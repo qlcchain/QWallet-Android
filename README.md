@@ -1,8 +1,7 @@
-# qlink
+# Earn QLC rewards from sharing your wifi, Qlink brings about disrupting rewardful Wifi sharing experience！
 
-Earn QLC rewards from sharing your wifi, Qlink brings about disrupting rewardful Wifi sharing experience！
 
-dApp Description
+## dApp Description
 
 Qlink Wifi sharing dApp, is the first Qlink product featuring peer-to-peer sharing of Wifi assets utilising blockchain technology. This disrupting technical breakthrough is bringing about Wifi asset registration and rewardful Wifi sharing experience to the users.
 
