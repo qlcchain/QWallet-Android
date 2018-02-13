@@ -10,7 +10,9 @@ Qlink Wifi sharing dApp users are allowed to connect to registered Wifi assets o
 By adopting a cross-chain protocol between the Qlink Chain and the NEO blockchain, the dual chains communicate to synchronise the registration of telecom assets as digital assets. They also enable data usage being kept on the Qlink network. Users’ data consumption has never been so transparent and secured. 
 
 ###### New in version 1.0.7
-We finally brought the VPN service powered by blockchain to your Android mobile devices! As the first mobile network platform deployed on the NEO chain, it has been a long way to tackle the unprecedented obstacles, for this recent few weeks, the team ran off their feet with VPN configuration on the user’s Android devices, great achievement has been made, while long way remain ahead.
+We're excited to present the VPN service sharing in our dApp! 
+As the first mobile network platform deployed on the NEO blockchain, it has been a long way to tackle some nasty obstacles. 
+The team did an amazing job, brining the Qlink vision to life! Go ahead and test it! (dApp, data and wallet on Neo testnet)
 
 1. VPN functionality
 2. Fixed various bugs
