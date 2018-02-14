@@ -1,4 +1,4 @@
-# Qlink MVP dApp 1.0.7  13.02.2018
+# Qlink MVP dApp 1.0.6  13.02.2018
 
 
 #### dApp Description
