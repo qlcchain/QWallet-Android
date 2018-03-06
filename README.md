@@ -1,4 +1,4 @@
-# Qlink MVP dApp 1.0.6  13.02.2018
+# Qlink MVP dApp
 
 
 #### dApp Description
@@ -9,13 +9,13 @@ Qlink Wifi sharing dApp users are allowed to connect to registered Wifi assets o
 
 By adopting a cross-chain protocol between the Qlink Chain and the NEO blockchain, the dual chains communicate to synchronise the registration of telecom assets as digital assets. They also enable data usage being kept on the Qlink network. Users’ data consumption has never been so transparent and secured. 
 
-###### New in version 1.0.6
-We're excited to present the VPN service sharing in our dApp! 
-As the first mobile network platform deployed on the NEO blockchain, it has been a long way to tackle some nasty obstacles. 
-The team did an amazing job, brining the Qlink vision to life! Go ahead and test it! (dApp, data and wallet on Neo testnet)
+###### New in version 1.0.8
+1，Add in wallet details screen that displays the wallet public address, private keys, accessible from the wallet icon on the wallet main screen.
 
-1. VPN functionality
-2. Fixed various bugs
-3. Improved speed and stability
+2，UI improvement was made to the WiFi and VPN assets screens, WiFi and VPN servers that are connected to are readable on the user’s end.
+
+3，WiFi assets owner could now set their desired tips.
+
+4，Add ‘Disconnect’ screens to completet the WiFi and VPN flow.
 
 https://medium.com/@Qlink/qlink-dapp-code-open-to-public-c9232e9c5d7e
