@@ -11,8 +11,13 @@ By adopting a cross-chain protocol between the Qlink Chain and the NEO blockchai
 
 ###### New in version 1.0.9
 1, Add QR code function in Wallet.
+
 2, Add multi wallet management function.
+
 3, Optimized of transaction stability
+
 4, Add using record of asset owner.
+
 5, Other UI modification and bug fix.
+
 https://medium.com/@Qlink/qlink-dapp-code-open-to-public-c9232e9c5d7e
