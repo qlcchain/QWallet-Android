@@ -9,13 +9,10 @@ Qlink Wifi sharing dApp users are allowed to connect to registered Wifi assets o
 
 By adopting a cross-chain protocol between the Qlink Chain and the NEO blockchain, the dual chains communicate to synchronise the registration of telecom assets as digital assets. They also enable data usage being kept on the Qlink network. Users’ data consumption has never been so transparent and secured. 
 
-###### New in version 1.0.8
-1，Add in wallet details screen that displays the wallet public address, private keys, accessible from the wallet icon on the wallet main screen.
-
-2，UI improvement was made to the WiFi and VPN assets screens, WiFi and VPN servers that are connected to are readable on the user’s end.
-
-3，WiFi assets owner could now set their desired tips.
-
-4，Add ‘Disconnect’ screens to completet the WiFi and VPN flow.
-
+###### New in version 1.0.9
+1, Add QR code function in Wallet.
+2, Add multi wallet management function.
+3, Optimized of transaction stability
+4, Add using record of asset owner.
+5, Other UI modification and bug fix.
 https://medium.com/@Qlink/qlink-dapp-code-open-to-public-c9232e9c5d7e
