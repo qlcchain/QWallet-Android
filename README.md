@@ -14,9 +14,9 @@ By adopting a cross-chain protocol between the Qlink Chain and the NEO blockchai
 
 2, Add multi wallet management function.
 
-3, Optimized of transaction stability
+3, Optimized of transaction stability.
 
-4, Add using record of asset owner.
+4, Add QLC receiving record in VPN/WiFi asset owner's wallet.
 
 5, Other UI modification and bug fix.
 
