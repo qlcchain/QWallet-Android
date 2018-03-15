@@ -2,10 +2,6 @@
 
 ----
 
-### What is Qlink dApp
-
-----
-
   Qlink dApp is the first dApp developed in the Qlink ecosystem with VPN & WiFi Sharing and Wallet functionalities. It features peer-to-peer sharing of VPN & Wi-Fi assets backed by blockchain technology.
   
 ### Features
