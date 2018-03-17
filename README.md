@@ -17,18 +17,24 @@
 * WiFi and VPN service usage record will be kept on the Qlink chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.0.9
+### New in version 1.1.0
 
 ------
 
-1, Add QR code function in Wallet.
+1. Optimize the VPN connection procedure, including new VPN connection timeout reminder;
 
-2, Add multi wallet management function.
+2. Add VPN server location selection feature;
 
-3, Optimized of transaction stability.
+3. Display the number of VPN connected users dynamically; 
 
-4, Add QLC receiving record in VPN/WiFi asset owner's wallet.
+4. Adjust the logical relationship between the Wallet and the registered asset;
 
-5, Other UI modification and bug fix.
+5. Support special characters in Wallet password setting；
+
+6. Fix Wallet history record related bugs;
+
+7. Fix the registered Wi-Fi list display issue;
+
+8. Other general bug fix and performance improvements.
 
 https://medium.com/@Qlink/qlink-dapp-code-open-to-public-c9232e9c5d7e
