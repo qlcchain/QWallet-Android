@@ -1,7 +1,7 @@
 ### Qlink dApp Intro
-请注意 目前APP试试运行在测试网络，请勿转入正式网的QLC！！！
+<font color=red size=12 face="黑体">请注意 目前APP试试运行在测试网络，请勿转入正式网的QLC！！！
 
-Please note that the current APP is running on the test network, please do not transfer to the main network QLC!!!
+Please note that the current APP is running on the test network, please do not transfer to the main network QLC!!!</font>
 
 ----
 
