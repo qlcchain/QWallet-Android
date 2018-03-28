@@ -1,5 +1,5 @@
 ### Qlink dApp Intro
-# :bangbang: 请注意 目前APP试试运行在测试网络，请勿转入正式网的QLC！！# :bangbang: 
+# :bangbang: 请注意 目前APP试试运行在测试网络，请勿转入正式网的QLC！！ :bangbang: 
 
 # :bangbang: Please be alerted that QLC dApp is currently running on testnet , DO NOT transfer your mainnet NEO or QLC to the in-app wallet! :bangbang:
 
