@@ -20,12 +20,14 @@
 * WiFi and VPN service usage record will be kept on the Qlink chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.1.1
+### New in version 1.1.2
 
 ------
+1. Gaming feature
+  The new gaming feature involves an asset ownership transfer. It allows users to takeover other's digital asset by paying up to current asset value which is equal to the bet added to earnings.
 
-1. Instant Messaging
+2. UI enhancements
 
-The new IM feature tends to facilitate connections between digital asset owner and other users. When the owner is P2P online, users can start a chat by clicking the owner’s picture. Powered by the blockchain technology, Qlink dApp provides the most secure network environment.
+3. Fixed VPN server location positioning issue
 
-2. Other general bug fix and performance improvements
+4. Other general bug fix and performance improvements
