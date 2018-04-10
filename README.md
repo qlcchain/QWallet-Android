@@ -20,14 +20,11 @@
 * WiFi and VPN service usage record will be kept on the WinQ chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.1.2
-
+### New in version 1.1.4
 ------
-1. Gaming feature
-  The new gaming feature involves an asset ownership transfer. It allows users to takeover other's digital asset by paying up to current asset value which is equal to the bet added to earnings.
 
-2. UI enhancements
+1. Fix connection bug when connecting to unregister WiFi.
 
-3. Fixed VPN server location positioning issue
+2. Fix the crash issues.
 
-4. Other general bug fix and performance improvements
+3. Optimaztion of p2p connection and local data saving.
