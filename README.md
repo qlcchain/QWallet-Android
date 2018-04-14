@@ -6,7 +6,7 @@
 ----
 
   WinQ dApp is the first dApp developed in the WinQ ecosystem with VPN & WiFi Sharing and Wallet functionalities. It features peer-to-peer sharing of VPN & Wi-Fi assets backed by blockchain technology.
-  
+
 ### Features
 
 ------
@@ -20,11 +20,15 @@
 * WiFi and VPN service usage record will be kept on the WinQ chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.1.4
+### New in version 1.1.5
 ------
 
-1. Fix connection bug when connecting to unregister WiFi.
-
-2. Fix the crash issues.
-
-3. Optimaztion of p2p connection and local data saving.
+1. Optimize the loading time when connecting VPN;
+2. Enhance the stability of Wi-Fi connection;
+3. Improve IM chat record display;
+4. Fix local persistent data issue;
+5. Fix the profile picture upload bug for specific phone models;
+6. Fix transaction issue caused by not enough GAS;
+7. Improve dApp stability;
+8. UI enhancement;
+9. Other general bug fix.
