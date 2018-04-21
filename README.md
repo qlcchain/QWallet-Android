@@ -20,15 +20,12 @@
 * WiFi and VPN service usage record will be kept on the WinQ chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.1.5
+### New in version 1.1.7
 ------
 
-1. Optimize the loading time when connecting VPN;
-2. Enhance the stability of Wi-Fi connection;
-3. Improve IM chat record display;
-4. Fix local persistent data issue;
-5. Fix the profile picture upload bug for specific phone models;
-6. Fix transaction issue caused by not enough GAS;
-7. Improve dApp stability;
-8. UI enhancement;
-9. Other general bug fix.
+1. Add support to arm64-v8 dynamic library;
+2. Highly improve dApp stability;
+3. New UI for Crypto Monopoly;
+4. Show accumulative asset earnings in wallet;
+5. Add wallet auto backup function;
+6. Other general bug fix and performance improvements.
