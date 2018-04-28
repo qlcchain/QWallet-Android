@@ -20,12 +20,8 @@
 * WiFi and VPN service usage record will be kept on the WinQ chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.1.7
+### New in version 1.1.8
 ------
 
-1. Add support to arm64-v8 dynamic library;
-2. Highly improve dApp stability;
-3. New UI for Crypto Monopoly;
-4. Show accumulative asset earnings in wallet;
-5. Add wallet auto backup function;
-6. Other general bug fix and performance improvements.
+1. New fingerprint unlock wallet function；
+2. Performance improvements.
