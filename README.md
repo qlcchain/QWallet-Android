@@ -20,8 +20,9 @@
 * WiFi and VPN service usage record will be kept on the WinQ chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.1.9
+### New in version 1.2.0
 ------
 
-1. Progress towards full iOS compatibility；
-2. Improve dApp compatibility across various Android versions.
+1. Upgrade wallet function；
+2. Optimization of QR code scanning feature;
+3. Fix a bug which may cause crash.
