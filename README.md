@@ -23,7 +23,7 @@
 ### New in version 1.2.2
 ------
 
-1. Enhance IM User Experience。
+1. Enhance IM User Experience.
 2. Add message push function.
 3. Integrated with Ethereum Wallet function, will add the UI later.
 4. Fix a bug which may cause crash.
