@@ -20,8 +20,12 @@
 * WiFi and VPN service usage record will be kept on the WinQ chain, which communicates with NEO chain via a dual-chain protocol. Users’ network services consumption has never been so transparent and secured.
 
 
-### New in version 1.2.3
+### New in version 1.2.5
 ------
 
-1. Preparing FIFA Game feature.
+1. New settings page;
+2. Code update for wallet module;
+3. Optimize the IM function;
+4. Modify the plug-in of VPN configuration profile upload;
+5. Other general bug fix and performance improvements.
 
