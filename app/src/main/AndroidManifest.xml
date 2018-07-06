@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.stratagile.qlink">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <permission android:name="com.stratagile.winq.dapp.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
+    <uses-permission android:name="com.stratagile.winq.dapp.permission.MIPUSH_RECEIVE" />
+
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <application
+        android:name=".application.AppConfig"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:appCategory="productivity"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        tools:ignore="UnusedAttribute"
+        android:hardwareAccelerated="true"
+        android:theme="@style/AppTheme.Base"
+        android:banner="@mipmap/ic_launcher">
+        <activity android:name=".ui.activity.main.SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="locale"
+            android:label="@string/app_name"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name=".service.ClientConnectedWifiRecordService"/>
+        <service android:name=".service.ServiceConnectedWIfiRecordSevice"/>
+        <service android:name=".service.ClientVpnService"/>
+        <activity android:name=".ui.activity.main.MainActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            tools:ignore="ExportedActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activity.wallet.WalletDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.NoWalletActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.WalletCreatedActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.main.GuestActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.CreateWalletPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.VerifyWalletPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <!--android:windowSoftInputMode="stateVisible|adjustResize"-->
+        <activity android:name=".ui.activity.wallet.ProfilePictureActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.TransactionRecordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.ImportWalletActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.QrCodeDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.ScanQrCodeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.ChangeWalletActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.GratuityActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wifi.ConnectWifiConfirmActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.main.LogActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.main.WebViewActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.RegisteVpnActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wifi.ConnectWifiSuccessActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.SelectContinentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.SelectCountryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.ConnectVpnActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.RegisterVpnSuccessActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.ConnectVpnSuccessActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wifi.RegisteWifiSuccessActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.eth.EthWalletActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.eth.BnbToQlcActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.eth.ImportEthWalletActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wifi.EnterWifiPasswordActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.im.ConversationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.activity.wifi.RegisterWifiActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            />
+
+        <activity android:name=".ui.activity.seize.SeizeActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.seize.SeizeVpnActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+
+        <provider
+            android:name=".utils.MyFileProvider"
+            android:authorities="com.stratagile.qlink.dapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+        <!--<provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.cytd.teacher.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>-->
+        <activity
+            android:name="com.stratagile.qlink.activities.VPNPreferences"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.stratagile.qlink.activities.DisconnectVPN"
+            android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=".DisconnectVPN"
+            android:theme="@style/blinkt.dialog" />
+        <activity
+            android:name="com.stratagile.qlink.activities.LogWindow"
+            android:allowTaskReparenting="true"
+            android:label="@string/openvpn_log"
+            android:launchMode="singleTask" />
+        <activity android:name="com.stratagile.qlink.activities.FileSelect" />
+        <service
+            android:name="com.stratagile.qlink.core.OpenVPNService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:process=":qlink">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.stratagile.qlink.api.ExternalOpenVPNService"
+            android:process=":qlink"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.stratagile.qlink.api.IOpenVPNAPIService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.stratagile.qlink.core.OpenVPNStatusService"
+            android:exported="false"
+            android:process=":qlink" />
+        <service
+            android:name="com.stratagile.qlink.OpenVPNTileService"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/qs_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:value="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="false" />
+        </service>
+
+        <activity android:name="com.stratagile.qlink.api.GrantPermissionsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.stratagile.qlink.api.ConfirmDialog">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="com.stratagile.qlink.OnBootReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name="com.stratagile.qlink.activities.ConfigConverter"
+            android:excludeFromRecents="true"
+            android:label="Convert Config File"
+            android:taskAffinity=".ConfigConverter"
+            android:uiOptions="splitActionBarWhenNarrow"
+            tools:ignore="ExportedActivity">
+            <intent-filter
+                android:label="@string/import_config"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="application/x-openvpn-profile" />
+            </intent-filter>
+            <intent-filter
+                android:label="@string/import_config"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="application/ovpn" />
+            </intent-filter>
+            <intent-filter android:label="@string/import_config">
+
+                <!-- http://stackoverflow.com/questions/7f030832/associating-certain-file-extension-to-my-android-application/7102838#7102838 -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:pathPattern=".*..*..*..*..*.ovpn" />
+                <data android:pathPattern=".*..*..*..*.ovpn" />
+                <data android:pathPattern=".*..*..*.ovpn" />
+                <data android:pathPattern=".*..*.ovpn" />
+                <data android:pathPattern=".*.ovpn" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.stratagile.qlink.LaunchVPN"
+            android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:label="@string/vpn_launch_title"
+            android:taskAffinity=".LaunchVPN"
+            android:theme="@style/blinkt.dialog"
+            tools:ignore="ExportedActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".api.Intents"
+            android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:label="@string/vpn_launch_title"
+            android:taskAffinity=".LaunchVPN"
+            android:theme="@style/blinkt.dialog"
+            tools:ignore="ExportedActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.stratagile.qlink.activities.CreateShortcuts"
+            android:excludeFromRecents="true"
+            android:label="@string/vpn_shortcut"
+            android:taskAffinity=".CreateShortcuts"
+            android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="service.eth.WalletGenService"
+            android:exported="false" />
+
+        <provider
+            android:name="com.stratagile.qlink.FileProvider"
+            android:authorities="com.stratagile.qlink.FileProvider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            tools:ignore="ExportedContentProvider" />
+
+        <!--
+        <receiver android:name="core.GetRestrictionReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_RESTRICTION_ENTRIES" />
+            </intent-filter>
+        </receiver>
+        -->
+        <activity
+            android:name="com.stratagile.qlink.activities.OpenSSLSpeed"
+            android:label="@string/title_activity_open_sslspeed"
+            android:parentActivityName="com.stratagile.qlink.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.stratagile.qlink.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.stratagile.qlink.api.RemoteAction"
+            />
+        <activity android:name=".ui.activity.file.FileChooseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.setting.SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wordcup.WordCupIntroduceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wordcup.WordCupGamesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wordcup.WordCupBetActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.mainwallet.MainWalletActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.setting.SelectLanguageActivityActivity"
+            android:screenOrientation="portrait"/>
+        <activity-alias
+            android:exported="true"
+            android:name=".api.DisconnectVPN"
+            android:targetActivity="com.stratagile.qlink.api.RemoteAction" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_key" />
+        <meta-data android:name="android.max_aspect"
+            android:value="2.5"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <service android:enabled="true" android:process=":pushservice"
+            android:name="com.xiaomi.push.service.XMPushService"/>
+
+        <service android:name="com.xiaomi.push.service.XMJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":pushservice" />
+
+        <service android:enabled="true"
+            android:exported="true"
+            android:name="com.xiaomi.mipush.sdk.PushMessageHandler" />
+
+        <service android:enabled="true"
+            android:name="com.xiaomi.mipush.sdk.MessageHandleService" />
+
+        <receiver android:exported="true"
+            android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:exported="false" android:process=":pushservice"
+            android:name="com.xiaomi.push.service.receivers.PingReceiver" >
+            <intent-filter>
+                <action android:name="com.xiaomi.push.PING_TIMER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:exported="true"
+            android:name="com.stratagile.qlink.reciver.WinqMessageReceiver">
+            <!--这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名-->
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

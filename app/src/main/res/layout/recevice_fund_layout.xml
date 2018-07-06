@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/white"
+            android:transitionName="card"
+            app:cardCornerRadius="@dimen/x5"
+            app:cardMaxElevation="0px"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/x39"
+                    android:orientation="horizontal"
+                    android:layout_height="@dimen/x255">
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/x33"
+                        android:orientation="vertical"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:layout_width="wrap_content"
+                            android:text="@string/Your_Address"
+                            android:transitionName="title"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/address"
+                            android:textColor="@color/color_333"
+                            android:layout_marginTop="@dimen/x14"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:textIsSelectable="true"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:background="@color/color_999"
+                            android:layout_marginTop="@dimen/x20"
+                            android:layout_height="@dimen/x1"/>
+
+                        <View
+                            android:layout_width="@dimen/x37"
+                            android:layout_weight="1"
+                            android:layout_height="0px"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:text="@string/Supported_tokens"
+                                android:textSize="@dimen/sp7"
+                                android:textColor="@color/color_999"
+                                android:layout_height="wrap_content" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:src="@mipmap/icon_neo"
+                                    android:layout_height="wrap_content" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:src="@mipmap/icon_qlink"
+                                    android:layout_height="wrap_content" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:src="@mipmap/icon_gas"
+                                    android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="@dimen/x37"
+                        android:layout_height="match_parent"/>
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_address"
+                            android:transitionName="qrcode"
+                            android:layout_marginRight="@dimen/x33"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/x40"
+                    android:layout_marginRight="@dimen/x40"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/x40"
+                    android:layout_marginBottom="@dimen/x40"
+                    android:layout_height="wrap_content" >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular_q"
+                        android:textSize="@dimen/sp7"
+                        android:textColor="#a8a6ae"
+                        android:text="@string/To_receive_NEP5_tokens_copy_the_address_and_share_it_with_the_sender"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="74dp"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36">
+            <Button
+                android:id="@+id/bt_back"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                style="?android:attr/borderlessButtonStyle"
+                android:text="@string/back"
+                android:fontFamily="@font/vagroun_q"
+                android:background="@drawable/aler_left_bt_bg"
+                android:textColor="@color/white"
+                android:layout_height="@dimen/dp_43" />
+            <Button
+                android:id="@+id/bt_copy"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                style="?android:attr/borderlessButtonStyle"
+                android:text="@string/copy_address"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:fontFamily="@font/vagroun_q"
+                android:background="@drawable/comfirm_button_bg"
+                android:textColor="@color/main_color"
+                android:layout_height="@dimen/dp_43" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

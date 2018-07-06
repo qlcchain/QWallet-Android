@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:id="@+id/noWalletParent"
+    android:background="@drawable/navigation_shape">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_header_wallet"
+            android:layout_marginTop="@dimen/dp_30"
+            />
+        <TextView
+            android:letterSpacing="0.1"
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/No_Wallet"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/x45"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x40"
+            android:layout_marginLeft="@dimen/x38"
+            android:layout_marginRight="@dimen/x38"
+            android:src="@mipmap/tab_checked"
+            android:layout_height="@dimen/dp_10" />
+
+
+        <TextView
+            android:id="@+id/t_tip"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:layout_marginTop="@dimen/x65"
+            android:textSize="15sp"
+            android:fontFamily="@font/roboto_regular_q"
+            android:layout_height="wrap_content"
+            android:text="@string/Whoops_You_have_no_wallet_yet"
+            android:textColor="@color/white"
+            />
+
+        <Button
+            android:id="@+id/bt_create"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x138"
+            android:layout_marginRight="@dimen/x138"
+            android:text="@string/create_new_wallet"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="39dp"
+            android:background="@drawable/comfirm_button_bg"
+            android:textColor="@color/mainColor"
+            android:layout_height="@dimen/dp_43" />
+        <Button
+            android:id="@+id/bt_import"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x138"
+            android:layout_marginRight="@dimen/x138"
+            android:text="@string/enter_private_key"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="@dimen/x44"
+            android:background="@drawable/comfirm_button_bg"
+            android:textColor="@color/mainColor"
+            android:layout_height="@dimen/dp_43" />
+        <Button
+            android:id="@+id/bt_scan"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x138"
+            android:layout_marginRight="@dimen/x138"
+            android:text="@string/scan_private_key_qr"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="@dimen/x44"
+            android:background="@drawable/comfirm_button_bg"
+            android:textColor="@color/mainColor"
+            android:layout_height="@dimen/dp_43" />
+        <Button
+            android:id="@+id/bt_later"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x138"
+            android:layout_marginRight="@dimen/x138"
+            android:text="@string/do_it_later"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="@dimen/x44"
+            android:background="@drawable/cancal_button_bg"
+            android:textColor="@color/white"
+            android:layout_height="@dimen/dp_43" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x72"
+            android:layout_marginLeft="@dimen/x38"
+            android:layout_marginRight="@dimen/x38"
+            android:src="@mipmap/tab_checked"
+            android:layout_height="@dimen/dp_10" />
+
+        <TextView
+            android:id="@+id/tv_tip_two"
+            android:fontFamily="@font/roboto_regular_q"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/x94"
+            android:layout_marginBottom="61dp"
+            android:textColor="#4cffffff"
+            android:textSize="8sp"
+            android:text="@string/You_need_a_wallet_to_use_all_of_the_WINQ_dApp_functionalities"
+            />
+
+    </LinearLayout>
+</LinearLayout>

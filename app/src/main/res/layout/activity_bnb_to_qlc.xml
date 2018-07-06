@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_amount"
+        android:layout_width="wrap_content"
+        android:hint="@string/amount"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:layout_gravity="center_horizontal"
+        android:minWidth="@dimen/x100"
+        />
+
+    <EditText
+        android:id="@+id/et_wallet_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/x20"
+        android:hint="@string/wallet_password"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/tv_transaction"
+        android:text="@string/transaction"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/x100"
+        android:layout_height="wrap_content" />
+</LinearLayout>

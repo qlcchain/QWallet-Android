@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/et_keystroe"
+        android:hint="@string/key_store"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x60"
+        android:maxHeight="@dimen/x600"
+        android:layout_marginTop="@dimen/x60"
+        android:layout_marginRight="@dimen/x60"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        app:passwordToggleEnabled="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_password"
+            android:hint="@string/password"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x60"
+            android:imeOptions="actionGo"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x60"
+            android:layout_marginRight="@dimen/x60"
+            android:inputType="textPassword"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_import"
+        android:layout_marginTop="@dimen/x60"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/import_vpn"
+        />
+</LinearLayout>

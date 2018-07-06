@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/content_background_shape"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/toolbar_layout"
+        android:visibility="gone"
+        android:id="@+id/tool"
+        />
+    <LinearLayout
+        android:layout_below="@+id/tool"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_select_country"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:background="@drawable/tablayout_background"
+            android:layout_height="@dimen/x90">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/vagroun_q"
+                android:text="@string/nearby"
+                android:gravity="center"
+                android:letterSpacing="0.1">
+            </TextView>
+        </LinearLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x90"
+            android:visibility="gone"
+            app:tabGravity="fill"
+            android:background="@drawable/tablayout_background"
+            app:tabIndicatorColor="@color/mainColor"
+            app:tabIndicatorHeight="2.0dp"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/white">
+        </android.support.design.widget.TabLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/x60"
+            android:paddingRight="@dimen/x65"
+            android:paddingTop="@dimen/x20"
+            android:paddingBottom="@dimen/x20">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/fragment_wifi_AppCompactImageViewQLinkReg"
+                android:layout_width="@dimen/x40"
+                android:layout_height="@dimen/x40"
+                android:src="@mipmap/icon_wifi_normal" />
+
+            <TextView
+                android:id="@+id/fragment_wifi_TextViewInfo"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular_q"
+                android:text="@string/qlinkRegistedWifi"
+                android:textColor="@color/colorBlack" />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/Owner"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:layout_marginRight="@dimen/x25"
+                android:fontFamily="@font/roboto_regular_q"
+                android:textColor="@color/colorBlack"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/Seize"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:fontFamily="@font/roboto_regular_q"
+                android:textColor="@color/colorBlack"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <com.stratagile.qlink.view.NoScrollViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.stratagile.qlink.view.NoScrollViewPager>
+    </LinearLayout>
+</RelativeLayout>

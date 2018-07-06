@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/content_background_shape">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x33"
+            android:layout_marginRight="@dimen/x33"
+            android:layout_marginTop="@dimen/x44"
+            android:minHeight="@dimen/x327">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x25"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/color_a8a6a6"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tv_race_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x10"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/color_333"
+                    android:textSize="10sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x60"
+                    android:layout_marginRight="@dimen/x60"
+                    android:layout_marginTop="@dimen/x10"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_home_country"
+                            android:layout_width="@dimen/x150"
+                            android:layout_height="@dimen/x150" />
+
+                        <TextView
+                            android:id="@+id/tv_home_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxLength="10"
+                            android:text="France"
+                            android:textColor="@color/color_333"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="@dimen/x150"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tv_home_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/x34"
+                            android:fontFamily="@font/roboto_regular"
+                            android:includeFontPadding="false"
+                            android:text="-"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_333"
+                            android:textSize="33sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/x34"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="VS"
+                            android:textColor="#b0aeb5"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tv_away_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:includeFontPadding="false"
+                            android:text="-"
+                            android:textColor="@color/color_333"
+                            android:textSize="33sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_away_country"
+                            android:layout_width="@dimen/x150"
+                            android:layout_height="@dimen/x150" />
+
+                        <TextView
+                            android:id="@+id/tv_away_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxEms="5"
+                            android:text="Australia"
+                            android:textColor="@color/color_333"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x33"
+            android:layout_marginRight="@dimen/x33"
+            android:layout_marginTop="@dimen/x13">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_game_status_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x40"
+                    android:fontFamily="@font/vagroundedbt"
+                    android:letterSpacing="0.1"
+                    android:text="PLACE YOUR 10 QLC BET"
+                    android:textColor="@color/color_333"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x48"
+                    android:layout_marginTop="@dimen/x25"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x20"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="@dimen/x142"
+                            android:layout_height="@dimen/x142">
+
+                            <ImageView
+                                android:id="@+id/iv_bet_home"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@mipmap/icon_ellipse_two" />
+
+                            <TextView
+                                android:id="@+id/tv_bet_home"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:includeFontPadding="false"
+                                android:text="1"
+                                android:textColor="@color/color_333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:textColor="@color/color_999"
+                            android:id="@+id/tv_home_wins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="home wins" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x20"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="@dimen/x142"
+                            android:layout_height="@dimen/x142">
+
+                            <ImageView
+                                android:id="@+id/iv_bet_tie"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@mipmap/icon_ellipse_two" />
+
+                            <TextView
+                                android:id="@+id/tv_bet_tie"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:includeFontPadding="false"
+                                android:text="X"
+                                android:textColor="@color/color_333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tv_tie_game"
+                            android:textColor="@color/color_999"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="tie game" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="@dimen/x142"
+                            android:layout_height="@dimen/x142">
+
+                            <ImageView
+                                android:id="@+id/iv_bet_away"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@mipmap/icon_ellipse_two" />
+
+                            <TextView
+                                android:id="@+id/tv_bet_away"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:includeFontPadding="false"
+                                android:text="2"
+                                android:textColor="@color/color_333"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tv_away_wins"
+                            android:textColor="@color/color_999"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="away wins" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_explain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x42"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n Nulla aliquam interdum tellus a porta 10 QLC consequat eget!"
+                    android:textColor="@color/color_333"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/bt_bet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x50"
+                    android:fontFamily="@font/vagroundedbt"
+                    android:paddingBottom="@dimen/x30"
+                    android:paddingLeft="@dimen/x100"
+                    android:paddingRight="@dimen/x100"
+                    android:paddingTop="@dimen/x30"
+                    android:text="confirm"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview_bet_status"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x209"
+            android:layout_marginLeft="@dimen/x33"
+            android:layout_marginRight="@dimen/x33"
+            android:layout_marginBottom="@dimen/x20"
+            android:layout_marginTop="@dimen/x13">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:background="@mipmap/bg_active"
+                android:layout_height="match_parent">
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:layout_width="0px"
+                        android:layout_weight="0.5"
+                        android:layout_height="1px"/>
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x25"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textStyle="bold"
+                            android:text="Total pool value"
+                            android:textColor="@color/color_a8a6a6"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_total_qlc"
+                            android:layout_width="wrap_content"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_your_win"
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x25"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textStyle="bold"
+                            android:text="Your winnings"
+                            android:textColor="@color/color_a8a6a6"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_you_win_qlc"
+                            android:layout_width="wrap_content"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="0px"
+                        android:layout_weight="0.5"
+                        android:layout_height="1px"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x116"
+                    android:layout_marginRight="@dimen/x116"
+                    android:layout_marginTop="@dimen/x10"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="home pool"
+                            android:textColor="@color/color_a8a6a6"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_home_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxLength="10"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="Tie pool"
+                            android:textColor="@color/color_a8a6a6"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_tie_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxEms="5"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="Away pool"
+                            android:textColor="@color/color_a8a6a6"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_away_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x10"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxEms="5"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

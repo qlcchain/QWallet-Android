@@ -1,0 +1,13 @@
+local.properties
+build
+**/.idea
+.gradle/
+**/gradle/**
+*.iml
+greendao_java
+mylibrary
+.externalNativeBuild
+/.externalNativeBuild
+qlink.jks
+
+/app/src/main/java/com/stratagile/qlink/constant/MainConstant.java

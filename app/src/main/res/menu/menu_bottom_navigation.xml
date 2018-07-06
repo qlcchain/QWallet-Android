@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_sms"
+        android:icon="@mipmap/tab_vpn_highlight"
+        android:title="@string/vpn" />
+    <item
+        android:id="@+id/item_wifi"
+        android:icon="@mipmap/tab_wifi_highlight"
+        android:title="@string/wifi" />
+    <item
+        android:id="@+id/item_wallet"
+        android:icon="@mipmap/tab_wallet_highlight"
+        android:title="@string/wallet" />
+</menu>

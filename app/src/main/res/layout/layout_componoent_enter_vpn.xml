@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:orientation="vertical">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:text="@string/start_vpn_with_qlc_powered_by_blockchain_technology"
+      android:fontFamily="@font/vagroundedbt"
+      android:gravity="left"
+      android:layout_marginLeft="@dimen/x10"
+      android:textSize="17sp"
+      android:textColor="@color/white"
+      android:layout_height="wrap_content" />
+
+  <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/img_floating_layer_vpn" />
+
+</LinearLayout>

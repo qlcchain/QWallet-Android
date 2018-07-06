@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/navigation_shape"
+    android:id="@+id/ll_root"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/iv_avater"
+        android:layout_width="@dimen/x290"
+        android:layout_height="@dimen/x290"
+        android:src="@mipmap/bg_success_logo"
+        android:layout_marginTop="@dimen/x250"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x120"
+        android:src="@mipmap/tab_checked"
+        android:layout_marginLeft="@dimen/x38"
+        android:layout_marginRight="@dimen/x38"
+        android:layout_height="@dimen/dp_10" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CONNECTED"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/x45"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:fontFamily="@font/vagroun_q"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x45"
+        android:src="@mipmap/tab_checked"
+        android:layout_marginLeft="@dimen/dp_18"
+        android:layout_marginRight="@dimen/dp_18"
+        android:layout_height="@dimen/dp_10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginTop="@dimen/x30"
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/User_ID_IP_Address"
+            android:textSize="13sp"
+            android:textColor="@color/color_40ffffff" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_vpn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21sp"
+                android:singleLine="true"
+                android:maxLength="20"
+                android:ellipsize="end"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_regular_q"
+                android:text="@string/ssid"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_connected_vpn"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x40"
+        android:src="@mipmap/tab_checked"
+        android:layout_marginLeft="@dimen/x38"
+        android:layout_marginRight="@dimen/x38"
+        android:layout_height="@dimen/dp_10" />
+
+</LinearLayout>

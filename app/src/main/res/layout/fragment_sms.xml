@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/content_background_shape"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/toolbar_layout"
+        android:visibility="gone"
+        android:id="@+id/tool"
+        />
+    <RelativeLayout
+        android:layout_below="@+id/tool"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rl_select_country"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_select_country"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@drawable/tablayout_background"
+                android:layout_height="@dimen/x90">
+                <LinearLayout
+                    android:id="@+id/ll_select_country_guide"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tabLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/vagroun_q"
+                        android:gravity="center"
+                        android:letterSpacing="0.1">
+                    </TextView>
+                    <ImageView
+                        android:layout_width="@dimen/x22"
+                        android:layout_marginLeft="@dimen/x20"
+                        android:src="@mipmap/icon_open"
+                        android:layout_height="@dimen/x20" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_world"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x44"
+                android:src="@mipmap/icon_world"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/rl_select_country"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="@dimen/x20"
+            android:paddingBottom="@dimen/x20"
+            android:paddingLeft="@dimen/x60"
+            android:paddingRight="@dimen/x65"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/fragment_wifi_AppCompactImageViewQLinkReg"
+                android:layout_width="@dimen/x40"
+                android:layout_height="@dimen/x40"
+                android:layout_marginRight="@dimen/x20"
+                android:src="@mipmap/icon_choose_a_vpn" />
+
+            <TextView
+                android:id="@+id/fragment_wifi_TextViewInfo"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular_q"
+                android:text="@string/Choose_a_VPN"
+                android:textColor="@color/colorBlack" />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/Owner"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:layout_marginRight="@dimen/x25"
+                android:fontFamily="@font/roboto_regular_q"
+                android:textColor="@color/colorBlack"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/Seize"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:fontFamily="@font/roboto_regular_q"
+                android:textColor="@color/colorBlack"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <com.stratagile.qlink.view.NoScrollViewPager
+            android:layout_below="@+id/menu"
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.stratagile.qlink.view.NoScrollViewPager>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rl_bannner"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/rl_select_country"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/x38"
+                android:src="@mipmap/bg_banner"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="@dimen/x30"
+                android:src="@mipmap/icon_delete"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x50"
+                android:layout_marginTop="@dimen/x50"
+                android:layout_height="@dimen/x30" />
+            <TextView
+                android:id="@+id/tv_play_win"
+                android:layout_width="@dimen/x297"
+                android:background="@mipmap/button_in"
+                android:text="PLAY ADN WIN!"
+                android:textColor="@color/main_color"
+                android:gravity="center"
+                android:fontFamily="@font/vagroun_q"
+                android:layout_centerInParent="true"
+                android:layout_height="@dimen/x87" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

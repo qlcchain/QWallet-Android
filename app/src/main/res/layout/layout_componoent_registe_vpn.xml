@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+    android:gravity="right"
+  android:orientation="vertical">
+
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@mipmap/img_floating_layer_add" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:text="@string/earn_qlc_by_sharing_your_configuration_file"
+      android:fontFamily="@font/vagroundedbt"
+      android:gravity="right"
+      android:textSize="17sp"
+      android:textColor="@color/white"
+      android:layout_height="wrap_content" />
+</LinearLayout>

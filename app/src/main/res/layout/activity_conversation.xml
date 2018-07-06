@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/content_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/x60"
+        android:paddingRight="@dimen/x60"
+        android:background="#63b700"
+        android:textColor="@color/white"
+        android:paddingTop="@dimen/x20"
+        android:paddingBottom="@dimen/x20"
+        android:layout_height="wrap_content"
+        android:text="@string/Welcome_to_Group_Chat_Feel_free_to_contact_the_owner_if_you_have_any_questions"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <com.stratagile.qlink.view.ShowKeyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:minHeight="@dimen/x90"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/x34"
+        android:paddingRight="@dimen/x34">
+        <EditText
+            android:id="@+id/et_content"
+            android:imeOptions="actionSend"
+            android:textSize="@dimen/sp14"
+            android:inputType="textMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/x30"
+            android:layout_marginRight="@dimen/x80"
+            android:hint="@string/Type_a_message" />
+
+        <ImageView
+            android:id="@+id/iv_send"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/x80"
+            android:layout_height="@dimen/x80"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_send" />
+
+    </com.stratagile.qlink.view.ShowKeyRelativeLayout>
+</LinearLayout>

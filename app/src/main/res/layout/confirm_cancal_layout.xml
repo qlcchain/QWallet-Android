@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_4c000000">
+
+    <LinearLayout
+        android:id="@+id/ll_popup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tip_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="#ffffff"
+            android:text=""
+            android:textColor="@color/color_333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_333" />
+
+
+        <TextView
+            android:id="@+id/bt_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bt_nobgd"
+            android:text="确定"
+            android:gravity="center"
+            android:textColor="@color/color_333"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            />
+
+        <TextView
+            android:id="@+id/bt_cancal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bt_nobgd"
+            android:text="取消"
+            android:gravity="center"
+            android:textColor="@color/main_color"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</RelativeLayout>

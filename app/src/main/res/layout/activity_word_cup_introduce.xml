@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@mipmap/bg_world_cup"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_ball"
+            android:layout_marginTop="@dimen/dp_30"
+            />
+        <TextView
+            android:letterSpacing="0.1"
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/x100"
+            android:paddingRight="@dimen/x100"
+            android:layout_height="wrap_content"
+            android:text="WELCOME TO \n WINQ'S WORLDCUP GAME"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/x45"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x40"
+            android:layout_marginLeft="@dimen/x38"
+            android:layout_marginRight="@dimen/x38"
+            android:src="@mipmap/tab_checked"
+            android:layout_height="@dimen/dp_10" />
+
+
+        <TextView
+            android:id="@+id/t_tip"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:layout_marginTop="@dimen/x50"
+            android:paddingLeft="@dimen/x72"
+            android:paddingRight="@dimen/x72"
+            android:textSize="13sp"
+            android:fontFamily="@font/roboto_regular_q"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum!\nNulla sapien lacus, lacinia et lectus eu, \nposuere iaculis mauris, Sed et mauris enim."
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="@dimen/x72"
+            android:paddingRight="@dimen/x72"
+            android:layout_marginTop="@dimen/x50"
+            android:textSize="13sp"
+            android:fontFamily="@font/roboto_regular_q"
+            android:layout_height="wrap_content"
+            android:text="Praesent sed aliquet ligula, non sodales \n arcu. Sed eget pretium ligula, in placerat \n nulla. Vestibulum blandit sed tellus!"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:letterSpacing="0.1"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="ARE YOU READY?"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/x80"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            />
+
+        <Button
+            android:id="@+id/bt_play"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x130"
+            android:layout_marginRight="@dimen/x130"
+            android:text="start playing"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="@dimen/x80"
+            android:background="@drawable/comfirm_button_bg"
+            android:textColor="@color/mainColor"
+            android:layout_height="@dimen/dp_43" />
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x130"
+            android:layout_marginRight="@dimen/x130"
+            android:text="@string/back_btn"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="@dimen/x44"
+            android:background="@drawable/wordcup_back_bg"
+            android:textColor="@color/white"
+            android:layout_height="@dimen/dp_43" />
+
+    </LinearLayout>
+</LinearLayout>

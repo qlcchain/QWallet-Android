@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:background="@drawable/selector_click_recycler_item_bg"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/x5"
+    app:cardBackgroundColor="@color/white"
+    android:layout_marginTop="@dimen/x25"
+    app:cardElevation="@dimen/x3"
+    android:layout_marginLeft="@dimen/x36"
+    android:layout_marginRight="@dimen/x36">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginTop="@dimen/x10"
+        android:gravity="center_vertical"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/x15"
+            android:layout_marginTop="@dimen/x10"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_time"
+                android:text="dddddddddd"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_group"
+                android:text="dddddddddd"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/ll_bet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_win_or_lost"
+                        android:layout_width="@dimen/x30"
+                        android:layout_marginRight="@dimen/x8"
+                        android:layout_height="@dimen/x30"
+                        android:src="@mipmap/bg_icon_rise" />
+
+                    <TextView
+                        android:id="@+id/tv_win_or_lost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:maxEms="7"
+                        android:textSize="10sp"
+                        android:text="Won: "
+                        android:fontFamily="@font/roboto_regular_q"
+                        android:textColor="@color/color_333" />
+                    <TextView
+                        android:id="@+id/tv_qlc"
+                        android:textStyle="bold"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:maxEms="7"
+                        android:textSize="10sp"
+                        android:text="+55 QLC"
+                        android:fontFamily="@font/roboto_regular_q"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/main_color"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/iv_home_country"
+            android:src="@mipmap/afghanistan"
+            android:layout_width="@dimen/x75"
+            android:layout_height="@dimen/x75" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/x23"
+            android:layout_marginRight="@dimen/x23"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_home_country"
+                    android:layout_width="wrap_content"
+                    android:textSize="14sp"
+                    android:text="RUS"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/color_333"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="10sp"
+                    android:text="vs"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:layout_marginRight="@dimen/x20"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_away_country"
+                    android:layout_width="wrap_content"
+                    android:textSize="14sp"
+                    android:text="KSA"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/color_333"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_bet_status"
+                android:layout_width="wrap_content"
+                android:paddingBottom="@dimen/x10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_bet_home"
+                    android:layout_width="@dimen/x50"
+                    android:gravity="center"
+                    android:textSize="8sp"
+                    android:text="home"
+                    android:paddingBottom="@dimen/x2"
+                    android:background="@drawable/wordcup_back_bg"
+                    android:layout_marginRight="@dimen/x10"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_bet_tie"
+                    android:layout_width="@dimen/x50"
+                    android:gravity="center"
+                    android:text="tie"
+                    android:paddingBottom="@dimen/x2"
+                    android:textSize="8sp"
+                    android:background="@drawable/wordcup_back_bg"
+                    android:layout_marginRight="@dimen/x10"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_bet_away"
+                    android:layout_width="@dimen/x50"
+                    android:gravity="center"
+                    android:text="away"
+                    android:textSize="8sp"
+                    android:paddingBottom="@dimen/x2"
+                    android:background="@drawable/wordcup_back_bg"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_not_bet"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/wordcup_nnot_bet_bg"
+                android:gravity="center"
+                android:paddingBottom="@dimen/x2"
+                android:paddingLeft="@dimen/x35"
+                android:paddingRight="@dimen/x35"
+                android:text="place your bet"
+                android:textColor="@color/white"
+                android:textSize="8sp" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_away_country"
+            android:src="@mipmap/china"
+            android:layout_width="@dimen/x75"
+            android:layout_height="@dimen/x75" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

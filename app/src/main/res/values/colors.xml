@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mainColor">#490080</color>
+    <color name="mainColorTwo">#5b4278</color>
+    <color name="mainColorThree">#8F74AC</color>
+    <color name="mainColorDark">#3B0060</color>
+    <color name="colorPrimary">#490080</color>
+    <color name="colorPrimaryDark">#3B0060</color>
+    <color name="colorAccent">#490080</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="splashtext">#9100c8</color>
+    <color name="colorFade">#D1D1D1</color>
+    <color name="colorCancel">#D5D4DB</color>
+    <color name="colorBorder">#95989A</color>
+    <color name="colorBlack">#000000</color>
+    <color name="wifi_background">#D1D1D1</color>
+    <color name="color_45cf80">#45cf80ff</color>
+    <color name="color_8F74AC">#8F74AC</color>
+    <color name="color_40ffffff">#40ffffff</color>
+    <color name="main_color">#490080</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000</color>
+    <color name="histroy">#330055</color>
+    <color name="color_333">#333333</color>
+    <!-- 上传图片添加的颜色 -->
+    <color name="style_divider_color">#C9C7CD</color>
+    <color name="color_323232">#323232</color>
+    <color name="color_00000000">#00000000</color>
+    <color name="text_color">#333333</color>
+    <color name="layout_background">#eeeeee</color>
+    <color name="content_press_background">#f5f5f5</color>
+    <color name="line_default">#e6e6e6</color>
+    <color name="line_biaoqian_up">#d9d9d9</color>
+    <color name="popwindow_background">#4c000000</color>
+    <color name="content_background">#eeeeee</color>
+    <color name="color_666">#666666</color>
+    <color name="color_999">#999</color>
+    <color name="color_a8a6a6">#a8a6a6</color>
+    <color name="color_4c000000">#4c000000</color>
+    <color name="color_bbb">#bbb</color>
+    <color name="color_2ba245">#2ba245</color>
+    <color name="color_f51818">#f51818</color>
+    <color name="color_new_task">#F9956A</color>
+    <color name="color_finish_task">#8DCD99</color>
+    <color name="_8c">#8c8c8c</color>
+    <color name="cannotbet">#ecebed</color>
+
+</resources>

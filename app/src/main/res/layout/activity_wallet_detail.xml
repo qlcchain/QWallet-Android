@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp11"
+        android:letterSpacing="0.1"
+        android:gravity="center"
+        android:fontFamily="@font/vagroun_q"
+        android:text="@string/MANAGE_YOUR_WALLETS"
+        android:background="@drawable/tablayout_background"
+        />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:transitionName="card"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/x10"
+        app:cardMaxElevation="0px"
+        android:layout_marginTop="@dimen/x34"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginRight="@dimen/x50"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/x42"
+            android:layout_marginRight="@dimen/x42"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/x39"
+                android:orientation="horizontal"
+                android:layout_height="@dimen/x255">
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@string/Public_Address"
+                        android:transitionName="title"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:textColor="@color/color_333"
+                        android:layout_marginTop="@dimen/x14"
+                        android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                        android:textIsSelectable="true"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="@dimen/x37"
+                        android:layout_weight="1"
+                        android:layout_height="0px"/>
+
+                    <TextView
+                        android:id="@+id/bt_copy_address"
+                        android:layout_width="match_parent"
+                        android:text="@string/COPY_ADDRESS"
+                        android:gravity="center"
+                        android:fontFamily="@font/vagroun_q"
+                        android:background="@drawable/copy_address_bg"
+                        android:textColor="@color/white"
+                        android:layout_height="@dimen/dp_43" />
+                </LinearLayout>
+                <View
+                    android:layout_width="@dimen/x37"
+                    android:layout_height="match_parent"/>
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/iv_address"
+                        android:transitionName="wif"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/x39"
+                android:minHeight="@dimen/x310"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_wif"
+                        android:layout_width="wrap_content"
+                        android:text="@string/Encrypted_Key_WIF"
+                        android:transitionName="title"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/wif"
+                        android:textSize="@dimen/sp14"
+                        android:lines="4"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_333"
+                        android:layout_marginTop="@dimen/x14"
+                        android:textIsSelectable="true"
+                        android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:id="@+id/ll_wif"
+                        android:layout_width="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/x20"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/iv_qr_1"
+                            android:layout_width="@dimen/x36"
+                            android:transitionName="qrcode"
+                            android:src="@mipmap/icon_qr_code"
+                            android:layout_height="@dimen/x36" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp9"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:textColor="@color/color_333"
+                            android:text="@string/VIEW_QR_CODE"
+                            android:letterSpacing="0.1"
+                            android:fontFamily="@font/vagroun_q"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="@dimen/x37"
+                    android:layout_height="match_parent"/>
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_hex"
+                        android:layout_width="wrap_content"
+                        android:text="@string/Private_Key_HEX"
+                        android:transitionName="title"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/privatekey"
+                        android:textSize="14sp"
+                        android:lines="4"
+                        android:textColor="@color/color_333"
+                        android:layout_marginTop="@dimen/x14"
+                        android:layout_width="wrap_content"
+                        android:textIsSelectable="true"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_hex"
+                        android:layout_width="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/x20"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/iv_qr_2"
+                            android:layout_width="@dimen/x36"
+                            android:transitionName="hex"
+                            android:src="@mipmap/icon_qr_code"
+                            android:layout_height="@dimen/x36" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:textSize="@dimen/sp9"
+                            android:textColor="@color/color_333"
+                            android:text="@string/VIEW_QR_CODE"
+                            android:letterSpacing="0.1"
+                            android:fontFamily="@font/vagroun_q"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp_18"
+        android:layout_marginRight="@dimen/dp_18"
+        android:layout_height="88dp">
+        <Button
+            android:id="@+id/bt_export"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/export_keys"
+            android:fontFamily="@font/vagroun_q"
+            android:background="@drawable/export_key"
+            android:textColor="@color/white"
+            android:layout_height="@dimen/dp_43" />
+        <Button
+            android:id="@+id/bt_change_wallet"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/change_wallet"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:fontFamily="@font/vagroun_q"
+            android:background="@drawable/change_wallet"
+            android:textColor="@color/white"
+            android:layout_height="@dimen/dp_43" />
+    </LinearLayout>
+</LinearLayout>
