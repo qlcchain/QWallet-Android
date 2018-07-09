@@ -815,16 +815,16 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
-                SelectCountryDialog.getInstance().createDialog(this).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
+                /*SelectCountryDialog.getInstance().createDialog(this).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
                     @Override
                     public void onSelected(String  country) {
                         KLog.i("选择了："+country);
                     }
-                });
+                });*/
                 //setSelectCountry();
-                /*Intent intent = new Intent(this, SelectContinentActivity.class);
+                Intent intent = new Intent(this, SelectContinentActivity.class);
                 intent.putExtra("country", ConstantValue.longcountry);
-                startActivityForResult(intent, SELECT_COUNTRY);*/
+                startActivityForResult(intent, SELECT_COUNTRY);
                 break;
             case R.id.et_configuration:
                 startActivityForResult(new Intent(this, FileChooseActivity.class), SELECT_PROFILE);
