@@ -78,8 +78,8 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     TextView title;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tabLayout)
-    TextView tabLayout;
+//    @BindView(R.id.tabLayout)
+//    TextView tabLayout;
     @BindView(R.id.viewPager)
     NoScrollViewPager viewPager;
 
@@ -92,10 +92,10 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     RelativeLayout rlBannner;
     @BindView(R.id.view)
     View view;
-    @BindView(R.id.iv_world)
-    ImageView ivWorld;
-    @BindView(R.id.ll_select_country_guide)
-    LinearLayout llSelectCountryGuide;
+//    @BindView(R.id.iv_world)
+//    ImageView ivWorld;
+//    @BindView(R.id.ll_select_country_guide)
+//    LinearLayout llSelectCountryGuide;
 
     @Nullable
     @Override
@@ -230,7 +230,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setVpnTitle(VpnTitle vpnTitle) {
-        tabLayout.setText(vpnTitle.getTitle().toUpperCase());
+//        tabLayout.setText(vpnTitle.getTitle().toUpperCase());
     }
 
     @Override
@@ -286,20 +286,20 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         }
         if (requestCode == SELECT_CONTINENT && resultCode == RESULT_OK) {
             String country = data.getStringExtra("country");
-            tabLayout.setText(country.toUpperCase());
+//            tabLayout.setText(country.toUpperCase());
             String continent = data.getStringExtra("continent");
             EventBus.getDefault().post(new SelectCountry(country, continent));
         }
     }
 
-    @OnClick(R.id.ll_select_country)
-    public void onViewClicked() {
-        Intent intent = new Intent(getActivity(), SelectContinentActivity.class);
-        intent.putExtra("country", tabLayout.getText().toString().toLowerCase());
-        startActivityForResult(intent, SELECT_CONTINENT);
-    }
+//    @OnClick(R.id.ll_select_country)
+//    public void onViewClicked() {
+//        Intent intent = new Intent(getActivity(), SelectContinentActivity.class);
+//        intent.putExtra("country", tabLayout.getText().toString().toLowerCase());
+//        startActivityForResult(intent, SELECT_CONTINENT);
+//    }
 
-    @OnClick({R.id.iv_delete, R.id.tv_play_win, R.id.rl_bannner, R.id.iv_world})
+    @OnClick({R.id.iv_delete, R.id.tv_play_win, R.id.rl_bannner})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_delete:
@@ -310,9 +310,9 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
                 break;
             case R.id.rl_bannner:
                 break;
-            case R.id.iv_world:
-                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
-                break;
+//            case R.id.iv_world:
+//                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
+//                break;
             default:
                 break;
         }
@@ -326,29 +326,29 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     }
 
     private void showGuideViewSelectCountry() {
-        if (!GuideSpUtil.getBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, false)) {
-            GuideSpUtil.putBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(llSelectCountryGuide)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(true);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-                }
-
-                @Override
-                public void onDismiss() {
-                    EventBus.getDefault().post(new ShowGuide(1));
-                }
-            });
-
-            builder.addComponent(new ChooseCountryComponent());
-            Guide guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(getActivity());
-        }
+//        if (!GuideSpUtil.getBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, false)) {
+//            GuideSpUtil.putBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, true);
+//            GuideBuilder builder = new GuideBuilder();
+//            builder.setTargetView(llSelectCountryGuide)
+//                    .setAlpha(150)
+//                    .setHighTargetCorner(20)
+//                    .setOverlayTarget(false)
+//                    .setOutsideTouchable(true);
+//            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+//                @Override
+//                public void onShown() {
+//                }
+//
+//                @Override
+//                public void onDismiss() {
+//                    EventBus.getDefault().post(new ShowGuide(1));
+//                }
+//            });
+//
+//            builder.addComponent(new ChooseCountryComponent());
+//            Guide guide = builder.createGuide();
+//            guide.setShouldCheckLocInWindow(false);
+//            guide.show(getActivity());
+//        }
     }
 }

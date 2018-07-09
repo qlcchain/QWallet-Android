@@ -845,4 +845,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="get_into_wallet_detail">Get into wallet detail</string>
     <string name="make_sure_you_backup_this">Make sure you backup this</string>
 
+    <!--2018 07 09-->
+    <string name="vpn_list">VPN List</string>
+    <string name="REGISTER_YOUR_VPN_">REGISTER YOUR VPN</string>
 </resources>
