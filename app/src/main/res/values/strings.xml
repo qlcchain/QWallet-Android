@@ -493,7 +493,6 @@
     <string name="income_qlc">You have qlc into your account!</string>
     <string name="qlc">qlc</string>
     <string name="choose_a_continent">choose a continent</string>
-    <string name="choose_a_region_country">choose a region/country</string>
     <string name="please_choose_a_continent">please choose continent</string>
     <string name="name">Jess ,Jesse ,Jessie ,Jo ,Joey ,Jordan ,Joslyn ,Joyce ,Jule ,Jules ,Justice ,Kelly ,Kelsey ,Kendall ,Kerry ,Garfield ,Garland ,Gene ,Gill ,Hadley ,Hailey ,Harley ,Hayden ,Hilary ,Hope ,Jackie ,Jamie ,Jan ,Jean ,Jerry ,Drew ,Easter ,Eddie ,Eden ,Edie ,Elisha ,Ellison ,Ennis ,Evan ,Evelyn ,Fay ,Frances ,Fred ,Gabriel ,Gale ,Cody ,Corey ,Cortney ,Cory ,Courtney ,Dallas ,Daly ,Dana ,Dane ,Darcy ,Day ,Dee ,Devin ,Devon ,Dominique ,Brennan ,Brett ,Britton ,Burnett ,Cameron ,Carmel ,Carol ,Cecile ,Celestine ,Charlene ,Cherry ,Christian ,Christy ,Claire ,Claude ,Avery ,Avril ,Bailey ,Barrie ,Bell ,Benny ,Berry ,Bert ,Bertie ,Beverly ,Billie ,Blake ,Bobbie ,Bobby ,Brady ,Alex ,Alexis ,Alfven ,Alison ,Alva ,Andie ,Andrea ,Anstice ,Arrow ,Asa ,Ash ,Ashby ,Augustine ,Ava ,Averil</string>
     <string name="loadPicError">The picture is damaged.</string>
@@ -844,5 +843,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="pick_one_online_vpn_asset_the_little_green_spot_means_online">Pick one online VPN asset \nThe little green spot means online</string>
     <string name="get_into_wallet_detail">Get into wallet detail</string>
     <string name="make_sure_you_backup_this">Make sure you backup this</string>
+
+
+    <string name="choose_a_country">Choose a country</string>
 
 </resources>

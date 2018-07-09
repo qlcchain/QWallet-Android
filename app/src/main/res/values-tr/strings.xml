@@ -1457,7 +1457,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="get_into_wallet_detail">Cüzdan detayına gir</string>
   <string name="make_sure_you_backup_this">Bunu yedeklediğinizden emin olun</string>
 
-
+  <string name="choose_a_country">bir ülke</string>
 
 </resources>
 
