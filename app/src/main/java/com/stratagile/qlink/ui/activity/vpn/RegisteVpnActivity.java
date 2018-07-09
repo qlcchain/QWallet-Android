@@ -347,7 +347,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     }
 
 
-   //************************************当app为重新安装，或者app中没有改ovpn对应的profile文件时，通过ovpn来生成对应的profile文件*********//
+    //************************************当app为重新安装，或者app中没有改ovpn对应的profile文件时，通过ovpn来生成对应的profile文件*********//
 
     private String mEmbeddedPwFile;
     private String mAliasName = null;
@@ -806,9 +806,15 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
-                Intent intent = new Intent(this, SelectContinentActivity.class);
+                SelectCountryDialog.getInstance().createDialog(this).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
+                    @Override
+                    public void onSelected(String  country) {
+                        KLog.i("选择了："+country);
+                    }
+                });
+               /* Intent intent = new Intent(this, SelectContinentActivity.class);
                 intent.putExtra("country", ConstantValue.longcountry);
-                startActivityForResult(intent, SELECT_COUNTRY);
+                startActivityForResult(intent, SELECT_COUNTRY);*/
                 break;
             case R.id.et_configuration:
                 startActivityForResult(new Intent(this, FileChooseActivity.class), SELECT_PROFILE);

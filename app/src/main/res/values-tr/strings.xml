@@ -1456,6 +1456,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="pick_one_online_vpn_asset_the_little_green_spot_means_online">Bir çevrimiçi VPN seçin \nKüçük yeşil nokta çevrimiçi manasına gelir</string>
   <string name="get_into_wallet_detail">Cüzdan detayına gir</string>
   <string name="make_sure_you_backup_this">Bunu yedeklediğinizden emin olun</string>
+  <string name="choose_a_country">bir ülke</string>
 
 
 
