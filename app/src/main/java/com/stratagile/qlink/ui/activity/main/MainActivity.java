@@ -472,17 +472,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 .into(ivWallet);
         ivWallet.setVisibility(View.INVISIBLE);
         ivWallet.setClickable(false);
-//        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-//            if (ivWallet != null) {
-//                ivWallet.setVisibility(View.INVISIBLE);
-//                ivWallet.setClickable(false);
-//            }
-//        } else {
-//            if (ivWallet != null) {
-//                ivWallet.setVisibility(View.VISIBLE);
-//                ivWallet.setClickable(true);
-//            }
-//        }
+        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            if (ivWallet != null) {
+                ivWallet.setVisibility(View.INVISIBLE);
+                ivWallet.setClickable(false);
+            }
+        } else {
+            if (ivWallet != null) {
+                ivWallet.setVisibility(View.VISIBLE);
+                ivWallet.setClickable(true);
+            }
+        }
     }
 
     /**
