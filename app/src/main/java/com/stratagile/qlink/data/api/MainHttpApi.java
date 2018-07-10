@@ -118,6 +118,10 @@ public interface MainHttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ChainVpn> vpnQuery(@Body RequestBody map);
 
+    @POST(MainAPI.url_vpn_query_v3)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ChainVpn> vpnQueryV3(@Body RequestBody map);
+
     @POST(MainAPI.vertify_vpn_name)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<VertifyVpn> vertifyVpnName(@Body RequestBody map);

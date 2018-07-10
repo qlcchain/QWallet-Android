@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.vpn.presenter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,8 +11,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
@@ -136,40 +141,25 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 
     @Override
     public void getVpn(Map map) {
-        httpAPIWrapper.vpnQuery(map).subscribe(new HttpObserver<ChainVpn>() {
-            @Override
-            public void onNext(ChainVpn chainVpn) {
-                KLog.i("onSuccesse");
-                handleVpnList(chainVpn);
-                onComplete();
-            }
-        });
-//        Disposable disposable = httpAPIWrapper.vpnQuery(map)
-//                .subscribe(new Consumer<ChainVpn>() {
-//                    @Override
-//                    public void accept(ChainVpn chainVpn) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                        handleVpnList(chainVpn);
-//                        //mView.closeProgressDialog();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                        //mView.closeProgressDialog();
-//                        //ToastUtil.show(mFragment.getActivity(), mFragment.getString(R.string.loading_failed_1));
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
+        if (map.get("country").equals("Others")) {
+            httpAPIWrapper.vpnQuery(map).subscribe(new HttpObserver<ChainVpn>() {
+                @Override
+                public void onNext(ChainVpn chainVpn) {
+                    KLog.i("onSuccesse");
+                    handleVpnList(chainVpn);
+                    onComplete();
+                }
+            });
+        } else {
+            httpAPIWrapper.vpnQueryV3(map).subscribe(new HttpObserver<ChainVpn>() {
+                @Override
+                public void onNext(ChainVpn chainVpn) {
+                    KLog.i("onSuccesse");
+                    handleVpnList(chainVpn);
+                    onComplete();
+                }
+            });
+        }
     }
 
     private void handleVpnList(ChainVpn chainVpn) {
@@ -315,17 +305,28 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     }
 
     private void preShowVpn(ArrayList<ChainVpn.DataBean.VpnListBean> vpnListBeans) {
+        boolean isAddConnectedVpn = false;
         ArrayList<VpnEntity> showList = new ArrayList<>();
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
             for (VpnEntity vpnEntity : vpnEntityList) {
                 if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
+                    if (vpnEntity.isConnected()) {
+                        isAddConnectedVpn = true;
+                    }
                     showList.add(vpnEntity);
                     break;
                 }
             }
         }
-
+        if (VpnStatus.isVPNActive() && !isAddConnectedVpn) {
+            for (VpnEntity vpnEntity : vpnEntityList) {
+                if (vpnEntity.isConnected()) {
+                    showList.add(vpnEntity);
+                    break;
+                }
+            }
+        }
         mView.setVpnList(showList);
     }
 
@@ -335,11 +336,17 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         if (vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
             connectVpnForSelf();
         } else {
-            Map<String, String> map = new HashMap<>();
-            map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
-            getBalance(map);
+            mView.showNeedQlcDialog(vpnEntity);
         }
     }
+
+    @Override
+    public void dialogConfirm() {
+        Map<String, String> map = new HashMap<>();
+        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
+        getBalance(map);
+    }
+
 
     /**
      * 连接的是自己的vpn
@@ -364,8 +371,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             } else {
 //                        ToastUtil.displayShortToast("vpn profile is null, please import vpn configuration file agin");
                 KLog.i("profile为空。。。");
-                if(connectVpnEntity != null && connectVpnEntity.getProfileLocalPath() != null)
-                {
+                if (connectVpnEntity != null && connectVpnEntity.getProfileLocalPath() != null) {
                     File configFile = new File(connectVpnEntity.getProfileLocalPath());
                     if (configFile.exists()) {
                         mView.showProgressDialog();

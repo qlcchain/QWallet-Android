@@ -244,11 +244,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setVpnTitle(VpnTitle vpnTitle) {
-//        tabLayout.setText(vpnTitle.getTitle().toUpperCase());
-    }
-
     @Override
     protected void setupFragmentComponent() {
         DaggerSmsComponent

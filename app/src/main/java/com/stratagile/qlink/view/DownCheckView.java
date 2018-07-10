@@ -9,18 +9,24 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.entity.ContinentAndCountry;
+import com.stratagile.qlink.entity.eventbus.SelectCountry;
 import com.stratagile.qlink.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -39,6 +45,7 @@ public class DownCheckView extends LinearLayout {
     private boolean animationEnd;
     private DownCheckAdapter downCheckAdapter;
     private long intervalTime = 250;
+    private ImageView ivChooseCountry;
 
     public OnItemCheckListener getOnItemCheckListener() {
         return onItemCheckListener;
@@ -72,6 +79,7 @@ public class DownCheckView extends LinearLayout {
         llController = view.findViewById(R.id.ll_controller);
         tvSelect = view.findViewById(R.id.select);
         ivShow = view.findViewById(R.id.iv_show);
+        ivChooseCountry = view.findViewById(R.id.iv_country);
         isShow = false;
         animationEnd = true;
         tvSelect.setOnClickListener(new OnClickListener() {
@@ -86,7 +94,7 @@ public class DownCheckView extends LinearLayout {
                     isShow = false;
                     mask.setVisibility(GONE);
                     recyclerView.setVisibility(INVISIBLE);
-                    ivShow.setImageDrawable(getContext().getResources().getDrawable(R.mipmap.icon_choose));
+                    imageOff();
                     recyclerView.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_center_to_top));
                     mask.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.activity_fade_out));
                     handler.sendEmptyMessageDelayed(0, intervalTime);
@@ -94,7 +102,7 @@ public class DownCheckView extends LinearLayout {
                     isShow = true;
                     mask.setVisibility(VISIBLE);
                     recyclerView.setVisibility(VISIBLE);
-                    ivShow.setImageDrawable(getContext().getResources().getDrawable(R.mipmap.icon_choice));
+                    imageOn();
                     recyclerView.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_top_to_center));
                     mask.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.activity_fade_in));
                     handler.sendEmptyMessageDelayed(1, intervalTime);
@@ -114,7 +122,7 @@ public class DownCheckView extends LinearLayout {
                 isShow = false;
                 mask.setVisibility(GONE);
                 recyclerView.setVisibility(INVISIBLE);
-                ivShow.setImageDrawable(getContext().getResources().getDrawable(R.mipmap.icon_max));
+                imageOff();
                 recyclerView.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_center_to_top));
                 mask.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.activity_fade_out));
                 handler.sendEmptyMessageDelayed(0, intervalTime);
@@ -130,10 +138,26 @@ public class DownCheckView extends LinearLayout {
         isShow = false;
         mask.setVisibility(GONE);
         recyclerView.setVisibility(INVISIBLE);
-        ivShow.setImageDrawable(getContext().getResources().getDrawable(R.mipmap.icon_max));
+        imageOff();
         recyclerView.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_center_to_top));
         mask.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.activity_fade_out));
         handler.sendEmptyMessageDelayed(0, intervalTime);
+    }
+
+    private void imageOn() {
+        RotateAnimation animation = new RotateAnimation(0f, 90, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(200);
+        animation.setRepeatCount(0);//动画的重复次数
+        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
+        ivShow.startAnimation(animation);//开始动画
+    }
+
+    private void imageOff() {
+        Animation animation = new RotateAnimation(90, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(200);
+        animation.setRepeatCount(0);//动画的重复次数
+        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
+        ivShow.startAnimation(animation);//开始动画
     }
 
     public void setData(ArrayList<ContinentAndCountry.ContinentBean.CountryBean> contentList) {
@@ -163,7 +187,7 @@ public class DownCheckView extends LinearLayout {
 
             @Override
             public void onItemSelect(ContinentAndCountry.ContinentBean.CountryBean item) {
-                setText(item.getName());
+                setText(item);
             }
         });
     }
@@ -179,9 +203,12 @@ public class DownCheckView extends LinearLayout {
                     animationEnd = true;
                     break;
                 case 2:
-                    tvSelect.setText(downCheckAdapter.getItem(msg.arg1).getName());
-                    onItemCheckListener.OnItemCheck(msg.arg1);
+                    setText(downCheckAdapter.getItem(msg.arg1));
+                    onItemCheckListener.onItemCheck(downCheckAdapter.getItem(msg.arg1));
                     mask.performClick();
+                    break;
+                case 3:
+                    EventBus.getDefault().post(msg.obj);
                     break;
                 default:
                     break;
@@ -190,11 +217,20 @@ public class DownCheckView extends LinearLayout {
     };
 
     public interface OnItemCheckListener {
-        void OnItemCheck(int position);
+        void onItemCheck(ContinentAndCountry.ContinentBean.CountryBean item);
     }
 
-    public void setText(String country) {
-        tvSelect.setText(country);
+    public void setText(ContinentAndCountry.ContinentBean.CountryBean item) {
+        if (!item.getName().equals(getContext().getString(R.string.choose_location))) {
+            Message msg = new Message();
+            msg.obj = item;
+            msg.what = 3;
+            handler.sendMessageDelayed(msg, 600);
+        }
+        tvSelect.setText(item.getName());
+        Glide.with(getContext())
+                .load(getContext().getResources().getIdentifier(item.getCountryImage(), "mipmap", getContext().getPackageName()))
+                .into(ivChooseCountry);
     }
 
 

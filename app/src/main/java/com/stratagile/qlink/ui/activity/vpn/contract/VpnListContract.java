@@ -32,6 +32,8 @@ public interface VpnListContract {
         void startOrStopVPN(VpnProfile vpnProfile);
 
         void preConnect();
+
+        void showNeedQlcDialog(VpnEntity vpnEntity);
     }
 
     interface VpnListContractPresenter extends BasePresenter {
@@ -46,5 +48,8 @@ public interface VpnListContract {
         void handleSendMessage(int message);
 
         void connectShareSuccess();
+
+        void dialogConfirm();
+
     }
 }
