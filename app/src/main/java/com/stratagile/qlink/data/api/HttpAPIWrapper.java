@@ -208,6 +208,14 @@ public class HttpAPIWrapper {
         }
 
     }
+    public Observable<ChainVpn> vpnQueryV3(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.vpnQueryV3(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.vpnQueryV3(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+
+    }
 
     public Observable<VertifyVpn> vertifyVpnName(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {

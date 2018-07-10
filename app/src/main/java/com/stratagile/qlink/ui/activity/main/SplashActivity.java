@@ -85,12 +85,14 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     public void loginSuccees() {
         startActivity(MainActivity.class);
+        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 
     @Override
     public void jumpToLogin() {
         startActivity(MainActivity.class);
+        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 

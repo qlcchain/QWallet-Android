@@ -186,6 +186,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Germany", "germany"));
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Others", "icon_others"));
         downCHeckView.setData(countryBeans);
+        downCHeckView.setText(new ContinentAndCountry.ContinentBean.CountryBean(getString(R.string.choose_location), "icon_choose_location"));
         if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
             statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));
             statusBar.setText(getString(R.string.testnet));
@@ -459,8 +460,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         downCHeckView.setVisibility(View.GONE);
         downCHeckView.setOnItemCheckListener(new DownCheckView.OnItemCheckListener() {
             @Override
-            public void OnItemCheck(int position) {
-//                downCHeckView.close();
+            public void onItemCheck(ContinentAndCountry.ContinentBean.CountryBean item) {
+
             }
         });
         tvTitle.setVisibility(View.VISIBLE);
@@ -471,17 +472,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 .into(ivWallet);
         ivWallet.setVisibility(View.INVISIBLE);
         ivWallet.setClickable(false);
-//        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-//            if (ivWallet != null) {
-//                ivWallet.setVisibility(View.INVISIBLE);
-//                ivWallet.setClickable(false);
-//            }
-//        } else {
-//            if (ivWallet != null) {
-//                ivWallet.setVisibility(View.VISIBLE);
-//                ivWallet.setClickable(true);
-//            }
-//        }
+        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            if (ivWallet != null) {
+                ivWallet.setVisibility(View.INVISIBLE);
+                ivWallet.setClickable(false);
+            }
+        } else {
+            if (ivWallet != null) {
+                ivWallet.setVisibility(View.VISIBLE);
+                ivWallet.setClickable(true);
+            }
+        }
     }
 
     /**

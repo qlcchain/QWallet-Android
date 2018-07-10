@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DownCheckAdapter extends BaseQuickAdapter<ContinentAndCountry.ContinentBean.CountryBean, BaseViewHolder> {
 
-    private int currentSelectItem = 0;
+    private int currentSelectItem = -1;
 
     public int getCurrentSelectItem() {
         return currentSelectItem;

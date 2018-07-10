@@ -21,9 +21,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -47,6 +49,7 @@ import com.stratagile.qlink.core.VPNLaunchHelper;
 import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.ContinentAndCountry;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
@@ -239,30 +242,23 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         return view;
     }
 
-    VpnEntity connectVpnEntity;
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ChangeToTestWallet(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
-        getVpn();
-    }
-
     /**
      * 显示vpn注册时需要扣费的dialog
      */
-    private void showVpnDisconnectDialog(VpnEntity vpnEntity) {
+    @Override
+    public void showNeedQlcDialog(VpnEntity vpnEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getActivity(), R.layout.dialog_layout, null);
+        View view = View.inflate(getActivity(), R.layout.dialog_need_qlc_layout, null);
         builder.setView(view);
         builder.setCancelable(true);
-        TextView title = (TextView) view.findViewById(R.id.title);//设置标题
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
         Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-        title.setText(R.string.Disconnect_VPN);
-        tvContent.setText(R.string.Are_you_sure_to_disconnect);
+        tvContent.setText(Html.fromHtml(AppConfig.getInstance().getResources().getString(R.string.Just_cost_QLC_Connect_NOW, ("" + vpnEntity.getQlc()))));
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
-        btn_cancel.setText(getString(R.string.cancel).toLowerCase());
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,13 +269,20 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                Intent intent = new Intent();
-                intent.setAction(BroadCastAction.disconnectVpn);
-                getActivity().sendBroadcast(intent);
+                mPresenter.dialogConfirm();
             }
         });
         dialog.show();
     }
+
+
+    VpnEntity connectVpnEntity;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ChangeToTestWallet(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
+        getVpn();
+    }
+
 
 //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -444,17 +447,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getVpnFromSelectCountry(SelectCountry selectCountry) {
+    public void getVpnFromSelectCountry(ContinentAndCountry.ContinentBean.CountryBean countryBean) {
         Map<String, String> map = new HashMap<>();
-        map.put("country", selectCountry.getCountry());
-        country = selectCountry.getCountry();
+        map.put("country", countryBean.getName());
+        country = countryBean.getName();
         mPresenter.getVpn(map);
         refreshLayout.setRefreshing(true);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setVpnTitle(VpnTitle vpnTitle) {
-        country = vpnTitle.getTitle();
     }
 
     private void getVpn() {
@@ -488,7 +486,6 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         }
         Map<String, String> map = new HashMap<>();
         KLog.i(country);
-        EventBus.getDefault().post(new VpnTitle(country));
         map.put("country", country);
         mPresenter.getVpn(map);
         refreshLayout.setRefreshing(false);

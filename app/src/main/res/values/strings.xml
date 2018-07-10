@@ -850,4 +850,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="vpn_list">VPN List</string>
     <string name="REGISTER_YOUR_VPN_">REGISTER YOUR VPN</string>
     <string name="please_wait_vpn_online">please wait this vpn online</string>
+    <string name="choose_location">Choose Location</string>
+    <string name="no">NO</string>
+    <string name="Just_cost_QLC_Connect_NOW"><Data><![CDATA[Just cost <b>\%s\</b> QLC<br />Connect NOW!]]></Data></string>
 </resources>
