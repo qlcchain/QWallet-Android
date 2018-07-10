@@ -46,16 +46,10 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
     @Override
     protected void convert(BaseViewHolder helper, VpnEntity item) {
         helper.setText(R.id.vpn_name, item.getVpnName());
-//        CardView cardView = helper.getView(R.id.cardView);
         helper.addOnClickListener(R.id.freind_avater);
-        helper.setText(R.id.connect_times, item.getOnlineTime() + "/times");
+        helper.setText(R.id.connect_times, item.getConnsuccessNum() + "/times");
         helper.setText(R.id.price, item.getQlc() + " QLC/hour");
         helper.setText(R.id.tv_country, item.getCountry());
-//        helper.setTextColor(R.id.vpn_name, mContext.getResources().getColor(R.color.mainColor));
-//        helper.setTextColor(R.id.price, mContext.getResources().getColor(R.color.color_333));
-//        helper.setTextColor(R.id.max_connect, mContext.getResources().getColor(R.color.color_333));
-//        cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.white));
-//        helper.addOnClickListener(R.id.iv_vpn_status);
         ImageView avater = (ImageView) helper.getView(R.id.freind_avater);
         if (item.getAvatar() == null || item.getAvatar().equals("")) {
             if (item.getAvaterUpdateTime() != 0) {
@@ -67,51 +61,21 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
                             .into(avater);
                 } else {
                     avater.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_default_avatar));
-//                    if (ConstantValue.myStatus > 0 && item.isOnline()) {
-//                        if (ConstantValue.loadingAvatarList.contains(item.getAvaterUpdateTime() + "")) {
-//                            //已经对改头像请求了加载
-//                        } else {
-//                            if (ConstantValue.isLoadingImg) {
-//                                return;
-//                            }
-//                            KLog.i("好友的头像不存在，请求发送图片过来");
-//                            if (Qsdk.getInstance().addFileSendRequest(item.getFriendNum()) == 0) {
-//                                ConstantValue.loadingAvatarList.add(item.getAvaterUpdateTime() + "");
-//                            }
-//                        }
-//                    } else {
-////                    KLog.i("没有登录，或者过滤掉重复的头像请求");
-//                    }
                 }
             } else {
                 avater.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_default_avatar));
             }
         } else {
-            if (item.getIsConnected()) {
-                if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {
-                    Glide.with(mContext)
-                            .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
-                            .apply(AppConfig.getInstance().options)
-                            .into(avater);
-                } else {
-                    Glide.with(mContext)
-                            .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
-                            .apply(AppConfig.getInstance().options)
-                            .into(avater);
-                }
-
+            if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {
+                Glide.with(mContext)
+                        .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
+                        .apply(AppConfig.getInstance().optionsAvater)
+                        .into(avater);
             } else {
-                if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {
-                    Glide.with(mContext)
-                            .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
-                            .apply(AppConfig.getInstance().optionsAvater)
-                            .into(avater);
-                } else {
-                    Glide.with(mContext)
-                            .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
-                            .apply(AppConfig.getInstance().optionsAvater)
-                            .into(avater);
-                }
+                Glide.with(mContext)
+                        .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
+                        .apply(AppConfig.getInstance().optionsAvater)
+                        .into(avater);
             }
         }
         if (item.isOnline()) {
@@ -139,23 +103,18 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
             helper.setImageDrawable(R.id.friend_status, mContext.getResources().getDrawable(R.mipmap.icon_search_red));
 //            helper.setImageDrawable(R.id.iv_vpn_avater, mContext.getResources().getDrawable(R.mipmap.icon_offiline_vpn));
         }
-        if (item.getIsConnected()) {
-//            cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.mainColor));
-//            helper.setTextColor(R.id.vpn_name, mContext.getResources().getColor(R.color.white));
-//            helper.setTextColor(R.id.price, mContext.getResources().getColor(R.color.white));
-//            helper.setTextColor(R.id.max_connect, mContext.getResources().getColor(R.color.white));
-//            helper.setImageDrawable(R.id.iv_vpn_avater, mContext.getResources().getDrawable(R.mipmap.icon_my_vpn));
-        } else {
-
-        }
         SwitchButton switchButton = helper.getView(R.id.switchBar);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     if (!item.isOnline()) {
-                        switchButton.setChecked(false);
-                        ToastUtil.displayShortToast(mContext.getResources().getString(R.string.please_wait_vpn_online));
+                        if (item.isConnected()) {
+                            switchButton.setChecked(true);
+                        } else {
+                            switchButton.setChecked(false);
+                            ToastUtil.displayShortToast(mContext.getResources().getString(R.string.please_wait_vpn_online));
+                        }
                     } else {
                         if (onVpnOpreateListener != null && !item.isConnected()) {
                             onVpnOpreateListener.onConnect(item);
@@ -186,6 +145,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
 
     public interface OnVpnOpreateListener {
         void onConnect(VpnEntity vpnEntity);
+
         void onDisConnect();
     }
 }

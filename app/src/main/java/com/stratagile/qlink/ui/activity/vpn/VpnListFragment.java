@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
@@ -27,8 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
@@ -223,9 +226,8 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             @Override
             public void onConnect(VpnEntity vpnEntity) {
                 if (VpnStatus.isVPNActive()) {
-                    Intent intent = new Intent();
-                    intent.setAction(BroadCastAction.disconnectVpn);
-                    getActivity().sendBroadcast(intent);
+                    showChangeVpnDialog(vpnEntity);
+                    return;
                 }
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
@@ -234,9 +236,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
             @Override
             public void onDisConnect() {
-                Intent intent = new Intent();
-                intent.setAction(BroadCastAction.disconnectVpn);
-                getActivity().sendBroadcast(intent);
+                showDisConnectVpnDialog(connectVpnEntity);
             }
         });
         return view;
@@ -270,6 +270,80 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             public void onClick(View v) {
                 dialog.dismiss();
                 mPresenter.dialogConfirm();
+            }
+        });
+        dialog.show();
+    }
+    /**
+     * 断开vpn的时候显示的dialog
+     */
+    public void showDisConnectVpnDialog(VpnEntity vpnEntity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = View.inflate(getActivity(), R.layout.dialog_disconnect_vpn_layout, null);
+        builder.setView(view);
+        builder.setCancelable(true);
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+        tvContent.setText(getString(R.string.Do_you_want_to_disconnect));
+        //取消或确定按钮监听事件处l
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                vpnListAdapter.notifyDataSetChanged();
+            }
+        });
+        btn_comfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction(BroadCastAction.disconnectVpn);
+                getActivity().sendBroadcast(intent);
+                connectVpnEntity.setIsConnected(false);
+                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
+            }
+        });
+        dialog.show();
+    }
+    /**
+     * 断开vpn的时候显示的dialog
+     */
+    public void showChangeVpnDialog(VpnEntity vpnEntity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = View.inflate(getActivity(), R.layout.dialog_change_vpn_layout, null);
+        builder.setView(view);
+        builder.setCancelable(true);
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+        tvContent.setText(getString(R.string.Want_to_connect_to_another_VPN));
+        //取消或确定按钮监听事件处l
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                vpnListAdapter.notifyDataSetChanged();
+            }
+        });
+        btn_comfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction(BroadCastAction.disconnectVpn);
+                getActivity().sendBroadcast(intent);
+
+                mPresenter.preConnectVpn(vpnEntity);
+                connectVpnEntity = vpnEntity;
+                mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
             }
         });
         dialog.show();

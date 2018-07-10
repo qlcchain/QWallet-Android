@@ -37,7 +37,6 @@
         <ImageView
             android:id="@+id/iv_country"
             android:src="@mipmap/icon_choose_location"
-            android:layout_marginLeft="@dimen/x10"
             android:layout_width="@dimen/x60"
             android:layout_height="@dimen/x60" />
         <TextView

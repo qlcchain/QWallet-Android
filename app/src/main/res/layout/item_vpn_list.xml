@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/x52"
+        android:layout_marginBottom="@dimen/x20"
         android:layout_marginTop="@dimen/x12"
         android:layout_weight="1"
         android:orientation="horizontal">
@@ -85,6 +85,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular_q"
                     android:textColor="@color/color_333"
+                    android:textStyle="bold"
                     android:textSize="10sp" />
 
                 <TextView
@@ -95,8 +96,7 @@
                     android:fontFamily="@font/roboto_regular_q"
                     android:text=""
                     android:textColor="@color/color_a8a6a6"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textSize="10sp" />
 
 
             </LinearLayout>
@@ -111,6 +111,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular_q"
                     android:text="@string/Users"
+                    android:textStyle="bold"
                     android:textColor="@color/color_333"
                     android:textSize="10sp" />
 
@@ -119,10 +120,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x20"
-                    android:text="total successful connection"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/total_successful_connection"
                     android:textColor="@color/color_a8a6a6"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textSize="10sp" />
             </LinearLayout>
         </LinearLayout>
 

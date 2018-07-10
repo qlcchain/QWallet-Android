@@ -29,7 +29,7 @@ public class OpenVPNThread implements Runnable {
     @SuppressLint("SdCardPath")
     private static final String BROKEN_PIE_SUPPORT = "/data/data/com.stratagile.qlink/cache/pievpn";
     private final static String BROKEN_PIE_SUPPORT2 = "syntax error";
-    private static final String TAG = "OpenVPN";
+    private static final String TAG = "WINQVPN";
     public static final int M_FATAL = (1 << 4);
     public static final int M_NONFATAL = (1 << 5);
     public static final int M_WARN = (1 << 6);
@@ -64,7 +64,7 @@ public class OpenVPNThread implements Runnable {
             startOpenVPNThreadArgs(mArgv);
             Log.i(TAG, "OpenVPN process exited");
         } catch (Exception e) {
-            VpnStatus.logException("Starting OpenVPN Thread", e);
+            VpnStatus.logException("Starting WINQVPN Thread", e);
             Log.e(TAG, "OpenVPNThread Got " + e.toString());
         } finally {
             int exitvalue = 0;
