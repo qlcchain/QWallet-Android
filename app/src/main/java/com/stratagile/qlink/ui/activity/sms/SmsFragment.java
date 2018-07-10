@@ -78,7 +78,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     TextView title;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-//    @BindView(R.id.tabLayout)
+    //    @BindView(R.id.tabLayout)
 //    TextView tabLayout;
     @BindView(R.id.viewPager)
     NoScrollViewPager viewPager;
@@ -92,6 +92,8 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     RelativeLayout rlBannner;
     @BindView(R.id.view)
     View view;
+    @BindView(R.id.registerVpn)
+    TextView registerVpn;
 //    @BindView(R.id.iv_world)
 //    ImageView ivWorld;
 //    @BindView(R.id.ll_select_country_guide)
@@ -299,7 +301,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
 //        startActivityForResult(intent, SELECT_CONTINENT);
 //    }
 
-    @OnClick({R.id.iv_delete, R.id.tv_play_win, R.id.rl_bannner})
+    @OnClick({R.id.iv_delete, R.id.tv_play_win, R.id.rl_bannner,R.id.registerVpn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_delete:
@@ -309,6 +311,29 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
                 startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
                 break;
             case R.id.rl_bannner:
+                break;
+            case R.id.registerVpn :
+                List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
+                    Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                    startActivityForResult(intent, START_CREATE_PASSWORD);
+                    return ;
+                }
+                if (walletList == null || walletList.size() == 0) {
+                    Intent intent = new Intent(getActivity(), NoWalletActivity.class);
+                    intent.putExtra("flag", "nowallet");
+                    startActivityForResult(intent, START_NO_WALLLET);
+                    return ;
+                }
+                if (ConstantValue.isShouldShowVertifyPassword) {
+                    Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                    startActivityForResult(intent, START_VERTIFY_PASSWORD);
+                    return ;
+                }
+                Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
+                intent.putExtra("flag", "");
+                startActivityForResult(intent, 0);
+                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 break;
 //            case R.id.iv_world:
 //                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));

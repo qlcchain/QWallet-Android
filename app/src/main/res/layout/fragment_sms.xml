@@ -101,6 +101,7 @@
                 <!--android:textColor="@color/colorBlack"-->
                 <!--android:layout_height="wrap_content" />-->
             <TextView
+                android:id="@+id/registerVpn"
                 android:layout_width="wrap_content"
                 android:text="@string/REGISTER_YOUR_VPN_"
                 android:layout_gravity="center_vertical"
