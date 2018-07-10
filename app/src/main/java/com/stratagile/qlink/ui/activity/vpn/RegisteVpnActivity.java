@@ -891,12 +891,14 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                         return;
                     }
                     if (vpnIsRegisted) {
-                        if (Float.parseFloat(etYourBet.getText().toString()) > Float.parseFloat(etAssetTranfer.getText().toString())) {
+                        ToastUtil.displayShortToast(getString(R.string.THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED).toLowerCase());
+                        return;
+                       /* if (Float.parseFloat(etYourBet.getText().toString()) > Float.parseFloat(etAssetTranfer.getText().toString())) {
                             showVpnAlreadyRegisterDialog();
                         } else {
                             //抢注册的qlc不够
                             ToastUtil.displayShortToast(getString(R.string.Your_bet_should_be_greater_than_the_current_asset_value));
-                        }
+                        }*/
                     } else {
                         if ((Float.parseFloat(etYourBet.getText().toString()) < Float.parseFloat(mbalance.getData().getQLC() + "")) && mbalance.getData().getGAS() > 0.0001) {
                             //可以正常注册
@@ -1291,12 +1293,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             vpnIsRegisted = false;
 
         } else {
+            ToastUtil.displayShortToast(getString(R.string.THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED).toLowerCase());
             vpnIsRegisted = true;
-            if (getIntent().getStringExtra("flag").equals("update")) {
+           /* if (getIntent().getStringExtra("flag").equals("update")) {
 
             } else {
                 etAssetTranfer.setText(verifyVpn.getData().getQlc() + "");
-            }
+            }*/
         }
     }
 
