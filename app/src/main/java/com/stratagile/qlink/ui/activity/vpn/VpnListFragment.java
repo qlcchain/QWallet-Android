@@ -844,6 +844,16 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     ProfileManager.getInstance(getActivity()).removeProfile(getActivity(), mResult);
                 }
                 connectVpnEntity.setIsConnected(true);
+                if (ConstantValue.isConnectVpn) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ConnectVpnSuccessActivity");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "ConnectVpnSuccessActivity");
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "ConnectVpnSuccessActivity");
+                    if(mFirebaseAnalytics != null){
+                        mFirebaseAnalytics.logEvent("ConnectVpnSuccessActivity", bundle);
+                    }
+                    ConstantValue.isConnectVpn = false;
+                }
                 AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
                 for (VpnEntity vpnEntity : vpnListAdapter.getData()) {
                     if (vpnEntity.getVpnName().equals(connectVpnEntity.getVpnName())) {
