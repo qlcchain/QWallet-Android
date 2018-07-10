@@ -21,6 +21,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
@@ -109,6 +110,12 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         title.setText(getResources().getString(R.string.vpn));
         ArrayList<String> titles = new ArrayList<>();
         titles.add(ConstantValue.longcountry.toUpperCase());
+        if(ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false))
+        {
+            registerVpn.setVisibility(View.GONE);
+        }else{
+            registerVpn.setVisibility(View.VISIBLE);
+        }
 //        titles.add("UNREGISTERED");
 //        titles.add(getResources().getString(R.string.generalsettings));
 //        titles.add(getResources().getString(R.string.faq));
@@ -202,7 +209,14 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         });
         return view;
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ChangeTestUI(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
+        if (!SpUtil.getBoolean(getActivity(), ConstantValue.isMainNet, false)) {
+            registerVpn.setVisibility(View.VISIBLE);
+        } else {
+            registerVpn.setVisibility(View.GONE);
+        }
+    }
     private static final String FEATURE_TELEVISION = "android.hardware.type.television";
     private static final String FEATURE_LEANBACK = "android.software.leanback";
 
