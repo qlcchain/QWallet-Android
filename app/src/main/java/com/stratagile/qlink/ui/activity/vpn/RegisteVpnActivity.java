@@ -191,6 +191,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     private boolean isUpdate = false;
     private TestConnectDialog testConnectDialog;
     private VpnProfile profile;
+    private int selectFlag = -1;
 
     /**
      * vpn的名字是否是自己曾经注册过的
@@ -806,9 +807,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
-                SelectCountryDialog.getInstance().createDialog(this).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
+                SelectCountryDialog.getInstance().createDialog(this, selectFlag).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
                     @Override
-                    public void onSelected(String  country) {
+                    public void onSelected(String  country,int selectIndex) {
+                        etCountry.setText(country);
+                        continent = "";
+                        selectFlag = selectIndex;
+                        SelectCountryDialog.getInstance().hideDialog();
                         KLog.i("选择了："+country);
                     }
                 });

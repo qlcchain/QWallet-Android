@@ -80,6 +80,7 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                         VpnEntity vpnEntity = new VpnEntity();
                         vpnEntity.setVpnName(result.getVpnName());
                         vpnEntity.setUsername(result.getVpnName());
+                        vpnEntity.setCountry(result.getCountry());
                         vpnEntity.setIsConnected(false);
                         vpnEntity.setP2pId(result.getP2pId());
                         vpnEntity.setProfileLocalPath(result.getProfileLocalPath());

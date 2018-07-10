@@ -38,7 +38,7 @@ public class SelectCountryDialog {
      * @param context 上下文
      * @return
      */
-    public SelectCountryDialog createDialog(Context context)
+    public SelectCountryDialog createDialog(Context context,int selectIndex)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = View.inflate(context, R.layout.activity_select_country_dialog, null);
@@ -61,13 +61,13 @@ public class SelectCountryDialog {
             //Collections.sort(continentAndCountry.getContinent().get(i).getCountry());
             continentChose = continentAndCountry.getContinent().get(i);
             mAdapterContactCity = new ContactCityAdapter(continentAndCountry.getContinent().get(i).getCountry());
-            mAdapterContactCity.setSelectItem(-1);
+            mAdapterContactCity.setSelectItem(selectIndex);
             recyclerView.setAdapter(mAdapterContactCity);
             mAdapterContactCity.setOnItemChangeListener(new ContactCityAdapter.OnItemChangeListener() {
                 @Override
                 public void onItemChange(int position) {
                     if (mSelectDelegate != null) {
-                        mSelectDelegate.onSelected(mAdapterContactCity.getItem(position).getName());
+                        mSelectDelegate.onSelected(mAdapterContactCity.getItem(position).getName(),position);
                     }
                 }
             });
@@ -94,7 +94,7 @@ public class SelectCountryDialog {
      * 设置回调函数接口
      */
     public interface SelectDelegate {
-        void onSelected(String country);
+        void onSelected(String country,int selectIndex);
     }
     /**
      * 设置回调函数
@@ -104,5 +104,9 @@ public class SelectCountryDialog {
     public SelectCountryDialog setSelectDelegate(SelectDelegate pSelectDelegate) {
         this.mSelectDelegate=pSelectDelegate;
         return this;
+    }
+    public void hideDialog()
+    {
+        builderTips.dismiss();
     }
 }

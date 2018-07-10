@@ -135,17 +135,17 @@
                                         android:maxLength="10"
                                         android:fontFamily="@font/roboto_regular_q"
                                         android:layout_height="wrap_content" />
+
                                     <Spinner
                                         android:id="@+id/spinner"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:entries="@array/coin_list"
 
-                                        android:textColor="@color/color_333"
-                                        android:textSize="@dimen/sp14"
                                         android:fontFamily="@font/roboto_regular_q"
                                         android:text="QLC"
-                                        />
+                                        android:textColor="@color/color_333"
+                                        android:textSize="@dimen/sp14" />
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
