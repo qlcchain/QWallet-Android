@@ -849,4 +849,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <!--2018 07 09-->
     <string name="vpn_list">VPN List</string>
     <string name="REGISTER_YOUR_VPN_">REGISTER YOUR VPN</string>
+    <string name="please_wait_vpn_online">please wait this vpn online</string>
 </resources>

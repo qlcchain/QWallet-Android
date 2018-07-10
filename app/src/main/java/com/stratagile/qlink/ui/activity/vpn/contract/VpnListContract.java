@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.vpn.contract;
 
+import com.stratagile.qlink.VpnProfile;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
@@ -27,9 +28,23 @@ public interface VpnListContract {
         void closeProgressDialog();
 
         void setVpnList(ArrayList<VpnEntity> vpnList);
+
+        void startOrStopVPN(VpnProfile vpnProfile);
+
+        void preConnect();
     }
 
     interface VpnListContractPresenter extends BasePresenter {
         void getVpn(Map map);
+
+        void preConnectVpn(VpnEntity vpnEntity);
+
+        void vpnProfileSendComplete();
+
+        void getPasswordFromRemote(int type);
+
+        void handleSendMessage(int message);
+
+        void connectShareSuccess();
     }
 }

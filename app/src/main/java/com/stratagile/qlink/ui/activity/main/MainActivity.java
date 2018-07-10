@@ -17,8 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -26,7 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +42,7 @@ import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.WifiEntity;
+import com.stratagile.qlink.entity.ContinentAndCountry;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
@@ -91,6 +90,7 @@ import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.WalletStorage;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
+import com.stratagile.qlink.view.DownCheckView;
 import com.stratagile.qlink.view.NoScrollViewPager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -98,7 +98,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,6 +136,12 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     View viewVpn;
     @BindView(R.id.view_wallet)
     View viewWallet;
+    @BindView(R.id.downCHeckView)
+    DownCheckView downCHeckView;
+    @BindView(R.id.rl1)
+    RelativeLayout rl1;
+    @BindView(R.id.rl2)
+    RelativeLayout rl2;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -170,8 +175,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.getStatusBarHeight(this));
+        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.getStatusBarHeight(this));
         statusBar.setLayoutParams(llp);
+        ArrayList<ContinentAndCountry.ContinentBean.CountryBean> countryBeans = new ArrayList<>();
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("United States", "united_states"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("United Kingdom", "united_kingdom"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("singapore", "singapore"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Japan", "japan"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Switzerland", "switzerland"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Germany", "germany"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Others", "icon_others"));
+        downCHeckView.setData(countryBeans);
         if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
             statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));
             statusBar.setText(getString(R.string.testnet));
@@ -336,8 +350,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         setWifiPage();
                         break;
                     case R.id.item_wallet:
-                        if(ConstantValue.canClickWallet)
-                        {
+                        if (ConstantValue.canClickWallet) {
                             setWalletPage();
                         }
                         break;
@@ -422,52 +435,65 @@ public class MainActivity extends BaseActivity implements MainContract.View {
      */
     private void setSmsPage() {
         viewPager.setCurrentItem(0, false);
+        downCHeckView.setVisibility(View.VISIBLE);
+        tvTitle.setVisibility(View.GONE);
         tvTitle.setText(R.string.vpn);
         Glide.with(this)
                 .load(R.mipmap.icon_addition)
                 .into(ivWallet);
-        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            ivWallet.setVisibility(View.INVISIBLE);
-            ivWallet.setClickable(false);
-        } else {
-            ivWallet.setVisibility(View.VISIBLE);
-            ivWallet.setClickable(true);
-        }
+        ivWallet.setVisibility(View.INVISIBLE);
+        ivWallet.setClickable(false);
+//        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+//            ivWallet.setVisibility(View.INVISIBLE);
+//            ivWallet.setClickable(false);
+//        } else {
+//            ivWallet.setVisibility(View.VISIBLE);
+//            ivWallet.setClickable(true);
+//        }
     }
 
     /**
      * 设置为wifi界面
      */
     private void setWifiPage() {
+        downCHeckView.setVisibility(View.GONE);
+        downCHeckView.setOnItemCheckListener(new DownCheckView.OnItemCheckListener() {
+            @Override
+            public void OnItemCheck(int position) {
+//                downCHeckView.close();
+            }
+        });
+        tvTitle.setVisibility(View.VISIBLE);
         viewPager.setCurrentItem(1, false);
         tvTitle.setText(R.string.AvailableWiFi);
         Glide.with(this)
                 .load(R.mipmap.icon_addition)
                 .into(ivWallet);
-        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            if(ivWallet != null)
-            {
-                ivWallet.setVisibility(View.INVISIBLE);
-                ivWallet.setClickable(false);
-            }
-        } else {
-            if(ivWallet != null)
-            {
-                ivWallet.setVisibility(View.VISIBLE);
-                ivWallet.setClickable(true);
-            }
-        }
+        ivWallet.setVisibility(View.INVISIBLE);
+        ivWallet.setClickable(false);
+//        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+//            if (ivWallet != null) {
+//                ivWallet.setVisibility(View.INVISIBLE);
+//                ivWallet.setClickable(false);
+//            }
+//        } else {
+//            if (ivWallet != null) {
+//                ivWallet.setVisibility(View.VISIBLE);
+//                ivWallet.setClickable(true);
+//            }
+//        }
     }
 
     /**
      * 设置为钱包界面
      */
     private void setWalletPage() {
-        if(ivWallet != null)
-        {
+        if (ivWallet != null) {
             ivWallet.setVisibility(View.VISIBLE);
             ivWallet.setClickable(true);
         }
+        downCHeckView.setVisibility(View.GONE);
+        tvTitle.setVisibility(View.VISIBLE);
         //如果支持指纹，但是没有开启
         if (isSupportFingerPrint() && !SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
             if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {

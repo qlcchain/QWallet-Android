@@ -67,7 +67,7 @@
             android:layout_gravity="center_vertical"
             android:paddingTop="@dimen/x20"
             android:paddingBottom="@dimen/x20"
-            android:paddingLeft="@dimen/x59"
+            android:paddingLeft="@dimen/x82"
             android:paddingRight="@dimen/x40"
             android:orientation="horizontal">
 
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular_q"
                 android:text="@string/vpn_list"
-                android:textColor="@color/colorBlack" />
+                android:textColor="@color/color_999" />
             <View
                 android:layout_width="0dp"
                 android:layout_weight="1"

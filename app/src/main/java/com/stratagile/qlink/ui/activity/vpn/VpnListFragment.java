@@ -1,8 +1,22 @@
 package com.stratagile.qlink.ui.activity.vpn;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.net.VpnService;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,27 +28,44 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
+import com.stratagile.qlink.VpnProfile;
+import com.stratagile.qlink.activities.DisconnectVPN;
+import com.stratagile.qlink.api.ExternalAppDatabase;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.core.ConnectionStatus;
+import com.stratagile.qlink.core.IServiceStatus;
+import com.stratagile.qlink.core.OpenVPNStatusService;
+import com.stratagile.qlink.core.PasswordCache;
+import com.stratagile.qlink.core.Preferences;
+import com.stratagile.qlink.core.ProfileManager;
+import com.stratagile.qlink.core.VPNLaunchHelper;
 import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
+import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.VpnRegisterSuccess;
+import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
 import com.stratagile.qlink.entity.im.Message;
+import com.stratagile.qlink.entity.vpn.VpnPrivateKeyRsp;
+import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordRsp;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
 import com.stratagile.qlink.guideview.GuideConstantValue;
 import com.stratagile.qlink.guideview.GuideSpUtil;
 import com.stratagile.qlink.guideview.compnonet.VpnListComponent;
+import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.service.ClientVpnService;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
 import com.stratagile.qlink.ui.activity.im.ConversationActivity;
 import com.stratagile.qlink.ui.activity.seize.SeizeActivity;
@@ -46,14 +77,18 @@ import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
+import com.stratagile.qlink.ui.adapter.VpnSpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.vpn.VpnListAdapter;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.StringUitl;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,6 +101,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
+import static com.stratagile.qlink.LaunchVPN.CLEARLOG;
+import static com.stratagile.qlink.LaunchVPN.START_VPN_PROFILE;
 
 /**
  * @author hzp
@@ -89,13 +126,15 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     private String country;
 
+    private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vpn_list, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
-        recyclerView.addItemDecoration(new SpaceItemDecoration((int) getResources().getDimension(R.dimen.x20)));
+        recyclerView.addItemDecoration(new VpnSpaceItemDecoration((int) getResources().getDimension(R.dimen.x20)));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.getItemAnimator().setChangeDuration(0);
         recyclerView.setAdapter(vpnListAdapter);
@@ -112,6 +151,9 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 if (!vpnListAdapter.getItem(position).isOnline()) {
                     //vpn资产不在线
                 } else {
+                    if (!vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                        return;
+                    }
                     if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
                         Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
                         intent.putExtra("position", position + "");
@@ -161,46 +203,6 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
-                    case R.id.iv_vpn_status:
-                        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-                            return;
-                        }
-                        if (vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
-                            //自己的资产不能抢注，不能点击，点击无效
-//                            if (vpnListAdapter.getItem(position).getIsConnected()) {
-//                                showVpnDisconnectDialog(vpnListAdapter.getItem(position));
-//                            } else {
-                            vpnListAdapter.getViewByPosition(recyclerView, position, R.id.cardView).performClick();
-//                            }
-                        } else {
-                            //别人的资产可以抢注，不管是否在线
-//                            vpnListAdapter.getViewByPosition(recyclerView, position, R.id.cardView).performClick();
-                            if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
-                                Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
-                                intent.putExtra("position", position + "");
-                                startActivityForResult(intent, 3);
-                                return;
-                            }
-                            if (ConstantValue.isShouldShowVertifyPassword) {
-                                Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
-                                intent.putExtra("position", position + "");
-                                startActivityForResult(intent, 3);
-                                return;
-                            }
-                            List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-                            if (walletList == null || walletList.size() == 0) {
-                                Intent intent = new Intent(getActivity(), NoWalletActivity.class);
-                                intent.putExtra("flag", "nowallet");
-                                intent.putExtra("position", position + "");
-                                startActivityForResult(intent, 3);
-                                return;
-                            }
-                            Intent intent = new Intent(getActivity(), SeizeActivity.class);
-                            intent.putExtra("vpnEntity", vpnListAdapter.getItem(position));
-                            intent.putExtra("seizeType", 0);
-                            startActivity(intent);
-                        }
-                        break;
                     case R.id.freind_avater:
                         if (vpnListAdapter.getItem(position).isOnline()) {
                             Intent intent = new Intent(getActivity(), ConversationActivity.class);
@@ -214,8 +216,30 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 }
             }
         });
+        vpnListAdapter.setOnVpnOpreateListener(new VpnListAdapter.OnVpnOpreateListener() {
+            @Override
+            public void onConnect(VpnEntity vpnEntity) {
+                if (VpnStatus.isVPNActive()) {
+                    Intent intent = new Intent();
+                    intent.setAction(BroadCastAction.disconnectVpn);
+                    getActivity().sendBroadcast(intent);
+                }
+                mPresenter.preConnectVpn(vpnEntity);
+                connectVpnEntity = vpnEntity;
+                mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+            }
+
+            @Override
+            public void onDisConnect() {
+                Intent intent = new Intent();
+                intent.setAction(BroadCastAction.disconnectVpn);
+                getActivity().sendBroadcast(intent);
+            }
+        });
         return view;
     }
+
+    VpnEntity connectVpnEntity;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ChangeToTestWallet(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
@@ -257,33 +281,20 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         dialog.show();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-            ArrayList<VpnEntity> showList = new ArrayList<>();
-            for (int i = 0; i < vpnListAdapter.getData().size(); i++) {
-                for (VpnEntity vpnEntity : vpnEntityList) {
-                    if (vpnListAdapter.getItem(i).getVpnName().equals(vpnEntity.getVpnName())) {
-                        showList.add(vpnEntity);
-                        break;
-                    }
-                }
-            }
-            Collections.sort(showList);
-            vpnListAdapter.setNewData(showList);
-        }
-        if (requestCode == 3 && resultCode == RESULT_OK) {
-//            vpnListAdapter.getViewByPosition(recyclerView, Integer.parseInt(data.getStringExtra("position")), R.id.cardView).performClick();
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         country = ConstantValue.longcountry.equals("") ? "United States" : ConstantValue.longcountry;
         EventBus.getDefault().register(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.stratagile.qlink.VPN_STATUS");
+        getActivity().registerReceiver(myBroadcastReceiver, filter);
     }
 
     @Override
@@ -296,6 +307,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        getActivity().unregisterReceiver(myBroadcastReceiver);
     }
 
     @Override
@@ -513,4 +525,396 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             guide.show(getActivity());
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleConfigFile(VpnSendEnd vpnSendEnd) {
+        KLog.i("c层的vpn配置文件传输完毕了，");
+        mPresenter.vpnProfileSendComplete();
+    }
+
+    /**
+     * @param vpnPrivateKeyRsp
+     * @see Qsdk# handleVpnPrivateKeyRsp(int, VpnPrivateKeyRsp)
+     * 拿到私钥的返回
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void privateKeyBack(VpnPrivateKeyRsp vpnPrivateKeyRsp) {
+        if (vpnPrivateKeyRsp.getPrivateKey() == null || vpnPrivateKeyRsp.getPrivateKey().equals("")) {
+            ToastUtil.displayShortToast(getString(R.string.Private_Key_Error));
+            KLog.i("error");
+            closeProgressDialog();
+            return;
+        }
+        KLog.i("收到了私钥的返回了。。。。");
+        mPresenter.handleSendMessage(0);
+        mTransientCertOrPCKS12PW = vpnPrivateKeyRsp.getPrivateKey();
+        KLog.i("私钥验证完成，开始连接，打开OpenVPNStatusService服务。");
+        Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * @param vpnUserAndPasswordRsp
+     * @see Qsdk# handleVpnUserAndPasswordRsp(int, VpnUserAndPasswordRsp)
+     * 拿到账号和密码的返回
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void userNameAndPasswordBack(VpnUserAndPasswordRsp vpnUserAndPasswordRsp) {
+        if (vpnUserAndPasswordRsp.getUserName() == null || vpnUserAndPasswordRsp.getUserName().equals("")) {
+            ToastUtil.displayShortToast(getString(R.string.username_or_password_error));
+            closeProgressDialog();
+            return;
+        }
+        KLog.i(vpnUserAndPasswordRsp.toString());
+        mPresenter.handleSendMessage(0);
+        mResult.mUsername = vpnUserAndPasswordRsp.getUserName();
+        mTransientAuthPW = vpnUserAndPasswordRsp.getPassword();
+        KLog.i("用户名和密码验证完成，开始连接，打开OpenVPNStatusService服务。");
+        Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void checkSharerConnectRsp(CheckConnectRsp checkConnectRsp) {
+        closeProgressDialog();
+        showProgressDialog();
+        mPresenter.connectShareSuccess();
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            KLog.i("服务连接了。。。");
+            IServiceStatus service = IServiceStatus.Stub.asInterface(binder);
+            try {
+                if (mTransientAuthPW != null) {
+                    service.setCachedPassword(mResult.getUUIDString(), PasswordCache.AUTHPASSWORD, mTransientAuthPW);
+                }
+                if (mTransientCertOrPCKS12PW != null) {
+                    service.setCachedPassword(mResult.getUUIDString(), PasswordCache.PCKS12ORCERTPASSWORD, mTransientCertOrPCKS12PW);
+                }
+
+                onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
+
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+            getActivity().unbindService(this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            KLog.i("服务断开连接了。。。。");
+        }
+    };
+
+    VpnProfile mResult;
+
+    @Override
+    public void startOrStopVPN(VpnProfile profile) {
+        mResult = profile;
+        if (VpnStatus.isVPNActive() && profile.getUUIDString().equals(VpnStatus.getLastConnectedVPNProfile())) {
+            Intent disconnectVPN = new Intent(getActivity(), DisconnectVPN.class);
+            startActivity(disconnectVPN);
+        } else {
+            if (Preferences.getDefaultSharedPreferences(getActivity()).getBoolean(CLEARLOG, true))
+                VpnStatus.clearLog();
+
+            // we got called to be the starting point, most likely a shortcut
+            String shortcutUUID = profile.getUUID().toString();
+            String shortcutName = profile.getName().toString();
+
+            VpnProfile profileToConnect = ProfileManager.get(getActivity(), shortcutUUID);
+            if (shortcutName != null && profileToConnect == null) {
+                profileToConnect = ProfileManager.getInstance(getActivity()).getProfileByName(shortcutName);
+                if (!(new ExternalAppDatabase(getActivity()).checkRemoteActionPermission(getActivity()))) {
+
+                    return;
+                }
+            }
+            KLog.i("startOrStopVPN  2222");
+
+            if (profileToConnect == null) {
+                VpnStatus.logError(R.string.shortcut_profile_notfound);
+                KLog.i("startOrStopVPN  3333");
+                // show Log window to display error
+//                finish();
+            } else {
+//                mSelectedProfile = profileToConnect;
+                launchVPN();
+            }
+        }
+    }
+
+    /**
+     * 密码
+     */
+    private String mTransientAuthPW;
+    /**
+     * 私钥
+     */
+    private String mTransientCertOrPCKS12PW;
+    private boolean mhideLog = false;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+            ArrayList<VpnEntity> showList = new ArrayList<>();
+            for (int i = 0; i < vpnListAdapter.getData().size(); i++) {
+                for (VpnEntity vpnEntity : vpnEntityList) {
+                    if (vpnListAdapter.getItem(i).getVpnName().equals(vpnEntity.getVpnName())) {
+                        showList.add(vpnEntity);
+                        break;
+                    }
+                }
+            }
+            Collections.sort(showList);
+            vpnListAdapter.setNewData(showList);
+        }
+        if (requestCode == 3 && resultCode == RESULT_OK) {
+//            vpnListAdapter.getViewByPosition(recyclerView, Integer.parseInt(data.getStringExtra("position")), R.id.cardView).performClick();
+        }
+        if (requestCode == START_VPN_PROFILE) {
+            KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
+            if (resultCode == Activity.RESULT_OK) {
+                KLog.i("开始检查配置文件的类型");
+                int needpw = mResult.needUserPWInput(mTransientCertOrPCKS12PW, mTransientAuthPW);
+                if (needpw != 0) {
+                    VpnStatus.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
+                            ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
+//                    askForPW(needpw);
+                    mPresenter.getPasswordFromRemote(needpw);
+                } else {
+                    KLog.i("不需要密码，直接连接，，。");
+                    SharedPreferences prefs = Preferences.getDefaultSharedPreferences(getActivity());
+                    boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
+
+                    if (!mhideLog && showLogWindow)
+//                        showLogWindow();
+                        ProfileManager.updateLRU(getActivity(), mResult);
+                    VPNLaunchHelper.startOpenVpn(mResult, getActivity());
+                    startListener();
+//                    finish();
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // User does not want us to start, so we just vanish
+                VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
+                        ConnectionStatus.LEVEL_NOTCONNECTED);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    VpnStatus.logError(R.string.nought_alwayson_warning);
+
+//                finish();
+            }
+        }
+    }
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    private void startListener() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (vpnDetailstatus != null && vpnDetailstatus.contains("CONNECTED")) {
+                    KLog.i("时间到了，已经连接了");
+                } else if (vpnDetailstatus != null) {
+                    closeProgressDialog();
+                    if (ConstantValue.isConnectVpn) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ConnectVpnFailedActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "ConnectVpnFailedActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "ConnectVpnFailedActivity");
+                        if(mFirebaseAnalytics != null){
+                            mFirebaseAnalytics.logEvent("ConnectVpnFailedActivity", bundle);
+                        }
+                        ConstantValue.isConnectVpn = false;
+                    }
+                    KLog.i("error");
+                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
+                    Intent intent = new Intent();
+                    intent.setAction(BroadCastAction.disconnectVpn);
+                    getActivity().sendBroadcast(intent);
+                } else {
+                    closeProgressDialog();
+                    if (ConstantValue.isConnectVpn) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ConnectVpnFailedActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "ConnectVpnFailedActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "ConnectVpnFailedActivity");
+                        if(mFirebaseAnalytics != null){
+                            mFirebaseAnalytics.logEvent("ConnectVpnFailedActivity", bundle);
+                        }
+                        ConstantValue.isConnectVpn = false;
+                    }
+                    KLog.i("error");
+                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error));
+                    Intent intent = new Intent();
+                    intent.setAction(BroadCastAction.disconnectVpn);
+                    getActivity().sendBroadcast(intent);
+                }
+            }
+        }).start();
+    }
+
+    void launchVPN() {
+        KLog.i("开启vpn");
+        int vpnok = mResult.checkProfile(getActivity());
+        if (vpnok != R.string.no_error_found) {
+//            showConfigErrorDialog(vpnok);
+            KLog.i("连接vpn出现错误");
+            return;
+        }
+
+        KLog.i("校验配置文件没有出现错误");
+
+        Intent intent = VpnService.prepare(getActivity());
+        // Check if we want to fix /dev/tun
+        SharedPreferences prefs = Preferences.getDefaultSharedPreferences(getActivity());
+        boolean usecm9fix = prefs.getBoolean("useCM9Fix", false);
+        boolean loadTunModule = prefs.getBoolean("loadTunModule", false);
+
+//        if (loadTunModule)
+//            execeuteSUcmd("insmod /system/lib/modules/tun.ko");
+//
+//        if (usecm9fix && !mCmfixed) {
+//            execeuteSUcmd("chown system /dev/tun");
+//        }
+
+        if (intent != null) {
+            VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
+                    ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
+            // Start the query
+            try {
+                KLog.i("开启vpn的服务");
+                startActivityForResult(intent, START_VPN_PROFILE);
+            } catch (ActivityNotFoundException ane) {
+                // Shame on you Sony! At least one user reported that
+                // an official Sony Xperia Arc S image triggers this exception
+                VpnStatus.logError(R.string.no_vpn_support_image);
+//                showLogWindow();
+            }
+        } else {
+            KLog.i("开启vpn的intent为空");
+            onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
+        }
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
+    }
+
+    String vpnDetailstatus;
+
+    public class MyBroadcastReceiver extends BroadcastReceiver {
+        public static final String TAG = "MyBroadcastReceiver";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            KLog.i(intent.getStringExtra("detailstatus"));
+            vpnDetailstatus = intent.getStringExtra("detailstatus");
+            //if (ConstantValue.showLog) {
+            LogUtil.addLog("连接已经注册的vpn的log：" + intent.getStringExtra("detailstatus"), getClass().getSimpleName());
+            KLog.i("收到广播了。。。。");
+            if (intent.getStringExtra("detailstatus").contains("CONNECTED")) {
+                LogUtil.addLog("vpn连接成功，开始进行扣费：" + connectVpnEntity.getVpnName(), getClass().getSimpleName());
+                if (connectVpnEntity.getProfileLocalPath() != null) {
+                    String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";
+                    String fileName = "";
+                    if (connectVpnEntity.getProfileLocalPath().contains("/")) {
+                        fileName = connectVpnEntity.getProfileLocalPath().substring(connectVpnEntity.getProfileLocalPath().lastIndexOf("/"), connectVpnEntity.getProfileLocalPath().length());
+                    } else {
+                        fileName = "/" + connectVpnEntity.getProfileLocalPath();
+                    }
+                    File configFile = new File(newPath + fileName);
+                    if (configFile.exists()) {
+                        configFile.delete();
+                    }
+                }
+                if (mResult != null) {
+                    ProfileManager.getInstance(getActivity()).removeProfile(getActivity(), mResult);
+                }
+                connectVpnEntity.setIsConnected(true);
+                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
+                for (VpnEntity vpnEntity : vpnListAdapter.getData()) {
+                    if (vpnEntity.getVpnName().equals(connectVpnEntity.getVpnName())) {
+                        vpnEntity.setIsConnected(true);
+                    }
+                }
+                vpnListAdapter.notifyDataSetChanged();
+                closeProgressDialog();
+//                onRecordSuccess(true);
+            }
+        }
+
+        private void openNewThreed(boolean upUI) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                            startConnectSuccess(upUI);
+                        }
+                    });
+                }
+            }).start();
+        }
+
+    }
+
+    @Override
+    public void preConnect() {
+        ConstantValue.isConnectVpn = true;
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "beginConnectVpn");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "beginConnectVpn");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "beginConnectVpn");
+        mFirebaseAnalytics.logEvent("beginConnectVpn", bundle);
+        String currentTime = StringUitl.getNowDateShort();
+        String currentTimeFlag = SpUtil.getString(AppConfig.getInstance(), currentTime + "_vpn", "0");
+        if (currentTimeFlag.equals("0")) {
+            bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "useVpnTotal");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "useVpnTotal");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "useVpnTotal");
+            mFirebaseAnalytics.logEvent("useVpnTotal", bundle);
+            SpUtil.putString(AppConfig.getInstance(), currentTime + "_vpn", "1");
+        }
+        getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
+        AppConfig.currentVpnUseType = 1;
+        AppConfig.currentUseVpn = connectVpnEntity;
+        KLog.i(AppConfig.currentVpnUseType);
+        KLog.i(AppConfig.currentUseVpn.getVpnName());
+        KLog.i(connectVpnEntity.getProfileLocalPath());
+        if (connectVpnEntity.getProfileLocalPath() == null) {
+            ToastUtil.displayShortToast(getResources().getString(R.string.import_content_resolve_error));
+            closeProgressDialog();
+            return;
+        }
+        File configFile = new File(connectVpnEntity.getProfileLocalPath());
+        if (configFile.exists()) {
+//            ToastUtil.displayShortToast("文件存在");
+            configFile.delete();
+//            readFile(configFile);
+        } else {
+        }
+        Qsdk.getInstance().sendVpnFileRequest(connectVpnEntity.getFriendNum(), connectVpnEntity.getProfileLocalPath(), connectVpnEntity.getVpnName());
+//        mPresenter.handleSendMessage(1);
+    }
+
 }

@@ -46,14 +46,40 @@ public class ContinentAndCountry {
         }
 
         public static class CountryBean implements  Comparable<CountryBean>{
+            public CountryBean(String name, String countryImage) {
+                this.name = name;
+                this.countryImage = countryImage;
+                this.isCheck = false;
+            }
+
+            public CountryBean(String name, String countryImage, boolean isCheck) {
+                this.name = name;
+                this.countryImage = countryImage;
+                this.isCheck = isCheck;
+            }
+
+            public CountryBean() {
+            }
+
             /**
+
              * name : China
+
              * countryImage : china
              * pys : United_States
              */
 
             private String name;
             private String countryImage;
+            private boolean isCheck;
+
+            public boolean isCheck() {
+                return isCheck;
+            }
+
+            public void setCheck(boolean check) {
+                isCheck = check;
+            }
 
             public String getName() {
                 return name;

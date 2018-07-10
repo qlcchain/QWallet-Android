@@ -1062,50 +1062,7 @@ public class ConnectVpnActivity extends BaseActivity implements ConnectVpnContra
                 if (mResult != null) {
                     ProfileManager.getInstance(ConnectVpnActivity.this).removeProfile(ConnectVpnActivity.this, mResult);
                 }
-                /*List<TransactionRecord> transactionVpnRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(vpnEntity.getVpnName())).list();
-                if(transactionVpnRecordList.size() > 0)
-                {
-                    Collections.sort(transactionVpnRecordList);
-                    TransactionRecord nearestRecord = transactionVpnRecordList.get(0);
-                    long lastPayTime = nearestRecord.getTimestamp();
-                    if((Calendar.getInstance().getTimeInMillis() - lastPayTime) > 60 * 60 * 1000)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
-                    {
-                        openNewThreed(true);
-                    }else{
-                        onRecordSuccess(true);
-                    }
-                }else{
-                    openNewThreed(true);
-                }*/
                 onRecordSuccess(true);
-                /*if (countDownTimerUtils == null) {
-                    countDownTimerUtils = CountDownTimerUtils.creatNewInstance();
-                    countDownTimerUtils.setMillisInFuture(Long.MAX_VALUE)
-                            .setCountDownInterval(1 * 60 * 1000)
-                            .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                                @Override
-                                public void onTick(long pMillisUntilFinished) {
-                                    if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true) {
-                                        List<TransactionRecord> transactionVpnRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(AppConfig.currentUseVpn.getVpnName())).list();
-                                        if (transactionVpnRecordList.size() > 0) {
-                                            Collections.sort(transactionVpnRecordList);
-                                            TransactionRecord nearestRecord = transactionVpnRecordList.get(0);
-                                            long lastPayTime = nearestRecord.getTimestamp();
-                                            if ((Calendar.getInstance().getTimeInMillis() - lastPayTime) > 60 * 60 * 1000)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
-                                            {
-                                                openNewThreed(false);
-                                            }
-                                        } else {
-                                            openNewThreed(false);
-                                        }
-                                    }
-                                    //KLog.i("VPN倒计时");
-                                }
-                            }).start();
-                } else {
-                    countDownTimerUtils.doOnce();
-                }*/
-
             }
         }
 
