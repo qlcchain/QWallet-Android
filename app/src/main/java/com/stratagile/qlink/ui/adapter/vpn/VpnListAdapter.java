@@ -104,6 +104,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
 //            helper.setImageDrawable(R.id.iv_vpn_avater, mContext.getResources().getDrawable(R.mipmap.icon_offiline_vpn));
         }
         SwitchButton switchButton = helper.getView(R.id.switchBar);
+        switchButton.setEnabled(true);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -119,6 +120,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
                         if (onVpnOpreateListener != null && !item.isConnected()) {
                             onVpnOpreateListener.onConnect(item);
                             switchButton.setChecked(false);
+                            switchButton.setEnabled(false);
                         }
                     }
                 } else {

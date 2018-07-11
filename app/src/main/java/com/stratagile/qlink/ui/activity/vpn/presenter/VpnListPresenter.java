@@ -124,6 +124,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         KLog.i("error");
                         flag = 0;
                         ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Connect_to_Sharer_Timeout));
+                        mView.refreshList();
                     } else {
                         sendEmptyMessageDelayed(1, 2000);
                     }

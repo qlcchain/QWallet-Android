@@ -138,17 +138,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:kswAnimationDuration="300"
+            android:enabled="false"
             android:checked="false"
             app:kswBackColor="@color/white"
             app:kswBackDrawable="@drawable/ios_back_drawable"
-            app:kswThumbDrawable="@drawable/ios_thumb_selector"
-            app:kswThumbHeight="@dimen/x60"
-            app:kswThumbMarginBottom="-6dp"
-            app:kswThumbMarginLeft="-5dp"
-            app:kswThumbMarginRight="-5dp"
-            app:kswThumbMarginTop="-2dp"
-            app:kswThumbRangeRatio="1.6"
-            app:kswThumbWidth="@dimen/x60"
+            app:kswThumbDrawable="@drawable/ios_thumb_drawable"
+            app:kswThumbHeight="@dimen/x35"
+            app:kswThumbRangeRatio="2.0"
+            app:kswThumbWidth="@dimen/x35"
             app:kswTintColor="@color/content_background" />
 
     </LinearLayout>

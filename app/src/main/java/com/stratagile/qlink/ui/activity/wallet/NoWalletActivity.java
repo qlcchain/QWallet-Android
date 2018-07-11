@@ -71,7 +71,6 @@ public class NoWalletActivity extends BaseActivity implements NoWalletContract.V
     TextView tvTipTwo;
     @BindView(R.id.noWalletParent)
     LinearLayout noWalletParent;
-    private String fromType;//跳转来源
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +87,6 @@ public class NoWalletActivity extends BaseActivity implements NoWalletContract.V
 
     @Override
     protected void initData() {
-        fromType = getIntent().getStringExtra("fromType");
         if (getIntent().getStringExtra("flag").equals("nowallet")) {
             tvTitle.setText(getString(R.string.no_wallet).toUpperCase());
         } else {
@@ -151,7 +149,6 @@ public class NoWalletActivity extends BaseActivity implements NoWalletContract.V
 //        String privateKey = WalletKtutil.byteArrayToHex(wallet.getPrivateKey());
 //        AppConfig.getInstance().getDaoSession().getWalletDao().insert(createWallet.getData());
         Intent intent = new Intent(this, WalletCreatedActivity.class);
-        intent.putExtra("fromType", fromType);
         intent.putExtra("wallet", createWallet.getData());
         if (flag == 0) {
             intent.putExtra("title", "Wallet Created");
@@ -186,12 +183,11 @@ public class NoWalletActivity extends BaseActivity implements NoWalletContract.V
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_create:
-                mPresenter.createWallet(new HashMap(), fromType);
+                mPresenter.createWallet(new HashMap());
 
                 break;
             case R.id.bt_import:
                 Intent intent = new Intent(this, ImportWalletActivity.class);
-                intent.putExtra("fromType", fromType);
                 startActivityForResult(intent, 1);
                 break;
             case R.id.bt_later:
@@ -220,7 +216,7 @@ public class NoWalletActivity extends BaseActivity implements NoWalletContract.V
             }
             Map<String, String> map = new HashMap<>();
             map.put("key", result);
-            mPresenter.importWallet(map, fromType);
+            mPresenter.importWallet(map);
         }
         if (requestCode == 2) {
             setResult(RESULT_OK);

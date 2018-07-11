@@ -40,7 +40,7 @@
             android:fontFamily="@font/vagroundedbt"
             android:gravity="center"
             android:minHeight="60dp"
-            android:text="@string/Just_cost_QLC_Connect_NOW"
+            android:text="@string/Please_disconnect_the_current_one_first"
             android:textColor="@color/color_333" />
 
         <LinearLayout

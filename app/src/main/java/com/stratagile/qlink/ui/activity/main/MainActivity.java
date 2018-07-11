@@ -180,7 +180,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         ArrayList<ContinentAndCountry.ContinentBean.CountryBean> countryBeans = new ArrayList<>();
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("United States", "united_states"));
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("United Kingdom", "united_kingdom"));
-        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("singapore", "singapore"));
+        countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Singapore", "singapore"));
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Japan", "japan"));
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Switzerland", "switzerland"));
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Germany", "germany"));
@@ -228,11 +228,12 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showRegisteVpnGuide(ShowGuide showGuide) {
         if (showGuide.getNumber() == 0) {
-            if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-                EventBus.getDefault().post(new ShowGuide(2));
-            } else {
-                showGuideViewRegisteVpn();
-            }
+            EventBus.getDefault().post(new ShowGuide(1));
+//            if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+//                EventBus.getDefault().post(new ShowGuide(2));
+//            } else {
+//                showGuideViewRegisteVpn();
+//            }
         }
     }
 

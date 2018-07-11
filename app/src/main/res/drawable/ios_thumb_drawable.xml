@@ -2,32 +2,32 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false" android:state_checked="true">
         <shape>
-            <solid android:color="#b3ecbc"/>
+            <solid android:color="#FAFAFA"/>
             <corners android:radius="99dp"/>
         </shape>
     </item>
     <item android:state_enabled="false" android:state_checked="false">
         <shape>
-            <solid android:color="#FEFEFE"/>
+            <solid android:color="#FAFAFA"/>
             <corners android:radius="99dp"/>
             <stroke
                 android:width="1.5dp"
                 android:color="#43d95d"/>
         </shape>
     </item>
-	<item android:state_checked="true">
-		<shape>
-			<solid android:color="#43d95d"/>
-			<corners android:radius="99dp"/>
-		</shape>
-	</item>
-	<item>
-		<shape>
-			<solid android:color="#FEFEFE"/>
-			<corners android:radius="99dp"/>
-			<stroke
-				android:width="1.5dp"
-				android:color="#E6E6E6"/>
-		</shape>
-	</item>
+    <item android:state_checked="true">
+        <shape>
+            <solid android:color="#FAFAFA"/>
+            <corners android:radius="99dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#FAFAFA"/>
+            <corners android:radius="99dp"/>
+            <stroke
+                android:width="1.5dp"
+                android:color="#E6E6E6"/>
+        </shape>
+    </item>
 </selector>

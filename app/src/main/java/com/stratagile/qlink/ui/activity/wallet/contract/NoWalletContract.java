@@ -40,8 +40,8 @@ public interface NoWalletContract {
     }
 
     interface NoWalletContractPresenter extends BasePresenter {
-       void createWallet(Map map, String fromType);
-        void importWallet(Map map, String fromType);
+       void createWallet(Map map);
+        void importWallet(Map map);
 
         void getSacnPermission();
     }

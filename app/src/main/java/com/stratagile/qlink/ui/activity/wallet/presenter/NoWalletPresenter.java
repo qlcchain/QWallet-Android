@@ -65,7 +65,7 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
     }
 
     @Override
-    public void createWallet(Map map, String fromType) {
+    public void createWallet(Map map) {
         mView.showProgressDialog();
 
         new Thread(new Runnable() {
@@ -74,24 +74,7 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
                 Account.INSTANCE.createNewWallet();
                 Wallet wallet = Account.INSTANCE.getWallet();
                 map.put("address", wallet.getAddress());
-                if ("worldCup".equals(fromType)) {
-                    com.stratagile.qlink.db.Wallet walletWinq = new com.stratagile.qlink.db.Wallet();
-                    walletWinq.setAddress(wallet.getAddress());
-                    walletWinq.setWif(wallet.getWIF());
-                    walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                    walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
-                    walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
-                    walletWinq.setIsMain(true);
-                    KLog.i();walletWinq.toString();
-                    AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
-                    CreateWallet createWallet = new CreateWallet();
-                    createWallet.setData(walletWinq);
-                    int size = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size();
-                    SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentMainWallet, size - 1);
-                    mView.onCreatWalletSuccess(createWallet, 0);
-                } else {
-                    getNeoAndGasFromServer(map);
-                }
+                getNeoAndGasFromServer(map);
             }
         }).start();
     }
@@ -141,7 +124,7 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
     }
 
     @Override
-    public void importWallet(Map map, String fromType) {
+    public void importWallet(Map map) {
         mView.showProgressDialog();
         new Thread(new Runnable() {
             @Override
@@ -153,24 +136,7 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
                 if (result) {
                     Wallet wallet = Account.INSTANCE.getWallet();
                     map.put("address", wallet.getAddress());
-                    if ("worldCup".equals(fromType)) {
-                        com.stratagile.qlink.db.Wallet walletWinq = new com.stratagile.qlink.db.Wallet();
-                        walletWinq.setAddress(wallet.getAddress());
-                        walletWinq.setWif(wallet.getWIF());
-                        walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                        walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
-                        walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
-                        walletWinq.setIsMain(true);
-                        KLog.i();walletWinq.toString();
-                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
-                        CreateWallet createWallet = new CreateWallet();
-                        createWallet.setData(walletWinq);
-                        int size = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size();
-                        SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentMainWallet, size - 1);
-                        mView.onCreatWalletSuccess(createWallet, 1);
-                    } else {
-                        getNeoAndGasFromServer(map);
-                    }
+                    getNeoAndGasFromServer(map);
                 } else {
                     mView.createWalletFaliure();
                 }

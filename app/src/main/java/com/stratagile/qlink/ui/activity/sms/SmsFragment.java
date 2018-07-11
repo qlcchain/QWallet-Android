@@ -41,7 +41,6 @@ import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
-import com.stratagile.qlink.ui.activity.wordcup.WordCupIntroduceActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.view.NoScrollViewPager;
@@ -85,12 +84,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     NoScrollViewPager viewPager;
 
     public static final int SELECT_CONTINENT = 4;
-    @BindView(R.id.iv_delete)
-    ImageView ivDelete;
-    @BindView(R.id.tv_play_win)
-    TextView tvPlayWin;
-    @BindView(R.id.rl_bannner)
-    RelativeLayout rlBannner;
     @BindView(R.id.view)
     View view;
     @BindView(R.id.registerVpn)
@@ -310,17 +303,9 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
 //        startActivityForResult(intent, SELECT_CONTINENT);
 //    }
 
-    @OnClick({R.id.iv_delete, R.id.tv_play_win, R.id.rl_bannner,R.id.registerVpn})
+    @OnClick({R.id.registerVpn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_delete:
-                rlBannner.setVisibility(View.GONE);
-                break;
-            case R.id.tv_play_win:
-                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
-                break;
-            case R.id.rl_bannner:
-                break;
             case R.id.registerVpn :
                 List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
                 if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {

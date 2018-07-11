@@ -54,7 +54,6 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
     TextView tvTitle;
     @BindView(R.id.importWalletParent)
     LinearLayout importWalletParent;
-    private String fromType;//跳转来源
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,21 +70,9 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
 
     @Override
     protected void initData() {
-        fromType = getIntent().getStringExtra("fromType");
         tvTitle.setText(R.string.Import_My_Wallet);
         importWalletParent.setBackgroundResource(R.drawable.navigation_shape);
-        if(fromType != null)
-        {
-            switch (fromType)
-            {
-                case "worldCup"://世界杯背景
-                    importWalletParent.setBackgroundResource(R.mipmap.bg_world_cup_two);
-                    break;
-                default:
-                    importWalletParent.setBackgroundResource(R.drawable.navigation_shape);
-                    break;
-            }
-        }
+        importWalletParent.setBackgroundResource(R.drawable.navigation_shape);
     }
 
     @Override
@@ -126,7 +113,6 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
         }
         closeProgressDialog();
         Intent intent = new Intent(this, WalletCreatedActivity.class);
-        intent.putExtra("fromType", fromType);
         intent.putExtra("wallet", createWallet.getData());
         intent.putExtra("title", "wallet imported");
         startActivity(intent);

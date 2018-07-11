@@ -69,7 +69,6 @@ public class WalletCreatedActivity extends BaseActivity implements WalletCreated
     @BindView(R.id.walletCreatedParent)
     LinearLayout walletCreatedParent;
     private Wallet wallet;
-    private String fromType;//跳转来源
 
 
     @Override
@@ -88,7 +87,6 @@ public class WalletCreatedActivity extends BaseActivity implements WalletCreated
     @Override
     protected void initData() {
         wallet = getIntent().getParcelableExtra("wallet");
-        fromType = getIntent().getStringExtra("fromType");
         KLog.i(wallet.toString());
         publicAddress.setText(wallet.getAddress());
         encryptedKey.setText(wallet.getWif());
@@ -96,18 +94,7 @@ public class WalletCreatedActivity extends BaseActivity implements WalletCreated
         walletCreatedParent.setBackgroundResource(R.drawable.navigation_shape);
         tvTitle.setText(getIntent().getStringExtra("title").toUpperCase());
         autoExportKeys();
-        if(fromType != null)
-        {
-            switch (fromType)
-            {
-                case "worldCup"://世界杯背景
-                    walletCreatedParent.setBackgroundResource(R.mipmap.bg_world_cup_two);
-                    break;
-                default:
-                    walletCreatedParent.setBackgroundResource(R.drawable.navigation_shape);
-                    break;
-            }
-        }
+        walletCreatedParent.setBackgroundResource(R.drawable.navigation_shape);
 
     }
 

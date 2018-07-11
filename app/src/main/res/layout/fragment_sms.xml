@@ -120,35 +120,5 @@
             android:layout_height="match_parent">
 
         </com.stratagile.qlink.view.NoScrollViewPager>
-        <RelativeLayout
-            android:visibility="gone"
-            android:id="@+id/rl_bannner"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/rl_select_country"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/x38"
-                android:src="@mipmap/bg_banner"
-                android:layout_height="wrap_content" />
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="@dimen/x30"
-                android:src="@mipmap/icon_delete"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/x50"
-                android:layout_marginTop="@dimen/x50"
-                android:layout_height="@dimen/x30" />
-            <TextView
-                android:id="@+id/tv_play_win"
-                android:layout_width="@dimen/x297"
-                android:background="@mipmap/button_in"
-                android:text="PLAY ADN WIN!"
-                android:textColor="@color/main_color"
-                android:gravity="center"
-                android:fontFamily="@font/vagroun_q"
-                android:layout_centerInParent="true"
-                android:layout_height="@dimen/x87" />
-        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

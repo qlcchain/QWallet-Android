@@ -34,6 +34,8 @@ public interface VpnListContract {
         void preConnect();
 
         void showNeedQlcDialog(VpnEntity vpnEntity);
+
+        void refreshList();
     }
 
     interface VpnListContractPresenter extends BasePresenter {

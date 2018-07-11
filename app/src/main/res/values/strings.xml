@@ -853,8 +853,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="please_wait_vpn_online">please wait this vpn online</string>
     <string name="choose_location">Choose Location</string>
     <string name="no">NO</string>
-    <string name="Just_cost_QLC_Connect_NOW"><Data><![CDATA[Just cost <b>\%s\</b> QLC<br />Connect NOW!]]></Data></string>
+    <string name="Just_cost_QLC_Connect_NOW"><Data><![CDATA[This will cost <b>\%s\</b> QLC.<br />Would you like to connect?]]></Data></string>
     <string name="total_successful_connection">total successful connection</string>
     <string name="Do_you_want_to_disconnect">Do you want to disconnect?</string>
-    <string name="Want_to_connect_to_another_VPN">Want to connect to another VPN?</string>
+    <string name="Please_disconnect_the_current_one_first">Please disconnect the current one first.</string>
 </resources>

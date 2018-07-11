@@ -263,6 +263,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                vpnListAdapter.notifyDataSetChanged();
             }
         });
         btn_comfirm.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +275,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         });
         dialog.show();
     }
+
+    @Override
+    public void refreshList() {
+        vpnListAdapter.notifyDataSetChanged();
+    }
+
     /**
      * 断开vpn的时候显示的dialog
      */
@@ -312,7 +319,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         dialog.show();
     }
     /**
-     * 断开vpn的时候显示的dialog
+     * 切换vpn的时候显示的dialog
      */
     public void showChangeVpnDialog(VpnEntity vpnEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -322,7 +329,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
         Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-        tvContent.setText(getString(R.string.Want_to_connect_to_another_VPN));
+        tvContent.setText(getString(R.string.Please_disconnect_the_current_one_first));
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
         Window window = dialog.getWindow();
@@ -342,9 +349,9 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 intent.setAction(BroadCastAction.disconnectVpn);
                 getActivity().sendBroadcast(intent);
 
-                mPresenter.preConnectVpn(vpnEntity);
-                connectVpnEntity = vpnEntity;
-                mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+//                mPresenter.preConnectVpn(vpnEntity);
+//                connectVpnEntity = vpnEntity;
+//                mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
             }
         });
         dialog.show();
@@ -368,7 +375,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        country = ConstantValue.longcountry.equals("") ? "United States" : ConstantValue.longcountry;
+        country = ConstantValue.longcountry.equals("") ? "Others" : ConstantValue.longcountry;
         EventBus.getDefault().register(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.stratagile.qlink.VPN_STATUS");
@@ -560,7 +567,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             }
         }
         Map<String, String> map = new HashMap<>();
-        KLog.i(country);
+        KLog.i("国家为：" + country);
         map.put("country", country);
         mPresenter.getVpn(map);
         refreshLayout.setRefreshing(false);
@@ -578,6 +585,8 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             builder.setTargetView(recyclerView.getChildAt(0))
                     .setAlpha(150)
                     .setHighTargetCorner(20)
+                    .setHighTargetPaddingLeft((int) getResources().getDimension(R.dimen.x15))
+                    .setHighTargetPaddingRight((int) getResources().getDimension(R.dimen.x15))
                     .setOverlayTarget(false)
                     .setOutsideTouchable(false);
             builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
