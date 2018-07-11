@@ -305,6 +305,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 intent.setAction(BroadCastAction.disconnectVpn);
                 getActivity().sendBroadcast(intent);
                 connectVpnEntity.setIsConnected(false);
+                AppConfig.currentUseVpn = null;
                 AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
             }
         });
@@ -896,7 +897,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             //if (ConstantValue.showLog) {
             LogUtil.addLog("连接已经注册的vpn的log：" + intent.getStringExtra("detailstatus"), getClass().getSimpleName());
             KLog.i("收到广播了。。。。");
-            if (intent.getStringExtra("detailstatus").contains("CONNECTED")) {
+            if (intent.getStringExtra("detailstatus").contains("CONNECTED") && connectVpnEntity != null) {
                 LogUtil.addLog("vpn连接成功，开始进行扣费：" + connectVpnEntity.getVpnName(), getClass().getSimpleName());
                 if (connectVpnEntity.getProfileLocalPath() != null) {
                     String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";

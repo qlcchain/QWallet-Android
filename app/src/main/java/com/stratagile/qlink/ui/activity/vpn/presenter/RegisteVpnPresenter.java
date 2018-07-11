@@ -1,4 +1,5 @@
 package com.stratagile.qlink.ui.activity.vpn.presenter;
+
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
@@ -10,17 +11,17 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.RegisterVpn;
-import com.stratagile.qlink.entity.RegisterWiFi;
+import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
-import com.stratagile.qlink.ui.activity.vpn.contract.RegisteVpnContract;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
+import com.stratagile.qlink.ui.activity.vpn.contract.RegisteVpnContract;
 import com.stratagile.qlink.utils.SpUtil;
 
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Map;
 
 import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -171,12 +172,12 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
     public void updateVpnInfo(Map map) {
         mView.showProgressDialog();
         Disposable disposable = httpAPIWrapper.updateVpnInfo(map)
-                .subscribe(new Consumer<BaseBack>() {
+                .subscribe(new Consumer<UpdateVpn>() {
                     @Override
-                    public void accept(BaseBack balance) throws Exception {
+                    public void accept(UpdateVpn updateVpn) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
-                        mView.updateVpnInfoSuccess();
+                        mView.updateVpnInfoSuccess(updateVpn.getData().getCountry());
                     }
                 }, new Consumer<Throwable>() {
                     @Override

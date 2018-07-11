@@ -1684,9 +1684,11 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     }
 
     @Override
-    public void updateVpnInfoSuccess() {
+    public void updateVpnInfoSuccess(String data) {
         closeProgressDialog();
         KLog.i(vpnEntity.toString());
+        vpnEntity.setCountry(data);
+        etCountry.setText(vpnEntity.getCountry());
         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
         //更新sd卡资产数据begin
         MyAsset myAsset = new MyAsset();

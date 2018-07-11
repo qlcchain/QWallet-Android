@@ -33,7 +33,6 @@
 
         <CheckBox
             android:id="@+id/checkbox"
-            android:enabled="false"
             android:layout_width="@dimen/x46"
             android:layout_height="@dimen/x46"
             android:background="@drawable/check_box_selector"
