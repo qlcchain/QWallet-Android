@@ -1,182 +1,353 @@
 <resources>
   <string name="app_name">WINQ</string>
+
   <string name="AvailableWiFi">WiFi</string>
+
   <string name="activity_splash_intro">Dünyanın İlk Merkeziyetsiz Mobil Ağı</string>
+
   <string name="powered">Blok Zinciri ile Desteklenmektedir</string>
+
   <string name="apploading">Yükleniyor...</string>
+
   <string name="wallet">Cüzdan</string>
+
   <string name="vpn">VPN</string>
+
   <string name="wifi">WIFI</string>
+
   <string name="transaction">İşlem</string>
+
   <string name="nearby">Yakında</string>
+
   <string name="all">HEPSİ</string>
+
   <string name="registerwifi">Wi-Fi\'ını Kaydet</string>
+
   <string name="CreateP2pNetwork">p2p ağ oluşturuluyor...</string>
+
   <string name="NoNetWork">Bağlantı yok, Lütfen bir ağa bağlanmayı deneyiniz.</string>
+
   <string name="qlinkRegistedWifi">Bir WiFi Seç</string>
+
   <string name="pleaseEnableWifi">Lütfen wifi\'ı etkinleştirin</string>
+
   <string name="waitP2pNetWork">Lütfen p2p ağ kurulurken bekleyiniz.</string>
+
   <string name="registeyouwifi">wifi\'ınızı kaydedin</string>
+
   <string name="shareotherwifi">Diğerlerinin wifi\'ını Paylaş</string>
+
   <string name="wifidetails">WIFI DETAYLARI</string>
+
   <string name="privatekeyerror">Bu geçerli bir özel anahtar değildir.</string>
+
   <string name="privatekeyisnone">Lütfen özel anahtarınızı giriniz.</string>
+
   <string name="passwordisNone">Lütfen şifrenizi giriniz!</string>
+
   <string name="importWalletSuccess">Cüzdan aktarımı başarılı</string>
+
   <string name="createWalletSuccess">cüzdan oluşturulması başarılı</string>
+
   <string name="google_map_key">AIzaSyARhjAjyhSIyWxdYWuOkR8JDSopj1xp7gw</string>
+
+
+
   <string name="address">Sunucu Adresi:</string>
+
   <string name="port">Sunucu Portu:</string>
+
   <string name="location">Konum</string>
+
   <string name="cant_read_folder">Dizin okunamadı</string>
+
   <string name="select">Seç</string>
+
   <string name="cancel">İptal</string>
+
   <string name="no_data">Veri Yok</string>
+
   <string name="useLZO">LZO Sıkıştırma</string>
+
   <string name="client_no_certificate">Sertifika Yok</string>
+
   <string name="client_certificate_title">Müşteri Sertifikası</string>
+
   <string name="client_key_title">Müşteri Sertifika Anahtarı</string>
+
   <string name="client_pkcs12_title">PKCS12 Dosyası</string>
+
   <string name="ca_title">CA Sertifikası</string>
+
   <string name="no_certificate">Bir sertifika seçmelisiniz</string>
+
   <string name="copyright_guicode">Kaynak kodu ve sorun izleyicisine https://github.com/schwabe/ics-openvpn/ adresinden ulaşılabilir</string>
+
   <string name="copyright_others">Bu program aşağıdaki bileşenleri kullanır; lisanslarla ilgili tüm ayrıntılar için kaynak koduna göz atın </string>
+
   <string name="about">Hakkında</string>
+
   <string name="vpn_list_title">Profiller</string>
+
   <string name="vpn_type">Tip</string>
+
   <string name="pkcs12pwquery">PKCS12 Şifresi</string>
+
   <string name="file_select">Seç…</string>
+
   <string name="file_nothing_selected">Bir dosya seçmelisiniz</string>
+
   <string name="useTLSAuth">TLS Kimlik Doğrulaması Kullanın</string>
+
   <string name="tls_direction">TLS Yönü</string>
+
   <string name="ipv6_dialog_tile">IPv6 Adresini/Ağmaskesini CIDR Formatında Giriniz (örn. 2000:dd::23/64)</string>
-  <string name="ipv4_dialog_title">IPv4 Adresini/Ağmaskesini  CIDR Formatında Giriniz (örn. 1.2.3.4/24)</string>
+
+  <string name="ipv4_dialog_title">IPv4 Adresini/Ağmaskesini CIDR Formatında Giriniz (örn. 1.2.3.4/24)</string>
+
   <string name="ipv4_address">IPv4 Adresi</string>
+
   <string name="ipv6_address">IPv6 Adresi</string>
+
   <string name="custom_option_warning">Özel OpenVPN seçeneklerini giriniz. Dikkatli olun. Ayrıca, tun ile ilgili OpenVPN ayarlarının çoğunun VPNSettings tasarımı tarafından desteklenemeyeceğini de unutmayın. Önemli bir seçeneğin eksik olduğunu düşünüyorsanız iletişime geçin</string>
+
   <string name="auth_username">Kullanıcı Adı</string>
+
   <string name="auth_pwquery">Şifre</string>
+
   <string name="static_keys_info">Statik yapılandırma için, TLS Kimlik Doğrulama Anahtarları statik anahtarlar olarak kullanılacaktır</string>
+
   <string name="configure_the_vpn">VPN Yapılandırma</string>
+
   <string name="menu_add_profile">Profil Ekle</string>
+
   <string name="add_profile_name_prompt">Yeni Profili tanımlamak için bir ad giriniz</string>
+
   <string name="duplicate_profile_name">Lütfen eşsiz bir Profil Adı giriniz</string>
+
   <string name="profilename">Profil Adı</string>
+
   <string name="no_keystore_cert_selected">Bir Kullanıcı sertifikası seçmelisiniz</string>
+
   <string name="no_ca_cert_selected">Bir CA sertifikası Seçmelisiniz</string>
+
   <string name="no_error_found">Hata Bulunamadı</string>
+
   <string name="config_error_found">Yapılandırmada Hata</string>
+
   <string name="ipv4_format_error">IPv4 adresi ayrıştırılırken hata oluştu</string>
+
   <string name="custom_route_format_error">Özel rotaları ayrıştırırken hata oluştu</string>
+
   <string name="pw_query_hint">(talebe bağlı sorgu için boş bırakınız)</string>
+
   <string name="vpn_shortcut">OpenVPN Kısayolu</string>
+
   <string name="vpn_launch_title">VPN\'e bağlanılıyor…</string>
+
   <string name="shortcut_profile_notfound">Kısayolda belirtilen profil bulunamadı</string>
+
   <string name="random_host_prefix">Rastgele Host Öneki</string>
+
   <string name="random_host_summary">host adının önüne rastgele 6 karakter ekleyin</string>
+
   <string name="custom_config_title">Özel Seçenekleri Etkinleştir</string>
+
   <string name="custom_config_summary">Özel seçenekleri belirtin. Dikkatli olun!</string>
+
   <string name="route_rejected">Rota Android tarafından reddedildi.</string>
+
   <string name="cancel_connection">Bağlantıyı Kes</string>
+
   <string name="cancel_connection_long">VPN bağlantısını kes</string>
+
   <string name="clear_log">logları temizle</string>
+
   <string name="title_cancel">Doğrulamayı iptal et</string>
+
   <string name="cancel_connection_query">Bağlı VPN\'yi sonlandırmak/ bağlantı girişimini iptal etmek mi istiyorsunuz?.</string>
+
   <string name="remove_vpn">VPN\'i Sil</string>
+
   <string name="check_remote_tlscert">Sunucunun TLS Sunucu uzantıları ile bir sertifika kullanıp kullanmadığını kontrol eder. (--remote-cert-tls server)</string>
+
   <string name="check_remote_tlscert_title">TLS sunucu sertifikası bekleniyor</string>
+
   <string name="remote_tlscn_check_summary">Uzak Sunucu Sertifikası Subject DN Kontrol Ediliyor </string>
+
   <string name="remote_tlscn_check_title">Sertifika Host Adı Kontrolü</string>
-  <string name="enter_tlscn_dialog"> Remote DN sertifikasını doğrulamak için kullanılacak kontrolü belirtin(örn. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nDN yada RDN\'nin tümünü belirtin (ör. openvpn.blinkt.de) yada doğrulama için bir RDN önekini belirtin\n\nRDN önekini kullanırken  \"Server\" , \"Server-1\" ve \"Server-2\ ile eşleşir"\n\n Metin alanının boş bırakılması sunucu ana bilgisayarı adına karşın RND\'i kontrol edecektir.\n\n Daha fazla Bilgi için OpenVPN 2.3.1+ manpage under —verify-x509-name kısmına göz atın</string>
+
+  <string name="enter_tlscn_dialog"> Remote DN sertifikasını doğrulamak için kullanılacak kontrolü belirtin(örn. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nDN yada RDN\'nin tümünü belirtin (ör. openvpn.blinkt.de) yada doğrulama için bir RDN önekini belirtin\n\nRDN önekini kullanırken \"Server\" , \"Server-1\" ve \"Server-2\ ile eşleşir"\n\n Metin alanının boş bırakılması sunucu ana bilgisayarı adına karşın RND\'i kontrol edecektir.\n\n Daha fazla Bilgi için OpenVPN 2.3.1+ manpage under —verify-x509-name kısmına göz atın</string>
+
   <string name="enter_tlscn_title">Uzak sertifika konusu</string>
+
   <string name="tls_key_auth">TLS Anahtar Kimlik Doğrulaması\'nı etkinleştirir </string>
+
   <string name="tls_auth_file">TLS Kimlik Doğrulama Dosyası</string>
+
   <string name="pull_on_summary">Sunucudan IP adresleri, yolları ve zamanlama seçeneklerini ister.</string>
+
   <string name="pull_off_summary">Sunucudan bilgi istenmemekte. Ayarlar aşağıda belirtilmelidir.</string>
+
   <string name="use_pull">Çekim Ayarları</string>
+
   <string name="dns">DNS</string>
+
   <string name="override_dns">DNS Ayarları Sunucu Tarafından Geçersiz Kılındı</string>
+
   <string name="dns_override_summary">Kendi DNS Sunucunu Kullan</string>
+
   <string name="searchdomain">domainArama</string>
+
   <string name="dns1_summary">Kullanılacak DNS Sunucusu.</string>
+
   <string name="dns_server">DNS Sunucusu</string>
+
   <string name="secondary_dns_message">Normal DNS Sunucusuna ulaşılamıyorsa İkincil DNS Sunucusu kullanılır.</string>
+
   <string name="backup_dns">Yedek DNS Suncusu</string>
+
   <string name="ignored_pushed_routes">Aktarılan yönlendirmeleri yoksay</string>
+
   <string name="ignore_routes_summary">Sunucu tarafından aktarılan yönlendirmeyi yoksay.</string>
+
   <string name="default_route_summary">Tüm Trafiği VPN üzerinden yönlendirir</string>
+
   <string name="use_default_title">Varsayılan Rotayı Kullan</string>
-  <string name="custom_route_message">Özel rotaları girin. Hedefleri sadece CIDR formatında  girin. \ "10.0.0.0/8 2002 :: / 16 \", 10.0.0.0/8 ve 2002 :: / 16 ağları VPN üzerinden yönlendirecektir.</string>
+
+  <string name="custom_route_message">Özel rotaları girin. Hedefleri sadece CIDR formatında girin. \ "10.0.0.0/8 2002 :: / 16 \", 10.0.0.0/8 ve 2002 :: / 16 ağları VPN üzerinden yönlendirecektir.</string>
+
   <string name="custom_route_message_excluded">Rotalar VPN üzerinden yönlendirilMEMElidir.Dahili rotalar için aynı sözdizimini kullanın</string>
+
   <string name="custom_routes_title">Özel Rotalar</string>
+
   <string name="custom_routes_title_excluded">Hariç Tutulan Ağlar</string>
+
   <string name="log_verbosity_level">Log ayrıntı düzeyi</string>
+
   <string name="float_summary">Herhangi bir IP\'den kimlik doğrulamalı paketlere izin verir</string>
+
   <string name="float_title">Kayan sunucuya izin ver</string>
+
   <string name="custom_options_title">Özel seçenekler</string>
+
   <string name="edit_vpn">VPN Ayarlarını Düzenle</string>
+
   <string name="remove_vpn_query">VPN Profilini Sil \'%s\'?</string>
+
   <string name="tun_error_helpful">Bazı özel ICS görüntülerinde /dev/tun üzerindeki izin hatalı olabilir veya tun modülü tamamen eksik olabilir. CM9 görüntüleri için genel ayarlardan sahipliği onar seçeneğini deneyin.</string>
+
   <string name="tun_open_error">Tun arabirimi açılamadı</string>
+
   <string name="error">"Hata: "</string>
+
   <string name="clear">Temizle</string>
+
   <string name="last_openvpn_tun_config">Tun arayüzü açılıyor:</string>
+
   <string name="local_ip_info">Local IPv4: %1$s/%2$d IPv6: %3$s MTU: %4$d</string>
+
   <string name="dns_server_info">DNS Server: %1$s, Domain: %2$s</string>
+
   <string name="routes_info_incl">Rota: %1$s %2$s</string>
+
   <string name="routes_info_excl">Harici Rotalar: %1$s %2$s</string>
+
   <string name="routes_debug">VpnService rotaları yüklendi: %1$s %2$s</string>
-  <string name="ip_not_cidr">İkinci adresin uzaktaki eş adresi olduğunu varsayarak,%1$s ve %2$s arayüz bilgilerini alır. Local IP için /32 netmask\'ı kullanır. OpenVPN tarafından verilen Mode  \"%3$s\ dir".</string>
-  <string name="route_not_cidr">%1$s ve %2$s değerleri,  netmask olarak /32 kullanılarak, CIDR netmask ile IP yolu olarak algılanamıyor</string>
+
+  <string name="ip_not_cidr">İkinci adresin uzaktaki eş adresi olduğunu varsayarak,%1$s ve %2$s arayüz bilgilerini alır. Local IP için /32 netmask\'ı kullanır. OpenVPN tarafından verilen Mode \"%3$s\ dir".</string>
+
+  <string name="route_not_cidr">%1$s ve %2$s değerleri, netmask olarak /32 kullanılarak, CIDR netmask ile IP yolu olarak algılanamıyor</string>
+
   <string name="route_not_netip"> %1$s/%2$s -> %3$s/%2$s rota düzeltildi</string>
+
   <string name="keychain_access">Android Anahtar Zinciri Sertifikalarına erişilemiyor. Bu, bir ürün yazılımı yükseltmesi veya uygulamanın/uygulama ayarlarının yedeğinin geri yüklenmesinden dolayı olabilir. Sertifikaya erişim iznini yeniden oluşturmak için lütfen VPN\'i düzenleyin ve temel ayarlardan sertifikayı yeniden seçin.</string>
+
   <string name="version_info">%1$s %2$s</string>
+
   <string name="send_logfile">log dosyasını gönder</string>
+
   <string name="send">Gönder</string>
+
   <string name="ics_openvpn_log_file">ICS OpenVPN log dosyası</string>
+
   <string name="copied_entry">Log girdisi panoya kopyalandı</string>
+
   <string name="tap_mode">Dokunma Modu</string>
+
   <string name="faq_tap_mode">Dokunma modu rootlanmamış VPN API ile çalışamıyor. Bu nedenle bu uygulama dokunma desteğini sağlayamıyor</string>
+
   <string name="tap_faq2">Tekrar mı? Dalga mı geçiyorsun? Hayır, dokunma modu gerçekten desteklenmiyor ve desteklenip desteklenmeyeceğini soran daha fazla e-posta göndermenizin de bir yararı olmayacak.</string>
-  <string name="tap_faq3">Üçüncü kez mi? Aslında,  birileri, gönderim sırasında layer2 bilgisini ve alıcıdaki layer2 bilgisine ekleyecek olan tun temelli bir dokunma emülatorü yazabilir. Ancak bu dokunma emülatörünü, ARP\'ye ve muhtemelen bir DHCP istemcisine de uygulamak zorunda kalacak. Bu konuda çalışacak birinin olduğunu sanmıyorum. Eğerki çok kodlamaya başlamaya çok hevesliysen benimle iletişme geçebilirsin.</string>
+
+  <string name="tap_faq3">Üçüncü kez mi? Aslında, birileri, gönderim sırasında layer2 bilgisini ve alıcıdaki layer2 bilgisine ekleyecek olan tun temelli bir dokunma emülatorü yazabilir. Ancak bu dokunma emülatörünü, ARP\'ye ve muhtemelen bir DHCP istemcisine de uygulamak zorunda kalacak. Bu konuda çalışacak birinin olduğunu sanmıyorum. Eğerki çok kodlamaya başlamaya çok hevesliysen benimle iletişme geçebilirsin.</string>
+
   <string name="faq">SSS</string>
+
   <string name="copying_log_entries">Log girdileri kopyalanıyor</string>
+
   <string name="faq_copying">Tek bir log girdisini kopyalamak için log girdisine basın ve basılı tutun. Tüm logları kopyalamak/göndermek için Log Gönder seçeneğini kullanın. Buton GUI\'de görünmüyorsa, donanım menüsü düğmesini kullanın.</string>
+
   <string name="faq_shortcut">Başlatmak için kısayol</string>
+
   <string name="faq_howto_shortcut">Masaüstünüze OpenVPN\'i başlatmak için kısayol ekleyebilirsiniz. Ana ekran programınıza bağlı olarak bir kısayol veya widget eklemeniz gerekecektir.</string>
+
   <string name="no_vpn_support_image">Görseliniz VPNService API\'sini desteklemiyor, üzgünüz :(</string>
+
   <string name="encryption">Şifreleme</string>
+
   <string name="cipher_dialog_title">Şifreleme yöntemini giriniz</string>
+
   <string name="chipher_dialog_message">OpenVPN tarafından kullanılan şifreleme algoritmasını girin. Varsayılan şifreyi kullanmak için boş bırakın.</string>
-  <string name="auth_dialog_message">OpenVPN için kullanılan kimlik doğrulama derlemesini girin. Varsayılan derlemeyi kullanmak için boş bırakın. </string>
+
+  <string name="auth_dialog_message">OpenVPN için kullanılan kimlik doğrulama derlemesini girin. Varsayılan derlemeyi kullanmak için boş bırakın. </ String>
+
   <string name="settings_auth">Kimlik Doğrulama/Şifreleme</string>
+
   <string name="file_explorer_tab">Dosya Gezginir</string>
+
   <string name="inline_file_tab">Satır İçi Dosya</string>
+
   <string name="error_importing_file">Dosya içe aktarılırken hata oluştu</string>
+
   <string name="import_error_message">Dosya, dosya sisteminden içe aktarılamadı</string>
+
   <string name="inline_file_data">[[Satır içi dosya verileri]]</string>
+
   <string name="opentun_no_ipaddr">IP bilgisi olmadığından tun cihazının açılışı reddedildi</string>
+
   <string name="menu_import">Profili ovpn dosyasından içe aktar</string>
+
   <string name="menu_import_short">İçe aktar</string>
+
   <string name="import_content_resolve_error">İçe aktarılacak profil okunamadı</string>
+
   <string name="error_reading_config_file">Yapılandırma dosyası okunurken hata oluştu</string>
+
   <string name="add_profile">Profil ekle</string>
+
   <string name="import_could_not_open">İçe aktarılan yapılandırma dosyasında %1$s dosyası bulunamadı</string>
+
   <string name="importing_config">Config dosyası %1$s kaynağından içe aktarılıyor</string>
+
   <string name="import_warning_custom_options">Yapılandırmanızda, UI yapılandırmalarıyla eşlenmemiş birkaç yapılandırma seçeneği var. Bu seçenekler özel yapılandırma seçenekleri olarak eklendi. Özel yapılandırmalar aşağıda görüntülenmektedir:</string>
+
   <string name="import_done">Yapılandırma dosyası okundu.</string>
+
   <string name="nobind_summary">Local adres ve bağlantı noktasına bağlanmayınız</string>
+
   <string name="no_bind">Yerel bağlayıcı yok</string>
+
   <string name="import_configuration_file">Yapılandırma dosyasını içe aktar</string>
+
   <string name="faq_security_title">Güvenlik Hususları</string>
 
-  <string name="faq_security">"Open VPN olarak güvenliğin hassasl olduğunu belirtmek gerekir. Sdcard\'daki tüm veriler doğal olarak güvensizdir. Tüm uygulamalar onları okuyabilir( örneğin bu program özel bir sd card izni gerektirmemektedir). Bu uygulamanın verileri sadece bu uygulama tarafından okunabilir. Dosya iletişim kutusunda cacert /sertifika/anahtar için içe aktarma seçeneğini kullanarak, veriler VPN profilinde depolanır. VPN profilleri sadece bu uygulama tarafından okunabilir. (Sd card\'daki kopyaları silmeyi unutmayın). Sadece bu uygulama tarafından ulaşılabilir olsa bile, veriler halen şifrelenmemiştir. Telefonu root\'layarak yada başka yöntemlerle verilere ulaşılabilir. Kayıtlı şifreler de düz metin olarak saklanmaktadır. Android anahtar deposuna aktarmak için pkcs12 dosyaları şiddetle tavsiye edilir.</string>
+  <string name="faq_security">"Open VPN olarak güvenliğin hassasl olduğunu belirtmek gerekir. Sdcard'daki tüm veriler doğal olarak güvensizdir. Tüm uygulamalar onları okuyabilir( örneğin bu program özel bir sd card izni gerektirmemektedir). Bu uygulamanın verileri sadece bu uygulama tarafından okunabilir. Dosya iletişim kutusunda cacert /sertifika/anahtar için içe aktarma seçeneğini kullanarak, veriler VPN profilinde depolanır. VPN profilleri sadece bu uygulama tarafından okunabilir. (Sd card'daki kopyaları silmeyi unutmayın). Sadece bu uygulama tarafından ulaşılabilir olsa bile, veriler halen şifrelenmemiştir. Telefonu root'layarak yada başka yöntemlerle verilere ulaşılabilir. Kayıtlı şifreler de düz metin olarak saklanmaktadır. Android anahtar deposuna aktarmak için pkcs12 dosyaları şiddetle tavsiye edilir.</string>
 
   <string name="import_vpn">İçe aktar</string>
 
   <string name="broken_image_cert_title">Sertifika seçiminde hata görünüyor</string>
 
-  <string name="broken_image_cert">Android 4.0+ sertifika seçimi diyalogunu  göstermeye çalışan bir istisna ile karşılaşıldı Bu Android 4.0+ üzeri sürümlerin standart özelliği kesinlikle değildir. Android ROM\'unuz sertifika deposu destegi arızalı olabilir</string>
+  <string name="broken_image_cert">Android 4.0+ sertifika seçimi diyalogunu göstermeye çalışan bir istisna ile karşılaşıldı Bu Android 4.0+ üzeri sürümlerin standart özelliği kesinlikle değildir. Android ROM\'unuz sertifika deposu destegi arızalı olabilir</string>
 
   <string name="ipv4">IPv4</string>
 
@@ -190,7 +361,7 @@
 
   <string name="broken_images">Hatalı imajlar</string>
 
-  <string name="broken_images_faq">&lt;p&gt; Resmi HTC imajlarının, tünelden geçmemesi için trafik oluşturan garip bir yönlendirme sorunu olduğu bilinmektedir (Ayrıca, hata izleyicide &lt;a href="https://github.com/schwabe/ics-openvpn/issues/18"&gt;Issue 18&lt;/a&gt; kısmına göz atın.)&lt;/p&gt;&lt;p&gt;Xperia Arc S ve Xperia Ray\'ın eski resmi SONY imajlarında VPNService\'in bulunmadığı bildirildi. (Ayrıca, hata izleyicide &lt;a href="https://github.com/schwabe/ics-openvpn/issues/29"&gt;Issue 29&lt;/a&gt; kısmına göz atın.)&lt;/p&gt;&lt;p&gt; Özel yapım imajlarda  tun modülü olmayabilir ya da /dev/tun hakları yanlış olabilir. Bazı CM9 imajları "Cihaza özgü hackler"  kısmından "Sahipliği onar" seçeneğinin etkinleştirilmesine ihtiyaç duyabilir.&lt;/p&gt;&lt;p&gt; En önemlisi: Cihazınızın Android imajı bozuksa, satıcınıza bildirin. Daha çok insanın bir sorunu bildirmesi, daha yüksek oranla satıcının sorunu düzeltmesini sağlayabilir. &lt;/p&gt;</string>
+  <string name="broken_images_faq">&lt;p&gt; Resmi HTC imajlarının, tünelden geçmemesi için trafik oluşturan garip bir yönlendirme sorunu olduğu bilinmektedir (Ayrıca, hata izleyicide &lt;a href="https://github.com/schwabe/ics-openvpn/issues/18"&gt;Issue 18&lt;/a&gt; kısmına göz atın.)&lt;/p&gt;&lt;p&gt;Xperia Arc S ve Xperia Ray\'ın eski resmi SONY imajlarında VPNService\'in bulunmadığı bildirildi. (Ayrıca, hata izleyicide &lt;a href="https://github.com/schwabe/ics-openvpn/issues/29"&gt;Issue 29&lt;/a&gt; kısmına göz atın.)&lt;/p&gt;&lt;p&gt; Özel yapım imajlarda tun modülü olmayabilir ya da /dev/tun hakları yanlış olabilir. Bazı CM9 imajları "Cihaza özgü hackler" kısmından "Sahipliği onar" seçeneğinin etkinleştirilmesine ihtiyaç duyabilir.&lt;/p&gt;&lt;p&gt; En önemlisi: Cihazınızın Android imajı bozuksa, satıcınıza bildirin. Daha çok insanın bir sorunu bildirmesi, daha yüksek oranla satıcının sorunu düzeltmesini sağlayabilir. &lt;/p&gt;</string>
 
   <string name="pkcs12_file_encryption_key">PKCS12 Dosya Şifreleme Anahtarı</string>
 
@@ -208,7 +379,7 @@
 
   <string name="owner_fix_summary">/dev/tun \'un sahibi sisteme ayarlanmaya çalışılıyor. Bazı CM9 imajları VPNService API\'sini çalıştırmak için buna ihtiyaç duymaktadır.Root gereklidir.</string>
 
-  <string name="owner_fix">Fix  /dev/tun \'un sahipliği düzeltildi.</string>
+  <string name="owner_fix">Fix /dev/tun \'un sahipliği düzeltildi.</string>
 
   <string name="generated_config_summary">Oluşturulan OpenVPN Yapılandırma Dosyasını gösterir</string>
 
@@ -228,11 +399,11 @@
 
   <string name="keychain_nocacert">Android anahtar deposundan okunurken CA Sertifikası verilmedi. Kimlik doğrulama muhtemelen başarısız olacaktır.</string>
 
-  <string name="show_log_summary">Bağlantıda Log penceresini gösterir. Log  penceresine her zaman bildirim durumundan erişilebilir..</string>
+  <string name="show_log_summary">Bağlantıda Log penceresini gösterir. Log penceresine her zaman bildirim durumundan erişilebilir..</string>
 
   <string name="show_log_window">log penceresini göster</string>
 
-  <string name="mobile_info">%10$s %9$s  %3$s %1$s (%2$s) running on, Android %6$s (%7$s) API %4$d, ABI %5$s, (%8$s)</string>
+  <string name="mobile_info">%10$s %9$s %3$s %1$s (%2$s) running on, Android %6$s (%7$s) API %4$d, ABI %5$s, (%8$s)</string>
 
   <string name="error_rsa_sign">Android anahtar deposu anahtarıyla imzalama hatası %1$s: %2$s</string>
 
@@ -240,7 +411,7 @@
 
   <string name="faq_system_dialogs_title">Bağlantı uyarısı ve bildirim sesi</string>
 
-  <string name="translationby">Turkish translation by Murat Magrebi&lt;muratmagrebi@gmail.com&gt;</string>
+  <string name="translationby">Turkish translation by Murat Magrebi&lt;muratmagrebi@gmail.com ;</string>
 
   <string name="ipdns">IP ve DNS</string>
 
@@ -260,7 +431,7 @@
 
   <string name="ip_add_error">IP adresi alınamadı \"%1$s\", sistem tarafından reddedildi: %2$s</string>
 
-  <string name="faq_howto">&lt;p&gt;Çalışan bir yapılandırma edinin(bilgisayarınızda test edin yada sağlayıcınızdan/organizasyonunuzdan indirin)&lt;/p&gt;&lt;p&gt;Ekstra pem/pkcs12 dosyaları olmayan tek bir dosya ise, dosyayı kendiniz e-posta ile gönderebilir ve eki açabilirsiniz. Birden çok dosyanız var ise sd card\'a koyunuz.&lt;/p&gt;&lt;p&gt;Yapılandırma dosyasını içe aktarmak için e-posta eki/Vpn listesindeki klasör simgesini kullanın.&lt;/p&gt;&lt;p&gt;Eksik dosyalar nedeniye hata oluşuyorsa, eksik dosyaları sd card\'ınıza koyun.&lt;/p&gt;&lt;p&gt;İçe aktarılan VPN\'i VPN listenize eklemek için kaydetme simgesine tıklayın.&lt;/p&gt;&lt;p&gt;VPN\'nin adına tıklayarak VPN\'i bağlayın&lt;/p&gt;&lt;p&gt;Logta hata veya uyarı varsa, uyarıları/hataları anlamaya ve düzeltmeye çalışın.&lt;/p&gt; </string>
+  <string name="faq_howto">&lt;p&gt;Çalışan bir yapılandırma edinin(bilgisayarınızda test edin yada sağlayıcınızdan/organizasyonunuzdan indirin)&lt;/p&gt;&lt;p&gt;Ekstra pem/pkcs12 dosyaları olmayan tek bir dosya ise, dosyayı kendiniz e-posta ile gönderebilir ve eki açabilirsiniz. Birden çok dosyanız var ise sd card\'a koyunuz.&lt;/p&gt;&lt;p&gt;Yapılandırma dosyasını içe aktarmak için e-posta eki/Vpn listesindeki klasör simgesini kullanın.&lt;/p&gt;&lt;p&gt;Eksik dosyalar nedeniye hata oluşuyorsa, eksik dosyaları sd card'ınıza koyun.&lt;/p&gt;&lt;p&gt;İçe aktarılan VPN'i VPN listenize eklemek için kaydetme simgesine tıklayın.&lt;/p&gt;&lt;p&gt;VPN'nin adına tıklayarak VPN'i bağlayın&lt;/p&gt;&lt;p&gt;Logta hata veya uyarı varsa, uyarıları/hataları anlamaya ve düzeltmeye çalışın.&lt;/p&gt; </string>
 
   <string name="faq_howto_title">Hızlı Başlat</string>
 
@@ -268,7 +439,7 @@
 
   <string name="setting_loadtun">Tun mudülünü yükle</string>
 
-  <string name="importpkcs12fromconfig">Android Anahtar deposunun içindeki yapılandırmadan  PKCS12\'i içe aktar</string>
+  <string name="importpkcs12fromconfig">Android Anahtar deposunun içindeki yapılandırmadan PKCS12\'i içe aktar</string>
 
   <string name="getproxy_error">Proxy ayarları alınırken hata oluştu: %s</string>
 
@@ -306,7 +477,7 @@
 
   <string name="faq_routing_title">Yönlendirme / Arayüz Yapılandırması</string>
 
-  <string name="faq_routing">Yönlendirme ve arabirim yapılandırması, geleneksel ifconfig/route komutları ile değil, VPNService API\'sı kullanılarak yapılır.Bu, diğer işletim sistemlerinden farklı bir yönlendirme yapılandırmasıyla sonuçlanır.\nVPN tünelinin yapılandırması, IP adresi ve bu arabirim üzerinden yönlendirilmesi gereken ağlardan oluşur.Özellikle, eş partner adresi veya ağ geçidi adresine ihtiyaç duyulmaz veya gerekli değildir. VPN Sunucusuna ulaşmak için özel yollara da (örneğin redirect-gateway kullanılırken eklenmesine) gerek duyulmaz. Uygulama, bu nedenle bir yapılandırmayı içe aktarırken bu ayarları dikkate almaz. Uygulama, VPNService API\'sı ile sunucuya bağlantının VPN tüneli üzerinden yönlendirilmemesini sağlar.\nVPNService API\'si, VPN üzerinden yönlendirilmemesi gereken ağların belirlenmesine izin vermez. Bir geçici çözüm olarak, uygulama tünel üzerinden yönlendirilmemesi gereken ağları (ör. Yol x.x.x.x y.y.y.y net_gateway) saptamaya çalışır ve diğer platformların davranışlarını taklit etmek için bu yolları dışlayan bir dizi rota hesaplar. Log  pencereleri bağlantı kurulduktan sonra VPNService\'nin yapılandırmasını gösterir.\nSahne arkasında: Android 4.4+  yönlendirme politikası kullanıyor. oute/ifconfig kullanmak kurulu rotaları göstermeyecektir. Bunun yerine iptables -t mangle -L  ,ip kuralını kullanın,</string>
+  <string name="faq_routing">Yönlendirme ve arabirim yapılandırması, geleneksel ifconfig/route komutları ile değil, VPNService API\'sı kullanılarak yapılır.Bu, diğer işletim sistemlerinden farklı bir yönlendirme yapılandırmasıyla sonuçlanır.\nVPN tünelinin yapılandırması, IP adresi ve bu arabirim üzerinden yönlendirilmesi gereken ağlardan oluşur.Özellikle, eş partner adresi veya ağ geçidi adresine ihtiyaç duyulmaz veya gerekli değildir. VPN Sunucusuna ulaşmak için özel yollara da (örneğin redirect-gateway kullanılırken eklenmesine) gerek duyulmaz. Uygulama, bu nedenle bir yapılandırmayı içe aktarırken bu ayarları dikkate almaz. Uygulama, VPNService API\'sı ile sunucuya bağlantının VPN tüneli üzerinden yönlendirilmemesini sağlar.\nVPNService API\'si, VPN üzerinden yönlendirilmemesi gereken ağların belirlenmesine izin vermez. Bir geçici çözüm olarak, uygulama tünel üzerinden yönlendirilmemesi gereken ağları (ör. Yol x.x.x.x y.y.y.y net_gateway) saptamaya çalışır ve diğer platformların davranışlarını taklit etmek için bu yolları dışlayan bir dizi rota hesaplar. Log pencereleri bağlantı kurulduktan sonra VPNService'nin yapılandırmasını gösterir.\nSahne arkasında: Android 4.4+ yönlendirme politikası kullanıyor. oute/ifconfig kullanmak kurulu rotaları göstermeyecektir. Bunun yerine iptables -t mangle -L ,ip kuralını kullanın,</string>
 
   <string name="persisttun_summary">OpenVPN yeniden bağlandığında VPN bağlantısına geri dönme.</string>
 
@@ -318,9 +489,9 @@
 
   <string name="battery_consumption_title">Pil tüketimi</string>
 
-  <string name="baterry_consumption">Kişisel testlerimde, OpenVPN\'in yüksek batarya tüketiminin ana nedeni, kalıcı(keepalive) paketlerdir. Çoğu OpenVPN sunucusunda, istemcinin ve sunucunun her on saniyede bir kalıcı paketler almasına neden olan \'keepalive 10 60\' gibi bir yapılandırma yönergesi bulunur. &lt;p&gt; Bu paketler küçük ve çok fazla trafik kullanmıyorken, mobil radyo ağını meşgul ediyor ve enerji tüketimini artırıyorlar. (Ayrıca &lt;a href="http://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine"&gt;The Radio State Machine | Android Developers&lt;/a&gt; \'a göz atın) &lt;p&gt; Bu ayar, istemcide değiştirilemez. Sadece OpenVPN\'in sistem yöneticisi ayarı değiştirebilir. &lt;p&gt; Ne yazık ki UDP ile 60 saniyeden daha uzun bir kalıcı paket ayarı kullanmak, bazı NAT ağ geçitlerinin bir hareketsizlikten dolayı zaman aşımı nedeniyle bağlantının kopmasına neden olabilir. Uzun kalıcı paket oluşturma süresi kullanmak zaman aşımına neden olur, ama, TCP üzerinden TCP\'ye tünel yapmak, yüksek paket kaybına sahip bağlantılarda çok zayıf bir performans sergiler. ( Ayrıca Göz Atın :&lt;a href="http://sites.inka.de/bigred/devel/tcp-tcp.html"&gt;Neden TCP üzerinden TCP kötü bir fikir? &lt;/a&gt;) </string>
+  <string name="baterry_consumption">Kişisel testlerimde, OpenVPN\'in yüksek batarya tüketiminin ana nedeni, kalıcı(keepalive) paketlerdir. Çoğu OpenVPN sunucusunda, istemcinin ve sunucunun her on saniyede bir kalıcı paketler almasına neden olan \'keepalive 10 60\' gibi bir yapılandırma yönergesi bulunur. &lt;p&gt; Bu paketler küçük ve çok fazla trafik kullanmıyorken, mobil radyo ağını meşgul ediyor ve enerji tüketimini artırıyorlar. (Ayrıca &lt;a href="http://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine"&gt;The Radio State Machine | Android Developers&lt;/a&gt; \'a göz atın) &lt;p&gt; Bu ayar, istemcide değiştirilemez. Sadece OpenVPN\'in sistem yöneticisi ayarı değiştirebilir. &lt;p&gt; Ne yazık ki UDP ile 60 saniyeden daha uzun bir kalıcı paket ayarı kullanmak, bazı NAT ağ geçitlerinin bir hareketsizlikten dolayı zaman aşımı nedeniyle bağlantının kopmasına neden olabilir. Uzun kalıcı paket oluşturma süresi kullanmak zaman aşımına neden olur, ama, TCP üzerinden TCP'ye tünel yapmak, yüksek paket kaybına sahip bağlantılarda çok zayıf bir performans sergiler. ( Ayrıca Göz Atın :&lt;a href="http://sites.inka.de/bigred/devel/tcp-tcp.html"&gt;Neden TCP üzerinden TCP kötü bir fikir? &lt;/a&gt;) </string>
 
-  <string name="faq_tethering">Android Paylaşım özelliği (WiFi, USB veya Bluetooth üzerinden)ve VPNService API (bu programda kullanılan) birlikte çalışamaktadır. Daha fazla detay için the &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/34\">sorun #34&lt;/a>\'a göz atın</string>
+  <string name="faq_tethering">Android Paylaşım özelliği (WiFi, USB veya Bluetooth üzerinden)ve VPNService API (bu programda kullanılan) birlikte çalışamaktadır. Daha fazla detay için the &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/34\">sorun #34&lt;/a>'a göz atın</string>
 
   <string name="vpn_tethering_title">VPN ve İnternet paylaşımı</string>
 
@@ -428,7 +599,7 @@
 
   <string name="clearappsdialog">İzin verilen harici uygulamaların listesini temizlemek istiyor musunuz?\nİzin verilen uygulamaların güncel listesi:\n\n%s</string>
 
-  <string name="screenoff_summary">Ekran kapalı olduğunda ve 60 saniye içince 64kB\'den az veri transferi olduğunda VPN\'i duraklat.VPN,  \"Kalıcı Tun\" seçeneği etkinleştirildiğinde, cihazınızı ağ bağlantısı olmadan bırakacaktır. \"Persistent Tun\" seçeneği olmadan cihazın VPN bağlantısı/koruması olmayacaktır.</string>
+  <string name="screenoff_summary">Ekran kapalı olduğunda ve 60 saniye içince 64kB\'den az veri transferi olduğunda VPN\'i duraklat.VPN, \"Kalıcı Tun\" seçeneği etkinleştirildiğinde, cihazınızı ağ bağlantısı olmadan bırakacaktır. \"Persistent Tun\" seçeneği olmadan cihazın VPN bağlantısı/koruması olmayacaktır.</string>
 
   <string name="screenoff_title">Ekranı kapattıktan sonra VPN\'i duraklat</string>
 
@@ -460,7 +631,7 @@
 
   <string name="permission_icon_app">Uygulamanın simgesi Android için OpenVPN\'i kullanmaya çalışıyor</string>
 
-  <string name="faq_vpndialog43">"Android 4.3 ile başlayarak VPN doğrulaması \"overlaying apps\" lere karşın korunmaktadır. Bu, iletişim kutusuna dokunma girişine tepki vermeme ile sonuçlanır. Overlay kullanan bir uygulamanız varsa, bu davranışa neden olabilir.Eğer rahatsız edici bir uygulama bulursanız, uygulamanın sahibi ile iletişime geçin. Bu sorun, Android 4.3 ve sonraki sürümlerdeki tüm VPN uygulamalarını etkilemektedir. Ayrıca daha fazla detay için &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/185\">Sorun 185&lt;a>  kısmına bakınız"</string>
+  <string name="faq_vpndialog43">"Android 4.3 ile başlayarak VPN doğrulaması \"overlaying apps\" lere karşın korunmaktadır. Bu, iletişim kutusuna dokunma girişine tepki vermeme ile sonuçlanır. Overlay kullanan bir uygulamanız varsa, bu davranışa neden olabilir.Eğer rahatsız edici bir uygulama bulursanız, uygulamanın sahibi ile iletişime geçin. Bu sorun, Android 4.3 ve sonraki sürümlerdeki tüm VPN uygulamalarını etkilemektedir. Ayrıca daha fazla detay için &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/185\">Sorun 185&lt;a> kısmına bakınız"</string>
 
   <string name="faq_vpndialog43_title">Vpn Yapılandırma Diyalogu</string>
 
@@ -494,7 +665,7 @@
 
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
 
-  <string name="faq_system_dialog_xposed">Android cihazının rootlu ise, you can install the &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; ve  the &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt; yükleyebilirsiniz; VPN diyalog,  kendi sorumluluğunuzda &lt;/a&gt; modülü onaylar"</string>
+  <string name="faq_system_dialog_xposed">Android cihazının rootlu ise, you can install the &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; ve the &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt; yükleyebilirsiniz; VPN diyalog, kendi sorumluluğunuzda &lt;/a&gt; modülü onaylar"</string>
 
   <string name="full_licenses">Tam lisanslar</string>
 
@@ -508,7 +679,7 @@
 
   <string name="files_missing_hint">Bazı dosyalar bulunamadı. Lütfen profili içe aktarmak için dosyaları seçin:</string>
 
-  <string name="openvpn_is_no_free_vpn">Bu uygulamayı kullanmak için bir OpenVPN\'i destekleyen VPN sağlayıcı/VPN ağ geçidine ihtiyacınız vardır(genellikle işveren tarafından sağlanan).   OpenVPN hakkında daha fazla bilgi ve kendi OpenVPN sunucunuzu nasıl kurabileceğiniz hakkında daha fazla bilgi için http://community.openvpn.net/ adresine göz atın. </string>
+  <string name="openvpn_is_no_free_vpn">Bu uygulamayı kullanmak için bir OpenVPN\'i destekleyen VPN sağlayıcı/VPN ağ geçidine ihtiyacınız vardır(genellikle işveren tarafından sağlanan). OpenVPN hakkında daha fazla bilgi ve kendi OpenVPN sunucunuzu nasıl kurabileceğiniz hakkında daha fazla bilgi için http://community.openvpn.net/ adresine göz atın. </string>
 
   <string name="import_log"> log içe aktar:</string>
 
@@ -570,13 +741,13 @@
 
   <string name="show_log">Logları göster</string>
 
-  <string name="faq_android_clients"> Android için birden çok OpenVPN istemcisi vardır. En yaygın olanları En yaygın olanları Android için OpenVPN (bu istemci), OpenVPN Connect ve OpenVPN Setting\'dir.&lt;p&gt; İstemciler 2 grupta toplanmıştı: Android için OpenVPN ve OpenVPN Connect, resmi CPNService API\'sini (Android 4.0+) kullanır, root gerektirmez sadece OpenVPN Settings root kullanır.&lt;p&gt; Android için OpenVPN Arne Schwabe tarafından geliştirilmiş açık kaynak bir istemcidir. Daha gelişmiş kullanıcılara yöneliktir ve birçok ayarı ve profilleri dosyalardan içe aktarma, uygulama içindeki profilleri yapılandırma/değiştirme imkanı sunar. İstemci OpenVPN\'in topluluk sürümüne dayanmaktadır.OpenVPN 2.x kaynak kodunu temel alır.Bu istemci  topluluğun yarı resmi istemcisi olarak görülebilir. &lt;p&gt;OpenVPN Connect, OpenVPN Technlogies, Inc. tarafından geçiştirilmiş açık kaynak olmayan bir istemcidir. İstemci, genel kullanım istemcisi olarak tanımlanır, ortalama kullanıcıyı daha fazla hedefler ve OpenVPN profillerinin içe aktarılmasına izin verir. Bu istemci, OpenVPN protokolünün  OpenVPN C++ üzerinden yeniden yerleştirilmesini temel alır.(Bu, OpenVPN Technologies, Inc\'in bir iOS OpenVPN uygulaması yayınlamasına izin vermek için gerekliydi). Bu istemci OpenVPN teknolojilerinin resmi istemcisidir &lt;p&gt; OpenVPN Settings istemcilerin en eski ve açık kaynaklı OpenVPN için bir kullanıcı arayüzüdür. Android için OpenVPN\'in aksine, root gerektirir ve VPNService API\'sini kullanmaz. Android 4.0+ \'ye bağlı değildir.</string>
+  <string name="faq_android_clients"> Android için birden çok OpenVPN istemcisi vardır. En yaygın olanları En yaygın olanları Android için OpenVPN (bu istemci), OpenVPN Connect ve OpenVPN Setting\'dir.&lt;p&gt; İstemciler 2 grupta toplanmıştı: Android için OpenVPN ve OpenVPN Connect, resmi CPNService API\'sini (Android 4.0+) kullanır, root gerektirmez sadece OpenVPN Settings root kullanır.&lt;p&gt; Android için OpenVPN Arne Schwabe tarafından geliştirilmiş açık kaynak bir istemcidir. Daha gelişmiş kullanıcılara yöneliktir ve birçok ayarı ve profilleri dosyalardan içe aktarma, uygulama içindeki profilleri yapılandırma/değiştirme imkanı sunar. İstemci OpenVPN\'in topluluk sürümüne dayanmaktadır.OpenVPN 2.x kaynak kodunu temel alır.Bu istemci topluluğun yarı resmi istemcisi olarak görülebilir. &lt;p&gt;OpenVPN Connect, OpenVPN Technlogies, Inc. tarafından geçiştirilmiş açık kaynak olmayan bir istemcidir. İstemci, genel kullanım istemcisi olarak tanımlanır, ortalama kullanıcıyı daha fazla hedefler ve OpenVPN profillerinin içe aktarılmasına izin verir. Bu istemci, OpenVPN protokolünün OpenVPN C++ üzerinden yeniden yerleştirilmesini temel alır.(Bu, OpenVPN Technologies, Inc\'in bir iOS OpenVPN uygulaması yayınlamasına izin vermek için gerekliydi). Bu istemci OpenVPN teknolojilerinin resmi istemcisidir &lt;p&gt; OpenVPN Settings istemcilerin en eski ve açık kaynaklı OpenVPN için bir kullanıcı arayüzüdür. Android için OpenVPN'in aksine, root gerektirir ve VPNService API'sini kullanmaz. Android 4.0+ 'ye bağlı değildir.</string>
 
   <string name="faq_androids_clients_title">OpenVPN Android istemcileri arasındaki farklar</string>
 
   <string name="ignore_multicast_route">Multicast rotaların yok sayılması: %s</string>
 
-  <string name="ab_only_cidr">Android VPN için sadece CIDR yönlendirmelerini destekler . CIDR olmayan yönlendirmeler neredeyse hiç kullanılmadığından, Android için OpenVPN CIDR olmayan yönlendirmeler ve bir uyarı vermek için  /32\'yi kullanır.</string>
+  <string name="ab_only_cidr">Android VPN için sadece CIDR yönlendirmelerini destekler . CIDR olmayan yönlendirmeler neredeyse hiç kullanılmadığından, Android için OpenVPN CIDR olmayan yönlendirmeler ve bir uyarı vermek için /32\'yi kullanır.</string>
 
   <string name="ab_tethering_44">VPN aktifken bağlama çalışır. Bağlı olan bağlantı VPN\'yi KULLANMAYACAKTIR.</string>
 
@@ -584,9 +755,9 @@
 
   <string name="ab_proxy">Hiçbir DNS sunucusu ayarlanmadığında Android, mobil / Wi-Fi bağlantısı için belirtilen proxy ayarlarınızı kullanmaya devam edecektir. Android için OpenVPN, bu konu hakkında sizi uyarır.<p>Bir VPN bir DNS sunucusu belirlediğinde, Android bir proxy kullanmaz. VPN bağlantısı için bir proxy ayarlacak API yoktur.</p></string>
 
-  <string name="ab_lollipop_reinstall">VPN uygulamaları, kaldırılıp tekrar yüklendiğinde çalışmayabilir.Detaylara göz atmak için  #80074</string>
+  <string name="ab_lollipop_reinstall">VPN uygulamaları, kaldırılıp tekrar yüklendiğinde çalışmayabilir.Detaylara göz atmak için #80074</string>
 
-  <string name="ab_not_route_to_vpn">Yapılandırılmış istemci IP\'si ve ağ maskesindeki IP\'ler VPN\'ye yönlendirilmez. OpenVPN, istemci IP\'sine ve (ağ maskesine) netmask\'ına uygun bir yönlendirme  ekleyerek açıkça bu hata etrafında çalışır</string>
+  <string name="ab_not_route_to_vpn">Yapılandırılmış istemci IP\'si ve ağ maskesindeki IP\'ler VPN\'ye yönlendirilmez. OpenVPN, istemci IP\'sine ve (ağ maskesine) netmask\'ına uygun bir yönlendirme ekleyerek açıkça bu hata etrafında çalışır</string>
 
   <string name="ab_persist_tun">Kalıcı ayar desteği için kullanılan başka bir tun aygıtı etkinken bir tun cihazı açmak, cihazdaki VPNServices\'ı çökertir. VPN\'nin yeniden çalışması için tekrar başlatılması gerekir.Android için OpenVPN, tun cihazını tekrar açmayı engellemeye çalışır ve gerçekten ihtiyaç duyulursa, çökmeyi önlemek için yeni TUN cihazını açmadan önce mevcut TUN\'ı kapatır. Bu, paketlerin VPN olmayan bağlantı üzerinden gönderildiği kısa bir pencereye yol açabilir.Bu geçici çözümle bile, VPNServices bazen çöker ve aygıtın yeniden başlatılmasını gerektirir.</string>
 
@@ -628,7 +799,7 @@
 
   <string name="tls_cipher_alert_title">SSL23_GET_SERVER_HELLO ile bağlantı kurulamadı: sslv3 uyarı anlaşması hatası</string>
 
-  <string name="tls_cipher_alert">Daha yeni Android için OpenVPN sürümleri (0.6.29/March 2015) izin verilen şifre takımları için daha güvenli bir varsayılan değer kullanır (tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!kRSA\"). Ne yazık ki, daha az  güvenli  şifreleme paketleri ve dışa aktarma şifreleme paketlerinin ihmal edilmesi, özellikle Perfect Forward Secrecy\'yi (Diffie-Hellman) desteklemeyen şifre paketlerinin ihmal edilmesi bazı problemlere neden olmaktadır. Bu genellikle tls-chiper ayarlanatak sunucuda TLS güvenliğini arttırmaya çalışmak iyi niyetli ama kötü yürütülen girişimlerden yada SSL ile ayrılan bazı gömülü işletim sistemlerinde meydana gelir (ör. MikroTik).\nBu sorunu çözmek için, tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!kRSA\" gibi sunucudaki tls-cipher ayarlarını makul varsayılan değere ayarlayın. İstemci üzerindeki soruna geçici bir çözüm bulmak için Android istemcideki özel  tls-cipher DEFAULT seçeneğini ekleyin.</string>
+  <string name="tls_cipher_alert">Daha yeni Android için OpenVPN sürümleri (0.6.29/March 2015) izin verilen şifre takımları için daha güvenli bir varsayılan değer kullanır (tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!kRSA\"). Ne yazık ki, daha az güvenli şifreleme paketleri ve dışa aktarma şifreleme paketlerinin ihmal edilmesi, özellikle Perfect Forward Secrecy\'yi (Diffie-Hellman) desteklemeyen şifre paketlerinin ihmal edilmesi bazı problemlere neden olmaktadır. Bu genellikle tls-chiper ayarlanatak sunucuda TLS güvenliğini arttırmaya çalışmak iyi niyetli ama kötü yürütülen girişimlerden yada SSL ile ayrılan bazı gömülü işletim sistemlerinde meydana gelir (ör. MikroTik).\nBu sorunu çözmek için, tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!kRSA\" gibi sunucudaki tls-cipher ayarlarını makul varsayılan değere ayarlayın. İstemci üzerindeki soruna geçici bir çözüm bulmak için Android istemcideki özel tls-cipher DEFAULT seçeneğini ekleyin.</string>
 
   <string name="message_no_user_edit">Bu profil harici bir uygulamadan (%s) eklendi ve kullanıcı tarafından düzenlenemez olarak işaretlendi.</string>
 
@@ -640,7 +811,7 @@
 
   <string name="Search">Arama</string>
 
-  <string name="lastdumpdate">(son çökme  %1$d:%2$dh önce gerçekleşti (%3$s))</string>
+  <string name="lastdumpdate">(son çökme %1$d:%2$dh önce gerçekleşti (%3$s))</string>
 
   <string name="clear_log_on_connect">Yeni bağlantıdaki log kaydını temizle</string>
 
@@ -678,9 +849,9 @@
 
   <string name="crl_title">Sertifika İptal Listesi (opsiyonel)</string>
 
-  <string name="reread_log">Log önbellek dosyasından log maddesi  (%d) tekrar okundu</string>
+  <string name="reread_log">Log önbellek dosyasından log maddesi (%d) tekrar okundu</string>
 
-  <string name="samsung_broken">Samsung telefonları en çok satan Android telefonlar arasında olsa bile, Samsung\'un ürün yazılımı da çok fazla hata barındıran Android yazılımları arasındadır. Bu hatalar VPN işlemleri ile sınırlı değildir ve bunların bir çoğu geçici olarak çözülebilir.Aşağıda, bu hataların bazıları açıklanmaktadır.\n\nDNS, VPN aralığındaki DNS sunucusu olmadığı sürece çalışmamaktadır.\n\nBirçok Samsung 5.x cihazında izin verilen/izin verilmeyen uygulamalar özelliği çalışmamaktadır.\nSamsung 6.x\'de, VPN uygulamasının güç tasarrufu özelliklerinden muaf tutulmadığı sürece VPN\'nin çalışmadığı bildirilmektedir.</string>
+  <string name="samsung_broken">Samsung telefonları en çok satan Android telefonlar arasında olsa bile, Samsung\'un ürün yazılımı da çok fazla hata barındıran Android yazılımları arasındadır. Bu hatalar VPN işlemleri ile sınırlı değildir ve bunların bir çoğu geçici olarak çözülebilir.Aşağıda, bu hataların bazıları açıklanmaktadır.\n\nDNS, VPN aralığındaki DNS sunucusu olmadığı sürece çalışmamaktadır.\n\nBirçok Samsung 5.x cihazında izin verilen/izin verilmeyen uygulamalar özelliği çalışmamaktadır.\nSamsung 6.x\'de, VPN uygulamasının güç tasarrufu özelliklerinden muaf tutulmadığı sürece VPN'nin çalışmadığı bildirilmektedir.</string>
 
   <string name="samsung_broken_title">Samsung telefonlar</string>
 
@@ -706,9 +877,9 @@
 
   <string name="state_waitconnectretry">Bağlantı denemesi arasında %ss saniyedir bekleniyor</string>
 
-  <string name="nought_alwayson_warning"><![CDATA[Bir VPN onay kutucuğuyla almadıysanız, başka bir uygulama için  \"Her zaman VPN\'de\" seçeneği aktiftir. Bu durumda sadece bu uygulamanın bir VPN\'ye bağlanmasına izin verilmektedir. Ayarlar -> Ağ ve daha fazla... -> VPN\'ler kısmını kontrol ediniz ]]></string>
+  <string name="nought_alwayson_warning"><![CDATA[Bir VPN onay kutucuğuyla almadıysanız, başka bir uygulama için \"Her zaman VPN\'de\" seçeneği aktiftir. Bu durumda sadece bu uygulamanın bir VPN\'ye bağlanmasına izin verilmektedir. Ayarlar -> Ağ ve daha fazla... -> VPN'ler kısmını kontrol ediniz ]]></string>
 
-  <string name="management_socket_closed">OpenVPN bağlantısı kapatıldı  (%s)</string>
+  <string name="management_socket_closed">OpenVPN bağlantısı kapatıldı (%s)</string>
 
   <string name="change_sorting">Sıralamayı değiştir</string>
 
@@ -748,25 +919,25 @@
 
   <string name="weakmd">&lt;p>OpenSSL versiyon 1.1 ile başlayarak, OpenSSL MD5 gibi sertifikalardaki zayıf imzaları
 
-         reddetmektedir.  .&lt;/p>&lt;p>&lt;b> Md5 imzaları tamamen güvensizdir ve artık kullanılmamalıdır.&lt;/b> MD5
+reddetmektedir. .&lt;/p>&lt;p>&lt;b> Md5 imzaları tamamen güvensizdir ve artık kullanılmamalıdır.&lt;/b> MD5
 
-       çakışmalar &lt;a
+çakışmalar &lt;a
 
-        href="https://natmchugh.blogspot.de/2015/02/create-your-own-md5-collisions.html">bir kaç saatte minimum maliyetle&lt;/a> oluşturulabilir.
+href="https://natmchugh.blogspot.de/2015/02/create-your-own-md5-collisions.html">bir kaç saatte minimum maliyetle&lt;/a> oluşturulabilir.
 
-        VPN sertifikalarını mümkün olan en kısa sürede güncellemelisiniz. &lt;/p>&lt;p>Malesef, eski easy-rsa sürümleri
+VPN sertifikalarını mümkün olan en kısa sürede güncellemelisiniz. &lt;/p>&lt;p>Malesef, eski easy-rsa sürümleri
 
-        "default_md md5" yapılandırma seçeneğini içermektedir. Eski bir easy-rsa versiyonunu kullanıyorsanız, Buradan güncelleyin
+"default_md md5" yapılandırma seçeneğini içermektedir. Eski bir easy-rsa versiyonunu kullanıyorsanız, Buradan güncelleyin
 
-       &lt;a href="https://github.com/OpenVPN/easy-rsa/releases">latest version&lt;/a>) yada md5 \'i  sha256 ile değiştirin ve
+&lt;a href="https://github.com/OpenVPN/easy-rsa/releases">latest version&lt;/a>) yada md5 'i sha256 ile değiştirin ve
 
-       sertifikanızı terkar oluşturun.&lt;/p>&lt;p>Eski ve hatalı sertifikaları gerçekten kullanmak istiyorsanız, gelişmiş yapılandırmadan
+sertifikanızı terkar oluşturun.&lt;/p>&lt;p>Eski ve hatalı sertifikaları gerçekten kullanmak istiyorsanız, gelişmiş yapılandırmadan
 
-         yada içe aktarılan yapılandırmadan  tls-cipher "DEFAULT:@SECLEVEL=0" özel yapılandırmasını
+yada içe aktarılan yapılandırmadan tls-cipher "DEFAULT:@SECLEVEL=0" özel yapılandırmasını
 
-        kullanın&lt;/p>
+kullanın&lt;/p>
 
-    </string>
+</string>
 
   <string name="volume_byte">%.0f B</string>
 
@@ -798,7 +969,7 @@
 
   <string name="test_algoirhtms">Seçilen algoritmaları test et</string>
 
-  <string name="all_app_prompt">Harici bir uygulama %s \'i kontrol etmeye çalışıyor.  Erişim isteyen uygulama belirlenemedi. Bu uygulamaya izin vermek,  TÜM uygulamalara erişim sağlar. </string>
+  <string name="all_app_prompt">Harici bir uygulama %s \'i kontrol etmeye çalışıyor. Erişim isteyen uygulama belirlenemedi. Bu uygulamaya izin vermek, TÜM uygulamalara erişim sağlar. </string>
 
   <string name="openvpn3_nostatickeys">OpenVPN 3 C ++ uygulaması, statik anahtarları desteklemiyor. Lütfen genel ayarlardan OpenVPN 2.x\'e geçiş yapın.</string>
 
@@ -896,7 +1067,7 @@
 
   <string name="Are_you_sure_to_disconnect">Bağlantıyı kesmek istediğinizden emin misiniz?</string>
 
-  <string name="PROFILE_PICTURE">PROFİL FOTOĞRAFI </string>
+  <string name="PROFILE_PICTURE">PROFİL FOTOĞRAFI</string>
 
   <string name="Generating_config...">Yapılandırma oluşturuluyor...</string>
 
@@ -938,7 +1109,7 @@
 
   <string name="Please_enter_your_bet">Lütfen bahsinizi girin</string>
 
-  <string name="Not_enough_QLC_Or_GAS">Yeterli  QLC veya GAS bulunmamakta</string>
+  <string name="Not_enough_QLC_Or_GAS">Yeterli QLC veya GAS bulunmamakta</string>
 
   <string name="Your_bet_should_be_greater_than_the_current_asset_value">Bahsiniz şuanki varlık değerinden daha büyük olmalıdır</string>
 
@@ -984,7 +1155,7 @@
 
   <string name="cannot_register_empty_vpn_asset">boş vpn varlığı kaydedilemez</string>
 
-  <string name="Connect_vpn_success">Vpn bağlantısı başarılı </string>
+  <string name="Connect_vpn_success">Vpn bağlantısı başarılı</string>
 
   <string name="deductions_failure">kesinti başarısız</string>
 
@@ -1018,7 +1189,7 @@
 
   <string name="connect_to_wifi_failure_system_error">%s wifi\'ya bağlantı başarısız, sistem hatası.</string>
 
-  <string name="Permission_Denied_please_go_to_setting_open_location_permission">İzin Reddedildi, lütfen lokasyon iznini açmak için  ayarlara gidiniz</string>
+  <string name="Permission_Denied_please_go_to_setting_open_location_permission">İzin Reddedildi, lütfen lokasyon iznini açmak için ayarlara gidiniz</string>
 
   <string name="Try_to_connect_to_a_WiFi_with_green_WiFi_icon">Yeşil WiFi simgesiyle bir WiFi\'ya bağlanmayı deneyin!</string>
 
@@ -1056,12 +1227,17 @@
 
   <string name="Log">Log</string>
 
-  <string name="ASIA">ASIA</string>
-  <string name="AFRICA">AFRICA</string>
-  <string name="OCEANIA">OCEANIA</string>
-  <string name="EUROPE">EUROPE</string>
-  <string name="NORTHAMERICA">NORTHAMERICA</string>
-  <string name="SOUTHAMERICA">SOUTHAMERICA</string>
+  <string name="ASIA">ASYA</string>
+
+  <string name="AFRICA">AFRİKA</string>
+
+  <string name="OCEANIA">OKYANUSYA</string>
+
+  <string name="EUROPE">AVRUPA</string>
+
+  <string name="NORTHAMERICA">KUZEY AMERİKA</string>
+
+  <string name="SOUTHAMERICA">GÜNEY AMERİKA</string>
 
   <string name="no_wallet">cüzdan yok</string>
 
@@ -1259,9 +1435,9 @@
 
   <string name="Manage_all_your_assets_in_your_wallet_or_go_back_and_register_another_VPN_asset">Cüzdanındaki tüm varlıklarını yönet, \n yada geri dön ve başka bir VPN varlığı kaydet!</string>
 
-  <string name="continue_to_my_wallet">    cüzdanıma ilerle</string>
+  <string name="continue_to_my_wallet"> cüzdanıma ilerle</string>
 
-  <string name="go_back_to_the_home_page">ana sayfaya geri dön     </string>
+  <string name="go_back_to_the_home_page">ana sayfaya geri dön </string>
 
   <string name="VPN_NAME">VPN ADI</string>
 
@@ -1404,21 +1580,45 @@
   <string name="I_will_pay">Ödeyeceğim</string>
 
   <string name="Vpn_Name">Vpn Adı</string>
-  <string name="Not_connected">Bağlı değil!</string>
-  <string name="bet_confirm"><Data><![CDATA[ <b>\%s\</b>de yer alacak,  <font color="#490080"><b>\%s\</b> maçı için <b>\"%s\"</b> sonucuna 10 QLC bahis koymak istediğinize emin misiniz? <br /><br />  Bahsinizi koyarak, mevcut cüzdanınızdan
-10 QLC\'yi nihai maç sonucundan sonra
-kazancınızı saklayacak veya geri verecek
- olan Akıllı Sözleşmeye göndereceksiniz.<br /><br />
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum metus, eget efficitur diam duis varius!]]></Data></string>
-  <string name="TRANSACTIONS">İŞLEMLER</string>
-  <string name="RECEIVE">AL</string>
-  <string name="mainnnet_wallet">MAINNET CÜZDANI</string>
-  <string name="guest_viewpager_1">Bir Cüzdan Oluşturun \n 100 QLC Ödül Kazanın</string>
-  <string name="testnet_reward">Testnet Ödülleri</string>
-  <string name="guest_viewpager_2">QLC Token ile \n Sıfır Maliyetli Güvenli VPN</string>
-  <string name="guest_viewpager_3">Arkadaşlarınızla Palaşın \n Sürprizler Kazanın</string>
-  <string name="got_it">Anladım</string>
 
+  <string name="Not_connected">Bağlı değil!</string>
+
+
+
+  <!--20180612止，以后每次翻译都要备注时间，方便做增量翻译-->
+
+
+
+
+
+  <!-- 20180613-->
+
+  <string name="bet_confirm"><Data><![CDATA[ <b>\%s\</b>de yer alacak, <font color="#490080"><b>\%s\</b> maçı için <b>\"%s\"</b> sonucuna 10 QLC bahis koymak istediğinize emin misiniz? <br /><br /> Bahsinizi koyarak, mevcut cüzdanınızdan
+
+10 QLC'yi nihai maç sonucundan sonra
+
+kazancınızı saklayacak veya geri verecek
+
+olan Akıllı Sözleşmeye göndereceksiniz.<br /><br />
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum metus, eget efficitur diam duis varius!]]></Data></string>
+
+  <string name="TRANSACTIONS">İŞLEMLER</string>
+
+  <string name="RECEIVE">AL</string>
+
+  <string name="mainnnet_wallet">MAINNET CÜZDANI</string>
+
+  <!--20180625-->
+  <string name="guest_viewpager_1">Bir Cüzdan Oluşturun \n 100 QLC Ödül Kazanın</string>
+
+  <string name="testnet_reward">Testnet Ödülleri</string>
+
+  <string name="guest_viewpager_2">QLC Token ile \n Sıfır Maliyetli Güvenli VPN</string>
+
+  <string name="guest_viewpager_3">Arkadaşlarınızla Palaşın \n Sürprizler Kazanın</string>
+
+  <string name="got_it">Anladım</string>
 
 
   <string name="testnet">TestNet!</string>
@@ -1444,7 +1644,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="BUY_QLC">QLC SATIN AL</string>
   <string name="English">İngilizce</string>
   <string name="Choose_a_VPN">Bir VPN Seç</string>
-
   <string name="prioritize_the_list_by_server_location">listeyi sunucu konumuna göre önceliklendirin</string>
   <string name="connect_now">Şimdi Bağlan!</string>
   <string name="enter_settings_wallet">Cüzdan Ayarlarına Girin</string>
@@ -1457,7 +1656,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="get_into_wallet_detail">Cüzdan detayına gir</string>
   <string name="make_sure_you_backup_this">Bunu yedeklediğinizden emin olun</string>
   <string name="choose_a_country">bir ülke</string>
-
   <string name="vpn_list">VPN Listesi</string>
   <string name="REGISTER_YOUR_VPN_">VPN\'ini KAYDET</string>
   <string name="please_wait_vpn_online">Bu vpn çevrimiçi olana kadar lütfen bekleyin</string>
@@ -1468,7 +1666,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="Do_you_want_to_disconnect">Bağlantıyı koparmak istiyor musunuz?</string>
   <string name="Please_disconnect_the_current_one_first">Lütfen önce mevcut olandan bağlantıyı koparın.</string>
 
+
 </resources>
-
-
-
