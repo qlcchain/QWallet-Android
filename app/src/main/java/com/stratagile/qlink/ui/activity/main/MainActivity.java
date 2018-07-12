@@ -602,7 +602,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void onBackPressed() {
-        if (downCHeckView != null && downCHeckView.isShown()) {
+        if (downCHeckView != null && downCHeckView.isShow()) {
             downCHeckView.close();
             return;
         }

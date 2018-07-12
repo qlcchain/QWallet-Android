@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN for Android</string>
+  <string name="app">WINQ for Android</string>
   <string name="address">Adresse du serveur :</string>
   <string name="port">Port du serveur :</string>
   <string name="location">"Emplacement"</string>
@@ -20,7 +20,7 @@
   <string name="client_pkcs12_title">"Fichier PKCS12"</string>
   <string name="ca_title">"Certificat CA"</string>
   <string name="no_certificate">"Vous devez sélectionner un certificat"</string>
-  <string name="copyright_guicode">Le code source et le tracker de bugs est disponible sur https://github.com/schwabe/ics-openvpn/</string>
+  <string name="copyright_guicode">Le code source et le tracker de bugs est disponible sur https://github.com/schwabe/ics-WINQ/</string>
   <string name="copyright_others">"Le programme utilise les composants suivants. Voir le code source pour plus de détails sur les licences."</string>
   <string name="about">"À propos"</string>
   <string name="vpn_list_title">Profils</string>
@@ -34,7 +34,7 @@
   <string name="ipv4_dialog_title">Entrez l\'adresse IPv4 / masque de réseau au format CIDR (ex : 1.2.3.4/24)</string>
   <string name="ipv4_address">"Adresse IPv4"</string>
   <string name="ipv6_address">"Adresse IPv6"</string>
-  <string name="custom_option_warning">Entrez les options d\'OpenVPN personnalisées. A utiliser avec précaution. A noter aussi que de nombreux paramètres Tun d\'OpenVPN ne sont pas pris en charge à cause de la conception de \"VPNSettings\". Si vous pensez qu\'une option importante manque, veuillez contacter l\'auteur</string>
+  <string name="custom_option_warning">Entrez les options d\'WINQ personnalisées. A utiliser avec précaution. A noter aussi que de nombreux paramètres Tun d\'WINQ ne sont pas pris en charge à cause de la conception de \"VPNSettings\". Si vous pensez qu\'une option importante manque, veuillez contacter l\'auteur</string>
   <string name="auth_username">"Nom d\'utilisateur"</string>
   <string name="auth_pwquery">"Mot de passe"</string>
   <string name="static_keys_info">"Pour la configuration statique, des clés d\'authentification TLS seront utilisés comme des clés statiques."</string>
@@ -50,7 +50,7 @@
   <string name="ipv4_format_error">"Impossible d\'analyser l\'adresse IPv4"</string>
   <string name="custom_route_format_error">Impossible d\'analyser les redirections personnalisées</string>
   <string name="pw_query_hint">(Laisser vide pour interroger sur demande)</string>
-  <string name="vpn_shortcut">"Raccourci OpenVPN"</string>
+  <string name="vpn_shortcut">"Raccourci WINQ"</string>
   <string name="vpn_launch_title">Connexion à VPN &#8230;</string>
   <string name="shortcut_profile_notfound">"Profil spécifié dans raccourci introuvable"</string>
   <string name="random_host_prefix">Préfixe de l\'hôte aléatoire</string>
@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Attendre le certificat de serveur TLS</string>
   <string name="remote_tlscn_check_summary">Vérifie l\'objet du certificat serveur distant DN</string>
   <string name="remote_tlscn_check_title">"Vérification du certificat de l\'hôte"</string>
-  <string name="enter_tlscn_dialog">Spécifiez le contrôle utilisé pour vérifier le certificat à distance DN (par exemple, C=DE, L=Paderborn, OU =Avian IP Carriers, CN=openvpn.blinkt.de)\n\nIndiquez le DN complet ou le RDN (openvpn.blinkt.de dans l\'exemple) ou un préfixe RDN pour vérification.\n\nEn utilisant le préfixe RDN \"Server\" correspond à \"Server-1\" et \"Server 2\"\n\nSi vous laissez le champ de texte vide, cela vérifiera le RDN contre le nom du serveur.\n\nPour plus de détails, voir la page du manuel OpenVPN 2.3.1 sous —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Spécifiez le contrôle utilisé pour vérifier le certificat à distance DN (par exemple, C=DE, L=Paderborn, OU =Avian IP Carriers, CN=WINQ.blinkt.de)\n\nIndiquez le DN complet ou le RDN (WINQ.blinkt.de dans l\'exemple) ou un préfixe RDN pour vérification.\n\nEn utilisant le préfixe RDN \"Server\" correspond à \"Server-1\" et \"Server 2\"\n\nSi vous laissez le champ de texte vide, cela vérifiera le RDN contre le nom du serveur.\n\nPour plus de détails, voir la page du manuel WINQ 2.3.1 sous —verify-x509-name</string>
   <string name="enter_tlscn_title">Objet du certificat distant</string>
   <string name="tls_key_auth">"Activer l\'authentification par clé TLS"</string>
   <string name="tls_auth_file">"Fichier d\'authentification TLS"</string>
@@ -101,20 +101,20 @@
   <string name="tun_open_error">L\'ouverture de l\'interface /dev/tun a échouée</string>
   <string name="error">Erreur :</string>
   <string name="clear">Effacer</string>
-  <string name="last_openvpn_tun_config">Ouverture de l\'interface tun :</string>
+  <string name="last_WINQ_tun_config">Ouverture de l\'interface tun :</string>
   <string name="local_ip_info">IPv4 locale : %1$s/%2$d IPv6 : %3$s MTU : %4$d</string>
   <string name="dns_server_info">Serveur DNS : %1$s, Domaine : %2$s</string>
   <string name="routes_info_incl">Routes : %1$s %2$s</string>
   <string name="routes_info_excl">Routes exclues : %1$s %2$s</string>
   <string name="routes_debug">Routes VpnService installés : %1$s %2$s</string>
-  <string name="ip_not_cidr">Informations récupérées de l\'interface : %1$s et %2$s , en supposant que la seconde adresse est l\'adresse peer du réseau distant. Utilisation du masque de réseau /32 pour l\'IP locale. Mode donné par OpenVPN : \"%3$s\".</string>
+  <string name="ip_not_cidr">Informations récupérées de l\'interface : %1$s et %2$s , en supposant que la seconde adresse est l\'adresse peer du réseau distant. Utilisation du masque de réseau /32 pour l\'IP locale. Mode donné par WINQ : \"%3$s\".</string>
   <string name="route_not_cidr">"Ne peut pas donner un sens à %1$s et %2$s comme routage IP avec masque réseau de type CIDR, en utilisant /32 comme masque de réseau."</string>
   <string name="route_not_netip">Route corrigée : %1$s / %2$s en %3$s / %2$s</string>
   <string name="keychain_access">\"Impossible d\'accéder aux certificats \"Android Keychain\". (Peut être causé par une mise à jour du firmware ou par une restauration d\'une sauvegarde des paramètres de l\'application). Veuillez modifier le profil VPN et sélectionnez de nouveau le certificat dans les réglages de base pour recréer l\'autorisation d\'accéder au certificat.\".</string>
   <string name="version_info">"%1$s %2$s"</string>
   <string name="send_logfile">Envoyer le fichier de log</string>
   <string name="send">Envoyer</string>
-  <string name="ics_openvpn_log_file">"Fichier de log OpenVPN ICS"</string>
+  <string name="ics_WINQ_log_file">"Fichier de log WINQ ICS"</string>
   <string name="copied_entry">Entrée du journal copié dans le presse papier</string>
   <string name="tap_mode">Mode Tap</string>
   <string name="faq_tap_mode">"Le mode TAP est indisponible avec l\'API non root VPN. Par conséquent, cette application ne peut pas supporter TAP"</string>
@@ -124,12 +124,12 @@
   <string name="copying_log_entries">"Copie des entrées du log"</string>
   <string name="faq_copying">"Pour copier une seule entrée du log restez appuyé sur celle-ci. Pour copier ou envoyer le log au complet utilisez l\'option \"Envoi du Log\". Utilisez le bouton matériel s\'il n\'est pas visible."</string>
   <string name="faq_shortcut">"Raccourci pour démarrer"</string>
-  <string name="faq_howto_shortcut">Vous pouvez placer un raccourci pour démarrer OpenVPN sur l\'écran d\'accueil. En fonction du programme gérant votre écran d\'accueil, vous devez soit ajouter un raccourci, soit un widget.</string>
+  <string name="faq_howto_shortcut">Vous pouvez placer un raccourci pour démarrer WINQ sur l\'écran d\'accueil. En fonction du programme gérant votre écran d\'accueil, vous devez soit ajouter un raccourci, soit un widget.</string>
   <string name="no_vpn_support_image">"Votre ROM ne prend pas en charge l\'API VPNService, désolé :("</string>
   <string name="encryption">Chiffrement</string>
   <string name="cipher_dialog_title">Entrez la méthode de chiffrement</string>
-  <string name="chipher_dialog_message">Entrez l\'algorithme de chiffrement utilisé par OpenVPN. Laissez vide pour utiliser l\'algorithme par défaut.</string>
-  <string name="auth_dialog_message">Entrez l\'authentification digest utilisé pour OpenVPN. Laisser vide pour utiliser le digest par défaut.</string>
+  <string name="chipher_dialog_message">Entrez l\'algorithme de chiffrement utilisé par WINQ. Laissez vide pour utiliser l\'algorithme par défaut.</string>
+  <string name="auth_dialog_message">Entrez l\'authentification digest utilisé pour WINQ. Laisser vide pour utiliser le digest par défaut.</string>
   <string name="settings_auth">Authentification/Chiffrement</string>
   <string name="file_explorer_tab">Explorateur de fichiers</string>
   <string name="inline_file_tab">"Fichier personnalisé"</string>
@@ -150,7 +150,7 @@
   <string name="no_bind">"Aucune liaison locale"</string>
   <string name="import_configuration_file">Importer le fichier de configuration</string>
   <string name="faq_security_title">"Considérations de sécurité"</string>
-  <string name="faq_security">"La stratégie de sécurité d\'OpenVPN amène quelque remarques concernant la sécurité des données saisies. En général, toutes les informations stockées sur la carte SD ne sont pas sécurisées. Toute application peut en obtenir l\'accès (par exemple, ce programme ne requiert aucun droit particulier d\'accès à la carte SD). Dans le cas de ce programme, il est le seul à avoir accès à ces données. En utilisant l\'option d\'importation pour les CaCert/Cert/Key, les données sont stockées dans le porfile VPN. Ce dernier est seulement accessible à cette application. Ainsi, veuillez ne pas oublier de supprimer les copies sur la carte SD après importation. Car, même si l\'application en a l\'exclusivité, les données ne sont pas pour autant cryptées. En \"rootant\" l\'appareil ou par d\'autres exploits il est toujours possible d\'accéder à ces informations. A titre d\'exemple, les mots de passe sont stockés en clair. Pour les fichiers de type Pkfcs12, il est fortement recommandé que vous les importiez dans le gestionnaire de clées d\'Android."</string>
+  <string name="faq_security">"La stratégie de sécurité d\'WINQ amène quelque remarques concernant la sécurité des données saisies. En général, toutes les informations stockées sur la carte SD ne sont pas sécurisées. Toute application peut en obtenir l\'accès (par exemple, ce programme ne requiert aucun droit particulier d\'accès à la carte SD). Dans le cas de ce programme, il est le seul à avoir accès à ces données. En utilisant l\'option d\'importation pour les CaCert/Cert/Key, les données sont stockées dans le porfile VPN. Ce dernier est seulement accessible à cette application. Ainsi, veuillez ne pas oublier de supprimer les copies sur la carte SD après importation. Car, même si l\'application en a l\'exclusivité, les données ne sont pas pour autant cryptées. En \"rootant\" l\'appareil ou par d\'autres exploits il est toujours possible d\'accéder à ces informations. A titre d\'exemple, les mots de passe sont stockés en clair. Pour les fichiers de type Pkfcs12, il est fortement recommandé que vous les importiez dans le gestionnaire de clées d\'Android."</string>
   <string name="import_vpn">"Importer"</string>
   <string name="broken_image_cert_title">"Erreur d\'affichage certificat sélectionné"</string>
   <string name="broken_image_cert">"Exception en essayant d\'afficher le dialogue de sélection du certification d\'Android 4.0+. Ceci ne devrait pas se produire car c\'est une des fonctionnalités de base de ce système. Il est donc possible que votre ROM ne supporte pas le stockage de certfiicats."</string>
@@ -160,7 +160,7 @@
   <string name="converted_profile">profil importé</string>
   <string name="converted_profile_i">profil importé %d</string>
   <string name="broken_images">Images corrompues</string>
-  <string name="broken_images_faq">&lt;&gt;Les ROMs officielles HTC sont connues pour avoir des problèmes de routage entraînant que le trafic ne passe pas par le tunnel VPN. (C.f.: &lt;a href=\"http://code.google.com/p/ics-openvpn/issues/detail?id=18\"&gt;Issue 18&lt;/a&gt; dans le \"bug tacker\")&lt;/p&gt;&lt;p&gt;Les ROMs officielles de SONY pour le Xperia Arc S et le Xperia Ray ont été signalé comme ne possédant pas le service VPN. Toute autre ROM SONY peut avoir le même problème.  (C.f.: &lt;a href=\"http://code.google.com/p/ics-openvpn/issues/detail?id=29\"&gt;Issue 29&lt;/a&gt; dans le \"bug tacker\")&lt;/p&gt;&lt;p&gt;Sur les ROM personnalisées le module TUN peut être manquant ou les droits de /dev/tun peuvent être incorrects. Certaines ROM CM9 peuvent nécessiter d\'utiliser l\'option de correction des droits de /dev/tun accessible depuis les \"Options générales\"/&lt;/p&gt;&lt;p&gt;Important: Si votre ROM a un problème, contactez le vendeur, il se peut que qu\'il vous fournisse un patch.&lt;/p&gt;</string>
+  <string name="broken_images_faq">&lt;&gt;Les ROMs officielles HTC sont connues pour avoir des problèmes de routage entraînant que le trafic ne passe pas par le tunnel VPN. (C.f.: &lt;a href=\"http://code.google.com/p/ics-WINQ/issues/detail?id=18\"&gt;Issue 18&lt;/a&gt; dans le \"bug tacker\")&lt;/p&gt;&lt;p&gt;Les ROMs officielles de SONY pour le Xperia Arc S et le Xperia Ray ont été signalé comme ne possédant pas le service VPN. Toute autre ROM SONY peut avoir le même problème.  (C.f.: &lt;a href=\"http://code.google.com/p/ics-WINQ/issues/detail?id=29\"&gt;Issue 29&lt;/a&gt; dans le \"bug tacker\")&lt;/p&gt;&lt;p&gt;Sur les ROM personnalisées le module TUN peut être manquant ou les droits de /dev/tun peuvent être incorrects. Certaines ROM CM9 peuvent nécessiter d\'utiliser l\'option de correction des droits de /dev/tun accessible depuis les \"Options générales\"/&lt;/p&gt;&lt;p&gt;Important: Si votre ROM a un problème, contactez le vendeur, il se peut que qu\'il vous fournisse un patch.&lt;/p&gt;</string>
   <string name="pkcs12_file_encryption_key">Fichier avec la clé de chiffrement PKCS12</string>
   <string name="private_key_password">Mot de passe de la clé privée</string>
   <string name="password">Mot de passe</string>
@@ -170,7 +170,7 @@
   <string name="generalsettings">Paramètres</string>
   <string name="owner_fix_summary">Essaie de définir le propriétaire de l\'interface /dev/tun. Certaines images CM9 en ont besoin pour faire fonctionner l\'API VPNService. Nécessite les droits root.</string>
   <string name="owner_fix">Corriger les permissions de /dev/tun</string>
-  <string name="generated_config_summary">Affiche le fichier de configuration OpenVPN généré</string>
+  <string name="generated_config_summary">Affiche le fichier de configuration WINQ généré</string>
   <string name="edit_profile_title">Modification \"%s\"</string>
   <string name="building_configration">Création de la configuration&#8230;</string>
   <string name="netchange_summary">Activer cette option forcera une reconnexion si l\'état du réseau est modifié (par exemple WiFi/Mobile)</string>
@@ -190,9 +190,9 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="ipdns">IP et DNS</string>
   <string name="basic">Base</string>
   <string name="routing">Routage</string>
-  <string name="obscure">Paramètres OpenVPN avancés</string>
+  <string name="obscure">Paramètres WINQ avancés</string>
   <string name="advanced">Avancée</string>
-  <string name="export_config_title">Configuration ICS OpenVPN</string>
+  <string name="export_config_title">Configuration ICS WINQ</string>
   <string name="warn_no_dns">Aucun serveur DNS utilisé. La résolution de noms de domaines peut ne pas fonctionner. Envisager d\'ajouter des serveurs DNS personnalisés. Veuillez également noter que Android va continuer à utiliser vos paramètres de proxy spécifiés pour votre connexion Wi-Fi/mobile lorsque aucun serveur DNS n\'est défini.</string>
   <string name="dns_add_error">"Impossible d\'ajouter le serveur DNS \"%1$s\", rejetés par le système: %2$s"</string>
   <string name="ip_add_error">Impossible de configurer l\'adresse IP \"%1$s\", rejetées par le système : %2$s</string>
@@ -205,7 +205,7 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="using_proxy">"Utilisation du proxy %1$s %2$d"</string>
   <string name="use_system_proxy">"Utiliser le proxy système"</string>
   <string name="use_system_proxy_summary">"Utiliser la configuration générale du système pour que les proxy HTTP / HTTPS se connectent."</string>
-  <string name="onbootrestartsummary">OpenVPN connectera le VPN spécifié si elle était active au démarrage du système. Veuillez lire l\'avertissement de connexion FAQ avant d\'utiliser cette option sur Android &lt; 5.0.</string>
+  <string name="onbootrestartsummary">WINQ connectera le VPN spécifié si elle était active au démarrage du système. Veuillez lire l\'avertissement de connexion FAQ avant d\'utiliser cette option sur Android &lt; 5.0.</string>
   <string name="onbootrestart">Se connecter au redémarrage</string>
   <string name="ignore">Ignorer</string>
   <string name="restart">Redémarrer</string>
@@ -220,22 +220,22 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="faq_hint">"Veillez également à consulter la FAQ. Il s\'y trouve un guide de démarrage rapide."</string>
   <string name="faq_routing_title">"Redirections / Configuration de l\'interface"</string>
   <string name="faq_routing">La configuration du routage et des interfaces n\'est pas faite par l\'intermédiaire des commandes traditionnelles ifconfig/route, mais en utilisant l\'API VPNService. Il en résulte une configuration de routage différente que sur les autres systèmes d\'exploitation. \nLa configuration du tunnel VPN se compose de l\'adresse IP et des réseaux qui doivent être routés via cette interface. En particulier aucune adresse de pair ou de passerelle n\'est nécessaire ou requise. Des routes spéciales pour atteindre le serveur VPN (par exemple ajoutées lorsque vous utilisez \"redirect-gateway\") ne sont pas nécessaires. L\'application ignore par conséquent ces paramètres lors de l\'importation d\'une configuration. L\'application assure avec l\'API VPNService que la connexion au serveur ne passe pas par le tunnel VPN.\nL\'API VPNService ne permet pas de spécifier les réseaux qui ne doivent pas être routés via le VPN. Pour contourner ce problème, l\'application essaye de détecter les réseaux qui ne doivent pas être routés par le tunnel (ex. route x.x.x.x y.y.y.y net_gateway) et calcule un ensemble de routes qui exclut cette route pour mimer le comportement des autres plates-formes. La fenêtre des logs montre la configuration de VPNService lors d\'une connexion.\nEn coulisse: Android 4.4+ n\'utilise pas la politique du routage. Utiliser route/ifconfig n\'affichera pas les routes installés. Utilisez plutôt ip rule, iptables -t mangle -L</string>
-  <string name="persisttun_summary">Ne pas couper la connexion VPN lors de la reconnexion d\'OpenVPN.</string>
+  <string name="persisttun_summary">Ne pas couper la connexion VPN lors de la reconnexion d\'WINQ.</string>
   <string name="persistent_tun_title">Persistance de l\'interface TUN</string>
-  <string name="openvpn_log">Log OpenVPN</string>
-  <string name="import_config">"Importer une configuration OpenVPN"</string>
+  <string name="WINQ_log">Log WINQ</string>
+  <string name="import_config">"Importer une configuration WINQ"</string>
   <string name="battery_consumption_title">"Consommation de la batterie"</string>
-  <string name="baterry_consumption">In my personal tests the main reason for high battery consumption of OpenVPN are the keepalive packets. Most OpenVPN servers have a configuration directive like \'keepalive 10 60\' which causes the client and server to exchange keepalive packets every ten seconds. &lt;p&gt; While these packets are small and do not use much traffic, they keep the mobile radio network busy and increase the energy consumption. (See also &lt;a href=\"http://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine\"&gt;The Radio State Machine | Android Developers&lt;/a&gt;) &lt;p&gt; This keepalive setting cannot be changed on the client. Only the system administrator of the OpenVPN can change the setting. &lt;p&gt; Unfortunately using a keepalive larger than 60 seconds with UDP can cause some NAT gateways to drop the connection due to an inactivity timeout. Using TCP with a long keepalive timeout works, but tunneling TCP over TCP performs extremely poorly on connections with high packet loss. (See &lt;a href=\"http://sites.inka.de/bigred/devel/tcp-tcp.html\"&gt;Why TCP Over TCP Is A Bad Idea&lt;/a&gt;)</string>
-  <string name="faq_tethering">La fonctionnalité Partage de connexion Android (sur WiFi, USB ou Bluetooth) et l\'API VPNService (utilisé par ce programme) ne fonctionnent pas ensemble. Pour plus de détails voir &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/34\"&gt;issue #34&lt;/a&gt;</string>
+  <string name="baterry_consumption">In my personal tests the main reason for high battery consumption of WINQ are the keepalive packets. Most WINQ servers have a configuration directive like \'keepalive 10 60\' which causes the client and server to exchange keepalive packets every ten seconds. &lt;p&gt; While these packets are small and do not use much traffic, they keep the mobile radio network busy and increase the energy consumption. (See also &lt;a href=\"http://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine\"&gt;The Radio State Machine | Android Developers&lt;/a&gt;) &lt;p&gt; This keepalive setting cannot be changed on the client. Only the system administrator of the WINQ can change the setting. &lt;p&gt; Unfortunately using a keepalive larger than 60 seconds with UDP can cause some NAT gateways to drop the connection due to an inactivity timeout. Using TCP with a long keepalive timeout works, but tunneling TCP over TCP performs extremely poorly on connections with high packet loss. (See &lt;a href=\"http://sites.inka.de/bigred/devel/tcp-tcp.html\"&gt;Why TCP Over TCP Is A Bad Idea&lt;/a&gt;)</string>
+  <string name="faq_tethering">La fonctionnalité Partage de connexion Android (sur WiFi, USB ou Bluetooth) et l\'API VPNService (utilisé par ce programme) ne fonctionnent pas ensemble. Pour plus de détails voir &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/34\"&gt;issue #34&lt;/a&gt;</string>
   <string name="vpn_tethering_title">VPN et Partage</string>
   <string name="connection_retries">Tentatives de connexion</string>
   <string name="reconnection_settings">Paramètres de reconnexion</string>
   <string name="connectretrymessage">Nombre de secondes entre chaque tentatives de connexion.</string>
   <string name="connectretrywait">Nombre de secondes entre deux connexions</string>
-  <string name="minidump_generated">OpenVPN a planté de façon inattendue. Veuillez envisager d\'utiliser l\'option Minidump dans le menu principal</string>
+  <string name="minidump_generated">WINQ a planté de façon inattendue. Veuillez envisager d\'utiliser l\'option Minidump dans le menu principal</string>
   <string name="send_minidump">Envoyer le Minidump au développeur</string>
   <string name="send_minidump_summary">Envoie les informations sur le dernier crash au développeur</string>
-  <string name="notifcation_title">OpenVPN - %s</string>
+  <string name="notifcation_title">WINQ - %s</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Connexion</string>
@@ -272,9 +272,9 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="rdn">RDN (nom commun)</string>
   <string name="rdn_prefix">Préfixe RDN</string>
   <string name="tls_remote_deprecated">tls-remote (OBSOLÈTE)</string>
-  <string name="help_translate">Vous pouvez aider à traduire en visitant http://crowdin.net/project/ics-openvpn/invite</string>
+  <string name="help_translate">Vous pouvez aider à traduire en visitant http://crowdin.net/project/ics-WINQ/invite</string>
   <string name="prompt">%1$s essaye de contrôler %2$s</string>
-  <string name="remote_warning">En poursuivant vous donnez la permission a l\'application de contrôler complètement OpenVPN pour Android et d\'intercepter tout le trafic réseau.<b>N\'acceptez que si vous faite confiance à l\'application.</b> Sinon vous vous exposez au risque de voir vos données compromises par un logiciel malveillant.\"</string>
+  <string name="remote_warning">En poursuivant vous donnez la permission a l\'application de contrôler complètement WINQ pour Android et d\'intercepter tout le trafic réseau.<b>N\'acceptez que si vous faite confiance à l\'application.</b> Sinon vous vous exposez au risque de voir vos données compromises par un logiciel malveillant.\"</string>
   <string name="remote_trust">Faire confiance à cette application.</string>
   <string name="no_external_app_allowed">Aucune application n\'est autorisée à utiliser l\'API externe</string>
   <string name="allowed_apps">Applications autorisées : %s</string>
@@ -294,8 +294,8 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="vpnbehaviour">Comportement du VPN</string>
   <string name="allow_vpn_changes">Autoriser les modifications des profils VPN</string>
   <string name="hwkeychain">Clés du matériel :</string>
-  <string name="permission_icon_app">Icône de l\'appli essayant d\'utiliser OpenVPN for Android</string>
-  <string name="faq_vpndialog43">"À partir d\'Android 4.3  la confirmation VPN est gardée contre les \"applications recouvrante\". Cela se traduit par la boîte de dialogue qui ne réagi pas à la saisie tactile. Si vous avez une application qui utilise des superpositions, elle peut causer ce comportement. Si vous trouvez une application délinquante contacter l\'auteur de l\'application. Ce problème affecte toutes les applications VPN sur Android 4.3 et plus. Voir aussi  &lt;a href=\"http://code.google.com/p/ics-openvpn/issues/detail?id=185\"&gt;Issue 185&lt;a&gt; pour plus de détails"</string>
+  <string name="permission_icon_app">Icône de l\'appli essayant d\'utiliser WINQ for Android</string>
+  <string name="faq_vpndialog43">"À partir d\'Android 4.3  la confirmation VPN est gardée contre les \"applications recouvrante\". Cela se traduit par la boîte de dialogue qui ne réagi pas à la saisie tactile. Si vous avez une application qui utilise des superpositions, elle peut causer ce comportement. Si vous trouvez une application délinquante contacter l\'auteur de l\'application. Ce problème affecte toutes les applications VPN sur Android 4.3 et plus. Voir aussi  &lt;a href=\"http://code.google.com/p/ics-WINQ/issues/detail?id=185\"&gt;Issue 185&lt;a&gt; pour plus de détails"</string>
   <string name="faq_vpndialog43_title">Fenêtre de confirmation du VPN</string>
   <string name="donatePlayStore">Sinon vous pouvez m\'envoyer un don via le Play Store :</string>
   <string name="thanks_for_donation">Merci pour le don %s !</string>
@@ -319,12 +319,12 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="userpw_file">Fichier Nom d\'utilisateur/Mot de passe</string>
   <string name="imported_from_file">[Importé de : %s]</string>
   <string name="files_missing_hint">Certains fichiers sont introuvables. Sélectionner les fichiers pour importer le profil :</string>
-  <string name="openvpn_is_no_free_vpn">Pour utiliser cette application, vous avez besoin d\'un fournisseur/passerelle VPN qui soutient OpenVPN (souvent fourni par votre employeur). Vérifier ici http://community.openvpn.net pour plus d\'informations sur OpenVPN et comment configurer votre propre serveur OpenVPN.</string>
+  <string name="WINQ_is_no_free_vpn">Pour utiliser cette application, vous avez besoin d\'un fournisseur/passerelle VPN qui soutient WINQ (souvent fourni par votre employeur). Vérifier ici http://community.WINQ.net pour plus d\'informations sur WINQ et comment configurer votre propre serveur WINQ.</string>
   <string name="import_log">Journal d\'importation :</string>
   <string name="ip_looks_like_subnet">Topologie VPN «%3$s » spécifiée mais ifconfig %1$s %2$s ressemble plus à une adresse IP avec un masque de réseau. On suppose que la topologie « sous-réseau » est utilisée.</string>
   <string name="mssfix_invalid_value">La valeur de mssfix doit être un entier compris entre 0 et 9000</string>
   <string name="mtu_invalid_value">La valeur de dépassement MTU doit être un entier compris entre 64 et 9000</string>
-  <string name="mssfix_value_dialog">Annoncer aux sessions TCP en cours d\'exécution sur le tunnel qu\'ils devraient limiter leurs tailles de paquets d\'émission de telle sorte qu\'après OpenVPN les a encapsulé, la taille des paquets UDP résultant que OpenVPN envoie à son homologue ne dépassera pas ce nombre d\'octets. (Valeur par défaut est 1450)</string>
+  <string name="mssfix_value_dialog">Annoncer aux sessions TCP en cours d\'exécution sur le tunnel qu\'ils devraient limiter leurs tailles de paquets d\'émission de telle sorte qu\'après WINQ les a encapsulé, la taille des paquets UDP résultant que WINQ envoie à son homologue ne dépassera pas ce nombre d\'octets. (Valeur par défaut est 1450)</string>
   <string name="mssfix_checkbox">Remplacer la valeur MSS de TCP payload</string>
   <string name="mssfix_dialogtitle">Définir MSS de TCP payload</string>
   <string name="client_behaviour">Comportement du client</string>
@@ -350,15 +350,15 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="duplicate_vpn">Dupliquer le profil VPN</string>
   <string name="duplicate_profile_title">Duplication de profil : %s</string>
   <string name="show_log">Afficher le journal</string>
-  <string name="faq_android_clients">Il existe plusieurs clients OpenVPN pour Android. Les plus communs sont OpenVPN for Android (ce client), OpenVPN Connect, et OpenVPN Settings..&lt;p&gt;Les clients peuvent êtres regroupés en 2 groupes : OpenVPN for Android et OpenVPN Connect utilisent le service API officiel de VPNService (Android 4.0+) et ne nécessitent pas une élévation des privilèges (rootage), puis OpenVPN Settings qui nécessite le rootage.&lt;p&gt;OpenVPN for Android et un client « open source » développé par Arne Schwabe. Il est destiné aux utilisateurs avancés et comprend plusieurs paramètres, ainsi que la possibilité d\'importer les profils depuis des fichiers et de les configurer/changer à partir de l\'application. Le client est basé sur la version communautaire d\'OpenVPN. Il est basé sur le code source d\'OpenVPN 2.x. Ce client peut-être considérer en étant la version semi-officielle de la communauté.&lt;p&gt;OpenVPN Connect est un logiciel propriétaire développé par OpenVPN Technologies, Inc. Le client est destiné aux utilisateurs avec une connaissance moyenne et offre la possibilité d\'importer les profils OpenVPN. Ce client est basé sur une nouvelle réalisation du protocole OpenVPN C++ (ceci était nécessaire afin de permettre à OpenVPN Technologies, Inc. de publier une version iOS de l\'application OpenVPN). Ce client est le client officiel des technologies OpenVPN&lt;p&gt;OpenVPN Settings est le client le plus ancien et agit comme l\'interface utilisateur de la version « open source » d\'OpenVPN. Contrairement à OpenVPN for Android il ne nécessite pas le rootage et ne se sert pas du service API de VPNService. Il ne dépend pas sur Android 4.0+</string>
-  <string name="faq_androids_clients_title">Différences entre les clients OpenVPN Android</string>
+  <string name="faq_android_clients">Il existe plusieurs clients WINQ pour Android. Les plus communs sont WINQ for Android (ce client), WINQ Connect, et WINQ Settings..&lt;p&gt;Les clients peuvent êtres regroupés en 2 groupes : WINQ for Android et WINQ Connect utilisent le service API officiel de VPNService (Android 4.0+) et ne nécessitent pas une élévation des privilèges (rootage), puis WINQ Settings qui nécessite le rootage.&lt;p&gt;WINQ for Android et un client « open source » développé par Arne Schwabe. Il est destiné aux utilisateurs avancés et comprend plusieurs paramètres, ainsi que la possibilité d\'importer les profils depuis des fichiers et de les configurer/changer à partir de l\'application. Le client est basé sur la version communautaire d\'WINQ. Il est basé sur le code source d\'WINQ 2.x. Ce client peut-être considérer en étant la version semi-officielle de la communauté.&lt;p&gt;WINQ Connect est un logiciel propriétaire développé par WINQ Technologies, Inc. Le client est destiné aux utilisateurs avec une connaissance moyenne et offre la possibilité d\'importer les profils WINQ. Ce client est basé sur une nouvelle réalisation du protocole WINQ C++ (ceci était nécessaire afin de permettre à WINQ Technologies, Inc. de publier une version iOS de l\'application WINQ). Ce client est le client officiel des technologies WINQ&lt;p&gt;WINQ Settings est le client le plus ancien et agit comme l\'interface utilisateur de la version « open source » d\'WINQ. Contrairement à WINQ for Android il ne nécessite pas le rootage et ne se sert pas du service API de VPNService. Il ne dépend pas sur Android 4.0+</string>
+  <string name="faq_androids_clients_title">Différences entre les clients WINQ Android</string>
   <string name="ignore_multicast_route">Ignorer la route multidiffusion : %s</string>
-  <string name="ab_only_cidr">Android ne prend en charge que les routes CIDR vers VPN. Étant donné que les routes non-CIDR ne sont pratiquement jamais utilisées, OpenVPN pour Android utilisera un /32 pour les routes ne sont pas CIDR et émettre un avertissement.</string>
+  <string name="ab_only_cidr">Android ne prend en charge que les routes CIDR vers VPN. Étant donné que les routes non-CIDR ne sont pratiquement jamais utilisées, WINQ pour Android utilisera un /32 pour les routes ne sont pas CIDR et émettre un avertissement.</string>
   <string name="ab_tethering_44">Le partage fonctionne tandis que le VPN est actif. La connexion partagée n\'utilisera pas le VPN.</string>
   <string name="ab_kitkat_mss">Les versions antérieures à KitKat définissent une valeur MSS erronée (#61948). Essayez d\'activer l\'option mssfix pour contourner ce bug.</string>
-  <string name="ab_proxy">Android va continuer à utiliser vos paramètres de proxy spécifiés pour la connexion mobile / Wi-Fi lorsque aucun serveur DNS n\'est définis. OpenVPN pour Android vous avertira à ce sujet dans le log.<p>Quand un VPN définit un serveur de DNS, Android n\'utilisera pas de proxy. Il n\'y a pas d\'API pour définir un proxy pour un connection VPN.</p></string>
+  <string name="ab_proxy">Android va continuer à utiliser vos paramètres de proxy spécifiés pour la connexion mobile / Wi-Fi lorsque aucun serveur DNS n\'est définis. WINQ pour Android vous avertira à ce sujet dans le log.<p>Quand un VPN définit un serveur de DNS, Android n\'utilisera pas de proxy. Il n\'y a pas d\'API pour définir un proxy pour un connection VPN.</p></string>
   <string name="ab_lollipop_reinstall">Les applications VPN peuvent s\'arrêter de fonctionner lors d\'une désinstallation suivie d\'une réinstallation. Pour plus de détails, voir #80074</string>
-  <string name="ab_not_route_to_vpn">L\'adresse IP du client, et les adresses IP de ce réseau ne sont pas routées par le VPN. OpenVPN contourne ce problème en ajoutant une route qui corresponds à l’adresse IP et le Masque de sous réseau du client</string>
+  <string name="ab_not_route_to_vpn">L\'adresse IP du client, et les adresses IP de ce réseau ne sont pas routées par le VPN. WINQ contourne ce problème en ajoutant une route qui corresponds à l’adresse IP et le Masque de sous réseau du client</string>
   <string name="ab_secondary_users">Le VPN ne fonctionnera pas du tout pour tous les utilisateurs secondaires.</string>
   <string name="ab_kitkat_reconnect">"Plusieurs utilisateurs ont signalés des prêtes de paquets durant l\'utilisation d\'un VPN sur leur connexion mobile. Ce comportement semble lier à certains fournisseurs, il n\'y a pas de contournement connu ou de bug que l\'on puisse régler."</string>
   <string name="ab_only_cidr_title">Routes non CIDR</string>
@@ -379,14 +379,14 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="tls_cipher_alert_title">Échec de la connexion avec l\'erreur SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure</string>
   <string name="message_no_user_edit">Ce profil a été ajouté à partir d\'une application externe (%s) et a été marqué comme non modifiable par l\'utilisateur.</string>
   <string name="crl_file">Liste des certificats révoqués</string>
-  <string name="service_restarted">Redémarrage du service OpenVPN (l\'Application a probablement plantée ou a été tué pour cause d\'utilisation excessive de la mémoire)</string>
+  <string name="service_restarted">Redémarrage du service WINQ (l\'Application a probablement plantée ou a été tué pour cause d\'utilisation excessive de la mémoire)</string>
   <string name="import_config_error">L\'importation de la configuration a abouti à une erreur, l\'enregistrement est impossible</string>
   <string name="Search">Rechercher</string>
   <string name="lastdumpdate">(Le dernier dump est vieux de %1$d:%2$d (du %3$s ))</string>
   <string name="clear_log_on_connect">Effacer le journal sur une nouvelle connexion</string>
   <string name="connect_timeout">Extinction de la connexion</string>
   <string name="no_allowed_app">Aucune application n\'est autorisée. Il faut au minimum ajouter cette application (%s) afin d\'en autoriser au moins une. Cela évite d’autoriser toutes les autres applications inutilement</string>
-  <string name="query_permissions_sdcard">OpenVPN pour Android va essayer de chercher le(s) fichier(s) manquant(s) sur une sdcard. Tapoter cette fenêtre de dialogue va démarrer une demande d\'autorisation.</string>
+  <string name="query_permissions_sdcard">WINQ pour Android va essayer de chercher le(s) fichier(s) manquant(s) sur une sdcard. Tapoter cette fenêtre de dialogue va démarrer une demande d\'autorisation.</string>
   <string name="protocol">Protocole</string>
   <string name="enabled_connection_entry">Activé</string>
   <string name="permission_revoked">Autorisation de VPN révoquée par le système d\'exploitation (ex : un autre programme VPN est lancé), arrêt du VPN</string>
@@ -410,10 +410,10 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="qs_title">Activer VPN</string>
   <string name="qs_connect">Connecter à %s</string>
   <string name="qs_disconnect">Déconnecter %s</string>
-  <string name="connectretrymaxmessage">Entrez le temps maximum entre les tentatives de connexion. OpenVPN va lentement augmenter son temps d\'attente après une tentative de connexion infructueuse jusqu\'à atteindre cette valeur. Par défaut, 300sec.</string>
+  <string name="connectretrymaxmessage">Entrez le temps maximum entre les tentatives de connexion. WINQ va lentement augmenter son temps d\'attente après une tentative de connexion infructueuse jusqu\'à atteindre cette valeur. Par défaut, 300sec.</string>
   <string name="connectretrymaxtitle">Temps maximum entre les tentatives de connexion</string>
   <string name="state_waitconnectretry">%s secondes avant la prochaine tentative de connexion</string>
-  <string name="management_socket_closed">Connexion à OpenVPN fermé (%s)</string>
+  <string name="management_socket_closed">Connexion à WINQ fermé (%s)</string>
   <string name="change_sorting">Changer de tri</string>
   <string name="sort">Trier</string>
   <string name="sorted_lru">Profils triés par dernier récemment utilisé</string>
