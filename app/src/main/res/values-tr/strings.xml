@@ -1458,7 +1458,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="make_sure_you_backup_this">Bunu yedeklediğinizden emin olun</string>
   <string name="choose_a_country">bir ülke</string>
 
-
+  <string name="vpn_list">VPN Listesi</string>
+  <string name="REGISTER_YOUR_VPN_">VPN\'ini KAYDET</string>
+  <string name="please_wait_vpn_online">Bu vpn çevrimiçi olana kadar lütfen bekleyin</string>
+  <string name="choose_location">Konum seç</string>
+  <string name="no">HAYIR</string>
+  <string name="Just_cost_QLC_Connect_NOW"><Data><![CDATA[<b>\%s\</b> QLC ödenecek.<br />Bağlanmak istiyor musunuz?]]></Data></string>
+  <string name="total_successful_connection">Bağlantı Başarılı</string>
+  <string name="Do_you_want_to_disconnect">Bağlantıyı koparmak istiyor musunuz?</string>
+  <string name="Please_disconnect_the_current_one_first">Lütfen önce mevcut olandan bağlantıyı koparın.</string>
 
 </resources>
 
