@@ -602,6 +602,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void onBackPressed() {
+        if (downCHeckView != null && downCHeckView.isShown()) {
+            downCHeckView.close();
+            return;
+        }
         moveTaskToBack(true);
     }
 
@@ -609,8 +613,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     public void handleToAppToBack(ForegroundCallBack foregroundCallBack) {
         if (!foregroundCallBack.isForeground()) {
             ConstantValue.isShouldShowVertifyPassword = true;
-            bottomNavigation.setSelectedItemId(R.id.item_wifi);
-            viewPager.setCurrentItem(1, false);
+            if (viewPager.getCurrentItem() == 2) {
+                bottomNavigation.setSelectedItemId(R.id.item_wifi);
+                viewPager.setCurrentItem(1, false);
+            }
         }
     }
 

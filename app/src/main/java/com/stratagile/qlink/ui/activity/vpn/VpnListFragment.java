@@ -901,6 +901,9 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (connectVpnEntity == null) {
+                return;
+            }
             KLog.i(intent.getStringExtra("detailstatus"));
             vpnDetailstatus = intent.getStringExtra("detailstatus");
             //if (ConstantValue.showLog) {
