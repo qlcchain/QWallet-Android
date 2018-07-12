@@ -30,15 +30,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:letterSpacing="0.1"
+                            android:textSize="@dimen/sp11"
+                            android:fontFamily="@font/vagroun_q"
+                            android:text="@string/VPN_INFORMATION"
+                            android:background="@color/mainColor"
+                            />
+                        <TextView
+                            android:id="@+id/registelocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/x40"
                             android:text="@string/VPN_Server_Location"
                             android:textSize="@dimen/sp9"
                             android:paddingLeft="@dimen/x52"
-                            android:paddingRight="@dimen/x52"
-                            android:textColor="@color/color_333" />
+                            android:paddingRight="@dimen/x52"/>
 
                         <TextView
                             android:id="@+id/et_country"
@@ -48,6 +60,8 @@
                             android:hint="@string/Choose_a_country"
                             android:textColorHint="@color/color_333"
                             android:textColor="@color/color_333"
+                            android:drawableRight="@mipmap/icon_right"
+                            android:drawablePadding="@dimen/x20"
                             android:textSize="16sp"
                             android:layout_marginLeft="@dimen/x52"
                             android:layout_marginRight="@dimen/x52"
@@ -69,12 +83,11 @@
                             android:paddingRight="@dimen/x30"
                             android:orientation="vertical">
                             <TextView
-                                android:id="@+id/title"
+                                android:id="@+id/titlevpn"
                                 android:text="@string/VPN_Name2"
                                 android:layout_marginLeft="@dimen/x22"
                                 android:textSize="@dimen/sp9"
                                 android:layout_width="wrap_content"
-                                android:textColor="@color/color_333"
                                 android:layout_height="wrap_content" />
                             <EditText
                                 android:id="@+id/info_userid"
@@ -93,7 +106,7 @@
                                 android:textSize="@dimen/sp9"
                                 android:layout_gravity="right"
                                 android:layout_width="wrap_content"
-                                android:textColor="@color/color_333"
+                                android:textColor="@color/deposi"
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
 
@@ -237,8 +250,7 @@
                             android:text="@string/Import_OpenVPN_Configuration_Profile"
                             android:textSize="@dimen/sp9"
                             android:paddingLeft="@dimen/x52"
-                            android:paddingRight="@dimen/x52"
-                            android:textColor="@color/color_333" />
+                            android:paddingRight="@dimen/x52" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_marginTop="@dimen/x23"
@@ -536,13 +548,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:gravity="center"
-                android:paddingLeft="@dimen/x40"
-                android:paddingRight="@dimen/x40"
-                android:layout_height="80dp">
-                <Button
+                android:layout_marginTop="@dimen/x25"
+                android:layout_marginBottom="@dimen/x70"
+                android:paddingLeft="@dimen/x20"
+                android:paddingRight="@dimen/x20"
+                android:layout_height="70dp">
+              <Button
                     android:id="@+id/button1"
                     android:layout_width="0dp"
                     android:text="@string/cancel"
+                    android:visibility="gone"
                     style="?android:attr/borderlessButtonStyle"
                     android:fontFamily="@font/vagroundedbt"
                     android:background="@drawable/aler_left_bt_bg"
@@ -556,9 +571,9 @@
                     android:layout_weight="2"
                     android:fontFamily="@font/vagroundedbt"
                     style="?android:attr/borderlessButtonStyle"
-                    android:background="@drawable/comfirm_button_bg"
-                    android:text="@string/verify"
-                    android:textColor="@color/main_color"
+                    android:background="@color/regedit"
+                    android:text="@string/Register"
+                    android:textColor="@color/white"
                     android:layout_height="50dp" />
             </LinearLayout>
         </LinearLayout>

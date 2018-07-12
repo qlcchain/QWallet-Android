@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -180,10 +181,12 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     QlinkSeekBar qlcSeekbar;
     @BindView(R.id.connect_seekbar)
     QlinkSeekBar connectSeekbar;
-    @BindView(R.id.title)
-    TextView title;
+    @BindView(R.id.titlevpn)
+    TextView titlevpn;
     @BindView(R.id.spinner)
     Spinner spinner;
+    @BindView(R.id.registelocation)
+    TextView registelocation;
     private String vpnFilePath = "";
 
     private VpnEntity vpnEntity;
@@ -621,6 +624,16 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         etPrivateKeyPassword.setOnEditorActionListener(this);
         etUsername.setOnEditorActionListener(this);
+        String str = getString(R.string.VPN_Name2);//"默认颜色<font color='#FF0000'>*</font>"
+        str = "<font color='#333333'>"+str.substring(0,str.length()-1)+"</font>" +"<font color='#FF0000'>*</font>";
+        titlevpn.setText(Html.fromHtml(str));
+        str = getString(R.string.VPN_Server_Location);
+        str = "<font color='#333333'>"+ str.substring(0,str.length()-1)+"</font>" +"<font color='#FF0000'>*</font>";
+        registelocation.setText(Html.fromHtml(str));
+
+        str = getString(R.string.Import_OpenVPN_Configuration_Profile);
+        str = "<font color='#333333'>"+ str.substring(0,str.length()-1)+"</font>" +"<font color='#FF0000'>*</font>";
+        tvConfiguration.setText(Html.fromHtml(str));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

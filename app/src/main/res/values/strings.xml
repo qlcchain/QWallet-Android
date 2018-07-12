@@ -756,6 +756,7 @@
     <string name="Suggested_Tipping_Price_QLC">Suggested Tipping Price (QLC)</string>
     <string name="Maximum_number_of_Connections">Maximum number of Connections</string>
     <string name="register">register</string>
+    <string name="Register">REGISTER</string>
     <string name="some_speed_status">some speed status</string>
     <string name="Medium_Text">Medium Text</string>
     <string name="Filename">Filename</string>
@@ -855,5 +856,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="total_successful_connection">Successful Connections</string>
     <string name="Do_you_want_to_disconnect">Do you want to disconnect?</string>
     <string name="Please_disconnect_the_current_one_first">Please disconnect the current one first.</string>
+
+
+    <!--20180712待翻译-->
     <string name="Deposit">Deposit 1 QLC for asset registration</string>
 </resources>

@@ -16,7 +16,6 @@
         android:paddingLeft="15px"
         android:gravity="left"
         android:fontFamily="@font/roboto_regular"
-        android:letterSpacing="0.3"
         android:text="@string/VPN_Server_Location"
         android:textColor="@color/c">
     </TextView>
