@@ -6,7 +6,7 @@
   -->
 <resources>
   <string name="app_name">WINQ</string>
-  <string name="app">OpenVPN for Android</string>
+  <string name="app">WINQ for Android</string>
   <string name="address">伺服器地址：</string>
   <string name="port">伺服器端口:</string>
   <string name="location">位置</string>
@@ -21,7 +21,7 @@
   <string name="client_pkcs12_title">PKCS12 檔案</string>
   <string name="ca_title">CA 憑證</string>
   <string name="no_certificate">您必須選擇一個憑證</string>
-  <string name="copyright_guicode">取得原始碼與事件追蹤，可上 https://github.com/schwabe/ics-openvpn/</string>
+  <string name="copyright_guicode">取得原始碼與事件追蹤，可上 https://github.com/schwabe/ics-WINQ/</string>
   <string name="copyright_others">本程式使用了以下元件，在原始碼中的授權條款查看完整細節。</string>
   <string name="about">關於</string>
   <string name="vpn_list_title">設定檔</string>
@@ -35,7 +35,7 @@
   <string name="ipv4_dialog_title">以 CIDR 格式輸入 IPv4 地址/遮罩 (例如 1.2.3.4/24)</string>
   <string name="ipv4_address">IPv4 位址</string>
   <string name="ipv6_address">IPv6 地址</string>
-  <string name="custom_option_warning">輸入自訂的 OpenVPN 選項。請謹慎使用。另外請注意，VPNSettings 的設計並不支援許多 tun 通道相關 OpenVPN 設定 。如果您認為有缺少重要的設定選項，請聯絡作者。</string>
+  <string name="custom_option_warning">輸入自訂的 WINQ 選項。請謹慎使用。另外請注意，VPNSettings 的設計並不支援許多 tun 通道相關 WINQ 設定 。如果您認為有缺少重要的設定選項，請聯絡作者。</string>
   <string name="auth_username">用戶名稱</string>
   <string name="auth_pwquery">密碼</string>
   <string name="static_keys_info">對於靜態設定，TLS 認證金鑰將會用作靜態金鑰。</string>
@@ -51,7 +51,7 @@
   <string name="ipv4_format_error">解析 IPv4 地址時發生錯誤</string>
   <string name="custom_route_format_error">解析自訂路由時發生錯誤</string>
   <string name="pw_query_hint">(如需查詢，請留空)</string>
-  <string name="vpn_shortcut">OpenVPN 捷徑</string>
+  <string name="vpn_shortcut">WINQ 捷徑</string>
   <string name="vpn_launch_title">正在連線到 VPN...</string>
   <string name="shortcut_profile_notfound">在捷徑中找不到指定的設定檔</string>
   <string name="random_host_prefix">隨機主機名稱的前綴字</string>
@@ -69,7 +69,7 @@
   <string name="check_remote_tlscert_title">預期的 TLS 伺服器憑證</string>
   <string name="remote_tlscn_check_summary">檢查遠端的伺服器憑證主旨 DN</string>
   <string name="remote_tlscn_check_title">憑證主機名稱檢查</string>
-  <string name="enter_tlscn_dialog">指定用於驗證遠程證書的DN（例如C = DE，L =帕德博恩，OU =禽流IP運營商，CN = openvpn.blinkt.de）\ñ\ n指定完整的DN或RDN檢查（openvpn.blinkt.de在這個例子中）或RDN前綴進行驗證。\ N使用RDN前綴“服務器”\ n當匹配“服務器1”和“服務器2”\ñ\ nLeaving文本字段為空將檢查RDN對服務器的主機名。 \ñ\ n有關詳細信息請參見下-verify-X509-名的OpenVPN 2.3.1+手冊頁</string>
+  <string name="enter_tlscn_dialog">指定用於驗證遠程證書的DN（例如C = DE，L =帕德博恩，OU =禽流IP運營商，CN = WINQ.blinkt.de）\ñ\ n指定完整的DN或RDN檢查（WINQ.blinkt.de在這個例子中）或RDN前綴進行驗證。\ N使用RDN前綴“服務器”\ n當匹配“服務器1”和“服務器2”\ñ\ nLeaving文本字段為空將檢查RDN對服務器的主機名。 \ñ\ n有關詳細信息請參見下-verify-X509-名的WINQ 2.3.1+手冊頁</string>
   <string name="enter_tlscn_title">遠端憑證主旨</string>
   <string name="tls_key_auth">啟用 TLS 密鑰認證</string>
   <string name="tls_auth_file">TLS 驗證檔</string>
@@ -102,20 +102,20 @@
   <string name="tun_open_error">無法開啟 Tun 通道介面</string>
   <string name="error">"錯誤: "</string>
   <string name="clear">清除</string>
-  <string name="last_openvpn_tun_config">打開 tun 介面：</string>
+  <string name="last_WINQ_tun_config">打開 tun 介面：</string>
   <string name="local_ip_info">本地 IPv4：%1$s / %2$d IPv6：%3$s MTU：%4$d</string>
   <string name="dns_server_info">DNS 伺服器器：%1$s，域名：%2$s</string>
   <string name="routes_info_incl">路由：%1$s %2$s</string>
   <string name="routes_info_excl">排除的路由：%1$s %2$s</string>
   <string name="routes_debug">VpnService 路由安裝：%1$s %2$s</string>
-  <string name="ip_not_cidr">GOT的接口信息%1$s和%2$s，假設第二個地址是遠程的對等地址。使用/ 32掩碼本地IP。通過OpenVPN的給定方式是“%3$s”。</string>
+  <string name="ip_not_cidr">GOT的接口信息%1$s和%2$s，假設第二個地址是遠程的對等地址。使用/ 32掩碼本地IP。通過WINQ的給定方式是“%3$s”。</string>
   <string name="route_not_cidr">不能使%1$s和%2$s如IP路由CIDR子網掩碼感，使用/ 32子網掩碼。</string>
   <string name="route_not_netip">修正路由 %1$s / %2$s 到 %3$s / %2$s</string>
   <string name="keychain_access">無法訪問Android鑰匙扣證書。這可以通過固件升級或通過恢復的應用程序/應用程序設置的備份引起。請編輯VPN和重新選擇下基本設置證書重新訪問證書的權限。</string>
   <string name="version_info">%1$s %2$s</string>
   <string name="send_logfile">送出日誌檔案</string>
   <string name="send">傳送</string>
-  <string name="ics_openvpn_log_file">ICS OpenVPN 日誌檔案</string>
+  <string name="ics_WINQ_log_file">ICS WINQ 日誌檔案</string>
   <string name="copied_entry">已將記錄複製到剪貼簿</string>
   <string name="tap_mode">Tap 模式</string>
   <string name="faq_tap_mode">點擊模式是不可能的非根VPN API。因此，該應用程序不能提供自來水的支持</string>
@@ -125,12 +125,12 @@
   <string name="copying_log_entries">複製記錄項目</string>
   <string name="faq_copying">若要複製單筆記錄，在此記錄項目上點選。若要複製/送出整筆記錄，使用送出記錄選項。如果這個按鈕在畫面中無法顯示，請使用實體的選單按鈕。</string>
   <string name="faq_shortcut">以快捷方式啟動</string>
-  <string name="faq_howto_shortcut">您可以將快捷方式啟動 OpenVPN 在您的桌面上。根據您的主畫面程式必須添加一個快捷方式或小部件。</string>
+  <string name="faq_howto_shortcut">您可以將快捷方式啟動 WINQ 在您的桌面上。根據您的主畫面程式必須添加一個快捷方式或小部件。</string>
   <string name="no_vpn_support_image">你的Android ROM不支援VPN服務API，抱歉了。 :(</string>
   <string name="encryption">加密</string>
   <string name="cipher_dialog_title">輸入加密方法</string>
-  <string name="chipher_dialog_message">輸入由OpenVPN的加密密碼算法。留空使用默認密碼。</string>
-  <string name="auth_dialog_message">輸入驗證摘要多用於OpenVPN的。留空使用默認的摘要。</string>
+  <string name="chipher_dialog_message">輸入由WINQ的加密密碼算法。留空使用默認密碼。</string>
+  <string name="auth_dialog_message">輸入驗證摘要多用於WINQ的。留空使用默認的摘要。</string>
   <string name="settings_auth">驗證/加密</string>
   <string name="file_explorer_tab">檔案瀏覽器</string>
   <string name="inline_file_tab">內嵌檔案</string>
@@ -151,7 +151,7 @@
   <string name="no_bind">沒有本地綁定</string>
   <string name="import_configuration_file">匯入設定檔</string>
   <string name="faq_security_title">保安上的考慮</string>
-  <string name="faq_security">“由於OpenVPN是安全敏感的有關安全性的幾個音符都是明智的。在​​SD卡的所有數據本質上是不安全的。每一個應用程序可以讀取它（比如這個方案並不需要特別的SD卡的權限）。此應用程序的數據只能讀由應用程序本身。通過使用CACERT /證書/密鑰的文件對話框中的數據導入選項存儲在VPN配置文件的VPN配置文件只能由該應用程序進行訪問。（不要忘了刪除在SD副本卡後）。即使只能由該應用程序中的數據仍然是未加密的，通過生根電話或其他攻擊有可能檢索數據。保存的密碼是明文存儲以及對於PKCS12文件，強烈建議你將它們導入到android的密鑰庫。“</string>
+  <string name="faq_security">“由於WINQ是安全敏感的有關安全性的幾個音符都是明智的。在​​SD卡的所有數據本質上是不安全的。每一個應用程序可以讀取它（比如這個方案並不需要特別的SD卡的權限）。此應用程序的數據只能讀由應用程序本身。通過使用CACERT /證書/密鑰的文件對話框中的數據導入選項存儲在VPN配置文件的VPN配置文件只能由該應用程序進行訪問。（不要忘了刪除在SD副本卡後）。即使只能由該應用程序中的數據仍然是未加密的，通過生根電話或其他攻擊有可能檢索數據。保存的密碼是明文存儲以及對於PKCS12文件，強烈建議你將它們導入到android的密鑰庫。“</string>
   <string name="import_vpn">匯入</string>
   <string name="broken_image_cert_title">錯誤顯示證書選擇</string>
   <string name="broken_image_cert">有一個例外，試圖展示了Android 4.0+證書選擇對話框。這不應該發生，因為這款Android 4.0+的標準功能。也許對於證書存儲你的Andr​​oid ROM支持被打破</string>
@@ -161,7 +161,7 @@
   <string name="converted_profile">匯入設定檔</string>
   <string name="converted_profile_i">匯入設定檔 %d</string>
   <string name="broken_images">損壞的映像</string>
-  <string name="broken_images_faq">&lt;p&gt;Official HTC圖像，已知有一種奇怪的路由問題造成交通不流過隧道（也&lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/18\"&gt;Issue 18&lt;/a&gt;看到bug跟踪系統。）的的Xperia弧S和的Xperia雷&lt;/p&gt;&lt;p&gt;Older官方SONY圖像已被報導完全缺少VPNService從圖像。 （也&lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/29\"&gt;Issue 29&lt;/a&gt;看到bug跟踪系統。）&lt;/p&gt;&lt;p&gt;On自定義生成的TUN模塊可能會丟失照片或為/ dev / TUN的權利可能是錯誤的。一些CM9圖像需要在“設備特定的黑客”enabled.&lt;/p&gt;&lt;p&gt;Most重要的是“修復所有權”選項：如果您的設備有一個破碎的機器人形象，報告給你的供應商。越多的人誰給供應商報告問題時，他們越有可能解決it.&lt;/p&gt;</string>
+  <string name="broken_images_faq">&lt;p&gt;Official HTC圖像，已知有一種奇怪的路由問題造成交通不流過隧道（也&lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/18\"&gt;Issue 18&lt;/a&gt;看到bug跟踪系統。）的的Xperia弧S和的Xperia雷&lt;/p&gt;&lt;p&gt;Older官方SONY圖像已被報導完全缺少VPNService從圖像。 （也&lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/29\"&gt;Issue 29&lt;/a&gt;看到bug跟踪系統。）&lt;/p&gt;&lt;p&gt;On自定義生成的TUN模塊可能會丟失照片或為/ dev / TUN的權利可能是錯誤的。一些CM9圖像需要在“設備特定的黑客”enabled.&lt;/p&gt;&lt;p&gt;Most重要的是“修復所有權”選項：如果您的設備有一個破碎的機器人形象，報告給你的供應商。越多的人誰給供應商報告問題時，他們越有可能解決it.&lt;/p&gt;</string>
   <string name="pkcs12_file_encryption_key">PKCS12檔加密金鑰</string>
   <string name="private_key_password">私密金鑰密碼</string>
   <string name="password">密碼</string>
@@ -190,9 +190,9 @@
   <string name="ipdns">IP和DNS</string>
   <string name="basic">基本</string>
   <string name="routing">路由</string>
-  <string name="obscure">鮮為人知的OpenVPN設定，一般情況下不需要派上用場。</string>
+  <string name="obscure">鮮為人知的WINQ設定，一般情況下不需要派上用場。</string>
   <string name="advanced">進階</string>
-  <string name="export_config_title">ICS Openvpn 設定</string>
+  <string name="export_config_title">ICS WINQ 設定</string>
   <string name="warn_no_dns">不使用任何DNS服務器。名稱解析可能無法正常工作。考慮設置自定義DNS服務器。另請注意，Android將繼續使用您的手機/ Wi-Fi連接指定的代理服務器設置時沒有DNS服務器設置。</string>
   <string name="dns_add_error">無法添加DNS服務器“%1$s”，系統拒絕：%2$s</string>
   <string name="ip_add_error">無法配置IP地址“%1$s”，系統拒絕：%2$s</string>
@@ -205,7 +205,7 @@
   <string name="using_proxy">使用代理伺服器 %1$s %2$d</string>
   <string name="use_system_proxy">使用系統代理</string>
   <string name="use_system_proxy_summary">使用系統配置的 HTTP/HTTPS 代理伺服器進行連線。</string>
-  <string name="onbootrestartsummary">OpenVPN 將會在系統啟動時連線到特定的 VPN。在 Android &lt; 5.0 上使用這個設定前，請閱讀連線警告 FAQ。</string>
+  <string name="onbootrestartsummary">WINQ 將會在系統啟動時連線到特定的 VPN。在 Android &lt; 5.0 上使用這個設定前，請閱讀連線警告 FAQ。</string>
   <string name="onbootrestart">啟動時連線</string>
   <string name="ignore">忽略</string>
   <string name="restart">重置</string>
@@ -213,29 +213,29 @@
   <string name="configuration_changed">設定已變更</string>
   <string name="log_no_last_vpn">無法判斷最後一次連線使用的設定檔，因此無法編輯設定檔。</string>
   <string name="faq_duplicate_notification_title">重複的通知</string>
-  <string name="faq_duplicate_notification">如果 Android 在系統記憶體 (RAM) 壓力下，會從現用的記憶體中移除在當下不需要的應用程式和服務。這將中止正在進行的 VPN 連線。為了確保連線/OpenVPN 不被終止，因此，此應用程式必須顯示在通知列中，才將具有較高優先的順序執行。如之前常見問題中說明的，鑰匙圖示是系統產生的，這不能當作是應用程式為了以更高的執行順序。</string>
+  <string name="faq_duplicate_notification">如果 Android 在系統記憶體 (RAM) 壓力下，會從現用的記憶體中移除在當下不需要的應用程式和服務。這將中止正在進行的 VPN 連線。為了確保連線/WINQ 不被終止，因此，此應用程式必須顯示在通知列中，才將具有較高優先的順序執行。如之前常見問題中說明的，鑰匙圖示是系統產生的，這不能當作是應用程式為了以更高的執行順序。</string>
   <string name="no_vpn_profiles_defined">沒有定義的 VPN 設定檔。</string>
   <string name="add_new_vpn_hint">使用&lt;img src=\"ic_menu_add\"/&gt;圖標添加新的VPN</string>
   <string name="vpn_import_hint">使用&lt;img src=\"ic_menu_archive\"/&gt;圖標，導入從您的SD卡現有的（.ovpn或.conf文件）配置文件。</string>
   <string name="faq_hint">此外，請務必檢查出的常見問​​題解答。有一個快速入門指南。</string>
   <string name="faq_routing_title">路由/網絡介面 設定</string>
   <string name="faq_routing">路由和接口配置不經由傳統的ifconfig /路由命令，但通過使用VPNService API來完成。這將導致比其他操作系統不同的路由配置。 \ n此VPN隧道的配置包括IP地址和應該被路由通過該接口的網絡。特別是，沒有同行夥伴地址或網關地址是必要的或需要。特殊的路由到達VPN服務器不需要任一（例如，當使用重定向網關加）。導入配置時，應用程序將因此而忽略這些設置。該應用程序可確保與連接到服務器沒有通過VPN隧道路由到的VPNService API。\ n此VPNService API不允許指定網絡不應該通過VPN路由。作為一種變通方法的應用程序會自動檢測網絡，不應該被路由到隧道（如航線XXXX YYYY net_gateway），並計算一組路由排除此路線效仿其他平台的行為。日誌窗口顯示VPNService的在建立一個連接的配置\ nBehind場景：安卓4.4+確實使用策略路由。利用路由/ ifconfig命令將不顯示已安裝的路線。相反，使用IP規則，iptables的-t軋-L</string>
-  <string name="persisttun_summary">當 OpenVPN 重新連線時，持續使用 VPN 連線。</string>
+  <string name="persisttun_summary">當 WINQ 重新連線時，持續使用 VPN 連線。</string>
   <string name="persistent_tun_title">保持 tun 通道</string>
-  <string name="openvpn_log">OpenVPN 運作記錄</string>
-  <string name="import_config">匯入 OpenVPN 配置</string>
+  <string name="WINQ_log">WINQ 運作記錄</string>
+  <string name="import_config">匯入 WINQ 配置</string>
   <string name="battery_consumption_title">電池消耗</string>
-  <string name="baterry_consumption">在我個人的測試中的 OpenVPN 高電池消耗的主要原因是保活資料包。大多數的 OpenVPN 伺服器有一個配置指令像 \' keepalive 10 60\'，這會導致用戶端和伺服器交換保活資料包每十秒。&lt; P &gt; 雖然這些資料包是小和不使用太多的交通，它們保持移動無線電網路忙，增加了能源消耗。(請參見 &lt; href =\"HTTP://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine\"&gt; 無線電狀態機 |Android 開發者 &lt; /a &gt;） &lt; p &gt; 此 keepalive 設置不能更改用戶端上。只有 OpenVPN 的系統管理員可以更改的設置。&lt; P &gt; 不幸的 udp 使用保活大於 60 秒可以導致一些 NAT 閘道來斷開連接由於不活動超時。用不了多久使用 TCP 保持活著超時工作，但隧道 TCP 通過 TCP 表現極為不佳與高資料包丟失連接上。(請參閱 &lt; href =\"HTTP://sites.inka.de/bigred/devel/tcp-tcp.html\"&gt; 為什麼 TCP 在 TCP 是一個壞點子 &lt; /a &gt;)</string>
-  <string name="faq_tethering">網路共用的功能 (透過 Wi-Fi、USB 或藍牙) 和 VPNService API (此程式使用) 不一起作用。更多細節請看 &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/34\"&gt;issue #34&lt;/a&gt;</string>
+  <string name="baterry_consumption">在我個人的測試中的 WINQ 高電池消耗的主要原因是保活資料包。大多數的 WINQ 伺服器有一個配置指令像 \' keepalive 10 60\'，這會導致用戶端和伺服器交換保活資料包每十秒。&lt; P &gt; 雖然這些資料包是小和不使用太多的交通，它們保持移動無線電網路忙，增加了能源消耗。(請參見 &lt; href =\"HTTP://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine\"&gt; 無線電狀態機 |Android 開發者 &lt; /a &gt;） &lt; p &gt; 此 keepalive 設置不能更改用戶端上。只有 WINQ 的系統管理員可以更改的設置。&lt; P &gt; 不幸的 udp 使用保活大於 60 秒可以導致一些 NAT 閘道來斷開連接由於不活動超時。用不了多久使用 TCP 保持活著超時工作，但隧道 TCP 通過 TCP 表現極為不佳與高資料包丟失連接上。(請參閱 &lt; href =\"HTTP://sites.inka.de/bigred/devel/tcp-tcp.html\"&gt; 為什麼 TCP 在 TCP 是一個壞點子 &lt; /a &gt;)</string>
+  <string name="faq_tethering">網路共用的功能 (透過 Wi-Fi、USB 或藍牙) 和 VPNService API (此程式使用) 不一起作用。更多細節請看 &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/34\"&gt;issue #34&lt;/a&gt;</string>
   <string name="vpn_tethering_title">VPN 與網路共用</string>
   <string name="connection_retries">連線重試次數</string>
   <string name="reconnection_settings">重新連線設定</string>
   <string name="connectretrymessage">嘗試重新連線之間的等待秒數。</string>
   <string name="connectretrywait">重新連線的間隔時間</string>
-  <string name="minidump_generated">OpenVPN 發生非預期的異常，你可以使用在主選單中的發送異常傾印選項，將資訊提供給開發人員。</string>
+  <string name="minidump_generated">WINQ 發生非預期的異常，你可以使用在主選單中的發送異常傾印選項，將資訊提供給開發人員。</string>
   <string name="send_minidump">向開發人員傳送異常傾印</string>
   <string name="send_minidump_summary">傳送程式上一個異常停止的除錯資訊給開發人員</string>
-  <string name="notifcation_title">OpenVPN - %s</string>
+  <string name="notifcation_title">WINQ - %s</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">連線中</string>
@@ -274,10 +274,10 @@
   <string name="rdn_prefix">RDN 前綴</string>
   <string name="tls_remote_deprecated">tls-remote (不建議使用)</string>
   <string name="help_translate">您可以訪問
-http://crowdin.net/project/ics-openvpn/invite
+http://crowdin.net/project/ics-WINQ/invite
 幫助我們翻譯本軟體</string>
   <string name="prompt">%1$s 試圖控制 %2$s</string>
-  <string name="remote_warning">你正在提供這個應用程式完全控制 OpenVPN for Android 與攔截所有網路流量的權限，<b>不允許，除非信任此應用程式。</b>否則，你的資料會受到惡意軟體洩漏的風險。</string>
+  <string name="remote_warning">你正在提供這個應用程式完全控制 WINQ for Android 與攔截所有網路流量的權限，<b>不允許，除非信任此應用程式。</b>否則，你的資料會受到惡意軟體洩漏的風險。</string>
   <string name="remote_trust">信任此應用程式</string>
   <string name="no_external_app_allowed">不允許應用程式使用外部 API </string>
   <string name="allowed_apps">允許的應用程式：%s</string>
@@ -297,8 +297,8 @@ http://crowdin.net/project/ics-openvpn/invite
   <string name="vpnbehaviour">VPN 行為</string>
   <string name="allow_vpn_changes">允許更改 VPN 設定檔</string>
   <string name="hwkeychain">硬體金鑰庫︰</string>
-  <string name="permission_icon_app">應用程式嘗試使用 OpenVPN for Android 對圖示</string>
-  <string name="faq_vpndialog43">\"從 Android 4.3 開始，VPN 確認防止「覆蓋應用程式」，會導致對話框觸碰時沒有反應。如果你的應用程式中有使用覆蓋應用程式的功能，可能或造成這個現象。如果，發現造成這個問題的應用程式，請聯絡這個此應用程式的作者。這個問題會影響到所有在 Android 4.3 及更高版本的 VPN 應用程式。另請參見：See also &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/185\"&gt;Issue 185&lt;a&gt; 了解更多詳細資訊。</string>
+  <string name="permission_icon_app">應用程式嘗試使用 WINQ for Android 對圖示</string>
+  <string name="faq_vpndialog43">\"從 Android 4.3 開始，VPN 確認防止「覆蓋應用程式」，會導致對話框觸碰時沒有反應。如果你的應用程式中有使用覆蓋應用程式的功能，可能或造成這個現象。如果，發現造成這個問題的應用程式，請聯絡這個此應用程式的作者。這個問題會影響到所有在 Android 4.3 及更高版本的 VPN 應用程式。另請參見：See also &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/185\"&gt;Issue 185&lt;a&gt; 了解更多詳細資訊。</string>
   <string name="faq_vpndialog43_title">VPN 確認對話框</string>
   <string name="donatePlayStore">或者，你可以透過 Play 商店捐贈我：</string>
   <string name="thanks_for_donation">感謝捐贈 %s！</string>
@@ -322,12 +322,12 @@ http://crowdin.net/project/ics-openvpn/invite
   <string name="userpw_file">用戶名稱/密碼</string>
   <string name="imported_from_file">[從匯入：%s]</string>
   <string name="files_missing_hint">一些文件無法找到。請選擇要導入的文件的配置文件：</string>
-  <string name="openvpn_is_no_free_vpn">要使用這個程序，你需要一個VPN供應商/ VPN支持OpenVPN的網關（通常由雇主提供）。查看http://community.openvpn.net/關於OpenVPN的更多信息，以及如何設置自己的OpenVPN服務器。</string>
+  <string name="WINQ_is_no_free_vpn">要使用這個程序，你需要一個VPN供應商/ VPN支持WINQ的網關（通常由雇主提供）。查看http://community.WINQ.net/關於WINQ的更多信息，以及如何設置自己的WINQ服務器。</string>
   <string name="import_log">匯入日誌：</string>
   <string name="ip_looks_like_subnet">VPN拓撲“%3$s”規定，但使用ifconfig %1$s %2$s看起來更像是一個網絡掩碼的IP地址。假設“子網”的拓撲結構。</string>
   <string name="mssfix_invalid_value">MSS的覆蓋值必須在0到9000的整數</string>
   <string name="mtu_invalid_value">MSS的覆蓋值必須在0到9000的整數</string>
-  <string name="mssfix_value_dialog">宣布運行在他們應當限制其發送的包大小，使得後的OpenVPN已包封它們，將所得的UDP包大小的OpenVPN給對端發送將不超過此字節數的隧道的TCP會話。 （默認為1450）</string>
+  <string name="mssfix_value_dialog">宣布運行在他們應當限制其發送的包大小，使得後的WINQ已包封它們，將所得的UDP包大小的WINQ給對端發送將不超過此字節數的隧道的TCP會話。 （默認為1450）</string>
   <string name="mssfix_checkbox">覆寫TCP 裝載資料 (payload) 的最大分段大小 (MSS) 值</string>
   <string name="mssfix_dialogtitle">設定 TCP 裝載資料 (payload) 的最大分段大小 (MSS)</string>
   <string name="client_behaviour">客戶端行為</string>
@@ -353,13 +353,13 @@ http://crowdin.net/project/ics-openvpn/invite
   <string name="duplicate_vpn">重複的 VPN 設定檔</string>
   <string name="duplicate_profile_title">複製設定檔︰ %s</string>
   <string name="show_log">顯示記錄</string>
-  <string name="faq_android_clients">安卓系統的多個 OpenVPN 用戶端存在。最常見是 OpenVPN 為 Android （此用戶端），OpenVPN 連接和 OpenVPN 設置。 &lt; p &gt; 用戶端可以分為兩組： OpenVPN 為 Android 和 OpenVPN 連接使用官方的 VPNService API （安卓 4.0 +），需要無根、 無使用根 &lt; p &gt; 的 OpenVPN 設置 OpenVPN 的 Android 是開源用戶端和開發的 Arne 米爾克。 它針對更高級的使用者，並提供許多設置和能力，從檔導入設定檔，配置更改內部應用程式的設定檔。用戶端基於 OpenVPN 的社區版本。它基於 OpenVPN 2.x 原始程式碼。此用戶端可以被看作是半正式的社區用戶端。&lt; p &gt; OpenVPN 連接是由 OpenVPN 技術公司開發的非開源用戶端用戶端縮進是一般使用的用戶端和更多針對普通使用者，並允許的 OpenVPN 設定檔導入。此用戶端基於 OpenVPN c + + 重新實現的 OpenVPN 協定 （這要求允許 OpenVPN 技術，公司將發佈 iOS OpenVPN 應用程式）。此用戶端是最古老的用戶端和也的使用者介面對於開放源碼 OpenVPN OpenVPN 技術 &lt; p &gt; OpenVPN 設置的官方用戶端。與安卓系統的 OpenVPN 它需要根和不使用 VPNService API。它不依賴于安卓 4.0 +</string>
-  <string name="faq_androids_clients_title">OpenVPN Android 用戶端之間的差異</string>
+  <string name="faq_android_clients">安卓系統的多個 WINQ 用戶端存在。最常見是 WINQ 為 Android （此用戶端），WINQ 連接和 WINQ 設置。 &lt; p &gt; 用戶端可以分為兩組： WINQ 為 Android 和 WINQ 連接使用官方的 VPNService API （安卓 4.0 +），需要無根、 無使用根 &lt; p &gt; 的 WINQ 設置 WINQ 的 Android 是開源用戶端和開發的 Arne 米爾克。 它針對更高級的使用者，並提供許多設置和能力，從檔導入設定檔，配置更改內部應用程式的設定檔。用戶端基於 WINQ 的社區版本。它基於 WINQ 2.x 原始程式碼。此用戶端可以被看作是半正式的社區用戶端。&lt; p &gt; WINQ 連接是由 WINQ 技術公司開發的非開源用戶端用戶端縮進是一般使用的用戶端和更多針對普通使用者，並允許的 WINQ 設定檔導入。此用戶端基於 WINQ c + + 重新實現的 WINQ 協定 （這要求允許 WINQ 技術，公司將發佈 iOS WINQ 應用程式）。此用戶端是最古老的用戶端和也的使用者介面對於開放源碼 WINQ WINQ 技術 &lt; p &gt; WINQ 設置的官方用戶端。與安卓系統的 WINQ 它需要根和不使用 VPNService API。它不依賴于安卓 4.0 +</string>
+  <string name="faq_androids_clients_title">WINQ Android 用戶端之間的差異</string>
   <string name="ignore_multicast_route">忽略多點傳送路徑：%s</string>
-  <string name="ab_only_cidr">Android 只支援無類別域間 (CIDR) 路由到此 VPN。因為非無類別域間 (CIDR) 路由幾乎不會被使用，OpenVPN for Android 將使用 /32 非無類別域間 (CIDR) 路由處理這個警告。</string>
+  <string name="ab_only_cidr">Android 只支援無類別域間 (CIDR) 路由到此 VPN。因為非無類別域間 (CIDR) 路由幾乎不會被使用，WINQ for Android 將使用 /32 非無類別域間 (CIDR) 路由處理這個警告。</string>
   <string name="ab_tethering_44">當 VPN 啟用時，網路共用仍可運作，但網路共用的連線不會透過 VPN。</string>
   <string name="ab_kitkat_mss">早期的 KitKat 版本在 TCP 連線中，設定錯誤的最大分段大小 (MSS) 值 (#61948)。試著開啟 mssfix 選項來繞開這個 bug。</string>
-  <string name="ab_proxy">Android 沒有 DNS 伺服器設定時，會繼續使用你指定的行動/Wi-Fi 連線代理設定。OpenVPN for Android 會在日誌中記錄警告訊息。<p>當 VPN 有設定 DNS 伺服器時，因為，Android API 中無法為 VPN 連線設定代理，所以，將不會使用代理設定。</p></string>
+  <string name="ab_proxy">Android 沒有 DNS 伺服器設定時，會繼續使用你指定的行動/Wi-Fi 連線代理設定。WINQ for Android 會在日誌中記錄警告訊息。<p>當 VPN 有設定 DNS 伺服器時，因為，Android API 中無法為 VPN 連線設定代理，所以，將不會使用代理設定。</p></string>
   <string name="ab_lollipop_reinstall">當解除安裝或重新安裝，VPN 應用程式也會停止運作。詳細資訊起參閱 #80074</string>
   <string name="ab_not_route_to_vpn">台灣繁體中文</string>
   <string name="ab_secondary_users">VPN 不會對次級使用者作用。</string>

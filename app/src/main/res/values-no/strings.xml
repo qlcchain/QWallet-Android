@@ -6,7 +6,7 @@
   -->
 <resources>
   <string name="app_name">WINQ</string>
-  <string name="app">OpenVPN for Android</string>
+  <string name="app">WINQ for Android</string>
   <string name="address">Server adresse:</string>
   <string name="port">Server port:</string>
   <string name="location">Plassering</string>
@@ -21,7 +21,7 @@
   <string name="client_pkcs12_title">PKCS12 fil</string>
   <string name="ca_title">CA-sertifikat</string>
   <string name="no_certificate">Du må velge et sertifikat</string>
-  <string name="copyright_guicode">Kildekode og problemsøkersporing er tilgjengelig på http://code.google.com/p/ics-openvpn/</string>
+  <string name="copyright_guicode">Kildekode og problemsøkersporing er tilgjengelig på http://code.google.com/p/ics-WINQ/</string>
   <string name="copyright_others">Dette programmet bruker følgende komponenter; se kildekoden for detaljer om lisensene</string>
   <string name="about">Om</string>
   <string name="vpn_list_title">Profiler</string>
@@ -35,7 +35,7 @@
   <string name="ipv4_dialog_title">Angi IPv6-adresse/nettmaske i CIDR format (f.eks 1.2.3.4/24)</string>
   <string name="ipv4_address">IPv4-adresse</string>
   <string name="ipv6_address">IPv6-adresse</string>
-  <string name="custom_option_warning">Angi egendefinerte OpenVPN-alternativer. Bør brukes med forsiktighet. Vær også oppmerksom på at mange av de tun-relaterte OpenVPN-innstillingene ikke støttes i henhold til utformingen av VPNSettings. Hvis du tror at et viktig alternativ mangler kan du kontakte forfatteren</string>
+  <string name="custom_option_warning">Angi egendefinerte WINQ-alternativer. Bør brukes med forsiktighet. Vær også oppmerksom på at mange av de tun-relaterte WINQ-innstillingene ikke støttes i henhold til utformingen av VPNSettings. Hvis du tror at et viktig alternativ mangler kan du kontakte forfatteren</string>
   <string name="auth_username">Brukernavn</string>
   <string name="auth_pwquery">Passord</string>
   <string name="static_keys_info">For den statiske konfigurasjonen vil TLS Auth Keys-ene bli brukt som statiske nøkler</string>
@@ -51,7 +51,7 @@
   <string name="ipv4_format_error">Feil ved analyse av IPv4-adressen</string>
   <string name="custom_route_format_error">Feil ved analyse av egendefinerte ruter</string>
   <string name="pw_query_hint">(La stå tomt for å søke på forespørsel)</string>
-  <string name="vpn_shortcut">OpenVPN snarvei</string>
+  <string name="vpn_shortcut">WINQ snarvei</string>
   <string name="vpn_launch_title">Kobler til VPN&#8230;</string>
   <string name="shortcut_profile_notfound">Profilen som er angitt i snarveien ble ikke funnet</string>
   <string name="random_host_prefix">Tilfeldig vert prefiks</string>
@@ -94,7 +94,7 @@
   <string name="tun_open_error">Kunne ikke åpne tun-grensesnittet</string>
   <string name="error">"Feil:"</string>
   <string name="clear">Fjern</string>
-  <string name="last_openvpn_tun_config">Åpner tun-grensesnittet:</string>
+  <string name="last_WINQ_tun_config">Åpner tun-grensesnittet:</string>
   <string name="local_ip_info">Lokal IPv4: %1$s/%2$d IPv6: %3$s MTU: %4$d</string>
   <string name="dns_server_info">DNS-server: %1$s, domene: %2$s</string>
   <string name="routes_info_incl">Ruter: %1$s %2$s</string>
@@ -104,7 +104,7 @@
   <string name="version_info">%1$s %2$s</string>
   <string name="send_logfile">Send loggfilen</string>
   <string name="send">Send</string>
-  <string name="ics_openvpn_log_file">ICS OpenVPN loggfil</string>
+  <string name="ics_WINQ_log_file">ICS WINQ loggfil</string>
   <string name="copied_entry">Kopierte oppføring i loggen til utklippstavlen</string>
   <string name="tap_mode">Tap modus</string>
   <string name="faq_tap_mode">Tap-modus er ikke mulig med ikke-root APN API. Denne appen kan derfor ikke bidra med tap-støtte</string>
@@ -113,12 +113,12 @@
   <string name="faq">FAQ</string>
   <string name="copying_log_entries">Kopier loggoppføringer</string>
   <string name="faq_shortcut">Snarvei til start</string>
-  <string name="faq_howto_shortcut">Du kan legge inn en snarvei for å starte OpenVPN på skrivebordet. Avhengig av ditt startskjermprogram må du legge til enten en snarvei eller en widget.</string>
+  <string name="faq_howto_shortcut">Du kan legge inn en snarvei for å starte WINQ på skrivebordet. Avhengig av ditt startskjermprogram må du legge til enten en snarvei eller en widget.</string>
   <string name="no_vpn_support_image">Bildet ditt støtter ikke VPNService API, beklager :(</string>
   <string name="encryption">Kryptering</string>
   <string name="cipher_dialog_title">Angi krypteringsmetode</string>
-  <string name="chipher_dialog_message">Skriv inn krypteringskrypteringsalgoritmen som brukes av OpenVPN. La det stå tomt for å bruke standard kryptering.</string>
-  <string name="auth_dialog_message">Skriv inn godkjenningsfordeling som brukes til OpenVPN. La være tom for å bruke standard fordøyelse.</string>
+  <string name="chipher_dialog_message">Skriv inn krypteringskrypteringsalgoritmen som brukes av WINQ. La det stå tomt for å bruke standard kryptering.</string>
+  <string name="auth_dialog_message">Skriv inn godkjenningsfordeling som brukes til WINQ. La være tom for å bruke standard fordøyelse.</string>
   <string name="settings_auth">Autentisering/kryptering</string>
   <string name="file_explorer_tab">Filutforsker</string>
   <string name="error_importing_file">Feil ved import av fil</string>
@@ -135,7 +135,7 @@
   <string name="no_bind">Ingen lokale binding</string>
   <string name="import_configuration_file">Importer konfigurasjonsfil</string>
   <string name="faq_security_title">Sikkerhetsvurderinger</string>
-  <string name="faq_security">"Som OpenVPN er sikkerhetsfølsomt, er noen få notater om sikkerhet fornuftig. Alle data på SD-kortet er iboende usikre. Hvert program kan lese det (for eksempel krever dette programmet ingen spesielle SD-kortrettigheter). Dataene i denne applikasjonen kan bare leses Ved bruk av importalternativet for cacert/cert/nøkkel i fildialogen lagres dataene i VPN-profilen. VPN-profilene er bare tilgjengelige for dette programmet. (Ikke glem å slette kopier på SD Kort etterpå). Selv om det kun er tilgjengelig med denne applikasjonen, er dataene fortsatt ukrypterte. Ved å rote telefonen eller andre utnytelser kan det hende at dataene kan hentes. Lagrede passord lagres også i vanlig tekst. For pkcs12-filer anbefales det sterkt At du importerer dem inn i android-nøkkelbutikken. "</string>
+  <string name="faq_security">"Som WINQ er sikkerhetsfølsomt, er noen få notater om sikkerhet fornuftig. Alle data på SD-kortet er iboende usikre. Hvert program kan lese det (for eksempel krever dette programmet ingen spesielle SD-kortrettigheter). Dataene i denne applikasjonen kan bare leses Ved bruk av importalternativet for cacert/cert/nøkkel i fildialogen lagres dataene i VPN-profilen. VPN-profilene er bare tilgjengelige for dette programmet. (Ikke glem å slette kopier på SD Kort etterpå). Selv om det kun er tilgjengelig med denne applikasjonen, er dataene fortsatt ukrypterte. Ved å rote telefonen eller andre utnytelser kan det hende at dataene kan hentes. Lagrede passord lagres også i vanlig tekst. For pkcs12-filer anbefales det sterkt At du importerer dem inn i android-nøkkelbutikken. "</string>
   <string name="import_vpn">Importer</string>
   <string name="broken_image_cert_title">Feil ved visning av sertifikatvalg</string>
   <string name="ipv4">IPv4</string>
@@ -152,7 +152,7 @@
   <string name="generated_config">Generert konfigurasjon</string>
   <string name="generalsettings">Innstillinger</string>
   <string name="owner_fix">Fiks eierskap av /dev/tun</string>
-  <string name="generated_config_summary">Viser den genererte OpenVPN konfigurasjonsfilen</string>
+  <string name="generated_config_summary">Viser den genererte WINQ konfigurasjonsfilen</string>
   <string name="edit_profile_title">Rediger \"%s\"</string>
   <string name="building_configration">Lager konfigurasjon&#8230;</string>
   <string name="netchange">Koble til på nytt ved nettverks endring</string>
@@ -165,9 +165,9 @@
   <string name="ipdns">IP og DNS</string>
   <string name="basic">Grunnleggende</string>
   <string name="routing">Ruting</string>
-  <string name="obscure">Obskure OpenVPN-innstillinger. Vanligvis ikke nødvendig.</string>
+  <string name="obscure">Obskure WINQ-innstillinger. Vanligvis ikke nødvendig.</string>
   <string name="advanced">Avansert</string>
-  <string name="export_config_title">ICS Openvpn konfigurasjon</string>
+  <string name="export_config_title">ICS WINQ konfigurasjon</string>
   <string name="warn_no_dns">Ingen DNS-servere som brukes. Navneoppløsning fungerer ikke. Vurdere å angi tilpassede DNS-servere. Vær også oppmerksom på at Android vil fortsette å bruke proxy-innstillingene angitt for mobile/Wi-Fi-tilkoblingen når ingen DNS-servere er angitt.</string>
   <string name="faq_howto_title">Hurtigstart</string>
   <string name="setting_loadtun_summary">Prøv å laste tun.ko kjernemodul før tilkobling. Krever at enheten er rootet.</string>
@@ -184,15 +184,15 @@
   <string name="faq_duplicate_notification_title">Kopier varsler</string>
   <string name="no_vpn_profiles_defined">Ingen VPN-profiler er definert.</string>
   <string name="faq_routing_title">Ruting/grensesnitt-konfigurasjon</string>
-  <string name="persisttun_summary">Ikke gå tilbake til ingen VPN-tilkoblingen mens OpenVPN kobler til på nytt.</string>
-  <string name="openvpn_log">OpenVPN Logg</string>
-  <string name="import_config">Importer OpenVPN konfigurasjon</string>
+  <string name="persisttun_summary">Ikke gå tilbake til ingen VPN-tilkoblingen mens WINQ kobler til på nytt.</string>
+  <string name="WINQ_log">WINQ Logg</string>
+  <string name="import_config">Importer WINQ konfigurasjon</string>
   <string name="battery_consumption_title">Batteriforbruk</string>
   <string name="connection_retries">Tilkoblingsforsøk</string>
-  <string name="minidump_generated">OpenVPN krasjet uventet. Vennligst vurder bruk av Minidump-alternativet i hovedmenyen</string>
+  <string name="minidump_generated">WINQ krasjet uventet. Vennligst vurder bruk av Minidump-alternativet i hovedmenyen</string>
   <string name="send_minidump">Send Minidump til utvikler</string>
   <string name="send_minidump_summary">Sender feilsøkingsinformasjon om siste krasj til utvikler</string>
-  <string name="notifcation_title">OpenVPN - %s</string>
+  <string name="notifcation_title">WINQ - %s</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Kobler til</string>
@@ -223,7 +223,7 @@
   <string name="remotetlsnote">Din importerte konfigurasjon brukte det gamle DEPRECATED tls-remote-alternativet som bruker et annet DN-format.</string>
   <string name="rdn">RDN (vanlig navn)</string>
   <string name="rdn_prefix">RDN prefiks</string>
-  <string name="help_translate">Du kan bidra til å oversette ved å besøke http://crowdin.net/project/ics-openvpn/invite</string>
+  <string name="help_translate">Du kan bidra til å oversette ved å besøke http://crowdin.net/project/ics-WINQ/invite</string>
   <string name="screenoff_title">Pause VPN-tilkobling etter at skjermen er slått av</string>
   <string name="import_log">Importer logg:</string>
   <string name="client_behaviour">Klient adferd</string>

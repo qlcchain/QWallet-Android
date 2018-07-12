@@ -130,6 +130,10 @@ public class DownCheckView extends LinearLayout {
         });
     }
 
+    public boolean isShow() {
+        return isShow;
+    }
+
     public void close() {
         if (!isShow) {
             return;

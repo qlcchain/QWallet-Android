@@ -6,7 +6,7 @@
   -->
 <resources>
   <string name="app_name">WINQ</string>
-  <string name="app">OpenVPN voor Android</string>
+  <string name="app">WINQ voor Android</string>
   <string name="address">Server Adres:</string>
   <string name="port">Server Poort:</string>
   <string name="location">Locatie</string>
@@ -21,7 +21,7 @@
   <string name="client_pkcs12_title">PKCS12 Bestand</string>
   <string name="ca_title">CA Certificaat</string>
   <string name="no_certificate">U moet een certificaat selecteren</string>
-  <string name="copyright_guicode">De broncode en bugs zijn te vinden op https://github.com/schwabe/ics-openvpn/</string>
+  <string name="copyright_guicode">De broncode en bugs zijn te vinden op https://github.com/schwabe/ics-WINQ/</string>
   <string name="copyright_others">Het programma gebruikt de volgende componenten. Zie de broncode voor volledige details over de licenties.</string>
   <string name="about">Over</string>
   <string name="vpn_list_title">Profielen</string>
@@ -35,7 +35,7 @@
   <string name="ipv4_dialog_title">Voer IPv4-adres/Netmask in CIDR-indeling in (bijv. 1.2.3.4/24)</string>
   <string name="ipv4_address">IPv4 Adres</string>
   <string name="ipv6_address">IPv6 Adres</string>
-  <string name="custom_option_warning">Geavanceerde OpenVPN opties. Wees voorzichtig. Veel van de tun gerelateerde OpenVPN instellingen worden niet ondersteund. Als u denkt dat een belangrijke optie ontbreekt, neem dan contact op met de auteur</string>
+  <string name="custom_option_warning">Geavanceerde WINQ opties. Wees voorzichtig. Veel van de tun gerelateerde WINQ instellingen worden niet ondersteund. Als u denkt dat een belangrijke optie ontbreekt, neem dan contact op met de auteur</string>
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_pwquery">Wachtwoord</string>
   <string name="static_keys_info">Voor de statische configuratie worden de TLS Auth keys als statische sleutels gebruikt</string>
@@ -51,7 +51,7 @@
   <string name="ipv4_format_error">Fout bij inlezen van IPv4-adres</string>
   <string name="custom_route_format_error">Fout bij inlezen van aangepaste routes</string>
   <string name="pw_query_hint">(vrij laten voor query op aanvraag)</string>
-  <string name="vpn_shortcut">OpenVPN snelkoppeling</string>
+  <string name="vpn_shortcut">WINQ snelkoppeling</string>
   <string name="vpn_launch_title">Verbinding maken met VPN&#8230;</string>
   <string name="shortcut_profile_notfound">Het profiel zoals aangegeven in de snelkoppeling kon niet gevonden worden.</string>
   <string name="random_host_prefix">Willekeurig Host Voorvoegsel</string>
@@ -69,7 +69,7 @@
   <string name="check_remote_tlscert_title">Verwacht TLS server-certificaat</string>
   <string name="remote_tlscn_check_summary">Controleert de DN van het externe servercertificaat</string>
   <string name="remote_tlscn_check_title">Controleer Certificaat Hostname</string>
-  <string name="enter_tlscn_dialog">Specificeer de controle die gebruikt wordt om het externe certificaat DN te verifiëren (bijv. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nSpecificeer de volledige DN of de RDN (openvpn.blinkt.de in het voorbeeld) of een RDN-voorvoegsel voor verificatie.\n\nWanneer het gebruikte RDN-voorvoegsel \"Server\" overeenkomt met \"Server-1\" en \"Server-2\"\n\nEen leeg tekstveld zorgt dat de RDN wordt gecontroleerd tegen de hostnaam van de server.\n\nVoor meer details zie de OpenVPN 2.3.1+ manpage onder --verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Specificeer de controle die gebruikt wordt om het externe certificaat DN te verifiëren (bijv. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=WINQ.blinkt.de)\n\nSpecificeer de volledige DN of de RDN (WINQ.blinkt.de in het voorbeeld) of een RDN-voorvoegsel voor verificatie.\n\nWanneer het gebruikte RDN-voorvoegsel \"Server\" overeenkomt met \"Server-1\" en \"Server-2\"\n\nEen leeg tekstveld zorgt dat de RDN wordt gecontroleerd tegen de hostnaam van de server.\n\nVoor meer details zie de WINQ 2.3.1+ manpage onder --verify-x509-name</string>
   <string name="enter_tlscn_title">Externe certificaathouder</string>
   <string name="tls_key_auth">Activeert TLS Key Authenticatie</string>
   <string name="tls_auth_file">TLS Auth Bestand</string>
@@ -102,20 +102,20 @@
   <string name="tun_open_error">Kon de tun interface niet openen</string>
   <string name="error">"Fout: "</string>
   <string name="clear">Leeg maken</string>
-  <string name="last_openvpn_tun_config">Openen tun interface:</string>
+  <string name="last_WINQ_tun_config">Openen tun interface:</string>
   <string name="local_ip_info">Lokaal IPv4: %1$s/%2$d IPv6: %3$s MTU: %4$d</string>
   <string name="dns_server_info">DNS Server: %1$s, Domein: %2$s</string>
   <string name="routes_info_incl">Routes: %1$s %2$s</string>
   <string name="routes_info_excl">Uitgesloten routes: %1$s %2$s</string>
   <string name="routes_debug">VpnService routes geïnstalleerd: %1$s %2$s</string>
-  <string name="ip_not_cidr">Verkreeg interface informatie %1$s en %2$s, ervan uitgaande dat tweede adres het peer-adres van remote is. Gebruik /32 netmask voor lokale IP. De modus die door OpenVPN wordt gegeven is \"%3$s\".</string>
+  <string name="ip_not_cidr">Verkreeg interface informatie %1$s en %2$s, ervan uitgaande dat tweede adres het peer-adres van remote is. Gebruik /32 netmask voor lokale IP. De modus die door WINQ wordt gegeven is \"%3$s\".</string>
   <string name="route_not_cidr">Kan %1$s en %2$s niet als IP-route met CIDR-netmask begrijpen met /32 als netmask.</string>
   <string name="route_not_netip">Gecorrigeerde route van %1$s/%2$s naar %3$s/%2$s</string>
   <string name="keychain_access">Geen toegang tot de Android Keychain certificaten. Dit kan veroorzaakt worden door een upgrade van de firmware or door het herstellen van een backup van de app/appinstellingen. Pas de VPN-configuratie aan en selecteer opnieuw het certificaat onder basisintellingen om de opslagtoestemming opnieuw te verlenen om het certificaat te laden.</string>
   <string name="version_info">%1$s %2$s</string>
   <string name="send_logfile">Verzend logboek</string>
   <string name="send">Verzend</string>
-  <string name="ics_openvpn_log_file">ICS OpenVPN logboek</string>
+  <string name="ics_WINQ_log_file">ICS WINQ logboek</string>
   <string name="copied_entry">Logboekmelding gekopieerd naar klembord</string>
   <string name="tap_mode">Tap mode</string>
   <string name="faq_tap_mode">Tap mode is niet mogelijk met de niet-root VPN API. Daarom kan deze applicatie geen tap ondersteuning bieden</string>
@@ -125,12 +125,12 @@
   <string name="copying_log_entries">Loggegevens aan het kopiëren</string>
   <string name="faq_copying">Om een enkel logboekitem te kopiëren, houd de vermelding lang ingedrukt. Om het hele logboek te kopiëren, gebruik de \'Verzend Logboek\' optie. Gebruik de hardwaretoets als de knop niet zichtbaar is in de interface.</string>
   <string name="faq_shortcut">Snelkoppeling naar start</string>
-  <string name="faq_howto_shortcut">U kunt een snelkoppeling plaatsen om OpenVPN vanaf uw startscherm te starten. Afhankelijk van uw startscherm moet u een snelkoppeling of een widget toevoegen.</string>
+  <string name="faq_howto_shortcut">U kunt een snelkoppeling plaatsen om WINQ vanaf uw startscherm te starten. Afhankelijk van uw startscherm moet u een snelkoppeling of een widget toevoegen.</string>
   <string name="no_vpn_support_image">Uw afbeelding ondersteunt geen VPNService API, sorry :(</string>
   <string name="encryption">Encryptie</string>
   <string name="cipher_dialog_title">Voer encryptiemethode in</string>
-  <string name="chipher_dialog_message">Voer het encryptie-cijfer algoritme in dat door OpenVPN wordt gebruikt. Laat leeg om het standaard cijfer te gebruiken.</string>
-  <string name="auth_dialog_message">Voer de authenticatieverdeling in die gebruikt wordt voor OpenVPN. Laat leeg om de standaard verdeling te gebruiken.</string>
+  <string name="chipher_dialog_message">Voer het encryptie-cijfer algoritme in dat door WINQ wordt gebruikt. Laat leeg om het standaard cijfer te gebruiken.</string>
+  <string name="auth_dialog_message">Voer de authenticatieverdeling in die gebruikt wordt voor WINQ. Laat leeg om de standaard verdeling te gebruiken.</string>
   <string name="settings_auth">Authenticatie/Encryptie</string>
   <string name="file_explorer_tab">Bestandsverkenner</string>
   <string name="inline_file_tab">Inline bestand</string>
@@ -151,7 +151,7 @@
   <string name="no_bind">Geen lokale binding</string>
   <string name="import_configuration_file">Importeer configuratiebestand</string>
   <string name="faq_security_title">Beveiligingsoverwegingen</string>
-  <string name="faq_security">"Omdat OpenVPN beveiligingsgevoelig is, zijn enkele opmerkingen over beveiliging verstandig. Alle gegevens op de sdcard zijn onveilig. Elke app kan het lezen (dit programma vereist bijvoorbeeld geen speciale SD-kaartrechten). De gegevens van deze app kunnen alleen worden gelezen door deze app zelf. Door de importoptie voor cacert/cert/key in het bestandsdialoogvenster te gebruiken, worden de gegevens opgeslagen in het VPN-profiel. De VPN-profielen zijn alleen toegankelijk voor deze app. (Vergeet niet om de kopieën op de SD-kaart achteraf te verwijderen). Hoewel deze gegevens alleen toegankelijk zijn voor deze app, zijn ze nog steeds niet geëncrypteerd. Door het rooten van de telefoon of andere exploits is het mogelijk om de gegevens op te halen. Opgeslagen wachtwoorden worden ook als niet-gecodeerde tekst opgeslagen. Voor pkcs12 bestanden is het sterk aanbevolen dat je ze importeert in de Android keystore."</string>
+  <string name="faq_security">"Omdat WINQ beveiligingsgevoelig is, zijn enkele opmerkingen over beveiliging verstandig. Alle gegevens op de sdcard zijn onveilig. Elke app kan het lezen (dit programma vereist bijvoorbeeld geen speciale SD-kaartrechten). De gegevens van deze app kunnen alleen worden gelezen door deze app zelf. Door de importoptie voor cacert/cert/key in het bestandsdialoogvenster te gebruiken, worden de gegevens opgeslagen in het VPN-profiel. De VPN-profielen zijn alleen toegankelijk voor deze app. (Vergeet niet om de kopieën op de SD-kaart achteraf te verwijderen). Hoewel deze gegevens alleen toegankelijk zijn voor deze app, zijn ze nog steeds niet geëncrypteerd. Door het rooten van de telefoon of andere exploits is het mogelijk om de gegevens op te halen. Opgeslagen wachtwoorden worden ook als niet-gecodeerde tekst opgeslagen. Voor pkcs12 bestanden is het sterk aanbevolen dat je ze importeert in de Android keystore."</string>
   <string name="import_vpn">Importeren</string>
   <string name="broken_image_cert_title">Fout bij het weergeven van de certificaat selectie</string>
   <string name="broken_image_cert">Er is een uitzondering opgetreden bij het weergeven van het dialoogvenster voor het selecteren van certificaten voor Android 4.0+. Dit zou nooit mogen gebeuren omdat dit een standaardfunctie is van Android 4.0+. Misschien werkt uw Android ROM-ondersteuning voor het opslaan van certificaten niet meer</string>
@@ -161,7 +161,7 @@
   <string name="converted_profile">Geïmporteerd profiel</string>
   <string name="converted_profile_i">Geïmporteerd profiel %d</string>
   <string name="broken_images">Niet Werkende ROM\'s</string>
-  <string name="broken_images_faq">&lt;p&gt; Officiële HTC-ROM\'s hebben een vreemd routeringsprobleem waardoor verkeer niet door de tunnel kan stromen (zie ook &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/18\"&gt;Issue 18&lt;/a&gt; in de bug-tracker.) &lt;/p&gt;&lt;p&gt; Van de officiële SONY-ROM\'s van Xperia Arc S en Xperia Ray is gemeld dat de VPNService volledig mist van de ROM. (Zie ook &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/29\"&gt;Issue 29&lt;/a&gt; in de bug-tracker.) &lt;/p&gt;&lt;p&gt;Aan aangepaste build-ROM\'s ontbreekt de tun-module of zijn de rechten van /dev/tun mogelijk onjuist. Sommige CM9-ROM\'s hebben de optie \'Eigenaar bevestigen\' onder \'Apparaatspecifieke hacks\' ingeschakeld nodig.&lt;/p&gt;&lt;p&gt;Het belangrijkste is: als uw apparaat een kapotte Android-ROM heeft, moet u dit melden aan uw leverancier. Hoe meer mensen een probleem melden aan de leverancier, des te groter de kans is dat ze het probleem oplossen.&lt;/p&gt;</string>
+  <string name="broken_images_faq">&lt;p&gt; Officiële HTC-ROM\'s hebben een vreemd routeringsprobleem waardoor verkeer niet door de tunnel kan stromen (zie ook &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/18\"&gt;Issue 18&lt;/a&gt; in de bug-tracker.) &lt;/p&gt;&lt;p&gt; Van de officiële SONY-ROM\'s van Xperia Arc S en Xperia Ray is gemeld dat de VPNService volledig mist van de ROM. (Zie ook &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/29\"&gt;Issue 29&lt;/a&gt; in de bug-tracker.) &lt;/p&gt;&lt;p&gt;Aan aangepaste build-ROM\'s ontbreekt de tun-module of zijn de rechten van /dev/tun mogelijk onjuist. Sommige CM9-ROM\'s hebben de optie \'Eigenaar bevestigen\' onder \'Apparaatspecifieke hacks\' ingeschakeld nodig.&lt;/p&gt;&lt;p&gt;Het belangrijkste is: als uw apparaat een kapotte Android-ROM heeft, moet u dit melden aan uw leverancier. Hoe meer mensen een probleem melden aan de leverancier, des te groter de kans is dat ze het probleem oplossen.&lt;/p&gt;</string>
   <string name="pkcs12_file_encryption_key">PKCS12 Bestand Encryptie Sleutel</string>
   <string name="private_key_password">Privé Sleutel Wachtwoord</string>
   <string name="password">Wachtwoord</string>
@@ -171,7 +171,7 @@
   <string name="generalsettings">Instellingen</string>
   <string name="owner_fix_summary">Probeert de eigenaar van /dev/tun naar het systeem in te stellen. Sommige CM9-ROM\'s hebben dit nodig om de VPNService API te laten werken. Vereist root toegang.</string>
   <string name="owner_fix">Herstel eigenaar van /dev/tun</string>
-  <string name="generated_config_summary">Toont het gegenereerde OpenVPN configuratiebestand</string>
+  <string name="generated_config_summary">Toont het gegenereerde WINQ configuratiebestand</string>
   <string name="edit_profile_title">Bewerken van \"%s\"</string>
   <string name="building_configration">Configuratie bouwen&#8230;</string>
   <string name="netchange_summary">Het inschakelen van deze optie zal opnieuw verbinden na het veranderen van de netwerk status (bijv. van WiFi naar mobiel) forceren</string>
@@ -190,9 +190,9 @@
   <string name="ipdns">IP en DNS</string>
   <string name="basic">Basis</string>
   <string name="routing">Routing</string>
-  <string name="obscure">Vreemde OpenVPN-instellingen. Normaal niet nodig.</string>
+  <string name="obscure">Vreemde WINQ-instellingen. Normaal niet nodig.</string>
   <string name="advanced">Geavanceerd</string>
-  <string name="export_config_title">ICS Openvpn configuratie</string>
+  <string name="export_config_title">ICS WINQ configuratie</string>
   <string name="warn_no_dns">Er worden geen DNS-servers gebruikt. Naamomzetting werkt mogelijk niet. Overweeg om aangepaste DNS-servers in te stellen. Houd er ook rekening mee dat Android uw proxy-instellingen gebruikt die zijn opgegeven voor uw mobiele/Wi-Fi-verbinding wanneer er geen DNS-servers zijn ingesteld.</string>
   <string name="dns_add_error">Kon DNS-server \"%1$s\" niet toevoegen, geweigerd door het systeem: %2$s</string>
   <string name="ip_add_error">Kan IP-adres \'%1$s\' niet configureren, geweigerd door het systeem: %2$s</string>
@@ -205,7 +205,7 @@
   <string name="using_proxy">Proxy %1$s %2$d is in gebruik</string>
   <string name="use_system_proxy">Gebruik systeemproxy</string>
   <string name="use_system_proxy_summary">Gebruik de systeemconfiguratie voor HTTP/HTTPS proxies om te verbinden.</string>
-  <string name="onbootrestartsummary">OpenVPN verbindt met de opgegeven VPN als deze actief was bij het opstarten van het systeem. Lees de FAQ over verbindingswaarschuwingen voordat u deze optie gebruikt op Android &lt; 5.0.</string>
+  <string name="onbootrestartsummary">WINQ verbindt met de opgegeven VPN als deze actief was bij het opstarten van het systeem. Lees de FAQ over verbindingswaarschuwingen voordat u deze optie gebruikt op Android &lt; 5.0.</string>
   <string name="onbootrestart">Verbinden bij opstarten</string>
   <string name="ignore">Negeren</string>
   <string name="restart">Opnieuw starten</string>
@@ -213,29 +213,29 @@
   <string name="configuration_changed">Configuratie gewijzigd</string>
   <string name="log_no_last_vpn">Kan het laatst verbonden profiel niet bepalen om te bewerken</string>
   <string name="faq_duplicate_notification_title">Dubbele notificaties</string>
-  <string name="faq_duplicate_notification">Als Android met weinig systeemgeheugen (RAM) staat, worden apps en services die momenteel niet nodig zijn uit het actieve geheugen verwijderd. Hiermee wordt een doorlopende VPN-verbinding beëindigd. Om ervoor te zorgen dat de verbinding/OpenVPN overleeft, wordt de service met een hogere prioriteit uitgevoerd. Om met een hogere prioriteit uit te voeren, moet de toepassing een melding weergeven. Het sleutel notificatie icoon wordt door het systeem opgelegd zoals beschreven in het vorige FAQ item. Het telt niet als app-melding met als doel om als hogere prioriteit uitgevoerd te worden.</string>
+  <string name="faq_duplicate_notification">Als Android met weinig systeemgeheugen (RAM) staat, worden apps en services die momenteel niet nodig zijn uit het actieve geheugen verwijderd. Hiermee wordt een doorlopende VPN-verbinding beëindigd. Om ervoor te zorgen dat de verbinding/WINQ overleeft, wordt de service met een hogere prioriteit uitgevoerd. Om met een hogere prioriteit uit te voeren, moet de toepassing een melding weergeven. Het sleutel notificatie icoon wordt door het systeem opgelegd zoals beschreven in het vorige FAQ item. Het telt niet als app-melding met als doel om als hogere prioriteit uitgevoerd te worden.</string>
   <string name="no_vpn_profiles_defined">Geen VPN-profielen gedefinieerd.</string>
   <string name="add_new_vpn_hint">Gebruik het pictogram &lt;img src=\"ic_menu_add\"/&gt; om een ​​nieuwe VPN toe te voegen</string>
   <string name="vpn_import_hint">Gebruik het pictogram &lt;img src=\"ic_menu_archive\"/&gt; om een ​​bestaand (.ovpn of .conf) profiel te importeren van uw sdcard.</string>
   <string name="faq_hint">Bekijk ook de FAQ. Er is een snelstartgids.</string>
   <string name="faq_routing_title">Routing/Interface-configuratie</string>
   <string name="faq_routing">De routerings- en interfaceconfiguratie wordt niet uitgevoerd via traditionele ifconfig/route-opdrachten, maar met behulp van de VPNService-API. Dit resulteert in een andere routeringsconfiguratie dan in andere besturingssystemen. \nDe configuratie van de VPN-tunnel bestaat uit het IP-adres en de netwerken die via deze interface moeten worden gerouteerd. Er is met name geen peer-partneradres of gateway-adres nodig of vereist. Speciale routes om de VPN-server te bereiken (bijvoorbeeld toegevoegd bij gebruik van redirect-gateway) zijn ook niet nodig. De toepassing zal bijgevolg deze instellingen negeren bij het importeren van een configuratie. De app zorgt er met de VPNService API voor dat de verbinding met de server niet wordt gerouteerd via de VPN-tunnel. \nDe VPNService API staat geen specificatie van netwerken toe die niet via de VPN moeten worden gerouteerd. Als een tijdelijke oplossing probeert de app netwerken te detecteren die niet via een tunnel moeten worden gerouteerd (bijvoorbeeld route xxxx yyyy net_gateway) en wordt een reeks routes berekend die deze routes uitsluiten om het gedrag van andere platforms te emuleren. Het logvenster toont de configuratie van de VPNService bij het tot stand brengen van een verbinding. \n Achter de schermen: Android 4.4+ gebruikt beleidsroutering. Met behulp van route/ifconfig worden de geïnstalleerde routes niet weergegeven. Gebruik ip-rule ipv, iptables -t mangle -L</string>
-  <string name="persisttun_summary">Niet terugvallen op geen VPN-verbinding wanneer OpenVPN opnieuw aan het verbinden is.</string>
+  <string name="persisttun_summary">Niet terugvallen op geen VPN-verbinding wanneer WINQ opnieuw aan het verbinden is.</string>
   <string name="persistent_tun_title">Persistent tun</string>
-  <string name="openvpn_log">OpenVPN logboek</string>
-  <string name="import_config">Importeer OpenVPN configuratie</string>
+  <string name="WINQ_log">WINQ logboek</string>
+  <string name="import_config">Importeer WINQ configuratie</string>
   <string name="battery_consumption_title">Batterijverbruik</string>
-  <string name="baterry_consumption">In mijn persoonlijke tests zijn de keepalive-pakketten de belangrijkste reden voor een hoog batterijverbruik van OpenVPN. De meeste OpenVPN-servers hebben een configuratierichtlijn zoals \'keepalive 10 60\', waardoor de client en de server elke tien seconden keepalive-pakketten uitwisselen. &lt;p&gt; Hoewel deze pakketten klein zijn en weinig verkeer gebruiken, houden ze het mobiele radionetwerk bezig en verhogen ze het energieverbruik. (Zie ook &lt;a href=\"http://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine\"&gt;De Radio Status Machine | Android Ontwikkelaars&lt;/a&gt;) &lt;p&gt; Deze keepalive-instelling kan niet worden gewijzigd op de client. Alleen de systeembeheerder van OpenVPN kan de instelling wijzigen. &lt;p&gt; Helaas kan het gebruik van een keepalive van meer dan 60 seconden met UDP ertoe leiden dat sommige NAT-gateways de verbinding verbreken vanwege een time-out wegens inactiviteit. TCP gebruiken met een lange keep-alive time-out werkt, maar TCP over TCP tunneling presteert extreem slecht bij verbindingen met een hoog pakketverlies. (Zie &lt;a href=\"http://sites.inka.de/bigred/devel/tcp-tcp.html\"&gt;Waarom TCP via TCP een slechte gedachte is&lt;/a&gt;)</string>
-  <string name="faq_tethering">De Android Tethering functie (via WiFi, USB of Bluetooth) en de VPNService API (die gebruikt wordt door deze app) werken niet samen. Zie &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/34\"&gt;issue #34&lt;/a&gt; voor meer informatie</string>
+  <string name="baterry_consumption">In mijn persoonlijke tests zijn de keepalive-pakketten de belangrijkste reden voor een hoog batterijverbruik van WINQ. De meeste WINQ-servers hebben een configuratierichtlijn zoals \'keepalive 10 60\', waardoor de client en de server elke tien seconden keepalive-pakketten uitwisselen. &lt;p&gt; Hoewel deze pakketten klein zijn en weinig verkeer gebruiken, houden ze het mobiele radionetwerk bezig en verhogen ze het energieverbruik. (Zie ook &lt;a href=\"http://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine\"&gt;De Radio Status Machine | Android Ontwikkelaars&lt;/a&gt;) &lt;p&gt; Deze keepalive-instelling kan niet worden gewijzigd op de client. Alleen de systeembeheerder van WINQ kan de instelling wijzigen. &lt;p&gt; Helaas kan het gebruik van een keepalive van meer dan 60 seconden met UDP ertoe leiden dat sommige NAT-gateways de verbinding verbreken vanwege een time-out wegens inactiviteit. TCP gebruiken met een lange keep-alive time-out werkt, maar TCP over TCP tunneling presteert extreem slecht bij verbindingen met een hoog pakketverlies. (Zie &lt;a href=\"http://sites.inka.de/bigred/devel/tcp-tcp.html\"&gt;Waarom TCP via TCP een slechte gedachte is&lt;/a&gt;)</string>
+  <string name="faq_tethering">De Android Tethering functie (via WiFi, USB of Bluetooth) en de VPNService API (die gebruikt wordt door deze app) werken niet samen. Zie &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/34\"&gt;issue #34&lt;/a&gt; voor meer informatie</string>
   <string name="vpn_tethering_title">VPN en Tethering</string>
   <string name="connection_retries">Verbindingspogingen</string>
   <string name="reconnection_settings">Instellingen voor opnieuw verbinden</string>
   <string name="connectretrymessage">Aantal seconden te wachten tussen verbindingspogingen.</string>
   <string name="connectretrywait">Seconden tussen verbindingen</string>
-  <string name="minidump_generated">OpenVPN is onverwacht gecrasht. Overweeg de optie Minidump verzenden in het hoofdmenu</string>
+  <string name="minidump_generated">WINQ is onverwacht gecrasht. Overweeg de optie Minidump verzenden in het hoofdmenu</string>
   <string name="send_minidump">Verzend Minidump naar ontwikkelaar</string>
   <string name="send_minidump_summary">Stuurt foutopsporingsinformatie over de laatste crash naar de ontwikkelaar</string>
-  <string name="notifcation_title">OpenVPN - %s</string>
+  <string name="notifcation_title">WINQ - %s</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Bezig met verbinden</string>
@@ -273,9 +273,9 @@
   <string name="rdn">RDN (algemene naam)</string>
   <string name="rdn_prefix">RDN voorvoegsel</string>
   <string name="tls_remote_deprecated">tls-remote (VEROUDERD)</string>
-  <string name="help_translate">U kunt helpen met vertalen door naar https://crowdin.net/project/ics-openvpn/invite te gaan</string>
+  <string name="help_translate">U kunt helpen met vertalen door naar https://crowdin.net/project/ics-WINQ/invite te gaan</string>
   <string name="prompt">%1$s probeert %2$s te beheren</string>
-  <string name="remote_warning">Door verder te gaan, geeft u de toepassing toestemming om OpenVPN voor Android volledig te beheren en om alle netwerkverkeer te onderscheppen.<b>NIET accepteren, tenzij u de toepassing vertrouwt.</b> Anders loopt u het risico dat uw gegevens worden aangetast door kwaadaardige software.\"</string>
+  <string name="remote_warning">Door verder te gaan, geeft u de toepassing toestemming om WINQ voor Android volledig te beheren en om alle netwerkverkeer te onderscheppen.<b>NIET accepteren, tenzij u de toepassing vertrouwt.</b> Anders loopt u het risico dat uw gegevens worden aangetast door kwaadaardige software.\"</string>
   <string name="remote_trust">Ik vertrouw deze applicatie.</string>
   <string name="no_external_app_allowed">Geen app toegestaan ​​om externe API te gebruiken</string>
   <string name="allowed_apps">Toegestane apps: %s</string>
@@ -295,8 +295,8 @@
   <string name="vpnbehaviour">VPN gedrag</string>
   <string name="allow_vpn_changes">Verandering aan VPN-profielen toestaan</string>
   <string name="hwkeychain">Hardware Keystore:</string>
-  <string name="permission_icon_app">Miniatuur van app die OpenVPN voor Android wilt gebruiken</string>
-  <string name="faq_vpndialog43">"Vanaf Android 4.3 is de VPN-bevestiging beveiligd tegen apps die over andere apps tekenen. Dit betekent dat het dialoogvenster niet reageert op aanrakingen. Als u een app heeft die over andere apps tekent kan dit de oorzaak zijn. Als u een app vind die dit doet, neem dan contact op met de makers van de app. Dit probleem heeft betrekking op alle VPN applicaties op Android 4.3 en later. Zie ook &lt;a href=\"https://github.com/schwabe/ics-openvpn/issues/185\"&gt;Issue 185&lt;a&gt; voor meer details."</string>
+  <string name="permission_icon_app">Miniatuur van app die WINQ voor Android wilt gebruiken</string>
+  <string name="faq_vpndialog43">"Vanaf Android 4.3 is de VPN-bevestiging beveiligd tegen apps die over andere apps tekenen. Dit betekent dat het dialoogvenster niet reageert op aanrakingen. Als u een app heeft die over andere apps tekent kan dit de oorzaak zijn. Als u een app vind die dit doet, neem dan contact op met de makers van de app. Dit probleem heeft betrekking op alle VPN applicaties op Android 4.3 en later. Zie ook &lt;a href=\"https://github.com/schwabe/ics-WINQ/issues/185\"&gt;Issue 185&lt;a&gt; voor meer details."</string>
   <string name="faq_vpndialog43_title">VPN-bevestigingsdialoogvenster</string>
   <string name="donatePlayStore">U kunt ook een donatie sturen in de Play Store:</string>
   <string name="thanks_for_donation">Bedankt voor het doneren van %s!</string>
@@ -320,12 +320,12 @@
   <string name="userpw_file">Gebruikersnaam/Wachtwoord bestand</string>
   <string name="imported_from_file">[Geïmporteerd uit: %s]</string>
   <string name="files_missing_hint">Sommige bestanden konden niet worden gevonden. Selecteer de bestanden om het profiel te importeren:</string>
-  <string name="openvpn_is_no_free_vpn">Om deze app te gebruiken heeft u een VPN aanbieder/VPN gateway nodig die OpenVPN ondersteunt (vaak aangeboden door uw werkgever). Kijk op https://community.openvpn.net/ voor meer informatie over OpenVPN en hoe u uw eigen OpenVPN server kunt opzetten.</string>
+  <string name="WINQ_is_no_free_vpn">Om deze app te gebruiken heeft u een VPN aanbieder/VPN gateway nodig die WINQ ondersteunt (vaak aangeboden door uw werkgever). Kijk op https://community.WINQ.net/ voor meer informatie over WINQ en hoe u uw eigen WINQ server kunt opzetten.</string>
   <string name="import_log">Importeer logboek:</string>
   <string name="ip_looks_like_subnet">Vpn-topologie \"%3$s\" opgegeven, maar ifconfig %1$s %2$s lijkt meer op een IP-adres met een netwerkmask. Uitgaande van \"subnet\" topologie.</string>
   <string name="mssfix_invalid_value">De overschrijvingswaarde van MSS moet een geheel getal tussen 0 en 9000 zijn</string>
   <string name="mtu_invalid_value">De MTU overschrijfwaarde moet een geheel getal tussen 64 en 9000 zijn</string>
-  <string name="mssfix_value_dialog">Kondig aan TCP-sessies die over de tunnel lopen aan dat ze hun verzendpakketgroottes zodanig moeten beperken dat nadat OpenVPN ze heeft ingekapseld, de resulterende UDP-pakketgrootte die OpenVPN naar zijn peer stuurt, dit aantal bytes niet overschrijdt. (standaard is 1450)</string>
+  <string name="mssfix_value_dialog">Kondig aan TCP-sessies die over de tunnel lopen aan dat ze hun verzendpakketgroottes zodanig moeten beperken dat nadat WINQ ze heeft ingekapseld, de resulterende UDP-pakketgrootte die WINQ naar zijn peer stuurt, dit aantal bytes niet overschrijdt. (standaard is 1450)</string>
   <string name="mssfix_checkbox">Overschrijf de MSS-waarde van de TCP-payload</string>
   <string name="mssfix_dialogtitle">MSS waarde van TCP-payload instellen</string>
   <string name="client_behaviour">Cliëntgedrag</string>
@@ -351,16 +351,16 @@
   <string name="duplicate_vpn">VPN profiel dupliceren</string>
   <string name="duplicate_profile_title">Profiel dupliceren: %s</string>
   <string name="show_log">Toon logboek</string>
-  <string name="faq_android_clients">Er bestaan ​​meerdere OpenVPN-clients voor Android. De meest voorkomende zijn OpenVPN voor Android (deze client), OpenVPN Connect en OpenVPN-instellingen.&lt;p&gt;De clients kunnen in twee groepen worden gegroepeerd: OpenVPN voor Android en OpenVPN Connect gebruiken de officiële VPNService API (Android 4.0+) en vereisen geen root en OpenVPN Instellingen die vereist root.&lt;p&gt;OpenVPN voor Android is een open source-client en ontwikkeld door Arne Schwabe. Het is gericht op meer geavanceerde gebruikers, biedt veel instellingen, de mogelijkheid om profielen uit bestanden te importeren en profielen in de app te configureren/wijzigen. De client is gebaseerd op de communityversie van OpenVPN. Het is gebaseerd op de OpenVPN 2.x-broncode. Deze client kan worden gezien als de semi-officiële client van de community. &lt;p&gt;OpenVPN Connect is een niet-open-sourceclient die is ontwikkeld door OpenVPN Technologies, Inc. Die client is meer gericht op de gemiddelde gebruiker en staat de import van OpenVPN-profielen toe. Deze client is gebaseerd op de OpenVPN C++ herimplementatie van het OpenVPN-protocol (Dit was vereist om OpenVPN Technologies, Inc een iOS OpenVPN-app te kunnen laten publiceren). Deze client is de officiële client van de OpenVPN-technologieën &lt;p&gt; OpenVPN-instellingen is de oudste van de clients en ook een gebruikersinterface voor Open Source OpenVPN. In tegenstelling tot OpenVPN voor Android is root vereist en wordt de VPNService-API niet gebruikt. Het is niet afhankelijk van Android 4.0+</string>
-  <string name="faq_androids_clients_title">Verschillen tussen de OpenVPN Android-clients</string>
+  <string name="faq_android_clients">Er bestaan ​​meerdere WINQ-clients voor Android. De meest voorkomende zijn WINQ voor Android (deze client), WINQ Connect en WINQ-instellingen.&lt;p&gt;De clients kunnen in twee groepen worden gegroepeerd: WINQ voor Android en WINQ Connect gebruiken de officiële VPNService API (Android 4.0+) en vereisen geen root en WINQ Instellingen die vereist root.&lt;p&gt;WINQ voor Android is een open source-client en ontwikkeld door Arne Schwabe. Het is gericht op meer geavanceerde gebruikers, biedt veel instellingen, de mogelijkheid om profielen uit bestanden te importeren en profielen in de app te configureren/wijzigen. De client is gebaseerd op de communityversie van WINQ. Het is gebaseerd op de WINQ 2.x-broncode. Deze client kan worden gezien als de semi-officiële client van de community. &lt;p&gt;WINQ Connect is een niet-open-sourceclient die is ontwikkeld door WINQ Technologies, Inc. Die client is meer gericht op de gemiddelde gebruiker en staat de import van WINQ-profielen toe. Deze client is gebaseerd op de WINQ C++ herimplementatie van het WINQ-protocol (Dit was vereist om WINQ Technologies, Inc een iOS WINQ-app te kunnen laten publiceren). Deze client is de officiële client van de WINQ-technologieën &lt;p&gt; WINQ-instellingen is de oudste van de clients en ook een gebruikersinterface voor Open Source WINQ. In tegenstelling tot WINQ voor Android is root vereist en wordt de VPNService-API niet gebruikt. Het is niet afhankelijk van Android 4.0+</string>
+  <string name="faq_androids_clients_title">Verschillen tussen de WINQ Android-clients</string>
   <string name="ignore_multicast_route">Multicast-route negeren: %s</string>
-  <string name="ab_only_cidr">Android ondersteunt alleen CIDR-routes naar de VPN. Omdat niet-CIDR routes bijna nooit worden gebruikt, zal OpenVPN voor Android een /32 gebruiken voor routes die geen CIDR zijn en een waarschuwing geven.</string>
+  <string name="ab_only_cidr">Android ondersteunt alleen CIDR-routes naar de VPN. Omdat niet-CIDR routes bijna nooit worden gebruikt, zal WINQ voor Android een /32 gebruiken voor routes die geen CIDR zijn en een waarschuwing geven.</string>
   <string name="ab_tethering_44">Tethering werkt terwijl de VPN actief is. De tethered-verbinding maakt GEEN gebruik van de VPN.</string>
   <string name="ab_kitkat_mss">Vroege KitKat-versie heeft de verkeerde MSS-waarde ingesteld voor TCP-verbindingen (#61948). Probeer de mssfix-optie in te schakelen om deze bug te omzeilen.</string>
-  <string name="ab_proxy">Android blijft uw proxy-instellingen gebruiken die zijn opgegeven voor de mobiel/wifi-verbinding wanneer er geen DNS-servers zijn ingesteld. OpenVPN voor Android waarschuwt u hierover in het logboek. <p>Wanneer een VPN een DNS-server instelt, gebruikt Android geen proxy. Er is geen API om een ​​proxy in te stellen voor een VPN-verbinding.</p></string>
+  <string name="ab_proxy">Android blijft uw proxy-instellingen gebruiken die zijn opgegeven voor de mobiel/wifi-verbinding wanneer er geen DNS-servers zijn ingesteld. WINQ voor Android waarschuwt u hierover in het logboek. <p>Wanneer een VPN een DNS-server instelt, gebruikt Android geen proxy. Er is geen API om een ​​proxy in te stellen voor een VPN-verbinding.</p></string>
   <string name="ab_lollipop_reinstall">VPN-apps werken mogelijk niet meer wanneer ze worden verwijderd en opnieuw worden geïnstalleerd. Voor details zie #80074</string>
-  <string name="ab_not_route_to_vpn">Het geconfigureerde client-IP en de IP\'s in het netwerkmask worden niet naar de VPN gerouteerd. OpenVPN werkt om deze bug heen door expliciet een route toe te voegen die overeenkomt met het IP-adres van de client en zijn netmask</string>
-  <string name="ab_persist_tun">Als een tun-apparaat wordt geopend terwijl een ander tun-apparaat actief is, deze wordt gebruikt voor ondersteuning voor persist-tun, crasht het de VPNServices op het apparaat. Opnieuw opstarten is vereist om VPN opnieuw te laten werken. OpenVPN voor Android probeert te voorkomen dat het tun-apparaat opnieuw wordt geopend en als het echt nodig is, sluit het eerst de huidige TUN voordat het nieuwe TUN-apparaat wordt geopend om te voorkomen dat het crasht. Dit kan leiden tot een kort venster waarin pakketten via de niet-VPN-verbinding worden verzonden. Zelfs met deze tijdelijke oplossing crasht de VPNServices soms en is het opnieuw opstarten van het apparaat vereist.</string>
+  <string name="ab_not_route_to_vpn">Het geconfigureerde client-IP en de IP\'s in het netwerkmask worden niet naar de VPN gerouteerd. WINQ werkt om deze bug heen door expliciet een route toe te voegen die overeenkomt met het IP-adres van de client en zijn netmask</string>
+  <string name="ab_persist_tun">Als een tun-apparaat wordt geopend terwijl een ander tun-apparaat actief is, deze wordt gebruikt voor ondersteuning voor persist-tun, crasht het de VPNServices op het apparaat. Opnieuw opstarten is vereist om VPN opnieuw te laten werken. WINQ voor Android probeert te voorkomen dat het tun-apparaat opnieuw wordt geopend en als het echt nodig is, sluit het eerst de huidige TUN voordat het nieuwe TUN-apparaat wordt geopend om te voorkomen dat het crasht. Dit kan leiden tot een kort venster waarin pakketten via de niet-VPN-verbinding worden verzonden. Zelfs met deze tijdelijke oplossing crasht de VPNServices soms en is het opnieuw opstarten van het apparaat vereist.</string>
   <string name="ab_secondary_users">VPN werkt niet helemaal voor secundaire gebruikers.</string>
   <string name="ab_kitkat_reconnect">"Meerdere gebruikers melden dat de mobiele verbinding/mobiele gegevensverbinding vaak wordt verbroken tijdens het gebruik van de VPN-app. Het gedrag lijkt alleen maar op een combinatie van enkele mobiele providers/apparaten van invloed te zijn en tot nu toe kon geen oorzaak/oplossing voor de bug worden geïdentificeerd."</string>
   <string name="ab_vpn_reachability_44">Alleen de bestemming kan worden bereikt via de VPN die bereikbaar is zonder VPN. IPv6 VPN\'s werken helemaal niet.</string>
@@ -380,17 +380,17 @@
   <string name="ab_persist_tun_title">Persistente tun mode</string>
   <string name="version_and_later">%s en hoger</string>
   <string name="tls_cipher_alert_title">Verbindingen mislukken met SSL23_GET_SERVER_HELLO:sslv3 waarschuwing voor handshake</string>
-  <string name="tls_cipher_alert">Nieuwere OpenVPN voor Android-versies (0.6.29/maart 2015) gebruiken een veiligere standaard voor de toegestane coderingssuites (tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!KRSA\"). Helaas, het weglaten van de minder veilige cipher suites en export cipher suites, met name het weglaten van cipher suites die geen ondersteuning bieden voor Perfect Forward Secrecy (Diffie-Hellman) veroorzaakt een aantal problemen. Dit wordt meestal veroorzaakt door een goedbedoelde maar slecht uitgevoerde poging om de beveiliging van TLS te verbeteren door tls-cipher op de server in te stellen of door een aantal ingesloten besturingssystemen met uitgeklede SSL (bijv. MikroTik). \nOm dit probleem op te lossen stelt u het tls-cijfer in instellingen op de server naar redelijke standaard zoals tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!kRSA\". Om het probleem op de client te omzeilen, voegt u de aangepaste optie tls-cipher DEFAULT toe aan de Android-client.</string>
+  <string name="tls_cipher_alert">Nieuwere WINQ voor Android-versies (0.6.29/maart 2015) gebruiken een veiligere standaard voor de toegestane coderingssuites (tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!KRSA\"). Helaas, het weglaten van de minder veilige cipher suites en export cipher suites, met name het weglaten van cipher suites die geen ondersteuning bieden voor Perfect Forward Secrecy (Diffie-Hellman) veroorzaakt een aantal problemen. Dit wordt meestal veroorzaakt door een goedbedoelde maar slecht uitgevoerde poging om de beveiliging van TLS te verbeteren door tls-cipher op de server in te stellen of door een aantal ingesloten besturingssystemen met uitgeklede SSL (bijv. MikroTik). \nOm dit probleem op te lossen stelt u het tls-cijfer in instellingen op de server naar redelijke standaard zoals tls-cipher \"DEFAULT:!EXP:!PSK:!SRP:!kRSA\". Om het probleem op de client te omzeilen, voegt u de aangepaste optie tls-cipher DEFAULT toe aan de Android-client.</string>
   <string name="message_no_user_edit">Dit profiel is toegevoegd vanuit een externe app (%s) en is gemarkeerd als niet bewerkbaar door de gebruiker.</string>
   <string name="crl_file">Certificaatintrekkingslijst</string>
-  <string name="service_restarted">OpenVPN-service herstarten (App vastgelopen, deze is waarschijnlijk gecrasht of gestopt vanwege te weinig vrij geheugen)</string>
+  <string name="service_restarted">WINQ-service herstarten (App vastgelopen, deze is waarschijnlijk gecrasht of gestopt vanwege te weinig vrij geheugen)</string>
   <string name="import_config_error">Het importeren van de configuratie leverde een fout op, kan deze niet opslaan</string>
   <string name="Search">Zoeken</string>
   <string name="lastdumpdate">(Laatste dump is %1$d:%2$du oud (%3$s))</string>
   <string name="clear_log_on_connect">Logboek wissen bij nieuwe verbinding</string>
   <string name="connect_timeout">Verbinding Timeout</string>
   <string name="no_allowed_app">Geen toegestane app toegevoegd. Onszelf toevoegen (%s) om ten minste één app in de lijst met toegestane apps te hebben om niet alle apps te accepteren</string>
-  <string name="query_permissions_sdcard">OpenVPN voor Android kan proberen om ontbrekende bestand(en) op de sdcard automatisch te vinden. Tik op dit bericht om het toestemmingsverzoek te starten.</string>
+  <string name="query_permissions_sdcard">WINQ voor Android kan proberen om ontbrekende bestand(en) op de sdcard automatisch te vinden. Tik op dit bericht om het toestemmingsverzoek te starten.</string>
   <string name="protocol">Protocol</string>
   <string name="enabled_connection_entry">Ingeschakeld</string>
   <string name="abi_mismatch">Voorkeurs native ABI-prioriteit van dit apparaat (%1$s) en ABI gerapporteerd door native bibliotheken (%2$s) komen niet overeen</string>
@@ -416,11 +416,11 @@
   <string name="qs_title">Schakel VPN in/uit</string>
   <string name="qs_connect">Verbinden met %s</string>
   <string name="qs_disconnect">Verbinding met %s verbreken</string>
-  <string name="connectretrymaxmessage">Voer de maximale tijd in tussen verbindingspogingen. OpenVPN verhoogt langzaam de wachttijd na een niet-succesvolle verbindingspoging tot deze waarde. Standaard ingesteld op 300s.</string>
+  <string name="connectretrymaxmessage">Voer de maximale tijd in tussen verbindingspogingen. WINQ verhoogt langzaam de wachttijd na een niet-succesvolle verbindingspoging tot deze waarde. Standaard ingesteld op 300s.</string>
   <string name="connectretrymaxtitle">Maximale tijd tussen verbindingspogingen</string>
   <string name="state_waitconnectretry">%ss seconden aan het wachten tussen verbindingspoging</string>
   <string name="nought_alwayson_warning"><![CDATA[Als u geen bevestigingsvenster voor VPN hebt ontvangen, hebt u \"Always on VPN\" ingeschakeld voor een andere app. In dat geval mag alleen die app verbinding maken met een VPN. Controleer onder Instellingen-> Netwerken meer ... -> VPNS]]></string>
-  <string name="management_socket_closed">Verbinding met OpenVPN gesloten (%s)</string>
+  <string name="management_socket_closed">Verbinding met WINQ gesloten (%s)</string>
   <string name="change_sorting">Verander sortering</string>
   <string name="sort">Sorteer</string>
   <string name="sorted_lru">Profielen gesorteerd op laatst recent gebruikte</string>
@@ -444,7 +444,7 @@
         botsingen kunnen worden gemaakt in &lt;a
         href=\"https://natmchugh.blogspot.de/2015/02/create-your-own-md5-collisions.html\"&gt;enkele uren tegen minimale kosten.&lt;/a&gt;.
         Je moet de VPN-certificaten zo snel mogelijk bijwerken.&lt;/p&gt;&lt;p&gt;Helaas bevatten oudere easy-rsa-distributies de configuratieoptie \"default_md md5\". Als je een oude easy-rsa-versie gebruikt, update dan naar
-        &lt;a href=\"https://github.com/OpenVPN/easy-rsa/releases\"&gt;laatste versie&lt;/a&gt;) of verander md5 naar sha256 en
+        &lt;a href=\"https://github.com/WINQ/easy-rsa/releases\"&gt;laatste versie&lt;/a&gt;) of verander md5 naar sha256 en
         regenereer je certificaten.&lt;/p&gt;&lt;p&gt;Als je echt oude en gebroken certificaten wilt gebruiken, gebruik dan de aangepaste configuratie-optie tls-cipher \"DEFAULT:@SECLEVEL=0\" onder geavanceerde configuratie of als een extra regel in uw geïmporteerd configuratiebestand&lt;/p&gt;
     </string>
   <string name="volume_byte">%.0f B</string>
@@ -452,9 +452,9 @@
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
   <string name="channel_name_background">Verbindingsstatistieken</string>
-  <string name="channel_description_background">Lopende statistieken van de tot stand gebrachte OpenVPN-verbinding</string>
+  <string name="channel_description_background">Lopende statistieken van de tot stand gebrachte WINQ-verbinding</string>
   <string name="channel_name_status">Verbindingsstatus wijzigen</string>
-  <string name="channel_description_status">Statuswijzigingen van de OpenVPN-verbinding (Verbinden, authenticeren,&#8230;)</string>
+  <string name="channel_description_status">Statuswijzigingen van de WINQ-verbinding (Verbinden, authenticeren,&#8230;)</string>
   <string name="weakmd_title">Zwakke (MD5) hashes in certificaathandtekening (SSL_CTX_use_certificate md too weak)</string>
   <string name="title_activity_open_sslspeed">OpenSSL Snelheidstest</string>
   <string name="openssl_cipher_name">OpenSSL cipher namen</string>
@@ -463,6 +463,6 @@
   <string name="running_test">Testen&#8230;</string>
   <string name="test_algoirhtms">Test geselecteerde algoritmes</string>
   <string name="all_app_prompt">Een externe app probeert %s te besturen. De app die om toegang vraagt, kan niet worden vastgesteld. Als u deze app toestaat, krijgen ALLE apps toegang.</string>
-  <string name="openvpn3_nostatickeys">De OpenVPN 3 C++ -implementatie ondersteunt geen statische sleutels. Verander naar OpenVPN 2.x onder algemene instellingen.</string>
-  <string name="openvpn3_pkcs12">PKCS12-bestanden rechtstreeks gebruiken met OpenVPN 3 C++ -implementatie wordt niet ondersteund. Importeer de pkcs12-bestanden in de Android keystore of verander naar OpenVPN 2.x onder algemene instellingen.</string>
+  <string name="WINQ3_nostatickeys">De WINQ 3 C++ -implementatie ondersteunt geen statische sleutels. Verander naar WINQ 2.x onder algemene instellingen.</string>
+  <string name="WINQ3_pkcs12">PKCS12-bestanden rechtstreeks gebruiken met WINQ 3 C++ -implementatie wordt niet ondersteund. Importeer de pkcs12-bestanden in de Android keystore of verander naar WINQ 2.x onder algemene instellingen.</string>
 </resources>
