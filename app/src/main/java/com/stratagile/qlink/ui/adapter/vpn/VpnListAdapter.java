@@ -47,7 +47,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
     protected void convert(BaseViewHolder helper, VpnEntity item) {
         helper.setText(R.id.vpn_name, item.getVpnName());
         helper.addOnClickListener(R.id.freind_avater);
-        helper.setText(R.id.connect_times, item.getConnsuccessNum() + "/times");
+        helper.setText(R.id.connect_times, item.getConnsuccessNum() + "");
         helper.setText(R.id.price, item.getQlc() + " QLC/hour");
         helper.setText(R.id.tv_country, item.getCountry());
         ImageView avater = (ImageView) helper.getView(R.id.freind_avater);
@@ -81,10 +81,8 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
         if (item.isOnline()) {
             helper.setImageDrawable(R.id.friend_status, mContext.getResources().getDrawable(R.mipmap.icon_search));
             helper.setTextColor(R.id.vpn_name, mContext.getResources().getColor(R.color.color_333));
-//            helper.setImageDrawable(R.id.iv_vpn_avater, mContext.getResources().getDrawable(R.mipmap.icon_choose_a_vpn));
             //我的vpn资产
             if (item.getP2pId().equals(SpUtil.getString(mContext, ConstantValue.P2PID, ""))) {
-//                helper.setImageDrawable(R.id.iv_vpn_avater, mContext.getResources().getDrawable(R.mipmap.icon_my_vpn));
             }
             if (item.getUnReadMessageCount() != 0) {
                 helper.setImageDrawable(R.id.message_status, mContext.getResources().getDrawable(R.mipmap.icon_owner_message_two));
@@ -92,16 +90,9 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
             } else {
                 helper.setImageDrawable(R.id.message_status, mContext.getResources().getDrawable(R.mipmap.icon_owner_message));
             }
-//            helper.setVisible(R.id.ll_content, true);
-//            helper.setText(R.id.price, item.getQlc() + " QLC");
-//            helper.setText(R.id.max_connect, item.getConnectMaxnumber() + "");
         } else {
-//            avater.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_offline_default));
-//            helper.setVisible(R.id.ll_content, false);
             helper.setImageDrawable(R.id.message_status, mContext.getResources().getDrawable(R.mipmap.icon_owner_message_three));
-//            helper.setTextColor(R.id.vpn_name, mContext.getResources().getColor(R.color.color_a8a6a6));
             helper.setImageDrawable(R.id.friend_status, mContext.getResources().getDrawable(R.mipmap.icon_search_red));
-//            helper.setImageDrawable(R.id.iv_vpn_avater, mContext.getResources().getDrawable(R.mipmap.icon_offiline_vpn));
         }
         SwitchButton switchButton = helper.getView(R.id.switchBar);
         switchButton.setEnabled(true);
@@ -131,18 +122,6 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
             }
         });
         switchButton.setChecked(item.getIsConnected());
-        //自己的资产不能抢注，别人的资产可以抢注，不在乎别人的资产是否在线
-//        if (item.getP2pId().equals(SpUtil.getString(mContext, ConstantValue.P2PID, ""))) {
-//            helper.setImageDrawable(R.id.iv_vpn_status, mContext.getResources().getDrawable(R.mipmap.icon_seize));
-//        } else {
-//            if(ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false))
-//            {
-//                helper.setImageDrawable(R.id.iv_vpn_status, mContext.getResources().getDrawable(R.mipmap.icon_seize));
-//            }else{
-//                helper.setImageDrawable(R.id.iv_vpn_status, mContext.getResources().getDrawable(R.mipmap.icon_seize_two));
-//            }
-//
-//        }
     }
 
     public interface OnVpnOpreateListener {

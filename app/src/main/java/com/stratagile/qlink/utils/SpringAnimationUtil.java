@@ -58,4 +58,35 @@ public class SpringAnimationUtil {
                 .addEndListener(onAnimationEndListener)
                 .start();
     }
+    /**
+     * 旋转动画，退出
+     * @param springView
+     */
+    public static void endRotatoSpringViewAnimation(View springView, DynamicAnimation.OnAnimationEndListener onAnimationEndListener) {
+        SpringForce spring = new SpringForce(0f)
+                .setDampingRatio(0.6f)
+                .setStiffness(180f);
+        new SpringAnimation(springView, DynamicAnimation.ROTATION)
+                .setStartValue(90f)
+                .setSpring(spring)
+                .setMaxValue(110f)
+                .setMinValue(-10f)
+                .start();
+    }
+    /**
+     * 旋转动画，进入
+     * @param springView
+     */
+    public static void startRotatoSpringViewAnimation(View springView, DynamicAnimation.OnAnimationEndListener onAnimationEndListener) {
+        SpringForce spring = new SpringForce(90f)
+                .setDampingRatio(0.6f)
+                .setStiffness(180f);
+        new SpringAnimation(springView, DynamicAnimation.ROTATION)
+                .setStartValue(0f)
+                .setSpring(spring)
+                .setMaxValue(110f)
+                .setMinValue(-10f)
+                .start();
+    }
+
 }
