@@ -1664,8 +1664,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="Just_cost_QLC_Connect_NOW"><Data><![CDATA[<b>\%s\</b> QLC ödenecek.<br />Bağlanmak istiyor musunuz?]]></Data></string>
   <string name="total_successful_connection">Bağlantı Başarılı</string>
   <string name="Do_you_want_to_disconnect">Bağlantıyı koparmak istiyor musunuz?</string>
-  <string name="Please_disconnect_the_current_one_first">Lütfen önce mevcut olandan bağlantıyı koparın.</string>
-
-  <!--20180712待翻译-->
-  <string name="Deposit">Deposit 1 QLC for asset registration</string>
+  <string name="Please_disconnect_the_current_one_first">Lütfen önce mevcut olandan bağlantıyı koparın.</string>  <!--20180712待翻译-->
+  <string name="Deposit">Varlık kaydı için 1 QLC yükleyiniz</string>
 </resources>
