@@ -1038,6 +1038,10 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 return;
             }
             KLog.i(fileData);
+            if(!fileData.equals(vpnEntity.getProfileLocalPath()))
+            {
+                isUpdateConfigFile = true;
+            }
             Uri uri = new Uri.Builder().path(fileData).scheme("file").build();
             startConfigImport(uri);
         } else if (requestCode == IMPORT_PROFILE) {
