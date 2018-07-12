@@ -12,7 +12,7 @@
         android:layout_height="30dp"
         android:paddingTop="15px"
         android:background="@drawable/tablayout_background"
-        android:textSize="18px"
+        android:textSize="@dimen/sp9"
         android:paddingLeft="15px"
         android:gravity="left"
         android:fontFamily="@font/roboto_regular"
@@ -31,7 +31,7 @@
         android:drawablePadding="@dimen/x10"
         android:fontFamily="@font/roboto_regular"
         android:paddingLeft="15px"
-        android:textSize="28px"
+        android:textSize="@dimen/sp15"
         android:text="@string/choose_a_country"
         android:textColor="@color/white"></TextView>
 

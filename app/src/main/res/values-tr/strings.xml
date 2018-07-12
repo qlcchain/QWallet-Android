@@ -299,7 +299,7 @@
 
   <string name="chipher_dialog_message">OpenVPN tarafından kullanılan şifreleme algoritmasını girin. Varsayılan şifreyi kullanmak için boş bırakın.</string>
 
-  <string name="auth_dialog_message">OpenVPN için kullanılan kimlik doğrulama derlemesini girin. Varsayılan derlemeyi kullanmak için boş bırakın. </ String>
+  <string name="auth_dialog_message">OpenVPN için kullanılan kimlik doğrulama derlemesini girin. Varsayılan derlemeyi kullanmak için boş bırakın. </string>
 
   <string name="settings_auth">Kimlik Doğrulama/Şifreleme</string>
 
