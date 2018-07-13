@@ -208,13 +208,13 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     vpnEntity.setAddress(vpnListBean.getAddress());
                     vpnEntity.setP2pId(vpnListBean.getP2pId());
                     vpnEntity.setCountry(vpnListBean.getCountry());
+                    vpnEntity.setConnsuccessNum(vpnListBean.getConnsuccessNum());
+                    vpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
                     if (vpnListBean.getConnectNum() != 0) {
                         vpnEntity.setQlc((float) vpnListBean.getCost());
                         vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
                         vpnEntity.setAvatar(vpnListBean.getImgUrl());
                         vpnEntity.setP2pId(vpnListBean.getP2pId());
-                        vpnEntity.setConnsuccessNum(vpnListBean.getConnsuccessNum());
-                        vpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
                         vpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
                         vpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
                     }
@@ -233,6 +233,8 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 tempVpnEntity.setFriendNum("");
                 tempVpnEntity.setGroupNum(-1);
                 tempVpnEntity.setQlc(0f);
+                tempVpnEntity.setConnsuccessNum(vpnListBean.getConnsuccessNum());
+                tempVpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
                 tempVpnEntity.setVpnName(vpnListBean.getVpnName());
                 tempVpnEntity.setQlc((float) vpnListBean.getCost());
                 tempVpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());

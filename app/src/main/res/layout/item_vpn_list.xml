@@ -35,7 +35,8 @@
                 android:layout_height="@dimen/x30"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/x5"
+                android:layout_marginBottom="@dimen/x2"
+                android:layout_marginRight="@dimen/x5"
                 android:layout_marginLeft="@dimen/x10" />
 
             <ImageView

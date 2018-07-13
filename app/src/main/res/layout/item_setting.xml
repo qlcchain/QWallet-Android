@@ -58,17 +58,17 @@
         <com.kyleduo.switchbutton.SwitchButton
             android:id="@+id/switchBar"
             android:layout_width="wrap_content"
-            app:kswBackColor="@color/white"
-            app:kswAnimationDuration="300"
-            app:kswTintColor="@color/content_background"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:kswBackDrawable="@drawable/flyme_back_drawable"
-            app:kswThumbDrawable="@drawable/flyme_thumb_drawable"
-            app:kswThumbMargin="@dimen/x8"
-            app:kswThumbHeight="@dimen/x30"
-            app:kswThumbRangeRatio="2.2"
-            app:kswThumbWidth="@dimen/x30"
-            android:layout_height="wrap_content" />
+            app:kswAnimationDuration="300"
+            android:checked="false"
+            app:kswBackColor="@color/white"
+            app:kswBackDrawable="@drawable/ios_back_drawable"
+            app:kswThumbDrawable="@drawable/ios_thumb_drawable"
+            app:kswThumbHeight="@dimen/x35"
+            app:kswThumbRangeRatio="2.0"
+            app:kswThumbWidth="@dimen/x35"
+            app:kswTintColor="@color/content_background" />
     </LinearLayout>
     <View
         android:id="@+id/view"

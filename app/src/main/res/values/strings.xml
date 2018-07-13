@@ -756,6 +756,7 @@
     <string name="Suggested_Tipping_Price_QLC">Suggested Tipping Price (QLC)</string>
     <string name="Maximum_number_of_Connections">Maximum number of Connections</string>
     <string name="register">register</string>
+    <string name="Register">REGISTER</string>
     <string name="some_speed_status">some speed status</string>
     <string name="Medium_Text">Medium Text</string>
     <string name="Filename">Filename</string>
@@ -846,8 +847,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="get_into_wallet_detail">Get into wallet detail</string>
     <string name="make_sure_you_backup_this">Make sure you backup this</string>
     <string name="choose_a_country">Choose a country</string>
-
-    <!--2018 07 09-->
     <string name="vpn_list">VPN List</string>
     <string name="REGISTER_YOUR_VPN_">REGISTER YOUR VPN</string>
     <string name="please_wait_vpn_online">please wait this vpn online</string>
@@ -857,4 +856,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="total_successful_connection">Successful Connections</string>
     <string name="Do_you_want_to_disconnect">Do you want to disconnect?</string>
     <string name="Please_disconnect_the_current_one_first">Please disconnect the current one first.</string>
+    <string name="Deposit">Deposit 1 QLC for asset registration</string>
 </resources>

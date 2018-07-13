@@ -84,6 +84,7 @@ import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
@@ -417,12 +418,14 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         myStatusFlag = myStatus;
         if (myStatus.getStatus() > 0) {
             this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search));
+            SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
             /*if(countDownTimerUtils != null)
             {
                 countDownTimerUtils.doOnce();
             }*/
         } else {
             this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search_red));
+            SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
         }
     }
 
@@ -602,7 +605,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void onBackPressed() {
-        if (downCHeckView != null && downCHeckView.isShown()) {
+        if (downCHeckView != null && downCHeckView.isShow()) {
             downCHeckView.close();
             return;
         }
@@ -640,7 +643,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(disconnectVpnSuccessBroadReceiver);
-        clearGuide();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -3,6 +3,7 @@ package com.stratagile.qlink.view;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.animation.DynamicAnimation;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.entity.ContinentAndCountry;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
+import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.UIUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -130,6 +132,10 @@ public class DownCheckView extends LinearLayout {
         });
     }
 
+    public boolean isShow() {
+        return isShow;
+    }
+
     public void close() {
         if (!isShow) {
             return;
@@ -145,19 +151,31 @@ public class DownCheckView extends LinearLayout {
     }
 
     private void imageOn() {
-        RotateAnimation animation = new RotateAnimation(0f, 90, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(200);
-        animation.setRepeatCount(0);//动画的重复次数
-        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
-        ivShow.startAnimation(animation);//开始动画
+        SpringAnimationUtil.startRotatoSpringViewAnimation(ivShow, new DynamicAnimation.OnAnimationEndListener() {
+            @Override
+            public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+            }
+        });
+//        RotateAnimation animation = new RotateAnimation(0f, 90, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+//        animation.setDuration(200);
+//        animation.setRepeatCount(0);//动画的重复次数
+//        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
+//        ivShow.startAnimation(animation);//开始动画
     }
 
     private void imageOff() {
-        Animation animation = new RotateAnimation(90, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(200);
-        animation.setRepeatCount(0);//动画的重复次数
-        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
-        ivShow.startAnimation(animation);//开始动画
+        SpringAnimationUtil.endRotatoSpringViewAnimation(ivShow, new DynamicAnimation.OnAnimationEndListener() {
+            @Override
+            public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+            }
+        });
+//        Animation animation = new RotateAnimation(90, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+//        animation.setDuration(200);
+//        animation.setRepeatCount(0);//动画的重复次数
+//        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
+//        ivShow.startAnimation(animation);//开始动画
     }
 
     public void setData(ArrayList<ContinentAndCountry.ContinentBean.CountryBean> contentList) {

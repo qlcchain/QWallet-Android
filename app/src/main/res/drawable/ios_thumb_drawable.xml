@@ -12,7 +12,7 @@
             <corners android:radius="99dp"/>
             <stroke
                 android:width="1.5dp"
-                android:color="#43d95d"/>
+                android:color="@color/color_online"/>
         </shape>
     </item>
     <item android:state_checked="true">
