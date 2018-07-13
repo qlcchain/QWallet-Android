@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
 
     <TextView
@@ -17,7 +16,9 @@
         android:background="@drawable/navigation_shape" />
 
     <RelativeLayout
+        android:id="@+id/rl1"
         android:layout_width="match_parent"
+        android:layout_below="@+id/status_bar"
         android:background="@drawable/navigation_shape"
         android:layout_height="@dimen/x128">
         <ImageView
@@ -62,14 +63,17 @@
     </RelativeLayout>
 
     <com.stratagile.qlink.view.NoScrollViewPager
+        android:layout_below="@+id/rl1"
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_above="@+id/rl2"
+        android:layout_height="match_parent">
 
     </com.stratagile.qlink.view.NoScrollViewPager>
 
     <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x100">
         <com.stratagile.qlink.view.BottomNavigationViewEx
@@ -101,5 +105,9 @@
                 android:layout_weight="1"/>
         </LinearLayout>
     </RelativeLayout>
-
-</LinearLayout>
+    <com.stratagile.qlink.view.DownCheckView
+        android:layout_below="@+id/status_bar"
+        android:id="@+id/downCHeckView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

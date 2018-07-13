@@ -698,20 +698,11 @@ public class Qsdk {
 
     public void getFriendSharedVpnInfo(String friendNum, int status) {
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+        boolean hasVpn = false;
         if (status > 0) {
-//            QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.allVpnBasicInfoReq, new HashMap());
             for (VpnEntity vpnEntity : vpnEntityList) {
                 if (vpnEntity.getP2pId() != null && vpnEntity.getP2pId().contains(friendNum)) {
-//                    if (vpnEntity.getConnectMaxnumber() == 0) {
-//                        //获取该好友分享的WiFi的详情
-//                        Map<String, String> infoMap = new HashMap<>();
-//                        infoMap.put("vpnName", vpnEntity.getVpnName());
-//                        infoMap.put("p2pId", vpnEntity.getP2pId());
-//                        LogUtil.addLog("要获取信息的资产信息为：" + vpnEntity.toString(), getClass().getSimpleName());
-//                        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnBasicInfoReq, infoMap);
-//                    } else {
-//
-//                    }
+                    hasVpn = true;
                     KLog.i("friendNum和数据库的数据匹配成功");
                     KLog.i("friendNum=" + friendNum);
                     KLog.i("将" + vpnEntity.getVpnName() + "的在线状态设置为在线");
@@ -723,9 +714,12 @@ public class Qsdk {
                     //break;
                 }
             }
-            EventBus.getDefault().post(new ArrayList<VpnEntity>());
+            if (hasVpn) {
+                EventBus.getDefault().post(new ArrayList<VpnEntity>());
+            }
         } else {
             for (VpnEntity vpnEntity : vpnEntityList) {
+                hasVpn = true;
                 if (vpnEntity.getP2pId().contains(friendNum)) {
                     vpnEntity.setOnline(false);
                     KLog.i("将" + vpnEntity.getVpnName() + "的在线状态设置为不在线");
@@ -733,7 +727,9 @@ public class Qsdk {
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                 }
             }
-            EventBus.getDefault().post(new ArrayList<VpnEntity>());
+            if (hasVpn) {
+                EventBus.getDefault().post(new ArrayList<VpnEntity>());
+            }
         }
     }
 

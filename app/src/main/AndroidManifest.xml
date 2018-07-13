@@ -369,15 +369,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.setting.SettingsActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wordcup.WordCupIntroduceActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wordcup.WordCupGamesActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wordcup.WordCupBetActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.mainwallet.MainWalletActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.setting.SelectLanguageActivityActivity"
             android:screenOrientation="portrait"/>
         <activity-alias

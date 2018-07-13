@@ -38,21 +38,23 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         public final static Property AssetTranfer = new Property(13, double.class, "assetTranfer", false, "ASSET_TRANFER");
         public final static Property Avatar = new Property(14, String.class, "avatar", false, "AVATAR");
         public final static Property RegisterQlc = new Property(15, double.class, "registerQlc", false, "REGISTER_QLC");
-        public final static Property IsInMainWallet = new Property(16, boolean.class, "isInMainWallet", false, "IS_IN_MAIN_WALLET");
-        public final static Property UnReadMessageCount = new Property(17, int.class, "unReadMessageCount", false, "UN_READ_MESSAGE_COUNT");
-        public final static Property FriendNum = new Property(18, String.class, "friendNum", false, "FRIEND_NUM");
-        public final static Property Configuration = new Property(19, String.class, "configuration", false, "CONFIGURATION");
-        public final static Property VpnName = new Property(20, String.class, "vpnName", false, "VPN_NAME");
-        public final static Property P2pId = new Property(21, String.class, "p2pId", false, "P2P_ID");
-        public final static Property Address = new Property(22, String.class, "address", false, "ADDRESS");
-        public final static Property Type = new Property(23, int.class, "type", false, "TYPE");
-        public final static Property CurrentConnect = new Property(24, int.class, "currentConnect", false, "CURRENT_CONNECT");
-        public final static Property Qlc = new Property(25, float.class, "qlc", false, "QLC");
-        public final static Property IsConnected = new Property(26, boolean.class, "isConnected", false, "IS_CONNECTED");
-        public final static Property Online = new Property(27, boolean.class, "online", false, "ONLINE");
-        public final static Property IsLoadingAvater = new Property(28, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
-        public final static Property AvaterUpdateTime = new Property(29, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
-        public final static Property Price = new Property(30, float.class, "price", false, "PRICE");
+        public final static Property OnlineTime = new Property(16, int.class, "onlineTime", false, "ONLINE_TIME");
+        public final static Property ConnsuccessNum = new Property(17, int.class, "connsuccessNum", false, "CONNSUCCESS_NUM");
+        public final static Property IsInMainWallet = new Property(18, boolean.class, "isInMainWallet", false, "IS_IN_MAIN_WALLET");
+        public final static Property UnReadMessageCount = new Property(19, int.class, "unReadMessageCount", false, "UN_READ_MESSAGE_COUNT");
+        public final static Property FriendNum = new Property(20, String.class, "friendNum", false, "FRIEND_NUM");
+        public final static Property Configuration = new Property(21, String.class, "configuration", false, "CONFIGURATION");
+        public final static Property VpnName = new Property(22, String.class, "vpnName", false, "VPN_NAME");
+        public final static Property P2pId = new Property(23, String.class, "p2pId", false, "P2P_ID");
+        public final static Property Address = new Property(24, String.class, "address", false, "ADDRESS");
+        public final static Property Type = new Property(25, int.class, "type", false, "TYPE");
+        public final static Property CurrentConnect = new Property(26, int.class, "currentConnect", false, "CURRENT_CONNECT");
+        public final static Property Qlc = new Property(27, float.class, "qlc", false, "QLC");
+        public final static Property IsConnected = new Property(28, boolean.class, "isConnected", false, "IS_CONNECTED");
+        public final static Property Online = new Property(29, boolean.class, "online", false, "ONLINE");
+        public final static Property IsLoadingAvater = new Property(30, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
+        public final static Property AvaterUpdateTime = new Property(31, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
+        public final static Property Price = new Property(32, float.class, "price", false, "PRICE");
     }
 
 
@@ -84,21 +86,23 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
                 "\"ASSET_TRANFER\" REAL NOT NULL ," + // 13: assetTranfer
                 "\"AVATAR\" TEXT," + // 14: avatar
                 "\"REGISTER_QLC\" REAL NOT NULL ," + // 15: registerQlc
-                "\"IS_IN_MAIN_WALLET\" INTEGER NOT NULL ," + // 16: isInMainWallet
-                "\"UN_READ_MESSAGE_COUNT\" INTEGER NOT NULL ," + // 17: unReadMessageCount
-                "\"FRIEND_NUM\" TEXT," + // 18: friendNum
-                "\"CONFIGURATION\" TEXT," + // 19: configuration
-                "\"VPN_NAME\" TEXT," + // 20: vpnName
-                "\"P2P_ID\" TEXT," + // 21: p2pId
-                "\"ADDRESS\" TEXT," + // 22: address
-                "\"TYPE\" INTEGER NOT NULL ," + // 23: type
-                "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 24: currentConnect
-                "\"QLC\" REAL NOT NULL ," + // 25: qlc
-                "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 26: isConnected
-                "\"ONLINE\" INTEGER NOT NULL ," + // 27: online
-                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 28: isLoadingAvater
-                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 29: avaterUpdateTime
-                "\"PRICE\" REAL NOT NULL );"); // 30: price
+                "\"ONLINE_TIME\" INTEGER NOT NULL ," + // 16: onlineTime
+                "\"CONNSUCCESS_NUM\" INTEGER NOT NULL ," + // 17: connsuccessNum
+                "\"IS_IN_MAIN_WALLET\" INTEGER NOT NULL ," + // 18: isInMainWallet
+                "\"UN_READ_MESSAGE_COUNT\" INTEGER NOT NULL ," + // 19: unReadMessageCount
+                "\"FRIEND_NUM\" TEXT," + // 20: friendNum
+                "\"CONFIGURATION\" TEXT," + // 21: configuration
+                "\"VPN_NAME\" TEXT," + // 22: vpnName
+                "\"P2P_ID\" TEXT," + // 23: p2pId
+                "\"ADDRESS\" TEXT," + // 24: address
+                "\"TYPE\" INTEGER NOT NULL ," + // 25: type
+                "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 26: currentConnect
+                "\"QLC\" REAL NOT NULL ," + // 27: qlc
+                "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 28: isConnected
+                "\"ONLINE\" INTEGER NOT NULL ," + // 29: online
+                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 30: isLoadingAvater
+                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 31: avaterUpdateTime
+                "\"PRICE\" REAL NOT NULL );"); // 32: price
     }
 
     /** Drops the underlying database table. */
@@ -174,41 +178,43 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             stmt.bindString(15, avatar);
         }
         stmt.bindDouble(16, entity.getRegisterQlc());
-        stmt.bindLong(17, entity.getIsInMainWallet() ? 1L: 0L);
-        stmt.bindLong(18, entity.getUnReadMessageCount());
+        stmt.bindLong(17, entity.getOnlineTime());
+        stmt.bindLong(18, entity.getConnsuccessNum());
+        stmt.bindLong(19, entity.getIsInMainWallet() ? 1L: 0L);
+        stmt.bindLong(20, entity.getUnReadMessageCount());
  
         String friendNum = entity.getFriendNum();
         if (friendNum != null) {
-            stmt.bindString(19, friendNum);
+            stmt.bindString(21, friendNum);
         }
  
         String configuration = entity.getConfiguration();
         if (configuration != null) {
-            stmt.bindString(20, configuration);
+            stmt.bindString(22, configuration);
         }
  
         String vpnName = entity.getVpnName();
         if (vpnName != null) {
-            stmt.bindString(21, vpnName);
+            stmt.bindString(23, vpnName);
         }
  
         String p2pId = entity.getP2pId();
         if (p2pId != null) {
-            stmt.bindString(22, p2pId);
+            stmt.bindString(24, p2pId);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(23, address);
+            stmt.bindString(25, address);
         }
-        stmt.bindLong(24, entity.getType());
-        stmt.bindLong(25, entity.getCurrentConnect());
-        stmt.bindDouble(26, entity.getQlc());
-        stmt.bindLong(27, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(28, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(29, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(30, entity.getAvaterUpdateTime());
-        stmt.bindDouble(31, entity.getPrice());
+        stmt.bindLong(26, entity.getType());
+        stmt.bindLong(27, entity.getCurrentConnect());
+        stmt.bindDouble(28, entity.getQlc());
+        stmt.bindLong(29, entity.getIsConnected() ? 1L: 0L);
+        stmt.bindLong(30, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(31, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(32, entity.getAvaterUpdateTime());
+        stmt.bindDouble(33, entity.getPrice());
     }
 
     @Override
@@ -278,41 +284,43 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             stmt.bindString(15, avatar);
         }
         stmt.bindDouble(16, entity.getRegisterQlc());
-        stmt.bindLong(17, entity.getIsInMainWallet() ? 1L: 0L);
-        stmt.bindLong(18, entity.getUnReadMessageCount());
+        stmt.bindLong(17, entity.getOnlineTime());
+        stmt.bindLong(18, entity.getConnsuccessNum());
+        stmt.bindLong(19, entity.getIsInMainWallet() ? 1L: 0L);
+        stmt.bindLong(20, entity.getUnReadMessageCount());
  
         String friendNum = entity.getFriendNum();
         if (friendNum != null) {
-            stmt.bindString(19, friendNum);
+            stmt.bindString(21, friendNum);
         }
  
         String configuration = entity.getConfiguration();
         if (configuration != null) {
-            stmt.bindString(20, configuration);
+            stmt.bindString(22, configuration);
         }
  
         String vpnName = entity.getVpnName();
         if (vpnName != null) {
-            stmt.bindString(21, vpnName);
+            stmt.bindString(23, vpnName);
         }
  
         String p2pId = entity.getP2pId();
         if (p2pId != null) {
-            stmt.bindString(22, p2pId);
+            stmt.bindString(24, p2pId);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(23, address);
+            stmt.bindString(25, address);
         }
-        stmt.bindLong(24, entity.getType());
-        stmt.bindLong(25, entity.getCurrentConnect());
-        stmt.bindDouble(26, entity.getQlc());
-        stmt.bindLong(27, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(28, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(29, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(30, entity.getAvaterUpdateTime());
-        stmt.bindDouble(31, entity.getPrice());
+        stmt.bindLong(26, entity.getType());
+        stmt.bindLong(27, entity.getCurrentConnect());
+        stmt.bindDouble(28, entity.getQlc());
+        stmt.bindLong(29, entity.getIsConnected() ? 1L: 0L);
+        stmt.bindLong(30, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(31, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(32, entity.getAvaterUpdateTime());
+        stmt.bindDouble(33, entity.getPrice());
     }
 
     @Override
@@ -339,21 +347,23 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             cursor.getDouble(offset + 13), // assetTranfer
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // avatar
             cursor.getDouble(offset + 15), // registerQlc
-            cursor.getShort(offset + 16) != 0, // isInMainWallet
-            cursor.getInt(offset + 17), // unReadMessageCount
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // friendNum
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // configuration
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // vpnName
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // p2pId
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // address
-            cursor.getInt(offset + 23), // type
-            cursor.getInt(offset + 24), // currentConnect
-            cursor.getFloat(offset + 25), // qlc
-            cursor.getShort(offset + 26) != 0, // isConnected
-            cursor.getShort(offset + 27) != 0, // online
-            cursor.getShort(offset + 28) != 0, // isLoadingAvater
-            cursor.getLong(offset + 29), // avaterUpdateTime
-            cursor.getFloat(offset + 30) // price
+            cursor.getInt(offset + 16), // onlineTime
+            cursor.getInt(offset + 17), // connsuccessNum
+            cursor.getShort(offset + 18) != 0, // isInMainWallet
+            cursor.getInt(offset + 19), // unReadMessageCount
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // friendNum
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // configuration
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // vpnName
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // p2pId
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // address
+            cursor.getInt(offset + 25), // type
+            cursor.getInt(offset + 26), // currentConnect
+            cursor.getFloat(offset + 27), // qlc
+            cursor.getShort(offset + 28) != 0, // isConnected
+            cursor.getShort(offset + 29) != 0, // online
+            cursor.getShort(offset + 30) != 0, // isLoadingAvater
+            cursor.getLong(offset + 31), // avaterUpdateTime
+            cursor.getFloat(offset + 32) // price
         );
         return entity;
     }
@@ -376,21 +386,23 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         entity.setAssetTranfer(cursor.getDouble(offset + 13));
         entity.setAvatar(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setRegisterQlc(cursor.getDouble(offset + 15));
-        entity.setIsInMainWallet(cursor.getShort(offset + 16) != 0);
-        entity.setUnReadMessageCount(cursor.getInt(offset + 17));
-        entity.setFriendNum(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setConfiguration(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setVpnName(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setP2pId(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
-        entity.setAddress(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
-        entity.setType(cursor.getInt(offset + 23));
-        entity.setCurrentConnect(cursor.getInt(offset + 24));
-        entity.setQlc(cursor.getFloat(offset + 25));
-        entity.setIsConnected(cursor.getShort(offset + 26) != 0);
-        entity.setOnline(cursor.getShort(offset + 27) != 0);
-        entity.setIsLoadingAvater(cursor.getShort(offset + 28) != 0);
-        entity.setAvaterUpdateTime(cursor.getLong(offset + 29));
-        entity.setPrice(cursor.getFloat(offset + 30));
+        entity.setOnlineTime(cursor.getInt(offset + 16));
+        entity.setConnsuccessNum(cursor.getInt(offset + 17));
+        entity.setIsInMainWallet(cursor.getShort(offset + 18) != 0);
+        entity.setUnReadMessageCount(cursor.getInt(offset + 19));
+        entity.setFriendNum(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setConfiguration(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setVpnName(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setP2pId(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setAddress(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setType(cursor.getInt(offset + 25));
+        entity.setCurrentConnect(cursor.getInt(offset + 26));
+        entity.setQlc(cursor.getFloat(offset + 27));
+        entity.setIsConnected(cursor.getShort(offset + 28) != 0);
+        entity.setOnline(cursor.getShort(offset + 29) != 0);
+        entity.setIsLoadingAvater(cursor.getShort(offset + 30) != 0);
+        entity.setAvaterUpdateTime(cursor.getLong(offset + 31));
+        entity.setPrice(cursor.getFloat(offset + 32));
      }
     
     @Override

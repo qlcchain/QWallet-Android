@@ -21,6 +21,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
@@ -40,7 +41,6 @@ import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
-import com.stratagile.qlink.ui.activity.wordcup.WordCupIntroduceActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.view.NoScrollViewPager;
@@ -78,24 +78,20 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     TextView title;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tabLayout)
-    TextView tabLayout;
+    //    @BindView(R.id.tabLayout)
+//    TextView tabLayout;
     @BindView(R.id.viewPager)
     NoScrollViewPager viewPager;
 
     public static final int SELECT_CONTINENT = 4;
-    @BindView(R.id.iv_delete)
-    ImageView ivDelete;
-    @BindView(R.id.tv_play_win)
-    TextView tvPlayWin;
-    @BindView(R.id.rl_bannner)
-    RelativeLayout rlBannner;
     @BindView(R.id.view)
     View view;
-    @BindView(R.id.iv_world)
-    ImageView ivWorld;
-    @BindView(R.id.ll_select_country_guide)
-    LinearLayout llSelectCountryGuide;
+    @BindView(R.id.registerVpn)
+    TextView registerVpn;
+//    @BindView(R.id.iv_world)
+//    ImageView ivWorld;
+//    @BindView(R.id.ll_select_country_guide)
+//    LinearLayout llSelectCountryGuide;
 
     @Nullable
     @Override
@@ -107,6 +103,12 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         title.setText(getResources().getString(R.string.vpn));
         ArrayList<String> titles = new ArrayList<>();
         titles.add(ConstantValue.longcountry.toUpperCase());
+        if(ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false))
+        {
+            registerVpn.setVisibility(View.GONE);
+        }else{
+            registerVpn.setVisibility(View.VISIBLE);
+        }
 //        titles.add("UNREGISTERED");
 //        titles.add(getResources().getString(R.string.generalsettings));
 //        titles.add(getResources().getString(R.string.faq));
@@ -200,7 +202,14 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         });
         return view;
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ChangeTestUI(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
+        if (!SpUtil.getBoolean(getActivity(), ConstantValue.isMainNet, false)) {
+            registerVpn.setVisibility(View.VISIBLE);
+        } else {
+            registerVpn.setVisibility(View.GONE);
+        }
+    }
     private static final String FEATURE_TELEVISION = "android.hardware.type.television";
     private static final String FEATURE_LEANBACK = "android.software.leanback";
 
@@ -226,11 +235,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setVpnTitle(VpnTitle vpnTitle) {
-        tabLayout.setText(vpnTitle.getTitle().toUpperCase());
     }
 
     @Override
@@ -286,33 +290,48 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         }
         if (requestCode == SELECT_CONTINENT && resultCode == RESULT_OK) {
             String country = data.getStringExtra("country");
-            tabLayout.setText(country.toUpperCase());
+//            tabLayout.setText(country.toUpperCase());
             String continent = data.getStringExtra("continent");
             EventBus.getDefault().post(new SelectCountry(country, continent));
         }
     }
 
-    @OnClick(R.id.ll_select_country)
-    public void onViewClicked() {
-        Intent intent = new Intent(getActivity(), SelectContinentActivity.class);
-        intent.putExtra("country", tabLayout.getText().toString().toLowerCase());
-        startActivityForResult(intent, SELECT_CONTINENT);
-    }
+//    @OnClick(R.id.ll_select_country)
+//    public void onViewClicked() {
+//        Intent intent = new Intent(getActivity(), SelectContinentActivity.class);
+//        intent.putExtra("country", tabLayout.getText().toString().toLowerCase());
+//        startActivityForResult(intent, SELECT_CONTINENT);
+//    }
 
-    @OnClick({R.id.iv_delete, R.id.tv_play_win, R.id.rl_bannner, R.id.iv_world})
+    @OnClick({R.id.registerVpn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_delete:
-                rlBannner.setVisibility(View.GONE);
+            case R.id.registerVpn :
+                List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
+                    Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                    startActivityForResult(intent, START_CREATE_PASSWORD);
+                    return ;
+                }
+                if (walletList == null || walletList.size() == 0) {
+                    Intent intent = new Intent(getActivity(), NoWalletActivity.class);
+                    intent.putExtra("flag", "nowallet");
+                    startActivityForResult(intent, START_NO_WALLLET);
+                    return ;
+                }
+                if (ConstantValue.isShouldShowVertifyPassword) {
+                    Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                    startActivityForResult(intent, START_VERTIFY_PASSWORD);
+                    return ;
+                }
+                Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
+                intent.putExtra("flag", "");
+                startActivityForResult(intent, 0);
+                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 break;
-            case R.id.tv_play_win:
-                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
-                break;
-            case R.id.rl_bannner:
-                break;
-            case R.id.iv_world:
-                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
-                break;
+//            case R.id.iv_world:
+//                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));
+//                break;
             default:
                 break;
         }
@@ -326,29 +345,29 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     }
 
     private void showGuideViewSelectCountry() {
-        if (!GuideSpUtil.getBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, false)) {
-            GuideSpUtil.putBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(llSelectCountryGuide)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(true);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-                }
-
-                @Override
-                public void onDismiss() {
-                    EventBus.getDefault().post(new ShowGuide(1));
-                }
-            });
-
-            builder.addComponent(new ChooseCountryComponent());
-            Guide guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(getActivity());
-        }
+//        if (!GuideSpUtil.getBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, false)) {
+//            GuideSpUtil.putBoolean(getActivity(), GuideConstantValue.isShowChooseCountryGuide, true);
+//            GuideBuilder builder = new GuideBuilder();
+//            builder.setTargetView(llSelectCountryGuide)
+//                    .setAlpha(150)
+//                    .setHighTargetCorner(20)
+//                    .setOverlayTarget(false)
+//                    .setOutsideTouchable(true);
+//            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+//                @Override
+//                public void onShown() {
+//                }
+//
+//                @Override
+//                public void onDismiss() {
+//                    EventBus.getDefault().post(new ShowGuide(1));
+//                }
+//            });
+//
+//            builder.addComponent(new ChooseCountryComponent());
+//            Guide guide = builder.createGuide();
+//            guide.setShouldCheckLocInWindow(false);
+//            guide.show(getActivity());
+//        }
     }
 }

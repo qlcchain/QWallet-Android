@@ -30,7 +30,7 @@ public interface RegisteVpnContract {
         void registVpnSuccess();
         void onGetBalancelSuccess(Balance balance);
 
-        void updateVpnInfoSuccess();
+        void updateVpnInfoSuccess(String data);
     }
 
     interface RegisteVpnContractPresenter extends BasePresenter {

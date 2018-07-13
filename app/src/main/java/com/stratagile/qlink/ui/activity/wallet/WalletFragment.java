@@ -225,7 +225,10 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
     }
 
     private void preGetBalance(Wallet wallet) {
-        refreshLayout.setRefreshing(false);
+        if(refreshLayout != null)
+        {
+            refreshLayout.setRefreshing(false);
+        }
         this.wallet = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getActivity(), ConstantValue.currentWallet, 0));
         wallet = this.wallet;
         KLog.i("获取资产");

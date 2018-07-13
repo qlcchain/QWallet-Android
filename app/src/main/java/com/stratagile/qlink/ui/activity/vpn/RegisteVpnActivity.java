@@ -18,8 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -47,8 +45,6 @@ import com.stratagile.qlink.activities.DisconnectVPN;
 import com.stratagile.qlink.activities.FileSelect;
 import com.stratagile.qlink.activities.VPNPreferences;
 import com.stratagile.qlink.api.ExternalAppDatabase;
-import com.stratagile.qlink.api.transaction.SendBackWithTxId;
-import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.BroadCastAction;
@@ -73,12 +69,13 @@ import com.stratagile.qlink.ui.activity.vpn.component.DaggerRegisteVpnComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.RegisteVpnContract;
 import com.stratagile.qlink.ui.activity.vpn.module.RegisteVpnModule;
 import com.stratagile.qlink.ui.activity.vpn.presenter.RegisteVpnPresenter;
-import com.stratagile.qlink.ui.adapter.vpn.ContactCityAdapter;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LogUtil;
+import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.QlinkSeekBar;
 import com.stratagile.qlink.view.TestConnectDialog;
@@ -97,7 +94,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -195,9 +191,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     private boolean isUpdate = false;
     private TestConnectDialog testConnectDialog;
     private VpnProfile profile;
-
-    private ContactCityAdapter mAdapterContactCity;
-    private ContinentAndCountry.ContinentBean continentChose;
+    private int selectFlag = -1;
 
     /**
      * vpn的名字是否是自己曾经注册过的
@@ -235,8 +229,6 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
      */
     private boolean isUpdateConfigFile = false;
     private String continent;
-
-    private AlertDialog builderTips;
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -356,7 +348,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     }
 
 
-   //************************************当app为重新安装，或者app中没有改ovpn对应的profile文件时，通过ovpn来生成对应的profile文件*********//
+    //************************************当app为重新安装，或者app中没有改ovpn对应的profile文件时，通过ovpn来生成对应的profile文件*********//
 
     private String mEmbeddedPwFile;
     private String mAliasName = null;
@@ -815,16 +807,19 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
-                /*SelectCountryDialog.getInstance().createDialog(this).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
+                SelectCountryDialog.getInstance().createDialog(this, selectFlag).setSelectDelegate(new SelectCountryDialog.SelectDelegate() {
                     @Override
-                    public void onSelected(String  country) {
+                    public void onSelected(String  country,int selectIndex) {
+                        etCountry.setText(country);
+                        continent = "";
+                        selectFlag = selectIndex;
+                        SelectCountryDialog.getInstance().hideDialog();
                         KLog.i("选择了："+country);
                     }
-                });*/
-                //setSelectCountry();
-                Intent intent = new Intent(this, SelectContinentActivity.class);
+                });
+               /* Intent intent = new Intent(this, SelectContinentActivity.class);
                 intent.putExtra("country", ConstantValue.longcountry);
-                startActivityForResult(intent, SELECT_COUNTRY);
+                startActivityForResult(intent, SELECT_COUNTRY);*/
                 break;
             case R.id.et_configuration:
                 startActivityForResult(new Intent(this, FileChooseActivity.class), SELECT_PROFILE);
@@ -896,12 +891,14 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                         return;
                     }
                     if (vpnIsRegisted) {
-                        if (Float.parseFloat(etYourBet.getText().toString()) > Float.parseFloat(etAssetTranfer.getText().toString())) {
+                        ToastUtil.displayShortToast(getString(R.string.THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED).toLowerCase());
+                        return;
+                       /* if (Float.parseFloat(etYourBet.getText().toString()) > Float.parseFloat(etAssetTranfer.getText().toString())) {
                             showVpnAlreadyRegisterDialog();
                         } else {
                             //抢注册的qlc不够
                             ToastUtil.displayShortToast(getString(R.string.Your_bet_should_be_greater_than_the_current_asset_value));
-                        }
+                        }*/
                     } else {
                         if ((Float.parseFloat(etYourBet.getText().toString()) < Float.parseFloat(mbalance.getData().getQLC() + "")) && mbalance.getData().getGAS() > 0.0001) {
                             //可以正常注册
@@ -921,56 +918,6 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }
     }
 
-    private void setSelectCountry()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = View.inflate(this, R.layout.activity_select_country_dialog, null);
-        builder.setView(view);
-        builder.setCancelable(false);
-        Button btn_cancel = (Button) view.findViewById(R.id.bt_cancel);//取消按钮
-        btn_cancel.setText(R.string.back_btn);
-
-        Button btn_comfirm = (Button) view.findViewById(R.id.bt_continue);//确定按钮
-        btn_comfirm.setText(R.string.cancel_btn_dialog);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerSelView);
-        btn_cancel.setVisibility(View.GONE);
-        btn_comfirm.setVisibility(View.GONE);
-        builder.setCancelable(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Gson gson = new Gson();
-        ContinentAndCountry continentAndCountry = gson.fromJson(FileUtil.getJson(RegisteVpnActivity.this, "ContinentAndCountryDialogBean.json"), ContinentAndCountry.class);
-        for (int i = 0; i < continentAndCountry.getContinent().size(); i++) {
-            KLog.i("设置适配器。。。");
-            //Collections.sort(continentAndCountry.getContinent().get(i).getCountry());
-            continentChose = continentAndCountry.getContinent().get(i);
-            mAdapterContactCity = new ContactCityAdapter(continentAndCountry.getContinent().get(i).getCountry());
-            mAdapterContactCity.setSelectItem(-1);
-            recyclerView.setAdapter(mAdapterContactCity);
-            mAdapterContactCity.setOnItemChangeListener(new ContactCityAdapter.OnItemChangeListener() {
-                @Override
-                public void onItemChange(int position) {
-
-                    KLog.i("选择了："+position);
-                }
-            });
-        }
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builderTips.dismiss();
-            }
-        });
-        btn_comfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builderTips.dismiss();
-            }
-        });
-        title.setText(R.string.unlock_wallet);
-        builderTips = builder.create();
-        builderTips.setCanceledOnTouchOutside(true);
-        builderTips.show();
-    }
     private void startUpdateVpnInfo() {
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnEntity.getVpnName());
@@ -1346,12 +1293,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             vpnIsRegisted = false;
 
         } else {
+            ToastUtil.displayShortToast(getString(R.string.THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED).toLowerCase());
             vpnIsRegisted = true;
-            if (getIntent().getStringExtra("flag").equals("update")) {
+           /* if (getIntent().getStringExtra("flag").equals("update")) {
 
             } else {
                 etAssetTranfer.setText(verifyVpn.getData().getQlc() + "");
-            }
+            }*/
         }
     }
 
@@ -1736,9 +1684,11 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     }
 
     @Override
-    public void updateVpnInfoSuccess() {
+    public void updateVpnInfoSuccess(String data) {
         closeProgressDialog();
         KLog.i(vpnEntity.toString());
+        vpnEntity.setCountry(data);
+        etCountry.setText(vpnEntity.getCountry());
         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
         //更新sd卡资产数据begin
         MyAsset myAsset = new MyAsset();

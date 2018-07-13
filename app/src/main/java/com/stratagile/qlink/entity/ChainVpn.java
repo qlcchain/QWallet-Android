@@ -56,6 +56,25 @@ public class ChainVpn extends BaseBack {
             private int connectNum;
             private double bandWidth;
 
+            public int getOnlineTime() {
+                return onlineTime;
+            }
+
+            public void setOnlineTime(int onlineTime) {
+                this.onlineTime = onlineTime;
+            }
+
+            public int getConnsuccessNum() {
+                return connsuccessNum;
+            }
+
+            public void setConnsuccessNum(int connsuccessNum) {
+                this.connsuccessNum = connsuccessNum;
+            }
+
+            private int onlineTime;
+            private int connsuccessNum;
+
             public String getProfileLocalPath() {
                 return profileLocalPath;
             }

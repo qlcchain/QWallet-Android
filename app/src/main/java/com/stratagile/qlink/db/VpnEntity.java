@@ -22,46 +22,9 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     @Id(autoincrement = true)
     private Long id;
     /**
-     *vpn注册的所在的国家
+     * vpn注册的所在的国家
      */
     private String country;
-
-    @Override
-    public String toString() {
-        return "VpnEntity{" +
-                "id=" + id +
-                ", country='" + country + '\'' +
-                ", userId='" + userId + '\'' +
-                ", profileLocalPath='" + profileLocalPath + '\'' +
-                ", password='" + password + '\'' +
-                ", privateKeyPassword='" + privateKeyPassword + '\'' +
-                ", profileUUid='" + profileUUid + '\'' +
-                ", ipV4Address='" + ipV4Address + '\'' +
-                ", continent='" + continent + '\'' +
-                ", username='" + username + '\'' +
-                ", groupNum=" + groupNum +
-                ", bandwidth='" + bandwidth + '\'' +
-                ", connectMaxnumber=" + connectMaxnumber +
-                ", assetTranfer=" + assetTranfer +
-                ", avatar='" + avatar + '\'' +
-                ", registerQlc=" + registerQlc +
-                ", unReadMessageCount=" + unReadMessageCount +
-                ", friendNum='" + friendNum + '\'' +
-                ", configuration='" + configuration + '\'' +
-                ", vpnName='" + vpnName + '\'' +
-                ", p2pId='" + p2pId + '\'' +
-                ", address='" + address + '\'' +
-                ", type=" + type +
-                ", currentConnect=" + currentConnect +
-                ", qlc=" + qlc +
-                ", isConnected=" + isConnected +
-                ", online=" + online +
-                ", isLoadingAvater=" + isLoadingAvater +
-                ", avaterUpdateTime=" + avaterUpdateTime +
-                ", price=" + price +
-                ", isInMainWallet=" + isInMainWallet +
-                '}';
-    }
 
     protected VpnEntity(Parcel in) {
         if (in.readByte() == 0) {
@@ -84,6 +47,9 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         assetTranfer = in.readDouble();
         avatar = in.readString();
         registerQlc = in.readDouble();
+        onlineTime = in.readInt();
+        connsuccessNum = in.readInt();
+        isInMainWallet = in.readByte() != 0;
         unReadMessageCount = in.readInt();
         friendNum = in.readString();
         configuration = in.readString();
@@ -98,7 +64,6 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         isLoadingAvater = in.readByte() != 0;
         avaterUpdateTime = in.readLong();
         price = in.readFloat();
-        isInMainWallet = in.readByte() != 0;
     }
 
     public static final Creator<VpnEntity> CREATOR = new Creator<VpnEntity>() {
@@ -113,6 +78,45 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         }
     };
 
+    @Override
+    public String toString() {
+        return "VpnEntity{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", userId='" + userId + '\'' +
+                ", profileLocalPath='" + profileLocalPath + '\'' +
+                ", password='" + password + '\'' +
+                ", privateKeyPassword='" + privateKeyPassword + '\'' +
+                ", profileUUid='" + profileUUid + '\'' +
+                ", ipV4Address='" + ipV4Address + '\'' +
+                ", continent='" + continent + '\'' +
+                ", username='" + username + '\'' +
+                ", groupNum=" + groupNum +
+                ", bandwidth='" + bandwidth + '\'' +
+                ", connectMaxnumber=" + connectMaxnumber +
+                ", assetTranfer=" + assetTranfer +
+                ", avatar='" + avatar + '\'' +
+                ", registerQlc=" + registerQlc +
+                ", onlineTime=" + onlineTime +
+                ", connsuccessNum=" + connsuccessNum +
+                ", isInMainWallet=" + isInMainWallet +
+                ", unReadMessageCount=" + unReadMessageCount +
+                ", friendNum='" + friendNum + '\'' +
+                ", configuration='" + configuration + '\'' +
+                ", vpnName='" + vpnName + '\'' +
+                ", p2pId='" + p2pId + '\'' +
+                ", address='" + address + '\'' +
+                ", type=" + type +
+                ", currentConnect=" + currentConnect +
+                ", qlc=" + qlc +
+                ", isConnected=" + isConnected +
+                ", online=" + online +
+                ", isLoadingAvater=" + isLoadingAvater +
+                ", avaterUpdateTime=" + avaterUpdateTime +
+                ", price=" + price +
+                '}';
+    }
+
     public String getAvatar() {
         return avatar;
     }
@@ -122,22 +126,22 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     }
 
     /**
-     *同vpnName，没用
+     * 同vpnName，没用
      */
     private String userId;
     /**
-     *配置文件在vpn注册者的手机中的存储地址，
+     * 配置文件在vpn注册者的手机中的存储地址，
      * 在连接着连接的时候，需要根据这个地址通过c层把配置文件传输给连接者。
      * 在注册或者修改vpn的配置文件的时候，会把这个配置文件复制到sd卡下的QLink目录下。使用的是QLink目录下的配置文件
      * 命名方式为 时间戳 + ".ovpn"
      */
     private String profileLocalPath;
     /**
-     *配置文件的密码
+     * 配置文件的密码
      */
     private String password;
     /**
-     *配置文件的私钥密码
+     * 配置文件的私钥密码
      */
     private String privateKeyPassword;
     /**
@@ -165,11 +169,11 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
 
 
     /**
-     *vpn注册之后的测试出来的带宽，现在没用到
+     * vpn注册之后的测试出来的带宽，现在没用到
      */
     private String bandwidth;
     /**
-     *允许的最大的连接数量
+     * 允许的最大的连接数量
      */
     private int connectMaxnumber;
 
@@ -185,6 +189,16 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
      */
     private double registerQlc;
 
+    /**
+     * 在线的次数
+     */
+    private int onlineTime;
+
+    /**
+     * 连接成功的次数
+     */
+    private int connsuccessNum;
+
     private boolean isInMainWallet = false;//是否主网资产
 
     public int getUnReadMessageCount() {
@@ -197,7 +211,6 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
 
     /**
      * 未读消息的个数
-
      */
     private int unReadMessageCount;
 
@@ -218,19 +231,19 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     }
 
     /**
-     *好友编号
+     * 好友编号
      */
     private String friendNum;
     /**
-     *配置文件的名字
+     * 配置文件的名字
      */
     private String configuration;
     /**
-     *vpn的名字
+     * vpn的名字
      */
     private String vpnName;
     /**
-     *vpn注册者的p2pId
+     * vpn注册者的p2pId
      */
     private String p2pId;
     /**
@@ -238,19 +251,19 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
      */
     private String address;
     /**
-     *资产类型，vpn为3
+     * 资产类型，vpn为3
      */
     private int type;
     /**
-     *当前连接的使用者的数量
+     * 当前连接的使用者的数量
      */
     private int currentConnect;
     /**
-     *使用者连接vpn时，每小时所需的qlc
+     * 使用者连接vpn时，每小时所需的qlc
      */
     private float qlc;
     /**
-     *在使用者方使用，用来辨别是否连接上了此vpn
+     * 在使用者方使用，用来辨别是否连接上了此vpn
      */
     private boolean isConnected;
 
@@ -259,17 +272,17 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     public VpnEntity() {
     }
 
-    @Generated(hash = 61705745)
+    @Generated(hash = 781170088)
     public VpnEntity(Long id, String country, String userId,
-            String profileLocalPath, String password, String privateKeyPassword,
-            String profileUUid, String ipV4Address, String continent,
-            String username, int groupNum, String bandwidth, int connectMaxnumber,
-            double assetTranfer, String avatar, double registerQlc,
-            boolean isInMainWallet, int unReadMessageCount, String friendNum,
-            String configuration, String vpnName, String p2pId, String address,
-            int type, int currentConnect, float qlc, boolean isConnected,
-            boolean online, boolean isLoadingAvater, long avaterUpdateTime,
-            float price) {
+                     String profileLocalPath, String password, String privateKeyPassword,
+                     String profileUUid, String ipV4Address, String continent,
+                     String username, int groupNum, String bandwidth, int connectMaxnumber,
+                     double assetTranfer, String avatar, double registerQlc, int onlineTime,
+                     int connsuccessNum, boolean isInMainWallet, int unReadMessageCount,
+                     String friendNum, String configuration, String vpnName, String p2pId,
+                     String address, int type, int currentConnect, float qlc,
+                     boolean isConnected, boolean online, boolean isLoadingAvater,
+                     long avaterUpdateTime, float price) {
         this.id = id;
         this.country = country;
         this.userId = userId;
@@ -286,6 +299,8 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.assetTranfer = assetTranfer;
         this.avatar = avatar;
         this.registerQlc = registerQlc;
+        this.onlineTime = onlineTime;
+        this.connsuccessNum = connsuccessNum;
         this.isInMainWallet = isInMainWallet;
         this.unReadMessageCount = unReadMessageCount;
         this.friendNum = friendNum;
@@ -498,6 +513,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
 
     /**
      * 返回大于0，往前排，小于0，往后排，等于0，接着看后面的
+     *
      * @param o
      * @return
      */
@@ -506,14 +522,14 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
 
         int myIsonline = isOnline() ? 1 : 0;
         int anohterIsonline = o.isOnline() ? 1 : 0;
-        int i = anohterIsonline - myIsonline; //比较是否在线
+        int myIsConnect = getIsConnected() ? 1 : 0;
+        int anotherIsConnect = o.getIsConnected() ? 1 : 0;
+        int i =  anotherIsConnect - myIsConnect;   //比较是否连接
         if (i == 0) {
-            i = (int) (o.getAssetTranfer() - getAssetTranfer());  //比较资产值
+            i = anohterIsonline - myIsonline; //比较是否在线
             if (i == 0) {
-                int myIsConnect = getIsConnected() ? 1 : 0;
-                int anotherIsConnect = o.getIsConnected() ? 1 : 0;
-                return anotherIsConnect - myIsConnect;   //比较是否连接
-
+                i = (int) (o.getAssetTranfer() - getAssetTranfer());  //比较资产值
+                return i;
             } else {
                 return i;
             }
@@ -578,6 +594,14 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.registerQlc = registerQlc;
     }
 
+    public boolean getIsInMainWallet() {
+        return this.isInMainWallet;
+    }
+
+    public void setIsInMainWallet(boolean isInMainWallet) {
+        this.isInMainWallet = isInMainWallet;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -606,6 +630,9 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         dest.writeDouble(assetTranfer);
         dest.writeString(avatar);
         dest.writeDouble(registerQlc);
+        dest.writeInt(onlineTime);
+        dest.writeInt(connsuccessNum);
+        dest.writeByte((byte) (isInMainWallet ? 1 : 0));
         dest.writeInt(unReadMessageCount);
         dest.writeString(friendNum);
         dest.writeString(configuration);
@@ -620,14 +647,21 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         dest.writeByte((byte) (isLoadingAvater ? 1 : 0));
         dest.writeLong(avaterUpdateTime);
         dest.writeFloat(price);
-        dest.writeByte((byte) (isInMainWallet ? 1 : 0));
     }
 
-    public boolean getIsInMainWallet() {
-        return this.isInMainWallet;
+    public int getOnlineTime() {
+        return this.onlineTime;
     }
 
-    public void setIsInMainWallet(boolean isInMainWallet) {
-        this.isInMainWallet = isInMainWallet;
+    public void setOnlineTime(int onlineTime) {
+        this.onlineTime = onlineTime;
+    }
+
+    public int getConnsuccessNum() {
+        return this.connsuccessNum;
+    }
+
+    public void setConnsuccessNum(int connsuccessNum) {
+        this.connsuccessNum = connsuccessNum;
     }
 }
