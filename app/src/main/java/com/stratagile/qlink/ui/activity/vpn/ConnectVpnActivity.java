@@ -125,6 +125,7 @@ public class ConnectVpnActivity extends BaseActivity implements ConnectVpnContra
     @Inject
     ConnectVpnPresenter mPresenter;
     @BindView(R.id.iv_user_avater)
+
     ImageView ivUserAvater;
     @BindView(R.id.tv_title)
     TextView tvTitle;
