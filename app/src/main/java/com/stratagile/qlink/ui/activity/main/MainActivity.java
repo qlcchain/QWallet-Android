@@ -643,7 +643,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(disconnectVpnSuccessBroadReceiver);
-        clearGuide();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
