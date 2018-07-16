@@ -49,6 +49,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.stratagile.qlink.entity.MyAsset.VPN_ASSET;
+import static com.stratagile.qlink.entity.MyAsset.VPN_ASSET_1;
+
 /**
  * @author hzp
  * @Package com.stratagile.qlink.ui.activity.wallet
@@ -144,8 +147,8 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
     }
 
     /**
-     * @see WalletFragment#onCreateView
      * @param assetRefrash
+     * @see WalletFragment#onCreateView
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefrash(AssetRefrash assetRefrash) {

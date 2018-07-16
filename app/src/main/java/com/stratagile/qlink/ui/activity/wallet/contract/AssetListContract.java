@@ -35,5 +35,6 @@ public interface AssetListContract {
 //        void getBusinessInfo(Map map);
 
         void getAssetInfoFromServer(Map map);
+
     }
 }

@@ -218,6 +218,13 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         vpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
                         vpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
                     }
+                    if (vpnListBean.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                        if (qlinkcom.GetP2PConnectionStatus() > 0) {
+                            vpnEntity.setOnline(true);
+                        } else {
+                            vpnEntity.setOnline(false);
+                        }
+                    }
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                     isAdded = true;
                     break;

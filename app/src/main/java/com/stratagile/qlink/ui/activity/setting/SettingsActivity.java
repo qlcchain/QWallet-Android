@@ -182,10 +182,10 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         });
         settingsAdapter.setOnCheckChangeListener(new SettingsAdapter.OnCheckChangeListener() {
             @Override
-            public void onCheck(boolean isCheck, int position) {
-                if (position == 3) {
+            public void onCheck(boolean isCheck, int position, String icon) {
+                if ("icon_fingerprint".equals(icon)) {
                     SpUtil.putBoolean(AppConfig.getInstance(), ConstantValue.fingerprintUnLock, isCheck);
-                } else if (position == 4) {
+                } else if ("icon_cut".equals(icon)) {
                     SpUtil.putBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, isCheck);
                     EventBus.getDefault().post(new ChangeWalletNeedRefesh());
                     if (SpUtil.getBoolean(SettingsActivity.this, ConstantValue.showTestFlag, true)) {
