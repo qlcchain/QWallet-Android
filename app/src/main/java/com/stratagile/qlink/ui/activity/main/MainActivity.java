@@ -100,6 +100,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -305,6 +306,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                 mapHeart.put("wifiName", currentWifiName);
                                 mapHeart.put("vpnName", currentVpnName);
                                 mPresenter.heartBeat(mapHeart);
+                            }
+
+                            long lastRestart = SpUtil.getLong(AppConfig.getInstance(), ConstantValue.lastRestart,Calendar.getInstance().getTimeInMillis());
+                            if ((Calendar.getInstance().getTimeInMillis() - lastRestart) >2 * 60 * 60 * 1000)//每两小时重启一次
+                            {
+                                SpUtil.putLong(AppConfig.getInstance(),ConstantValue.lastRestart,Calendar.getInstance().getTimeInMillis());
+                                Intent intent = new Intent(mainActivity, SplashActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(0);
                             }
                             // }
                         }

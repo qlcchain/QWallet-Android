@@ -49,6 +49,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <!--协议部分，随便设置-->
+                <data android:scheme="xl" android:host="winq" android:path="/openWinq" android:port="8888"/>
+                <!--下面这几行也必须得设置-->
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
         </activity>
         <service android:name=".service.ClientConnectedWifiRecordService"/>
         <service android:name=".service.ServiceConnectedWIfiRecordSevice"/>
