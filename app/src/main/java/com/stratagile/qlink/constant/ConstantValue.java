@@ -114,6 +114,8 @@ public class ConstantValue {
     public static boolean isConnectWifi = false;
 
     public static MainAddress.DataBean mainAddressData;
+
+    public static String lastRestart = "lastRestart";//上一次自动重启时间
     /**
      * 本次进入app在下载的头像的名字
      */
