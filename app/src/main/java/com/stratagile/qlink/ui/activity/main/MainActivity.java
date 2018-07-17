@@ -311,6 +311,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                             long lastRestart = SpUtil.getLong(AppConfig.getInstance(), ConstantValue.lastRestart,Calendar.getInstance().getTimeInMillis());
                             if ((Calendar.getInstance().getTimeInMillis() - lastRestart) >2 * 60 * 60 * 1000)//每两小时重启一次
                             {
+                                KLog.i("heart倒计时_restart");
+                                Intent intentDis = new Intent();
+                                intentDis.setAction(BroadCastAction.disconnectVpn);
+                                sendBroadcast(intentDis);
+                                AppConfig.currentUseVpn = null;
                                 SpUtil.putLong(AppConfig.getInstance(),ConstantValue.lastRestart,Calendar.getInstance().getTimeInMillis());
                                 Intent intent = new Intent(mainActivity, SplashActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
