@@ -1023,10 +1023,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             mFirebaseAnalytics.logEvent("useVpnTotal", bundle);
             SpUtil.putString(AppConfig.getInstance(), currentTime + "_vpn", "1");
         }
-        if(ConstantValue.freeNum <= 0)
-        {
-            getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
-        }
+        getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
         AppConfig.currentVpnUseType = 1;
         AppConfig.currentUseVpn = connectVpnEntity;
         KLog.i(AppConfig.currentVpnUseType);

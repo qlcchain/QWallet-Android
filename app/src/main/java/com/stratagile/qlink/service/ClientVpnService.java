@@ -55,7 +55,7 @@ public class ClientVpnService extends Service {
                     .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                         @Override
                         public void onTick(long pMillisUntilFinished) {
-                            if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !AppConfig.currentUseVpn .getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                            if (ConstantValue.freeNum <= 0 && AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !AppConfig.currentUseVpn .getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
                                 List<TransactionRecord> transactionVpnRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(AppConfig.currentUseVpn.getVpnName())).list();
                                 if (transactionVpnRecordList.size() > 0) {
                                     Collections.sort(transactionVpnRecordList);
