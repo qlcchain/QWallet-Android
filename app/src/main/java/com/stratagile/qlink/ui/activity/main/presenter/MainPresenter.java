@@ -14,6 +14,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.api.HttpObserver;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.UpLoadAvatar;
@@ -288,27 +289,6 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                 onComplete();
             }
         });
-//                .subscribe(new Consumer<BaseBack>() {
-//                    @Override
-//                    public void accept(BaseBack result) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
     }
 
     @Override
@@ -323,30 +303,12 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                         KLog.i("onSuccesse");
                         SpUtil.putString(AppConfig.getInstance(), ConstantValue.myAvatarPath, upLoadAvatar.getHead());
                         mView.getAvatarSuccess(upLoadAvatar);
+                        Map<String, String> infoMap = new HashMap<>();
+                        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+                        zsFreeNum(infoMap);
                         onComplete();
                     }
                 });
-//                .subscribe(new Consumer<UpLoadAvatar>() {
-//                    @Override
-//                    public void accept(UpLoadAvatar upLoadAvatar) throws Exception {
-//                        //isSuccesse
-//
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
     }
 
     public void getMainAddress() {
@@ -363,61 +325,15 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                 onComplete();
             }
         });
-//        Observer<MainAddress> observer = new Observer<MainAddress>() {
-//            Disposable disposable;
-//
-//            @Override
-//            public void onSubscribe(Disposable d) {
-//                disposable = d;
-//                mCompositeDisposable.add(disposable);
-//            }
-//
-//            @Override
-//            public void onNext(MainAddress mainAddress) {
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                disposable.dispose();
-//                mCompositeDisposable.remove(disposable);
-//                KLog.i("onError");
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                disposable.dispose();
-//                mCompositeDisposable.remove(disposable);
-//            }
-//        };
-//        observable.subscribe(observer);
-//        final Disposable disposable = httpAPIWrapper.getMainAddress(new HashMap())
-//                .subscribe(new Consumer<MainAddress>() {
-//                    @Override
-//                    public void accept(MainAddress mainAddress) throws Exception {
-//                        KLog.i("onSuccesse");
-//                        ConstantValue.mainAddress = mainAddress.getData().getNEO().getAddress();
-//                        ConstantValue.ethMainAddress = mainAddress.getData().getETH().getAddress();
-//                        ConstantValue.mainAddressData = mainAddress.getData();
-//                        Map<String, String> infoMap = new HashMap<>();
-//                        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
-//                        userAvatar(infoMap);
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
+    }
+
+    public void zsFreeNum(Map map) {
+        httpAPIWrapper.zsFreeNum(map)
+                .subscribe(new HttpObserver<FreeNum>() {
+                    @Override
+                    public void onNext(FreeNum baseBack) {
+                        mView.onGetFreeNumBack(baseBack.getData().getFreeNum());
+                    }
+                });
     }
 }

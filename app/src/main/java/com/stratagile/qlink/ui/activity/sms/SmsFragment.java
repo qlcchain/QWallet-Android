@@ -50,6 +50,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -103,10 +104,9 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         title.setText(getResources().getString(R.string.vpn));
         ArrayList<String> titles = new ArrayList<>();
         titles.add(ConstantValue.longcountry.toUpperCase());
-        if(ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false))
-        {
+        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             registerVpn.setVisibility(View.GONE);
-        }else{
+        } else {
             registerVpn.setVisibility(View.VISIBLE);
         }
 //        titles.add("UNREGISTERED");
@@ -181,19 +181,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
                         startActivityForResult(intent, 0);
                         getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                         return true;
-//                        if (ConstantValue.connectedWifiInfo != null) {
-//                            if (ConstantValue.isConnectToP2p) {
-//                                Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
-//                                startActivityForResult(intent, 0);
-//                                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-//                                return true;
-//                            } else {
-//                                ToastUtil.displayShortToast(getString(R.string.waitP2pNetWork));
-//                            }
-//                        } else {
-//                            ToastUtil.displayShortToast(getString(R.string.pleaseEnableWifi));
-//                        }
-//                        break;
                     default:
                         break;
                 }
@@ -202,6 +189,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         });
         return view;
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ChangeTestUI(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
         if (!SpUtil.getBoolean(getActivity(), ConstantValue.isMainNet, false)) {
@@ -210,6 +198,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
             registerVpn.setVisibility(View.GONE);
         }
     }
+
     private static final String FEATURE_TELEVISION = "android.hardware.type.television";
     private static final String FEATURE_LEANBACK = "android.software.leanback";
 
@@ -296,33 +285,39 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         }
     }
 
-//    @OnClick(R.id.ll_select_country)
+    //    @OnClick(R.id.ll_select_country)
 //    public void onViewClicked() {
 //        Intent intent = new Intent(getActivity(), SelectContinentActivity.class);
 //        intent.putExtra("country", tabLayout.getText().toString().toLowerCase());
 //        startActivityForResult(intent, SELECT_CONTINENT);
 //    }
+    int jianjushijian = 500;
+    long dangqianshijian = 0;
 
     @OnClick({R.id.registerVpn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.registerVpn :
+            case R.id.registerVpn:
+                if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
+                    return;
+                }
+                dangqianshijian = Calendar.getInstance().getTimeInMillis();
                 List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
                 if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
                     Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
                     startActivityForResult(intent, START_CREATE_PASSWORD);
-                    return ;
+                    return;
                 }
                 if (walletList == null || walletList.size() == 0) {
                     Intent intent = new Intent(getActivity(), NoWalletActivity.class);
                     intent.putExtra("flag", "nowallet");
                     startActivityForResult(intent, START_NO_WALLLET);
-                    return ;
+                    return;
                 }
                 if (ConstantValue.isShouldShowVertifyPassword) {
                     Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
                     startActivityForResult(intent, START_VERTIFY_PASSWORD);
-                    return ;
+                    return;
                 }
                 Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
                 intent.putExtra("flag", "");

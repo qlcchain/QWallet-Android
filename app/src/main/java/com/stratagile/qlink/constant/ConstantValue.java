@@ -33,6 +33,10 @@ public class ConstantValue {
     public static String unlockTime = "unlocktime";
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
+    /**
+     * 拥有的免费连接次数
+     */
+    public static int freeNum = 0;
     //统一收钱的钱包地址
 //    public static String mainAddress = "AQC7Bod2LxaRxmLewRrwCA1Nt6AQMWSm28";
     public static String mainAddress = "";

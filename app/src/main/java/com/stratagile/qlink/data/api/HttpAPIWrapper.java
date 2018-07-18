@@ -14,6 +14,8 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EthWalletDetail;
+import com.stratagile.qlink.entity.FreeNum;
+import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.MainAddress;
@@ -358,30 +360,57 @@ public class HttpAPIWrapper {
         }
 
     }
-    public Observable<RaceTimes> getRaceTimes(Map map) {
+//    public Observable<RaceTimes> getRaceTimes(Map map) {
+//        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+//            return wrapper(mMainHttpAPI.getRaceTimes(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//        } else {
+//            return wrapper(mHttpAPI.getRaceTimes(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//        }
+//
+//    }
+//
+//    public Observable<ServerTime> getServerTime(Map map) {
+//        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+//            return wrapper(mMainHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//        } else {
+//            return wrapper(mHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//        }
+//
+//    }
+//    public Observable<BetResult> betRace(Map map) {
+//        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+//            return wrapper(mMainHttpAPI.betRace(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//        } else {
+//
+//            return wrapper(mHttpAPI.betRace(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//        }
+//    }
+
+    public Observable<FreeNum> zsFreeNum(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.getRaceTimes(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mMainHttpAPI.zsFreeNum(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
-            return wrapper(mHttpAPI.getRaceTimes(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.zsFreeNum(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }
 
-    public Observable<ServerTime> getServerTime(Map map) {
+    public Observable<BaseBack> freeConnection(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mMainHttpAPI.freeConnection(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
-            return wrapper(mHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.freeConnection(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }
-    public Observable<BetResult> betRace(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.betRace(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
-        } else {
 
-            return wrapper(mHttpAPI.betRace(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    public Observable<FreeRecord> queryFreeRecords(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.queryFreeRecords(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.queryFreeRecords(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
+
     }
 
     /**

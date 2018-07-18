@@ -37,6 +37,7 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ChainVpn;
+import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.fragments.Utils;
 import com.stratagile.qlink.qlink.Qsdk;
@@ -469,7 +470,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     /**
      * 检查和分享者的连接情况
      */
-    private void checkSharerConnect() {
+    public void checkSharerConnect() {
         if (qlinkcom.GetP2PConnectionStatus() > 0) {
             if (connectVpnEntity.getFriendNum() == null || "".equals(connectVpnEntity.getFriendNum())) {
                 byte[] p2pId = new byte[100];
@@ -713,6 +714,18 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         mView.startOrStopVPN(mResult);
 //        setResult(RESULT_OK, result);
 //        finish();
+    }
+
+    @Override
+    public void zsFreeNum(Map map) {
+        httpAPIWrapper.zsFreeNum(map)
+                .subscribe(new HttpObserver<FreeNum>() {
+                    @Override
+                    public void onNext(FreeNum baseBack) {
+                        mView.onGetFreeNumBack(baseBack.getData().getFreeNum());
+                        onComplete();
+                    }
+                });
     }
 
 }

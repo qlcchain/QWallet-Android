@@ -32,6 +32,8 @@ public interface MainContract {
         void onCreatWalletSuccess(ArrayList<Wallet> importWalletResult, int flag);
 
         void getAvatarSuccess(UpLoadAvatar upLoadAvatar);
+
+        void onGetFreeNumBack(int num);
     }
 
     interface MainContractPresenter extends BasePresenter {

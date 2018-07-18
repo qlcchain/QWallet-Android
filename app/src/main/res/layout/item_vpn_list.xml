@@ -144,6 +144,7 @@
             app:kswBackColor="@color/white"
             app:kswBackDrawable="@drawable/ios_back_drawable"
             app:kswThumbDrawable="@drawable/ios_thumb_drawable"
+            app:kswThumbMargin="0px"
             app:kswThumbHeight="@dimen/x35"
             app:kswThumbRangeRatio="2.0"
             app:kswThumbWidth="@dimen/x35"

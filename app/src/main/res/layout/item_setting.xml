@@ -67,6 +67,7 @@
             app:kswThumbDrawable="@drawable/ios_thumb_drawable"
             app:kswThumbHeight="@dimen/x35"
             app:kswThumbRangeRatio="2.0"
+            app:kswThumbMargin="0px"
             app:kswThumbWidth="@dimen/x35"
             app:kswTintColor="@color/content_background" />
     </LinearLayout>

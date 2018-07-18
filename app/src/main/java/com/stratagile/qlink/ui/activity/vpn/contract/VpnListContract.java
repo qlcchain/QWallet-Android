@@ -36,6 +36,8 @@ public interface VpnListContract {
         void showNeedQlcDialog(VpnEntity vpnEntity);
 
         void refreshList();
+
+        void onGetFreeNumBack(int num);
     }
 
     interface VpnListContractPresenter extends BasePresenter {
@@ -52,6 +54,8 @@ public interface VpnListContract {
         void connectShareSuccess();
 
         void dialogConfirm();
+
+        void zsFreeNum(Map map);
 
     }
 }

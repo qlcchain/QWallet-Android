@@ -53,12 +53,24 @@
             android:id="@+id/iv_wallet"
             android:layout_width="@dimen/x70"
             android:layout_height="@dimen/x70"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x42"
-            android:src="@mipmap/icon_addition"
+            android:src="@mipmap/icon_free"
             />
+        <TextView
+            android:id="@+id/tv_free"
+            android:layout_width="wrap_content"
+            android:text="FREE:"
+            android:textSize="9sp"
+            android:fontFamily="@font/vagroundedbt"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/iv_wallet"
+            android:layout_marginRight="@dimen/x50"
+            android:layout_marginBottom="@dimen/x15"
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 

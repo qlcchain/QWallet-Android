@@ -96,11 +96,14 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.WalletCreatedActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.wallet.FreeConnectActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.main.GuestActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.CreateWalletPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.VerifyWalletPasswordActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <!--android:windowSoftInputMode="stateVisible|adjustResize"-->
         <activity android:name=".ui.activity.wallet.ProfilePictureActivity"

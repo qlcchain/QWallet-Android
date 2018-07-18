@@ -130,6 +130,8 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
 
+    int freeNum = 0;
+
     private String country;
 
     private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
@@ -247,6 +249,10 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
      */
     @Override
     public void showNeedQlcDialog(VpnEntity vpnEntity) {
+        if (ConstantValue.freeNum != 0) {
+            mPresenter.checkSharerConnect();
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = View.inflate(getActivity(), R.layout.dialog_need_qlc_layout, null);
         builder.setView(view);
@@ -279,6 +285,11 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Override
     public void refreshList() {
         vpnListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGetFreeNumBack(int num) {
+        ConstantValue.freeNum = num;
     }
 
     /**
