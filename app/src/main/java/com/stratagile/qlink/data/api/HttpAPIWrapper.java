@@ -395,7 +395,7 @@ public class HttpAPIWrapper {
 
     }
 
-    public Observable<BaseBack> freeConnection(Map map) {
+    public Observable<FreeNum> freeConnection(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mMainHttpAPI.freeConnection(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {

@@ -939,6 +939,13 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     ProfileManager.getInstance(getActivity()).removeProfile(getActivity(), mResult);
                 }
                 connectVpnEntity.setIsConnected(true);
+                //更新免费使用次数
+                Map<String, Object> infoMap = new HashMap<>();
+                infoMap.put("assetName", connectVpnEntity.getVpnName());
+                infoMap.put("fromP2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+                infoMap.put("toP2pId", connectVpnEntity.getP2pId());
+                infoMap.put("addressTo", connectVpnEntity.getAddress());
+                mPresenter.freeConnection(infoMap);
                 if (ConstantValue.isConnectVpn) {
                     Bundle bundle = new Bundle();
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ConnectVpnSuccessActivity");
@@ -1000,7 +1007,10 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             mFirebaseAnalytics.logEvent("useVpnTotal", bundle);
             SpUtil.putString(AppConfig.getInstance(), currentTime + "_vpn", "1");
         }
-        getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
+        if(ConstantValue.freeNum <= 0)
+        {
+            getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
+        }
         AppConfig.currentVpnUseType = 1;
         AppConfig.currentUseVpn = connectVpnEntity;
         KLog.i(AppConfig.currentVpnUseType);

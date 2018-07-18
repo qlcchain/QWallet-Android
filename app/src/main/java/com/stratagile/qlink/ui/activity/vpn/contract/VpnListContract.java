@@ -57,5 +57,6 @@ public interface VpnListContract {
 
         void zsFreeNum(Map map);
 
+        void freeConnection(Map map);
     }
 }
