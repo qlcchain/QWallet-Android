@@ -732,11 +732,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     @Override
     public void freeConnection(Map map) {
         httpAPIWrapper.freeConnection(map)
-                .subscribe(new HttpObserver<BaseBack>() {
+                .subscribe(new HttpObserver<FreeNum>() {
                     @Override
-                    public void onNext(BaseBack freeNum) {
+                    public void onNext(FreeNum freeNum) {
                         //isSuccesse
                         KLog.i("onSuccesse");
+                        mView.onGetFreeNumBack(freeNum.getData().getFreeNum());
                         onComplete();
                     }
                 });

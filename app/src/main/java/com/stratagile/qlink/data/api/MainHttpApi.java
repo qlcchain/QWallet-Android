@@ -207,7 +207,7 @@ public interface MainHttpApi {
 
     @POST(MainAPI.url_freeConnection)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> freeConnection(@Body RequestBody map);
+    Observable<FreeNum> freeConnection(@Body RequestBody map);
 
     @POST(MainAPI.url_queryFreeRecords)
     @Headers({"Content-Type: application/json","Accept: application/json"})
