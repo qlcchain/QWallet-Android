@@ -36,6 +36,7 @@ import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
@@ -731,12 +732,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     @Override
     public void freeConnection(Map map) {
         httpAPIWrapper.freeConnection(map)
-                .subscribe(new HttpObserver<FreeNum>() {
+                .subscribe(new HttpObserver<BaseBack>() {
                     @Override
-                    public void onNext(FreeNum freeNum) {
+                    public void onNext(BaseBack freeNum) {
                         //isSuccesse
                         KLog.i("onSuccesse");
-                        mView.onGetFreeNumBack(freeNum.getData().getFreeNum());
+                        onComplete();
                     }
                 });
     }

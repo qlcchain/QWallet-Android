@@ -231,6 +231,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     showChangeVpnDialog(vpnEntity);
                     return;
                 }
+                if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() == 0 && ConstantValue.freeNum == 0) {
+                    Intent intent = new Intent(getActivity(), NoWalletActivity.class);
+                    intent.putExtra("flag", "nowallet");
+                    startActivity(intent);
+                    return;
+                }
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
