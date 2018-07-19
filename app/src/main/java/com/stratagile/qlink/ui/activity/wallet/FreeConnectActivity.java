@@ -16,15 +16,18 @@ import com.stratagile.qlink.ui.activity.wallet.module.FreeConnectModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.FreeConnectPresenter;
 import com.stratagile.qlink.ui.adapter.wallet.FreeRecordAdapter;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.view.FreeSelectPopWindow;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author hzp
@@ -33,7 +36,7 @@ import butterknife.ButterKnife;
  * @date 2018/07/18 11:53:01
  */
 
-public class FreeConnectActivity extends BaseActivity implements FreeConnectContract.View {
+public class FreeConnectActivity extends BaseActivity implements FreeConnectContract.View, FreeSelectPopWindow.OnItemClickListener {
 
     @Inject
     FreeConnectPresenter mPresenter;
@@ -42,6 +45,8 @@ public class FreeConnectActivity extends BaseActivity implements FreeConnectCont
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     FreeRecordAdapter freeRecordAdapter;
+    @BindView(R.id.tv_expansion)
+    TextView tvExpansion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +62,7 @@ public class FreeConnectActivity extends BaseActivity implements FreeConnectCont
 
     @Override
     protected void initData() {
-        setTitle("free connection details");
+        setTitle(getString(R.string.free_connection_details));
         Map<String, Object> map = new HashMap<>();
         map.put("p2pId", SpUtil.getString(this, ConstantValue.P2PID, ""));
         map.put("type", 0);
@@ -105,9 +110,49 @@ public class FreeConnectActivity extends BaseActivity implements FreeConnectCont
         mPresenter.queryFreeRecords(map);
     }
 
+    List<FreeRecord.DataBean> orginList;
     @Override
     public void onGetFreeRecordBack(FreeRecord freeRecord) {
         freeRecordAdapter.setNewData(freeRecord.getData());
+        orginList = freeRecord.getData();
     }
+
+    @OnClick(R.id.tv_expansion)
+    public void onViewClicked() {
+        FreeSelectPopWindow morePopWindow = new FreeSelectPopWindow(this);
+        morePopWindow.setOnItemClickListener(this);
+        morePopWindow.showPopupWindow(tvExpansion);
+    }
+
+    @Override
+    public void onItemClick(int id) {
+        ArrayList<FreeRecord.DataBean> list = new ArrayList<>();
+
+        switch (id) {
+            case R.id.rl_all:
+                freeRecordAdapter.setNewData(orginList);
+                break;
+            case R.id.rl_gain:
+                for (FreeRecord.DataBean dataBean : orginList) {
+                    if (dataBean.getFreeType() == 1) {
+                        list.add(dataBean);
+                    }
+                }
+                freeRecordAdapter.setNewData(list);
+                break;
+            case R.id.rl_used:
+                for (FreeRecord.DataBean dataBean : orginList) {
+                    if (dataBean.getFreeType() == 2) {
+                        list.add(dataBean);
+                    }
+                }
+                freeRecordAdapter.setNewData(list);
+                break;
+            default:
+                break;
+
+        }
+    }
+
 
 }

@@ -56,6 +56,7 @@ import com.stratagile.qlink.entity.ContinentAndCountry;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
+import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.VpnRegisterSuccess;
@@ -296,6 +297,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Override
     public void onGetFreeNumBack(int num) {
         ConstantValue.freeNum = num;
+        EventBus.getDefault().post(new FreeCount(num));
     }
 
     /**

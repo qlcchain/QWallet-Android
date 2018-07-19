@@ -50,6 +50,7 @@ import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
+import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.P2pBack;
@@ -254,7 +255,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             } else {
                 tvFree.setVisibility(View.VISIBLE);
                 ivWallet.setVisibility(View.VISIBLE);
-                tvFree.setText("FREE:" + num);
+                tvFree.setText(getString(R.string.free) + ":" + num);
+            }
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetFreeNumBack(FreeCount freeCount) {
+        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+            if (freeCount.getCount() == 0) {
+                tvFree.setVisibility(View.GONE);
+                ivWallet.setVisibility(View.GONE);
+            } else {
+                tvFree.setVisibility(View.VISIBLE);
+                ivWallet.setVisibility(View.VISIBLE);
+                tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
             }
         }
     }
