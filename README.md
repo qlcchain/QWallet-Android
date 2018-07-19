@@ -1,8 +1,5 @@
-### WinQ dApp Intro
-# :exclamation::exclamation::exclamation: 请注意 目前APP试试运行在测试网络，请勿转入正式网的QLC:exclamation::exclamation::exclamation:
-
-# :heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: Please be alerted that QLC dApp is currently running on testnet , DO NOT transfer your mainnet NEO or QLC to the in-app wallet:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark:
-
+### WinQ source code has been public on Github under QLC account with https://github.com/qlcchain/WinQ-Android-code and 
+https://github.com/qlcchain/WinQ-iOS, This Repositories will be kept as the release base, Thank you for your always attention on WinQ and QLC Chain!
 ----
 
   WinQ dApp is the first dApp developed in the WinQ ecosystem with VPN & WiFi Sharing and Wallet functionalities. It features peer-to-peer sharing of VPN & Wi-Fi assets backed by blockchain technology.
