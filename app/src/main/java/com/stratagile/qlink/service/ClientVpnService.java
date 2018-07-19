@@ -16,17 +16,27 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.TransactionRecordDao;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.AssetsWarpper;
+import com.stratagile.qlink.entity.FreeNum;
+import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by huzhipeng on 2018/2/11.
@@ -48,6 +58,7 @@ public class ClientVpnService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.stratagile.qlink.VPN_STATUS");
         registerReceiver(myBroadcastReceiver, filter);
+        int timeInterval = 60 * 60 * 1000;
         if (countDownTimerUtils == null) {
             countDownTimerUtils = CountDownTimerUtils.creatNewInstance();
             countDownTimerUtils.setMillisInFuture(Long.MAX_VALUE)
@@ -55,19 +66,37 @@ public class ClientVpnService extends Service {
                     .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                         @Override
                         public void onTick(long pMillisUntilFinished) {
-                            if (ConstantValue.freeNum <= 0 && AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !AppConfig.currentUseVpn .getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                                List<TransactionRecord> transactionVpnRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(AppConfig.currentUseVpn.getVpnName())).list();
-                                if (transactionVpnRecordList.size() > 0) {
-                                    Collections.sort(transactionVpnRecordList);
-                                    TransactionRecord nearestRecord = transactionVpnRecordList.get(0);
-                                    long lastPayTime = nearestRecord.getTimestamp();
-                                    if ((Calendar.getInstance().getTimeInMillis() - lastPayTime) > 60 * 60 * 1000)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
-                                    {
+                            if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !AppConfig.currentUseVpn .getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                                if(ConstantValue.freeNum <= 0)
+                                {
+                                    List<TransactionRecord> transactionVpnRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(AppConfig.currentUseVpn.getVpnName())).list();
+                                    if (transactionVpnRecordList.size() > 0) {
+                                        Collections.sort(transactionVpnRecordList);
+                                        TransactionRecord nearestRecord = transactionVpnRecordList.get(0);
+                                        long lastPayTime = nearestRecord.getTimestamp();
+                                        KLog.i("vpn计时扣费"+lastPayTime);
+                                        if ((Calendar.getInstance().getTimeInMillis() - lastPayTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
+                                        {
+                                            connectToVpnRecord(AppConfig.currentUseVpn);
+
+                                        }
+                                    } else {
                                         connectToVpnRecord(AppConfig.currentUseVpn);
                                     }
-                                } else {
-                                    connectToVpnRecord(AppConfig.currentUseVpn);
+                                }else{
+
+                                    List<VpnEntity> VpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(AppConfig.currentUseVpn.getVpnName())).list();
+                                    if (VpnEntityList.size() > 0) {
+                                        long lastFreeTime = VpnEntityList.get(0).getLastFreeTime();
+                                        if ((Calendar.getInstance().getTimeInMillis() - lastFreeTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
+                                        {
+                                            connectToVpnFree(AppConfig.currentUseVpn);
+
+                                        }
+                                    }
+
                                 }
+
                             }
                             //KLog.i("VPN倒计时");
                         }
@@ -140,5 +169,45 @@ public class ClientVpnService extends Service {
                 //ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.deductions_failure));
             }
         });
+    }
+    public void connectToVpnFree(VpnEntity vpnEntity) {
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("assetName", vpnEntity.getVpnName());
+        infoMap.put("fromP2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        infoMap.put("toP2pId", vpnEntity.getP2pId());
+        infoMap.put("addressTo", vpnEntity.getAddress());
+        AppConfig.getInstance().getApplicationComponent().getHttpApiWrapper().freeConnection(infoMap)
+                .subscribe(new Observer<FreeNum>() {
+                    Disposable disposable;
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(FreeNum freeNum) {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        ConstantValue.freeNum = freeNum.getData().getFreeNum();
+                        EventBus.getDefault().post(new FreeCount(freeNum.getData().getFreeNum()));
+                        vpnEntity.setLastFreeTime(new Date().getTime());
+                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
+                        disposable.dispose();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        KLog.i("onError");
+                        e.printStackTrace();
+                        disposable.dispose();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        KLog.i("onComplete");
+                        disposable.dispose();
+                    }
+                });
     }
 }
