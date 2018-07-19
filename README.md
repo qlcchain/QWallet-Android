@@ -1,5 +1,4 @@
-### WinQ source code has been public on Github under QLC account with https://github.com/qlcchain/WinQ-Android-code and 
-https://github.com/qlcchain/WinQ-iOS, This Repositories will be kept as the release base, Thank you for your always attention on WinQ and QLC Chain!
+## WinQ source code has been public on Github under QLC account with https://github.com/qlcchain/WinQ-Android-code and https://github.com/qlcchain/WinQ-iOS, This Repositories will be kept as the release base, Thank you for your always attention on WinQ and QLC Chain!
 ----
 
   WinQ dApp is the first dApp developed in the WinQ ecosystem with VPN & WiFi Sharing and Wallet functionalities. It features peer-to-peer sharing of VPN & Wi-Fi assets backed by blockchain technology.
