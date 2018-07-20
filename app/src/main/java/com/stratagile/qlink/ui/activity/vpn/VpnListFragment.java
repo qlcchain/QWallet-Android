@@ -277,8 +277,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             vpnListAdapter.notifyDataSetChanged();
             return;
         }
-        if (Float.parseFloat(mBalance.getData().getQLC() + "") >= vpnEntity.getQlc() && mBalance.getData().getGAS() > 0.0001) {
-        } else {
+        if (Float.parseFloat(mBalance.getData().getQLC() + "") < vpnEntity.getQlc() || mBalance.getData().getGAS() < 0.0001) {
             ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
             return;
         }
@@ -347,9 +346,11 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void getbalance(ChangeWallet changeWallet) {
-        Map<String, String> map = new HashMap<>();
-        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
-        mPresenter.getWalletBalance(map);
+        if ( AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() != 0) {
+            Map<String, String> map = new HashMap<>();
+            map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
+            mPresenter.getWalletBalance(map);
+        }
     }
 
     @Override
@@ -398,7 +399,9 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 Intent intent = new Intent();
                 intent.setAction(BroadCastAction.disconnectVpn);
                 getActivity().sendBroadcast(intent);
-                connectVpnEntity.setIsConnected(false);
+                if (connectVpnEntity != null) {
+                    connectVpnEntity.setIsConnected(false);
+                }
                 AppConfig.currentUseVpn = null;
                 AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
             }
