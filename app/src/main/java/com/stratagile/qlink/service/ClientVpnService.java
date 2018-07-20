@@ -66,6 +66,7 @@ public class ClientVpnService extends Service {
                     .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                         @Override
                         public void onTick(long pMillisUntilFinished) {
+                            KLog.i("vpn计时扣费");
                             if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !AppConfig.currentUseVpn .getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
                                 if(ConstantValue.freeNum <= 0)
                                 {
