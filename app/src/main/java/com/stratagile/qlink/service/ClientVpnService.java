@@ -89,6 +89,7 @@ public class ClientVpnService extends Service {
                                     List<VpnEntity> VpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(AppConfig.currentUseVpn.getVpnName())).list();
                                     if (VpnEntityList.size() > 0) {
                                         long lastFreeTime = VpnEntityList.get(0).getLastFreeTime();
+                                        KLog.i("vpn计时免费次数"+lastFreeTime);
                                         if ((Calendar.getInstance().getTimeInMillis() - lastFreeTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
                                         {
                                             connectToVpnFree(AppConfig.currentUseVpn);
