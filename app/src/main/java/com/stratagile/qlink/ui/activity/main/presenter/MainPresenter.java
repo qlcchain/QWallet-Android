@@ -303,9 +303,6 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                         KLog.i("onSuccesse");
                         SpUtil.putString(AppConfig.getInstance(), ConstantValue.myAvatarPath, upLoadAvatar.getHead());
                         mView.getAvatarSuccess(upLoadAvatar);
-                        Map<String, String> infoMap = new HashMap<>();
-                        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
-                        zsFreeNum(infoMap);
                         onComplete();
                     }
                 });

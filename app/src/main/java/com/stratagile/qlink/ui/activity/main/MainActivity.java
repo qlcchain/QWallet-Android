@@ -218,6 +218,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getPic(P2pBack p2pBack) {
+        Map<String, String> infoMap1 = new HashMap<>();
+        infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        mPresenter.zsFreeNum(infoMap1);
+
         if (SpUtil.getString(this, ConstantValue.myAvatarPath, "").equals("")) {
             Map<String, String> infoMap = new HashMap<>();
             infoMap.put("p2pId", SpUtil.getString(this, ConstantValue.P2PID, ""));
@@ -249,14 +253,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     public void onGetFreeNumBack(int num) {
         ConstantValue.freeNum = num;
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            if (num == 0) {
-                tvFree.setVisibility(View.GONE);
-                ivWallet.setVisibility(View.GONE);
-            } else {
-                tvFree.setVisibility(View.VISIBLE);
-                ivWallet.setVisibility(View.VISIBLE);
-                tvFree.setText(getString(R.string.free) + ":" + num);
-            }
+//            if (num == 0) {
+//                tvFree.setVisibility(View.GONE);
+//                ivWallet.setVisibility(View.GONE);
+//            } else {
+//                tvFree.setVisibility(View.VISIBLE);
+//                ivWallet.setVisibility(View.VISIBLE);
+//                tvFree.setText(getString(R.string.free) + ":" + num);
+//            }
+            tvFree.setVisibility(View.VISIBLE);
+            ivWallet.setVisibility(View.VISIBLE);
+            tvFree.setText(getString(R.string.free) + ":" + num);
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -301,6 +308,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         String addressNames = FileUtil.getAllAddressNames();
         Map<String, String> map = new HashMap<>();
         map.put("key", addressNames);
+        if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
+            Map<String, String> infoMap1 = new HashMap<>();
+            infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+            mPresenter.zsFreeNum(infoMap1);
+        }
         if (!("".equals(addressNames))) {
             List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
             if (walletList.size() == 0) {

@@ -681,6 +681,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 }
             }
         } else {
+            vpnEntity = new VpnEntity();
             llYourBet.setVisibility(View.VISIBLE);
             setTitle(getString(R.string.REGISTER_YOUR_VPN).toUpperCase());
 //            infoUserid.setOnFocusChangeListener(new View.OnFocusChangeListener() {

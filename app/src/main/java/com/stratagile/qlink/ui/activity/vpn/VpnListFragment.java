@@ -214,6 +214,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 switch (view.getId()) {
                     case R.id.freind_avater:
                         if (vpnListAdapter.getItem(position).isOnline()) {
+                            ToastUtil.displayShortToast(getString(R.string.Please_create_a_wallet_to_continue));
                             Intent intent = new Intent(getActivity(), ConversationActivity.class);
                             intent.putExtra("vpnEntity", vpnListAdapter.getItem(position));
                             intent.putExtra("assetType", "3");
@@ -258,6 +259,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     public void showNeedQlcDialog(VpnEntity vpnEntity) {
         if (ConstantValue.freeNum != 0) {
             mPresenter.checkSharerConnect();
+            ToastUtil.displayShortToast(getString(R.string.This_will_consume_one_of_your_free_connections));
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
