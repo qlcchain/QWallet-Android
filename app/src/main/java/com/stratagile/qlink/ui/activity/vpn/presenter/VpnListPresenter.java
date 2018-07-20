@@ -742,4 +742,9 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     }
                 });
     }
+
+    @Override
+    public void getWalletBalance(Map map) {
+
+    }
 }

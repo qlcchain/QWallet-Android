@@ -52,7 +52,9 @@ import com.stratagile.qlink.core.VPNLaunchHelper;
 import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ContinentAndCountry;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
@@ -233,12 +235,6 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     showChangeVpnDialog(vpnEntity);
                     return;
                 }
-                if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() == 0 && ConstantValue.freeNum == 0) {
-                    Intent intent = new Intent(getActivity(), NoWalletActivity.class);
-                    intent.putExtra("flag", "nowallet");
-                    startActivity(intent);
-                    return;
-                }
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -258,8 +254,32 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Override
     public void showNeedQlcDialog(VpnEntity vpnEntity) {
         if (ConstantValue.freeNum != 0) {
-            mPresenter.checkSharerConnect();
-            ToastUtil.displayShortToast(getString(R.string.This_will_consume_one_of_your_free_connections));
+            showFreeQlcDialog(vpnEntity);
+            return;
+        }
+        if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
+            Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+            startActivity(intent);
+            vpnListAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (ConstantValue.isShouldShowVertifyPassword) {
+            Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+            startActivity(intent);
+            vpnListAdapter.notifyDataSetChanged();
+            return;
+        }
+        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+        if (walletList == null || walletList.size() == 0) {
+            Intent intent = new Intent(getActivity(), NoWalletActivity.class);
+            intent.putExtra("flag", "nowallet");
+            startActivity(intent);
+            vpnListAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (Float.parseFloat(mBalance.getData().getQLC() + "") >= vpnEntity.getQlc() && mBalance.getData().getGAS() > 0.0001) {
+        } else {
+            ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -289,6 +309,52 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             }
         });
         dialog.show();
+    }
+    /**
+     * 显示vpn注册时需要扣费的dialog
+     */
+    public void showFreeQlcDialog(VpnEntity vpnEntity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = View.inflate(getActivity(), R.layout.dialog_need_qlc_layout, null);
+        builder.setView(view);
+        builder.setCancelable(true);
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+        tvContent.setText(getString(R.string.This_will_consume_one_of_your_free_connections));
+        //取消或确定按钮监听事件处l
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                vpnListAdapter.notifyDataSetChanged();
+            }
+        });
+        btn_comfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                mPresenter.checkSharerConnect();
+            }
+        });
+        dialog.show();
+    }
+
+    Balance mBalance;
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void getbalance(ChangeWallet changeWallet) {
+        Map<String, String> map = new HashMap<>();
+        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
+        mPresenter.getWalletBalance(map);
+    }
+
+    @Override
+    public void onGetBalancelSuccess(Balance balance) {
+        mBalance = balance;
     }
 
     @Override
@@ -407,6 +473,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     public void fetchData() {
         refreshLayout.setRefreshing(true);
         getVpn();
+        getbalance(new ChangeWallet());
     }
 
     @Override

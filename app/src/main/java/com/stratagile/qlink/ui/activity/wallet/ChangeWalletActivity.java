@@ -15,6 +15,7 @@ import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerChangeWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.ChangeWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ChangeWalletModule;
@@ -22,6 +23,8 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.ChangeWalletPresenter;
 import com.stratagile.qlink.ui.adapter.wallet.WalletListAdapter;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.SpUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -159,6 +162,7 @@ public class ChangeWalletActivity extends BaseActivity implements ChangeWalletCo
                         @Override
                         public void run() {
                             closeProgressDialog();
+                            EventBus.getDefault().post(new ChangeWallet());
                             setResult(RESULT_OK);
                             onBackPressed();
                         }
