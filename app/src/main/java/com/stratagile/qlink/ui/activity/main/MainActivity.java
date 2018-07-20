@@ -706,6 +706,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onDestroy() {
         KLog.i("mainactivity关闭");
+        Intent intent = new Intent();
+        intent.setAction(BroadCastAction.disconnectVpn);
+        sendBroadcast(intent);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(disconnectVpnSuccessBroadReceiver);

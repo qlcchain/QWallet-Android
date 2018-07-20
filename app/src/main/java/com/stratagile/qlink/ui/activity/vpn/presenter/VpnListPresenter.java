@@ -745,6 +745,14 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 
     @Override
     public void getWalletBalance(Map map) {
-
+        httpAPIWrapper.getBalance(map)
+                .subscribe(new HttpObserver<Balance>() {
+                    @Override
+                    public void onNext(Balance balance) {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        mView.onGetBalancelSuccess(balance);
+                    }
+                });
     }
 }

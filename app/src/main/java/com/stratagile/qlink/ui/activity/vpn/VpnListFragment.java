@@ -231,9 +231,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         vpnListAdapter.setOnVpnOpreateListener(new VpnListAdapter.OnVpnOpreateListener() {
             @Override
             public void onConnect(VpnEntity vpnEntity) {
-                if (VpnStatus.isVPNActive()) {
-                    showChangeVpnDialog(vpnEntity);
-                    return;
+//                if (VpnStatus.isVPNActive()) {
+//                    showChangeVpnDialog(vpnEntity);
+//                    return;
+//                }
+                if (vpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                    getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
                 }
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
@@ -277,8 +280,13 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             vpnListAdapter.notifyDataSetChanged();
             return;
         }
-        if (Float.parseFloat(mBalance.getData().getQLC() + "") < vpnEntity.getQlc() || mBalance.getData().getGAS() < 0.0001) {
-            ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
+        if (mBalance != null) {
+            if (Float.parseFloat(mBalance.getData().getQLC() + "") < vpnEntity.getQlc() || mBalance.getData().getGAS() < 0.0001) {
+                ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
+                return;
+            }
+        } else {
+            getbalance(new ChangeWallet());
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
