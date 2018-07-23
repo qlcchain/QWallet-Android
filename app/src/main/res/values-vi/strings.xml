@@ -5,6 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
+  <string name="app_name">WINQ</string>
   <string name="app">OpenVPN cho Android</string>
   <string name="address">Địa chỉ máy chủ:</string>
   <string name="port">Cổng máy chủ:</string>

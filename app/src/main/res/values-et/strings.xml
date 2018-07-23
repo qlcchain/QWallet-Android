@@ -5,6 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
+  <string name="app_name">WINQ</string>
   <string name="app">WINQ Androidile</string>
   <string name="address">Serveri aadress:</string>
   <string name="port">Serveri port:</string>

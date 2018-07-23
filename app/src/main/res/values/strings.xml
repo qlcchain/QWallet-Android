@@ -834,7 +834,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="English">English</string>
     <string name="Choose_a_VPN">Choose a VPN</string>
     <string name="Import_OpenVPN_Configuration_Profile">Import OpenVPN Configuration Profile</string>
-
+    <string name="openvpn_log">OpenVPN Log</string>
     <string name="prioritize_the_list_by_server_location">prioritize the list by server location</string>
     <string name="connect_now">Connect now!</string>
     <string name="enter_settings_wallet">Enter Settings Wallet</string>
