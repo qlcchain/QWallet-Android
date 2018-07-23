@@ -857,4 +857,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="Do_you_want_to_disconnect">Do you want to disconnect?</string>
     <string name="Please_disconnect_the_current_one_first">Please disconnect the current one first.</string>
     <string name="Deposit">Deposit 1 QLC for asset registration</string>
+
+    <!--2018 07 19-->
+    <string name="free">FREE</string>
+    <string name="free_connection_details">free connection details</string>
+    <string name="Gain">Gain</string>
+    <string name="Used">Used</string>
+    <string name="HISTORY_RECORD">HISTORY RECORD</string>
+    <string name="AVAILABLE">AVAILABLE</string>
+    <string name="Please_create_a_wallet_to_continue">Please create a wallet to continue.</string>
+    <string name="This_will_consume_one_of_your_free_connections">This will consume one of your free connections.</string>
 </resources>

@@ -10,6 +10,8 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EthWalletDetail;
+import com.stratagile.qlink.entity.FreeNum;
+import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.MainAddress;
@@ -40,6 +42,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
+import static com.stratagile.qlink.data.api.API.url_zs_free_num;
 import static com.stratagile.qlink.data.api.MainAPI.sendRow;
 import static com.stratagile.qlink.data.api.MainAPI.url_bet;
 import static com.stratagile.qlink.data.api.MainAPI.url_bnb_2_qlc;
@@ -186,17 +189,29 @@ public interface MainHttpApi {
 
 
     /*************************************************/
-    @POST(url_get_server_time)
-    @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<ServerTime> getServerTime(@Body RequestBody map);
+//    @POST(url_get_server_time)
+//    @Headers({"Content-Type: application/json","Accept: application/json"})
+//    Observable<ServerTime> getServerTime(@Body RequestBody map);
+//
+//    @POST(url_bet)
+//    @Headers({"Content-Type: application/json","Accept: application/json"})
+//    Observable<BetResult> betRace(@Body RequestBody map);
+//
+//    @POST(url_race_times)
+//    @Headers({"Content-Type: application/json","Accept: application/json"})
+//    Observable<RaceTimes> getRaceTimes(@Body RequestBody map);
 
-    @POST(url_bet)
+    @POST(MainAPI.url_zs_free_num)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BetResult> betRace(@Body RequestBody map);
+    Observable<FreeNum> zsFreeNum(@Body RequestBody map);
 
-    @POST(url_race_times)
+    @POST(MainAPI.url_freeConnection)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<RaceTimes> getRaceTimes(@Body RequestBody map);
+    Observable<FreeNum> freeConnection(@Body RequestBody map);
+
+    @POST(MainAPI.url_queryFreeRecords)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<FreeRecord> queryFreeRecords(@Body RequestBody map);
 
     /*************************************************/
 }

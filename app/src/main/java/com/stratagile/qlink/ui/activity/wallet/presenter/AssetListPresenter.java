@@ -5,18 +5,23 @@ import android.support.annotation.NonNull;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.db.WifiEntityDao;
+import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.wallet.contract.AssetListContract;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -100,20 +105,6 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
      * 就将数据库中的删除。
      */
     private void handleAssetFromServerBack(WifiRegisteResult wifiRegisteResult) {
-        /*String ownVpnSsidStr = "";//记录服务属于自己vpn的ssid
-        String ownWifiSsidStr = "";//记录服务属于自己wifi的ssid
-        for (WifiRegisteResult.DataBean dataBean : wifiRegisteResult.getData()) {
-            if (dataBean.getP2pId() != null && dataBean.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                if("0".equals(dataBean.getType()))
-                {
-                    ownWifiSsidStr += dataBean.getSsId();
-                }else if("3".equals(dataBean.getType()))
-                {
-                    ownVpnSsidStr += dataBean.getSsId();
-                }
-
-            }
-        }*/
         for (WifiRegisteResult.DataBean dataBean : wifiRegisteResult.getData()) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             List<VpnEntity> vpnEntityListInSql = new ArrayList<>();
@@ -127,10 +118,12 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                         ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                         break;
-                    } else if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals(vpnEntity.getP2pId())) {
+                    } else if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && dataBean.getP2pId().equals(vpnEntity.getP2pId())) {
                         vpnEntity.setP2pId(dataBean.getP2pId());
                         vpnEntity.setAddress(dataBean.getAddress());
-                        vpnEntity.setQlc((float) dataBean.getQlc());
+                        vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
+//                        vpnEntity.setQlc((float) dataBean.getQlc());
+                        vpnEntity.setAssetTranfer(dataBean.getQlc());
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                     }
                 }
@@ -140,7 +133,9 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                     vpnEntity.setP2pId(dataBean.getP2pId());
                     vpnEntity.setVpnName(dataBean.getSsId());
                     vpnEntity.setAddress(dataBean.getAddress());
-                    vpnEntity.setQlc((float) dataBean.getQlc());
+                    vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
+//                    vpnEntity.setQlc((float) dataBean.getQlc());
+                    vpnEntity.setAssetTranfer(dataBean.getQlc());
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
                 }
 

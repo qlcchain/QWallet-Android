@@ -15,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -49,6 +50,7 @@ import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
+import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.P2pBack;
@@ -73,6 +75,7 @@ import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
+import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
@@ -100,6 +103,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +147,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     RelativeLayout rl1;
     @BindView(R.id.rl2)
     RelativeLayout rl2;
+    @BindView(R.id.tv_free)
+    TextView tvFree;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -212,6 +218,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getPic(P2pBack p2pBack) {
+        Map<String, String> infoMap1 = new HashMap<>();
+        infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        mPresenter.zsFreeNum(infoMap1);
+
         if (SpUtil.getString(this, ConstantValue.myAvatarPath, "").equals("")) {
             Map<String, String> infoMap = new HashMap<>();
             infoMap.put("p2pId", SpUtil.getString(this, ConstantValue.P2PID, ""));
@@ -235,6 +245,33 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 //            } else {
 //                showGuideViewRegisteVpn();
 //            }
+        }
+    }
+
+
+    @Override
+    public void onGetFreeNumBack(int num) {
+        ConstantValue.freeNum = num;
+        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+//            if (num == 0) {
+//                tvFree.setVisibility(View.GONE);
+//                ivWallet.setVisibility(View.GONE);
+//            } else {
+//                tvFree.setVisibility(View.VISIBLE);
+//                ivWallet.setVisibility(View.VISIBLE);
+//                tvFree.setText(getString(R.string.free) + ":" + num);
+//            }
+            tvFree.setVisibility(View.VISIBLE);
+            ivWallet.setVisibility(View.VISIBLE);
+            tvFree.setText(getString(R.string.free) + ":" + num);
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetFreeNumBack(FreeCount freeCount) {
+        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+            tvFree.setVisibility(View.VISIBLE);
+            ivWallet.setVisibility(View.VISIBLE);
+            tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
         }
     }
 
@@ -266,6 +303,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         String addressNames = FileUtil.getAllAddressNames();
         Map<String, String> map = new HashMap<>();
         map.put("key", addressNames);
+        if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
+            Map<String, String> infoMap1 = new HashMap<>();
+            infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+            mPresenter.zsFreeNum(infoMap1);
+        }
         if (!("".equals(addressNames))) {
             List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
             if (walletList.size() == 0) {
@@ -305,6 +347,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                 mapHeart.put("wifiName", currentWifiName);
                                 mapHeart.put("vpnName", currentVpnName);
                                 mPresenter.heartBeat(mapHeart);
+                            }
+
+                            long lastRestart = SpUtil.getLong(AppConfig.getInstance(), ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
+                            if ((Calendar.getInstance().getTimeInMillis() - lastRestart) > 2 * 60 * 60 * 1000)//每两小时重启一次
+                            {
+                                SpUtil.putLong(AppConfig.getInstance(), ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
+                                Intent intent = new Intent(mainActivity, SplashActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                Process.killProcess(Process.myPid());
+                                System.exit(0);
                             }
                             // }
                         }
@@ -443,24 +496,22 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         downCHeckView.setVisibility(View.VISIBLE);
         tvTitle.setVisibility(View.GONE);
         tvTitle.setText(R.string.vpn);
-        Glide.with(this)
-                .load(R.mipmap.icon_addition)
-                .into(ivWallet);
-        ivWallet.setVisibility(View.INVISIBLE);
-        ivWallet.setClickable(false);
-//        if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-//            ivWallet.setVisibility(View.INVISIBLE);
-//            ivWallet.setClickable(false);
+        tvFree.setVisibility(View.VISIBLE);
+//        if (freeNum != 0) {
+//            tvFree.setVisibility(View.VISIBLE);
 //        } else {
-//            ivWallet.setVisibility(View.VISIBLE);
-//            ivWallet.setClickable(true);
+//            tvFree.setVisibility(View.GONE);
 //        }
+        Glide.with(this)
+                .load(R.mipmap.icon_free)
+                .into(ivWallet);
     }
 
     /**
      * 设置为wifi界面
      */
     private void setWifiPage() {
+        tvFree.setVisibility(View.GONE);
         downCHeckView.setVisibility(View.GONE);
         downCHeckView.setOnItemCheckListener(new DownCheckView.OnItemCheckListener() {
             @Override
@@ -492,7 +543,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     /**
      * 设置为钱包界面
      */
+    int jianjushijian = 500;
+    long dangqianshijian = 0;
+
     private void setWalletPage() {
+        if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
+            return;
+        }
+        dangqianshijian = Calendar.getInstance().getTimeInMillis();
+        KLog.i("进入钱包页面。。");
+        tvFree.setVisibility(View.GONE);
         if (ivWallet != null) {
             ivWallet.setVisibility(View.VISIBLE);
             ivWallet.setClickable(true);
@@ -640,6 +700,12 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void onDestroy() {
+        KLog.i("mainactivity关闭");
+        Intent intent = new Intent();
+        intent.setAction(BroadCastAction.disconnectVpn);
+        sendBroadcast(intent);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(disconnectVpnSuccessBroadReceiver);
@@ -773,6 +839,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             case R.id.iv_wallet:
                 if (bottomNavigation.getSelectedItemId() == R.id.item_wallet) {
                     startActivity(new Intent(this, SettingsActivity.class));
+                    return;
+                }
+                if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+                    startActivity(new Intent(this, FreeConnectActivity.class));
                     return;
                 }
                 List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();

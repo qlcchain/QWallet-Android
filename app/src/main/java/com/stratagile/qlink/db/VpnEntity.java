@@ -26,6 +26,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
      */
     private String country;
 
+
     protected VpnEntity(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
@@ -60,6 +61,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         currentConnect = in.readInt();
         qlc = in.readFloat();
         isConnected = in.readByte() != 0;
+        lastFreeTime = in.readLong();
         online = in.readByte() != 0;
         isLoadingAvater = in.readByte() != 0;
         avaterUpdateTime = in.readLong();
@@ -114,6 +116,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
                 ", isLoadingAvater=" + isLoadingAvater +
                 ", avaterUpdateTime=" + avaterUpdateTime +
                 ", price=" + price +
+                ", lastFreeTime=" + lastFreeTime +
                 '}';
     }
 
@@ -267,22 +270,31 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
      */
     private boolean isConnected;
 
+    public long getLastFreeTime() {
+        return lastFreeTime;
+    }
+
+    public void setLastFreeTime(long lastFreeTime) {
+        this.lastFreeTime = lastFreeTime;
+    }
+
+    private long lastFreeTime = 0;
 
     @Generated(hash = 2103615292)
     public VpnEntity() {
     }
 
-    @Generated(hash = 781170088)
+    @Generated(hash = 942521035)
     public VpnEntity(Long id, String country, String userId,
-                     String profileLocalPath, String password, String privateKeyPassword,
-                     String profileUUid, String ipV4Address, String continent,
-                     String username, int groupNum, String bandwidth, int connectMaxnumber,
-                     double assetTranfer, String avatar, double registerQlc, int onlineTime,
-                     int connsuccessNum, boolean isInMainWallet, int unReadMessageCount,
-                     String friendNum, String configuration, String vpnName, String p2pId,
-                     String address, int type, int currentConnect, float qlc,
-                     boolean isConnected, boolean online, boolean isLoadingAvater,
-                     long avaterUpdateTime, float price) {
+            String profileLocalPath, String password, String privateKeyPassword,
+            String profileUUid, String ipV4Address, String continent,
+            String username, int groupNum, String bandwidth, int connectMaxnumber,
+            double assetTranfer, String avatar, double registerQlc, int onlineTime,
+            int connsuccessNum, boolean isInMainWallet, int unReadMessageCount,
+            String friendNum, String configuration, String vpnName, String p2pId,
+            String address, int type, int currentConnect, float qlc,
+            boolean isConnected, long lastFreeTime, boolean online,
+            boolean isLoadingAvater, long avaterUpdateTime, float price) {
         this.id = id;
         this.country = country;
         this.userId = userId;
@@ -312,11 +324,14 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.currentConnect = currentConnect;
         this.qlc = qlc;
         this.isConnected = isConnected;
+        this.lastFreeTime = lastFreeTime;
         this.online = online;
         this.isLoadingAvater = isLoadingAvater;
         this.avaterUpdateTime = avaterUpdateTime;
         this.price = price;
     }
+
+
 
     public boolean isOnline() {
         return online;
@@ -602,6 +617,24 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.isInMainWallet = isInMainWallet;
     }
 
+   
+
+    public int getOnlineTime() {
+        return this.onlineTime;
+    }
+
+    public void setOnlineTime(int onlineTime) {
+        this.onlineTime = onlineTime;
+    }
+
+    public int getConnsuccessNum() {
+        return this.connsuccessNum;
+    }
+
+    public void setConnsuccessNum(int connsuccessNum) {
+        this.connsuccessNum = connsuccessNum;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -643,25 +676,10 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         dest.writeInt(currentConnect);
         dest.writeFloat(qlc);
         dest.writeByte((byte) (isConnected ? 1 : 0));
+        dest.writeLong(lastFreeTime);
         dest.writeByte((byte) (online ? 1 : 0));
         dest.writeByte((byte) (isLoadingAvater ? 1 : 0));
         dest.writeLong(avaterUpdateTime);
         dest.writeFloat(price);
-    }
-
-    public int getOnlineTime() {
-        return this.onlineTime;
-    }
-
-    public void setOnlineTime(int onlineTime) {
-        this.onlineTime = onlineTime;
-    }
-
-    public int getConnsuccessNum() {
-        return this.connsuccessNum;
-    }
-
-    public void setConnsuccessNum(int connsuccessNum) {
-        this.connsuccessNum = connsuccessNum;
     }
 }

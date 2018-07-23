@@ -187,16 +187,16 @@ public class MainHttpAPIWrapper {
     public Observable<EthWalletDetail> getEthAddressDetail(String address, Map map) {
         return wrapperETH(mainHttpAPI.getEthAddressDetail(address, map)).compose(SCHEDULERS_TRANSFORMER);
     }
-    public Observable<RaceTimes> getRaceTimes(Map map) {
-        return wrapper(mainHttpAPI.getRaceTimes(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
-    }
-
-    public Observable<ServerTime> getServerTime(Map map) {
-        return wrapper(mainHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
-    }
-    public Observable<BetResult> betRace(Map map) {
-        return wrapper(mainHttpAPI.betRace(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
-    }
+//    public Observable<RaceTimes> getRaceTimes(Map map) {
+//        return wrapper(mainHttpAPI.getRaceTimes(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//    }
+//
+//    public Observable<ServerTime> getServerTime(Map map) {
+//        return wrapper(mainHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//    }
+//    public Observable<BetResult> betRace(Map map) {
+//        return wrapper(mainHttpAPI.betRace(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+//    }
 
     /**
      * 给任何Http的Observable加上通用的线程调度器

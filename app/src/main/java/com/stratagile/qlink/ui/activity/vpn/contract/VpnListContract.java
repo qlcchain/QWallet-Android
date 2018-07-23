@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.vpn.contract;
 
 import com.stratagile.qlink.VpnProfile;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
@@ -36,6 +37,10 @@ public interface VpnListContract {
         void showNeedQlcDialog(VpnEntity vpnEntity);
 
         void refreshList();
+
+        void onGetFreeNumBack(int num);
+
+        void onGetBalancelSuccess(Balance balance);
     }
 
     interface VpnListContractPresenter extends BasePresenter {
@@ -53,5 +58,10 @@ public interface VpnListContract {
 
         void dialogConfirm();
 
+        void zsFreeNum(Map map);
+
+        void freeConnection(Map map);
+
+        void getWalletBalance(Map map);
     }
 }

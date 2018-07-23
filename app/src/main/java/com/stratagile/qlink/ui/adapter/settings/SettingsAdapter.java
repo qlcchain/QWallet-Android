@@ -45,7 +45,7 @@ public class SettingsAdapter extends BaseQuickAdapter<SettingBean, BaseViewHolde
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (onCheckChangeListener != null) {
                         KLog.i("切换点击...");
-                        onCheckChangeListener.onCheck(isChecked, helper.getLayoutPosition());
+                        onCheckChangeListener.onCheck(isChecked, helper.getLayoutPosition(), item.getIcon());
                     }
                     helper.setText(R.id.tv_desc, isChecked ? item.getOnStr() : item.getOffStr());
                     item.setFingerprintUnLock(isChecked);
@@ -77,7 +77,7 @@ public class SettingsAdapter extends BaseQuickAdapter<SettingBean, BaseViewHolde
     }
 
     public interface OnCheckChangeListener {
-        void onCheck(boolean isCheck, int position);
+        void onCheck(boolean isCheck, int position, String name);
     }
 
 }

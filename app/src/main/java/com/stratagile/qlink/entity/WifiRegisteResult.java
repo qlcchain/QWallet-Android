@@ -47,7 +47,7 @@ public class WifiRegisteResult extends BaseBack {
         private int connectNum;
 //        private String ipv4Address;
 //        private double bandWidth;
-//        private String profileLocalPath;
+        private String profileLocalPath;
         private String imgUrl;
 
         public String getSsId() {
@@ -138,13 +138,13 @@ public class WifiRegisteResult extends BaseBack {
 //            this.bandWidth = bandWidth;
 //        }
 //
-//        public String getProfileLocalPath() {
-//            return profileLocalPath;
-//        }
-//
-//        public void setProfileLocalPath(String profileLocalPath) {
-//            this.profileLocalPath = profileLocalPath;
-//        }
+        public String getProfileLocalPath() {
+            return profileLocalPath;
+        }
+
+        public void setProfileLocalPath(String profileLocalPath) {
+            this.profileLocalPath = profileLocalPath;
+        }
 
         public String getImgUrl() {
             return imgUrl;

@@ -35,7 +35,7 @@
             android:textSize="10sp"
             android:fontFamily="@font/roboto_regular_q"
             android:text="@string/Value"
-            android:layout_marginRight="@dimen/x72"
+            android:layout_marginRight="@dimen/x80"
             />
 
         <TextView

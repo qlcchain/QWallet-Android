@@ -51,10 +51,11 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         public final static Property CurrentConnect = new Property(26, int.class, "currentConnect", false, "CURRENT_CONNECT");
         public final static Property Qlc = new Property(27, float.class, "qlc", false, "QLC");
         public final static Property IsConnected = new Property(28, boolean.class, "isConnected", false, "IS_CONNECTED");
-        public final static Property Online = new Property(29, boolean.class, "online", false, "ONLINE");
-        public final static Property IsLoadingAvater = new Property(30, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
-        public final static Property AvaterUpdateTime = new Property(31, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
-        public final static Property Price = new Property(32, float.class, "price", false, "PRICE");
+        public final static Property LastFreeTime = new Property(29, long.class, "lastFreeTime", false, "LAST_FREE_TIME");
+        public final static Property Online = new Property(30, boolean.class, "online", false, "ONLINE");
+        public final static Property IsLoadingAvater = new Property(31, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
+        public final static Property AvaterUpdateTime = new Property(32, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
+        public final static Property Price = new Property(33, float.class, "price", false, "PRICE");
     }
 
 
@@ -99,10 +100,11 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
                 "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 26: currentConnect
                 "\"QLC\" REAL NOT NULL ," + // 27: qlc
                 "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 28: isConnected
-                "\"ONLINE\" INTEGER NOT NULL ," + // 29: online
-                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 30: isLoadingAvater
-                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 31: avaterUpdateTime
-                "\"PRICE\" REAL NOT NULL );"); // 32: price
+                "\"LAST_FREE_TIME\" INTEGER NOT NULL ," + // 29: lastFreeTime
+                "\"ONLINE\" INTEGER NOT NULL ," + // 30: online
+                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 31: isLoadingAvater
+                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 32: avaterUpdateTime
+                "\"PRICE\" REAL NOT NULL );"); // 33: price
     }
 
     /** Drops the underlying database table. */
@@ -211,10 +213,11 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         stmt.bindLong(27, entity.getCurrentConnect());
         stmt.bindDouble(28, entity.getQlc());
         stmt.bindLong(29, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(30, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(31, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(32, entity.getAvaterUpdateTime());
-        stmt.bindDouble(33, entity.getPrice());
+        stmt.bindLong(30, entity.getLastFreeTime());
+        stmt.bindLong(31, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(32, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(33, entity.getAvaterUpdateTime());
+        stmt.bindDouble(34, entity.getPrice());
     }
 
     @Override
@@ -317,10 +320,11 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         stmt.bindLong(27, entity.getCurrentConnect());
         stmt.bindDouble(28, entity.getQlc());
         stmt.bindLong(29, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(30, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(31, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(32, entity.getAvaterUpdateTime());
-        stmt.bindDouble(33, entity.getPrice());
+        stmt.bindLong(30, entity.getLastFreeTime());
+        stmt.bindLong(31, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(32, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(33, entity.getAvaterUpdateTime());
+        stmt.bindDouble(34, entity.getPrice());
     }
 
     @Override
@@ -360,10 +364,11 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             cursor.getInt(offset + 26), // currentConnect
             cursor.getFloat(offset + 27), // qlc
             cursor.getShort(offset + 28) != 0, // isConnected
-            cursor.getShort(offset + 29) != 0, // online
-            cursor.getShort(offset + 30) != 0, // isLoadingAvater
-            cursor.getLong(offset + 31), // avaterUpdateTime
-            cursor.getFloat(offset + 32) // price
+            cursor.getLong(offset + 29), // lastFreeTime
+            cursor.getShort(offset + 30) != 0, // online
+            cursor.getShort(offset + 31) != 0, // isLoadingAvater
+            cursor.getLong(offset + 32), // avaterUpdateTime
+            cursor.getFloat(offset + 33) // price
         );
         return entity;
     }
@@ -399,10 +404,11 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         entity.setCurrentConnect(cursor.getInt(offset + 26));
         entity.setQlc(cursor.getFloat(offset + 27));
         entity.setIsConnected(cursor.getShort(offset + 28) != 0);
-        entity.setOnline(cursor.getShort(offset + 29) != 0);
-        entity.setIsLoadingAvater(cursor.getShort(offset + 30) != 0);
-        entity.setAvaterUpdateTime(cursor.getLong(offset + 31));
-        entity.setPrice(cursor.getFloat(offset + 32));
+        entity.setLastFreeTime(cursor.getLong(offset + 29));
+        entity.setOnline(cursor.getShort(offset + 30) != 0);
+        entity.setIsLoadingAvater(cursor.getShort(offset + 31) != 0);
+        entity.setAvaterUpdateTime(cursor.getLong(offset + 32));
+        entity.setPrice(cursor.getFloat(offset + 33));
      }
     
     @Override

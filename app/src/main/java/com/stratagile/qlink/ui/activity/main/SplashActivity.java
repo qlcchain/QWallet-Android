@@ -13,6 +13,9 @@ import com.stratagile.qlink.ui.activity.main.contract.SplashContract;
 import com.stratagile.qlink.ui.activity.main.module.SplashModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SplashPresenter;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
+import com.stratagile.qlink.utils.SpUtil;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -52,6 +55,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     protected void initData() {
         LocalAssetsUtils.updateGreanDaoFromLocal();
+        SpUtil.putLong(AppConfig.getInstance(),ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
         mPresenter.getLastVersion();
         mPresenter.getPermission();
         mPresenter.observeJump();

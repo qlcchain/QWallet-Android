@@ -84,7 +84,7 @@ public class DownCheckView extends LinearLayout {
         ivChooseCountry = view.findViewById(R.id.iv_country);
         isShow = false;
         animationEnd = true;
-        tvSelect.setOnClickListener(new OnClickListener() {
+        llController.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 KLog.i("点击");

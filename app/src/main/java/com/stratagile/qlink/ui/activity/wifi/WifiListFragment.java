@@ -98,10 +98,10 @@ public class WifiListFragment extends MyBaseFragment implements WifiListContract
         recyclerView.getItemAnimator().setChangeDuration(0);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        KLog.i("density的大小为:" + getResources().getDisplayMetrics().density);
-        KLog.i(getResources().getDisplayMetrics().widthPixels);
-        KLog.i(getResources().getDisplayMetrics().heightPixels);
-        KLog.i(getResources().getDimension(R.dimen.x1280));
+        KLog.i("测试density的大小为:" + getResources().getDisplayMetrics().density);
+        KLog.i("测试屏幕宽度为：" + getResources().getDisplayMetrics().widthPixels);
+        KLog.i("测试屏幕高度为：" + getResources().getDisplayMetrics().heightPixels);
+        KLog.i("测试取的x1280为：：" + getResources().getDimension(R.dimen.x1280));
         KLog.i("测试dimens使用的是哪个:" + getResources().getDimension(R.dimen.fundspace));
         recyclerView.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(10, getActivity())));
         wifiListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

@@ -1666,4 +1666,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
   <string name="Do_you_want_to_disconnect">Bağlantıyı koparmak istiyor musunuz?</string>
   <string name="Please_disconnect_the_current_one_first">Lütfen önce mevcut olandan bağlantıyı koparın.</string>  <!--20180712待翻译-->
   <string name="Deposit">Varlık kaydı için 1 QLC yükleyiniz</string>
+  <string name="free">ÜCRETSİZ</string>
+  <string name="free_connection_details">ücretsiz bağlantı detayları</string>
+  <string name="Gain">Kazanım</string>
+  <string name="Used">Kullanım</string>
+  <string name="HISTORY_RECORD">KAYIT GEÇMİŞİ</string>
+  <string name="AVAILABLE">KULLANILABİLİR</string>
+  <string name="Please_create_a_wallet_to_continue">Devam etmek için lütfen cüzdan oluşturun.</string>
+  <string name="This_will_consume_one_of_your_free_connections">Bu sizin ücretsiz bağlantılarınızdan birini tüketecektir.</string>
+
 </resources>

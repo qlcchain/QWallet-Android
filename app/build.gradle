@@ -29,9 +29,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 51
+        versionCode 52
         multiDexEnabled true
-        versionName "1.2.7 beta"
+        versionName "1.2.7 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -108,7 +108,7 @@ android {
     }
 
     greendao {
-        schemaVersion 36//数据库版本号
+        schemaVersion 38//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录

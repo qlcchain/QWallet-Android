@@ -36,7 +36,10 @@ import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.ChainVpn;
+import com.stratagile.qlink.entity.FreeNum;
+import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.fragments.Utils;
 import com.stratagile.qlink.qlink.Qsdk;
@@ -217,6 +220,13 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         vpnEntity.setP2pId(vpnListBean.getP2pId());
                         vpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
                         vpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
+                    }
+                    if (vpnListBean.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                        if (qlinkcom.GetP2PConnectionStatus() > 0) {
+                            vpnEntity.setOnline(true);
+                        } else {
+                            vpnEntity.setOnline(false);
+                        }
                     }
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                     isAdded = true;
@@ -462,7 +472,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     /**
      * 检查和分享者的连接情况
      */
-    private void checkSharerConnect() {
+    public void checkSharerConnect() {
         if (qlinkcom.GetP2PConnectionStatus() > 0) {
             if (connectVpnEntity.getFriendNum() == null || "".equals(connectVpnEntity.getFriendNum())) {
                 byte[] p2pId = new byte[100];
@@ -708,4 +718,41 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 //        finish();
     }
 
+    @Override
+    public void zsFreeNum(Map map) {
+        httpAPIWrapper.zsFreeNum(map)
+                .subscribe(new HttpObserver<FreeNum>() {
+                    @Override
+                    public void onNext(FreeNum baseBack) {
+                        mView.onGetFreeNumBack(baseBack.getData().getFreeNum());
+                        onComplete();
+                    }
+                });
+    }
+    @Override
+    public void freeConnection(Map map) {
+        httpAPIWrapper.freeConnection(map)
+                .subscribe(new HttpObserver<FreeNum>() {
+                    @Override
+                    public void onNext(FreeNum freeNum) {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        mView.onGetFreeNumBack(freeNum.getData().getFreeNum());
+                        onComplete();
+                    }
+                });
+    }
+
+    @Override
+    public void getWalletBalance(Map map) {
+        httpAPIWrapper.getBalance(map)
+                .subscribe(new HttpObserver<Balance>() {
+                    @Override
+                    public void onNext(Balance balance) {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        mView.onGetBalancelSuccess(balance);
+                    }
+                });
+    }
 }
