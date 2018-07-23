@@ -127,7 +127,9 @@ public class FreeConnectActivity extends BaseActivity implements FreeConnectCont
     @Override
     public void onItemClick(int id) {
         ArrayList<FreeRecord.DataBean> list = new ArrayList<>();
-
+        if (orginList == null || orginList.size() == 0) {
+            return;
+        }
         switch (id) {
             case R.id.rl_all:
                 freeRecordAdapter.setNewData(orginList);

@@ -95,7 +95,11 @@ public class Qsdk {
                     }
                     wifiEntityList1.add(wifiEntity);
                 }
-                AppConfig.getInstance().getDaoSession().getWifiEntityDao().updateInTx(wifiEntityList1);
+                try {
+                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().updateInTx(wifiEntityList1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
                 List<VpnEntity> vpnEntityList1 = new ArrayList<>();
                 for (VpnEntity vpnEntity : vpnEntityList) {
