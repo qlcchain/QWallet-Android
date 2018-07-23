@@ -80,6 +80,7 @@ public class ClientVpnService extends Service {
                                         KLog.i("vpn计时扣费"+lastPayTime);
                                         if ((Calendar.getInstance().getTimeInMillis() - lastPayTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
                                         {
+                                            KLog.i("vpn计时扣费开始"+lastPayTime);
                                             connectToVpnRecord(AppConfig.currentUseVpn);
 
                                         }
@@ -94,6 +95,7 @@ public class ClientVpnService extends Service {
                                         KLog.i("vpn计时免费次数"+lastFreeTime);
                                         if ((Calendar.getInstance().getTimeInMillis() - lastFreeTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
                                         {
+                                            KLog.i("vpn计时免费次数开始"+lastFreeTime);
                                             connectToVpnFree(AppConfig.currentUseVpn);
 
                                         }

@@ -356,7 +356,7 @@ public class Qsdk {
             if (transactionRecord.getTxid().equals(recordSaveReq.getTxid())) {
                 Map<String, Object> infoMap = new HashMap<>();
                 infoMap.put("txid", transactionRecord.getTxid());
-                infoMap.put("success", true);
+                infoMap.put("success", "1");
                 QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.recordSaveRsp, infoMap);
                 return;
             }
@@ -373,7 +373,7 @@ public class Qsdk {
         //告诉使用端，我已经记录成功，
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("txid", transactionRecord.getTxid());
-        infoMap.put("success", true);
+        infoMap.put("success", "1");
         QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.recordSaveRsp, infoMap);
         if (recordSaveReq.getTransactiomType() == 3)//如果是vpn连接，说明有qlc进账
         {

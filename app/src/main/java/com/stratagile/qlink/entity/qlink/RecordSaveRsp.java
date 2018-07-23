@@ -6,7 +6,7 @@ package com.stratagile.qlink.entity.qlink;
 
 public class RecordSaveRsp {
     private String txid;
-    private boolean success;
+    private String success;
 
     @Override
     public String toString() {
@@ -24,11 +24,11 @@ public class RecordSaveRsp {
         this.txid = txid;
     }
 
-    public boolean isSuccess() {
+    public String isSuccess() {
         return success;
     }
 
-    public void setSuccess(boolean success) {
+    public void setSuccess(String success) {
         this.success = success;
     }
 }
