@@ -269,14 +269,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetFreeNumBack(FreeCount freeCount) {
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            if (freeCount.getCount() == 0) {
-                tvFree.setVisibility(View.GONE);
-                ivWallet.setVisibility(View.GONE);
-            } else {
-                tvFree.setVisibility(View.VISIBLE);
-                ivWallet.setVisibility(View.VISIBLE);
-                tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
-            }
+            tvFree.setVisibility(View.VISIBLE);
+            ivWallet.setVisibility(View.VISIBLE);
+            tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
         }
     }
 

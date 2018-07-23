@@ -231,10 +231,10 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         vpnListAdapter.setOnVpnOpreateListener(new VpnListAdapter.OnVpnOpreateListener() {
             @Override
             public void onConnect(VpnEntity vpnEntity) {
-//                if (VpnStatus.isVPNActive()) {
-//                    showChangeVpnDialog(vpnEntity);
-//                    return;
-//                }
+                if (VpnStatus.isVPNActive() && vpnListAdapter.getData().get(0).isConnected()) {
+                    showChangeVpnDialog(vpnEntity);
+                    return;
+                }
                 if (vpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                     getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
                 }
