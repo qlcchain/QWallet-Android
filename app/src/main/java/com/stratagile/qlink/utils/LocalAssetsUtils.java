@@ -77,6 +77,7 @@ public class LocalAssetsUtils {
                                         myAsset.getWifiEntity().setWalletAddress(wifiEntity.getWalletAddress());
                                         myAsset.getWifiEntity().setIsRegiste(wifiEntity.getIsRegiste());
                                         myAsset.getWifiEntity().setAvatar(wifiEntity.getAvatar());
+                                        myAsset.getWifiEntity().setWifiPassword(wifiEntity.getWifiPassword());
                                         AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(myAsset.getWifiEntity());
                                     }
                                 }
@@ -101,6 +102,9 @@ public class LocalAssetsUtils {
                                         //添加了抢注册功能，p2pId和钱包地址可能会变化
                                         myAsset.getVpnEntity().setP2pId(vpnEntity.getP2pId());
                                         myAsset.getVpnEntity().setAddress(vpnEntity.getAddress());
+                                        myAsset.getVpnEntity().setUsername(vpnEntity.getUsername());
+                                        myAsset.getVpnEntity().setPassword(vpnEntity.getPassword());
+                                        myAsset.getVpnEntity().setPrivateKeyPassword(vpnEntity.getPrivateKeyPassword());
                                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(myAsset.getVpnEntity());
 
 
@@ -117,6 +121,9 @@ public class LocalAssetsUtils {
                                         infoMap.put("qlc", vpnEntity.getQlc());
                                         infoMap.put("exist", true);
                                         infoMap.put("ipV4Address", vpnEntity.getIpV4Address());
+                                        infoMap.put("username", vpnEntity.getUsername());
+                                        infoMap.put("password", vpnEntity.getPassword());
+                                        infoMap.put("privateKeyPassword", vpnEntity.getPrivateKeyPassword());
                                         vpnList.add(infoMap);
                                     }
                                 }
