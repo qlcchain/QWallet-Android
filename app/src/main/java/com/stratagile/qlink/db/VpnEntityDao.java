@@ -24,38 +24,39 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Country = new Property(1, String.class, "country", false, "COUNTRY");
-        public final static Property UserId = new Property(2, String.class, "userId", false, "USER_ID");
-        public final static Property ProfileLocalPath = new Property(3, String.class, "profileLocalPath", false, "PROFILE_LOCAL_PATH");
-        public final static Property Password = new Property(4, String.class, "password", false, "PASSWORD");
-        public final static Property PrivateKeyPassword = new Property(5, String.class, "privateKeyPassword", false, "PRIVATE_KEY_PASSWORD");
-        public final static Property ProfileUUid = new Property(6, String.class, "profileUUid", false, "PROFILE_UUID");
-        public final static Property IpV4Address = new Property(7, String.class, "ipV4Address", false, "IP_V4_ADDRESS");
-        public final static Property Continent = new Property(8, String.class, "continent", false, "CONTINENT");
-        public final static Property Username = new Property(9, String.class, "username", false, "USERNAME");
-        public final static Property GroupNum = new Property(10, int.class, "groupNum", false, "GROUP_NUM");
-        public final static Property Bandwidth = new Property(11, String.class, "bandwidth", false, "BANDWIDTH");
-        public final static Property ConnectMaxnumber = new Property(12, int.class, "connectMaxnumber", false, "CONNECT_MAXNUMBER");
-        public final static Property AssetTranfer = new Property(13, double.class, "assetTranfer", false, "ASSET_TRANFER");
-        public final static Property Avatar = new Property(14, String.class, "avatar", false, "AVATAR");
-        public final static Property RegisterQlc = new Property(15, double.class, "registerQlc", false, "REGISTER_QLC");
-        public final static Property OnlineTime = new Property(16, int.class, "onlineTime", false, "ONLINE_TIME");
-        public final static Property ConnsuccessNum = new Property(17, int.class, "connsuccessNum", false, "CONNSUCCESS_NUM");
-        public final static Property IsInMainWallet = new Property(18, boolean.class, "isInMainWallet", false, "IS_IN_MAIN_WALLET");
-        public final static Property UnReadMessageCount = new Property(19, int.class, "unReadMessageCount", false, "UN_READ_MESSAGE_COUNT");
-        public final static Property FriendNum = new Property(20, String.class, "friendNum", false, "FRIEND_NUM");
-        public final static Property Configuration = new Property(21, String.class, "configuration", false, "CONFIGURATION");
-        public final static Property VpnName = new Property(22, String.class, "vpnName", false, "VPN_NAME");
-        public final static Property P2pId = new Property(23, String.class, "p2pId", false, "P2P_ID");
-        public final static Property Address = new Property(24, String.class, "address", false, "ADDRESS");
-        public final static Property Type = new Property(25, int.class, "type", false, "TYPE");
-        public final static Property CurrentConnect = new Property(26, int.class, "currentConnect", false, "CURRENT_CONNECT");
-        public final static Property Qlc = new Property(27, float.class, "qlc", false, "QLC");
-        public final static Property IsConnected = new Property(28, boolean.class, "isConnected", false, "IS_CONNECTED");
-        public final static Property LastFreeTime = new Property(29, long.class, "lastFreeTime", false, "LAST_FREE_TIME");
-        public final static Property Online = new Property(30, boolean.class, "online", false, "ONLINE");
-        public final static Property IsLoadingAvater = new Property(31, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
-        public final static Property AvaterUpdateTime = new Property(32, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
-        public final static Property Price = new Property(33, float.class, "price", false, "PRICE");
+        public final static Property IsMainNet = new Property(2, boolean.class, "isMainNet", false, "IS_MAIN_NET");
+        public final static Property UserId = new Property(3, String.class, "userId", false, "USER_ID");
+        public final static Property ProfileLocalPath = new Property(4, String.class, "profileLocalPath", false, "PROFILE_LOCAL_PATH");
+        public final static Property Password = new Property(5, String.class, "password", false, "PASSWORD");
+        public final static Property PrivateKeyPassword = new Property(6, String.class, "privateKeyPassword", false, "PRIVATE_KEY_PASSWORD");
+        public final static Property ProfileUUid = new Property(7, String.class, "profileUUid", false, "PROFILE_UUID");
+        public final static Property IpV4Address = new Property(8, String.class, "ipV4Address", false, "IP_V4_ADDRESS");
+        public final static Property Continent = new Property(9, String.class, "continent", false, "CONTINENT");
+        public final static Property Username = new Property(10, String.class, "username", false, "USERNAME");
+        public final static Property GroupNum = new Property(11, int.class, "groupNum", false, "GROUP_NUM");
+        public final static Property Bandwidth = new Property(12, String.class, "bandwidth", false, "BANDWIDTH");
+        public final static Property ConnectMaxnumber = new Property(13, int.class, "connectMaxnumber", false, "CONNECT_MAXNUMBER");
+        public final static Property AssetTranfer = new Property(14, double.class, "assetTranfer", false, "ASSET_TRANFER");
+        public final static Property Avatar = new Property(15, String.class, "avatar", false, "AVATAR");
+        public final static Property RegisterQlc = new Property(16, double.class, "registerQlc", false, "REGISTER_QLC");
+        public final static Property OnlineTime = new Property(17, int.class, "onlineTime", false, "ONLINE_TIME");
+        public final static Property ConnsuccessNum = new Property(18, int.class, "connsuccessNum", false, "CONNSUCCESS_NUM");
+        public final static Property IsInMainWallet = new Property(19, boolean.class, "isInMainWallet", false, "IS_IN_MAIN_WALLET");
+        public final static Property UnReadMessageCount = new Property(20, int.class, "unReadMessageCount", false, "UN_READ_MESSAGE_COUNT");
+        public final static Property FriendNum = new Property(21, String.class, "friendNum", false, "FRIEND_NUM");
+        public final static Property Configuration = new Property(22, String.class, "configuration", false, "CONFIGURATION");
+        public final static Property VpnName = new Property(23, String.class, "vpnName", false, "VPN_NAME");
+        public final static Property P2pId = new Property(24, String.class, "p2pId", false, "P2P_ID");
+        public final static Property Address = new Property(25, String.class, "address", false, "ADDRESS");
+        public final static Property Type = new Property(26, int.class, "type", false, "TYPE");
+        public final static Property CurrentConnect = new Property(27, int.class, "currentConnect", false, "CURRENT_CONNECT");
+        public final static Property Qlc = new Property(28, float.class, "qlc", false, "QLC");
+        public final static Property IsConnected = new Property(29, boolean.class, "isConnected", false, "IS_CONNECTED");
+        public final static Property LastFreeTime = new Property(30, long.class, "lastFreeTime", false, "LAST_FREE_TIME");
+        public final static Property Online = new Property(31, boolean.class, "online", false, "ONLINE");
+        public final static Property IsLoadingAvater = new Property(32, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
+        public final static Property AvaterUpdateTime = new Property(33, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
+        public final static Property Price = new Property(34, float.class, "price", false, "PRICE");
     }
 
 
@@ -73,38 +74,39 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"VPN_ENTITY\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"COUNTRY\" TEXT," + // 1: country
-                "\"USER_ID\" TEXT," + // 2: userId
-                "\"PROFILE_LOCAL_PATH\" TEXT," + // 3: profileLocalPath
-                "\"PASSWORD\" TEXT," + // 4: password
-                "\"PRIVATE_KEY_PASSWORD\" TEXT," + // 5: privateKeyPassword
-                "\"PROFILE_UUID\" TEXT," + // 6: profileUUid
-                "\"IP_V4_ADDRESS\" TEXT," + // 7: ipV4Address
-                "\"CONTINENT\" TEXT," + // 8: continent
-                "\"USERNAME\" TEXT," + // 9: username
-                "\"GROUP_NUM\" INTEGER NOT NULL ," + // 10: groupNum
-                "\"BANDWIDTH\" TEXT," + // 11: bandwidth
-                "\"CONNECT_MAXNUMBER\" INTEGER NOT NULL ," + // 12: connectMaxnumber
-                "\"ASSET_TRANFER\" REAL NOT NULL ," + // 13: assetTranfer
-                "\"AVATAR\" TEXT," + // 14: avatar
-                "\"REGISTER_QLC\" REAL NOT NULL ," + // 15: registerQlc
-                "\"ONLINE_TIME\" INTEGER NOT NULL ," + // 16: onlineTime
-                "\"CONNSUCCESS_NUM\" INTEGER NOT NULL ," + // 17: connsuccessNum
-                "\"IS_IN_MAIN_WALLET\" INTEGER NOT NULL ," + // 18: isInMainWallet
-                "\"UN_READ_MESSAGE_COUNT\" INTEGER NOT NULL ," + // 19: unReadMessageCount
-                "\"FRIEND_NUM\" TEXT," + // 20: friendNum
-                "\"CONFIGURATION\" TEXT," + // 21: configuration
-                "\"VPN_NAME\" TEXT," + // 22: vpnName
-                "\"P2P_ID\" TEXT," + // 23: p2pId
-                "\"ADDRESS\" TEXT," + // 24: address
-                "\"TYPE\" INTEGER NOT NULL ," + // 25: type
-                "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 26: currentConnect
-                "\"QLC\" REAL NOT NULL ," + // 27: qlc
-                "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 28: isConnected
-                "\"LAST_FREE_TIME\" INTEGER NOT NULL ," + // 29: lastFreeTime
-                "\"ONLINE\" INTEGER NOT NULL ," + // 30: online
-                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 31: isLoadingAvater
-                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 32: avaterUpdateTime
-                "\"PRICE\" REAL NOT NULL );"); // 33: price
+                "\"IS_MAIN_NET\" INTEGER NOT NULL ," + // 2: isMainNet
+                "\"USER_ID\" TEXT," + // 3: userId
+                "\"PROFILE_LOCAL_PATH\" TEXT," + // 4: profileLocalPath
+                "\"PASSWORD\" TEXT," + // 5: password
+                "\"PRIVATE_KEY_PASSWORD\" TEXT," + // 6: privateKeyPassword
+                "\"PROFILE_UUID\" TEXT," + // 7: profileUUid
+                "\"IP_V4_ADDRESS\" TEXT," + // 8: ipV4Address
+                "\"CONTINENT\" TEXT," + // 9: continent
+                "\"USERNAME\" TEXT," + // 10: username
+                "\"GROUP_NUM\" INTEGER NOT NULL ," + // 11: groupNum
+                "\"BANDWIDTH\" TEXT," + // 12: bandwidth
+                "\"CONNECT_MAXNUMBER\" INTEGER NOT NULL ," + // 13: connectMaxnumber
+                "\"ASSET_TRANFER\" REAL NOT NULL ," + // 14: assetTranfer
+                "\"AVATAR\" TEXT," + // 15: avatar
+                "\"REGISTER_QLC\" REAL NOT NULL ," + // 16: registerQlc
+                "\"ONLINE_TIME\" INTEGER NOT NULL ," + // 17: onlineTime
+                "\"CONNSUCCESS_NUM\" INTEGER NOT NULL ," + // 18: connsuccessNum
+                "\"IS_IN_MAIN_WALLET\" INTEGER NOT NULL ," + // 19: isInMainWallet
+                "\"UN_READ_MESSAGE_COUNT\" INTEGER NOT NULL ," + // 20: unReadMessageCount
+                "\"FRIEND_NUM\" TEXT," + // 21: friendNum
+                "\"CONFIGURATION\" TEXT," + // 22: configuration
+                "\"VPN_NAME\" TEXT," + // 23: vpnName
+                "\"P2P_ID\" TEXT," + // 24: p2pId
+                "\"ADDRESS\" TEXT," + // 25: address
+                "\"TYPE\" INTEGER NOT NULL ," + // 26: type
+                "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 27: currentConnect
+                "\"QLC\" REAL NOT NULL ," + // 28: qlc
+                "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 29: isConnected
+                "\"LAST_FREE_TIME\" INTEGER NOT NULL ," + // 30: lastFreeTime
+                "\"ONLINE\" INTEGER NOT NULL ," + // 31: online
+                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 32: isLoadingAvater
+                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 33: avaterUpdateTime
+                "\"PRICE\" REAL NOT NULL );"); // 34: price
     }
 
     /** Drops the underlying database table. */
@@ -126,98 +128,99 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         if (country != null) {
             stmt.bindString(2, country);
         }
+        stmt.bindLong(3, entity.getIsMainNet() ? 1L: 0L);
  
         String userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindString(3, userId);
+            stmt.bindString(4, userId);
         }
  
         String profileLocalPath = entity.getProfileLocalPath();
         if (profileLocalPath != null) {
-            stmt.bindString(4, profileLocalPath);
+            stmt.bindString(5, profileLocalPath);
         }
  
         String password = entity.getPassword();
         if (password != null) {
-            stmt.bindString(5, password);
+            stmt.bindString(6, password);
         }
  
         String privateKeyPassword = entity.getPrivateKeyPassword();
         if (privateKeyPassword != null) {
-            stmt.bindString(6, privateKeyPassword);
+            stmt.bindString(7, privateKeyPassword);
         }
  
         String profileUUid = entity.getProfileUUid();
         if (profileUUid != null) {
-            stmt.bindString(7, profileUUid);
+            stmt.bindString(8, profileUUid);
         }
  
         String ipV4Address = entity.getIpV4Address();
         if (ipV4Address != null) {
-            stmt.bindString(8, ipV4Address);
+            stmt.bindString(9, ipV4Address);
         }
  
         String continent = entity.getContinent();
         if (continent != null) {
-            stmt.bindString(9, continent);
+            stmt.bindString(10, continent);
         }
  
         String username = entity.getUsername();
         if (username != null) {
-            stmt.bindString(10, username);
+            stmt.bindString(11, username);
         }
-        stmt.bindLong(11, entity.getGroupNum());
+        stmt.bindLong(12, entity.getGroupNum());
  
         String bandwidth = entity.getBandwidth();
         if (bandwidth != null) {
-            stmt.bindString(12, bandwidth);
+            stmt.bindString(13, bandwidth);
         }
-        stmt.bindLong(13, entity.getConnectMaxnumber());
-        stmt.bindDouble(14, entity.getAssetTranfer());
+        stmt.bindLong(14, entity.getConnectMaxnumber());
+        stmt.bindDouble(15, entity.getAssetTranfer());
  
         String avatar = entity.getAvatar();
         if (avatar != null) {
-            stmt.bindString(15, avatar);
+            stmt.bindString(16, avatar);
         }
-        stmt.bindDouble(16, entity.getRegisterQlc());
-        stmt.bindLong(17, entity.getOnlineTime());
-        stmt.bindLong(18, entity.getConnsuccessNum());
-        stmt.bindLong(19, entity.getIsInMainWallet() ? 1L: 0L);
-        stmt.bindLong(20, entity.getUnReadMessageCount());
+        stmt.bindDouble(17, entity.getRegisterQlc());
+        stmt.bindLong(18, entity.getOnlineTime());
+        stmt.bindLong(19, entity.getConnsuccessNum());
+        stmt.bindLong(20, entity.getIsInMainWallet() ? 1L: 0L);
+        stmt.bindLong(21, entity.getUnReadMessageCount());
  
         String friendNum = entity.getFriendNum();
         if (friendNum != null) {
-            stmt.bindString(21, friendNum);
+            stmt.bindString(22, friendNum);
         }
  
         String configuration = entity.getConfiguration();
         if (configuration != null) {
-            stmt.bindString(22, configuration);
+            stmt.bindString(23, configuration);
         }
  
         String vpnName = entity.getVpnName();
         if (vpnName != null) {
-            stmt.bindString(23, vpnName);
+            stmt.bindString(24, vpnName);
         }
  
         String p2pId = entity.getP2pId();
         if (p2pId != null) {
-            stmt.bindString(24, p2pId);
+            stmt.bindString(25, p2pId);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(25, address);
+            stmt.bindString(26, address);
         }
-        stmt.bindLong(26, entity.getType());
-        stmt.bindLong(27, entity.getCurrentConnect());
-        stmt.bindDouble(28, entity.getQlc());
-        stmt.bindLong(29, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(30, entity.getLastFreeTime());
-        stmt.bindLong(31, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(32, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(33, entity.getAvaterUpdateTime());
-        stmt.bindDouble(34, entity.getPrice());
+        stmt.bindLong(27, entity.getType());
+        stmt.bindLong(28, entity.getCurrentConnect());
+        stmt.bindDouble(29, entity.getQlc());
+        stmt.bindLong(30, entity.getIsConnected() ? 1L: 0L);
+        stmt.bindLong(31, entity.getLastFreeTime());
+        stmt.bindLong(32, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(33, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(34, entity.getAvaterUpdateTime());
+        stmt.bindDouble(35, entity.getPrice());
     }
 
     @Override
@@ -233,98 +236,99 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         if (country != null) {
             stmt.bindString(2, country);
         }
+        stmt.bindLong(3, entity.getIsMainNet() ? 1L: 0L);
  
         String userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindString(3, userId);
+            stmt.bindString(4, userId);
         }
  
         String profileLocalPath = entity.getProfileLocalPath();
         if (profileLocalPath != null) {
-            stmt.bindString(4, profileLocalPath);
+            stmt.bindString(5, profileLocalPath);
         }
  
         String password = entity.getPassword();
         if (password != null) {
-            stmt.bindString(5, password);
+            stmt.bindString(6, password);
         }
  
         String privateKeyPassword = entity.getPrivateKeyPassword();
         if (privateKeyPassword != null) {
-            stmt.bindString(6, privateKeyPassword);
+            stmt.bindString(7, privateKeyPassword);
         }
  
         String profileUUid = entity.getProfileUUid();
         if (profileUUid != null) {
-            stmt.bindString(7, profileUUid);
+            stmt.bindString(8, profileUUid);
         }
  
         String ipV4Address = entity.getIpV4Address();
         if (ipV4Address != null) {
-            stmt.bindString(8, ipV4Address);
+            stmt.bindString(9, ipV4Address);
         }
  
         String continent = entity.getContinent();
         if (continent != null) {
-            stmt.bindString(9, continent);
+            stmt.bindString(10, continent);
         }
  
         String username = entity.getUsername();
         if (username != null) {
-            stmt.bindString(10, username);
+            stmt.bindString(11, username);
         }
-        stmt.bindLong(11, entity.getGroupNum());
+        stmt.bindLong(12, entity.getGroupNum());
  
         String bandwidth = entity.getBandwidth();
         if (bandwidth != null) {
-            stmt.bindString(12, bandwidth);
+            stmt.bindString(13, bandwidth);
         }
-        stmt.bindLong(13, entity.getConnectMaxnumber());
-        stmt.bindDouble(14, entity.getAssetTranfer());
+        stmt.bindLong(14, entity.getConnectMaxnumber());
+        stmt.bindDouble(15, entity.getAssetTranfer());
  
         String avatar = entity.getAvatar();
         if (avatar != null) {
-            stmt.bindString(15, avatar);
+            stmt.bindString(16, avatar);
         }
-        stmt.bindDouble(16, entity.getRegisterQlc());
-        stmt.bindLong(17, entity.getOnlineTime());
-        stmt.bindLong(18, entity.getConnsuccessNum());
-        stmt.bindLong(19, entity.getIsInMainWallet() ? 1L: 0L);
-        stmt.bindLong(20, entity.getUnReadMessageCount());
+        stmt.bindDouble(17, entity.getRegisterQlc());
+        stmt.bindLong(18, entity.getOnlineTime());
+        stmt.bindLong(19, entity.getConnsuccessNum());
+        stmt.bindLong(20, entity.getIsInMainWallet() ? 1L: 0L);
+        stmt.bindLong(21, entity.getUnReadMessageCount());
  
         String friendNum = entity.getFriendNum();
         if (friendNum != null) {
-            stmt.bindString(21, friendNum);
+            stmt.bindString(22, friendNum);
         }
  
         String configuration = entity.getConfiguration();
         if (configuration != null) {
-            stmt.bindString(22, configuration);
+            stmt.bindString(23, configuration);
         }
  
         String vpnName = entity.getVpnName();
         if (vpnName != null) {
-            stmt.bindString(23, vpnName);
+            stmt.bindString(24, vpnName);
         }
  
         String p2pId = entity.getP2pId();
         if (p2pId != null) {
-            stmt.bindString(24, p2pId);
+            stmt.bindString(25, p2pId);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(25, address);
+            stmt.bindString(26, address);
         }
-        stmt.bindLong(26, entity.getType());
-        stmt.bindLong(27, entity.getCurrentConnect());
-        stmt.bindDouble(28, entity.getQlc());
-        stmt.bindLong(29, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(30, entity.getLastFreeTime());
-        stmt.bindLong(31, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(32, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(33, entity.getAvaterUpdateTime());
-        stmt.bindDouble(34, entity.getPrice());
+        stmt.bindLong(27, entity.getType());
+        stmt.bindLong(28, entity.getCurrentConnect());
+        stmt.bindDouble(29, entity.getQlc());
+        stmt.bindLong(30, entity.getIsConnected() ? 1L: 0L);
+        stmt.bindLong(31, entity.getLastFreeTime());
+        stmt.bindLong(32, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(33, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(34, entity.getAvaterUpdateTime());
+        stmt.bindDouble(35, entity.getPrice());
     }
 
     @Override
@@ -337,38 +341,39 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         VpnEntity entity = new VpnEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // country
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // userId
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // profileLocalPath
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // password
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // privateKeyPassword
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // profileUUid
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // ipV4Address
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // continent
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // username
-            cursor.getInt(offset + 10), // groupNum
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // bandwidth
-            cursor.getInt(offset + 12), // connectMaxnumber
-            cursor.getDouble(offset + 13), // assetTranfer
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // avatar
-            cursor.getDouble(offset + 15), // registerQlc
-            cursor.getInt(offset + 16), // onlineTime
-            cursor.getInt(offset + 17), // connsuccessNum
-            cursor.getShort(offset + 18) != 0, // isInMainWallet
-            cursor.getInt(offset + 19), // unReadMessageCount
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // friendNum
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // configuration
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // vpnName
-            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // p2pId
-            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // address
-            cursor.getInt(offset + 25), // type
-            cursor.getInt(offset + 26), // currentConnect
-            cursor.getFloat(offset + 27), // qlc
-            cursor.getShort(offset + 28) != 0, // isConnected
-            cursor.getLong(offset + 29), // lastFreeTime
-            cursor.getShort(offset + 30) != 0, // online
-            cursor.getShort(offset + 31) != 0, // isLoadingAvater
-            cursor.getLong(offset + 32), // avaterUpdateTime
-            cursor.getFloat(offset + 33) // price
+            cursor.getShort(offset + 2) != 0, // isMainNet
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // userId
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // profileLocalPath
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // password
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // privateKeyPassword
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // profileUUid
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // ipV4Address
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // continent
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // username
+            cursor.getInt(offset + 11), // groupNum
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // bandwidth
+            cursor.getInt(offset + 13), // connectMaxnumber
+            cursor.getDouble(offset + 14), // assetTranfer
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // avatar
+            cursor.getDouble(offset + 16), // registerQlc
+            cursor.getInt(offset + 17), // onlineTime
+            cursor.getInt(offset + 18), // connsuccessNum
+            cursor.getShort(offset + 19) != 0, // isInMainWallet
+            cursor.getInt(offset + 20), // unReadMessageCount
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // friendNum
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // configuration
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // vpnName
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // p2pId
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // address
+            cursor.getInt(offset + 26), // type
+            cursor.getInt(offset + 27), // currentConnect
+            cursor.getFloat(offset + 28), // qlc
+            cursor.getShort(offset + 29) != 0, // isConnected
+            cursor.getLong(offset + 30), // lastFreeTime
+            cursor.getShort(offset + 31) != 0, // online
+            cursor.getShort(offset + 32) != 0, // isLoadingAvater
+            cursor.getLong(offset + 33), // avaterUpdateTime
+            cursor.getFloat(offset + 34) // price
         );
         return entity;
     }
@@ -377,38 +382,39 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
     public void readEntity(Cursor cursor, VpnEntity entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCountry(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setUserId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setProfileLocalPath(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setPassword(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setPrivateKeyPassword(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setProfileUUid(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setIpV4Address(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setContinent(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setUsername(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setGroupNum(cursor.getInt(offset + 10));
-        entity.setBandwidth(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setConnectMaxnumber(cursor.getInt(offset + 12));
-        entity.setAssetTranfer(cursor.getDouble(offset + 13));
-        entity.setAvatar(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setRegisterQlc(cursor.getDouble(offset + 15));
-        entity.setOnlineTime(cursor.getInt(offset + 16));
-        entity.setConnsuccessNum(cursor.getInt(offset + 17));
-        entity.setIsInMainWallet(cursor.getShort(offset + 18) != 0);
-        entity.setUnReadMessageCount(cursor.getInt(offset + 19));
-        entity.setFriendNum(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setConfiguration(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
-        entity.setVpnName(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
-        entity.setP2pId(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
-        entity.setAddress(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
-        entity.setType(cursor.getInt(offset + 25));
-        entity.setCurrentConnect(cursor.getInt(offset + 26));
-        entity.setQlc(cursor.getFloat(offset + 27));
-        entity.setIsConnected(cursor.getShort(offset + 28) != 0);
-        entity.setLastFreeTime(cursor.getLong(offset + 29));
-        entity.setOnline(cursor.getShort(offset + 30) != 0);
-        entity.setIsLoadingAvater(cursor.getShort(offset + 31) != 0);
-        entity.setAvaterUpdateTime(cursor.getLong(offset + 32));
-        entity.setPrice(cursor.getFloat(offset + 33));
+        entity.setIsMainNet(cursor.getShort(offset + 2) != 0);
+        entity.setUserId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setProfileLocalPath(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setPassword(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPrivateKeyPassword(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setProfileUUid(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setIpV4Address(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setContinent(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setUsername(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setGroupNum(cursor.getInt(offset + 11));
+        entity.setBandwidth(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setConnectMaxnumber(cursor.getInt(offset + 13));
+        entity.setAssetTranfer(cursor.getDouble(offset + 14));
+        entity.setAvatar(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setRegisterQlc(cursor.getDouble(offset + 16));
+        entity.setOnlineTime(cursor.getInt(offset + 17));
+        entity.setConnsuccessNum(cursor.getInt(offset + 18));
+        entity.setIsInMainWallet(cursor.getShort(offset + 19) != 0);
+        entity.setUnReadMessageCount(cursor.getInt(offset + 20));
+        entity.setFriendNum(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setConfiguration(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setVpnName(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setP2pId(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setAddress(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setType(cursor.getInt(offset + 26));
+        entity.setCurrentConnect(cursor.getInt(offset + 27));
+        entity.setQlc(cursor.getFloat(offset + 28));
+        entity.setIsConnected(cursor.getShort(offset + 29) != 0);
+        entity.setLastFreeTime(cursor.getLong(offset + 30));
+        entity.setOnline(cursor.getShort(offset + 31) != 0);
+        entity.setIsLoadingAvater(cursor.getShort(offset + 32) != 0);
+        entity.setAvaterUpdateTime(cursor.getLong(offset + 33));
+        entity.setPrice(cursor.getFloat(offset + 34));
      }
     
     @Override

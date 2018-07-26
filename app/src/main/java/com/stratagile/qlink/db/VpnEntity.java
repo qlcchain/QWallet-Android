@@ -26,6 +26,48 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
      */
     private String country;
 
+    private boolean isMainNet;
+
+    @Override
+    public String toString() {
+        return "VpnEntity{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", isMainNet=" + isMainNet +
+                ", userId='" + userId + '\'' +
+                ", profileLocalPath='" + profileLocalPath + '\'' +
+                ", password='" + password + '\'' +
+                ", privateKeyPassword='" + privateKeyPassword + '\'' +
+                ", profileUUid='" + profileUUid + '\'' +
+                ", ipV4Address='" + ipV4Address + '\'' +
+                ", continent='" + continent + '\'' +
+                ", username='" + username + '\'' +
+                ", groupNum=" + groupNum +
+                ", bandwidth='" + bandwidth + '\'' +
+                ", connectMaxnumber=" + connectMaxnumber +
+                ", assetTranfer=" + assetTranfer +
+                ", avatar='" + avatar + '\'' +
+                ", registerQlc=" + registerQlc +
+                ", onlineTime=" + onlineTime +
+                ", connsuccessNum=" + connsuccessNum +
+                ", isInMainWallet=" + isInMainWallet +
+                ", unReadMessageCount=" + unReadMessageCount +
+                ", friendNum='" + friendNum + '\'' +
+                ", configuration='" + configuration + '\'' +
+                ", vpnName='" + vpnName + '\'' +
+                ", p2pId='" + p2pId + '\'' +
+                ", address='" + address + '\'' +
+                ", type=" + type +
+                ", currentConnect=" + currentConnect +
+                ", qlc=" + qlc +
+                ", isConnected=" + isConnected +
+                ", lastFreeTime=" + lastFreeTime +
+                ", online=" + online +
+                ", isLoadingAvater=" + isLoadingAvater +
+                ", avaterUpdateTime=" + avaterUpdateTime +
+                ", price=" + price +
+                '}';
+    }
 
     protected VpnEntity(Parcel in) {
         if (in.readByte() == 0) {
@@ -34,6 +76,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
             id = in.readLong();
         }
         country = in.readString();
+        isMainNet = in.readByte() != 0;
         userId = in.readString();
         profileLocalPath = in.readString();
         password = in.readString();
@@ -79,46 +122,6 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
             return new VpnEntity[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "VpnEntity{" +
-                "id=" + id +
-                ", country='" + country + '\'' +
-                ", userId='" + userId + '\'' +
-                ", profileLocalPath='" + profileLocalPath + '\'' +
-                ", password='" + password + '\'' +
-                ", privateKeyPassword='" + privateKeyPassword + '\'' +
-                ", profileUUid='" + profileUUid + '\'' +
-                ", ipV4Address='" + ipV4Address + '\'' +
-                ", continent='" + continent + '\'' +
-                ", username='" + username + '\'' +
-                ", groupNum=" + groupNum +
-                ", bandwidth='" + bandwidth + '\'' +
-                ", connectMaxnumber=" + connectMaxnumber +
-                ", assetTranfer=" + assetTranfer +
-                ", avatar='" + avatar + '\'' +
-                ", registerQlc=" + registerQlc +
-                ", onlineTime=" + onlineTime +
-                ", connsuccessNum=" + connsuccessNum +
-                ", isInMainWallet=" + isInMainWallet +
-                ", unReadMessageCount=" + unReadMessageCount +
-                ", friendNum='" + friendNum + '\'' +
-                ", configuration='" + configuration + '\'' +
-                ", vpnName='" + vpnName + '\'' +
-                ", p2pId='" + p2pId + '\'' +
-                ", address='" + address + '\'' +
-                ", type=" + type +
-                ", currentConnect=" + currentConnect +
-                ", qlc=" + qlc +
-                ", isConnected=" + isConnected +
-                ", online=" + online +
-                ", isLoadingAvater=" + isLoadingAvater +
-                ", avaterUpdateTime=" + avaterUpdateTime +
-                ", price=" + price +
-                ", lastFreeTime=" + lastFreeTime +
-                '}';
-    }
 
     public String getAvatar() {
         return avatar;
@@ -284,8 +287,8 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     public VpnEntity() {
     }
 
-    @Generated(hash = 942521035)
-    public VpnEntity(Long id, String country, String userId,
+    @Generated(hash = 1376861147)
+    public VpnEntity(Long id, String country, boolean isMainNet, String userId,
             String profileLocalPath, String password, String privateKeyPassword,
             String profileUUid, String ipV4Address, String continent,
             String username, int groupNum, String bandwidth, int connectMaxnumber,
@@ -297,6 +300,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
             boolean isLoadingAvater, long avaterUpdateTime, float price) {
         this.id = id;
         this.country = country;
+        this.isMainNet = isMainNet;
         this.userId = userId;
         this.profileLocalPath = profileLocalPath;
         this.password = password;
@@ -330,8 +334,6 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.avaterUpdateTime = avaterUpdateTime;
         this.price = price;
     }
-
-
 
     public boolean isOnline() {
         return online;
@@ -649,6 +651,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
             dest.writeLong(id);
         }
         dest.writeString(country);
+        dest.writeByte((byte) (isMainNet ? 1 : 0));
         dest.writeString(userId);
         dest.writeString(profileLocalPath);
         dest.writeString(password);
@@ -681,5 +684,13 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         dest.writeByte((byte) (isLoadingAvater ? 1 : 0));
         dest.writeLong(avaterUpdateTime);
         dest.writeFloat(price);
+    }
+
+    public boolean getIsMainNet() {
+        return this.isMainNet;
+    }
+
+    public void setIsMainNet(boolean isMainNet) {
+        this.isMainNet = isMainNet;
     }
 }

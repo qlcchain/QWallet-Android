@@ -1443,6 +1443,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         vpnEntity.setCountry(etCountry.getText().toString());
         vpnEntity.setContinent(continent);
+        vpnEntity.setIsMainNet(SpUtil.getBoolean(this, ConstantValue.isMainNet, false));
         KLog.i(vpnEntity.toString());
         verifyConnectVpn();
         currentConnectType = CONNECT_CONFGIFILE_CHANGE;

@@ -75,6 +75,7 @@ import javax.inject.Inject;
 
 import static com.stratagile.qlink.LaunchVPN.CLEARLOG;
 import static com.stratagile.qlink.LaunchVPN.START_VPN_PROFILE;
+import static com.stratagile.qlink.utils.VpnUtil.isInSameNet;
 
 /**
  * @author hzp
@@ -179,7 +180,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             int j = vpnListBeans.size();
             for (int i = 0; i < j; i++) {
                 ChainVpn.DataBean.VpnListBean objData = vpnListBeans.get(i);
-                if (objData.getVpnName().equals(obj.getVpnName())) {
+                if (objData.getVpnName().equals(obj.getVpnName()) && isInSameNet(obj)) {
                     isHad = true;
                     break;
                 }
@@ -194,10 +195,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         Iterator it = vpnEntityList.iterator();        //根据传入的集合(旧集合)获取迭代器
         while (it.hasNext()) {          //遍历老集合
             VpnEntity obj = (VpnEntity) it.next();       //记录每一个元素
-            if (!newList.contains(obj.getVpnName())) {      //如果新集合中不包含旧集合中的元素
+            if (!newList.contains(obj.getVpnName()) && isInSameNet(obj)) {      //如果新集合中不包含旧集合中的元素
                 newList.add(obj.getVpnName());       //将元素添加
             } else {
-                AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(obj);
+                if (isInSameNet(obj)) {
+                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(obj);
+                }
             }
         }
         vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
@@ -207,6 +210,10 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 //            LogUtil.addLog("服务器给的资产名为：" + vpnListBean.getVpnName() + "  服务器给的资产p2pid为：" + vpnListBean.getP2pId(), getClass().getSimpleName());
             for (VpnEntity vpnEntity : vpnEntityList) {
                 if (vpnListBean.getVpnName().equals(vpnEntity.getVpnName())) {
+                    if (!isInSameNet(vpnEntity)) {
+                        isAdded = true;
+                        continue;
+                    }
                     vpnEntity.setAssetTranfer(vpnListBean.getQlc());
                     vpnEntity.setAddress(vpnListBean.getAddress());
                     vpnEntity.setP2pId(vpnListBean.getP2pId());
@@ -235,6 +242,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             }
             if (!isAdded) {
                 VpnEntity tempVpnEntity = new VpnEntity();
+                tempVpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                 tempVpnEntity.setP2pId(vpnListBean.getP2pId());
                 tempVpnEntity.setAddress(vpnListBean.getAddress());
                 tempVpnEntity.setCountry(vpnListBean.getCountry());
@@ -258,6 +266,9 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
             for (VpnEntity vpnEntity : vpnEntityList) {
+                if (!isInSameNet(vpnEntity)) {
+                    continue;
+                }
                 if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName()) && "".equals(vpnEntity.getFriendNum())) {
                     //判断是否是好友，是好友就把friendNum添加到WiFientity中，不是好友就要添加好友，再添加。
                     int friendNum = qlinkcom.GetFriendNumInFriendlist(vpnListBean.getP2pId());
@@ -323,6 +334,9 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
             for (VpnEntity vpnEntity : vpnEntityList) {
+                if (!isInSameNet(vpnEntity)) {
+                    continue;
+                }
                 if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
                     if (vpnEntity.isConnected()) {
                         isAddConnectedVpn = true;
