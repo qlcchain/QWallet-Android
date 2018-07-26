@@ -482,6 +482,7 @@ public class UseHistoryListFragment extends MyBaseFragment implements UseHistory
                     recordSave.setExChangeId(txid);
                     recordSave.setTransactiomType(1);
                     recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                    recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                     AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
                     closeProgressDialog();
                     showSendDialog();

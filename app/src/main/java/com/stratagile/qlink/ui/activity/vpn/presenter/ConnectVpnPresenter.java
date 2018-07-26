@@ -92,6 +92,7 @@ public class ConnectVpnPresenter implements ConnectVpnContract.ConnectVpnContrac
                 recordSave.setFriendNum(vpnEntity.getFriendNum());
                 recordSave.setQlcCount(vpnEntity.getQlc());
                 recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                 AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
             }
 

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.entity.Balance;
@@ -12,6 +13,7 @@ import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.ui.activity.wifi.contract.WifiRegisteContract;
 import com.stratagile.qlink.ui.activity.wifi.WifiRegisteFragment;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.Calendar;
@@ -73,6 +75,7 @@ public class WifiRegistePresenter implements WifiRegisteContract.WifiRegisteCont
                         recordSave.setAssetName(ssid);
                         recordSave.setTransactiomType(4);
                         recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                        recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
                     }
                 }, new Consumer<Throwable>() {

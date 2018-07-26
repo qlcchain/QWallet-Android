@@ -97,6 +97,7 @@ public class TransactionRecord implements  Comparable<TransactionRecord>{
      */
     private String assetName;
 
+    private boolean isMainNet;
     /**
      * 需要接收人的p2pid.
      * 因为加入了每次启动app的删除好友的逻辑，所以记录friendNum是不行的了，必须用p2pId来进行识别
@@ -125,11 +126,9 @@ public class TransactionRecord implements  Comparable<TransactionRecord>{
     }
 
 
-    @Generated(hash = 106790922)
-    public TransactionRecord(Long id, int transactiomType, boolean isReported,
-            int connectType, String txid, double neoCount, double qlcCount,
-            long timestamp, String exChangeId, String friendNum, String assetName,
-            String toP2pId) {
+    @Generated(hash = 261598317)
+    public TransactionRecord(Long id, int transactiomType, boolean isReported, int connectType, String txid, double neoCount, double qlcCount, long timestamp, String exChangeId,
+            String friendNum, String assetName, boolean isMainNet, String toP2pId) {
         this.id = id;
         this.transactiomType = transactiomType;
         this.isReported = isReported;
@@ -141,8 +140,11 @@ public class TransactionRecord implements  Comparable<TransactionRecord>{
         this.exChangeId = exChangeId;
         this.friendNum = friendNum;
         this.assetName = assetName;
+        this.isMainNet = isMainNet;
         this.toP2pId = toP2pId;
     }
+
+
     public Long getId() {
         return this.id;
     }
@@ -218,6 +220,16 @@ public class TransactionRecord implements  Comparable<TransactionRecord>{
             return  0;
         else
             return 1;
+    }
+
+
+    public boolean getIsMainNet() {
+        return this.isMainNet;
+    }
+
+
+    public void setIsMainNet(boolean isMainNet) {
+        this.isMainNet = isMainNet;
     }
 
 }

@@ -3,12 +3,14 @@ import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.ui.activity.seize.contract.SeizeVpnContract;
 import com.stratagile.qlink.ui.activity.seize.SeizeVpnActivity;
+import com.stratagile.qlink.utils.SpUtil;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -69,6 +71,7 @@ public class SeizeVpnPresenter implements SeizeVpnContract.SeizeVpnContractPrese
                         recordSave.setAssetName(vpnName);
                         recordSave.setTransactiomType(5);
                         recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                        recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
                     }
                 }, new Consumer<Throwable>() {

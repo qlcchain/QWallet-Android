@@ -146,6 +146,7 @@ public class TransactionApi {
                         }
                         transactionRecord.setTimestamp(Calendar.getInstance().getTimeInMillis());
                         transactionRecord.setTransactiomType(TransactionRecord.transactionType.transactionGetQlc.ordinal());
+                        transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(transactionRecord);
                     }, throwable -> {
                         KLog.i("onError");
@@ -421,6 +422,7 @@ public class TransactionApi {
                         recordSave.setAssetName(map.get("ssId") + "");
                         recordSave.setTransactiomType(4);
                         recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                        recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
                         sendCallBack.onSuccess(registerWiFi.getRecordId());
                     }, throwable -> {
@@ -494,6 +496,7 @@ public class TransactionApi {
                             recordSave.setAssetName(map.get("vpnName") + "");
                             recordSave.setTransactiomType(5);
                             recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                            recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                             AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
                             VpnEntity vpnEntity = new VpnEntity();
                             vpnEntity.setVpnName(registerWiFi.getVpnName());

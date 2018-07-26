@@ -33,7 +33,8 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
         public final static Property ExChangeId = new Property(8, String.class, "exChangeId", false, "EX_CHANGE_ID");
         public final static Property FriendNum = new Property(9, String.class, "friendNum", false, "FRIEND_NUM");
         public final static Property AssetName = new Property(10, String.class, "assetName", false, "ASSET_NAME");
-        public final static Property ToP2pId = new Property(11, String.class, "toP2pId", false, "TO_P2P_ID");
+        public final static Property IsMainNet = new Property(11, boolean.class, "isMainNet", false, "IS_MAIN_NET");
+        public final static Property ToP2pId = new Property(12, String.class, "toP2pId", false, "TO_P2P_ID");
     }
 
 
@@ -60,7 +61,8 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
                 "\"EX_CHANGE_ID\" TEXT," + // 8: exChangeId
                 "\"FRIEND_NUM\" TEXT," + // 9: friendNum
                 "\"ASSET_NAME\" TEXT," + // 10: assetName
-                "\"TO_P2P_ID\" TEXT);"); // 11: toP2pId
+                "\"IS_MAIN_NET\" INTEGER NOT NULL ," + // 11: isMainNet
+                "\"TO_P2P_ID\" TEXT);"); // 12: toP2pId
     }
 
     /** Drops the underlying database table. */
@@ -103,10 +105,11 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
         if (assetName != null) {
             stmt.bindString(11, assetName);
         }
+        stmt.bindLong(12, entity.getIsMainNet() ? 1L: 0L);
  
         String toP2pId = entity.getToP2pId();
         if (toP2pId != null) {
-            stmt.bindString(12, toP2pId);
+            stmt.bindString(13, toP2pId);
         }
     }
 
@@ -144,10 +147,11 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
         if (assetName != null) {
             stmt.bindString(11, assetName);
         }
+        stmt.bindLong(12, entity.getIsMainNet() ? 1L: 0L);
  
         String toP2pId = entity.getToP2pId();
         if (toP2pId != null) {
-            stmt.bindString(12, toP2pId);
+            stmt.bindString(13, toP2pId);
         }
     }
 
@@ -170,7 +174,8 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // exChangeId
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // friendNum
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // assetName
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // toP2pId
+            cursor.getShort(offset + 11) != 0, // isMainNet
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // toP2pId
         );
         return entity;
     }
@@ -188,7 +193,8 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
         entity.setExChangeId(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setFriendNum(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setAssetName(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setToP2pId(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setIsMainNet(cursor.getShort(offset + 11) != 0);
+        entity.setToP2pId(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
      }
     
     @Override

@@ -338,6 +338,7 @@ public class Qsdk {
         for (TransactionRecord transactionRecord : transactionRecordList) {
             if (transactionRecord.getTxid().equals(recordSaveRsp.getTxid()) && transactionRecord.getConnectType() == 0) {
                 transactionRecord.setIsReported(true);
+                transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                 AppConfig.getInstance().getDaoSession().getTransactionRecordDao().update(transactionRecord);
                 break;
             }
@@ -369,6 +370,7 @@ public class Qsdk {
         transactionRecord.setConnectType(1);
         transactionRecord.setIsReported(true);
         transactionRecord.setTimestamp(recordSaveReq.getTimestamp());
+        transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(transactionRecord);
         //告诉使用端，我已经记录成功，
         Map<String, Object> infoMap = new HashMap<>();

@@ -77,6 +77,7 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                         recordSave.setAssetName(vpnName);
                         recordSave.setTransactiomType(5);
                         recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                        recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
                         VpnEntity vpnEntity = new VpnEntity();
                         vpnEntity.setVpnName(result.getVpnName());

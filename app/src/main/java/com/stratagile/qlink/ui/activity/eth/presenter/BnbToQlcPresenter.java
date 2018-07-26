@@ -12,6 +12,7 @@ import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.ui.activity.eth.contract.BnbToQlcContract;
 import com.stratagile.qlink.ui.activity.eth.BnbToQlcActivity;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.WalletStorage;
 
@@ -171,6 +172,7 @@ public class BnbToQlcPresenter implements BnbToQlcContract.BnbToQlcContractPrese
                             transactionRecord.setTxid(buyQlc.getData().getRecordId());
                             transactionRecord.setTimestamp(Calendar.getInstance().getTimeInMillis());
                             transactionRecord.setTransactiomType(TransactionRecord.transactionType.transactionBnb2Qlc.ordinal());
+                            transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                             AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(transactionRecord);
                         }
                     }

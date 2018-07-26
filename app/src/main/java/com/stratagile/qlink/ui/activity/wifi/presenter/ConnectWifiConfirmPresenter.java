@@ -254,6 +254,7 @@ public class ConnectWifiConfirmPresenter implements ConnectWifiConfirmContract.C
                             recordSave.setIsReported(false);
                             recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
                             Qsdk.getInstance().sendRecordSaveReq(wifipasswordRsp.getFriendNum(), recordSave);
+                            recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                             AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
 
                             mView.connectWifiSuccess("connect to wifi " + wifipasswordRsp.getSsid() + " success", wifipasswordRsp.getSsid());
