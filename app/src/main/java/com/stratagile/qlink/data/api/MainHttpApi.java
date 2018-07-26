@@ -25,6 +25,7 @@ import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
+import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 
@@ -157,7 +158,7 @@ public interface MainHttpApi {
 
     @POST(MainAPI.update_vpn_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> updateVpnInfo(@Body RequestBody map);
+    Observable<UpdateVpn> updateVpnInfo(@Body RequestBody map);
 
 
     @POST(MainAPI.update_wifi_info)

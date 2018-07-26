@@ -439,14 +439,14 @@ public class TransactionApi {
         });
     }
 
-    public void registerVPN(Map map, String fromAddress, String address, String qlc, SendBackWithTxId sendCallBack) {
+    public void registerVPN(Map map, String fromAddress, String address, String qlc, SendBackWithTxId sendCallBack, VpnEntity vpnEntity) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
         getUtxo(address, fromAddress, new SendCallBack() {
             @Override
             public void onSuccess() {
-                regsiterVPNReal(map, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), new SendBackWithTxId() {
+                regsiterVPNReal(vpnEntity, map, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), new SendBackWithTxId() {
                     @Override
                     public void onSuccess(String txid) {
                         sendCallBack.onSuccess(txid);
@@ -466,7 +466,7 @@ public class TransactionApi {
         });
     }
 
-    private void regsiterVPNReal(Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
+    private void regsiterVPNReal(VpnEntity vpnEntity, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
         if (assets == null) {
             sendCallBack.onFailure();
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.send_failure));
@@ -498,9 +498,7 @@ public class TransactionApi {
                             recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
                             recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                             AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
-                            VpnEntity vpnEntity = new VpnEntity();
                             vpnEntity.setVpnName(registerWiFi.getVpnName());
-                            vpnEntity.setUsername(registerWiFi.getVpnName());
                             vpnEntity.setIsConnected(false);
                             vpnEntity.setP2pId(registerWiFi.getP2pId());
                             vpnEntity.setProfileLocalPath(registerWiFi.getProfileLocalPath());

@@ -375,6 +375,14 @@ public class LocalAssetsUtils {
         } finally {
 
         }
+
+        Iterator it = localAssetArrayList.iterator();        //根据传入的集合(旧集合)获取迭代器
+        while (it.hasNext()) {          //遍历老集合
+            MyAsset obj = (MyAsset) it.next();       //记录每一个元素
+            if (obj.getType() == 1 &&  !VpnUtil.isInSameNet(obj.getVpnEntity())) {
+                it.remove();
+            }
+        }
         return localAssetArrayList;
     }
 }

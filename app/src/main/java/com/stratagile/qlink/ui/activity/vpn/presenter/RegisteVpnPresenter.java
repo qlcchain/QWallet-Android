@@ -60,7 +60,7 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
     }
 
     @Override
-    public void registerVpn(Map map, String vpnName) {
+    public void registerVpn(Map map, String vpnName, VpnEntity vpnEntity) {
 
 //        mView.showProgressDialog();
         Disposable disposable = httpAPIWrapper.vpnRegisterV2(map)
@@ -79,9 +79,7 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                         recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
                         recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
-                        VpnEntity vpnEntity = new VpnEntity();
                         vpnEntity.setVpnName(result.getVpnName());
-                        vpnEntity.setUsername(result.getVpnName());
                         vpnEntity.setCountry(result.getCountry());
                         vpnEntity.setIsConnected(false);
                         vpnEntity.setP2pId(result.getP2pId());

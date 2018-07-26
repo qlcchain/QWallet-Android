@@ -7,6 +7,15 @@ package com.stratagile.qlink.entity.vpn;
 public class VpnPrivateKeyReq {
     private String vpnName;
 
+    private String isMainNet;
+
+    public String getIsMainNet() {
+        return isMainNet;
+    }
+
+    public void setIsMainNet(String isMainNet) {
+        this.isMainNet = isMainNet;
+    }
     public String getVpnName() {
         return vpnName;
     }

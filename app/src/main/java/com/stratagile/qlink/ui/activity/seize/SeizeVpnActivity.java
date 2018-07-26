@@ -1001,7 +1001,7 @@ public class SeizeVpnActivity extends BaseActivity implements SeizeVpnContract.V
                         public void onFailure() {
 
                         }
-                    });
+                    }, newVpnEntity);
 //                    mPresenter.registerVpn(map, infoUserid.getText().toString());
                 } catch (InterruptedException e) {
                     e.printStackTrace();

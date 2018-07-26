@@ -6,7 +6,22 @@ package com.stratagile.qlink.entity.vpn;
  */
 
 public class VpnUserAndPasswordReq {
+
+    public static String mainNet = "1";
+
+    public static String testNet = "0";
+
     private String vpnName;
+
+    private String isMainNet;
+
+    public String getIsMainNet() {
+        return isMainNet;
+    }
+
+    public void setIsMainNet(String isMainNet) {
+        this.isMainNet = isMainNet;
+    }
 
     public String getVpnName() {
         return vpnName;

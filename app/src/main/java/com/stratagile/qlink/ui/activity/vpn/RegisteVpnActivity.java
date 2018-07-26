@@ -260,30 +260,30 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             LogUtil.addLog("连接vpn的log：" + intent.getStringExtra("detailstatus"), getClass().getSimpleName());
             if (intent.getStringExtra("detailstatus").equals("CONNECTED")) {
                 if (currentConnectType != CONNECT_ME) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(5000);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (currentConnectType == CONNECT_TEST) {
-                                            verifyCorrect(2);
-                                        } else {
+                    if (currentConnectType == CONNECT_TEST) {
+                        verifyCorrect(2);
+                    } else {
+                        Intent intent2 = new Intent();
+                        intent2.setAction(BroadCastAction.disconnectVpn);
+                        KLog.i("断开连接");
+                        sendBroadcast(intent2);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(5000);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
                                             startUpdateVpnInfo();
-                                            Intent intent2 = new Intent();
-                                            intent2.setAction(BroadCastAction.disconnectVpn);
-                                            KLog.i("断开连接");
-                                            sendBroadcast(intent2);
                                         }
-                                    }
-                                });
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                    });
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    }).start();
+                        }).start();
+                    }
                 } else {
                     closeProgressDialog();
                     ToastUtil.displayShortToast(getString(R.string.Connect_vpn_success));
@@ -879,6 +879,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                         vpnEntity.setConnectMaxnumber(connectSeekbar.getProgress());
                         vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
                         vpnEntity.setPrivateKeyPassword(etPrivateKeyPassword.getText().toString().trim());
+                        vpnEntity.setUsername(etUsername.getText().toString());
+                        vpnEntity.setPassword(etPassword.getText().toString());
                         vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
                         vpnEntity.setCountry(etCountry.getText().toString());
                         vpnEntity.setContinent(continent);
@@ -1440,6 +1442,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         vpnEntity.setConnectMaxnumber(connectSeekbar.getProgress());
         vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         vpnEntity.setPrivateKeyPassword(etPrivateKeyPassword.getText().toString().trim());
+        vpnEntity.setPassword(etPassword.getText().toString());
+        vpnEntity.setUsername(etUsername.getText().toString());
         vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         vpnEntity.setCountry(etCountry.getText().toString());
         vpnEntity.setContinent(continent);
@@ -1749,6 +1753,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         vpnEntity.setProfileLocalPath(vpnFilePath);
         vpnEntity.setFriendNum("");
+        vpnEntity.setIsMainNet(SpUtil.getBoolean(this, ConstantValue.isMainNet, false));
         vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {//主网
             vpnEntity.setIsInMainWallet(true);
@@ -1799,7 +1804,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                                 }
                             });
                         }
-                    });
+                    }, vpnEntity);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

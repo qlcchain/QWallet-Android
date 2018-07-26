@@ -252,19 +252,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void onGetFreeNumBack(int num) {
         ConstantValue.freeNum = num;
-        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-//            if (num == 0) {
-//                tvFree.setVisibility(View.GONE);
-//                ivWallet.setVisibility(View.GONE);
-//            } else {
-//                tvFree.setVisibility(View.VISIBLE);
-//                ivWallet.setVisibility(View.VISIBLE);
-//                tvFree.setText(getString(R.string.free) + ":" + num);
-//            }
-            tvFree.setVisibility(View.VISIBLE);
-            ivWallet.setVisibility(View.VISIBLE);
-            tvFree.setText(getString(R.string.free) + ":" + num);
-        }
+        tvFree.setVisibility(View.VISIBLE);
+        ivWallet.setVisibility(View.VISIBLE);
+        tvFree.setText(getString(R.string.free) + ":" + num);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetFreeNumBack(FreeCount freeCount) {
@@ -284,6 +274,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ChangeTestUI(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
         mPresenter.getMainAddress();
+        Map<String, String> infoMap1 = new HashMap<>();
+        infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        mPresenter.zsFreeNum(infoMap1);
         if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
             if (SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
                 statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));

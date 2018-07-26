@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.vpn.contract;
 
+import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
@@ -34,7 +35,7 @@ public interface RegisteVpnContract {
     }
 
     interface RegisteVpnContractPresenter extends BasePresenter {
-        void registerVpn(Map map, String vpnName);
+        void registerVpn(Map map, String vpnName, VpnEntity vpnEntity);
 
         void vertifyVpnName(Map map);
 

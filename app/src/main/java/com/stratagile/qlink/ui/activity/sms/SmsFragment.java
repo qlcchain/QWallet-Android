@@ -105,7 +105,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         ArrayList<String> titles = new ArrayList<>();
         titles.add(ConstantValue.longcountry.toUpperCase());
         if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            registerVpn.setVisibility(View.GONE);
+//            registerVpn.setVisibility(View.GONE);
         } else {
             registerVpn.setVisibility(View.VISIBLE);
         }
@@ -195,7 +195,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         if (!SpUtil.getBoolean(getActivity(), ConstantValue.isMainNet, false)) {
             registerVpn.setVisibility(View.VISIBLE);
         } else {
-            registerVpn.setVisibility(View.GONE);
+//            registerVpn.setVisibility(View.GONE);
         }
     }
 

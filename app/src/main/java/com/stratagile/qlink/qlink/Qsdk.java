@@ -38,6 +38,7 @@ import com.stratagile.qlink.entity.wifi.WifipasswordReq;
 import com.stratagile.qlink.entity.wifi.WifipasswordRsp;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.utils.QlinkUtil;
+import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -415,6 +416,9 @@ public class Qsdk {
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
             if (vpnEntity.getVpnName().equals(vpnUserAndPasswordReq.getVpnName())) {
+                if (!VpnUtil.isInSameNet(vpnUserAndPasswordReq.getIsMainNet(), vpnEntity)) {
+                    continue;
+                }
                 LogUtil.addLog("发送我自己的vpn的用户名和密码  vpnNmae=" + vpnEntity.getVpnName() + "  userName=" + vpnEntity.getUsername() + "  password=" + vpnEntity.getPassword(), getClass().getSimpleName());
                 Map<String, Object> infoMap = new HashMap<>();
                 infoMap.put("vpnName", vpnEntity.getVpnName());
@@ -432,6 +436,7 @@ public class Qsdk {
     public void sendVpnUserAndPasswordReq(String friendNum, String vpnName) {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnName);
+        infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
         QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnUserAndPasswordReq, infoMap);
     }
 
@@ -442,6 +447,9 @@ public class Qsdk {
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
             if (vpnEntity.getVpnName().equals(vpnPrivateKeyReq.getVpnName())) {
+                if (!VpnUtil.isInSameNet(vpnPrivateKeyReq.getIsMainNet(), vpnEntity)) {
+                    continue;
+                }
                 LogUtil.addLog("发送我自己的vpn的私钥  vpnNmae=" + vpnEntity.getVpnName() + "  privatekey=" + vpnEntity.getPrivateKeyPassword(), getClass().getSimpleName());
                 Map<String, Object> infoMap = new HashMap<>();
                 infoMap.put("vpnName", vpnEntity.getVpnName());
@@ -458,6 +466,7 @@ public class Qsdk {
     public void sendVpnPrivateKeyReq(String friendNum, String vpnName) {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnName);
+        infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
         QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnPrivateKeyReq, infoMap);
     }
 

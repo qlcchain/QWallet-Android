@@ -34,6 +34,7 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.AssetListPresenter;
 import com.stratagile.qlink.ui.activity.wifi.RegisterWifiActivity;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.AssetListAdapter;
+import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -295,6 +296,9 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
                 continue;
             }
             if (vpnEntity.getP2pId() != null && vpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                if (!VpnUtil.isInSameNet(vpnEntity)) {
+                    continue;
+                }
                 if (vpnEntity.getAddress() != null && vpnEntity.getAddress().equals(wallet.getAddress())) {
                     MyAsset myAsset = new MyAsset();
                     myAsset.setType(1);

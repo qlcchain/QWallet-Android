@@ -52,6 +52,7 @@ import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VpnUtil;
 import com.stratagile.qlink.views.FileSelectLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -214,6 +215,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         isAdded = true;
                         continue;
                     }
+                    vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                     vpnEntity.setAssetTranfer(vpnListBean.getQlc());
                     vpnEntity.setAddress(vpnListBean.getAddress());
                     vpnEntity.setP2pId(vpnListBean.getP2pId());
@@ -348,7 +350,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         }
         if (VpnStatus.isVPNActive() && !isAddConnectedVpn) {
             for (VpnEntity vpnEntity : vpnEntityList) {
-                if (vpnEntity.isConnected()) {
+                if (vpnEntity.isConnected() && VpnUtil.isInSameNet(vpnEntity)) {
                     showList.add(vpnEntity);
                     break;
                 }
