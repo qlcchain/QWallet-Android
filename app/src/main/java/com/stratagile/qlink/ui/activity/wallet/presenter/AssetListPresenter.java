@@ -111,14 +111,14 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
             if ("3".equals(dataBean.getType())) {
                 vpnEntityListInSql = AppConfig.getInstance().getDaoSession().getVpnEntityDao().queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(dataBean.getSsId())).list();
             }
-            if (vpnEntityListInSql.size() > 0) {
+            if (vpnEntityListInSql.size() > 0 || "".equals(dataBean.getType())) {
                 for (VpnEntity vpnEntity : vpnEntityList) {
                     //3代表的是vpn资产
                     if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && dataBean.getP2pId().equals("")) {
                         ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                         break;
-                    } else if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && dataBean.getP2pId().equals(vpnEntity.getP2pId())) {
+                    } else if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals("")) {
                         vpnEntity.setP2pId(dataBean.getP2pId());
                         vpnEntity.setAddress(dataBean.getAddress());
                         vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
@@ -148,13 +148,13 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
             if ("0".equals(dataBean.getType())) {
                 wifiEntityListInSql = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().where(WifiEntityDao.Properties.Ssid.eq(dataBean.getSsId())).list();
             }
-            if (wifiEntityListInSql.size() > 0) {
+            if (wifiEntityListInSql.size() > 0 || "".equals(dataBean.getType())) {
                 for (WifiEntity wifiEntity : wifiEntityList) {
                     //0代表的是wifi资产
                     if (dataBean.getSsId().equals(wifiEntity.getSsid()) && dataBean.getP2pId().equals("")) {
                         AppConfig.getInstance().getDaoSession().getWifiEntityDao().delete(wifiEntity);
                         break;
-                    } else if (dataBean.getSsId().equals(wifiEntity.getSsid()) && !dataBean.getP2pId().equals(wifiEntity.getOwnerP2PId())) {
+                    } else if (dataBean.getSsId().equals(wifiEntity.getSsid()) && !dataBean.getP2pId().equals("")) {
                         wifiEntity.setOwnerP2PId(dataBean.getP2pId());
                         wifiEntity.setWalletAddress(dataBean.getAddress());
                         wifiEntity.setPriceInQlc((float) dataBean.getQlc());
