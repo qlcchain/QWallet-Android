@@ -41,6 +41,7 @@ import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.VersionUtil;
+import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -289,6 +290,12 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         ArrayList<MyAsset> assetArrayList = new ArrayList<>();
         List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
         for (WifiEntity wifiEntity : wifiEntityList) {
+            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !wifiEntity.getIsInMainWallet()) {//主网
+                continue;
+            }
+            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && wifiEntity.getIsInMainWallet()) {//测试网
+                continue;
+            }
             if (wifiEntity.getOwnerP2PId() != null && wifiEntity.getOwnerP2PId().equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {
                 if (wifiEntity.getWalletAddress() != null && wifiEntity.getWalletAddress().equals(wallet.getAddress())) {
                     MyAsset myAsset = new MyAsset();
@@ -300,7 +307,16 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
+            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !vpnEntity.getIsInMainWallet()) {//主网
+                continue;
+            }
+            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && vpnEntity.getIsInMainWallet()) {//测试网
+                continue;
+            }
             if (vpnEntity.getP2pId() != null && vpnEntity.getP2pId().equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {
+                if (!VpnUtil.isInSameNet(vpnEntity)) {
+                    continue;
+                }
                 if (vpnEntity.getAddress() != null && vpnEntity.getAddress().equals(wallet.getAddress())) {
                     MyAsset myAsset = new MyAsset();
                     myAsset.setType(1);
