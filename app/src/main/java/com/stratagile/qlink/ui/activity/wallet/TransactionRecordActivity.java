@@ -30,6 +30,7 @@ import com.stratagile.qlink.utils.eth.WalletStorage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -120,7 +121,19 @@ public class TransactionRecordActivity extends BaseActivity implements Transacti
     @Override
     protected void initData() {
         KLog.i("开始拉数据");
-        List<TransactionRecord> transactionRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().loadAll();
+        ArrayList<TransactionRecord> transactionRecordList = (ArrayList<TransactionRecord>) AppConfig.getInstance().getDaoSession().getTransactionRecordDao().loadAll();
+        Iterator<TransactionRecord> iterator = transactionRecordList.iterator();
+        ArrayList<TransactionRecord> transactionRecords = new ArrayList<>();
+        while (iterator.hasNext()) {
+            TransactionRecord transactionRecord = iterator.next();
+            if ((transactionRecord.getIsMainNet() && SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) || (!transactionRecord.getIsMainNet() && !SpUtil.getBoolean(this, ConstantValue.isMainNet, false))) {
+                //相同的网
+                transactionRecords.add(transactionRecord);
+            } else {
+
+            }
+        }
+        transactionRecordList = transactionRecords;
         checkData();
         Collections.sort(transactionRecordList);
         if (transactionRecordList == null || transactionRecordList.size() == 0) {

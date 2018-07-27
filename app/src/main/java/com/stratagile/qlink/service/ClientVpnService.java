@@ -21,6 +21,7 @@ import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
+import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
@@ -196,6 +197,7 @@ public class ClientVpnService extends Service {
                 recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
                 recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                 AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
+                Qsdk.getInstance().sendRecordSaveReq(vpnEntity.getFriendNum(), recordSave);
             }
 
             @Override

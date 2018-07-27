@@ -21,6 +21,7 @@ import com.stratagile.qlink.entity.vpn.VpnPrivateKeyReq;
 import com.stratagile.qlink.entity.vpn.VpnPrivateKeyRsp;
 import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordReq;
 import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordRsp;
+import com.stratagile.qlink.entity.vpn.VpnUserPassAndPrivateKeyReq;
 import com.stratagile.qlink.ui.activity.wallet.TransactionRecordActivity;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LogUtil;
@@ -220,6 +221,10 @@ public class Qsdk {
                     VpnUserAndPasswordRsp vpnUserAndPasswordRsp = gson.fromJson(qlinkEntity.getData(), VpnUserAndPasswordRsp.class);
                     handleVpnUserAndPasswordRsp(friendNumber, vpnUserAndPasswordRsp);
                     break;
+                case ConstantValue.vpnUserPassAndPrivateKeyReq:
+                    VpnUserPassAndPrivateKeyReq vpnUserPassAndPrivateKeyReq = gson.fromJson(qlinkEntity.getData(), VpnUserPassAndPrivateKeyReq.class);
+                    handleVpnUserAndPasswordAndPrivateKeyReq(friendNumber, vpnUserPassAndPrivateKeyReq);
+                    break;
                 case ConstantValue.recordSaveReq:
                     RecordSaveReq recordSaveReq = gson.fromJson(qlinkEntity.getData(), RecordSaveReq.class);
                     handleRecordSaveReq(friendNumber, recordSaveReq);
@@ -371,7 +376,7 @@ public class Qsdk {
         transactionRecord.setConnectType(1);
         transactionRecord.setIsReported(true);
         transactionRecord.setTimestamp(recordSaveReq.getTimestamp());
-        transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+        transactionRecord.setIsMainNet(recordSaveReq.getIsMainNet().equals(VpnUserAndPasswordReq.mainNet));
         AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(transactionRecord);
         //告诉使用端，我已经记录成功，
         Map<String, Object> infoMap = new HashMap<>();
@@ -390,6 +395,7 @@ public class Qsdk {
      * @param transactionRecord
      */
     public void sendRecordSaveReq(String friendNum, TransactionRecord transactionRecord) {
+        KLog.i("给" + friendNum + "添加记录");
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("transactiomType", transactionRecord.getTransactiomType());
         infoMap.put("txid", transactionRecord.getTxid());
@@ -397,6 +403,7 @@ public class Qsdk {
         infoMap.put("timestamp", transactionRecord.getTimestamp());
         infoMap.put("assetName", transactionRecord.getAssetName());
         infoMap.put("qlcCount", transactionRecord.getQlcCount());
+        infoMap.put("isMainNet", transactionRecord.getIsMainNet()? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
         QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.recordSaveReq, infoMap);
     }
 
@@ -425,6 +432,27 @@ public class Qsdk {
                 infoMap.put("userName", vpnEntity.getUsername());
                 infoMap.put("password", vpnEntity.getPassword());
                 QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnUserAndPasswordRsp, infoMap);
+                return;
+            }
+        }
+    }
+    /**
+     * 处理vpn账号和密码和私钥的请求
+     */
+    public void handleVpnUserAndPasswordAndPrivateKeyReq(String friendNum, VpnUserPassAndPrivateKeyReq vpnUserPassAndPrivateKeyReq) {
+        List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+        for (VpnEntity vpnEntity : vpnEntityList) {
+            if (vpnEntity.getVpnName().equals(vpnUserPassAndPrivateKeyReq.getVpnName())) {
+                if (!VpnUtil.isInSameNet(vpnUserPassAndPrivateKeyReq.getIsMainNet(), vpnEntity)) {
+                    continue;
+                }
+                LogUtil.addLog("发送我自己的vpn的用户名和密码  vpnNmae=" + vpnEntity.getVpnName() + "  userName=" + vpnEntity.getUsername() + "  password=" + vpnEntity.getPassword(), getClass().getSimpleName());
+                Map<String, Object> infoMap = new HashMap<>();
+                infoMap.put("vpnName", vpnEntity.getVpnName());
+                infoMap.put("userName", vpnEntity.getUsername());
+                infoMap.put("password", vpnEntity.getPassword());
+                infoMap.put("privateKey", vpnEntity.getPrivateKeyPassword());
+                QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnUserPassAndPrivateKeyRsp, infoMap);
                 return;
             }
         }

@@ -252,16 +252,18 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void onGetFreeNumBack(int num) {
         ConstantValue.freeNum = num;
-        tvFree.setVisibility(View.VISIBLE);
-        ivWallet.setVisibility(View.VISIBLE);
         tvFree.setText(getString(R.string.free) + ":" + num);
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetFreeNumBack(FreeCount freeCount) {
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
             tvFree.setVisibility(View.VISIBLE);
             ivWallet.setVisibility(View.VISIBLE);
-            tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetFreeNumBack(FreeCount freeCount) {
+        tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
+        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+            tvFree.setVisibility(View.VISIBLE);
+            ivWallet.setVisibility(View.VISIBLE);
         }
     }
 
@@ -490,6 +492,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         tvTitle.setVisibility(View.GONE);
         tvTitle.setText(R.string.vpn);
         tvFree.setVisibility(View.VISIBLE);
+        ivWallet.setVisibility(View.VISIBLE);
 //        if (freeNum != 0) {
 //            tvFree.setVisibility(View.VISIBLE);
 //        } else {

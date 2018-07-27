@@ -212,7 +212,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             for (VpnEntity vpnEntity : vpnEntityList) {
                 if (vpnListBean.getVpnName().equals(vpnEntity.getVpnName())) {
                     if (!isInSameNet(vpnEntity)) {
-                        isAdded = true;
+//                        isAdded = true;
                         continue;
                     }
                     vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
@@ -293,20 +293,20 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     } else {
                         KLog.i(friendNum + "已经是好友" + vpnEntity.getVpnName());
                         vpnEntity.setFriendNum(friendNumStr);
-                        try {
-                            if (qlinkcom.GetFriendConnectionStatus(vpnEntity.getFriendNum()) > 0 && vpnEntity.getConnectMaxnumber() == 0) {
-                                vpnEntity.setOnline(true);
-                                if (vpnEntity.getProfileLocalPath() == null || "".equals(vpnEntity.getProfileLocalPath())) {
-                                    Map<String, String> infoMap = new HashMap<>();
-                                    infoMap.put("vpnName", vpnEntity.getVpnName());
-                                    infoMap.put("p2pId", vpnEntity.getP2pId());
-                                    LogUtil.addLog("要获取信息的资产信息为：" + vpnEntity.toString(), getClass().getSimpleName());
-                                    QlinkUtil.parseMap2StringAndSend(vpnEntity.getFriendNum(), ConstantValue.vpnBasicInfoReq, infoMap);
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            if (qlinkcom.GetFriendConnectionStatus(vpnEntity.getFriendNum()) > 0 && vpnEntity.getConnectMaxnumber() == 0) {
+//                                vpnEntity.setOnline(true);
+//                                if (vpnEntity.getProfileLocalPath() == null || "".equals(vpnEntity.getProfileLocalPath())) {
+//                                    Map<String, String> infoMap = new HashMap<>();
+//                                    infoMap.put("vpnName", vpnEntity.getVpnName());
+//                                    infoMap.put("p2pId", vpnEntity.getP2pId());
+//                                    LogUtil.addLog("要获取信息的资产信息为：" + vpnEntity.toString(), getClass().getSimpleName());
+//                                    QlinkUtil.parseMap2StringAndSend(vpnEntity.getFriendNum(), ConstantValue.vpnBasicInfoReq, infoMap);
+//                                }
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
                     }
                     if (!vpnEntity.getFriendNum().equals("")) {
                         if (qlinkcom.GetFriendConnectionStatus(friendNumStr) > 0) {

@@ -15,6 +15,16 @@ public class RecordSaveReq {
     private String txid;
     private long timestamp;
 
+    private String isMainNet;
+
+    public String getIsMainNet() {
+        return isMainNet;
+    }
+
+    public void setIsMainNet(String isMainNet) {
+        this.isMainNet = isMainNet;
+    }
+
     public int getTransactiomType() {
         return transactiomType;
     }

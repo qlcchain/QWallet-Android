@@ -251,4 +251,14 @@ public class ConstantValue {
      * 默认的返回，就是因为版本更新，当前版本没有定义这个类型，就把这个type作为内容原路返回回去
      */
     public static final String defaultRsp = "defaultRsp";
+
+    /**
+     * 获取vpn用户名、密码、私钥的请求
+     */
+    public static final String vpnUserPassAndPrivateKeyReq = "vpnUserPassAndPrivateKeyReq";
+
+    /**
+     * 获取vpn用户名、密码、私钥的返回
+     */
+    public static final String vpnUserPassAndPrivateKeyRsp = "vpnUserPassAndPrivateKeyRsp";
 }
