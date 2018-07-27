@@ -93,6 +93,7 @@ import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -884,7 +885,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             ArrayList<VpnEntity> showList = new ArrayList<>();
             for (int i = 0; i < vpnListAdapter.getData().size(); i++) {
                 for (VpnEntity vpnEntity : vpnEntityList) {
-                    if (vpnListAdapter.getItem(i).getVpnName().equals(vpnEntity.getVpnName())) {
+                    if (VpnUtil.isInSameNet(vpnEntity) && vpnListAdapter.getItem(i).getVpnName().equals(vpnEntity.getVpnName())) {
                         showList.add(vpnEntity);
                         break;
                     }
