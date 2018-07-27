@@ -96,35 +96,46 @@ public class LocalAssetsUtils {
                                         myAsset.getVpnEntity().setAssetTranfer(vpnEntity.getAssetTranfer());
                                         myAsset.getVpnEntity().setFriendNum(vpnEntity.getFriendNum());
                                         myAsset.getVpnEntity().setAvatar(vpnEntity.getAvatar());
-                                        myAsset.getVpnEntity().setAvatar(vpnEntity.getAvatar());
                                         myAsset.getVpnEntity().setCountry(vpnEntity.getCountry());
                                         myAsset.getVpnEntity().setRegisterQlc(vpnEntity.getRegisterQlc());
                                         //添加了抢注册功能，p2pId和钱包地址可能会变化
                                         myAsset.getVpnEntity().setP2pId(vpnEntity.getP2pId());
                                         myAsset.getVpnEntity().setAddress(vpnEntity.getAddress());
-                                        myAsset.getVpnEntity().setUsername(vpnEntity.getUsername());
-                                        myAsset.getVpnEntity().setPassword(vpnEntity.getPassword());
-                                        myAsset.getVpnEntity().setPrivateKeyPassword(vpnEntity.getPrivateKeyPassword());
+                                        if (vpnEntity.getUsername() == null || vpnEntity.getUsername().equals("")) {
+
+                                        } else {
+                                            myAsset.getVpnEntity().setUsername(vpnEntity.getUsername());
+                                        }
+                                        if (vpnEntity.getPassword() == null || vpnEntity.getPassword().equals("")) {
+
+                                        } else {
+                                            myAsset.getVpnEntity().setPassword(vpnEntity.getPassword());
+                                        }
+                                        if (vpnEntity.getPrivateKeyPassword() == null || vpnEntity.getPrivateKeyPassword().equals("")) {
+
+                                        } else {
+                                            myAsset.getVpnEntity().setPrivateKeyPassword(vpnEntity.getPrivateKeyPassword());
+                                        }
                                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(myAsset.getVpnEntity());
 
 
-                                        Map<String, Object> infoMap = new HashMap<>();
-                                        infoMap.put("vpnName", vpnEntity.getVpnName());
-                                        infoMap.put("p2pId", vpnEntity.getP2pId());
-                                        infoMap.put("country", vpnEntity.getCountry());
-                                        infoMap.put("continent", vpnEntity.getContinent());
-                                        infoMap.put("connectMaxnumber", vpnEntity.getConnectMaxnumber());
-                                        infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath());
-                                        infoMap.put("bandwidth", vpnEntity.getBandwidth());
-                                        infoMap.put("currentConnect", vpnEntity.getCurrentConnect());
-                                        infoMap.put("avaterUpdateTime", vpnEntity.getAvaterUpdateTime());
-                                        infoMap.put("qlc", vpnEntity.getQlc());
-                                        infoMap.put("exist", true);
-                                        infoMap.put("ipV4Address", vpnEntity.getIpV4Address());
-                                        infoMap.put("username", vpnEntity.getUsername());
-                                        infoMap.put("password", vpnEntity.getPassword());
-                                        infoMap.put("privateKeyPassword", vpnEntity.getPrivateKeyPassword());
-                                        vpnList.add(infoMap);
+//                                        Map<String, Object> infoMap = new HashMap<>();
+//                                        infoMap.put("vpnName", vpnEntity.getVpnName());
+//                                        infoMap.put("p2pId", vpnEntity.getP2pId());
+//                                        infoMap.put("country", vpnEntity.getCountry());
+//                                        infoMap.put("continent", vpnEntity.getContinent());
+//                                        infoMap.put("connectMaxnumber", vpnEntity.getConnectMaxnumber());
+//                                        infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath());
+//                                        infoMap.put("bandwidth", vpnEntity.getBandwidth());
+//                                        infoMap.put("currentConnect", vpnEntity.getCurrentConnect());
+//                                        infoMap.put("avaterUpdateTime", vpnEntity.getAvaterUpdateTime());
+//                                        infoMap.put("qlc", vpnEntity.getQlc());
+//                                        infoMap.put("exist", true);
+//                                        infoMap.put("ipV4Address", vpnEntity.getIpV4Address());
+//                                        infoMap.put("username", vpnEntity.getUsername());
+//                                        infoMap.put("password", vpnEntity.getPassword());
+//                                        infoMap.put("privateKeyPassword", vpnEntity.getPrivateKeyPassword());
+//                                        vpnList.add(infoMap);
                                     }
                                 }
                             }

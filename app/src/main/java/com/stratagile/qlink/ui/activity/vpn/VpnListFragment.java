@@ -536,7 +536,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateVpnList(ArrayList<VpnEntity> vpnList) {
-        KLog.i("收到 updateVpnList");
+        KLog.i("更新vpn列表");
         if (vpnList == null || vpnList.size() == 0) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             List<VpnEntity> showList = vpnListAdapter.getData();

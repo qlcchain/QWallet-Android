@@ -421,8 +421,14 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         EventBus.getDefault().post(new NeoRefrash());
         //创建neo钱包。为唯一对象，每次在使用的钱包只有一个。
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+        Wallet wallet;
         if (walletList != null && walletList.size() != 0) {
-            Wallet wallet = walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
+            if (SpUtil.getInt(this, ConstantValue.currentWallet, 0) >= walletList.size()) {
+                wallet = walletList.get(0);
+                SpUtil.putInt(this, ConstantValue.currentWallet, 0);
+            } else {
+                wallet = walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
