@@ -294,7 +294,7 @@ public class Qsdk {
         if (inviteToGroupChatReq.getAssetType() == MyAsset.VPN_ASSET_1) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             for (VpnEntity vpnEntity : vpnEntityList) {
-                if (vpnEntity.getVpnName().equals(inviteToGroupChatReq.getAssetName()) && vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                if (VpnUtil.isInSameNet(vpnEntity )&& vpnEntity.getVpnName().equals(inviteToGroupChatReq.getAssetName()) && vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
                     int result = qlinkcom.InviteFriendToGroupChat(friendNum, vpnEntity.getGroupNum());
                     if (result == 0) {
                     }
@@ -518,7 +518,7 @@ public class Qsdk {
         if (vpnBasicInfoReq.getP2pId() != null && vpnBasicInfoReq.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             for (VpnEntity vpnEntity : vpnEntityList) {
-                if (vpnEntity.getVpnName().equals(vpnBasicInfoReq.getVpnName())) {
+                if (VpnUtil.isInSameNet(vpnEntity ) && vpnEntity.getVpnName().equals(vpnBasicInfoReq.getVpnName())) {
                     sendVpnBasicInfoRsp(friendNum, vpnEntity);
                     return;
                 }
@@ -531,7 +531,7 @@ public class Qsdk {
         if (vpnBasicInfoReq.getP2pId() == null) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             for (VpnEntity vpnEntity : vpnEntityList) {
-                if (vpnEntity.getVpnName().equals(vpnBasicInfoReq.getVpnName())) {
+                if (VpnUtil.isInSameNet(vpnEntity ) && vpnEntity.getVpnName().equals(vpnBasicInfoReq.getVpnName())) {
                     sendVpnBasicInfoRsp(friendNum, vpnEntity);
                     return;
                 }
@@ -583,7 +583,7 @@ public class Qsdk {
     public void handleVpnBasicInfoRsp(VpnBasicInfoRsp vpnBasicInfoRsp) {
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
-            if (vpnEntity.getVpnName().equals(vpnBasicInfoRsp.getVpnName())) {
+            if (VpnUtil.isInSameNet(vpnEntity )&&vpnEntity.getVpnName().equals(vpnBasicInfoRsp.getVpnName())) {
                 if (vpnBasicInfoRsp.isExist()) {
                     vpnEntity.setConnectMaxnumber(vpnBasicInfoRsp.getConnectMaxnumber());
                     vpnEntity.setProfileLocalPath(vpnBasicInfoRsp.getProfileLocalPath());
@@ -597,7 +597,7 @@ public class Qsdk {
                     }
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                     return;
-                } else if (vpnEntity.getVpnName().equals(vpnBasicInfoRsp.getVpnName()) && !vpnBasicInfoRsp.isExist()) {
+                } else if (VpnUtil.isInSameNet(vpnEntity )&& vpnEntity.getVpnName().equals(vpnBasicInfoRsp.getVpnName()) && !vpnBasicInfoRsp.isExist()) {
 //                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                     return;
                 }
