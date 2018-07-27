@@ -109,6 +109,7 @@ import butterknife.OnClick;
 
 import static com.stratagile.qlink.LaunchVPN.CLEARLOG;
 import static com.stratagile.qlink.LaunchVPN.START_VPN_PROFILE;
+import static com.stratagile.qlink.utils.VpnUtil.isInSameNet;
 
 /**
  * @author hzp
@@ -1292,7 +1293,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
-            if (vpnEntity.getVpnName().equals(infoUserid.getText().toString()) && vpnEntity.getP2pId().equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {
+            if (isInSameNet(vpnEntity) && vpnEntity.getVpnName().equals(infoUserid.getText().toString()) && vpnEntity.getP2pId().equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {
                 vpnNameIsSelf = true;
                 ToastUtil.displayShortToast(getString(R.string.This_asset_has_been_registered_by_you_please_enter_another_VPN_name));
                 return;
