@@ -412,7 +412,13 @@ public class HttpAPIWrapper {
         }
 
     }
-
+    public Observable<BaseBack> reportVpnInfo(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.reportVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.reportVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */

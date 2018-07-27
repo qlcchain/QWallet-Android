@@ -63,5 +63,7 @@ public interface VpnListContract {
         void freeConnection(Map map);
 
         void getWalletBalance(Map map);
+
+        void reportVpnInfo(Map map);
     }
 }

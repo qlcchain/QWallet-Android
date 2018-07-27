@@ -43,6 +43,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
+import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
@@ -216,5 +217,8 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<FreeRecord> queryFreeRecords(@Body RequestBody map);
 
+    @POST(reportVpnInfo)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> reportVpnInfo(@Body RequestBody map);
     /*************************************************/
 }

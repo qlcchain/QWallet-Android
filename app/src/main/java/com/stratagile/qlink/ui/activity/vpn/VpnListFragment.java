@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.vpn;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -137,6 +138,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     private String country;
 
+    private Boolean isReport = false;
     private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
 
     @Nullable
@@ -254,6 +256,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     /**
      * 显示vpn注册时需要扣费的dialog
      */
+    @SuppressLint("StringFormatMatches")
     @Override
     public void showNeedQlcDialog(VpnEntity vpnEntity) {
         if (ConstantValue.freeNum != 0) {
@@ -723,6 +726,18 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             ToastUtil.displayShortToast(getString(R.string.Private_Key_Error));
             KLog.i("error");
             closeProgressDialog();
+            if(connectVpnEntity  != null  && !isReport)
+            {
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                Map<String, Object> map = new HashMap<>();
+                map.put("vpnName",connectVpnEntity.getVpnName() );
+                map.put("status",0 );
+                map.put("mark","Private Key Error");
+                KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_Private Key Error" );
+                mPresenter.reportVpnInfo(map);
+                isReport = true;
+            }
             return;
         }
         KLog.i("收到了私钥的返回了。。。。");
@@ -743,6 +758,18 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         if (vpnUserAndPasswordRsp.getUserName() == null || vpnUserAndPasswordRsp.getUserName().equals("")) {
             ToastUtil.displayShortToast(getString(R.string.username_or_password_error));
             closeProgressDialog();
+            if(connectVpnEntity  != null  && !isReport)
+            {
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                Map<String, Object> map = new HashMap<>();
+                map.put("vpnName",connectVpnEntity.getVpnName() );
+                map.put("status",0 );
+                map.put("mark","UserName Or Password Error");
+                KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_UserName Or Password Error" );
+                mPresenter.reportVpnInfo(map);
+                isReport = true;
+            }
             return;
         }
         KLog.i(vpnUserAndPasswordRsp.toString());
@@ -758,6 +785,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     public void checkSharerConnectRsp(CheckConnectRsp checkConnectRsp) {
         closeProgressDialog();
         showProgressDialog();
+        isReport = false;
         mPresenter.connectShareSuccess();
     }
 
@@ -809,7 +837,18 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             if (shortcutName != null && profileToConnect == null) {
                 profileToConnect = ProfileManager.getInstance(getActivity()).getProfileByName(shortcutName);
                 if (!(new ExternalAppDatabase(getActivity()).checkRemoteActionPermission(getActivity()))) {
-
+                    if(connectVpnEntity  != null  && !isReport)
+                    {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("vpnName",connectVpnEntity.getVpnName() );
+                        map.put("status",0 );
+                        map.put("mark","no Permission" );
+                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_no Permission" );
+                        mPresenter.reportVpnInfo(map);
+                        isReport = true;
+                    }
                     return;
                 }
             }
@@ -877,6 +916,18 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         ProfileManager.updateLRU(getActivity(), mResult);
                     VPNLaunchHelper.startOpenVpn(mResult, getActivity());
                     startListener();
+                    if(connectVpnEntity  != null  && !isReport)
+                    {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("vpnName",connectVpnEntity.getVpnName() );
+                        map.put("status",0 );
+                        map.put("mark","If you did not get a VPN confirmation dialog" );
+                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_If you did not get a VPN confirmation dialog" );
+                        mPresenter.reportVpnInfo(map);
+                        isReport = true;
+                    }
 //                    finish();
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -922,6 +973,19 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     Intent intent = new Intent();
                     intent.setAction(BroadCastAction.disconnectVpn);
                     getActivity().sendBroadcast(intent);
+
+                    if(connectVpnEntity  != null && !isReport)
+                    {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("vpnName",connectVpnEntity.getVpnName() );
+                        map.put("status",0 );
+                        map.put("mark","Connect to VPN error, last VPN status:" +vpnDetailstatus);
+                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_More than two minutes");
+                        mPresenter.reportVpnInfo(map);
+                        isReport = true;
+                    }
                 } else {
                     closeProgressDialog();
                     if (ConstantValue.isConnectVpn) {
@@ -933,6 +997,18 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                             mFirebaseAnalytics.logEvent("ConnectVpnFailedActivity", bundle);
                         }
                         ConstantValue.isConnectVpn = false;
+                    }
+                    if(connectVpnEntity  != null  && !isReport)
+                    {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("vpnName",connectVpnEntity.getVpnName() );
+                        map.put("status",0 );
+                        map.put("mark","Connect to VPN error");
+                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_Connect to VPN error" );
+                        mPresenter.reportVpnInfo(map);
+                        isReport = true;
                     }
                     KLog.i("error");
                     ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error));
@@ -1097,6 +1173,18 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         if (connectVpnEntity.getProfileLocalPath() == null) {
             ToastUtil.displayShortToast(getResources().getString(R.string.import_content_resolve_error));
             closeProgressDialog();
+            if(connectVpnEntity  != null  && !isReport)
+            {
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                Map<String, Object> map = new HashMap<>();
+                map.put("vpnName",connectVpnEntity.getVpnName() );
+                map.put("status",0 );
+                map.put("mark","Could not read profile to import" );
+                KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_Could not read profile to import" );
+                mPresenter.reportVpnInfo(map);
+                isReport = true;
+            }
             return;
         }
         File configFile = new File(connectVpnEntity.getProfileLocalPath());

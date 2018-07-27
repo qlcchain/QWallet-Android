@@ -74,6 +74,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+
 import static com.stratagile.qlink.LaunchVPN.CLEARLOG;
 import static com.stratagile.qlink.LaunchVPN.START_VPN_PROFILE;
 import static com.stratagile.qlink.utils.VpnUtil.isInSameNet;
@@ -461,6 +465,17 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                 }
             }
+            if(connectVpnEntity  != null)
+            {
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                Map<String, Object> map = new HashMap<>();
+                map.put("vpnName",connectVpnEntity.getVpnName() );
+                map.put("status",0 );
+                map.put("mark","Cannot Read Configuration Profilefile" );
+                KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_Cannot Read Configuration Profilefile" );
+                reportVpnInfo(map);
+            }
             EventBus.getDefault().post(new DisconnectVpn());
             readFile(configFile);
         } else {
@@ -768,6 +783,32 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         //isSuccesse
                         KLog.i("onSuccesse");
                         mView.onGetBalancelSuccess(balance);
+                    }
+                });
+    }
+    @Override
+    public void reportVpnInfo(Map map) {
+        httpAPIWrapper.reportVpnInfo(map)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack result) throws Exception {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mFragment.getActivity(), mFragment.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
                     }
                 });
     }
