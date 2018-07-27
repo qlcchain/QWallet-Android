@@ -1713,6 +1713,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         KLog.i(vpnEntity.toString());
         vpnEntity.setCountry(data);
         etCountry.setText(vpnEntity.getCountry());
+        vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
         //更新sd卡资产数据begin
         MyAsset myAsset = new MyAsset();
