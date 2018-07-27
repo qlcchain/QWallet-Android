@@ -29,9 +29,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 53
+        versionCode 54
         multiDexEnabled true
-        versionName "1.2.8 beta"
+        versionName "1.2.8 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {

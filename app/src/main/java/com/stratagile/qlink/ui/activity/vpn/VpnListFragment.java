@@ -546,7 +546,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             }
             for (int i = 0; i < showList.size(); i++) {
                 for (VpnEntity vpnEntity1 : vpnEntityList) {
-                    if (showList.get(i).getVpnName().equals(vpnEntity1.getVpnName())) {
+                    if (showList.get(i).getVpnName().equals(vpnEntity1.getVpnName()) && VpnUtil.isInSameNet(vpnEntity1)) {
                         vpnEntity1.setUnReadMessageCount(showList.get(i).getUnReadMessageCount());
                         showList.set(i, vpnEntity1);
                     }
@@ -572,7 +572,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 showList.get(i).setIsConnected(false);
             }
             for (VpnEntity vpnEntity1 : vpnEntityList) {
-                if (showList.get(i).getVpnName().equals(vpnEntity1.getVpnName())) {
+                if (showList.get(i).getVpnName().equals(vpnEntity1.getVpnName()) && VpnUtil.isInSameNet(vpnEntity1)) {
                     vpnEntity1.setUnReadMessageCount(showList.get(i).getUnReadMessageCount());
                     showList.set(i, vpnEntity1);
                 }

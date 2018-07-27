@@ -275,7 +275,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 if (!isInSameNet(vpnEntity)) {
                     continue;
                 }
-                if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName()) && "".equals(vpnEntity.getFriendNum())) {
+                if (VpnUtil.isInSameNet(vpnEntity) && vpnEntity.getVpnName().equals(vpnListBean.getVpnName()) && "".equals(vpnEntity.getFriendNum())) {
                     //判断是否是好友，是好友就把friendNum添加到WiFientity中，不是好友就要添加好友，再添加。
                     int friendNum = qlinkcom.GetFriendNumInFriendlist(vpnListBean.getP2pId());
                     byte[] p2pId = new byte[100];
@@ -320,7 +320,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         }
                     }
                     String myP2pId = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "");
-                    if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName()) && myP2pId.equals(vpnEntity.getP2pId())) {
+                    if (VpnUtil.isInSameNet(vpnEntity) && vpnEntity.getVpnName().equals(vpnListBean.getVpnName()) && myP2pId.equals(vpnEntity.getP2pId())) {
                         if (ConstantValue.myStatus > 0) {
                             vpnEntity.setOnline(true);
                         }
@@ -343,7 +343,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 if (!isInSameNet(vpnEntity)) {
                     continue;
                 }
-                if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
+                if (VpnUtil.isInSameNet(vpnEntity) && vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
                     if (vpnEntity.isConnected()) {
                         isAddConnectedVpn = true;
                     }
