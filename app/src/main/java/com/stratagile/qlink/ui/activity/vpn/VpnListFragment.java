@@ -240,7 +240,13 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 }
                 if (vpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                     getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
+//                    mTransientCertOrPCKS12PW = vpnEntity.getPrivateKeyPassword();
+//                    mTransientAuthPW = vpnEntity.getPassword();
+                } else {
+
                 }
+                mTransientCertOrPCKS12PW = null;
+                mTransientAuthPW = null;
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -898,6 +904,9 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 //            vpnListAdapter.getViewByPosition(recyclerView, Integer.parseInt(data.getStringExtra("position")), R.id.cardView).performClick();
         }
         if (requestCode == START_VPN_PROFILE) {
+            if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                mResult.mUsername = connectVpnEntity.getUsername();
+            }
             KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
             if (resultCode == Activity.RESULT_OK) {
                 KLog.i("开始检查配置文件的类型");
@@ -906,7 +915,23 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     VpnStatus.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
                             ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
 //                    askForPW(needpw);
-                    mPresenter.getPasswordFromRemote(needpw);
+                    if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && needpw != R.string.password) {
+                        mTransientCertOrPCKS12PW = connectVpnEntity.getPrivateKeyPassword();
+                        KLog.i("私钥验证完成，开始连接，打开OpenVPNStatusService服务。");
+                        Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
+                        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+                    }
+
+                    if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && needpw == R.string.password) {
+                        mResult.mUsername = connectVpnEntity.getUsername();
+                        mTransientAuthPW = connectVpnEntity.getPassword();
+                        KLog.i("用户名和密码验证完成，开始连接，打开OpenVPNStatusService服务。");
+                        Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
+                        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+                    }
+                    if (!connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                        mPresenter.getPasswordFromRemote(needpw);
+                    }
                 } else {
                     KLog.i("不需要密码，直接连接，，。");
                     SharedPreferences prefs = Preferences.getDefaultSharedPreferences(getActivity());
@@ -970,7 +995,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         ConstantValue.isConnectVpn = false;
                     }
                     KLog.i("error");
-                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
+//                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
                     Intent intent = new Intent();
                     intent.setAction(BroadCastAction.disconnectVpn);
                     getActivity().sendBroadcast(intent);
