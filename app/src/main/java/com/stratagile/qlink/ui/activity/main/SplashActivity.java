@@ -54,7 +54,6 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     protected void initData() {
-        LocalAssetsUtils.updateGreanDaoFromLocal();
         SpUtil.putLong(AppConfig.getInstance(),ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
         mPresenter.getLastVersion();
         mPresenter.getPermission();

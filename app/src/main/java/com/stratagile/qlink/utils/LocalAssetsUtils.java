@@ -174,13 +174,14 @@ public class LocalAssetsUtils {
                                     }
                                 } else if (myAsset.getType() == 1)//vpn
                                 {
-                                    VpnEntityDao vpnEntityDao = AppConfig.getInstance().getDaoSession().getVpnEntityDao();
+                                   /* VpnEntityDao vpnEntityDao = AppConfig.getInstance().getDaoSession().getVpnEntityDao();
                                     boolean isMainNet = myAsset.getVpnEntity().getIsMainNet();
-                                    List<VpnEntity> VpnEntityList = vpnEntityDao.queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(myAsset.getVpnEntity().getVpnName()),VpnEntityDao.Properties.IsMainNet.eq(isMainNet)).list();
+                                    List<VpnEntity> VpnEntityList = vpnEntityDao.queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(myAsset.getVpnEntity().getVpnName())).list();
                                     if(VpnEntityList != null && VpnEntityList.size() == 0)
                                     {
                                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
-                                    }
+                                    }*/
+                                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
                                 }
                             }
                         }
@@ -191,6 +192,9 @@ public class LocalAssetsUtils {
 
                     }
                 }
+                List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
+                List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+                String aa ="";
             }
 
         }

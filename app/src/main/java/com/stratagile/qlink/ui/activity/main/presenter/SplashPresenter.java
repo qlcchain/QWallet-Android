@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.socks.library.KLog;
@@ -175,6 +176,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
     private PermissionListener permission = new PermissionListener() {
         @Override
         public void onSucceed(int requestCode, List<String> grantedPermissions) {
+            LocalAssetsUtils.updateGreanDaoFromLocal();
             // 权限申请成功回调。
             if (requestCode == 101) {
                 permissionState = 0;
