@@ -781,6 +781,7 @@ public class SeizeVpnActivity extends BaseActivity implements SeizeVpnContract.V
         vpl.saveProfileList(this);
         newVpnEntity.setProfileUUid(profile.getUUIDString());
         KLog.i(profile.getUUIDString());
+        newVpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
         AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(newVpnEntity);
         //更新sd卡资产数据begin
         MyAsset myAsset = new MyAsset();

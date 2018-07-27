@@ -88,6 +88,7 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                         vpnEntity.setAddress(result.getAddress());
                         vpnEntity.setIsInMainWallet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         vpnEntity.setOnline(true);
+                        vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
                     }
                 }, new Consumer<Throwable>() {

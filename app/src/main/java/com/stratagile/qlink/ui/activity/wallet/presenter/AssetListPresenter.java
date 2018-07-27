@@ -18,6 +18,7 @@ import com.stratagile.qlink.ui.activity.wallet.contract.AssetListContract;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VpnUtil;
 
 import javax.inject.Inject;
 
@@ -118,7 +119,7 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                         //ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                         break;
-                    } else if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals("")) {
+                    } else if (VpnUtil.isInSameNet(vpnEntity) && dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals("")) {
                         vpnEntity.setP2pId(dataBean.getP2pId());
                         vpnEntity.setAddress(dataBean.getAddress());
                         vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
@@ -134,6 +135,7 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                     vpnEntity.setVpnName(dataBean.getSsId());
                     vpnEntity.setAddress(dataBean.getAddress());
                     vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
+                    vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
 //                    vpnEntity.setQlc((float) dataBean.getQlc());
                     vpnEntity.setAssetTranfer(dataBean.getQlc());
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);

@@ -509,6 +509,7 @@ public class TransactionApi {
                             vpnEntity.setAssetTranfer(registerWiFi.getQlc());
                             vpnEntity.setIsInMainWallet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                             vpnEntity.setOnline(true);
+                            vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
                             AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
                             sendCallBack.onSuccess(registerWiFi.getRecordId());
                             disposable.dispose();
