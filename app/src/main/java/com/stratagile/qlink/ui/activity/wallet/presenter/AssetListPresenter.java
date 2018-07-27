@@ -115,7 +115,7 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                 for (VpnEntity vpnEntity : vpnEntityList) {
                     //3代表的是vpn资产
                     if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && dataBean.getP2pId().equals("")) {
-                        ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
+                        //ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                         break;
                     } else if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals("")) {

@@ -181,20 +181,18 @@ public class LocalAssetsUtils {
                                     {
                                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
                                     }*/
+                                    myAsset.getVpnEntity().setId(null);
                                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
                                 }
                             }
                         }
 
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     } finally {
 
                     }
                 }
-                List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-                List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-                String aa ="";
             }
 
         }
