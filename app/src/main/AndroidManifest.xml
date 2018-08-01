@@ -373,6 +373,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.setting.SelectLanguageActivityActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.vpn.RankActivity" />
+
         <activity-alias
             android:exported="true"
             android:name=".api.DisconnectVPN"

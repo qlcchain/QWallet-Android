@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/content_background_shape"
+    android:orientation="vertical">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+
+        android:paddingLeft="@dimen/x80"
+        android:paddingRight="@dimen/x80"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x330">
+
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:includeFontPadding="false"
+            android:text="@string/Asset"
+            android:layout_marginLeft="@dimen/x80"
+            />
+        <View
+            android:layout_width="0px"
+            android:layout_height="10px"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="@dimen/x300"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:gravity="right"
+            android:layout_marginRight="@dimen/x60"
+            android:text="@string/number_of_successful_connnections"
+            />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_content"
+        android:paddingLeft="@dimen/x30"
+        android:background="@null"
+        android:paddingRight="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

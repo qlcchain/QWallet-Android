@@ -682,7 +682,7 @@
     <string name="Amount_to_tip">Amount to tip</string>
     <string name="no_thanks">no, thanks</string>
     <string name="yes_send_tip">yes, send tip</string>
-    <string name="Enter_private_key_to_import_your_wallet">Enter_private key to import your wallet:</string>
+    <string name="Enter_private_key_to_import_your_wallet">Enter private key to import your wallet:</string>
     <string name="Private_key">Private key</string>
     <string name="import2">import</string>
     <string name="No_Wallet">No Wallet</string>

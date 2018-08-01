@@ -237,6 +237,10 @@ dependencies {
         exclude group: 'com.google.zxing'
     }
 
+    implementation "android.arch.lifecycle:runtime:$arch_version"
+    implementation "android.arch.lifecycle:common-java8:$arch_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    implementation "android.arch.lifecycle:extensions:$arch_version"
 
 //    debugCompile   'com.squareup.leakcanary:leakcanary-android:1.5.4'
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'

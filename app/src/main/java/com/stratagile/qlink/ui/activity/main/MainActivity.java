@@ -73,6 +73,7 @@ import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
+import com.stratagile.qlink.ui.activity.vpn.RankActivity;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
@@ -845,7 +846,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     return;
                 }
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-                    startActivity(new Intent(this, FreeConnectActivity.class));
+//                    startActivity(new Intent(this, FreeConnectActivity.class));
+                    startActivity(new Intent(this, RankActivity.class));
                     return;
                 }
                 List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();

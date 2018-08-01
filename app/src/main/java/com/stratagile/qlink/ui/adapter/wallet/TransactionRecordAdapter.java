@@ -33,7 +33,7 @@ public class TransactionRecordAdapter extends BaseQuickAdapter<Record.DataBean, 
 
     @Override
     protected void convert(BaseViewHolder helper, Record.DataBean item) {
-        //type = 0 是wifi， type = 1 是转账给别人，type = 2 是用neo兑换为qlc  3是vpn连接扣费 4 wifi注册扣费 、 5 vpn注册扣费
+        //type = 0 是wifi使用记录， type = 1 是转账给别人，type = 2 是用neo兑换为qlc  3是vpn连接扣费 4 wifi注册扣费 、 5 vpn注册扣费
         TextView tvDesc = helper.getView(R.id.desc);
         Drawable drawable;
         switch (item.getType()) {

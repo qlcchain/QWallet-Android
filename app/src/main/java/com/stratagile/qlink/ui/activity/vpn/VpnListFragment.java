@@ -750,6 +750,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         KLog.i("收到了私钥的返回了。。。。");
         mPresenter.handleSendMessage(0);
         mTransientCertOrPCKS12PW = vpnPrivateKeyRsp.getPrivateKey();
+        mResult.mKeyPassword = vpnPrivateKeyRsp.getPrivateKey();
         KLog.i("私钥验证完成，开始连接，打开OpenVPNStatusService服务。");
         Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
         getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -782,6 +783,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         KLog.i(vpnUserAndPasswordRsp.toString());
         mPresenter.handleSendMessage(0);
         mResult.mUsername = vpnUserAndPasswordRsp.getUserName();
+        mResult.mPassword = vpnUserAndPasswordRsp.getPassword();
         mTransientAuthPW = vpnUserAndPasswordRsp.getPassword();
         KLog.i("用户名和密码验证完成，开始连接，打开OpenVPNStatusService服务。");
         Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
@@ -828,49 +830,54 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Override
     public void startOrStopVPN(VpnProfile profile) {
-        mResult = profile;
-        if (VpnStatus.isVPNActive() && profile.getUUIDString().equals(VpnStatus.getLastConnectedVPNProfile())) {
-            Intent disconnectVPN = new Intent(getActivity(), DisconnectVPN.class);
-            startActivity(disconnectVPN);
-        } else {
-            if (Preferences.getDefaultSharedPreferences(getActivity()).getBoolean(CLEARLOG, true))
-                VpnStatus.clearLog();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mResult = profile;
+                if (VpnStatus.isVPNActive() && profile.getUUIDString().equals(VpnStatus.getLastConnectedVPNProfile())) {
+                    Intent disconnectVPN = new Intent(getActivity(), DisconnectVPN.class);
+                    startActivity(disconnectVPN);
+                } else {
+                    if (Preferences.getDefaultSharedPreferences(getActivity()).getBoolean(CLEARLOG, true))
+                        VpnStatus.clearLog();
 
-            // we got called to be the starting point, most likely a shortcut
-            String shortcutUUID = profile.getUUID().toString();
-            String shortcutName = profile.getName().toString();
+                    // we got called to be the starting point, most likely a shortcut
+                    String shortcutUUID = profile.getUUID().toString();
+                    String shortcutName = profile.getName().toString();
 
-            VpnProfile profileToConnect = ProfileManager.get(getActivity(), shortcutUUID);
-            if (shortcutName != null && profileToConnect == null) {
-                profileToConnect = ProfileManager.getInstance(getActivity()).getProfileByName(shortcutName);
-                if (!(new ExternalAppDatabase(getActivity()).checkRemoteActionPermission(getActivity()))) {
-                    if(connectVpnEntity  != null  && !isReport)
-                    {
-                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
-                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("vpnName",connectVpnEntity.getVpnName() );
-                        map.put("status",0 );
-                        map.put("mark","no Permission" );
-                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_no Permission" );
-                        mPresenter.reportVpnInfo(map);
-                        isReport = true;
+                    VpnProfile profileToConnect = ProfileManager.get(getActivity(), shortcutUUID);
+                    if (shortcutName != null && profileToConnect == null) {
+                        profileToConnect = ProfileManager.getInstance(getActivity()).getProfileByName(shortcutName);
+                        if (!(new ExternalAppDatabase(getActivity()).checkRemoteActionPermission(getActivity()))) {
+                            if(connectVpnEntity  != null  && !isReport)
+                            {
+                                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
+                                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("vpnName",connectVpnEntity.getVpnName() );
+                                map.put("status",0 );
+                                map.put("mark","no Permission" );
+                                KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_no Permission" );
+                                mPresenter.reportVpnInfo(map);
+                                isReport = true;
+                            }
+                            return;
+                        }
                     }
-                    return;
+                    KLog.i("startOrStopVPN  2222");
+
+                    if (profileToConnect == null) {
+                        VpnStatus.logError(R.string.shortcut_profile_notfound);
+                        KLog.i("startOrStopVPN  3333");
+                        // show Log window to display error
+//                finish();
+                    } else {
+//                mSelectedProfile = profileToConnect;
+                        launchVPN();
+                    }
                 }
             }
-            KLog.i("startOrStopVPN  2222");
-
-            if (profileToConnect == null) {
-                VpnStatus.logError(R.string.shortcut_profile_notfound);
-                KLog.i("startOrStopVPN  3333");
-                // show Log window to display error
-//                finish();
-            } else {
-//                mSelectedProfile = profileToConnect;
-                launchVPN();
-            }
-        }
+        }).start();
     }
 
     /**
@@ -910,25 +917,17 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
             if (resultCode == Activity.RESULT_OK) {
                 KLog.i("开始检查配置文件的类型");
+                if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                    mTransientCertOrPCKS12PW = connectVpnEntity.getPrivateKeyPassword();
+                    mResult.mUsername = connectVpnEntity.getUsername();
+                    mTransientAuthPW = connectVpnEntity.getPassword();
+                    mResult.mPassword = connectVpnEntity.getPassword();
+                    mResult.mKeyPassword = connectVpnEntity.getPrivateKeyPassword();
+                }
                 int needpw = mResult.needUserPWInput(mTransientCertOrPCKS12PW, mTransientAuthPW);
                 if (needpw != 0) {
                     VpnStatus.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
                             ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
-//                    askForPW(needpw);
-                    if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && needpw != R.string.password) {
-                        mTransientCertOrPCKS12PW = connectVpnEntity.getPrivateKeyPassword();
-                        KLog.i("私钥验证完成，开始连接，打开OpenVPNStatusService服务。");
-                        Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
-                        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-                    }
-
-                    if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && needpw == R.string.password) {
-                        mResult.mUsername = connectVpnEntity.getUsername();
-                        mTransientAuthPW = connectVpnEntity.getPassword();
-                        KLog.i("用户名和密码验证完成，开始连接，打开OpenVPNStatusService服务。");
-                        Intent intent = new Intent(getActivity(), OpenVPNStatusService.class);
-                        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-                    }
                     if (!connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                         mPresenter.getPasswordFromRemote(needpw);
                     }
@@ -995,7 +994,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         ConstantValue.isConnectVpn = false;
                     }
                     KLog.i("error");
-//                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
+                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
                     Intent intent = new Intent();
                     intent.setAction(BroadCastAction.disconnectVpn);
                     getActivity().sendBroadcast(intent);

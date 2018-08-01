@@ -867,4 +867,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="AVAILABLE">AVAILABLE</string>
     <string name="Please_create_a_wallet_to_continue">Please create a wallet to continue.</string>
     <string name="This_will_consume_one_of_your_free_connections">This will consume one of your free connections.</string>
+
+    <!--2018-08-01-->
+    <string name="weekly_ranking">weekly ranking</string>
+    <string name="rules">rules</string>
+    <string name="Asset">Asset</string>
+    <string name="number_of_successful_connnections">Number of successful connnections</string>
 </resources>

@@ -9,8 +9,8 @@ import com.stratagile.qlink.db.WifiEntity;
 
 public class MyAsset {
     public static final int WIFI_ASSET = 0;
-    public static final int VPN_ASSET = 1;
     public static final int VPN_ASSET_1 = 3;
+    public static final int VPN_ASSET = 1;
     public int getType() {
         return type;
     }
