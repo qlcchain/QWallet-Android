@@ -16,6 +16,7 @@ import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.wallet.contract.AssetListContract;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
+import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.VpnUtil;
@@ -106,17 +107,23 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
      * 就将数据库中的删除。
      */
     private void handleAssetFromServerBack(WifiRegisteResult wifiRegisteResult) {
+        String delete = "";
+        String update = "";
+        String insert = "";
+        LogUtil.addLog("server Assets count：" + wifiRegisteResult.getData().size(), getClass().getSimpleName());
         for (WifiRegisteResult.DataBean dataBean : wifiRegisteResult.getData()) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             List<VpnEntity> vpnEntityListInSql = new ArrayList<>();
             if ("3".equals(dataBean.getType())) {
                 vpnEntityListInSql = AppConfig.getInstance().getDaoSession().getVpnEntityDao().queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(dataBean.getSsId())).list();
             }
+
             if (vpnEntityListInSql.size() > 0 || "".equals(dataBean.getType())) {
                 for (VpnEntity vpnEntity : vpnEntityList) {
                     //3代表的是vpn资产
                     if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && dataBean.getP2pId().equals("")) {
                         //ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
+                        delete += vpnEntity.getVpnName()+",";
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                         break;
                     } else if (VpnUtil.isInSameNet(vpnEntity) && dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals("")) {
@@ -125,6 +132,7 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                         vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
 //                        vpnEntity.setQlc((float) dataBean.getQlc());
                         vpnEntity.setAssetTranfer(dataBean.getQlc());
+                        update +=  vpnEntity.getVpnName()+",";
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                     }
                 }
@@ -138,12 +146,16 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                     vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
 //                    vpnEntity.setQlc((float) dataBean.getQlc());
                     vpnEntity.setAssetTranfer(dataBean.getQlc());
+                    insert += vpnEntity.getVpnName()+",";
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
                 }
 
             }
 
         }
+        LogUtil.addLog("delete Assets：" + delete, getClass().getSimpleName());
+        LogUtil.addLog("update Assets：" + update, getClass().getSimpleName());
+        LogUtil.addLog("insert Assets：" + insert, getClass().getSimpleName());
         for (WifiRegisteResult.DataBean dataBean : wifiRegisteResult.getData()) {
             List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
             List<WifiEntity> wifiEntityListInSql = new ArrayList<>();

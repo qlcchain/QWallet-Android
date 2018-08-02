@@ -19,6 +19,7 @@ import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
+import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.socks.library.KLog;
@@ -175,6 +176,7 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
             }
         }
         ssidMap.put("ssIds", ssids);
+        LogUtil.addLog("local Assets：" + ssids, getClass().getSimpleName());
         mPresenter.getAssetInfoFromServer(ssidMap);
     }
 
@@ -288,6 +290,8 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
             }
         }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+        LogUtil.addLog("getasseList Assets count_0：" + vpnEntityList.size(), getClass().getSimpleName());
+        String addStr ="";
         for (VpnEntity vpnEntity : vpnEntityList) {
             if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !vpnEntity.getIsInMainWallet()) {//主网
                 continue;
@@ -303,10 +307,13 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
                     MyAsset myAsset = new MyAsset();
                     myAsset.setType(1);
                     myAsset.setVpnEntity(vpnEntity);
+                    addStr += vpnEntity.getVpnName() +",";
                     assetArrayList.add(myAsset);
                 }
             }
         }
+        LogUtil.addLog("getasseList Assets count_1：" + addStr, getClass().getSimpleName());
+        LogUtil.addLog("getasseList Assets count_2：" + assetArrayList.size(), getClass().getSimpleName());
         //更新sd卡资产数据begin
         LocalAssetsUtils.updateList(assetArrayList);
         //更新sd卡资产数据end
