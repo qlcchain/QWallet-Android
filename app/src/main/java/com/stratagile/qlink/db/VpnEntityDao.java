@@ -47,16 +47,17 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         public final static Property Configuration = new Property(22, String.class, "configuration", false, "CONFIGURATION");
         public final static Property VpnName = new Property(23, String.class, "vpnName", false, "VPN_NAME");
         public final static Property P2pId = new Property(24, String.class, "p2pId", false, "P2P_ID");
-        public final static Property Address = new Property(25, String.class, "address", false, "ADDRESS");
-        public final static Property Type = new Property(26, int.class, "type", false, "TYPE");
-        public final static Property CurrentConnect = new Property(27, int.class, "currentConnect", false, "CURRENT_CONNECT");
-        public final static Property Qlc = new Property(28, float.class, "qlc", false, "QLC");
-        public final static Property IsConnected = new Property(29, boolean.class, "isConnected", false, "IS_CONNECTED");
-        public final static Property LastFreeTime = new Property(30, long.class, "lastFreeTime", false, "LAST_FREE_TIME");
-        public final static Property Online = new Property(31, boolean.class, "online", false, "ONLINE");
-        public final static Property IsLoadingAvater = new Property(32, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
-        public final static Property AvaterUpdateTime = new Property(33, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
-        public final static Property Price = new Property(34, float.class, "price", false, "PRICE");
+        public final static Property P2pIdPc = new Property(25, String.class, "p2pIdPc", false, "P2P_ID_PC");
+        public final static Property Address = new Property(26, String.class, "address", false, "ADDRESS");
+        public final static Property Type = new Property(27, int.class, "type", false, "TYPE");
+        public final static Property CurrentConnect = new Property(28, int.class, "currentConnect", false, "CURRENT_CONNECT");
+        public final static Property Qlc = new Property(29, float.class, "qlc", false, "QLC");
+        public final static Property IsConnected = new Property(30, boolean.class, "isConnected", false, "IS_CONNECTED");
+        public final static Property LastFreeTime = new Property(31, long.class, "lastFreeTime", false, "LAST_FREE_TIME");
+        public final static Property Online = new Property(32, boolean.class, "online", false, "ONLINE");
+        public final static Property IsLoadingAvater = new Property(33, boolean.class, "isLoadingAvater", false, "IS_LOADING_AVATER");
+        public final static Property AvaterUpdateTime = new Property(34, long.class, "avaterUpdateTime", false, "AVATER_UPDATE_TIME");
+        public final static Property Price = new Property(35, float.class, "price", false, "PRICE");
     }
 
 
@@ -97,16 +98,17 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
                 "\"CONFIGURATION\" TEXT," + // 22: configuration
                 "\"VPN_NAME\" TEXT," + // 23: vpnName
                 "\"P2P_ID\" TEXT," + // 24: p2pId
-                "\"ADDRESS\" TEXT," + // 25: address
-                "\"TYPE\" INTEGER NOT NULL ," + // 26: type
-                "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 27: currentConnect
-                "\"QLC\" REAL NOT NULL ," + // 28: qlc
-                "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 29: isConnected
-                "\"LAST_FREE_TIME\" INTEGER NOT NULL ," + // 30: lastFreeTime
-                "\"ONLINE\" INTEGER NOT NULL ," + // 31: online
-                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 32: isLoadingAvater
-                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 33: avaterUpdateTime
-                "\"PRICE\" REAL NOT NULL );"); // 34: price
+                "\"P2P_ID_PC\" TEXT," + // 25: p2pIdPc
+                "\"ADDRESS\" TEXT," + // 26: address
+                "\"TYPE\" INTEGER NOT NULL ," + // 27: type
+                "\"CURRENT_CONNECT\" INTEGER NOT NULL ," + // 28: currentConnect
+                "\"QLC\" REAL NOT NULL ," + // 29: qlc
+                "\"IS_CONNECTED\" INTEGER NOT NULL ," + // 30: isConnected
+                "\"LAST_FREE_TIME\" INTEGER NOT NULL ," + // 31: lastFreeTime
+                "\"ONLINE\" INTEGER NOT NULL ," + // 32: online
+                "\"IS_LOADING_AVATER\" INTEGER NOT NULL ," + // 33: isLoadingAvater
+                "\"AVATER_UPDATE_TIME\" INTEGER NOT NULL ," + // 34: avaterUpdateTime
+                "\"PRICE\" REAL NOT NULL );"); // 35: price
     }
 
     /** Drops the underlying database table. */
@@ -208,19 +210,24 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             stmt.bindString(25, p2pId);
         }
  
+        String p2pIdPc = entity.getP2pIdPc();
+        if (p2pIdPc != null) {
+            stmt.bindString(26, p2pIdPc);
+        }
+ 
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(26, address);
+            stmt.bindString(27, address);
         }
-        stmt.bindLong(27, entity.getType());
-        stmt.bindLong(28, entity.getCurrentConnect());
-        stmt.bindDouble(29, entity.getQlc());
-        stmt.bindLong(30, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(31, entity.getLastFreeTime());
-        stmt.bindLong(32, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(33, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(34, entity.getAvaterUpdateTime());
-        stmt.bindDouble(35, entity.getPrice());
+        stmt.bindLong(28, entity.getType());
+        stmt.bindLong(29, entity.getCurrentConnect());
+        stmt.bindDouble(30, entity.getQlc());
+        stmt.bindLong(31, entity.getIsConnected() ? 1L: 0L);
+        stmt.bindLong(32, entity.getLastFreeTime());
+        stmt.bindLong(33, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(34, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(35, entity.getAvaterUpdateTime());
+        stmt.bindDouble(36, entity.getPrice());
     }
 
     @Override
@@ -316,19 +323,24 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             stmt.bindString(25, p2pId);
         }
  
+        String p2pIdPc = entity.getP2pIdPc();
+        if (p2pIdPc != null) {
+            stmt.bindString(26, p2pIdPc);
+        }
+ 
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(26, address);
+            stmt.bindString(27, address);
         }
-        stmt.bindLong(27, entity.getType());
-        stmt.bindLong(28, entity.getCurrentConnect());
-        stmt.bindDouble(29, entity.getQlc());
-        stmt.bindLong(30, entity.getIsConnected() ? 1L: 0L);
-        stmt.bindLong(31, entity.getLastFreeTime());
-        stmt.bindLong(32, entity.getOnline() ? 1L: 0L);
-        stmt.bindLong(33, entity.getIsLoadingAvater() ? 1L: 0L);
-        stmt.bindLong(34, entity.getAvaterUpdateTime());
-        stmt.bindDouble(35, entity.getPrice());
+        stmt.bindLong(28, entity.getType());
+        stmt.bindLong(29, entity.getCurrentConnect());
+        stmt.bindDouble(30, entity.getQlc());
+        stmt.bindLong(31, entity.getIsConnected() ? 1L: 0L);
+        stmt.bindLong(32, entity.getLastFreeTime());
+        stmt.bindLong(33, entity.getOnline() ? 1L: 0L);
+        stmt.bindLong(34, entity.getIsLoadingAvater() ? 1L: 0L);
+        stmt.bindLong(35, entity.getAvaterUpdateTime());
+        stmt.bindDouble(36, entity.getPrice());
     }
 
     @Override
@@ -364,16 +376,17 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
             cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // configuration
             cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // vpnName
             cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // p2pId
-            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // address
-            cursor.getInt(offset + 26), // type
-            cursor.getInt(offset + 27), // currentConnect
-            cursor.getFloat(offset + 28), // qlc
-            cursor.getShort(offset + 29) != 0, // isConnected
-            cursor.getLong(offset + 30), // lastFreeTime
-            cursor.getShort(offset + 31) != 0, // online
-            cursor.getShort(offset + 32) != 0, // isLoadingAvater
-            cursor.getLong(offset + 33), // avaterUpdateTime
-            cursor.getFloat(offset + 34) // price
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // p2pIdPc
+            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // address
+            cursor.getInt(offset + 27), // type
+            cursor.getInt(offset + 28), // currentConnect
+            cursor.getFloat(offset + 29), // qlc
+            cursor.getShort(offset + 30) != 0, // isConnected
+            cursor.getLong(offset + 31), // lastFreeTime
+            cursor.getShort(offset + 32) != 0, // online
+            cursor.getShort(offset + 33) != 0, // isLoadingAvater
+            cursor.getLong(offset + 34), // avaterUpdateTime
+            cursor.getFloat(offset + 35) // price
         );
         return entity;
     }
@@ -405,16 +418,17 @@ public class VpnEntityDao extends AbstractDao<VpnEntity, Long> {
         entity.setConfiguration(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
         entity.setVpnName(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
         entity.setP2pId(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
-        entity.setAddress(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
-        entity.setType(cursor.getInt(offset + 26));
-        entity.setCurrentConnect(cursor.getInt(offset + 27));
-        entity.setQlc(cursor.getFloat(offset + 28));
-        entity.setIsConnected(cursor.getShort(offset + 29) != 0);
-        entity.setLastFreeTime(cursor.getLong(offset + 30));
-        entity.setOnline(cursor.getShort(offset + 31) != 0);
-        entity.setIsLoadingAvater(cursor.getShort(offset + 32) != 0);
-        entity.setAvaterUpdateTime(cursor.getLong(offset + 33));
-        entity.setPrice(cursor.getFloat(offset + 34));
+        entity.setP2pIdPc(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setAddress(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
+        entity.setType(cursor.getInt(offset + 27));
+        entity.setCurrentConnect(cursor.getInt(offset + 28));
+        entity.setQlc(cursor.getFloat(offset + 29));
+        entity.setIsConnected(cursor.getShort(offset + 30) != 0);
+        entity.setLastFreeTime(cursor.getLong(offset + 31));
+        entity.setOnline(cursor.getShort(offset + 32) != 0);
+        entity.setIsLoadingAvater(cursor.getShort(offset + 33) != 0);
+        entity.setAvaterUpdateTime(cursor.getLong(offset + 34));
+        entity.setPrice(cursor.getFloat(offset + 35));
      }
     
     @Override

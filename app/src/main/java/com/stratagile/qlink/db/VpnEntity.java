@@ -252,6 +252,11 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
      * vpn注册者的p2pId
      */
     private String p2pId;
+
+    /**
+     * vpn注册者的电脑资产的p2pId
+     */
+    private String p2pIdPc;
     /**
      * 钱包地址
      */
@@ -287,7 +292,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     public VpnEntity() {
     }
 
-    @Generated(hash = 1376861147)
+    @Generated(hash = 104899653)
     public VpnEntity(Long id, String country, boolean isMainNet, String userId,
             String profileLocalPath, String password, String privateKeyPassword,
             String profileUUid, String ipV4Address, String continent,
@@ -295,7 +300,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
             double assetTranfer, String avatar, double registerQlc, int onlineTime,
             int connsuccessNum, boolean isInMainWallet, int unReadMessageCount,
             String friendNum, String configuration, String vpnName, String p2pId,
-            String address, int type, int currentConnect, float qlc,
+            String p2pIdPc, String address, int type, int currentConnect, float qlc,
             boolean isConnected, long lastFreeTime, boolean online,
             boolean isLoadingAvater, long avaterUpdateTime, float price) {
         this.id = id;
@@ -323,6 +328,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.configuration = configuration;
         this.vpnName = vpnName;
         this.p2pId = p2pId;
+        this.p2pIdPc = p2pIdPc;
         this.address = address;
         this.type = type;
         this.currentConnect = currentConnect;
@@ -358,6 +364,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     private long avaterUpdateTime;
     private float price;
 
+ 
     public Long getId() {
         return this.id;
     }
@@ -693,4 +700,13 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     public void setIsMainNet(boolean isMainNet) {
         this.isMainNet = isMainNet;
     }
+
+    public String getP2pIdPc() {
+        return this.p2pIdPc;
+    }
+
+    public void setP2pIdPc(String p2pIdPc) {
+        this.p2pIdPc = p2pIdPc;
+    }
+
 }

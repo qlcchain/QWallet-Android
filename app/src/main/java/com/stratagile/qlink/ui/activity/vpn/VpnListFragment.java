@@ -190,7 +190,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     }
                     if (vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                         //自己注册的vpn资产
-                        Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
+                        Intent intent = new Intent(getActivity(), RegisteWindowVpnActivityActivity.class);
                         KLog.i(vpnListAdapter.getData().get(position).toString());
                         intent.putExtra("flag", "update");
                         intent.putExtra("vpnentity", vpnListAdapter.getData().get(position));
