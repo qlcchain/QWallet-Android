@@ -166,6 +166,9 @@ public class ClientVpnService extends Service {
         LogUtil.addLog("计时器开始发起扣款申请", getClass().getSimpleName());
         KLog.i("vpn连接成功，计时器开始发起扣款申请");
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().queryBuilder().list();
+        if (walletList == null || walletList.size() == 0 || walletList.size() <= SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)) {
+            SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0);
+        }
         Wallet wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
         Map<String, Object> infoMap = new HashMap<>();
         String uuid = UUID.randomUUID().toString().replace("-", "");

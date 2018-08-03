@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="#ffffff"
-            android:shadowRadius="15"
+            android:shadowRadius="5"
             android:textStyle="bold"
             android:fontFamily="@font/vagroundedbt"
             android:textSize="30sp"

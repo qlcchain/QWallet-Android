@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:shadowColor="#ffffff"
-        android:shadowRadius="10"
+        android:shadowRadius="5"
         android:textStyle="bold"
         android:fontFamily="@font/vagroundedbt"
         android:textSize="20sp"

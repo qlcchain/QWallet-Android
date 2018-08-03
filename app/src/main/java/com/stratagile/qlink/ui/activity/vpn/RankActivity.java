@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.stratagile.qlink.card.ShadowTransformer;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.ui.activity.rank.RankListFragment;
 import com.stratagile.qlink.ui.activity.rank.RankViewModel;
+import com.stratagile.qlink.ui.activity.rank.RuleActivity;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerRankComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.RankContract;
 import com.stratagile.qlink.ui.activity.vpn.module.RankModule;
@@ -172,6 +174,9 @@ public class RankActivity extends BaseActivity implements RankContract.View {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.rule) {
+            startActivity(new Intent(this, RuleActivity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 

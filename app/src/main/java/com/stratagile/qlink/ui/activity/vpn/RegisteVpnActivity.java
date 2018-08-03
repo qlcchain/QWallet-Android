@@ -299,9 +299,9 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (getIntent().getStringExtra("flag").equals("update")) {
-            getMenuInflater().inflate(R.menu.connect_vpn, menu);
-        }
+//        if (getIntent().getStringExtra("flag").equals("update")) {
+//            getMenuInflater().inflate(R.menu.connect_vpn, menu);
+//        }
         return true;
     }
 

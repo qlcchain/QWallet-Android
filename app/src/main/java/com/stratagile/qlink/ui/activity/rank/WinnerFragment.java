@@ -52,7 +52,7 @@ public class WinnerFragment extends CardFragment {
             public void onChanged(@Nullable Active active) {
                 for (int i = 0; i < active.getData().getActs().size(); i++) {
                     if (active.getData().getActs().get(i).getActId().equals(getActId())) {
-                        tvWinner.setText(Html.fromHtml(AppConfig.getInstance().getResources().getString(R.string.winner_list_round_1_2300_qlc_prize_pool, (active.getData().getActs().get(i).getActAmount()))));
+                        tvWinner.setText(Html.fromHtml(AppConfig.getInstance().getResources().getString(R.string.winner_list_round_1_2300_qlc_prize_pool, active.getData().getActs().get(i).getActName(), (active.getData().getActs().get(i).getActAmount()))));
                     }
                 }
             }

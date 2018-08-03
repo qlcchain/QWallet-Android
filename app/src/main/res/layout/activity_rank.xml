@@ -34,10 +34,11 @@
             android:layout_weight="1"
             />
         <TextView
-            android:layout_width="@dimen/x300"
+            android:layout_width="@dimen/x350"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:gravity="right"
+            android:textSize="12sp"
             android:layout_marginRight="@dimen/x60"
             android:text="@string/number_of_successful_connnections"
             />
@@ -46,6 +47,7 @@
     <FrameLayout
         android:id="@+id/fragment_content"
         android:paddingLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/x10"
         android:background="@null"
         android:paddingRight="@dimen/x30"
         android:layout_width="match_parent"

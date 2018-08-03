@@ -79,9 +79,15 @@ public class RankListFragment extends BaseFragment implements RankListContract.V
             @Override
             public void onChanged(@Nullable ActiveList activeList) {
                 if (activeList.getData().getActId().equals(viewModel.getCurrentAct().getValue())) {
-                    rankListAdapter.setNewData(activeList.getData().getVpnRanking());
+                    if (activeList.getData().getActStatus().equals("NEW")) {
+                        rankListAdapter.setNewData(new ArrayList<>());
+                    } else {
+                        rankListAdapter.setNewData(activeList.getData().getVpnRanking());
+                    }
+                    rankListAdapter.setCurrentActStatus(activeList.getData().getActStatus());
                 } else {
                     rankListAdapter.setNewData(new ArrayList<>());
+                    rankListAdapter.setCurrentActStatus("");
                 }
             }
         });

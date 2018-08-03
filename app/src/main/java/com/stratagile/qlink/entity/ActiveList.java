@@ -60,6 +60,16 @@ public class ActiveList extends BaseBack {
              * connectSuccessNum : 4
              */
 
+            private double rewardTotal;
+
+            public double getRewardTotal() {
+                return rewardTotal;
+            }
+
+            public void setRewardTotal(double rewardTotal) {
+                this.rewardTotal = rewardTotal;
+            }
+
             private String imgUrl;
             private String assetName;
             private int connectSuccessNum;

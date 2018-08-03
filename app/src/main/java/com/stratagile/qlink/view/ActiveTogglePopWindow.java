@@ -77,7 +77,7 @@ public class ActiveTogglePopWindow extends PopupWindow {
     public void showPopupWindow(View parent) {
         if (!this.isShowing()) {
             // 以下拉方式显示popupwindow
-            this.showAsDropDown(parent, -270, 50);
+            this.showAsDropDown(parent, -(int)parent.getContext().getResources().getDimension(R.dimen.x180), (int) parent.getContext().getResources().getDimension(R.dimen.x33));
         } else {
             this.dismiss();
         }

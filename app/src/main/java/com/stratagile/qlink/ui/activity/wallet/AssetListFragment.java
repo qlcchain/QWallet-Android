@@ -166,6 +166,9 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
         Map<String, Object> ssidMap = new HashMap<>();
         ArrayList<MyAsset> localAssetsList = LocalAssetsUtils.getLocalAssetsList();
         assetArrayList = localAssetsList;
+        if (assetArrayList == null || assetArrayList.size() == 0) {
+            return;
+        }
         String[] ssids = new String[assetArrayList.size()];
         for (int i = 0; i < assetArrayList.size(); i++) {
             //0 wifi
