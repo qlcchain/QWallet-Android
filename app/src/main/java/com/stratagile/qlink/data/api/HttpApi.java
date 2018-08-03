@@ -1,6 +1,8 @@
 package com.stratagile.qlink.data.api;
 
 
+import com.stratagile.qlink.entity.Active;
+import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
@@ -23,6 +25,7 @@ import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
+import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -43,6 +46,9 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
+import static com.stratagile.qlink.data.api.API.act_asset;
+import static com.stratagile.qlink.data.api.API.act_get;
+import static com.stratagile.qlink.data.api.API.act_show;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.url_bet;
@@ -220,5 +226,17 @@ public interface HttpApi {
     @POST(reportVpnInfo)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> reportVpnInfo(@Body RequestBody map);
+
+    @POST(act_get)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Active> getAct(@Body RequestBody map);
+
+    @POST(act_asset)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ActiveList> getActAsset(@Body RequestBody map);
+
+    @POST(act_show)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ShowAct> getShowAct(@Body RequestBody map);
     /*************************************************/
 }

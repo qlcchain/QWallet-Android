@@ -34,6 +34,8 @@ public interface MainContract {
         void getAvatarSuccess(UpLoadAvatar upLoadAvatar);
 
         void onGetFreeNumBack(int num);
+
+        void onGetShowActBack(int isShow);
     }
 
     interface MainContractPresenter extends BasePresenter {

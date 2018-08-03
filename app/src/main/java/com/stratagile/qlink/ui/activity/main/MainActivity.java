@@ -94,8 +94,10 @@ import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.WalletStorage;
+import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.DownCheckView;
+import com.stratagile.qlink.view.FreeSelectPopWindow;
 import com.stratagile.qlink.view.NoScrollViewPager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -122,7 +124,7 @@ import butterknife.OnClick;
  * @date 2018/01/09 09:57:09
  */
 
-public class MainActivity extends BaseActivity implements MainContract.View {
+public class MainActivity extends BaseActivity implements MainContract.View, ActiveTogglePopWindow.OnItemClickListener {
 
     @Inject
     MainPresenter mPresenter;
@@ -255,15 +257,57 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         ConstantValue.freeNum = num;
         tvFree.setText(getString(R.string.free) + ":" + num);
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            tvFree.setVisibility(View.VISIBLE);
+            if (isShowAct == 0) {
+                tvFree.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(R.mipmap.icon_free)
+                        .into(ivWallet);
+            } else {
+                tvFree.setVisibility(View.GONE);
+                Glide.with(this)
+                        .load(R.mipmap.icon_set_active)
+                        .into(ivWallet);
+            }
             ivWallet.setVisibility(View.VISIBLE);
         }
     }
+
+    int isShowAct = 0;
+
+    @Override
+    public void onGetShowActBack(int isShow) {
+        isShowAct = isShow;
+        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+            if (isShowAct == 0) {
+                tvFree.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(R.mipmap.icon_free)
+                        .into(ivWallet);
+            } else {
+                tvFree.setVisibility(View.GONE);
+                Glide.with(this)
+                        .load(R.mipmap.icon_set_active)
+                        .into(ivWallet);
+            }
+            ivWallet.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetFreeNumBack(FreeCount freeCount) {
         tvFree.setText(getString(R.string.free) + ":" + freeCount.getCount());
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            tvFree.setVisibility(View.VISIBLE);
+            if (isShowAct == 0) {
+                tvFree.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(R.mipmap.icon_free)
+                        .into(ivWallet);
+            } else {
+                tvFree.setVisibility(View.GONE);
+                Glide.with(this)
+                        .load(R.mipmap.icon_set_active)
+                        .into(ivWallet);
+            }
             ivWallet.setVisibility(View.VISIBLE);
         }
     }
@@ -299,6 +343,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         String addressNames = FileUtil.getAllAddressNames();
         Map<String, String> map = new HashMap<>();
         map.put("key", addressNames);
+        mPresenter.getShowAct();
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
@@ -498,16 +543,26 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         downCHeckView.setVisibility(View.VISIBLE);
         tvTitle.setVisibility(View.GONE);
         tvTitle.setText(R.string.vpn);
-        tvFree.setVisibility(View.VISIBLE);
+        if (isShowAct == 0) {
+            tvFree.setVisibility(View.VISIBLE);
+        } else {
+            tvFree.setVisibility(View.GONE);
+        }
         ivWallet.setVisibility(View.VISIBLE);
 //        if (freeNum != 0) {
 //            tvFree.setVisibility(View.VISIBLE);
 //        } else {
 //            tvFree.setVisibility(View.GONE);
 //        }
-        Glide.with(this)
-                .load(R.mipmap.icon_free)
-                .into(ivWallet);
+        if (isShowAct == 1) {
+            Glide.with(this)
+                    .load(R.mipmap.icon_set_active)
+                    .into(ivWallet);
+        } else {
+            Glide.with(this)
+                    .load(R.mipmap.icon_free)
+                    .into(ivWallet);
+        }
     }
 
     /**
@@ -846,8 +901,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     return;
                 }
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-//                    startActivity(new Intent(this, FreeConnectActivity.class));
-                    startActivity(new Intent(this, RankActivity.class));
+                    if (isShowAct == 1) {
+                        ActiveTogglePopWindow morePopWindow = new ActiveTogglePopWindow(this);
+                        morePopWindow.setOnItemClickListener(MainActivity.this);
+                        morePopWindow.showPopupWindow(ivWallet);
+                    } else {
+                        startActivity(new Intent(this, FreeConnectActivity.class));
+                    }
                     return;
                 }
                 List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
@@ -922,6 +982,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 break;
             case R.id.view_vpn:
                 bottomNavigation.setSelectedItemId(R.id.item_sms);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(int id) {
+        switch (id) {
+            case R.id.rl_detail:
+                startActivity(new Intent(this, FreeConnectActivity.class));
+                break;
+            case R.id.rl_rank:
+                startActivity(new Intent(this, RankActivity.class));
                 break;
             default:
                 break;

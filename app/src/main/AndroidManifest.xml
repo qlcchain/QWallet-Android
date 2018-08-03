@@ -374,6 +374,7 @@
         <activity android:name=".ui.activity.setting.SelectLanguageActivityActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.vpn.RankActivity" />
+        <activity android:name=".ui.activity.rank.RuleActivity" />
 
         <activity-alias
             android:exported="true"

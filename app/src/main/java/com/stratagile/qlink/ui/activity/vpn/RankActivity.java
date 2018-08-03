@@ -1,16 +1,35 @@
 package com.stratagile.qlink.ui.activity.vpn;
 
 import android.app.FragmentManager;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.LayoutInflaterCompat;
+import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.InflateException;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.card.CardFragment;
 import com.stratagile.qlink.card.CardFragmentPagerAdapter;
 import com.stratagile.qlink.card.ShadowTransformer;
+import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.ui.activity.rank.RankListFragment;
 import com.stratagile.qlink.ui.activity.rank.RankViewModel;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerRankComponent;
@@ -44,6 +63,27 @@ public class RankActivity extends BaseActivity implements RankContract.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflaterCompat.setFactory(LayoutInflater.from(this), new LayoutInflaterFactory() {
+            @Override
+            public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+                if (name.equalsIgnoreCase("com.android.internal.view.menu.IconMenuItemView") || name.equalsIgnoreCase("com.android.internal.view.menu.ActionMenuItemView") || name.equalsIgnoreCase("android.support.v7.view.menu.ActionMenuItemView")) {
+                    try {
+                        LayoutInflater f = getLayoutInflater();
+                        final View view = f.createView(name, null, attrs);
+                        if (view instanceof TextView) {
+                            ((TextView) view).setTextColor(getResources().getColor(R.color.white));
+                            ((TextView) view).setTypeface(Typeface.createFromAsset(getAssets(), "vagroundedbt.ttf"));
+                        }
+                        return view;
+                    } catch (InflateException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        });
         super.onCreate(savedInstanceState);
     }
 
@@ -68,15 +108,7 @@ public class RankActivity extends BaseActivity implements RankContract.View {
 
     @Override
     protected void initData() {
-        cardFragmentPagerAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(), UIUtils.dip2px(1, this));
-        viewPager.setAdapter(cardFragmentPagerAdapter);
-        viewPager.setOffscreenPageLimit(3);
-        viewPager.setPageMargin(20);
-        mFragmentCardShadowTransformer = new ShadowTransformer(viewPager, cardFragmentPagerAdapter);
-        mFragmentCardShadowTransformer.enableScaling(true);
-        viewPager.setPageTransformer(false, mFragmentCardShadowTransformer);
         viewModel = ViewModelProviders.of(this).get(RankViewModel.class);
-        viewModel.getCurrentPage().setValue(0);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -85,12 +117,30 @@ public class RankActivity extends BaseActivity implements RankContract.View {
 
             @Override
             public void onPageSelected(int position) {
-                viewModel.getCurrentPage().postValue(position);
+                viewModel.getCurrentAct().postValue(((CardFragment) cardFragmentPagerAdapter.getItem(position)).getActId());
+//                KLog.i(((CardFragment)cardFragmentPagerAdapter.getItem(position)).getActId());
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+        viewModel.getAct();
+        setListener();
+    }
+
+    private void setListener() {
+        viewModel.getActive().observe(this, new Observer<Active>() {
+            @Override
+            public void onChanged(@Nullable Active active) {
+                cardFragmentPagerAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(), UIUtils.dip2px(1, RankActivity.this), active);
+                viewPager.setAdapter(cardFragmentPagerAdapter);
+                viewPager.setOffscreenPageLimit(3);
+                viewPager.setPageMargin(20);
+                mFragmentCardShadowTransformer = new ShadowTransformer(viewPager, cardFragmentPagerAdapter);
+                mFragmentCardShadowTransformer.enableScaling(true);
+                viewPager.setPageTransformer(false, mFragmentCardShadowTransformer);
             }
         });
     }
@@ -119,5 +169,19 @@ public class RankActivity extends BaseActivity implements RankContract.View {
     public void closeProgressDialog() {
         progressDialog.hide();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.rank_rule, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
 }

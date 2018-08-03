@@ -17,6 +17,7 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.MainAddress;
+import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
@@ -330,6 +331,16 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                     @Override
                     public void onNext(FreeNum baseBack) {
                         mView.onGetFreeNumBack(baseBack.getData().getFreeNum());
+                    }
+                });
+    }
+
+    public void getShowAct() {
+        httpAPIWrapper.getShowAct(new HashMap<String, Object>())
+                .subscribe(new HttpObserver<ShowAct>() {
+                    @Override
+                    public void onNext(ShowAct baseBack) {
+                        mView.onGetShowActBack(baseBack.getData().getIsShow());
                     }
                 });
     }

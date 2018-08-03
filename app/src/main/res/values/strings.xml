@@ -873,4 +873,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="rules">rules</string>
     <string name="Asset">Asset</string>
     <string name="number_of_successful_connnections">Number of successful connnections</string>
+    <string name="days">DAYS</string>
+    <string name="hrs">HRS</string>
+    <string name="mins">MINS</string>
+    <string name="secs">SECS</string>
+    <string name="winner_list_round_1_2300_qlc_prize_pool"><Data><![CDATA[Winner List <br /> Round 1<br /><b>\%s\</b> QLC Prize Pool]]></Data></string>
+    <string name="coming_soon">COMING SOON...</string>
+    <string name="details">Details</string>
+    <string name="ranking">Ranking</string>
 </resources>

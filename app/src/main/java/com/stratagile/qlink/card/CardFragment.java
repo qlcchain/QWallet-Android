@@ -16,6 +16,16 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.ui.activity.rank.RankViewModel;
 
 public class CardFragment extends Fragment {
+    private String actId = "";
+
+    public String getActId() {
+        return actId;
+    }
+
+    public void setActId(String actId) {
+        this.actId = actId;
+    }
+
     private CardView mCardView;
 
     private FrameLayout cardRootView;
