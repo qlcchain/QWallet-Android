@@ -92,8 +92,6 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
                         helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.mainColor));
                         helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.mainColor));
                         helper.setTextColor(R.id.tv_asset_name, mContext.getResources().getColor(R.color.mainColor));
-
-
                     } else {
                         helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.color_333));
                         helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.color_333));
