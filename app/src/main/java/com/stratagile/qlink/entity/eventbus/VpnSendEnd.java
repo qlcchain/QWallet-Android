@@ -5,4 +5,14 @@ package com.stratagile.qlink.entity.eventbus;
  */
 
 public class VpnSendEnd {
+
+    public String getProfileLocalPath() {
+        return profileLocalPath;
+    }
+
+    public void setProfileLocalPath(String profileLocalPath) {
+        this.profileLocalPath = profileLocalPath;
+    }
+
+    private String profileLocalPath;
 }

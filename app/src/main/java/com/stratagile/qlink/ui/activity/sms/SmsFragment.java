@@ -36,6 +36,7 @@ import com.stratagile.qlink.ui.activity.sms.contract.SmsContract;
 import com.stratagile.qlink.ui.activity.sms.module.SmsModule;
 import com.stratagile.qlink.ui.activity.sms.presenter.SmsPresenter;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
+import com.stratagile.qlink.ui.activity.vpn.RegisteWindowVpnActivityActivity;
 import com.stratagile.qlink.ui.activity.vpn.SelectContinentActivity;
 import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;

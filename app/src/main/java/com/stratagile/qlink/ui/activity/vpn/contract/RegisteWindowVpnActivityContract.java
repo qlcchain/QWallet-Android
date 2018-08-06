@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.vpn.contract;
 
+import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 /**
@@ -19,12 +20,17 @@ public interface RegisteWindowVpnActivityContract {
          *
          */
         void closeProgressDialog();
+
+        void getScanPermissionSuccess();
     }
 
     interface RegisteWindowVpnActivityContractPresenter extends BasePresenter {
-//        /**
+        //        /**
 //         *
 //         */
-//        void getBusinessInfo(Map map);
+        void getScanPermission();
+
+        void preAddVpn(VpnEntity vpnEntity);
+
     }
 }
