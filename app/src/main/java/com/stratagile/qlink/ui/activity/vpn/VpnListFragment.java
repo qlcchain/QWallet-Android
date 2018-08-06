@@ -234,19 +234,21 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         vpnListAdapter.setOnVpnOpreateListener(new VpnListAdapter.OnVpnOpreateListener() {
             @Override
             public void onConnect(VpnEntity vpnEntity) {
+                //vpn已经连接，需要先断开已经连接的vpn
                 if (VpnStatus.isVPNActive() && vpnListAdapter.getData().get(0).isConnected()) {
                     showChangeVpnDialog(vpnEntity);
                     return;
                 }
+                //连接自己的vpn
                 if (vpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                     getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
-//                    mTransientCertOrPCKS12PW = vpnEntity.getPrivateKeyPassword();
-//                    mTransientAuthPW = vpnEntity.getPassword();
                 } else {
 
                 }
+                //将私钥，密码都置为默认值
                 mTransientCertOrPCKS12PW = null;
                 mTransientAuthPW = null;
+
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -932,6 +934,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     }
                 } else {
                     KLog.i("不需要密码，直接连接，，。");
+                    ConstantValue.isConnectedVpn = false;
                     SharedPreferences prefs = Preferences.getDefaultSharedPreferences(getActivity());
                     boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
 
@@ -992,13 +995,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         }
                         ConstantValue.isConnectVpn = false;
                     }
-                    KLog.i("error");
-                    ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
                     Intent intent = new Intent();
                     intent.setAction(BroadCastAction.disconnectVpn);
                     getActivity().sendBroadcast(intent);
-
-                    if (connectVpnEntity != null && !isReport) {
+                    if (connectVpnEntity != null && !isReport && !ConstantValue.isConnectedVpn) {
+                        KLog.i("error");
+                        ToastUtil.displayShortToast(getString(R.string.Connect_to_VPN_error_last_VPN_status) + vpnDetailstatus);
                         SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
                         SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
                         Map<String, Object> map = new HashMap<>();
@@ -1124,6 +1126,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 if (mResult != null) {
                     ProfileManager.getInstance(getActivity()).removeProfile(getActivity(), mResult);
                 }
+                ConstantValue.isConnectedVpn = true;
                 connectVpnEntity.setIsConnected(true);
                 if (ConstantValue.isConnectVpn) {
                     Bundle bundle = new Bundle();

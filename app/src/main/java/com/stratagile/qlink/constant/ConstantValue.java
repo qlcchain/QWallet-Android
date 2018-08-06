@@ -117,6 +117,12 @@ public class ConstantValue {
     public static boolean isConnectVpn = false;
     public static boolean isConnectWifi = false;
 
+    /**
+     * 上否连接上了vpn的标志，在2018.08.06加上，为了避免在vpn连接上，然后马上又断开，导致
+     * 上报为连接不成功的错误上报。
+     */
+    public static boolean isConnectedVpn = false;
+
     public static MainAddress.DataBean mainAddressData;
 
     public static String lastRestart = "lastRestart";//上一次自动重启时间

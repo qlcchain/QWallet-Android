@@ -29,7 +29,7 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 54
+        versionCode 55
         multiDexEnabled true
         versionName "1.2.8 release"
         vectorDrawables.useSupportLibrary = true

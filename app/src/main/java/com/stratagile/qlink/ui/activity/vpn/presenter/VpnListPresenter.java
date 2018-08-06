@@ -366,9 +366,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     @Override
     public void preConnectVpn(VpnEntity vpnEntity) {
         connectVpnEntity = vpnEntity;
+        //如果是连接自己的vpn，那么直接连接
         if (vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
             connectVpnForSelf();
+            ConstantValue.isConnectedVpn = false;
         } else {
+            //连接的是别人的vpn，先显示需要扣费的弹窗
             mView.showNeedQlcDialog(vpnEntity);
         }
     }
@@ -465,6 +468,9 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                 }
             }
+            EventBus.getDefault().post(new DisconnectVpn());
+            readFile(configFile);
+        } else {
             if(connectVpnEntity  != null)
             {
                 SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
@@ -476,9 +482,6 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_Cannot Read Configuration Profilefile" );
                 reportVpnInfo(map);
             }
-            EventBus.getDefault().post(new DisconnectVpn());
-            readFile(configFile);
-        } else {
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Cannot_Read_Configuration_Profilefile));
             mView.closeProgressDialog();
         }
