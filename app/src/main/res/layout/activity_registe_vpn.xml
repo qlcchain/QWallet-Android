@@ -267,6 +267,7 @@
                                 android:singleLine="true"
                                 android:inputType="text" />
                             <ImageView
+                                android:id="@+id/et_configurationBtn"
                                 android:layout_width="@dimen/x40"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"

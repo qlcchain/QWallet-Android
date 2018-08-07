@@ -682,7 +682,19 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 }
             }
         } else {
-            vpnEntity = new VpnEntity();
+            vpnEntity = getIntent().getParcelableExtra("vpnentity");
+            if(vpnEntity == null)
+            {
+                vpnEntity = new VpnEntity();
+            }else{
+                String path = vpnEntity.getProfileLocalPath();
+                String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
+                etConfiguration.setText(vpnFileName);
+                vpnFilePath = vpnEntity.getProfileLocalPath();
+                vpnEntity.setConfiguration(vpnFileName);
+                profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
+                String a ="";
+            }
             llYourBet.setVisibility(View.VISIBLE);
             setTitle(getString(R.string.REGISTER_YOUR_VPN).toUpperCase());
 //            infoUserid.setOnFocusChangeListener(new View.OnFocusChangeListener() {

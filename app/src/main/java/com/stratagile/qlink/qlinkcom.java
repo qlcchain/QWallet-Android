@@ -457,7 +457,9 @@ public class qlinkcom {
             }
         } else {
             KLog.i("vpn文件发送完毕");
-            EventBus.getDefault().post(new VpnSendEnd());
+            VpnSendEnd vpnSendEnd = new VpnSendEnd();
+            vpnSendEnd.setProfileLocalPath(filename);
+            EventBus.getDefault().post(vpnSendEnd);
         }
     }
 
