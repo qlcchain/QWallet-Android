@@ -72,6 +72,7 @@ import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
+import com.stratagile.qlink.ui.activity.shadowsock.ShadowVpnActivity;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
 import com.stratagile.qlink.ui.activity.vpn.RankActivity;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
@@ -973,7 +974,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_wifi) {
                     startActivity(new Intent(this, LogActivity.class));
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_wallet) {
-//                    startActivity(new Intent(this, CryptoWalletTestActivity.class));
+                    startActivity(new Intent(this, ShadowVpnActivity.class));
 //                    clearGuide();
                 }
                 break;

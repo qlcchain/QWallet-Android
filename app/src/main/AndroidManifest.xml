@@ -377,6 +377,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.vpn.RankActivity" />
         <activity android:name=".ui.activity.rank.RuleActivity" />
+        <activity android:name=".ui.activity.shadowsock.ShadowVpnActivity" />
 
         <activity-alias
             android:exported="true"
