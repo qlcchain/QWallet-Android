@@ -8,7 +8,7 @@ Features of WinQ
 If you run into any issues, please use the [GitHub Issue Tracker](https://github.com/qlcchain/WinQ-Android-code/issues) 
 We are continually improving and adding new features based on the feedback you provide, so please let your opinions be known!
  ## Links & Resources
- - [QLC Website](https://qlcchain.org)
+- [QLC Website](https://qlcchain.org)
 - [Discord Chat](https://discord.gg/JnCnhjr)
 - [Reddit](https://www.reddit.com/r/Qlink/)
 - [Medium](https://medium.com/qlc-chain)
