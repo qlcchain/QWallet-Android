@@ -470,6 +470,10 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     }
 
     public String getP2pId() {
+        if(this.p2pIdPc != null && !"".equals(this.p2pIdPc))
+        {
+            return this.p2pIdPc;
+        }
         return this.p2pId;
     }
 

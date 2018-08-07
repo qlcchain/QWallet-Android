@@ -127,13 +127,17 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
                 finish();
                 break;
             case R.id.bt_send:
-                showProgressDialog();
                 String toxid = address.getText().toString();
                 if(toxid.equals(""))
                 {
                     ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.cannot_register_empty_vpn_asset));
                     return;
                 }
+                if (qlinkcom.GetP2PConnectionStatus() <= 0) {
+                    ToastUtil.displayShortToast(getString(R.string.you_offline));
+                    return;
+                }
+                showProgressDialog();
                 int friendNum = qlinkcom.GetFriendNumInFriendlist(toxid);
                 if (friendNum < 0 && !toxid.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
                     KLog.i(friendNum + "需要添加window好友");
@@ -148,13 +152,18 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
                 if (qlinkcom.GetFriendConnectionStatus(toxidStr+"") > 0) {
                     KLog.i(friendNum + "在线");
                     addVpnEntity = new VpnEntity();
-                    addVpnEntity.setP2pId(toxid);
+                    addVpnEntity.setP2pIdPc(toxid);
+                    addVpnEntity.setP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
                     addVpnEntity.setFriendNum(toxidStr);
                     mPresenter.preAddVpn(addVpnEntity);
                 } else {
                     KLog.i(friendNum + "离线");
                     ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
                     closeProgressDialog();
+                   /* Intent intent = new Intent(this, RegisteVpnActivity.class);
+                    intent.putExtra("flag", "");
+                    startActivityForResult(intent, 0);
+                    this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);*/
                 }
                 break;
         }
