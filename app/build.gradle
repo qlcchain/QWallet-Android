@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'checkstyle'
 
@@ -184,25 +184,25 @@ dependencies {
     //    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     // Annotation
-    implementation 'com.google.dagger:dagger:2.14.1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    implementation 'com.google.dagger:dagger:2.16'
+    kapt 'com.google.dagger:dagger-compiler:2.16'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     // Rx
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
     // Bus
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.github.zhaokaiqiang.klog:library:1.6.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     //图片加载框架
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
     //butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.yanzhenjie:permission:1.1.2'
     implementation files('libs/org.apache.http.legacy.jar')
     implementation files('libs/json-lib-2.4-jdk15.jar')
@@ -239,7 +239,7 @@ dependencies {
 
     implementation "android.arch.lifecycle:runtime:$arch_version"
     implementation "android.arch.lifecycle:common-java8:$arch_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    kapt "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.lifecycle:extensions:$arch_version"
 
 //    debugCompile   'com.squareup.leakcanary:leakcanary-android:1.5.4'

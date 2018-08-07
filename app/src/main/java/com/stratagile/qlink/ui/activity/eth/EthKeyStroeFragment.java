@@ -148,7 +148,7 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         KLog.i(credentials.getEcKeyPair().getPrivateKey());
         try {
             OwnWalletUtils.generateWalletFile(pwd, credentials.getEcKeyPair(), new File(AppConfig.getInstance().getFilesDir(), ""), true);
-            WalletStorage.getInstance(getActivity()).add(new FullWallet("0x" + walletFile.getAddress(), walletFile.getAddress()), getActivity());
+            WalletStorage.getInstance(getActivity()).add(new FullWallet(walletFile.getAddress(), walletFile.getAddress()), getActivity());
         } catch (CipherException e) {
             e.printStackTrace();
         } catch (IOException e) {

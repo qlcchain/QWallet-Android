@@ -974,7 +974,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     startActivity(new Intent(this, LogActivity.class));
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_wallet) {
 //                    startActivity(new Intent(this, CryptoWalletTestActivity.class));
-                    clearGuide();
+//                    clearGuide();
                 }
                 break;
             case R.id.view_wallet:

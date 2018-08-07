@@ -110,6 +110,9 @@ public class RankActivity extends BaseActivity implements RankContract.View {
 
     @Override
     protected void initData() {
+//        Intent intent = new Intent(this, RankActivity.class);
+//        String string = intent.toUri(Intent.URI_INTENT_SCHEME);
+//        KLog.i(string);
         viewModel = ViewModelProviders.of(this).get(RankViewModel.class);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
