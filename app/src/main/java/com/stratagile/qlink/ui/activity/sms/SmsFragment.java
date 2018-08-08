@@ -177,7 +177,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
                             startActivityForResult(intent, START_VERTIFY_PASSWORD);
                             return true;
                         }
-                        Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
+                        Intent intent = new Intent(getActivity(), RegisteWindowVpnActivityActivity.class);
                         intent.putExtra("flag", "");
                         startActivityForResult(intent, 0);
                         getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
@@ -320,7 +320,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
                     startActivityForResult(intent, START_VERTIFY_PASSWORD);
                     return;
                 }
-                Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
+                Intent intent = new Intent(getActivity(), RegisteWindowVpnActivityActivity.class);
                 intent.putExtra("flag", "");
                 startActivityForResult(intent, 0);
                 getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);

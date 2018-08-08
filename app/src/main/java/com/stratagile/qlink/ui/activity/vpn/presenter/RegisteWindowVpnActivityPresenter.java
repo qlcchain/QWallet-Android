@@ -129,31 +129,4 @@ public class RegisteWindowVpnActivityPresenter implements RegisteWindowVpnActivi
                     }
                 });
     }
-    /**
-     * 检查和分享者的连接情况
-     */
-    public void checkSharerConnect() {
-        if (qlinkcom.GetP2PConnectionStatus() > 0) {
-            if (addVpnEntity.getFriendNum() == null || "".equals(addVpnEntity.getFriendNum())) {
-                byte[] p2pId = new byte[100];
-                String friendNumStr = "";
-                qlinkcom.GetFriendP2PPublicKey(addVpnEntity.getP2pId(), p2pId);
-                friendNumStr = new String(p2pId).trim();
-                KLog.i(friendNumStr);
-                if (friendNumStr == null) {
-                    friendNumStr = "";
-                }
-                addVpnEntity.setFriendNum(friendNumStr);
-            }
-            if (qlinkcom.GetFriendConnectionStatus(addVpnEntity.getFriendNum()) > 0) {
-                mView.showProgressDialog();
-                QlinkUtil.parseMap2StringAndSend(addVpnEntity.getFriendNum(), ConstantValue.checkConnectReq, new HashMap());
-                //handler.sendEmptyMessage(1);
-            } else {
-                ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.The_friend_is_not_online));
-            }
-        } else {
-            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.you_offline));
-        }
-    }
 }
