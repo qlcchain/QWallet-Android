@@ -716,7 +716,6 @@ public class ConfigConverter extends BaseActivity implements FileSelectCallback,
 
 
     }
-
     private void startImportTask(final Uri data, final String possibleName) {
         mImportTask = new AsyncTask<Void, Void, Integer>() {
             private ProgressBar mProgress;

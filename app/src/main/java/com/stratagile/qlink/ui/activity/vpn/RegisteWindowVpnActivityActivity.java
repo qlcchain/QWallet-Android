@@ -23,15 +23,12 @@ import com.stratagile.qlink.ui.activity.vpn.contract.RegisteWindowVpnActivityCon
 import com.stratagile.qlink.ui.activity.vpn.module.RegisteWindowVpnActivityModule;
 import com.stratagile.qlink.ui.activity.vpn.presenter.RegisteWindowVpnActivityPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
-import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -152,9 +149,10 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
                 if (qlinkcom.GetFriendConnectionStatus(toxidStr+"") > 0) {
                     KLog.i(friendNum + "在线");
                     addVpnEntity = new VpnEntity();
-                    addVpnEntity.setP2pIdPc(toxid);
-                    addVpnEntity.setP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
+                    addVpnEntity.setP2pId(toxid);
+                    addVpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
                     addVpnEntity.setFriendNum(toxidStr);
+                    ConstantValue.isWindows = true;
                     mPresenter.preAddVpn(addVpnEntity);
                 } else {
                     KLog.i(friendNum + "离线");
@@ -176,6 +174,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.configuration_profile_error));
             return;
         }
+        ConstantValue.isWindows = false;
         closeProgressDialog();
         Intent intent = new Intent(this, RegisteVpnActivity.class);
         intent.putExtra("flag", "");
@@ -183,6 +182,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
         intent.putExtra("vpnentity", addVpnEntity);
         startActivityForResult(intent, 0);
         this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+        finish();
         //mPresenter.vpnProfileSendComplete();
     }
 

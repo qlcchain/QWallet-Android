@@ -90,6 +90,10 @@ public class ConstantValue {
 
     public static boolean isDeleteFreinds = false;//是否删除过好友
 
+    public static String windowsVpnName = ""; //电脑资产名称
+
+    public static boolean isWindows = false;//当前是否注册电脑资产
+
     /**
      * im消息的存储
      */

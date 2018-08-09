@@ -69,7 +69,8 @@ public class ClientVpnService extends Service {
                         @Override
                         public void onTick(long pMillisUntilFinished) {
                             KLog.i("vpn计时扣费"+AppConfig.currentUseVpn);
-                            if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !AppConfig.currentUseVpn .getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                            String vpnP2pId = AppConfig.currentUseVpn.getP2pIdPc() == null ? AppConfig.currentUseVpn.getP2pId() : AppConfig.currentUseVpn.getP2pIdPc();
+                            if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !vpnP2pId.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
                                 if(ConstantValue.freeNum <= 0)
                                 {
                                     TransactionRecordDao transactionRecordDao = AppConfig.getInstance().getDaoSession().getTransactionRecordDao();
