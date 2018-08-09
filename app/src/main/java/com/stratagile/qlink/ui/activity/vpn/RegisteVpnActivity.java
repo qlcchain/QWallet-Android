@@ -993,6 +993,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 intent.putExtra("flag", "");
                 startActivityForResult(intent, 0);
                 this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                finish();
                 break;
             default:
                 break;
