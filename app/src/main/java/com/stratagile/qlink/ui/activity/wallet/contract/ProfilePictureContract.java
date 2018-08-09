@@ -26,5 +26,6 @@ public interface ProfilePictureContract {
 
     interface ProfilePictureContractPresenter extends BasePresenter {
         void upLoadImg();
+        void upLoadImgPc(String p2pIdPc);
     }
 }

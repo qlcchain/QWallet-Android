@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -30,11 +31,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * @author zl
@@ -174,6 +180,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.configuration_profile_error));
             return;
         }
+        mPresenter.upLoadImg(addVpnEntity.getP2pId());
         ConstantValue.isWindows = false;
         closeProgressDialog();
         Intent intent = new Intent(this, RegisteVpnActivity.class);
