@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.vpn.presenter;
 import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
@@ -12,6 +13,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.vpn.contract.RegisteWindowVpnActivityContract;
@@ -22,12 +24,19 @@ import com.stratagile.qlink.utils.ToastUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * @author zl
@@ -126,6 +135,32 @@ public class RegisteWindowVpnActivityPresenter implements RegisteWindowVpnActivi
                         } else {
                             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Not_enough_QLC));
                         }
+                    }
+                });
+    }
+    @Override
+    public void upLoadImg(String p2pIdPc) {
+        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
+        RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
+        MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
+        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), p2pIdPc))     //userId, nickName
+                .subscribe(new Consumer<UpLoadAvatar>() {
+                    @Override
+                    public void accept(UpLoadAvatar upLoadAvatar) throws Exception {
+                        KLog.i("onSucess");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
                     }
                 });
     }

@@ -922,7 +922,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
             if (resultCode == Activity.RESULT_OK) {
                 KLog.i("开始检查配置文件的类型");
-                if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                if (connectVpnEntity != null  && connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                     mTransientCertOrPCKS12PW = connectVpnEntity.getPrivateKeyPassword();
                     mResult.mUsername = connectVpnEntity.getUsername();
                     mTransientAuthPW = connectVpnEntity.getPassword();

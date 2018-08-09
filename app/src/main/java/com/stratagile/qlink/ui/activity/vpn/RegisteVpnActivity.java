@@ -76,6 +76,7 @@ import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
+import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.api.transaction.TransactionApi;
@@ -819,8 +820,21 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         myAsset.setType(1);
         if(localVpnEntity != null)
         {
+            if(localVpnEntity.getP2pIdPc() != null)
+            {
+                localVpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
+            }
             myAsset.setVpnEntity(localVpnEntity);
             LocalAssetsUtils.insertLocalAssets(myAsset);
+        }
+        if(vpnEntity.getP2pIdPc() != null)
+        {
+            Map<String, Object> infoMap = new HashMap<>();
+            infoMap.put("vpnName", vpnEntity.getVpnName());
+            infoMap.put("userName", vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
+            infoMap.put("password", vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
+            infoMap.put("privateKey", vpnEntity.getPrivateKeyPassword()  == null ? "" : vpnEntity.getPrivateKeyPassword());
+            QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.vpnUserPassAndPrivateKeyRsp, infoMap);
         }
         CustomPopWindow.onBackPressed();
         getMenuInflater().inflate(R.menu.connect_vpn, toolbar.getMenu());
@@ -1826,6 +1840,10 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         map.put("connectNum", vpnEntity.getConnectMaxnumber() + "");
         map.put("ipV4Address", vpnEntity.getIpV4Address() == null ? "" : vpnEntity.getIpV4Address());
         map.put("bandWidth", vpnEntity.getBandwidth() == null? "" : vpnEntity.getBandwidth());
+        if(localVpnEntity.getP2pIdPc() != null)
+        {
+            vpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
+        }
         map.put("profileLocalPath", vpnEntity.getProfileLocalPath() == null? "" : vpnEntity.getProfileLocalPath());
         KLog.i(map);
         showProgressDialog();

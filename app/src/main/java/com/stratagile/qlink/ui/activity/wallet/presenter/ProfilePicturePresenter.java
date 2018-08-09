@@ -89,5 +89,30 @@ public class ProfilePicturePresenter implements ProfilePictureContract.ProfilePi
                 });
         mCompositeDisposable.add(disposable);
     }
-
+    @Override
+    public void upLoadImgPc(String p2pIdPc) {
+        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
+        RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
+        MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
+        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), p2pIdPc))     //userId, nickName
+                .subscribe(new Consumer<UpLoadAvatar>() {
+                    @Override
+                    public void accept(UpLoadAvatar upLoadAvatar) throws Exception {
+                        KLog.i("onSucess");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+    }
 }
