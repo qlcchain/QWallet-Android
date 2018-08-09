@@ -9,7 +9,6 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
-import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
@@ -84,7 +83,13 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                         vpnEntity.setIsConnected(false);
                         vpnEntity.setP2pId(result.getP2pId());
                         vpnEntity.setProfileLocalPath(result.getProfileLocalPath());
-                        vpnEntity.setAvatar(result.getImgUrl());
+                        if(ConstantValue.windowsVpnName.equals(vpnName))
+                        {
+                            vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
+                            ConstantValue.windowsVpnName ="";
+                        }else{
+                            vpnEntity.setAvatar(result.getImgUrl());
+                        }
                         vpnEntity.setAddress(result.getAddress());
                         vpnEntity.setIsInMainWallet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                         vpnEntity.setOnline(true);

@@ -210,6 +210,14 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         }
         vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         List<VpnEntity> toAddList = new ArrayList<>();
+        String avatar = "";
+        /*for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
+            if(vpnListBean.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")) && vpnListBean.getImgUrl() != null  && !"".equals(vpnListBean.getImgUrl()))
+            {
+                avatar = vpnListBean.getImgUrl();
+                break;
+            }
+        }*/
         for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
             boolean isAdded = false;
 //            LogUtil.addLog("服务器给的资产名为：" + vpnListBean.getVpnName() + "  服务器给的资产p2pid为：" + vpnListBean.getP2pId(), getClass().getSimpleName());
@@ -229,7 +237,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     if (vpnListBean.getConnectNum() != 0) {
                         vpnEntity.setQlc((float) vpnListBean.getCost());
                         vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
-                        vpnEntity.setAvatar(vpnListBean.getImgUrl());
+                        if(vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")))
+                        {
+                            vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
+                        }else{
+                            vpnEntity.setAvatar(vpnListBean.getImgUrl());
+                        }
                         vpnEntity.setP2pId(vpnListBean.getP2pId());
                         vpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
                         vpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
@@ -367,7 +380,8 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     public void preConnectVpn(VpnEntity vpnEntity) {
         connectVpnEntity = vpnEntity;
         //如果是连接自己的vpn，那么直接连接
-        if (vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+        String vpnP2pId = vpnEntity.getP2pIdPc() == null ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
+        if (vpnP2pId.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
             connectVpnForSelf();
             ConstantValue.isConnectedVpn = false;
         } else {
@@ -447,6 +461,10 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 
     @Override
     public void vpnProfileSendComplete() {
+        if(connectVpnEntity  == null)
+        {
+            return;
+        }
         String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";
         String fileName = "";
         if (connectVpnEntity.getProfileLocalPath().contains("/")) {

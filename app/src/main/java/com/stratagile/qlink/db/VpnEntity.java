@@ -28,6 +28,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
 
     private boolean isMainNet;
 
+
     @Override
     public String toString() {
         return "VpnEntity{" +
@@ -56,6 +57,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
                 ", configuration='" + configuration + '\'' +
                 ", vpnName='" + vpnName + '\'' +
                 ", p2pId='" + p2pId + '\'' +
+                ", p2pIdPc='" + p2pIdPc + '\'' +
                 ", address='" + address + '\'' +
                 ", type=" + type +
                 ", currentConnect=" + currentConnect +
@@ -99,6 +101,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         configuration = in.readString();
         vpnName = in.readString();
         p2pId = in.readString();
+        p2pIdPc = in.readString();
         address = in.readString();
         type = in.readInt();
         currentConnect = in.readInt();
@@ -470,10 +473,6 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     }
 
     public String getP2pId() {
-        if(this.p2pIdPc != null && !"".equals(this.p2pIdPc))
-        {
-            return this.p2pIdPc;
-        }
         return this.p2pId;
     }
 
@@ -648,6 +647,23 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.connsuccessNum = connsuccessNum;
     }
 
+
+    public boolean getIsMainNet() {
+        return this.isMainNet;
+    }
+
+    public void setIsMainNet(boolean isMainNet) {
+        this.isMainNet = isMainNet;
+    }
+
+    public String getP2pIdPc() {
+        return this.p2pIdPc;
+    }
+
+    public void setP2pIdPc(String p2pIdPc) {
+        this.p2pIdPc = p2pIdPc;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -685,6 +701,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         dest.writeString(configuration);
         dest.writeString(vpnName);
         dest.writeString(p2pId);
+        dest.writeString(p2pIdPc);
         dest.writeString(address);
         dest.writeInt(type);
         dest.writeInt(currentConnect);
@@ -696,21 +713,4 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         dest.writeLong(avaterUpdateTime);
         dest.writeFloat(price);
     }
-
-    public boolean getIsMainNet() {
-        return this.isMainNet;
-    }
-
-    public void setIsMainNet(boolean isMainNet) {
-        this.isMainNet = isMainNet;
-    }
-
-    public String getP2pIdPc() {
-        return this.p2pIdPc;
-    }
-
-    public void setP2pIdPc(String p2pIdPc) {
-        this.p2pIdPc = p2pIdPc;
-    }
-
 }

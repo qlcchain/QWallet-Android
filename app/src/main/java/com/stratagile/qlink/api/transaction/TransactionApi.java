@@ -502,7 +502,10 @@ public class TransactionApi {
                             vpnEntity.setIsConnected(false);
                             vpnEntity.setP2pId(registerWiFi.getP2pId());
                             vpnEntity.setProfileLocalPath(registerWiFi.getProfileLocalPath());
-                            vpnEntity.setAvatar(registerWiFi.getImgUrl());
+                            if(registerWiFi.getImgUrl() != null && !"".equals(registerWiFi.getImgUrl()))
+                            {
+                                vpnEntity.setAvatar(registerWiFi.getImgUrl());
+                            }
                             vpnEntity.setCountry(registerWiFi.getCountry());
                             vpnEntity.setAddress(registerWiFi.getAddress());
                             vpnEntity.setRegisterQlc(registerWiFi.getRegisterQlc());

@@ -723,6 +723,10 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleConfigFile(VpnSendEnd vpnSendEnd) {
         KLog.i("c层的vpn配置文件传输完毕了，");
+        if(ConstantValue.isWindows)//注册电脑资产
+        {
+            return;
+        }
         mPresenter.vpnProfileSendComplete();
     }
 
@@ -912,7 +916,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 //            vpnListAdapter.getViewByPosition(recyclerView, Integer.parseInt(data.getStringExtra("position")), R.id.cardView).performClick();
         }
         if (requestCode == START_VPN_PROFILE) {
-            if (connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+            if (connectVpnEntity != null && connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                 mResult.mUsername = connectVpnEntity.getUsername();
             }
             KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
