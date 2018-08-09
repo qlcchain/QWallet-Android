@@ -94,6 +94,8 @@ public class ConstantValue {
 
     public static boolean isWindows = false;//当前是否注册电脑资产
 
+    public static String getWindowsVpnPath = "";//电脑资产路径
+
     /**
      * im消息的存储
      */

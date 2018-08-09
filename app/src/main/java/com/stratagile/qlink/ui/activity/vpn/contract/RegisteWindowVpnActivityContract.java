@@ -32,5 +32,7 @@ public interface RegisteWindowVpnActivityContract {
 
         void preAddVpn(VpnEntity vpnEntity);
 
+        void upLoadImg(String p2pIdPc);
+
     }
 }

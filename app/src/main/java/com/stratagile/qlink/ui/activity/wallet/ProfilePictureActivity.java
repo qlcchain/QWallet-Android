@@ -166,11 +166,20 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
             }
         }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+        String oldP2pId = "";
         for (VpnEntity vpnEntity : vpnEntityList) {
-            String vpnP2PId = vpnEntity.getP2pIdPc() == null ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
-            if (vpnP2PId.equals(SpUtil.getString(ProfilePictureActivity.this, ConstantValue.P2PID, ""))) {
+            if (vpnEntity.getP2pId().equals(SpUtil.getString(ProfilePictureActivity.this, ConstantValue.P2PID, ""))) {
                 vpnEntity.setAvatar(upLoadAvatar.getHead());
                 AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
+            }
+            if (vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(ProfilePictureActivity.this, ConstantValue.P2PID, ""))) {
+                vpnEntity.setAvatar(upLoadAvatar.getHead());
+                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
+                if(!oldP2pId.contains(vpnEntity.getP2pIdPc()))
+                {
+                    mPresenter.upLoadImgPc(vpnEntity.getP2pId());
+                }
+                oldP2pId += vpnEntity.getP2pIdPc()+",";
             }
         }
         runOnUiThread(new Runnable() {
