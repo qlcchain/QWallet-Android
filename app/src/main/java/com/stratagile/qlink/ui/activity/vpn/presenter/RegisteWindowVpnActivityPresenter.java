@@ -140,7 +140,16 @@ public class RegisteWindowVpnActivityPresenter implements RegisteWindowVpnActivi
     }
     @Override
     public void upLoadImg(String p2pIdPc) {
-        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
+        String myAvater = SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "");
+        if(myAvater.equals(""))
+        {
+            return;
+        }
+        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + myAvater + ".jpg");
+        if(!upLoadFile.exists())
+        {
+            return;
+        }
         RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
         MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
         Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), p2pIdPc))     //userId, nickName
