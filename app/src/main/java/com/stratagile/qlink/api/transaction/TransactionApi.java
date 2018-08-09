@@ -506,6 +506,16 @@ public class TransactionApi {
                             {
                                 vpnEntity.setAvatar(registerWiFi.getImgUrl());
                             }
+                            if(ConstantValue.windowsVpnName.equals(registerWiFi.getVpnName()))
+                            {
+                                vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
+                                ConstantValue.windowsVpnName ="";
+                            }else{
+                                if(registerWiFi.getImgUrl() != null && !"".equals(registerWiFi.getImgUrl()))
+                                {
+                                    vpnEntity.setAvatar(registerWiFi.getImgUrl());
+                                }
+                             }
                             vpnEntity.setCountry(registerWiFi.getCountry());
                             vpnEntity.setAddress(registerWiFi.getAddress());
                             vpnEntity.setRegisterQlc(registerWiFi.getRegisterQlc());
@@ -513,6 +523,10 @@ public class TransactionApi {
                             vpnEntity.setIsInMainWallet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
                             vpnEntity.setOnline(true);
                             vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
+                            if(vpnEntity.getP2pIdPc() == null  || "".equals(vpnEntity.getP2pIdPc()))
+                            {
+                                //String aa = "";
+                            }
                             AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
                             sendCallBack.onSuccess(registerWiFi.getRecordId());
                             disposable.dispose();
