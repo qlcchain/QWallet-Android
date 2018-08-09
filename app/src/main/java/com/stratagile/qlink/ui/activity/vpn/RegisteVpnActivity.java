@@ -891,7 +891,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 startActivityForResult(intent, SELECT_COUNTRY);*/
                 break;
             case R.id.et_configuration:
-                if(vpnEntity.getP2pIdPc() !=null && !"".equals(vpnEntity))
+                if(vpnEntity.getP2pIdPc() !=null && !"".equals(vpnEntity.getP2pIdPc()))
                 {
                     return;
                 }
