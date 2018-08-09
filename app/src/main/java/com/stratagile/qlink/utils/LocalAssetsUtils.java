@@ -100,7 +100,9 @@ public class LocalAssetsUtils {
                                         myAsset.getVpnEntity().setRegisterQlc(vpnEntity.getRegisterQlc());
                                         //添加了抢注册功能，p2pId和钱包地址可能会变化
                                         myAsset.getVpnEntity().setP2pId(vpnEntity.getP2pId());
-                                        myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
+                                        if (vpnEntity.getP2pIdPc() != null && !vpnEntity.getP2pIdPc().equals("")) {
+                                            myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
+                                        }
                                         myAsset.getVpnEntity().setAddress(vpnEntity.getAddress());
                                         if (vpnEntity.getUsername() == null || vpnEntity.getUsername().equals("")) {
 

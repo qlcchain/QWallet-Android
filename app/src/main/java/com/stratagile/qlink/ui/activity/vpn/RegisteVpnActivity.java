@@ -152,6 +152,9 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     @BindView(R.id.button2)
     Button button2;
 
+    @BindView(R.id.vpninfo)
+    TextView vpninfo;
+
     private static final int SELECT_COUNTRY = 0;
     @BindView(R.id.et_country)
     TextView etCountry;
@@ -869,7 +872,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         overridePendingTransition(0, R.anim.activity_translate_out_1);
     }
 
-    @OnClick({R.id.et_country, R.id.et_configuration, R.id.button1, R.id.button2, R.id.bet_tip})
+    @OnClick({R.id.et_country, R.id.et_configuration, R.id.button1, R.id.button2, R.id.bet_tip,R.id.vpninfo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
@@ -888,6 +891,10 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 startActivityForResult(intent, SELECT_COUNTRY);*/
                 break;
             case R.id.et_configuration:
+                if(vpnEntity.getP2pIdPc() !=null && !"".equals(vpnEntity.getP2pIdPc()))
+                {
+                    return;
+                }
                 startActivityForResult(new Intent(this, FileChooseActivity.class), SELECT_PROFILE);
 //                startImportConfigFilePicker();
                 break;
@@ -980,6 +987,12 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 break;
             case R.id.bet_tip:
                 showBetTipDialog();
+                break;
+            case  R.id.vpninfo:
+                Intent intent = new Intent(this, RegisteWindowVpnActivityActivity.class);
+                intent.putExtra("flag", "");
+                startActivityForResult(intent, 0);
+                this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 break;
             default:
                 break;
@@ -1807,8 +1820,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         } else {
             vpnEntity.setIpV4Address(profile.mIPv4Address);
         }
-        vpnEntity.setP2pId(this.vpnEntity.getP2pId());
-        vpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+        if(this.vpnEntity.getP2pId() != null && !"".equals(this.vpnEntity.getP2pId()))
+        {
+            vpnEntity.setP2pId(this.vpnEntity.getP2pId());
+            vpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+        }else{
+            vpnEntity.setP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
+        }
         vpnEntity.setOnline(true);
         vpnEntity.setProfileUUid(profileUUID);
         vpnEntity.setConfiguration(etConfiguration.getText().toString());
