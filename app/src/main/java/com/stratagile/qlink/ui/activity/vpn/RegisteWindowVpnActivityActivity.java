@@ -250,9 +250,9 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
 
         configfileParent.setVisibility(View.VISIBLE);
         coinfgfileBtn.setVisibility(View.VISIBLE);
-        addParent.setVisibility(View.GONE);
         ConstantValue.isWindows = false;
         walletListAdapter.setSelectItem(0);
+        selectProfileLocalPath = WindowConfigList.get(0).getVpnfileName();
         walletListAdapter.setNewData(WindowConfigList);
         //mPresenter.vpnProfileSendComplete();
     }
