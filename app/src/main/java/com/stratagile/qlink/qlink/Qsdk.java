@@ -9,6 +9,7 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
+import com.stratagile.qlink.entity.eventbus.VpnSendComplete;
 import com.stratagile.qlink.entity.im.InviteToGroupChatReq;
 import com.stratagile.qlink.entity.qlink.DefaultRsp;
 import com.stratagile.qlink.entity.qlink.GratuitySuccess;
@@ -257,6 +258,10 @@ public class Qsdk {
                     break;
                 case ConstantValue.allVpnBasicInfoRsp:
 
+                    break;
+                case ConstantValue.sendVpnFileRsp:
+                    VpnSendComplete vpnSendEnd = new VpnSendComplete();
+                    EventBus.getDefault().post(vpnSendEnd);
                     break;
                 case ConstantValue.defaultRsp:
                     //处理低版本没有这个type，的返回，可以在这里做默认处理。。

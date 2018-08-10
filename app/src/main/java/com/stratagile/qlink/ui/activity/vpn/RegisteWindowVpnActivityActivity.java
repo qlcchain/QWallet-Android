@@ -5,7 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -17,13 +20,17 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.eventbus.VpnSendComplete;
 import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
+import com.stratagile.qlink.entity.vpn.WindowConfig;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerRegisteWindowVpnActivityComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.RegisteWindowVpnActivityContract;
 import com.stratagile.qlink.ui.activity.vpn.module.RegisteWindowVpnActivityModule;
 import com.stratagile.qlink.ui.activity.vpn.presenter.RegisteWindowVpnActivityPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
+import com.stratagile.qlink.ui.adapter.vpn.WindowConfigAdapter;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
@@ -31,16 +38,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 /**
  * @author zl
@@ -49,10 +56,12 @@ import okhttp3.RequestBody;
  * @date 2018/08/03 11:56:07
  */
 
-public class RegisteWindowVpnActivityActivity extends BaseActivity implements RegisteWindowVpnActivityContract.View {
+public class RegisteWindowVpnActivityActivity extends BaseActivity implements RegisteWindowVpnActivityContract.View, WindowConfigAdapter.OnItemChangeListener {
 
     @Inject
     RegisteWindowVpnActivityPresenter mPresenter;
+    @Inject
+    WindowConfigAdapter walletListAdapter;
     @BindView(R.id.address)
     TextView address;
     @BindView(R.id.paste)
@@ -63,8 +72,21 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
     Button btBack;
     @BindView(R.id.bt_send)
     Button btSend;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.select_config)
+    Button selectConfig;
+    @BindView(R.id.configfileParent)
+    CardView configfileParent;
+    @BindView(R.id.coinfgfileBtn)
+    LinearLayout coinfgfileBtn;
+    @BindView(R.id.addParent)
+    LinearLayout addParent;
 
     VpnEntity addVpnEntity;
+    String selectProfileLocalPath ="";
+
+    List<WindowConfig> WindowConfigList  = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +100,28 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
         ButterKnife.bind(this);
         setTitle(getString(R.string.VPN_DETAIL).toUpperCase());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        configfileParent.setVisibility(View.GONE);
+        coinfgfileBtn.setVisibility(View.GONE);
+        addParent.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void initData() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        walletListAdapter.setOnItemChangeListener(this);
+        recyclerView.setAdapter(walletListAdapter);
 
+        WindowConfig windowConfig = new WindowConfig();
+        windowConfig.setVpnfileName("aa");
+        windowConfig.setVpnName("bb");
+        WindowConfigList.add(windowConfig);
+        WindowConfigList.add(windowConfig);
+
+        configfileParent.setVisibility(View.VISIBLE);
+        coinfgfileBtn.setVisibility(View.VISIBLE);
+        addParent.setVisibility(View.VISIBLE);
+        walletListAdapter.setSelectItem(0);
+        walletListAdapter.setNewData(WindowConfigList);
     }
 
     @Override
@@ -110,7 +149,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
         progressDialog.hide();
     }
 
-    @OnClick({R.id.paste, R.id.scan, R.id.bt_back, R.id.bt_send})
+    @OnClick({R.id.paste, R.id.scan, R.id.bt_back, R.id.bt_send,R.id.select_config})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.paste:
@@ -129,7 +168,21 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
             case R.id.bt_back:
                 finish();
                 break;
+            case R.id.select_config:
+                if(selectProfileLocalPath.equals(""))
+                {
+                    return;
+                }
+                Intent intent = new Intent(this, RegisteVpnActivity.class);
+                intent.putExtra("flag", "");
+                addVpnEntity.setProfileLocalPath(selectProfileLocalPath);
+                intent.putExtra("vpnentity", addVpnEntity);
+                startActivityForResult(intent, 0);
+                this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                finish();
+                break;
             case R.id.bt_send:
+                WindowConfigList = new ArrayList<>();
                 String toxid = address.getText().toString();
                 if(toxid.equals(""))
                 {
@@ -180,19 +233,39 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.configuration_profile_error));
             return;
         }
-        mPresenter.upLoadImg(addVpnEntity.getP2pId());
-        ConstantValue.isWindows = false;
-        closeProgressDialog();
-        Intent intent = new Intent(this, RegisteVpnActivity.class);
+
+        /*Intent intent = new Intent(this, RegisteVpnActivity.class);
         intent.putExtra("flag", "");
         addVpnEntity.setProfileLocalPath(vpnSendEnd.getProfileLocalPath());
         intent.putExtra("vpnentity", addVpnEntity);
         startActivityForResult(intent, 0);
-        this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-        finish();
+        this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);*/
+
+        WindowConfig windowConfig = new WindowConfig();
+        windowConfig.setVpnfileName(vpnSendEnd.getProfileLocalPath());
+        String path = vpnSendEnd.getProfileLocalPath();
+        String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
+        windowConfig.setVpnName(vpnFileName);
+        WindowConfigList.add(windowConfig);
+
+        configfileParent.setVisibility(View.VISIBLE);
+        coinfgfileBtn.setVisibility(View.VISIBLE);
+        addParent.setVisibility(View.GONE);
+        ConstantValue.isWindows = false;
+        walletListAdapter.setSelectItem(0);
+        walletListAdapter.setNewData(WindowConfigList);
         //mPresenter.vpnProfileSendComplete();
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleConfigFileComplete(VpnSendComplete vpnSendComplete) {
+        closeProgressDialog();
+        /*configfileParent.setVisibility(View.VISIBLE);
+        coinfgfileBtn.setVisibility(View.VISIBLE);
+        addParent.setVisibility(View.GONE);
+        ConstantValue.isWindows = false;
+        walletListAdapter.setSelectItem(0);
+        walletListAdapter.setNewData(WindowConfigList);*/
+    }
     @Override
     public void getScanPermissionSuccess() {
         Intent intent1 = new Intent(this, ScanQrCodeActivity.class);
@@ -205,6 +278,11 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
                 address.setText(data.getStringExtra("result"));
             }
         }
+    }
+    @Override
+    public void onItemChange(int position) {
+        selectProfileLocalPath = WindowConfigList.get(position).getVpnfileName();
+        Log.i("selectProfileLocalPath",selectProfileLocalPath);
     }
     @Override
     public void onDestroy() {
