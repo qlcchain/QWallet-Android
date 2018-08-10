@@ -219,7 +219,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 switch (view.getId()) {
                     case R.id.freind_avater:
                         if (vpnListAdapter.getItem(position).isOnline()) {
-                            ToastUtil.displayShortToast(getString(R.string.Please_create_a_wallet_to_continue));
+                            //ToastUtil.displayShortToast(getString(R.string.Please_create_a_wallet_to_continue));
                             Intent intent = new Intent(getActivity(), ConversationActivity.class);
                             intent.putExtra("vpnEntity", vpnListAdapter.getItem(position));
                             intent.putExtra("assetType", "3");
