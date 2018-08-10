@@ -111,7 +111,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
         walletListAdapter.setOnItemChangeListener(this);
         recyclerView.setAdapter(walletListAdapter);
 
-        WindowConfig windowConfig = new WindowConfig();
+        /*WindowConfig windowConfig = new WindowConfig();
         windowConfig.setVpnfileName("aa");
         windowConfig.setVpnName("bb");
         WindowConfigList.add(windowConfig);
@@ -121,7 +121,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
         coinfgfileBtn.setVisibility(View.VISIBLE);
         addParent.setVisibility(View.VISIBLE);
         walletListAdapter.setSelectItem(0);
-        walletListAdapter.setNewData(WindowConfigList);
+        walletListAdapter.setNewData(WindowConfigList);*/
     }
 
     @Override
