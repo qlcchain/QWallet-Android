@@ -381,12 +381,18 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         connectVpnEntity = vpnEntity;
         //如果是连接自己的vpn，那么直接连接
         String vpnP2pId = vpnEntity.getP2pIdPc() == null ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
-        if (vpnP2pId.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+        if (vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
             connectVpnForSelf();
             ConstantValue.isConnectedVpn = false;
         } else {
             //连接的是别人的vpn，先显示需要扣费的弹窗
-            mView.showNeedQlcDialog(vpnEntity);
+            if(vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")))
+            {
+                checkSharerConnect();
+            }else{
+                mView.showNeedQlcDialog(vpnEntity);
+            }
+
         }
     }
 

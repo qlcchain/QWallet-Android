@@ -1,13 +1,11 @@
 package com.stratagile.qlink.ui.activity.shadowsock.presenter;
 import android.support.annotation.NonNull;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
-import com.stratagile.qlink.ui.activity.shadowsock.contract.ShadowVpnContract;
 import com.stratagile.qlink.ui.activity.shadowsock.ShadowVpnActivity;
+import com.stratagile.qlink.ui.activity.shadowsock.contract.ShadowVpnContract;
+
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author hzp

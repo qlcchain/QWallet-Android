@@ -273,4 +273,9 @@ public class ConstantValue {
      * 获取vpn用户名、密码、私钥的返回
      */
     public static final String vpnUserPassAndPrivateKeyRsp = "vpnUserPassAndPrivateKeyRsp";
+
+    /**
+     * 拿server 所有文件传输完成
+     */
+    public static final String sendVpnFileRsp = "sendVpnFileRsp";
 }

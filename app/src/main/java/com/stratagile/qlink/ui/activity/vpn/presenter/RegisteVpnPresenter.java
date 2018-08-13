@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.vpn.presenter;
 
+import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
@@ -10,12 +11,14 @@ import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.RegisterVpn;
+import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.ui.activity.vpn.contract.RegisteVpnContract;
 import com.stratagile.qlink.utils.SpUtil;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -25,6 +28,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * @author hzp
@@ -202,5 +208,40 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                     }
                 });
         mCompositeDisposable.add(disposable);
+    }
+    @Override
+    public void upLoadImg(String p2pIdPc) {
+        String myAvater = SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "");
+        if(myAvater.equals(""))
+        {
+            return;
+        }
+        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + myAvater + ".jpg");
+        if(!upLoadFile.exists())
+        {
+            return;
+        }
+        RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
+        MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
+        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), p2pIdPc))     //userId, nickName
+                .subscribe(new Consumer<UpLoadAvatar>() {
+                    @Override
+                    public void accept(UpLoadAvatar upLoadAvatar) throws Exception {
+                        KLog.i("onSucess");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
     }
 }
