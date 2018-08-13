@@ -98,7 +98,6 @@ import com.stratagile.qlink.utils.eth.WalletStorage;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.DownCheckView;
-import com.stratagile.qlink.view.FreeSelectPopWindow;
 import com.stratagile.qlink.view.NoScrollViewPager;
 
 import org.greenrobot.eventbus.EventBus;

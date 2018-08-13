@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
@@ -32,6 +33,8 @@ import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.ShowKeyRelativeLayout;
 
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * 作者：Android on 2017/8/1
@@ -58,6 +61,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         super.onCreate(savedInstanceState);
         // 这句很关键，注意是调用父类的方法
         super.setContentView(R.layout.activity_base);
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new Timber.DebugTree());
+        }
         getWindow().setBackgroundDrawable(null);
         // 经测试在代码里直接声明透明状态栏更有效
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
