@@ -42,5 +42,7 @@ public interface RegisteVpnContract {
         void getBalance(Map map);
 
         void updateVpnInfo(Map map);
+
+        void upLoadImg(String p2pIdPc);
     }
 }

@@ -2,18 +2,28 @@ package com.stratagile.qlink.application;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Process;
+import android.service.autofill.Dataset;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
@@ -21,6 +31,7 @@ import android.util.DisplayMetrics;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.FacebookSdk;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
@@ -35,6 +46,13 @@ import com.stratagile.qlink.db.MySQLiteOpenHelper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
+import com.stratagile.qlink.shadowsocks.bg.BaseService;
+import com.stratagile.qlink.shadowsocks.database.Profile;
+import com.stratagile.qlink.shadowsocks.database.ProfileManager;
+import com.stratagile.qlink.shadowsocks.preference.DataStore;
+import com.stratagile.qlink.shadowsocks.utils.Action;
+import com.stratagile.qlink.shadowsocks.utils.DeviceStorageApp;
+import com.stratagile.qlink.shadowsocks.utils.DirectBoot;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.GlideCircleTransform;
@@ -49,6 +67,8 @@ import com.vondear.rxtools.RxTool;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -74,7 +94,30 @@ public class AppConfig extends MultiDexApplication {
     private DaoSession mDaoSession;
     private StatusListener mStatus;
 
-//    public AppActivityManager mAppActivityManager;
+    private PackageInfo info;
+    private Profile currentProfile;
+    public Application deviceStorage;
+//    public FirebaseRemoteConfig remoteConfig;
+    public Handler handler;
+
+    public Profile getCurrentProfile() {
+//        DataStore.INSTANCE.setProfileId(2);
+        if ((DataStore.INSTANCE.getDirectBootAware())) {
+            return DirectBoot.INSTANCE.getDeviceProfile();
+        } else {
+            try {
+                return ProfileManager.INSTANCE.getProfile(DataStore.INSTANCE.getProfileId());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    public PackageInfo getInfo() {
+        return info;
+    }
+    //    public AppActivityManager mAppActivityManager;
 
     public static final String MI_PUSH_APP_ID = "2882303761517798507";
     public static final String MI_PUSH_APP_KEY = "5231779840507";
@@ -135,11 +178,28 @@ public class AppConfig extends MultiDexApplication {
 
             createNotificationChannels();
         }
-        mStatus = new StatusListener();
-        mStatus.init(getApplicationContext());
         initDbUpdate();
         initResumeListener();
         initMiPush();
+        info = getPackageInfo(getPackageName());
+        deviceStorage = Build.VERSION.SDK_INT < 24 ? this : new DeviceStorageApp(this);
+        handler = new Handler(Looper.getMainLooper());
+        mStatus = new StatusListener();
+        mStatus.init(getApplicationContext());
+        updateNotificationChannels();
+//        remoteConfig = FirebaseRemoteConfig.getInstance();
+    }
+
+    private void updateNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            ArrayList<NotificationChannel> list = new ArrayList<>();
+            list.add(new NotificationChannel("service-vpn", getText(R.string.service_vpn),NotificationManager.IMPORTANCE_LOW));
+            list.add(new NotificationChannel("service-proxy", getText(R.string.service_proxy), NotificationManager.IMPORTANCE_LOW));
+            list.add(new NotificationChannel("service-transproxy", getText(R.string.service_transproxy), NotificationManager.IMPORTANCE_LOW));
+            nm.createNotificationChannels(list);
+            nm.deleteNotificationChannel("service-nat");
+        }
     }
 
     private void initMiPush() {
@@ -365,8 +425,7 @@ public class AppConfig extends MultiDexApplication {
         List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
         String mainProcessName = getPackageName();
         int myPid = Process.myPid();
-        if(processInfos != null)
-        {
+        if (processInfos != null) {
             for (ActivityManager.RunningAppProcessInfo info : processInfos) {
                 if (info.pid == myPid && mainProcessName.equals(info.processName)) {
                     return true;
@@ -375,4 +434,66 @@ public class AppConfig extends MultiDexApplication {
         }
         return false;
     }
+
+    public PackageInfo getPackageInfo(String packageName) {
+        try {
+            return getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void startService() {
+        Intent intent = new Intent(this, BaseService.class);
+        if (Build.VERSION.SDK_INT >= 26) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
+    }
+
+    public void reloadService() {
+        sendBroadcast(new Intent(Action.RELOAD));
+    }
+
+    public void stopService() {
+        sendBroadcast(new Intent(Action.CLOSE));
+    }
+
+    public BroadcastReceiver listenForPackageChanges(boolean onetime, Callback callback) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addDataScheme("package");
+        BroadcastReceiver result = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+                    return;
+                }
+                callback.callback();
+                if (true) {
+                    AppConfig.instance.unregisterReceiver(this);
+                }
+            }
+        };
+        AppConfig.instance.registerReceiver(result, filter);
+        return result;
+    }
+
+    public interface Callback {
+        void callback();
+    }
+
+    public Profile switchProfile(long id) {
+        Profile result = null;
+        try {
+            result = ProfileManager.INSTANCE.getProfile(id) == null? ProfileManager.INSTANCE.createProfile(new Profile()): ProfileManager.INSTANCE.getProfile(id);
+        } catch (Exception e) {
+
+        }
+        DataStore.INSTANCE.setProfileId(result.getId());
+        return result;
+    }
+
 }

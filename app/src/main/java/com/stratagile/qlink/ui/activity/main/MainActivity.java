@@ -72,6 +72,7 @@ import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
+import com.stratagile.qlink.ui.activity.shadowsock.ShadowVpnActivity;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
 import com.stratagile.qlink.ui.activity.vpn.RankActivity;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
@@ -97,7 +98,6 @@ import com.stratagile.qlink.utils.eth.WalletStorage;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.DownCheckView;
-import com.stratagile.qlink.view.FreeSelectPopWindow;
 import com.stratagile.qlink.view.NoScrollViewPager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -973,7 +973,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_wifi) {
                     startActivity(new Intent(this, LogActivity.class));
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_wallet) {
-//                    startActivity(new Intent(this, CryptoWalletTestActivity.class));
+                    startActivity(new Intent(this, ShadowVpnActivity.class));
 //                    clearGuide();
                 }
                 break;

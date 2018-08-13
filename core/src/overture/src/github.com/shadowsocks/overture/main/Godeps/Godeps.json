@@ -1,0 +1,34 @@
+{
+	"ImportPath": "github.com/shadowsocks/overture-android/overture",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.11.5-12-g10f801e",
+			"Rev": "10f801ebc38b33738c9d17d50860f484a0988ff5"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-runewidth",
+			"Comment": "v0.0.2-1-g14207d2",
+			"Rev": "14207d285c6c197daabb5c9793d63e7af9ab2d50"
+		},
+		{
+			"ImportPath": "github.com/miekg/dns",
+			"Rev": "dcffd061aaeef4f0ab8369d0443146462b64ea6d"
+		},
+		{
+			"ImportPath": "golang.org/x/net/proxy",
+			"Rev": "d1e1b351919c6738fdeb9893d5c998b161464f0c"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "7de4796419dc3b554e6dab3a119a62469569d299"
+		},
+		{
+			"ImportPath": "gopkg.in/cheggaaa/pb.v1",
+			"Comment": "v1.0.11",
+			"Rev": "0817e3a1f8de9e3c78b159699b3c07d53e24a963"
+		}
+	]
+}

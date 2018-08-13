@@ -39,7 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Assert;
+//import junit.framework.Assert;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -228,7 +228,7 @@ public class ConfigConverter extends BaseActivity implements FileSelectCallback,
                     mResult.mCrlFilename = data;
                     break;
                 default:
-                    Assert.fail();
+//                    Assert.fail();
             }
         }
 
@@ -255,7 +255,7 @@ public class ConfigConverter extends BaseActivity implements FileSelectCallback,
             //noinspection WrongConstant
             KeyChain.choosePrivateKeyAlias(this,
                     new KeyChainAliasCallback() {
-
+                        @Override
                         public void alias(String alias) {
                             // Credential alias selected.  Remember the alias selection for future use.
                             mResult.mAlias = alias;

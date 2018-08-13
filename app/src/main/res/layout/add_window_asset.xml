@@ -108,6 +108,7 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <LinearLayout
+            android:id="@+id/addParent"
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
@@ -136,5 +137,43 @@
                 android:textColor="@color/main_color"
                 android:layout_height="@dimen/dp_43" />
         </LinearLayout>
+        <android.support.v7.widget.CardView
+            android:id="@+id/configfileParent"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_height="@dimen/x300"
+            android:layout_marginRight="@dimen/x36"
+            android:layout_marginTop="@dimen/x33">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/recyclerView"
+                android:layout_marginLeft="@dimen/x40"
+                android:layout_marginRight="@dimen/x40"
+                android:layout_marginTop="@dimen/x30"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/coinfgfileBtn"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_18"
+            android:layout_height="88dp">
+            <Button
+                android:id="@+id/select_config"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/configure_the_vpn"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:fontFamily="@font/vagroun_q"
+                android:background="@drawable/change_wallet"
+                android:textColor="@color/white"
+                android:layout_height="@dimen/dp_43" />
+        </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>
