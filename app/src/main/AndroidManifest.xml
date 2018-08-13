@@ -377,6 +377,22 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.vpn.RankActivity" />
         <activity android:name=".ui.activity.rank.RuleActivity" />
+        <activity android:name=".ui.activity.shadowsock.ShadowVpnActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="ss"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="ss" />
+            </intent-filter>
+        </activity>
 
         <activity-alias
             android:exported="true"
@@ -438,6 +454,57 @@
             </intent-filter>
         </receiver>
 
+
+        <!--shadowsorcks-->
+
+        <service
+            android:name=".shadowsocks.bg.VpnService"
+            android:directBootAware="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.VpnService"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".shadowsocks.bg.TransproxyService"
+            android:directBootAware="true"
+            android:exported="false">
+        </service>
+
+        <service
+            android:name=".shadowsocks.bg.ProxyService"
+            android:directBootAware="true"
+            android:exported="false">
+        </service>
+
+        <service android:name=".shadowsocks.bg.TileService" android:label="@string/quick_toggle"
+            android:directBootAware="true"
+            android:icon="@drawable/ic_service_active"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".shadowsocks.BootReceiver"
+            android:directBootAware="true"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".shadowsocks.tasker.ActionListener"
+            android:directBootAware="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

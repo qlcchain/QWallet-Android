@@ -245,7 +245,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
         windowConfig.setVpnfileName(vpnSendEnd.getProfileLocalPath());
         String path = vpnSendEnd.getProfileLocalPath();
         String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
-        windowConfig.setVpnName(vpnFileName);
+        windowConfig.setVpnName(vpnFileName + ".ovpn");
         WindowConfigList.add(windowConfig);
 
         configfileParent.setVisibility(View.VISIBLE);

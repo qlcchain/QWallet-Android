@@ -938,7 +938,7 @@ public class Qsdk {
      * 更新自己注册的WiFi的信息
      *
      * @param status
-     * @see com.stratagile.qlink.qlinkcom#CallSelfChange(int)
+     * @see qlinkcom#CallSelfChange(int)
      * @see com.stratagile.qlink.ui.activity.wifi.WifiListFragment#setListData(List)
      * @see com.stratagile.qlink.ui.activity.main.MainActivity#setMyStatus(MyStatus)
      */
