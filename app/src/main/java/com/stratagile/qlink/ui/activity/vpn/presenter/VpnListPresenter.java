@@ -48,6 +48,7 @@ import com.stratagile.qlink.service.ClientVpnService;
 import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.vpn.contract.VpnListContract;
 import com.stratagile.qlink.utils.LogUtil;
+import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
@@ -479,6 +480,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             fileName = "/" + connectVpnEntity.getProfileLocalPath();
         }
         File configFile = new File(newPath + fileName);
+        KLog.i("配置文件的hash值为：" + MD5Util.getFileMD5(configFile));
         Uri uri = new Uri.Builder().path(newPath + fileName).scheme("file").build();
         mPathsegments = uri.getPathSegments();
         KLog.i("发送0");

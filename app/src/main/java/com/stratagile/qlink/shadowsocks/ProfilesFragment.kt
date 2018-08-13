@@ -191,28 +191,6 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
                 if (selectedItem === this) selectedItem = null
             }
 
-//            var adView = adView
-//            if (item.host == "198.199.101.152") {
-//                if (adView == null) {
-//                    val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                            ViewGroup.LayoutParams.WRAP_CONTENT)
-//                    params.gravity = Gravity.CENTER_HORIZONTAL
-//                    adView = AdView(context)
-//                    adView.layoutParams = params
-//                    adView.adUnitId = "ca-app-pub-9097031975646651/7760346322"
-//                    adView.adSize = AdSize.FLUID
-//                    val padding = context.resources.getDimensionPixelOffset(R.dimen.profile_padding)
-//                    adView.setPadding(padding, 0, 0, padding)
-//
-//                    itemView.findViewById<LinearLayout>(R.id.content).addView(adView)
-//
-//                    // Load Ad
-//                    val adBuilder = AdRequest.Builder()
-//                    adBuilder.addTestDevice("B08FC1764A7B250E91EA9D0D5EBEB208")
-//                    adView.loadAd(adBuilder.build())
-//                    this.adView = adView
-//                } else adView.visibility = View.VISIBLE
-//            } else adView?.visibility = View.GONE
         }
 
         override fun onClick(v: View?) {
@@ -388,19 +366,16 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
             }
             R.id.action_import_clipboard -> {
                 try {
-                    val profiles = Profile.findAllUrls(clipboard.primaryClip!!.getItemAt(0).text, AppConfig.instance.currentProfile)
-                            .toList()
+                    val profiles = Profile.findAllUrls(clipboard.primaryClip!!.getItemAt(0).text, AppConfig.instance.currentProfile).toList()
                     if (profiles.isNotEmpty()) {
                         profiles.forEach { ProfileManager.createProfile(it) }
                         toast(R.string.action_import_msg)
-//                        (activity as MainActivity).snackbar().setText(R.string.action_import_msg).show()
                         return true
                     }
                 } catch (exc: Exception) {
                     exc.printStackTrace()
                 }
                 toast(R.string.action_import_err)
-//                (activity as MainActivity).snackbar().setText(R.string.action_import_err).show()
                 true
             }
             R.id.action_import_file -> {
