@@ -60,8 +60,8 @@ class ServiceNotification(private val service: BaseService.Interface, profileNam
                 val txr = service.getString(R.string.speed, Formatter.formatFileSize(service, txRate))
                 val rxr = service.getString(R.string.speed, Formatter.formatFileSize(service, rxRate))
                 builder.setContentText("$txr↑\t$rxr↓")
-                KLog.i("ServiceNotification", txr)
-                KLog.i("ServiceNotification", rxr)
+//                KLog.i("ServiceNotification", txr)
+//                KLog.i("ServiceNotification", rxr)
                 style.bigText(service.getString(R.string.stat_summary).format(Locale.ENGLISH, txr, rxr,
                         Formatter.formatFileSize(service, txTotal), Formatter.formatFileSize(service, rxTotal)))
                 show()
@@ -79,7 +79,7 @@ class ServiceNotification(private val service: BaseService.Interface, profileNam
             .setTicker(service.getString(R.string.forward_success))
             .setContentTitle("Shadowsocks")
             .setContentIntent(ShadowVpnActivity.pendingIntent(service))
-            .setSmallIcon(R.drawable.ic_service_busy)
+            .setSmallIcon(R.mipmap.icon_vpn)
     private val style = NotificationCompat.BigTextStyle(builder)
     private var isVisible = true
 

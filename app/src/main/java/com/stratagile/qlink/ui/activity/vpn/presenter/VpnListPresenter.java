@@ -49,10 +49,12 @@ import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.vpn.contract.VpnListContract;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LogUtil;
+import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 import com.stratagile.qlink.views.FileSelectLayout;
 
@@ -133,6 +135,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         mView.closeProgressDialog();
                         KLog.i("error");
                         flag = 0;
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("vpnName", connectVpnEntity.getVpnName());
+                        map.put("status", 0);
+                        map.put("mark", VersionUtil.getAppVersionName(AppConfig.getInstance()) + "  " +  AppConfig.getInstance().getResources().getString(R.string.Connect_to_Sharer_Timeout));
+                        KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_no Permission");
+                        reportVpnInfo(map);
                         ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Connect_to_Sharer_Timeout));
                         mView.refreshList();
                     } else {
@@ -480,6 +488,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             fileName = "/" + connectVpnEntity.getProfileLocalPath();
         }
         File configFile = new File(newPath + fileName);
+        KLog.i("配置文件的hash值为：" + MD5Util.getFileMD5(configFile));
         Uri uri = new Uri.Builder().path(newPath + fileName).scheme("file").build();
         mPathsegments = uri.getPathSegments();
         KLog.i("发送0");

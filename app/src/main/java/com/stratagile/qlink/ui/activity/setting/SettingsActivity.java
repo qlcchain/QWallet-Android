@@ -130,7 +130,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         if ("".equals(selectLanguage)) {
             switch (defaultLanguage) {
                 case "tr"://土耳其语
-                    selectLanguage = "Türk";
+                    selectLanguage = "Türkçe";
                     break;
                 default:
                     selectLanguage = "English";
@@ -139,7 +139,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         }else{
             switch (selectLanguage) {
                 case "Turkish"://土耳其语
-                    selectLanguage = "Türk";
+                    selectLanguage = "Türkçe";
                     break;
                 default:
                     selectLanguage = "English";
