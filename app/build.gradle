@@ -14,14 +14,14 @@ checkstyle {
 
 def openvpn3SwigFiles = new File(buildDir, "generated/source/ovpn3swig/ovpn3")
 
-def getCurrentFlavor() {
-    String task = getGradle().getStartParameter().getTaskRequests().toString()
-    Matcher matcher = Pattern.compile("(assemble|generate)\\w*(Release|Debug)").matcher(task)
-    if (matcher.find()) return matcher.group(2).toLowerCase() else {
-        println "Warning: No match found for $task"
-        return "debug"
-    }
-}
+//def getCurrentFlavor() {
+//    String task = getGradle().getStartParameter().getTaskRequests().toString()
+//    Matcher matcher = Pattern.compile("(assemble|generate)\\w*(Release|Debug)").matcher(task)
+//    if (matcher.find()) return matcher.group(2).toLowerCase() else {
+//        println "Warning: No match found for $task"
+//        return "debug"
+//    }
+//}
 
 task("generateOpenVPN3Swig", type: Exec) {
     doFirst {
@@ -113,8 +113,8 @@ android {
         release {
 
         }
-        sourceSets.main.jniLibs.srcDirs += new File(project(':core').buildDir, "intermediates/bundles/${getCurrentFlavor()}/jni")
-        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
+//        sourceSets.main.jniLibs.srcDirs += new File(project(':core').buildDir, "intermediates/bundles/${getCurrentFlavor()}/jni")
+//        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
     greendao {
         schemaVersion 42//数据库版本号
@@ -264,20 +264,13 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.lifecycle:extensions:$arch_version"
 
-    implementation project(':core')
+
+//    shadowsocks vpn
+//    implementation project(':core')
+    implementation files('libs/core-release.aar')
     implementation "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
-//    implementation "androidx.browser:browser:$androidxVersion"
-//    implementation "androidx.room:room-runtime:$roomVersion"
-//    kapt "androidx.room:room-compiler:$roomVersion"
-//    testImplementation "androidx.room:room-testing:$roomVersion"
-//    androidTestImplementation "androidx.test:runner:$androidTestVersion"
-//    androidTestImplementation "androidx.test.espresso:espresso-core:$androidEspressoVersion"
-
-
     implementation "android.arch.work:work-runtime-ktx:$workVersion"
-//    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
-//    implementation "com.takisoft.preferencex:preferencex-simplemenu:$preferencexVersion"
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.4'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
     implementation 'net.glxn.qrgen:android:2.0'

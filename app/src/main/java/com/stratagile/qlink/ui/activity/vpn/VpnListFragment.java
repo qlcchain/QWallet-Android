@@ -93,6 +93,7 @@ import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -747,7 +748,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 Map<String, Object> map = new HashMap<>();
                 map.put("vpnName", connectVpnEntity.getVpnName());
                 map.put("status", 0);
-                map.put("mark", "Private Key Error");
+                map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " Private Key Error");
                 KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_Private Key Error");
                 mPresenter.reportVpnInfo(map);
                 isReport = true;
@@ -779,7 +780,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 Map<String, Object> map = new HashMap<>();
                 map.put("vpnName", connectVpnEntity.getVpnName());
                 map.put("status", 0);
-                map.put("mark", "UserName Or Password Error");
+                map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " UserName Or Password Error");
                 KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_UserName Or Password Error");
                 mPresenter.reportVpnInfo(map);
                 isReport = true;
@@ -861,7 +862,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                                 Map<String, Object> map = new HashMap<>();
                                 map.put("vpnName", connectVpnEntity.getVpnName());
                                 map.put("status", 0);
-                                map.put("mark", "no Permission");
+                                map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " no Permission");
                                 KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_no Permission");
                                 mPresenter.reportVpnInfo(map);
                                 isReport = true;
@@ -962,7 +963,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         Map<String, Object> map = new HashMap<>();
                         map.put("vpnName",connectVpnEntity.getVpnName() );
                         map.put("status",0 );
-                        map.put("mark","If you did not get a VPN confirmation dialog" );
+                        map.put("mark",VersionUtil.getAppVersionName(getActivity()) + " If you did not get a VPN confirmation dialog" );
                         KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_If you did not get a VPN confirmation dialog" );
                         mPresenter.reportVpnInfo(map);
                         isReport = true;
@@ -1010,7 +1011,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         Map<String, Object> map = new HashMap<>();
                         map.put("vpnName", connectVpnEntity.getVpnName());
                         map.put("status", 0);
-                        map.put("mark", "Connect to VPN error, last VPN status:" + vpnDetailstatus);
+                        map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " Connect to VPN error, last VPN status:" + vpnDetailstatus);
                         KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_More than two minutes");
                         mPresenter.reportVpnInfo(map);
                         isReport = true;
@@ -1033,7 +1034,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         Map<String, Object> map = new HashMap<>();
                         map.put("vpnName", connectVpnEntity.getVpnName());
                         map.put("status", 0);
-                        map.put("mark", "Connect to VPN error");
+                        map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " Connect to VPN error");
                         KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_Connect to VPN error");
                         mPresenter.reportVpnInfo(map);
                         isReport = true;
@@ -1142,6 +1143,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     }
                     ConstantValue.isConnectVpn = false;
                 }
+                openNewThreed();
                 AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
                 for (VpnEntity vpnEntity : vpnListAdapter.getData()) {
                     if (vpnEntity.getVpnName().equals(connectVpnEntity.getVpnName())) {
@@ -1154,19 +1156,29 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             }
         }
 
-        private void openNewThreed(boolean upUI) {
+        private void openNewThreed() {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            startConnectSuccess(upUI);
+                            if (connectVpnEntity != null && !isReport) {
+                                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
+                                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("vpnName", connectVpnEntity.getVpnName());
+                                map.put("status", 1);
+                                map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " connect success");
+                                KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_no Permission");
+                                mPresenter.reportVpnInfo(map);
+                                isReport = true;
+                            }
                         }
                     });
                 }
@@ -1208,7 +1220,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 Map<String, Object> map = new HashMap<>();
                 map.put("vpnName", connectVpnEntity.getVpnName());
                 map.put("status", 0);
-                map.put("mark", "Could not read profile to import");
+                map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " Could not read profile to import");
                 KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_Could not read profile to import");
                 mPresenter.reportVpnInfo(map);
                 isReport = true;
