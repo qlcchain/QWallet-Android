@@ -9,7 +9,7 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
-import com.stratagile.qlink.entity.eventbus.VpnSendComplete;
+import com.stratagile.qlink.entity.eventbus.ServerVpnSendComplete;
 import com.stratagile.qlink.entity.im.InviteToGroupChatReq;
 import com.stratagile.qlink.entity.qlink.DefaultRsp;
 import com.stratagile.qlink.entity.qlink.GratuitySuccess;
@@ -20,6 +20,7 @@ import com.stratagile.qlink.entity.vpn.VpnBasicInfoReq;
 import com.stratagile.qlink.entity.vpn.VpnBasicInfoRsp;
 import com.stratagile.qlink.entity.vpn.VpnPrivateKeyReq;
 import com.stratagile.qlink.entity.vpn.VpnPrivateKeyRsp;
+import com.stratagile.qlink.entity.vpn.VpnServerFileRsp;
 import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordReq;
 import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordRsp;
 import com.stratagile.qlink.entity.vpn.VpnUserPassAndPrivateKeyReq;
@@ -260,7 +261,11 @@ public class Qsdk {
 
                     break;
                 case ConstantValue.sendVpnFileRsp:
-                    VpnSendComplete vpnSendEnd = new VpnSendComplete();
+                    ServerVpnSendComplete vpnSendEnd = new ServerVpnSendComplete();
+                    KLog.i("vpnServerFileRsp0:"+qlinkEntity.getData());
+                    VpnServerFileRsp vpnServerFileRsp = gson.fromJson(qlinkEntity.getData(), VpnServerFileRsp.class);
+                    KLog.i("vpnServerFileRsp1:"+vpnServerFileRsp);
+                    vpnSendEnd.setData(vpnServerFileRsp);
                     EventBus.getDefault().post(vpnSendEnd);
                     break;
                 case ConstantValue.defaultRsp:

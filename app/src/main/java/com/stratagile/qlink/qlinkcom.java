@@ -478,7 +478,6 @@ public class qlinkcom {
 
     public String GetFilePath(String oldFilePath) {
         KLog.i(oldFilePath);
-        ConstantValue.getWindowsVpnPath = oldFilePath;
         String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";
         String fileName = oldFilePath.substring(oldFilePath.lastIndexOf("/"), oldFilePath.length());
         KLog.i(fileName);
