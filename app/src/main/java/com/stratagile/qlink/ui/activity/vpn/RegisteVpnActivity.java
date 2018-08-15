@@ -835,7 +835,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             Map<String, Object> infoMap = new HashMap<>();
             infoMap.put("vpnName", vpnEntity.getVpnName());
             String path = vpnEntity.getProfileLocalPath();
-            String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
+            String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.length());
             infoMap.put("vpnfileName", vpnFileName);
             infoMap.put("userName", vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
             infoMap.put("password", vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
@@ -864,6 +864,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         intent2.setAction(BroadCastAction.disconnectVpn);
         KLog.i("断开连接");
         sendBroadcast(intent2);
+        LocalAssetsUtils.updateGreanDaoFromLocal();
         finish();
     }
 

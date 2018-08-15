@@ -490,4 +490,40 @@ public class FileUtil {
         }
         return "";
     }
+
+    /**
+     *  保持vpn server数据到sd卡
+     * @param name 文件名称
+     * @param jsonStr 数据内容
+     */
+    public static void saveVpnServerData(String name,String jsonStr) {
+        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn/"+name+".ovpn";
+        File jsonFile = new File(jsonPath);
+
+        FileWriter fw = null;
+        BufferedWriter out = null;
+        try {
+            if (!jsonFile.exists()) {
+                jsonFile.createNewFile();
+            }
+            fw = new FileWriter(jsonFile);
+            out = new BufferedWriter(fw);
+            out.write(jsonStr, 0, jsonStr.length());
+            out.close();
+        } catch (Exception e)
+        {
+            System.out.println("保持vpn sever数据异常" + e);
+            e.printStackTrace();
+        }
+        finally
+        {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
 }

@@ -47,6 +47,7 @@ import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.service.ClientVpnService;
 import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.vpn.contract.VpnListContract;
+import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.QlinkUtil;
@@ -351,7 +352,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 }
             }
         }
-
+        LocalAssetsUtils.updateGreanDaoFromLocal();
         preShowVpn(vpnListBeans);
     }
 
