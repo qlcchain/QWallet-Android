@@ -835,8 +835,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             Map<String, Object> infoMap = new HashMap<>();
             infoMap.put("vpnName", vpnEntity.getVpnName());
             String path = vpnEntity.getProfileLocalPath();
-            String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
-            infoMap.put("vpnfileName", vpnFileName+".ovpn");
+            String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.length());
+            infoMap.put("vpnfileName", vpnFileName);
             infoMap.put("userName", vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
             infoMap.put("password", vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
             infoMap.put("privateKey", vpnEntity.getPrivateKeyPassword()  == null ? "" : vpnEntity.getPrivateKeyPassword());

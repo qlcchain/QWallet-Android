@@ -7,8 +7,8 @@ package com.stratagile.qlink.entity.vpn;
 
 public class WindowConfig {
     private String vpnName;
-    private String vpnfileName;
-
+    private String vpnfileName;//手机存的配置文件路径
+    private String serverVpnfileName;//服务器的配置文件路径
     public String getVpnName() {
         return vpnName;
     }
@@ -24,4 +24,13 @@ public class WindowConfig {
     public void setVpnfileName(String vpnfileName) {
         this.vpnfileName = vpnfileName;
     }
+
+    public String getServerVpnfileName() {
+        return serverVpnfileName;
+    }
+
+    public void setServerVpnfileName(String serverVpnfileName) {
+        this.serverVpnfileName = serverVpnfileName;
+    }
+
 }
