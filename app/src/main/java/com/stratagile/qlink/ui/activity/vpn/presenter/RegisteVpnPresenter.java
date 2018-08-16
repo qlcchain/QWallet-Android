@@ -1,9 +1,13 @@
 package com.stratagile.qlink.ui.activity.vpn.presenter;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
@@ -17,9 +21,14 @@ import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.ui.activity.vpn.contract.RegisteVpnContract;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -44,6 +53,7 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
     private final RegisteVpnContract.View mView;
     private CompositeDisposable mCompositeDisposable;
     private RegisteVpnActivity mActivity;
+    private VpnEntity addVpnEntity;
 
     @Inject
     public RegisteVpnPresenter(@NonNull HttpAPIWrapper httpAPIWrapper, @NonNull RegisteVpnContract.View view, RegisteVpnActivity activity) {
@@ -243,5 +253,54 @@ public class RegisteVpnPresenter implements RegisteVpnContract.RegisteVpnContrac
                         KLog.i("onComplete");
                     }
                 });
+    }
+    @Override
+    public void getScanPermission() {
+        AndPermission.with(((Activity) mView))
+                .requestCode(101)
+                .permission(
+                        Manifest.permission.CAMERA
+                )
+                .rationale((requestCode, rationale) -> {
+                            AndPermission
+                                    .rationaleDialog((((Activity) mView)), rationale)
+                                    .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
+                                    .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
+                                    .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.permission_denied));
+                                        }
+                                    })
+                                    .show();
+                        }
+                )
+                .callback(permission)
+                .start();
+    }
+    private PermissionListener permission = new PermissionListener() {
+        @Override
+        public void onSucceed(int requestCode, List<String> grantedPermissions) {
+            // 权限申请成功回调。
+            if (requestCode == 101) {
+                mView.getScanPermissionSuccess();
+            }
+        }
+
+        @Override
+        public void onFailed(int requestCode, List<String> deniedPermissions) {
+            // 权限申请失败回调。
+            if (requestCode == 101) {
+                KLog.i("权限申请失败");
+                ToastUtil.show(AppConfig.getInstance(), AppConfig.getInstance().getResources().getString(R.string.permission_denied));
+            }
+        }
+    };
+    @Override
+    public void preAddVpn(VpnEntity vpnEntity) {
+        addVpnEntity = vpnEntity;
+        Map<String, String> map = new HashMap<>();
+        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
+        getBalance(map);
     }
 }

@@ -298,15 +298,14 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
                 windowConfig.setServerVpnfileName(path);
                 windowConfig.setVpnName(vpnFileName + ".ovpn");
                 WindowConfigList.add(windowConfig);
-
-                configfileParent.setVisibility(View.VISIBLE);
-                coinfgfileBtn.setVisibility(View.VISIBLE);
-                ConstantValue.isWindows = false;
-                walletListAdapter.setSelectItem(0);
-                selectProfileLocalPath = WindowConfigList.get(0).getVpnfileName();
-                ConstantValue.getWindowsVpnPath = WindowConfigList.get(0).getServerVpnfileName();
-                walletListAdapter.setNewData(WindowConfigList);
             }
+            configfileParent.setVisibility(View.VISIBLE);
+            coinfgfileBtn.setVisibility(View.VISIBLE);
+            ConstantValue.isWindows = false;
+            walletListAdapter.setSelectItem(0);
+            selectProfileLocalPath = WindowConfigList.get(0).getVpnfileName();
+            ConstantValue.getWindowsVpnPath = WindowConfigList.get(0).getServerVpnfileName();
+            walletListAdapter.setNewData(WindowConfigList);
         }
 
         /*ConfigParser cp = new ConfigParser();
