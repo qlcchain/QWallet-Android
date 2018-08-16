@@ -32,6 +32,8 @@ public interface RegisteVpnContract {
         void onGetBalancelSuccess(Balance balance);
 
         void updateVpnInfoSuccess(String data);
+
+        void getScanPermissionSuccess();
     }
 
     interface RegisteVpnContractPresenter extends BasePresenter {
@@ -44,5 +46,9 @@ public interface RegisteVpnContract {
         void updateVpnInfo(Map map);
 
         void upLoadImg(String p2pIdPc);
+
+        void getScanPermission();
+
+        void preAddVpn(VpnEntity vpnEntity);
     }
 }

@@ -1025,4 +1025,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="feature_cat">Feature Settings</string>
     <string name="unsaved_changes_prompt">Changes not saved. Do you want to save?</string>
     <string name="apply">Apply</string>
+
+
+
+    <string name="P2pId">P2P ID</string>
 </resources>
