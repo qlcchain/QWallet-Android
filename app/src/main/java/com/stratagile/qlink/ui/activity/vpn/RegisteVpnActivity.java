@@ -28,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -59,11 +60,13 @@ import com.stratagile.qlink.core.ProfileManager;
 import com.stratagile.qlink.core.VPNLaunchHelper;
 import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ContinentAndCountry;
 import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.entity.VertifyVpn;
+import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.VpnRegisterSuccess;
 import com.stratagile.qlink.fragments.Utils;
 import com.stratagile.qlink.qlinkcom;
@@ -86,6 +89,8 @@ import com.stratagile.qlink.view.TestConnectDialog;
 import com.stratagile.qlink.views.FileSelectLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -625,11 +630,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         unregisterReceiver(myBroadcastReceiver);
     }
 
@@ -830,19 +837,47 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             myAsset.setVpnEntity(localVpnEntity);
             LocalAssetsUtils.insertLocalAssets(myAsset);
         }
-        if(vpnEntity.getP2pIdPc() != null)
-        {
-            Map<String, Object> infoMap = new HashMap<>();
-            infoMap.put("vpnName", vpnEntity.getVpnName());
-            String path = vpnEntity.getProfileLocalPath();
-            String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.length());
-            infoMap.put("vpnfileName", vpnFileName);
-            infoMap.put("userName", vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
-            infoMap.put("password", vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
-            infoMap.put("privateKey", vpnEntity.getPrivateKeyPassword()  == null ? "" : vpnEntity.getPrivateKeyPassword());
-            QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.vpnUserPassAndPrivateKeyRsp, infoMap);
-            mPresenter.upLoadImg(vpnEntity.getP2pId());
-        }
+        LocalAssetsUtils.updateGreanDaoFromLocal();
+        VpnServerRecord VpnServerRecord = new VpnServerRecord();
+        String path = vpnEntity.getProfileLocalPath();
+        String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.length());
+        VpnServerRecord.setP2pId(vpnEntity.getP2pId());
+        VpnServerRecord.setVpnName(vpnEntity.getVpnName());
+        VpnServerRecord.setVpnfileName(vpnFileName);
+        VpnServerRecord.setUserName(vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
+        VpnServerRecord.setPassword( vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
+        VpnServerRecord.setPrivateKey(vpnEntity.getPrivateKeyPassword()  == null ? "" : vpnEntity.getPrivateKeyPassword());
+        VpnServerRecord.setMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+        AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().insert(VpnServerRecord);
+        mPresenter.upLoadImg(vpnEntity.getP2pId());
+        QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.checkConnectReq, new HashMap());
+       /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.dialog_need_qlc_layout, null);
+        builder.setView(view);
+        builder.setCancelable(true);
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+        tvContent.setText("test");
+        //取消或确定按钮监听事件处l
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        btn_comfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //dialog.dismiss();
+
+            }
+        });
+        dialog.show();*/
         CustomPopWindow.onBackPressed();
         getMenuInflater().inflate(R.menu.connect_vpn, toolbar.getMenu());
         button2.setText(getString(R.string.update).toLowerCase());
@@ -854,8 +889,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         tvUsernameFlag.setTextColor(Color.parseColor("#a8a6ae"));
         int groupNum = qlinkcom.CreatedNewGroupChat();
         vpnEntity.setGroupNum(groupNum);
-//        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-        Intent intent = new Intent(this, RegisterVpnSuccessActivity.class);
+        //AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
+        Intent intent = new Intent(RegisteVpnActivity.this, RegisterVpnSuccessActivity.class);
         intent.putExtra("vpnentity", vpnEntity);
         startActivity(intent);
         closeProgressDialog();
@@ -864,10 +899,38 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         intent2.setAction(BroadCastAction.disconnectVpn);
         KLog.i("断开连接");
         sendBroadcast(intent2);
-        LocalAssetsUtils.updateGreanDaoFromLocal();
         finish();
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void checkSharerConnectRsp(CheckConnectRsp checkConnectRsp) {
+        if(vpnEntity == null)
+        {
+            return;
+        }
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("vpnName", vpnEntity.getVpnName());
+        String path = vpnEntity.getProfileLocalPath();
+        String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.length());
+        infoMap.put("vpnfileName", vpnFileName);
+        infoMap.put("userName", vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
+        infoMap.put("password", vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
+        infoMap.put("privateKey", vpnEntity.getPrivateKeyPassword()  == null ? "" : vpnEntity.getPrivateKeyPassword());
+        QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.vpnUserPassAndPrivateKeyRsp, infoMap);
+        List<VpnServerRecord> vpnServerRecordList = AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().loadAll();
+        for (VpnServerRecord vpnServerRecord : vpnServerRecordList) {
+            if(vpnServerRecord.getVpnName().equals(vpnEntity.getVpnName()))
+            {
+                AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().delete(vpnServerRecord);
+                break;
+            }
+           /* if(vpnServerRecord.getVpnName().equals(vpnEntity.getVpnName()) && (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) == vpnServerRecord.isMainNet()))
+            {
+                AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().delete(vpnServerRecord);
+                break;
+            }*/
+        }
 
+    }
     @Override
     public void onBackPressed() {
         if (CustomPopWindow.onBackPressed()) {
@@ -894,116 +957,116 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                /* Intent intent = new Intent(this, SelectContinentActivity.class);
                 intent.putExtra("country", ConstantValue.longcountry);
                 startActivityForResult(intent, SELECT_COUNTRY);*/
-                break;
-            case R.id.et_configuration:
-                if(vpnEntity.getP2pIdPc() !=null && !"".equals(vpnEntity.getP2pIdPc()))
-                {
-                    return;
-                }
-                startActivityForResult(new Intent(this, FileChooseActivity.class), SELECT_PROFILE);
+        break;
+        case R.id.et_configuration:
+        if(vpnEntity.getP2pIdPc() !=null && !"".equals(vpnEntity.getP2pIdPc()))
+        {
+            return;
+        }
+        startActivityForResult(new Intent(this, FileChooseActivity.class), SELECT_PROFILE);
 //                startImportConfigFilePicker();
-                break;
-            case R.id.button1:
-                onBackPressed();
-                break;
-            case R.id.button2:
-                currentConnectType = CONNECT_TEST;
-                if (button2.getText().toString().toLowerCase(Locale.ENGLISH).equals("update")) {
-                    Wallet wallet = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
-                    if (vpnEntity == null || vpnEntity.getAddress() == null || wallet == null || !vpnEntity.getAddress().equals(wallet.getAddress())) {
-                        ToastUtil.displayShortToast(getString(R.string.The_asset_is_registered_under_another_wallet_Please_change_the_wallet_before_update));
-                        return;
-                    }
-                    if (etConfiguration.getText() == null || etConfiguration.getText().equals("")) {
-                        ToastUtil.displayShortToast(getString(R.string.You_must_update_your_asset_config_profile_before_update));
-                        return;
-                    }
-                    if (isUpdateConfigFile) {
-                        verifyConfigurationProfileFromUpdate();
-                    } else {
-                        vpnEntity.setPassword(etPassword.getText().toString());
-                        vpnEntity.setUsername(etUsername.getText().toString());
-                        if (profile == null) {
-                            profile = ProfileManager.get(this, profileUUID);
-                            if (profile != null) {
-                                vpnEntity.setIpV4Address(profile.mIPv4Address);
-                            }
-                        } else {
-                            vpnEntity.setIpV4Address(profile.mIPv4Address);
-                        }
-                        vpnEntity.setConfiguration(etConfiguration.getText().toString());
-                        KLog.i(vpnFilePath);
-                        if (vpnFilePath != null) {
-                            vpnEntity.setProfileLocalPath(vpnFilePath);
-                        }
-                        if (profileUUID != null) {
-                            vpnEntity.setProfileUUid(profileUUID);
-                        }
-                        vpnEntity.setAvaterUpdateTime(Long.parseLong(SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "0")));
-                        vpnEntity.setConnectMaxnumber(connectSeekbar.getProgress());
-                        vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
-                        vpnEntity.setPrivateKeyPassword(etPrivateKeyPassword.getText().toString().trim());
-                        vpnEntity.setUsername(etUsername.getText().toString());
-                        vpnEntity.setPassword(etPassword.getText().toString());
-                        vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
-                        vpnEntity.setCountry(etCountry.getText().toString());
-                        vpnEntity.setContinent(continent);
-                        startUpdateVpnInfo();
+        break;
+        case R.id.button1:
+        onBackPressed();
+        break;
+        case R.id.button2:
+        currentConnectType = CONNECT_TEST;
+        if (button2.getText().toString().toLowerCase(Locale.ENGLISH).equals("update")) {
+            Wallet wallet = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
+            if (vpnEntity == null || vpnEntity.getAddress() == null || wallet == null || !vpnEntity.getAddress().equals(wallet.getAddress())) {
+                ToastUtil.displayShortToast(getString(R.string.The_asset_is_registered_under_another_wallet_Please_change_the_wallet_before_update));
+                return;
+            }
+            if (etConfiguration.getText() == null || etConfiguration.getText().equals("")) {
+                ToastUtil.displayShortToast(getString(R.string.You_must_update_your_asset_config_profile_before_update));
+                return;
+            }
+            if (isUpdateConfigFile) {
+                verifyConfigurationProfileFromUpdate();
+            } else {
+                vpnEntity.setPassword(etPassword.getText().toString());
+                vpnEntity.setUsername(etUsername.getText().toString());
+                if (profile == null) {
+                    profile = ProfileManager.get(this, profileUUID);
+                    if (profile != null) {
+                        vpnEntity.setIpV4Address(profile.mIPv4Address);
                     }
                 } else {
-                    if (mbalance == null) {
-                        ToastUtil.displayShortToast(getString(R.string.please_wait));
-                        Map<String, String> map = new HashMap<>();
-                        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(RegisteVpnActivity.this, ConstantValue.currentWallet, 0)).getAddress());
-                        mPresenter.getBalance(map);
-                        return;
-                    }
-                    if (infoUserid.getText().toString().equals("")) {
-                        ToastUtil.displayShortToast(getString(R.string.Please_enter_VPN_name));
-                        return;
-                    }
-                    if (vpnNameIsSelf) {
-                        ToastUtil.displayShortToast(getString(R.string.This_asset_has_been_registered_by_you_please_enter_another_VPN_name));
-                        return;
-                    }
-                    if (etYourBet.getText().toString().equals("") || etYourBet.getText().toString().equals("0")) {
-                        ToastUtil.displayShortToast(getString(R.string.Please_enter_your_bet));
-                        return;
-                    }
-                    if (vpnIsRegisted) {
-                        ToastUtil.displayShortToast(getString(R.string.THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED).toLowerCase());
-                        return;
+                    vpnEntity.setIpV4Address(profile.mIPv4Address);
+                }
+                vpnEntity.setConfiguration(etConfiguration.getText().toString());
+                KLog.i(vpnFilePath);
+                if (vpnFilePath != null) {
+                    vpnEntity.setProfileLocalPath(vpnFilePath);
+                }
+                if (profileUUID != null) {
+                    vpnEntity.setProfileUUid(profileUUID);
+                }
+                vpnEntity.setAvaterUpdateTime(Long.parseLong(SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "0")));
+                vpnEntity.setConnectMaxnumber(connectSeekbar.getProgress());
+                vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
+                vpnEntity.setPrivateKeyPassword(etPrivateKeyPassword.getText().toString().trim());
+                vpnEntity.setUsername(etUsername.getText().toString());
+                vpnEntity.setPassword(etPassword.getText().toString());
+                vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
+                vpnEntity.setCountry(etCountry.getText().toString());
+                vpnEntity.setContinent(continent);
+                startUpdateVpnInfo();
+            }
+        } else {
+            if (mbalance == null) {
+                ToastUtil.displayShortToast(getString(R.string.please_wait));
+                Map<String, String> map = new HashMap<>();
+                map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(RegisteVpnActivity.this, ConstantValue.currentWallet, 0)).getAddress());
+                mPresenter.getBalance(map);
+                return;
+            }
+            if (infoUserid.getText().toString().equals("")) {
+                ToastUtil.displayShortToast(getString(R.string.Please_enter_VPN_name));
+                return;
+            }
+            if (vpnNameIsSelf) {
+                ToastUtil.displayShortToast(getString(R.string.This_asset_has_been_registered_by_you_please_enter_another_VPN_name));
+                return;
+            }
+            if (etYourBet.getText().toString().equals("") || etYourBet.getText().toString().equals("0")) {
+                ToastUtil.displayShortToast(getString(R.string.Please_enter_your_bet));
+                return;
+            }
+            if (vpnIsRegisted) {
+                ToastUtil.displayShortToast(getString(R.string.THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED).toLowerCase());
+                return;
                        /* if (Float.parseFloat(etYourBet.getText().toString()) > Float.parseFloat(etAssetTranfer.getText().toString())) {
                             showVpnAlreadyRegisterDialog();
                         } else {
                             //抢注册的qlc不够
                             ToastUtil.displayShortToast(getString(R.string.Your_bet_should_be_greater_than_the_current_asset_value));
                         }*/
-                    } else {
-                        if ((Float.parseFloat(etYourBet.getText().toString()) < Float.parseFloat(mbalance.getData().getQLC() + "")) && mbalance.getData().getGAS() > 0.0001) {
-                            //可以正常注册
-                            checkVpnInfo();
-                        } else {
-                            //qlc不足
-                            ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
-                        }
-                    }
+            } else {
+                if ((Float.parseFloat(etYourBet.getText().toString()) < Float.parseFloat(mbalance.getData().getQLC() + "")) && mbalance.getData().getGAS() > 0.0001) {
+                    //可以正常注册
+                    checkVpnInfo();
+                } else {
+                    //qlc不足
+                    ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
                 }
-                break;
-            case R.id.bet_tip:
-                showBetTipDialog();
-                break;
-            case  R.id.vpninfo:
-                Intent intent = new Intent(this, RegisteWindowVpnActivityActivity.class);
-                intent.putExtra("flag", "");
-                startActivityForResult(intent, 0);
-                this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                finish();
-                break;
-            default:
-                break;
+            }
         }
+        break;
+        case R.id.bet_tip:
+        showBetTipDialog();
+        break;
+        case  R.id.vpninfo:
+        Intent intent = new Intent(this, RegisteWindowVpnActivityActivity.class);
+        intent.putExtra("flag", "");
+        startActivityForResult(intent, 0);
+        this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+        finish();
+        break;
+        default:
+        break;
     }
+}
 
     private void startUpdateVpnInfo() {
         Map<String, String> infoMap = new HashMap<>();

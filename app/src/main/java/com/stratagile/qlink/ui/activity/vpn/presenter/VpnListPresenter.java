@@ -569,6 +569,11 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     public void connectShareSuccess() {
         KLog.i("移除监听");
         flag = 0;
+        if(connectVpnEntity == null)
+        {
+            return;
+        }
+        mView.showProgressDialog();
         if (connectVpnEntity.getProfileLocalPath() != null && !connectVpnEntity.getProfileLocalPath().equals("")) {
             mView.preConnect();
         } else {
