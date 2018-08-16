@@ -725,6 +725,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 fileParent.setVisibility(View.GONE);
                 fileParentLine.setVisibility(View.GONE);
                 toxid.setText(vpnEntity.getP2pId());
+                setToxID();
             }else{
                 toxidParent.setVisibility(View.GONE);
                 fileParent.setVisibility(View.VISIBLE);
@@ -827,72 +828,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.i("toxid:" ,charSequence.toString());
-                WindowConfigList = new ArrayList<>();
-                tempDataString= "";
-                VpnServerFileRspList= new ArrayList<>();
-                ConstantValue.getWindowsVpnPath = "";
-                String toxID = toxid.getText().toString();
-                if(toxID.equals(""))
-                {
-                    return;
-                }
-                if (qlinkcom.GetP2PConnectionStatus() <= 0) {
-                    ToastUtil.displayShortToast(getString(R.string.you_offline));
-                    return;
-                }
-                showProgressDialog();
-                int friendNum = qlinkcom.GetFriendNumInFriendlist(toxID);
-                if (friendNum < 0 && !toxID.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                    KLog.i(friendNum + "需要添加window好友");
-                    friendNum = qlinkcom.AddFriend(toxID);
-                    if (friendNum >= 0) {
-                        KLog.i("添加后好友索引" + friendNum);
-                    }
-                }else {
-                    KLog.i(friendNum + "已经是好友");
-                }
-                String toxidStr = new String(toxID).trim();
-                if (qlinkcom.GetFriendConnectionStatus(toxidStr+"") > 0) {
-                    KLog.i(friendNum + "在线");
-                    addVpnEntity = new VpnEntity();
-                    addVpnEntity.setP2pId(toxID);
-                    addVpnEntity.setP2pIdPc(SpUtil.getString(RegisteVpnActivity.this, ConstantValue.P2PID, ""));
-                    addVpnEntity.setFriendNum(toxidStr);
-                    ConstantValue.isWindows = true;
-                    Qsdk.getInstance().sendVpnFileRequest(addVpnEntity.getFriendNum(), "", "");
-                } else {
-                    KLog.i(friendNum + "离线");
-                    ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisteVpnActivity.this);
-                    View view = View.inflate(RegisteVpnActivity.this, R.layout.dialog_need_qlc_layout, null);
-                    builder.setView(view);
-                    builder.setCancelable(true);
-                    TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
-                    Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
-                    Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-                    tvContent.setText(getString(R.string.The_friend_is_not_online) +"," + getString(R.string.AcquiredToSlow_warning) +"?");
-                    //取消或确定按钮监听事件处l
-                    AlertDialog dialog = builder.create();
-                    Window window = dialog.getWindow();
-                    window.setBackgroundDrawableResource(android.R.color.transparent);
-                    btn_cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    });
-                    btn_comfirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String toxID = toxid.getText().toString();
-                            toxid.setText(toxID);
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
-                    closeProgressDialog();
-                }
+                setToxID();
             }
 
             @Override
@@ -943,6 +879,76 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
             }
         });
+    }
+
+    private  void setToxID ()
+    {
+        WindowConfigList = new ArrayList<>();
+        tempDataString= "";
+        VpnServerFileRspList= new ArrayList<>();
+        ConstantValue.getWindowsVpnPath = "";
+        String toxID = toxid.getText().toString();
+        if(toxID.equals(""))
+        {
+            return;
+        }
+        if (qlinkcom.GetP2PConnectionStatus() <= 0) {
+            ToastUtil.displayShortToast(getString(R.string.you_offline));
+            return;
+        }
+        showProgressDialog();
+        int friendNum = qlinkcom.GetFriendNumInFriendlist(toxID);
+        if (friendNum < 0 && !toxID.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+            KLog.i(friendNum + "需要添加window好友");
+            friendNum = qlinkcom.AddFriend(toxID);
+            if (friendNum >= 0) {
+                KLog.i("添加后好友索引" + friendNum);
+            }
+        }else {
+            KLog.i(friendNum + "已经是好友");
+        }
+        String toxidStr = new String(toxID).trim();
+        if (qlinkcom.GetFriendConnectionStatus(toxidStr+"") > 0) {
+            KLog.i(friendNum + "在线");
+            addVpnEntity = new VpnEntity();
+            addVpnEntity.setP2pId(toxID);
+            addVpnEntity.setP2pIdPc(SpUtil.getString(RegisteVpnActivity.this, ConstantValue.P2PID, ""));
+            addVpnEntity.setFriendNum(toxidStr);
+            ConstantValue.isWindows = true;
+            Qsdk.getInstance().sendVpnFileRequest(addVpnEntity.getFriendNum(), "", "");
+        } else {
+            KLog.i(friendNum + "离线");
+            ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegisteVpnActivity.this);
+            View view = View.inflate(RegisteVpnActivity.this, R.layout.dialog_need_qlc_layout, null);
+            builder.setView(view);
+            builder.setCancelable(true);
+            TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+            Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+            Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+            tvContent.setText(getString(R.string.The_friend_is_not_online) +"," + getString(R.string.AcquiredToSlow_warning) +"?");
+            //取消或确定按钮监听事件处l
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            btn_comfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String toxID = toxid.getText().toString();
+                    toxid.setText(toxID);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+            closeProgressDialog();
+        }
     }
 
     @Override
