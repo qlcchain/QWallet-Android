@@ -35,13 +35,13 @@
                             android:id="@+id/vpninfo"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/text_color"
                             android:gravity="center"
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
                             android:fontFamily="@font/vagroun_q"
                             android:text="@string/VPN_INFORMATION"
-                            android:background="@color/mainColor"
+                            android:background="@color/f6f6f6"
                             />
                         <TextView
                             android:id="@+id/registelocation"
@@ -233,26 +233,133 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/color_333"
                             android:gravity="center"
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
                             android:fontFamily="@font/vagroun_q"
                             android:text="@string/VPN_CONFIGURATION_PROFILE"
-                            android:background="@color/mainColor"
+                            android:background="@color/f6f6f6"
                             />
 
-
-                        <TextView
-                            android:id="@+id/tv_configuration"
+                        <LinearLayout
+                            android:id="@+id/toxidParent"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/x40"
-                            android:text="@string/Import_OpenVPN_Configuration_Profile"
-                            android:textSize="@dimen/sp9"
-                            android:paddingLeft="@dimen/x52"
-                            android:paddingRight="@dimen/x52" />
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/p2pid"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/x20"
+                                android:text="@string/P2pId"
+                                android:textSize="12sp"
+                                android:layout_marginLeft="@dimen/x40"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_marginTop="@dimen/dp_10"
+                                android:layout_marginLeft="@dimen/x40"
+                                android:layout_marginRight="@dimen/x40"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/toxid"
+                                    android:textColor="@color/color_333"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@mipmap/img_rectangular"
+                                    />
+                                <LinearLayout
+                                    android:id="@+id/toxidBtn"
+                                    android:layout_width="match_parent"
+                                    android:orientation="horizontal"
+                                    android:layout_marginTop="@dimen/x20"
+                                    android:layout_height="wrap_content">
+                                    <LinearLayout
+                                        android:layout_width="0px"
+                                        android:id="@+id/paste"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:layout_width="@dimen/x32"
+                                            android:layout_height="@dimen/x39"
+                                            android:src="@mipmap/icon_pasteaddress"
+                                            />
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:textStyle="bold"
+                                            android:letterSpacing="0.1"
+                                            android:fontFamily="@font/roboto_regular_q"
+                                            android:layout_marginLeft="@dimen/x10"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/PASTE_ADDRESS"
+                                            />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="0px"
+                                        android:gravity="center_vertical"
+                                        android:id="@+id/scan"
+                                        android:layout_weight="1"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:layout_width="@dimen/x32"
+                                            android:layout_height="@dimen/x39"
+                                            android:src="@mipmap/icon_scan_qr"
+                                            />
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:textStyle="bold"
+                                            android:letterSpacing="0.1"
+                                            android:fontFamily="@font/roboto_regular_q"
+                                            android:layout_marginLeft="@dimen/x10"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/SCAN_QR_CODE"
+                                            />
+                                    </LinearLayout>
+                                </LinearLayout>
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:background="@color/color_999"
+                                    android:layout_marginTop="@dimen/x10"
+                                    android:layout_height="@dimen/x1"/>
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/tv_configuration"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/x40"
+                                android:text="@string/Import_OpenVPN_Configuration_Profile"
+                                android:textSize="@dimen/sp9"
+                                android:paddingLeft="@dimen/x40"
+                                android:paddingRight="@dimen/x52" />
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/configfileParent"
+                                android:layout_width="match_parent"
+                                android:layout_marginLeft="@dimen/x36"
+                                android:layout_height="wrap_content"
+                                android:minWidth="@dimen/x200"
+                                android:layout_marginRight="@dimen/x36"
+                                android:layout_marginTop="@dimen/x33">
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:layout_width="match_parent"
+                                    android:id="@+id/recyclerView"
+                                    android:layout_marginLeft="@dimen/x40"
+                                    android:layout_marginRight="@dimen/x40"
+                                    android:layout_marginTop="@dimen/x30"
+                                    android:layout_height="match_parent">
+                                </android.support.v7.widget.RecyclerView>
+                            </android.support.v7.widget.CardView>
+                        </LinearLayout>
+
                         <RelativeLayout
+                            android:id="@+id/fileParent"
                             android:layout_width="match_parent"
                             android:layout_marginTop="@dimen/x23"
                             android:layout_marginLeft="@dimen/x52"
@@ -275,8 +382,10 @@
                                 android:layout_height="@dimen/x40"
                                 android:src="@mipmap/icon_folder"
                                 />
+
                         </RelativeLayout>
                         <View
+                            android:id="@+id/fileParentLine"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/x2"
                             android:background="@color/gray"
@@ -284,7 +393,6 @@
                             android:layout_marginRight="@dimen/x100"
                             android:layout_marginTop="@dimen/x10"
                             />
-
 
                         <TextView
                             android:id="@+id/tv_privatekey_flag"
@@ -465,13 +573,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/text_color"
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
                             android:gravity="center"
                             android:fontFamily="@font/vagroun_q"
                             android:text="@string/connection_limit_price_settings"
-                            android:background="@color/mainColor"
+                            android:background="@color/f6f6f6"
                             />
                         <LinearLayout
                             android:layout_width="match_parent"

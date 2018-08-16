@@ -16,7 +16,7 @@
         android:layout_height="@dimen/x68">
         <ImageView
             android:layout_width="@dimen/x46"
-            android:src="@mipmap/icon_action_one"
+            android:src="@mipmap/icon_choose_location"
             android:layout_height="@dimen/x46" />
         <TextView
             android:id="@+id/publicAddress"
@@ -24,7 +24,7 @@
             android:singleLine="true"
             android:ellipsize="middle"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x40"
+            android:layout_marginLeft="@dimen/x6"
             />
         <View
             android:layout_width="0px"
@@ -34,6 +34,7 @@
             android:id="@+id/checkbox"
             android:layout_width="@dimen/x46"
             android:layout_height="@dimen/x46"
+            android:layout_marginRight="@dimen/x1"
             android:background="@drawable/check_box_selector"
             android:button="@null"
             />
