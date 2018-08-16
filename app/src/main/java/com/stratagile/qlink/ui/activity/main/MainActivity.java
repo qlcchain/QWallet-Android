@@ -41,6 +41,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.ContinentAndCountry;
@@ -48,6 +49,7 @@ import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
+import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
@@ -88,6 +90,7 @@ import com.stratagile.qlink.ui.activity.wifi.WifiFragment;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LogUtil;
+import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.SystemUtil;
@@ -169,6 +172,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     private MyStatus myStatusFlag;
     private CountDownTimerUtils countDownTimerUtils;
+
+    private CountDownTimerUtils countDownTimerUtilsOnVpnServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -404,7 +409,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         }
                     }).start();
         }
+        if (countDownTimerUtilsOnVpnServer == null) {
+            countDownTimerUtilsOnVpnServer = CountDownTimerUtils.creatNewInstance();
+            countDownTimerUtilsOnVpnServer.setMillisInFuture(Long.MAX_VALUE)
+                    .setCountDownInterval(30 * 1000)
+                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+                        @Override
+                        public void onTick(long pMillisUntilFinished) {
+                            KLog.i("vpn server上报倒计时");
+                            List<VpnServerRecord> vpnServerRecordList = AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().loadAll();
+                            for (VpnServerRecord vpnServerRecord : vpnServerRecordList) {
+                                QlinkUtil.parseMap2StringAndSend(vpnServerRecord.getP2pId(), ConstantValue.checkConnectReq, new HashMap());
+                            }
 
+                        }
+                    }).start();
+        }
         LogUtil.addLog(SystemUtil.getDeviceBrand() + "  " + SystemUtil.getSystemModel() + "   " + SystemUtil.getSystemVersion() + "   " + VersionUtil.getAppVersionName(this), getClass().getSimpleName());
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -505,7 +525,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             }
         });
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void checkSharerConnectRsp(CheckConnectRsp checkConnectRsp) {
 
+        List<VpnServerRecord> vpnServerRecordList = AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().loadAll();
+        for (VpnServerRecord vpnServerRecord : vpnServerRecordList) {
+            Map<String, Object> infoMap = new HashMap<>();
+            infoMap.put("vpnName", vpnServerRecord.getVpnName());
+            infoMap.put("vpnfileName", vpnServerRecord.getVpnfileName());
+            infoMap.put("userName", vpnServerRecord.getUserName());
+            infoMap.put("password", vpnServerRecord.getPassword());
+            infoMap.put("privateKey", vpnServerRecord.getPrivateKey());
+            QlinkUtil.parseMap2StringAndSend(vpnServerRecord.getP2pId(), ConstantValue.vpnUserPassAndPrivateKeyRsp, infoMap);
+            AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().delete(vpnServerRecord);
+        }
+
+    }
     /**
      * 修改自己的在线状态
      *

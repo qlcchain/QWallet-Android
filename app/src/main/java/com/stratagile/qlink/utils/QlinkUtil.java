@@ -31,9 +31,9 @@ public class QlinkUtil {
         return result;
     }
     public static int parseMap2StringAndSend(String friendNum, String type, Map map) {
-        KLog.i("接收方的friendNum为：" + friendNum);
+        KLog.i("parseMap2StringAndSend接收方的friendNum为：" + friendNum+"——my:"+qlinkcom.GetP2PConnectionStatus()+"——you:"+qlinkcom.GetFriendConnectionStatus(friendNum+"") +"_data"+ parseMap2String(type, map));
         int sendReuestResult = qlinkcom.SendRequest(friendNum, parseMap2String(type, map));
-        KLog.i("发送的结果为:" + sendReuestResult);
+        KLog.i("parseMap2StringAndSend发送的结果为:" + sendReuestResult);
         return sendReuestResult;
     }
 }

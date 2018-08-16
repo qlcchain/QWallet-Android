@@ -274,9 +274,6 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleConfigFileComplete(ServerVpnSendComplete serverVpnSendComplete) {
-        closeProgressDialog();
-
-
         if(serverVpnSendComplete.getData() != null)
         {
             tempDataString += serverVpnSendComplete.getData().getFileData();
@@ -288,7 +285,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
                 tempDataString = "";
             }
         }else{
-
+            closeProgressDialog();
             Iterator it1 = VpnServerFileRspList.iterator();
             while(it1.hasNext()){
                 VpnServerFileRsp VpnServerFileRsp = (VpnServerFileRsp)it1.next();
