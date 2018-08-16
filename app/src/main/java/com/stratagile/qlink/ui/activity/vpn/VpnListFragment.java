@@ -800,7 +800,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void checkSharerConnectRsp(CheckConnectRsp checkConnectRsp) {
         closeProgressDialog();
-        showProgressDialog();
+        //showProgressDialog();
         isReport = false;
         mPresenter.connectShareSuccess();
     }
