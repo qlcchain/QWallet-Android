@@ -1031,4 +1031,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
 
 
     <string name="P2pId">P2P ID</string>
+    <string name="It_was_unable_to_get_the_files_Please_try_again">It was unable to get the files.Please try again</string>
+    <string name="reload">RELOAD</string>
+
 </resources>

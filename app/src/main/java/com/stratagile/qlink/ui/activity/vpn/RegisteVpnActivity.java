@@ -220,7 +220,12 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     View fileParentLine;
     @BindView(R.id.toxidBtn)
     LinearLayout toxidBtn;
-
+    @BindView(R.id.tragainBtnParent)
+    LinearLayout tragainBtnParent;
+    @BindView(R.id.tragainBtnLing)
+    View tragainBtnLing;
+    @BindView(R.id.tragainBtn)
+    TextView tragainBtn;
 
     @BindView(R.id.p2pid)
     TextView p2pid;
@@ -689,6 +694,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
     @Override
     protected void initView() {
+        isUpdate = false;
         setContentView(R.layout.activity_registe_vpn);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -916,10 +922,15 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             addVpnEntity.setP2pIdPc(SpUtil.getString(RegisteVpnActivity.this, ConstantValue.P2PID, ""));
             addVpnEntity.setFriendNum(toxidStr);
             ConstantValue.isWindows = true;
+            tragainBtnParent.setVisibility(View.GONE);
+            tragainBtnLing.setVisibility(View.GONE);
             Qsdk.getInstance().sendVpnFileRequest(addVpnEntity.getFriendNum(), "", "");
         } else {
             KLog.i(friendNum + "离线");
             ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
+            tragainBtnParent.setVisibility(View.VISIBLE);
+            tragainBtnLing.setVisibility(View.VISIBLE);
+          /*  ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisteVpnActivity.this);
             View view = View.inflate(RegisteVpnActivity.this, R.layout.dialog_need_qlc_layout, null);
             builder.setView(view);
@@ -927,9 +938,9 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
             Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
             Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-            tvContent.setText(getString(R.string.The_friend_is_not_online) +"," + getString(R.string.AcquiredToSlow_warning) +"?");
+            tvContent.setText(getString(R.string.The_friend_is_not_online) +"," + getString(R.string.AcquiredToSlow_warning) +"?");*/
             //取消或确定按钮监听事件处l
-            AlertDialog dialog = builder.create();
+           /* AlertDialog dialog = builder.create();
             Window window = dialog.getWindow();
             window.setBackgroundDrawableResource(android.R.color.transparent);
             btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -947,7 +958,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                     dialog.dismiss();
                 }
             });
-            dialog.show();
+            dialog.show();*/
             closeProgressDialog();
         }
     }
@@ -1067,7 +1078,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         overridePendingTransition(0, R.anim.activity_translate_out_1);
     }
 
-    @OnClick({R.id.et_country, R.id.et_configuration, R.id.button1, R.id.button2, R.id.bet_tip,R.id.vpninfo,R.id.paste,R.id.scan})
+    @OnClick({R.id.et_country, R.id.et_configuration, R.id.button1, R.id.button2, R.id.bet_tip,R.id.vpninfo,R.id.paste,R.id.scan,R.id.tragainBtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
@@ -1203,6 +1214,12 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             case R.id.scan:
                 mPresenter.getScanPermission();
                 break;
+            case R.id.tragainBtn:
+                tragainBtnParent.setVisibility(View.GONE);
+                tragainBtnLing.setVisibility(View.GONE);
+                String toxID = toxid.getText().toString();
+                toxid.setText(toxID);
+                break;
             default:
                 break;
         }
@@ -1253,6 +1270,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }else{
             closeProgressDialog();
             Iterator it1 = VpnServerFileRspList.iterator();
+            int index = 0;
+            int i = 0;
             while(it1.hasNext()){
                 VpnServerFileRsp VpnServerFileRsp = (VpnServerFileRsp)it1.next();
                 String path = VpnServerFileRsp.getVpnfileName();
@@ -1264,24 +1283,36 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 windowConfig.setServerVpnfileName(path);
                 windowConfig.setVpnName(vpnFileName + ".ovpn");
                 WindowConfigList.add(windowConfig);
+                if(isUpdate && vpnEntity.getProfileLocalPath().contains(vpnFileName))
+                {
+                    index = i;
+                }
+               i++;
             }
             ConstantValue.isWindows = false;
-            walletListAdapter.setSelectItem(0);
-            selectProfileLocalPath = WindowConfigList.get(0).getVpnfileName();
-            ConstantValue.getWindowsVpnPath = WindowConfigList.get(0).getServerVpnfileName();
+
+
+            walletListAdapter.setSelectItem(index);
+            selectProfileLocalPath = WindowConfigList.get(index).getVpnfileName();
+            ConstantValue.getWindowsVpnPath = WindowConfigList.get(index).getServerVpnfileName();
             walletListAdapter.setNewData(WindowConfigList);
             addVpnEntity = new VpnEntity();
             addVpnEntity.setP2pId(toxid.getText().toString());
             addVpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
             addVpnEntity.setFriendNum(toxid.getText().toString());
             addVpnEntity.setProfileLocalPath(selectProfileLocalPath);
-            vpnEntity = addVpnEntity;
-
+            if(!isUpdate)
+            {
+                vpnEntity = addVpnEntity;
+            }
             String path = vpnEntity.getProfileLocalPath();
             String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
             etConfiguration.setText(vpnFileName);
             vpnFilePath = vpnEntity.getProfileLocalPath();
-            vpnEntity.setConfiguration(vpnFileName);
+            if(!isUpdate)
+            {
+                vpnEntity.setConfiguration(vpnFileName);
+            }
             profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
             if(profile == null)
             {
@@ -1300,7 +1331,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public void onItemChange(int position) {
         selectProfileLocalPath = WindowConfigList.get(position).getVpnfileName();
         ConstantValue.getWindowsVpnPath = WindowConfigList.get(position).getServerVpnfileName();
-
+        isUpdateConfigFile = true;
         String path = selectProfileLocalPath;
         String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.indexOf(".ovpn"));
         etConfiguration.setText(vpnFileName);
@@ -1329,7 +1360,12 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         infoMap.put("connectNum", vpnEntity.getConnectMaxnumber() + "");
         infoMap.put("ipV4Address", vpnEntity.getIpV4Address() == null ? "" : vpnEntity.getIpV4Address());
         infoMap.put("bandWidth", vpnEntity.getBandwidth() == null? "" : vpnEntity.getBandwidth());
-        infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath() == null? "" : vpnEntity.getProfileLocalPath());
+        if(vpnEntity.getP2pIdPc() != null)
+        {
+            infoMap.put("profileLocalPath", ConstantValue.getWindowsVpnPath);
+        }else{
+            infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath() == null? "" : vpnEntity.getProfileLocalPath());
+        }
         if (isUpdateConfigFile) {
             infoMap.put("hash", vpnEntity.getHash());
         } else {
@@ -1401,7 +1437,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             if (toxid != null) {
                 toxid.setText(data.getStringExtra("result"));
             }
-            return;
+           return;
         }
         if (requestCode == SELECT_COUNTRY && resultCode == RESULT_OK) {
             KLog.i(data.getStringExtra("country"));
@@ -2298,7 +2334,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             mResult.mName = possibleName;
             profile = mResult;
 
-            embedFiles(cp,false);
+            embedFiles(cp,true);
             return;
 
         } catch (IOException | ConfigParser.ConfigParseError e) {
