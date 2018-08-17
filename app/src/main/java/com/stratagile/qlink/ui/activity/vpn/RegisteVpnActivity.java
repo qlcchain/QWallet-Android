@@ -91,6 +91,7 @@ import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
+import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -1329,6 +1330,11 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         infoMap.put("ipV4Address", vpnEntity.getIpV4Address() == null ? "" : vpnEntity.getIpV4Address());
         infoMap.put("bandWidth", vpnEntity.getBandwidth() == null? "" : vpnEntity.getBandwidth());
         infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath() == null? "" : vpnEntity.getProfileLocalPath());
+        if (isUpdateConfigFile) {
+            infoMap.put("hash", vpnEntity.getHash());
+        } else {
+            infoMap.put("hash", "");
+        }
         mPresenter.updateVpnInfo(infoMap);
     }
 
@@ -1719,6 +1725,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         KLog.i(vpnFilePath);
         File configurationFile = new File(vpnFilePath);
         if (configurationFile.exists()) {
+            vpnEntity.setHash(MD5Util.getFileMD5(configurationFile));
             KLog.i(configurationFile.getParent());
             KLog.i(configurationFile.getName());
             copyFile(configurationFile.getPath(), Environment.getExternalStorageDirectory() + "/Qlink/" + Calendar.getInstance().getTimeInMillis() + "." + configurationFile.getName().substring(configurationFile.getName().lastIndexOf(".") + 1));
@@ -1812,6 +1819,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 inStream.close();
             }
             vpnFilePath = newPath;
+            vpnEntity.setHash(MD5Util.getFileMD5(oldfile));
             LogUtil.addLog("配置文件复制到 " + newPath + " 成功", getClass().getSimpleName());
         } catch (Exception e) {
             System.out.println("复制单个文件操作出错");
@@ -2158,6 +2166,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         vpnEntity.setProfileLocalPath(vpnFilePath);
         vpnEntity.setFriendNum("");
+        vpnEntity.setHash(this.vpnEntity.getHash());
         vpnEntity.setIsMainNet(SpUtil.getBoolean(this, ConstantValue.isMainNet, false));
         vpnEntity.setQlc(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {//主网
@@ -2180,6 +2189,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         map.put("connectNum", vpnEntity.getConnectMaxnumber() + "");
         map.put("ipV4Address", vpnEntity.getIpV4Address() == null ? "" : vpnEntity.getIpV4Address());
         map.put("bandWidth", vpnEntity.getBandwidth() == null? "" : vpnEntity.getBandwidth());
+        map.put("hash", vpnEntity.getHash());
         if(localVpnEntity.getP2pIdPc() != null)
         {
             vpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
