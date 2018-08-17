@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
@@ -25,6 +26,7 @@ import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +49,7 @@ import io.reactivex.disposables.Disposable;
 public class ClientVpnService extends Service {
     private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
     private static CountDownTimerUtils countDownTimerUtils;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -68,30 +71,27 @@ public class ClientVpnService extends Service {
                     .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
                         @Override
                         public void onTick(long pMillisUntilFinished) {
-                            KLog.i("vpn计时扣费"+AppConfig.currentUseVpn);
+                            KLog.i("vpn计时扣费" + AppConfig.currentUseVpn);
                             String vpnP2pId = "";
-                            if(AppConfig.currentUseVpn !=null)
-                            {
+                            if (AppConfig.currentUseVpn != null) {
                                 vpnP2pId = AppConfig.currentUseVpn.getP2pIdPc() == null ? AppConfig.currentUseVpn.getP2pId() : AppConfig.currentUseVpn.getP2pIdPc();
                             }
                             if (AppConfig.currentUseVpn != null && AppConfig.currentUseVpn.getIsConnected() == true && !vpnP2pId.equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                                if(ConstantValue.freeNum <= 0)
-                                {
+                                if (ConstantValue.freeNum <= 0) {
                                     TransactionRecordDao transactionRecordDao = AppConfig.getInstance().getDaoSession().getTransactionRecordDao();
                                     boolean isMainNet = AppConfig.currentUseVpn.getIsMainNet();
-                                    List<TransactionRecord> transactionVpnRecordList = transactionRecordDao.queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(AppConfig.currentUseVpn.getVpnName()),TransactionRecordDao.Properties.IsMainNet.eq(isMainNet)).list();
+                                    List<TransactionRecord> transactionVpnRecordList = transactionRecordDao.queryBuilder().where(TransactionRecordDao.Properties.AssetName.eq(AppConfig.currentUseVpn.getVpnName()), TransactionRecordDao.Properties.IsMainNet.eq(isMainNet)).list();
                                     if (transactionVpnRecordList.size() > 0) {
                                         Collections.sort(transactionVpnRecordList);
                                         TransactionRecord nearestRecord = transactionVpnRecordList.get(0);
                                         long lastPayTime = nearestRecord.getTimestamp();
-                                        KLog.i("vpn计时扣费"+lastPayTime);
+                                        KLog.i("vpn计时扣费" + lastPayTime);
                                         if ((Calendar.getInstance().getTimeInMillis() - lastPayTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
                                         {
-                                            KLog.i("vpn计时扣费开始"+lastPayTime);
-                                            if(VpnUtil.isInSameNet(AppConfig.currentUseVpn))
-                                            {
+                                            KLog.i("vpn计时扣费开始" + lastPayTime);
+                                            if (VpnUtil.isInSameNet(AppConfig.currentUseVpn)) {
                                                 connectToVpnRecord(AppConfig.currentUseVpn);
-                                            }else{
+                                            } else {
                                                 AppConfig.currentUseVpn = null;
                                                 Intent intent = new Intent();
                                                 intent.setAction(BroadCastAction.disconnectVpn);
@@ -100,10 +100,9 @@ public class ClientVpnService extends Service {
 
                                         }
                                     } else {
-                                        if(VpnUtil.isInSameNet(AppConfig.currentUseVpn))
-                                        {
+                                        if (VpnUtil.isInSameNet(AppConfig.currentUseVpn)) {
                                             connectToVpnRecord(AppConfig.currentUseVpn);
-                                        }else{
+                                        } else {
                                             AppConfig.currentUseVpn = null;
                                             Intent intent = new Intent();
                                             intent.setAction(BroadCastAction.disconnectVpn);
@@ -111,20 +110,19 @@ public class ClientVpnService extends Service {
                                         }
 
                                     }
-                                }else{
+                                } else {
                                     VpnEntityDao vpnEntityDao = AppConfig.getInstance().getDaoSession().getVpnEntityDao();
                                     boolean isMainNet = AppConfig.currentUseVpn.getIsMainNet();
-                                    List<VpnEntity> VpnEntityList = vpnEntityDao.queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(AppConfig.currentUseVpn.getVpnName()),VpnEntityDao.Properties.IsMainNet.eq(isMainNet)).list();
+                                    List<VpnEntity> VpnEntityList = vpnEntityDao.queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(AppConfig.currentUseVpn.getVpnName()), VpnEntityDao.Properties.IsMainNet.eq(isMainNet)).list();
                                     if (VpnEntityList.size() > 0) {
                                         long lastFreeTime = VpnEntityList.get(0).getLastFreeTime();
-                                        KLog.i("vpn计时免费次数"+lastFreeTime);
+                                        KLog.i("vpn计时免费次数" + lastFreeTime);
                                         if ((Calendar.getInstance().getTimeInMillis() - lastFreeTime) > timeInterval)//如果离上次付费超过计费周期，才扣费。vpn是按小时计费
                                         {
-                                            KLog.i("vpn计时免费次数开始"+lastFreeTime);
-                                            if(VpnUtil.isInSameNet(AppConfig.currentUseVpn))
-                                            {
+                                            KLog.i("vpn计时免费次数开始" + lastFreeTime);
+                                            if (VpnUtil.isInSameNet(AppConfig.currentUseVpn)) {
                                                 connectToVpnFree(AppConfig.currentUseVpn);
-                                            }else{
+                                            } else {
                                                 AppConfig.currentUseVpn = null;
                                                 Intent intent = new Intent();
                                                 intent.setAction(BroadCastAction.disconnectVpn);
@@ -153,6 +151,7 @@ public class ClientVpnService extends Service {
 
     public class MyBroadcastReceiver extends BroadcastReceiver {
         public static final String TAG = "MyBroadcastReceiver";
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("com.stratagile.qlink.VPN_STATUS".equals(intent.getAction())) {
@@ -167,11 +166,21 @@ public class ClientVpnService extends Service {
             }
         }
     }
+
     public void connectToVpnRecord(VpnEntity vpnEntity) {
         LogUtil.addLog("计时器开始发起扣款申请", getClass().getSimpleName());
         KLog.i("vpn连接成功，计时器开始发起扣款申请");
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().queryBuilder().list();
-        if (walletList == null || walletList.size() == 0 || walletList.size() <= SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)) {
+        if (walletList == null || walletList.size() == 0) {
+            //2018.08.16加上了如果没有钱包就断开vpn，提示用户去创建钱包
+            AppConfig.currentUseVpn = null;
+            Intent intent = new Intent();
+            intent.setAction(BroadCastAction.disconnectVpn);
+            sendBroadcast(intent);
+            ToastUtil.displayShortToast(getString(R.string.there_is_no_free_connection_available_please_create_a_wallet_to_continue));
+            return;
+        }
+        if (walletList.size() <= SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)) {
             SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0);
         }
         Wallet wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
@@ -186,8 +195,7 @@ public class ClientVpnService extends Service {
         infoMap.put("qlc", vpnEntity.getQlc() + "");
         infoMap.put("fromP2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
         infoMap.put("toP2pId", vpnEntity.getP2pId());
-        if(vpnEntity.getQlc() <=0)
-        {
+        if (vpnEntity.getQlc() <= 0) {
             return;
         }
         TransactionApi.getInstance().v2Transaction(infoMap, wallet.getAddress(), vpnEntity.getAddress(), vpnEntity.getQlc() + "", new SendBackWithTxId() {
@@ -214,6 +222,7 @@ public class ClientVpnService extends Service {
             }
         });
     }
+
     public void connectToVpnFree(VpnEntity vpnEntity) {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("assetName", vpnEntity.getVpnName());

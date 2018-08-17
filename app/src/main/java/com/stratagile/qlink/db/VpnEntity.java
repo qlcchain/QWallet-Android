@@ -28,13 +28,13 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
 
     private boolean isMainNet;
 
-
     @Override
     public String toString() {
         return "VpnEntity{" +
                 "id=" + id +
                 ", country='" + country + '\'' +
                 ", isMainNet=" + isMainNet +
+                ", hash='" + hash + '\'' +
                 ", userId='" + userId + '\'' +
                 ", profileLocalPath='" + profileLocalPath + '\'' +
                 ", password='" + password + '\'' +
@@ -71,6 +71,12 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
                 '}';
     }
 
+    /**
+     * 配置文件的hash值
+     */
+    private String hash;
+
+
     protected VpnEntity(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
@@ -79,6 +85,7 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         }
         country = in.readString();
         isMainNet = in.readByte() != 0;
+        hash = in.readString();
         userId = in.readString();
         profileLocalPath = in.readString();
         password = in.readString();
@@ -295,20 +302,22 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     public VpnEntity() {
     }
 
-    @Generated(hash = 104899653)
-    public VpnEntity(Long id, String country, boolean isMainNet, String userId,
-            String profileLocalPath, String password, String privateKeyPassword,
-            String profileUUid, String ipV4Address, String continent,
-            String username, int groupNum, String bandwidth, int connectMaxnumber,
-            double assetTranfer, String avatar, double registerQlc, int onlineTime,
-            int connsuccessNum, boolean isInMainWallet, int unReadMessageCount,
-            String friendNum, String configuration, String vpnName, String p2pId,
-            String p2pIdPc, String address, int type, int currentConnect, float qlc,
+    @Generated(hash = 1350496477)
+    public VpnEntity(Long id, String country, boolean isMainNet, String hash,
+            String userId, String profileLocalPath, String password,
+            String privateKeyPassword, String profileUUid, String ipV4Address,
+            String continent, String username, int groupNum, String bandwidth,
+            int connectMaxnumber, double assetTranfer, String avatar,
+            double registerQlc, int onlineTime, int connsuccessNum,
+            boolean isInMainWallet, int unReadMessageCount, String friendNum,
+            String configuration, String vpnName, String p2pId, String p2pIdPc,
+            String address, int type, int currentConnect, float qlc,
             boolean isConnected, long lastFreeTime, boolean online,
             boolean isLoadingAvater, long avaterUpdateTime, float price) {
         this.id = id;
         this.country = country;
         this.isMainNet = isMainNet;
+        this.hash = hash;
         this.userId = userId;
         this.profileLocalPath = profileLocalPath;
         this.password = password;
@@ -664,53 +673,63 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
         this.p2pIdPc = p2pIdPc;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel parcel, int i) {
         if (id == null) {
-            dest.writeByte((byte) 0);
+            parcel.writeByte((byte) 0);
         } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(id);
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(id);
         }
-        dest.writeString(country);
-        dest.writeByte((byte) (isMainNet ? 1 : 0));
-        dest.writeString(userId);
-        dest.writeString(profileLocalPath);
-        dest.writeString(password);
-        dest.writeString(privateKeyPassword);
-        dest.writeString(profileUUid);
-        dest.writeString(ipV4Address);
-        dest.writeString(continent);
-        dest.writeString(username);
-        dest.writeInt(groupNum);
-        dest.writeString(bandwidth);
-        dest.writeInt(connectMaxnumber);
-        dest.writeDouble(assetTranfer);
-        dest.writeString(avatar);
-        dest.writeDouble(registerQlc);
-        dest.writeInt(onlineTime);
-        dest.writeInt(connsuccessNum);
-        dest.writeByte((byte) (isInMainWallet ? 1 : 0));
-        dest.writeInt(unReadMessageCount);
-        dest.writeString(friendNum);
-        dest.writeString(configuration);
-        dest.writeString(vpnName);
-        dest.writeString(p2pId);
-        dest.writeString(p2pIdPc);
-        dest.writeString(address);
-        dest.writeInt(type);
-        dest.writeInt(currentConnect);
-        dest.writeFloat(qlc);
-        dest.writeByte((byte) (isConnected ? 1 : 0));
-        dest.writeLong(lastFreeTime);
-        dest.writeByte((byte) (online ? 1 : 0));
-        dest.writeByte((byte) (isLoadingAvater ? 1 : 0));
-        dest.writeLong(avaterUpdateTime);
-        dest.writeFloat(price);
+        parcel.writeString(country);
+        parcel.writeByte((byte) (isMainNet ? 1 : 0));
+        parcel.writeString(hash);
+        parcel.writeString(userId);
+        parcel.writeString(profileLocalPath);
+        parcel.writeString(password);
+        parcel.writeString(privateKeyPassword);
+        parcel.writeString(profileUUid);
+        parcel.writeString(ipV4Address);
+        parcel.writeString(continent);
+        parcel.writeString(username);
+        parcel.writeInt(groupNum);
+        parcel.writeString(bandwidth);
+        parcel.writeInt(connectMaxnumber);
+        parcel.writeDouble(assetTranfer);
+        parcel.writeString(avatar);
+        parcel.writeDouble(registerQlc);
+        parcel.writeInt(onlineTime);
+        parcel.writeInt(connsuccessNum);
+        parcel.writeByte((byte) (isInMainWallet ? 1 : 0));
+        parcel.writeInt(unReadMessageCount);
+        parcel.writeString(friendNum);
+        parcel.writeString(configuration);
+        parcel.writeString(vpnName);
+        parcel.writeString(p2pId);
+        parcel.writeString(p2pIdPc);
+        parcel.writeString(address);
+        parcel.writeInt(type);
+        parcel.writeInt(currentConnect);
+        parcel.writeFloat(qlc);
+        parcel.writeByte((byte) (isConnected ? 1 : 0));
+        parcel.writeLong(lastFreeTime);
+        parcel.writeByte((byte) (online ? 1 : 0));
+        parcel.writeByte((byte) (isLoadingAvater ? 1 : 0));
+        parcel.writeLong(avaterUpdateTime);
+        parcel.writeFloat(price);
+    }
+
+    public String getHash() {
+        return this.hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

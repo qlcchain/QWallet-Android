@@ -1025,6 +1025,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="feature_cat">Feature Settings</string>
     <string name="unsaved_changes_prompt">Changes not saved. Do you want to save?</string>
     <string name="apply">Apply</string>
+    <string name="website">website</string>
+    <string name="there_is_no_free_connection_available_please_create_a_wallet_to_continue">There is no free connection available. Please create a wallet to continue.</string>
 
 
 

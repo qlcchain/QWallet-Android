@@ -17,6 +17,7 @@
         <LinearLayout
             android:id="@+id/ll_select_country"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="horizontal"
             android:background="@drawable/tablayout_background"

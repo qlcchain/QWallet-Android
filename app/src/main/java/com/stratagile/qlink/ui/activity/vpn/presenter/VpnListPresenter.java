@@ -60,6 +60,7 @@ import com.stratagile.qlink.views.FileSelectLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -592,7 +593,8 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         }
         try {
             InputStreamReader isr = new InputStreamReader(fim);
-
+            InputStream inputStream = new ByteArrayInputStream("".getBytes());
+            InputStreamReader isr3 = new InputStreamReader(inputStream);
             cp.parseConfig(isr);
             mResult = cp.convertProfile();
             embedFiles(cp);

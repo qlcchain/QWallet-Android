@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/status_bar"
         android:background="@drawable/navigation_shape"
-        android:layout_height="@dimen/x128">
+        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_avater"
             android:layout_width="@dimen/x70"
@@ -34,7 +35,8 @@
             android:id="@+id/my_status"
             android:layout_width="@dimen/x30"
             android:layout_height="@dimen/x30"
-            android:layout_marginTop="@dimen/x75"
+            android:layout_below="@id/iv_avater"
+            android:layout_marginTop="-5px"
             android:layout_alignRight="@+id/iv_avater"
             android:src="@mipmap/icon_search_red" />
         <TextView
