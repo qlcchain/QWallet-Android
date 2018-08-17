@@ -21,26 +21,26 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        WifiEntityDao.createTable(db, ifNotExists);
-        WifiMyRegisteDao.createTable(db, ifNotExists);
-        VpnEntityDao.createTable(db, ifNotExists);
-        VpnServerRecordDao.createTable(db, ifNotExists);
         EthWalletDao.createTable(db, ifNotExists);
         RecordSaveDao.createTable(db, ifNotExists);
-        WalletDao.createTable(db, ifNotExists);
         TransactionRecordDao.createTable(db, ifNotExists);
+        VpnEntityDao.createTable(db, ifNotExists);
+        WalletDao.createTable(db, ifNotExists);
+        WifiEntityDao.createTable(db, ifNotExists);
+        WifiMyRegisteDao.createTable(db, ifNotExists);
+        VpnServerRecordDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        WifiEntityDao.dropTable(db, ifExists);
-        WifiMyRegisteDao.dropTable(db, ifExists);
-        VpnEntityDao.dropTable(db, ifExists);
-        VpnServerRecordDao.dropTable(db, ifExists);
         EthWalletDao.dropTable(db, ifExists);
         RecordSaveDao.dropTable(db, ifExists);
-        WalletDao.dropTable(db, ifExists);
         TransactionRecordDao.dropTable(db, ifExists);
+        VpnEntityDao.dropTable(db, ifExists);
+        WalletDao.dropTable(db, ifExists);
+        WifiEntityDao.dropTable(db, ifExists);
+        WifiMyRegisteDao.dropTable(db, ifExists);
+        VpnServerRecordDao.dropTable(db, ifExists);
     }
 
     /**
@@ -59,14 +59,14 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(WifiEntityDao.class);
-        registerDaoClass(WifiMyRegisteDao.class);
-        registerDaoClass(VpnEntityDao.class);
-        registerDaoClass(VpnServerRecordDao.class);
         registerDaoClass(EthWalletDao.class);
         registerDaoClass(RecordSaveDao.class);
-        registerDaoClass(WalletDao.class);
         registerDaoClass(TransactionRecordDao.class);
+        registerDaoClass(VpnEntityDao.class);
+        registerDaoClass(WalletDao.class);
+        registerDaoClass(WifiEntityDao.class);
+        registerDaoClass(WifiMyRegisteDao.class);
+        registerDaoClass(VpnServerRecordDao.class);
     }
 
     public DaoSession newSession() {
