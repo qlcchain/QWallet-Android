@@ -147,6 +147,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
             }
         }
         settingBeanArrayList.add(new SettingBean("icon_language", getString(R.string.Language), selectLanguage, 0));
+        settingBeanArrayList.add(new SettingBean("icon_website", getString(R.string.website), "https://winq.net", 2));
         settingBeanArrayList.add(new SettingBean("icon_version", getString(R.string.Version), getString(R.string.Version) + " " + VersionUtil.getAppVersionName(this), 2));
 //        settingBeanArrayList.add(new SettingBean("icon_disclaimer", "Disclaimer", "My government...", 2));
         settingsAdapter.setNewData(settingBeanArrayList);
@@ -172,6 +173,13 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                         finish();
                         break;
                     case "icon_fingerprint":
+                        break;
+                    case "icon_website":
+                        Intent intent1 = new Intent();
+                        intent1.setAction("android.intent.action.VIEW");
+                        Uri content_url1 = Uri.parse("https://winq.net");
+                        intent1.setData(content_url1);
+                        startActivity(intent1);
                         break;
                     case "icon_language":
                         startActivity(new Intent(SettingsActivity.this, SelectLanguageActivityActivity.class));

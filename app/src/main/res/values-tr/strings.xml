@@ -1681,5 +1681,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="ranking">Sıralama</string>
     <string name="of_the_Price_Pool">Havuz ödülü</string>
     <string name="Rewards">Ödüller</string>
+    <string name="website">web sitesi</string>
 
 </resources>
