@@ -1668,14 +1668,14 @@ void CRYPTO_gcm128_release(GCM128_CONTEXT *ctx)
 # include <stdio.h>
 # include <openssl/aes.h>
 
-/* AssetsWarpper Case 1 */
+/* Test Case 1 */
 static const u8 K1[16], *P1 = NULL, *A1 = NULL, IV1[12], *C1 = NULL;
 static const u8 T1[] = {
     0x58, 0xe2, 0xfc, 0xce, 0xfa, 0x7e, 0x30, 0x61,
     0x36, 0x7f, 0x1d, 0x57, 0xa4, 0xe7, 0x45, 0x5a
 };
 
-/* AssetsWarpper Case 2 */
+/* Test Case 2 */
 # define K2 K1
 # define A2 A1
 # define IV2 IV1
@@ -1690,7 +1690,7 @@ static const u8 T2[] = {
     0xf5, 0x3a, 0x67, 0xb2, 0x12, 0x57, 0xbd, 0xdf
 };
 
-/* AssetsWarpper Case 3 */
+/* Test Case 3 */
 # define A3 A2
 static const u8 K3[] = {
     0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c,
@@ -1729,7 +1729,7 @@ static const u8 T3[] = {
     0x2c, 0xf3, 0x5a, 0xbd, 0x2b, 0xa6, 0xfa, 0xb4
 };
 
-/* AssetsWarpper Case 4 */
+/* Test Case 4 */
 # define K4 K3
 # define IV4 IV3
 static const u8 P4[] = {
@@ -1765,7 +1765,7 @@ static const u8 T4[] = {
     0x94, 0xfa, 0xe9, 0x5a, 0xe7, 0x12, 0x1a, 0x47
 };
 
-/* AssetsWarpper Case 5 */
+/* Test Case 5 */
 # define K5 K4
 # define P5 P4
 # define A5 A4
@@ -1789,7 +1789,7 @@ static const u8 T5[] = {
     0x56, 0x1b, 0xe1, 0x4a, 0xac, 0xa2, 0xfc, 0xcb
 };
 
-/* AssetsWarpper Case 6 */
+/* Test Case 6 */
 # define K6 K5
 # define P6 P5
 # define A6 A5
@@ -1820,14 +1820,14 @@ static const u8 T6[] = {
     0x46, 0x2a, 0xf4, 0x3c, 0x16, 0x99, 0xd0, 0x50
 };
 
-/* AssetsWarpper Case 7 */
+/* Test Case 7 */
 static const u8 K7[24], *P7 = NULL, *A7 = NULL, IV7[12], *C7 = NULL;
 static const u8 T7[] = {
     0xcd, 0x33, 0xb2, 0x8a, 0xc7, 0x73, 0xf7, 0x4b,
     0xa0, 0x0e, 0xd1, 0xf3, 0x12, 0x57, 0x24, 0x35
 };
 
-/* AssetsWarpper Case 8 */
+/* Test Case 8 */
 # define K8 K7
 # define IV8 IV7
 # define A8 A7
@@ -1842,7 +1842,7 @@ static const u8 T8[] = {
     0x8e, 0xf4, 0xd4, 0x58, 0x75, 0x14, 0xf0, 0xfb
 };
 
-/* AssetsWarpper Case 9 */
+/* Test Case 9 */
 # define A9 A8
 static const u8 K9[] = {
     0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c,
@@ -1882,7 +1882,7 @@ static const u8 T9[] = {
     0xb1, 0x18, 0x02, 0x4d, 0xb8, 0x67, 0x4a, 0x14
 };
 
-/* AssetsWarpper Case 10 */
+/* Test Case 10 */
 # define K10 K9
 # define IV10 IV9
 static const u8 P10[] = {
@@ -1918,7 +1918,7 @@ static const u8 T10[] = {
     0x37, 0xba, 0x55, 0xbd, 0x6d, 0x27, 0x61, 0x8c
 };
 
-/* AssetsWarpper Case 11 */
+/* Test Case 11 */
 # define K11 K10
 # define P11 P10
 # define A11 A10
@@ -1940,7 +1940,7 @@ static const u8 T11[] = {
     0x09, 0x4f, 0xcc, 0xa4, 0x0d, 0x35, 0x33, 0xf8
 };
 
-/* AssetsWarpper Case 12 */
+/* Test Case 12 */
 # define K12 K11
 # define P12 P11
 # define A12 A11
@@ -1971,14 +1971,14 @@ static const u8 T12[] = {
     0xb8, 0x56, 0x8f, 0xc3, 0xd3, 0x76, 0xa6, 0xd9
 };
 
-/* AssetsWarpper Case 13 */
+/* Test Case 13 */
 static const u8 K13[32], *P13 = NULL, *A13 = NULL, IV13[12], *C13 = NULL;
 static const u8 T13[] = {
     0x53, 0x0f, 0x8a, 0xfb, 0xc7, 0x45, 0x36, 0xb9,
     0xa9, 0x63, 0xb4, 0xf1, 0xc4, 0xcb, 0x73, 0x8b
 };
 
-/* AssetsWarpper Case 14 */
+/* Test Case 14 */
 # define K14 K13
 # define A14 A13
 static const u8 P14[16], IV14[12];
@@ -1992,7 +1992,7 @@ static const u8 T14[] = {
     0x26, 0x5b, 0x98, 0xb5, 0xd4, 0x8a, 0xb9, 0x19
 };
 
-/* AssetsWarpper Case 15 */
+/* Test Case 15 */
 # define A15 A14
 static const u8 K15[] = {
     0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c,
@@ -2033,7 +2033,7 @@ static const u8 T15[] = {
     0xec, 0x1a, 0x50, 0x22, 0x70, 0xe3, 0xcc, 0x6c
 };
 
-/* AssetsWarpper Case 16 */
+/* Test Case 16 */
 # define K16 K15
 # define IV16 IV15
 static const u8 P16[] = {
@@ -2069,7 +2069,7 @@ static const u8 T16[] = {
     0xcd, 0xdf, 0x88, 0x53, 0xbb, 0x2d, 0x55, 0x1b
 };
 
-/* AssetsWarpper Case 17 */
+/* Test Case 17 */
 # define K17 K16
 # define P17 P16
 # define A17 A16
@@ -2091,7 +2091,7 @@ static const u8 T17[] = {
     0x5e, 0x45, 0x49, 0x13, 0xfe, 0x2e, 0xa8, 0xf2
 };
 
-/* AssetsWarpper Case 18 */
+/* Test Case 18 */
 # define K18 K17
 # define P18 P17
 # define A18 A17
@@ -2122,7 +2122,7 @@ static const u8 T18[] = {
     0xc8, 0xb5, 0xd4, 0xcf, 0x5a, 0xe9, 0xf1, 0x9a
 };
 
-/* AssetsWarpper Case 19 */
+/* Test Case 19 */
 # define K19 K1
 # define P19 P1
 # define IV19 IV1
@@ -2151,7 +2151,7 @@ static const u8 T19[] = {
     0x37, 0xe6, 0x8e, 0x0c, 0xb8, 0xff, 0x94, 0x92
 };
 
-/* AssetsWarpper Case 20 */
+/* Test Case 20 */
 # define K20 K1
 # define A20 A1
 /* this results in 0xff in counter LSB */
