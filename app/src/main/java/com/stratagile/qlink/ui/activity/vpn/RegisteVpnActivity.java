@@ -814,6 +814,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     @Override
     protected void initData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setNestedScrollingEnabled(true);
         walletListAdapter.setOnItemChangeListener(this);
         recyclerView.setAdapter(walletListAdapter);
         IntentFilter filter = new IntentFilter();
@@ -1196,11 +1197,11 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 showBetTipDialog();
                 break;
             case  R.id.vpninfo:
-                Intent intent = new Intent(this, RegisteWindowVpnActivityActivity.class);
+               /* Intent intent = new Intent(this, RegisteWindowVpnActivityActivity.class);
                 intent.putExtra("flag", "");
                 startActivityForResult(intent, 0);
                 this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                finish();
+                finish();*/
                 break;
             case R.id.paste:
                 try {
