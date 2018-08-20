@@ -76,11 +76,11 @@ static const BIO_METHOD methods_dgramp = {
     dgram_write,
     dgram_read,
     dgram_puts,
-    NULL,                       /* dgram_gets, */
+    NULL,                       /* dgram_gets,         */
     dgram_ctrl,
     dgram_new,
     dgram_free,
-    NULL,
+    NULL,                       /* dgram_callback_ctrl */
 };
 
 # ifndef OPENSSL_NO_SCTP
@@ -90,11 +90,11 @@ static const BIO_METHOD methods_dgramp_sctp = {
     dgram_sctp_write,
     dgram_sctp_read,
     dgram_sctp_puts,
-    NULL,                       /* dgram_gets, */
+    NULL,                       /* dgram_gets,         */
     dgram_sctp_ctrl,
     dgram_sctp_new,
     dgram_sctp_free,
-    NULL,
+    NULL,                       /* dgram_callback_ctrl */
 };
 # endif
 
@@ -857,7 +857,7 @@ BIO *BIO_new_dgram_sctp(int fd, int close_flag)
     }
 
     /*
-     * AssetsWarpper if activation was successful. When using accept(), SCTP-AUTH has
+     * Test if activation was successful. When using accept(), SCTP-AUTH has
      * to be activated for the listening socket already, otherwise the
      * connected socket won't use it.
      */
@@ -1132,7 +1132,7 @@ static int dgram_sctp_read(BIO *b, char *out, int outl)
                 return -1;
 
             /*
-             * AssetsWarpper if socket buffer can handle max record size (2^14 + 2048
+             * Test if socket buffer can handle max record size (2^14 + 2048
              * + 13)
              */
             optlen = (socklen_t) sizeof(int);
@@ -1141,7 +1141,7 @@ static int dgram_sctp_read(BIO *b, char *out, int outl)
                 OPENSSL_assert(optval >= 18445);
 
             /*
-             * AssetsWarpper if SCTP doesn't partially deliver below max record size
+             * Test if SCTP doesn't partially deliver below max record size
              * (2^14 + 2048 + 13)
              */
             optlen = (socklen_t) sizeof(int);
@@ -1173,7 +1173,7 @@ static int dgram_sctp_read(BIO *b, char *out, int outl)
             }
         }
 
-        /* AssetsWarpper if peer uses SCTP-AUTH before continuing */
+        /* Test if peer uses SCTP-AUTH before continuing */
         if (!data->peer_auth_tested) {
             int ii, auth_data = 0, auth_forward = 0;
             unsigned char *p;
@@ -1451,6 +1451,7 @@ static long dgram_sctp_ctrl(BIO *b, int cmd, long num, void *ptr)
          * we need to deactivate an old key
          */
         data->ccs_sent = 1;
+        /* fall-through */
 
     case BIO_CTRL_DGRAM_SCTP_AUTH_CCS_RCVD:
         /* Returns 0 on success, -1 otherwise. */

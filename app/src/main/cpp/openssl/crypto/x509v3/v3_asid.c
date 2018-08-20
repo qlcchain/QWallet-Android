@@ -672,7 +672,7 @@ static int asid_contains(ASIdOrRanges *parent, ASIdOrRanges *child)
 }
 
 /*
- * AssetsWarpper whether a is a subset of b.
+ * Test whether a is a subset of b.
  */
 int X509v3_asid_subset(ASIdentifiers *a, ASIdentifiers *b)
 {
@@ -835,7 +835,7 @@ int X509v3_asid_validate_path(X509_STORE_CTX *ctx)
 
 /*
  * RFC 3779 3.3 path validation of an extension.
- * AssetsWarpper whether chain covers extension.
+ * Test whether chain covers extension.
  */
 int X509v3_asid_validate_resource_set(STACK_OF(X509) *chain,
                                       ASIdentifiers *ext, int allow_inheritance)

@@ -1,6 +1,6 @@
 # Auto-generated - DO NOT EDIT!
 # To regenerate, edit openssl.config, then run:
-#     ./import_openssl.sh import /path/to/openssl-1.1.0g.tar.gz
+#     ./import_openssl.sh import /path/to/openssl-1.1.0h.tar.gz
 #
 # This script will append to the following variables:
 #
@@ -589,6 +589,7 @@ arm_cflags := \
   -DOPENSSL_NO_STATIC_ENGINE \
   -DOPENSSL_PIC \
   -DOPENSSL_THREADS \
+  -DPOLY1305_ASM \
   -DSHA1_ASM \
   -DSHA256_ASM \
   -DSHA512_ASM \
@@ -604,6 +605,7 @@ arm_src_files := \
   crypto/ec/asm/ecp_nistz256-armv4.S \
   crypto/modes/asm/ghash-armv4.S \
   crypto/modes/asm/ghashv8-armx.S \
+  crypto/poly1305/asm/poly1305-armv4.S \
   crypto/sha/asm/sha1-armv4-large.S \
   crypto/sha/asm/sha256-armv4.S \
   crypto/sha/asm/sha512-armv4.S \

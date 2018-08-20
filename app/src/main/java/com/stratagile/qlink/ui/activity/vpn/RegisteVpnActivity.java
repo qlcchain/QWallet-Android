@@ -814,7 +814,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     @Override
     protected void initData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setNestedScrollingEnabled(true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
         walletListAdapter.setOnItemChangeListener(this);
         recyclerView.setAdapter(walletListAdapter);
         IntentFilter filter = new IntentFilter();

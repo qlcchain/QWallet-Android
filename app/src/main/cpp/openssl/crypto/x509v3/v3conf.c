@@ -14,7 +14,7 @@
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 
-/* AssetsWarpper application to add extensions from a config file */
+/* Test application to add extensions from a config file */
 
 int main(int argc, char **argv)
 {

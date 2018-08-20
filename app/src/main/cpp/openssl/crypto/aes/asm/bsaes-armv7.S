@@ -1,4 +1,4 @@
-@ Copyright 2012-2016 The OpenSSL Project Authors. All Rights Reserved.
+@ Copyright 2012-2018 The OpenSSL Project Authors. All Rights Reserved.
 @
 @ Licensed under the OpenSSL license (the "License").  You may not use
 @ this file except in compliance with the License.  You can obtain a copy
@@ -89,9 +89,9 @@
 .type	_bsaes_decrypt8,%function
 .align	4
 _bsaes_decrypt8:
-	adr	r6,_bsaes_decrypt8
+	adr	r6,.
 	vldmia	r4!, {q9}		@ round 0 key
-#ifdef	__APPLE__
+#if defined(__thumb2__) || defined(__APPLE__)
 	adr	r6,.LM0ISR
 #else
 	add	r6,r6,#.LM0ISR-_bsaes_decrypt8
@@ -579,9 +579,9 @@ _bsaes_const:
 .type	_bsaes_encrypt8,%function
 .align	4
 _bsaes_encrypt8:
-	adr	r6,_bsaes_encrypt8
+	adr	r6,.
 	vldmia	r4!, {q9}		@ round 0 key
-#ifdef	__APPLE__
+#if defined(__thumb2__) || defined(__APPLE__)
 	adr	r6,.LM0SR
 #else
 	sub	r6,r6,#_bsaes_encrypt8-.LM0SR
@@ -1014,9 +1014,9 @@ _bsaes_encrypt8_bitslice:
 .type	_bsaes_key_convert,%function
 .align	4
 _bsaes_key_convert:
-	adr	r6,_bsaes_key_convert
+	adr	r6,.
 	vld1.8	{q7},  [r4]!		@ load round 0 key
-#ifdef	__APPLE__
+#if defined(__thumb2__) || defined(__APPLE__)
 	adr	r6,.LM0
 #else
 	sub	r6,r6,#_bsaes_key_convert-.LM0
