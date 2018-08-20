@@ -440,7 +440,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
             cp.parseConfig(isr);
             profile = cp.convertProfile();
-            embedFiles(cp,true);
+            embedFiles(cp,true,true);
             return;
 
         } catch (IOException | ConfigParser.ConfigParseError e) {
@@ -449,7 +449,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         KLog.i("读取文件到流中成功");
     }
 
-    void  embedFiles(ConfigParser cp,boolean flag) {
+    void  embedFiles(ConfigParser cp,boolean saveProfile,boolean flag) {
         KLog.i("embedfiles1111");
         if (profile.mPKCS12Filename != null) {
             File pkcs12file = findFileRaw(profile.mPKCS12Filename);
@@ -475,8 +475,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             mEmbeddedPwFile = embedFile(cp.getAuthUserPassFile(), Utils.FileType.USERPW_FILE, false);
         }
         KLog.i("embedfiles4444");
-        if(flag)
-            saveProfile();
+        if(saveProfile)
+            saveProfile(flag);
     }
 
     private File findFile(String filename, Utils.FileType fileType) {
@@ -549,7 +549,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         return null;
     }
 
-    private void saveProfile() {
+    private void saveProfile(boolean flag) {
         KLog.i("保存配置文件");
         Intent result = new Intent();
         ProfileManager vpl = ProfileManager.getInstance(this);
@@ -572,7 +572,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             LocalAssetsUtils.updateLocalAssets(myAsset);
         }
         result.putExtra(VpnProfile.EXTRA_PROFILEUUID, profile.getUUID().toString());
-        startOrStopVPN(profile);
+        if(flag)
+            startOrStopVPN(profile);
     }
 
     private String embedFile(String filename, Utils.FileType type, boolean onlyFindFileAndNullonNotFound) {
@@ -792,7 +793,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 {
                     ConfigConverter configConverter = new ConfigConverter();
                     Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-                    startImportTask(uri,vpnFileName);
+                    startImportTask(uri,vpnFileName,true);
                 }
             }
             llYourBet.setVisibility(View.VISIBLE);
@@ -1287,7 +1288,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 {
                     index = i;
                 }
-               i++;
+                i++;
             }
             ConstantValue.isWindows = false;
 
@@ -1295,7 +1296,19 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             walletListAdapter.setSelectItem(index);
             selectProfileLocalPath = WindowConfigList.get(index).getVpnfileName();
             ConstantValue.getWindowsVpnPath = WindowConfigList.get(index).getServerVpnfileName();
-            walletListAdapter.setNewData(WindowConfigList);
+
+            List<WindowConfig> windowConfigListTemp  = new ArrayList<>();
+            String windowConfigStr = "";
+            Iterator windowConfigListIt = WindowConfigList.iterator();
+            while(windowConfigListIt.hasNext()){
+                WindowConfig indowConfig = (WindowConfig)windowConfigListIt.next();
+                if(!windowConfigStr.contains(indowConfig.getServerVpnfileName()))
+                {
+                    windowConfigListTemp.add(indowConfig);
+                }
+                windowConfigStr += indowConfig.getServerVpnfileName() + ",";
+            }
+            walletListAdapter.setNewData(windowConfigListTemp);
             addVpnEntity = new VpnEntity();
             addVpnEntity.setP2pId(toxid.getText().toString());
             addVpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
@@ -1318,7 +1331,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             {
                 ConfigConverter configConverter = new ConfigConverter();
                 Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-                startImportTask(uri,vpnFileName);
+                startImportTask(uri,vpnFileName,true);
             }
         }
     }
@@ -1343,7 +1356,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         {
             ConfigConverter configConverter = new ConfigConverter();
             Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-            startImportTask(uri,vpnFileName);
+            startImportTask(uri,vpnFileName,false);
         }
         Log.i("selectProfileLocalPath",selectProfileLocalPath);
     }
@@ -1437,7 +1450,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             if (toxid != null) {
                 toxid.setText(data.getStringExtra("result"));
             }
-           return;
+            return;
         }
         if (requestCode == SELECT_COUNTRY && resultCode == RESULT_OK) {
             KLog.i(data.getStringExtra("country"));
@@ -1816,7 +1829,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             VpnProfile profileTemp = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
             if(profileTemp == null)
             {
-                saveProfile();
+                saveProfile(true);
             }else{
                 verifyConnectVpn();
             }
@@ -2152,6 +2165,10 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public void updateVpnInfoSuccess(String data) {
         closeProgressDialog();
         KLog.i(vpnEntity.toString());
+        if(vpnEntity.getP2pIdPc() != null)
+        {
+            vpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
+        }
         vpnEntity.setCountry(data);
         etCountry.setText(vpnEntity.getCountry());
         vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
@@ -2163,6 +2180,18 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         LocalAssetsUtils.updateLocalAssets(myAsset);
         //更新sd卡资产数据end
         ToastUtil.displayShortToast(getString(R.string.update_success));
+        VpnServerRecord VpnServerRecord = new VpnServerRecord();
+        String path = vpnEntity.getProfileLocalPath();
+        String vpnFileName = path.substring(path.lastIndexOf("/") + 1,path.length());
+        VpnServerRecord.setP2pId(vpnEntity.getP2pId());
+        VpnServerRecord.setVpnName(vpnEntity.getVpnName());
+        VpnServerRecord.setVpnfileName(vpnFileName);
+        VpnServerRecord.setUserName(vpnEntity.getUsername() == null ? "" : vpnEntity.getUsername());
+        VpnServerRecord.setPassword( vpnEntity.getPassword() == null ? "" : vpnEntity.getPassword());
+        VpnServerRecord.setPrivateKey(vpnEntity.getPrivateKeyPassword()  == null ? "" : vpnEntity.getPrivateKeyPassword());
+        VpnServerRecord.setMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+        AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().insert(VpnServerRecord);
+        QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.checkConnectReq, new HashMap());
         //断开vpn
         Intent intent2 = new Intent();
         intent2.setAction(BroadCastAction.disconnectVpn);
@@ -2267,7 +2296,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }).start();
     }
 
-    private void startImportTask(final Uri data, final String possibleName) {
+    private void startImportTask(final Uri data, final String possibleName,boolean flag) {
         mImportTask = new AsyncTask<Void, Void, Integer>() {
             private ProgressBar mProgress;
 
@@ -2281,7 +2310,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 try {
                     InputStream is = getContentResolver().openInputStream(data);
 
-                    doImport(is,possibleName);
+                    doImport(is,possibleName,flag);
                     if (mResult==null)
                         return -3;
                 } catch (FileNotFoundException |
@@ -2324,7 +2353,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
         return newname;
     }
-    private void doImport(InputStream is,String possibleName) {
+    private void doImport(InputStream is,String possibleName,boolean flag) {
         ConfigParser cp = new ConfigParser();
         try {
             InputStreamReader isr = new InputStreamReader(is);
@@ -2334,7 +2363,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             mResult.mName = possibleName;
             profile = mResult;
 
-            embedFiles(cp,true);
+            embedFiles(cp,true,flag);
             return;
 
         } catch (IOException | ConfigParser.ConfigParseError e) {
