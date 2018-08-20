@@ -1,6 +1,6 @@
 # Auto-generated - DO NOT EDIT!
 # To regenerate, edit openssl.config, then run:
-#     ./import_openssl.sh import /path/to/openssl-1.1.0g.tar.gz
+#     ./import_openssl.sh import /path/to/openssl-1.1.0h.tar.gz
 #
 # This script will append to the following variables:
 #
@@ -121,7 +121,7 @@ mips32r6_src_files :=
 mips32r6_exclude_files :=
 
 
-LOCAL_LDLIBS :=  -latomic
+#LOCAL_LDLIBS :=  -latomic
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
 
 ifdef ARCH_MIPS_REV6

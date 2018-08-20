@@ -1124,7 +1124,7 @@ static int addr_contains(IPAddressOrRanges *parent,
 }
 
 /*
- * AssetsWarpper whether a is a subset of b.
+ * Test whether a is a subset of b.
  */
 int X509v3_addr_subset(IPAddrBlocks *a, IPAddrBlocks *b)
 {
@@ -1290,7 +1290,7 @@ int X509v3_addr_validate_path(X509_STORE_CTX *ctx)
 
 /*
  * RFC 3779 2.3 path validation of an extension.
- * AssetsWarpper whether chain covers extension.
+ * Test whether chain covers extension.
  */
 int X509v3_addr_validate_resource_set(STACK_OF(X509) *chain,
                                   IPAddrBlocks *ext, int allow_inheritance)
