@@ -329,6 +329,49 @@
                                     android:layout_marginTop="@dimen/x10"
                                     android:layout_height="@dimen/x1"/>
                             </LinearLayout>
+                            <LinearLayout
+                                android:visibility="visible"
+                                android:id="@+id/tragainBtnParent"
+                                android:layout_width="match_parent"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="@dimen/x20"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/x20"
+                                    android:hint="@string/It_was_unable_to_get_the_files_Please_try_again"
+                                    android:textColorHint="@color/color_333"
+                                    android:textColor="@color/color_333"
+                                    android:textSize="9sp"
+                                    android:layout_marginLeft="@dimen/x36"
+                                    android:layout_marginRight="@dimen/x1"
+                                    android:inputType="text" />
+                                <TextView
+                                    android:id="@+id/tragainBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/x20"
+                                    android:hint="@string/reload"
+                                    android:textColorHint="@color/color_333"
+                                    android:textColor="@color/color_333"
+                                    android:drawableRight="@mipmap/icon_refresh"
+                                    android:drawablePadding="@dimen/x8"
+                                    android:textSize="16sp"
+                                    android:layout_marginLeft="@dimen/x50"
+                                    android:layout_marginRight="@dimen/x12"
+                                    android:inputType="text" />
+                            </LinearLayout>
+                            <View
+                                android:visibility="gone"
+                                android:id="@+id/tragainBtnLing"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/x2"
+                                android:background="@color/gray"
+                                android:layout_marginLeft="@dimen/x40"
+                                android:layout_marginRight="@dimen/x40"
+                                android:layout_marginTop="@dimen/x10"
+                                />
                             <TextView
                                 android:id="@+id/tv_configuration"
                                 android:layout_width="match_parent"
@@ -663,7 +706,7 @@
                 android:paddingLeft="@dimen/x20"
                 android:paddingRight="@dimen/x20"
                 android:layout_height="70dp">
-              <Button
+                <Button
                     android:id="@+id/button1"
                     android:layout_width="0dp"
                     android:text="@string/cancel"
