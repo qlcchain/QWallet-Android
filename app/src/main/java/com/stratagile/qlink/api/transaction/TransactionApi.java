@@ -161,84 +161,6 @@ public class TransactionApi {
     }
 
     /**
-     * 转账的主方法
-     *
-     * @param fromAddress  自己的钱包地址
-     * @param address      对方的钱包地址， 也就是兑换neo的主钱包地址
-     * @param qlc          转账的qlc的数量
-     * @param sendCallBack 转账结果的回调
-     */
-    public void trasaction(String fromAddress, String address, String qlc, SendCallBack sendCallBack) {
-        if (mCompositeDisposable == null) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        getUtxo(fromAddress, new SendCallBack() {
-            @Override
-            public void onSuccess() {
-                sendNEP5Token(Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), new SendCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        sendCallBack.onSuccess();
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        sendCallBack.onFailure();
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure() {
-                sendCallBack.onFailure();
-            }
-        });
-    }
-
-    /**
-     * 实际进行转账的方法
-     *
-     * @param wallet            钱包实体，为第三方引用的那个库
-     * @param tokenContractHash 第三方的资产的编号，这里只做兑换qlc，所以这个资产编号为qlc的编号。
-     * @param fromAddress       自己的钱包地址
-     * @param toAddress         对方的钱包地址， 也就是兑换neo的主钱包地址
-     * @param amount            转账的qlc的数量
-     * @param sendCallBack      转账结果的回调
-     */
-    private void sendNEP5Token(Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendCallBack sendCallBack) {
-        if (assets == null) {
-            sendCallBack.onFailure();
-            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.send_failure));
-            return;
-        }
-        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, (String isSuccess) -> {
-            KLog.i("开始调用sendRow");
-            KLog.i(isSuccess);
-            Transaction tx = getTxid(isSuccess);
-            KLog.i(tx.getHash());
-            Map<String, String> infoMap = new HashMap<>();
-            infoMap.put("tx", isSuccess);
-            Disposable disposable = AppConfig.getInstance().getApplicationComponent().getHttpApiWrapper().sendRawTransaction(infoMap)
-                    .subscribe(sendRow -> {
-                        //isSuccesse
-                        KLog.i("onSuccesse");
-                        sendCallBack.onSuccess();
-                    }, throwable -> {
-                        //onError
-                        KLog.i("onError");
-                        throwable.printStackTrace();
-                        sendCallBack.onFailure();
-                    }, () -> {
-                        //onComplete
-                        KLog.i("onComplete");
-                        sendCallBack.onFailure();
-                    });
-            mCompositeDisposable.add(disposable);
-        });
-    }
-
-    /**
      * 连接vpn或打赏的主方法, 还有打赏
      *
      * @param map          封装的请求网络的参数的map集合。这个集合里的参数根据需求的不同而不同
@@ -274,41 +196,6 @@ public class TransactionApi {
         });
     }
 
-    /**
-     * 主网连接vpn或打赏的主方法, 还有打赏
-     *
-     * @param map          封装的请求网络的参数的map集合。这个集合里的参数根据需求的不同而不同
-     * @param fromAddress  自己的钱包地址
-     * @param address      对方的钱包地址， 也就是兑换neo的主钱包地址
-     * @param qlc          连接vpn或打赏的qlc的数量
-     * @param sendCallBack 连接vpn或打赏的结果的回调
-     */
-    public void v2TransactionInMain(Map map, String fromAddress, String address, String qlc, SendBackWithTxId sendCallBack) {
-        if (mCompositeDisposable == null) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        getUtxoInMain(fromAddress, new SendCallBack() {
-            @Override
-            public void onSuccess() {
-                payTransaction(map, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), new SendBackWithTxId() {
-                    @Override
-                    public void onSuccess(String txid) {
-                        sendCallBack.onSuccess(txid);
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        sendCallBack.onFailure();
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure() {
-                sendCallBack.onFailure();
-            }
-        });
-    }
 
     /**
      * 进行连接vpn和打赏的扣费的实际方法
@@ -658,89 +545,6 @@ public class TransactionApi {
     }
 
     /**
-     * 获取unpsent的方法
-     *
-     * @param address      需要获取unspent的钱包的地址
-     * @param sendCallBack 回调结果
-     */
-    private void getMainUtxo(String address, SendCallBack sendCallBack) {
-        Map<String, String> map = new HashMap<>();
-        map.put("address", address);
-        AppConfig.getInstance().getApplicationComponent().getMainHttpAPIWrapper().getUnspentAsset(map)
-                .subscribe(new Observer<AssetsWarpper>() {
-                    Disposable disposable;
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposable = d;
-                    }
-
-                    @Override
-                    public void onNext(AssetsWarpper assetsWarpper) {
-                        KLog.i("获取unspent成功");
-                        assets = assetsWarpper.getData();
-                        sendCallBack.onSuccess();
-                        disposable.dispose();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        KLog.i("onError");
-                        e.printStackTrace();
-                        sendCallBack.onFailure();
-                        disposable.dispose();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        KLog.i("onComplete");
-                        sendCallBack.onFailure();
-                        disposable.dispose();
-                    }
-                });
-    }
-
-    /**
-     * 主网获取unpsent的方法
-     *
-     * @param address      需要获取unspent的钱包的地址
-     * @param sendCallBack 回调结果
-     */
-    private void getUtxoInMain(String address, SendCallBack sendCallBack) {
-        Map<String, String> map = new HashMap<>();
-        map.put("address", address);
-        AppConfig.getInstance().getApplicationComponent().getMainHttpAPIWrapper().getUnspentAsset(map)
-                .subscribe(new Observer<AssetsWarpper>() {
-                    Disposable disposable;
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposable = d;
-                    }
-
-                    @Override
-                    public void onNext(AssetsWarpper assetsWarpper) {
-                        KLog.i("获取unspent成功");
-                        assets = assetsWarpper.getData();
-                        sendCallBack.onSuccess();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        KLog.i("onError");
-                        e.printStackTrace();
-                        sendCallBack.onFailure();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        KLog.i("onComplete");
-                        sendCallBack.onFailure();
-                    }
-                });
-    }
-
-    /**
      * 获取交易id的方法
      *
      * @param hex sendrow的参数，一串很长的参数
@@ -750,35 +554,6 @@ public class TransactionApi {
         final byte[] ba;
         ba = ModelUtil.decodeHex(hex);
         return new Transaction(ByteBuffer.wrap(ba));
-    }
-
-    public void getTransactionHex(String fromAddress, String address, String qlc, SendBackWithTxId sendCallBack) {
-        if (mCompositeDisposable == null) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        getMainUtxo(fromAddress, new SendCallBack() {
-            @Override
-            public void onSuccess() {
-                if (assets == null) {
-                    sendCallBack.onFailure();
-                    ToastUtil.displayShortToast("send failure");
-                    return;
-                }
-                NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-                neoNodeRPC.sendNEP5Token(assets, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), isSuccess -> {
-                    KLog.i("开始调用sendRow");
-                    KLog.i(isSuccess);
-                    Transaction tx = getTxid(isSuccess);
-                    KLog.i(tx.getHash());
-                    sendCallBack.onSuccess(isSuccess);
-                });
-            }
-
-            @Override
-            public void onFailure() {
-                sendCallBack.onFailure();
-            }
-        });
     }
 
 }

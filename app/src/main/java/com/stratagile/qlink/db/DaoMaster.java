@@ -37,10 +37,10 @@ public class DaoMaster extends AbstractDaoMaster {
         RecordSaveDao.dropTable(db, ifExists);
         TransactionRecordDao.dropTable(db, ifExists);
         VpnEntityDao.dropTable(db, ifExists);
+        VpnServerRecordDao.dropTable(db, ifExists);
         WalletDao.dropTable(db, ifExists);
         WifiEntityDao.dropTable(db, ifExists);
         WifiMyRegisteDao.dropTable(db, ifExists);
-        VpnServerRecordDao.dropTable(db, ifExists);
     }
 
     /**
@@ -63,10 +63,10 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(RecordSaveDao.class);
         registerDaoClass(TransactionRecordDao.class);
         registerDaoClass(VpnEntityDao.class);
+        registerDaoClass(VpnServerRecordDao.class);
         registerDaoClass(WalletDao.class);
         registerDaoClass(WifiEntityDao.class);
         registerDaoClass(WifiMyRegisteDao.class);
-        registerDaoClass(VpnServerRecordDao.class);
     }
 
     public DaoSession newSession() {
