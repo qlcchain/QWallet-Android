@@ -69,9 +69,6 @@ public class DaoSession extends AbstractDaoSession {
         vpnEntityDaoConfig = daoConfigMap.get(VpnEntityDao.class).clone();
         vpnEntityDaoConfig.initIdentityScope(type);
 
-        vpnServerRecordDaoConfig = daoConfigMap.get(VpnServerRecordDao.class).clone();
-        vpnServerRecordDaoConfig.initIdentityScope(type);
-
         walletDaoConfig = daoConfigMap.get(WalletDao.class).clone();
         walletDaoConfig.initIdentityScope(type);
 
@@ -81,23 +78,30 @@ public class DaoSession extends AbstractDaoSession {
         wifiMyRegisteDaoConfig = daoConfigMap.get(WifiMyRegisteDao.class).clone();
         wifiMyRegisteDaoConfig.initIdentityScope(type);
 
+        vpnServerRecordDaoConfig = daoConfigMap.get(VpnServerRecordDao.class).clone();
+        vpnServerRecordDaoConfig.initIdentityScope(type);
+
         ethWalletDao = new EthWalletDao(ethWalletDaoConfig, this);
         recordSaveDao = new RecordSaveDao(recordSaveDaoConfig, this);
         transactionRecordDao = new TransactionRecordDao(transactionRecordDaoConfig, this);
         vpnEntityDao = new VpnEntityDao(vpnEntityDaoConfig, this);
-        vpnServerRecordDao = new VpnServerRecordDao(vpnServerRecordDaoConfig, this);
-        walletDao = new WalletDao(walletDaoConfig, this);
-        wifiEntityDao = new WifiEntityDao(wifiEntityDaoConfig, this);
-        wifiMyRegisteDao = new WifiMyRegisteDao(wifiMyRegisteDaoConfig, this);
+
 
         registerDao(EthWallet.class, ethWalletDao);
         registerDao(RecordSave.class, recordSaveDao);
         registerDao(TransactionRecord.class, transactionRecordDao);
         registerDao(VpnEntity.class, vpnEntityDao);
+
+        registerDao(Wallet.class, walletDao);
+        registerDao(WifiEntity.class, wifiEntityDao);
+        registerDao(WifiMyRegiste.class, wifiMyRegisteDao);
+        registerDao(VpnServerRecord.class, vpnServerRecordDao);
+
         registerDao(VpnServerRecord.class, vpnServerRecordDao);
         registerDao(Wallet.class, walletDao);
         registerDao(WifiEntity.class, wifiEntityDao);
         registerDao(WifiMyRegiste.class, wifiMyRegisteDao);
+
     }
     
     public void clear() {
@@ -105,6 +109,7 @@ public class DaoSession extends AbstractDaoSession {
         recordSaveDaoConfig.clearIdentityScope();
         transactionRecordDaoConfig.clearIdentityScope();
         vpnEntityDaoConfig.clearIdentityScope();
+
         vpnServerRecordDaoConfig.clearIdentityScope();
         walletDaoConfig.clearIdentityScope();
         wifiEntityDaoConfig.clearIdentityScope();
@@ -123,16 +128,28 @@ public class DaoSession extends AbstractDaoSession {
         return transactionRecordDao;
     }
 
+    public TransactionRecordDao getTransactionRecordDao() {
+        return transactionRecordDao;
+    }
+
     public VpnEntityDao getVpnEntityDao() {
         return vpnEntityDao;
     }
 
-    public VpnServerRecordDao getVpnServerRecordDao() {
-        return vpnServerRecordDao;
-    }
-
     public WalletDao getWalletDao() {
         return walletDao;
+    }
+
+    public WifiEntityDao getWifiEntityDao() {
+        return wifiEntityDao;
+    }
+
+    public WifiMyRegisteDao getWifiMyRegisteDao() {
+        return wifiMyRegisteDao;
+    }
+
+    public VpnServerRecordDao getVpnServerRecordDao() {
+        return vpnServerRecordDao;
     }
 
     public WifiEntityDao getWifiEntityDao() {

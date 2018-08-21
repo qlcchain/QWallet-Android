@@ -330,7 +330,7 @@
                                     android:layout_height="@dimen/x1"/>
                             </LinearLayout>
                             <LinearLayout
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:id="@+id/tragainBtnParent"
                                 android:layout_width="match_parent"
                                 android:orientation="horizontal"

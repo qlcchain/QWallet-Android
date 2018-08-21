@@ -701,6 +701,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         etPrivateKeyPassword.setOnEditorActionListener(this);
         etUsername.setOnEditorActionListener(this);
+        tragainBtnParent.setVisibility(View.GONE);
+        tragainBtnLing.setVisibility(View.GONE);
         String str = getString(R.string.VPN_Name2);//"默认颜色<font color='#FF0000'>*</font>"
         str = "<font color='#333333'>"+str.substring(0,str.length()-1)+"</font>" +"<font color='#FF0000'>*</font>";
         titlevpn.setText(Html.fromHtml(str));
