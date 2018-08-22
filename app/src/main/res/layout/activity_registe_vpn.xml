@@ -259,6 +259,7 @@
                                     android:layout_marginTop="@dimen/x20"
                                     android:text="@string/P2pId"
                                     android:textSize="12sp"
+                                    android:textColor="@color/color_333"
                                     android:layout_marginLeft="@dimen/x40"
                                     />
                                <View
