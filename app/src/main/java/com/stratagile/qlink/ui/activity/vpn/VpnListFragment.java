@@ -166,7 +166,11 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 if (!vpnListAdapter.getItem(position).isOnline()) {
                     //vpn资产不在线
                 } else {
-                    if (!vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                    if (!vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && vpnListAdapter.getItem(position).getP2pIdPc() == null) {
+                        return;
+                    }
+                    if(vpnListAdapter.getItem(position).getP2pIdPc() != null && !vpnListAdapter.getItem(position).getP2pIdPc().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))
+                    {
                         return;
                     }
                     if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
@@ -189,7 +193,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         startActivityForResult(intent, 3);
                         return;
                     }
-                    if (vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                    if (vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) || (vpnListAdapter.getItem(position).getP2pIdPc() != null && vpnListAdapter.getItem(position).getP2pIdPc().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))) {
                         //自己注册的vpn资产
                         Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
                         KLog.i(vpnListAdapter.getData().get(position).toString());

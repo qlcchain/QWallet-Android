@@ -702,11 +702,11 @@
     <string name="Asset_Tranfer">Asset Tranfer</string>
     <string name="VPN_CONFIGURATION_PROFILE">VPN CONFIGURATION PROFILE</string>
     <string name="Import_WINQ_Configuration_Profile">Import WINQ Configuration Profile</string>
-    <string name="private_Key_Password2">private Key Password**</string>
-    <string name="Username2">Username**</string>
+    <string name="private_Key_Password2">private Key Password</string>
+    <string name="Username2">Username</string>
     <string name="Save">Save</string>
     <string name="USERNAME_AND_PASSWORD_OPTIONAL">USERNAME AND PASSWORD (OPTIONAL)</string>
-    <string name="Password2">Password**</string>
+    <string name="Password2">Password</string>
     <string name="Fields_are_optional">** Fields are optional</string>
     <string name="DEVICE_BANDWIDTH">DEVICE BANDWIDTH</string>
     <string name="Device_bandwidth_automatic_speed_test">Device bandwidth(automatic speed-test)</string>
@@ -1026,12 +1026,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="unsaved_changes_prompt">Changes not saved. Do you want to save?</string>
     <string name="apply">Apply</string>
     <string name="website">website</string>
+
+
+
+
+
     <string name="there_is_no_free_connection_available_please_create_a_wallet_to_continue">There is no free connection available. Please create a wallet to continue.</string>
-
-
-
     <string name="P2pId">P2P ID</string>
     <string name="It_was_unable_to_get_the_files_Please_try_again">It was unable to get the files.Please try again</string>
     <string name="reload">RELOAD</string>
+    <string name="Turorial">Turorial</string>s
+    <string name="Choose_One_Configuration_File">Choose One Configuration File</string>
+    <string name="Required">* Required</string>
 
 </resources>
