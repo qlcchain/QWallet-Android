@@ -703,6 +703,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         etUsername.setOnEditorActionListener(this);
         tragainBtnParent.setVisibility(View.GONE);
         tragainBtnLing.setVisibility(View.GONE);
+        tvConfiguration.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
         String str = getString(R.string.VPN_Name2);//"默认颜色<font color='#FF0000'>*</font>"
         str = "<font color='#333333'>"+str.substring(0,str.length()-1)+"</font>" +"<font color='#FF0000'>*</font>";
         titlevpn.setText(Html.fromHtml(str));
@@ -712,8 +714,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         str = getString(R.string.P2pId);
         str = str  +"<font color='#FF0000'>*</font>";
         p2pid.setText(Html.fromHtml(str));
-        str = getString(R.string.Import_OpenVPN_Configuration_Profile);
-        str = "<font color='#333333'>"+ str.substring(0,str.length()-1)+"</font>" +"<font color='#FF0000'>*</font>";
+        str = getString(R.string.Choose_One_Configuration_File);
+        str = "<font color='#333333'>"+ str.substring(0,str.length())+"</font>" +"<font color='#FF0000'>*</font>";
         tvConfiguration.setText(Html.fromHtml(str));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -1312,6 +1314,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 }
                 windowConfigStr += indowConfig.getServerVpnfileName() + ",";
             }
+            tvConfiguration.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
             walletListAdapter.setNewData(windowConfigListTemp);
             addVpnEntity = new VpnEntity();
             addVpnEntity.setP2pId(toxid.getText().toString());

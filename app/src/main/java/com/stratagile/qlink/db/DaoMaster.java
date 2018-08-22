@@ -25,10 +25,10 @@ public class DaoMaster extends AbstractDaoMaster {
         RecordSaveDao.createTable(db, ifNotExists);
         TransactionRecordDao.createTable(db, ifNotExists);
         VpnEntityDao.createTable(db, ifNotExists);
+        VpnServerRecordDao.createTable(db, ifNotExists);
         WalletDao.createTable(db, ifNotExists);
         WifiEntityDao.createTable(db, ifNotExists);
         WifiMyRegisteDao.createTable(db, ifNotExists);
-        VpnServerRecordDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
