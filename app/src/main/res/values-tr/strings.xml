@@ -1403,15 +1403,15 @@ kullanın&lt;/p>
 
     <string name="Import_OpenVPN_Configuration_Profile">OpenVPN Yapılandırma Profilini İçe Aktar</string>
 
-    <string name="private_Key_Password2">özel anahtar Şifresi*</string>
+    <string name="private_Key_Password2">özel anahtar Şifresi</string>
 
-    <string name="Username2">Kullanıcı Adı**</string>
+    <string name="Username2">Kullanıcı Adı</string>
 
     <string name="Save">Kaydet</string>
 
     <string name="USERNAME_AND_PASSWORD_OPTIONAL">KULLANICI ADI VE ŞİFRE(OPSİYONEL)</string>
 
-    <string name="Password2">Şifre**</string>
+    <string name="Password2">Şifre</string>
 
     <string name="Fields_are_optional">** işaretli alanlar opsiyoneldir</string>
 
@@ -1682,5 +1682,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="of_the_Price_Pool">Havuz ödülü</string>
     <string name="Rewards">Ödüller</string>
     <string name="website">web sitesi</string>
+
+
+
+    <string name="there_is_no_free_connection_available_please_create_a_wallet_to_continue">There is no free connection available. Please create a wallet to continue.</string>
+    <string name="P2pId">P2P ID</string>
+    <string name="It_was_unable_to_get_the_files_Please_try_again">It was unable to get the files.Please try again</string>
+    <string name="reload">RELOAD</string>
+    <string name="Turorial">Turorial</string>s
+    <string name="Choose_One_Configuration_File">Choose One Configuration File</string>
+    <string name="Required">* Required</string>
 
 </resources>

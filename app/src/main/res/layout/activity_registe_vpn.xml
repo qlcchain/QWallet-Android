@@ -104,7 +104,7 @@
                                 android:text="@string/Deposit"
                                 android:layout_marginRight="@dimen/x11"
                                 android:layout_marginBottom="@dimen/x11"
-                                android:textSize="@dimen/sp9"
+                                android:textSize="@dimen/sp7"
                                 android:layout_gravity="right"
                                 android:layout_width="wrap_content"
                                 android:textColor="@color/deposi"
@@ -247,15 +247,40 @@
                             android:layout_width="match_parent"
                             android:orientation="vertical"
                             android:layout_height="wrap_content">
-                            <TextView
-                                android:id="@+id/p2pid"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/x20"
-                                android:text="@string/P2pId"
-                                android:textSize="12sp"
-                                android:layout_marginLeft="@dimen/x40"
-                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                >
+                                <TextView
+                                    android:id="@+id/p2pid"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/x20"
+                                    android:text="@string/P2pId"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/color_333"
+                                    android:layout_marginLeft="@dimen/x40"
+                                    />
+                               <View
+                                   android:layout_width="0px"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="1"
+                                   ></View>
+                                <TextView
+                                    android:id="@+id/studyBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/x20"
+                                    android:hint="@string/Turorial"
+                                    android:textColorHint="@color/color_333"
+                                    android:textColor="@color/color_333"
+                                    android:drawableRight="@mipmap/icon_doubt2"
+                                    android:drawablePadding="@dimen/x8"
+                                    android:textSize="15sp"
+                                    android:layout_marginRight="@dimen/x35"
+                                    android:inputType="text" />
+                            </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:orientation="vertical"
@@ -267,6 +292,8 @@
                                     android:id="@+id/toxid"
                                     android:textColor="@color/color_333"
                                     android:layout_width="match_parent"
+                                    android:padding="@dimen/x10"
+                                    android:minHeight="@dimen/x91"
                                     android:layout_height="wrap_content"
                                     android:background="@mipmap/img_rectangular"
                                     />
@@ -274,7 +301,8 @@
                                     android:id="@+id/toxidBtn"
                                     android:layout_width="match_parent"
                                     android:orientation="horizontal"
-                                    android:layout_marginTop="@dimen/x20"
+                                    android:layout_marginTop="@dimen/x32"
+                                    android:layout_marginBottom="@dimen/x40"
                                     android:layout_height="wrap_content">
                                     <LinearLayout
                                         android:layout_width="0px"
@@ -292,7 +320,7 @@
                                             android:gravity="center"
                                             android:textSize="12sp"
                                             android:textStyle="bold"
-                                            android:letterSpacing="0.1"
+                                            android:letterSpacing="0"
                                             android:fontFamily="@font/roboto_regular_q"
                                             android:layout_marginLeft="@dimen/x10"
                                             android:layout_height="wrap_content"
@@ -304,7 +332,8 @@
                                         android:gravity="center_vertical"
                                         android:id="@+id/scan"
                                         android:layout_weight="1"
-                                        android:layout_height="wrap_content">
+                                        android:layout_marginLeft="@dimen/x80"
+                                         android:layout_height="wrap_content">
                                         <ImageView
                                             android:layout_width="@dimen/x32"
                                             android:layout_height="@dimen/x39"
@@ -315,7 +344,7 @@
                                             android:gravity="center"
                                             android:textSize="12sp"
                                             android:textStyle="bold"
-                                            android:letterSpacing="0.1"
+                                            android:letterSpacing="0"
                                             android:fontFamily="@font/roboto_regular_q"
                                             android:layout_marginLeft="@dimen/x10"
                                             android:layout_height="wrap_content"
@@ -330,7 +359,7 @@
                                     android:layout_height="@dimen/x1"/>
                             </LinearLayout>
                             <LinearLayout
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:id="@+id/tragainBtnParent"
                                 android:layout_width="match_parent"
                                 android:orientation="horizontal"
@@ -377,28 +406,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/x40"
-                                android:text="@string/Import_OpenVPN_Configuration_Profile"
+                                android:text="@string/Choose_One_Configuration_File"
                                 android:textSize="@dimen/sp9"
                                 android:paddingLeft="@dimen/x40"
                                 android:paddingRight="@dimen/x52" />
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/configfileParent"
+                            <android.support.v7.widget.RecyclerView
                                 android:layout_width="match_parent"
-                                android:layout_marginLeft="@dimen/x36"
-                                android:layout_height="wrap_content"
-                                android:minWidth="@dimen/x200"
-                                android:layout_marginRight="@dimen/x36"
-                                android:layout_marginTop="@dimen/x33">
-
-                                <android.support.v7.widget.RecyclerView
-                                    android:layout_width="match_parent"
-                                    android:id="@+id/recyclerView"
-                                    android:layout_marginLeft="@dimen/x40"
-                                    android:layout_marginRight="@dimen/x40"
-                                    android:layout_marginTop="@dimen/x30"
-                                    android:layout_height="match_parent">
-                                </android.support.v7.widget.RecyclerView>
-                            </android.support.v7.widget.CardView>
+                                android:id="@+id/recyclerView"
+                                android:layout_marginLeft="@dimen/x40"
+                                android:layout_marginRight="@dimen/x40"
+                                android:layout_marginTop="@dimen/x30"
+                                android:minHeight="@dimen/x100"
+                                android:layout_height="match_parent">
+                            </android.support.v7.widget.RecyclerView>
                         </LinearLayout>
 
                         <RelativeLayout
@@ -569,12 +589,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/Fields_are_optional"
+                            android:text="@string/Required"
+                            android:gravity="center"
                             android:textSize="@dimen/sp9"
                             android:textColor="@color/colorFade"
-                            android:layout_marginTop="@dimen/x30"
-                            android:layout_marginLeft="@dimen/x57"
-                            android:layout_marginBottom="@dimen/x40"
+                            android:layout_marginTop="@dimen/x16"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="@dimen/x32"
+                            android:layout_marginBottom="@dimen/x10"
                             />
 
                         <TextView
