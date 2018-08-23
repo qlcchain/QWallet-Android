@@ -457,10 +457,12 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         if (type == R.string.password) {
             KLog.i("需要用户名和密码");
             Qsdk.getInstance().sendVpnUserAndPasswordReq(connectVpnEntity.getFriendNum(), connectVpnEntity.getVpnName());
+            flag = 0;
             handler.sendEmptyMessage(1);
         } else {
             KLog.i("需要私钥");
             Qsdk.getInstance().sendVpnPrivateKeyReq(connectVpnEntity.getFriendNum(), connectVpnEntity.getVpnName());
+            flag = 0;
             handler.sendEmptyMessage(1);
         }
     }
