@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/content_background_shape">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="#fff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/linearLayout">
+
+        <EditText
+            android:layout_width="@dimen/x650"
+            android:paddingLeft="10dp"
+            android:layout_height="40dp"
+            android:inputType="textPersonName"
+            android:text=""
+            android:ems="10"
+            android:hint="@string/Please_enter_the_content"
+            android:id="@+id/input_Text"
+            android:maxLines="2" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/send_mess"
+            android:src="@mipmap/icon_send"
+            android:layout_marginLeft="5dp"
+            android:layout_height="39dp" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/msg_recycler_view"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        />
+</RelativeLayout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/navigation_shape">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/btn_icon_pressed_vpn"
+            android:layout_marginTop="@dimen/x74"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/CONGRATULATIONS"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/x40"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x40"
+            android:src="@mipmap/tab_checked"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36"
+            android:layout_height="@dimen/dp_10" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="@string/Your_VPN_asset_registration_was_successful"
+            android:layout_marginTop="@dimen/x40"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_25"
+            android:src="@mipmap/tab_checked"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36"
+            android:layout_height="@dimen/dp_10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginTop="@dimen/x40"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/dp_40"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/bg_images_logo"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/x25"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:singleLine="true"
+                    android:maxLength="20"
+                    android:ellipsize="end"
+                    android:textColor="#3fffffff"
+                    android:fontFamily="@font/roboto_regular_q"
+                    android:text="@string/VPN_NAME"
+                    />
+                <TextView
+                    android:id="@+id/tv_vpn"
+                    android:layout_width="wrap_content"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/x20"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_correct"
+                android:layout_alignParentRight="true"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x40"
+            android:src="@mipmap/tab_checked"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36"
+            android:layout_height="@dimen/dp_10" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="@string/Manage_all_your_assets_in_your_wallet_or_go_back_and_register_another_VPN_asset"
+            android:layout_marginTop="@dimen/x40"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_regular_q"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36"
+            android:textSize="12sp"
+            android:fontFamily="@font/vagroun_q"
+            android:background="@drawable/comfirm_button_bg"
+            android:text="@string/continue_to_my_wallet"
+            android:layout_marginTop="@dimen/x60"
+            android:drawableRight="@mipmap/icon_continue"
+            android:paddingRight="@dimen/dp_16"
+            android:textColor="@color/mainColor"
+            android:layout_height="50dp" />
+
+
+        <Button
+            android:id="@+id/bt_continue"
+            android:layout_width="match_parent"
+            android:text="@string/update_my_registration_info"
+            android:paddingLeft="@dimen/dp_16"
+            android:textSize="12sp"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_marginTop="@dimen/x20"
+            android:drawableLeft="@mipmap/icon_back1"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="@dimen/x36"
+            android:background="@drawable/cancal_button_bg"
+            android:textColor="@color/white"
+            android:layout_height="50dp" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

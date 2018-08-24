@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/dp_20"
+    android:layout_marginRight="@dimen/dp_20"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:fontFamily="@font/vagroun_q"
+        android:textColor="@color/white"
+        android:background="@drawable/navigation_shape"
+        android:text=""
+        android:textSize="18sp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:textColorHint="@color/color_999"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginRight="@dimen/x20"
+        android:layout_marginTop="@dimen/x20"
+        android:focusableInTouchMode="true"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:hint="@string/Filename"
+            android:textColorHint="@color/color_999"
+            android:textColor="@color/color_333"
+            android:fontFamily="@font/roboto_regular_q"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginRight="@dimen/x20"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="0px"
+            android:layout_weight="10"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_height="match_parent"
+            android:background="@drawable/aler_left_bt_bg"
+            android:text="@string/cancel" />
+        <View
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="1px" />
+        <Button
+            android:id="@+id/btn_right"
+            android:layout_width="0px"
+            android:layout_weight="10"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            android:layout_height="match_parent"
+            android:background="@drawable/yes_button_bg"
+            android:text="@string/ok_btn_dialog" />
+    </LinearLayout>
+</LinearLayout>

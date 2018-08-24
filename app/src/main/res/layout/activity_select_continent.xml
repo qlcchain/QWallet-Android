@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/navigation_shape"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/choose_a_continent"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:fontFamily="@font/vagroun_q"
+        android:gravity="center"
+        android:letterSpacing="0.1"
+        android:background="@drawable/tablayout_background">
+    </TextView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x650">
+
+        <ImageView
+            android:id="@+id/map_null"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/map_asia"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map_asia" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/map_africa"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map_africa" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/map_australia"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map_australia" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/map_northamerica"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map_northamerica" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/map_southamerica"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map_southamerica" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/map_europe"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x650"
+            android:src="@mipmap/bg_vpn_map_europe" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_continent"
+            android:text=""
+            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"
+            android:fontFamily="@font/vagroun_q"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x53"
+            android:layout_marginLeft="@dimen/x28"
+            android:layout_marginRight="@dimen/x28"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/x40"
+            >
+            <Button
+                android:id="@+id/bt_cancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:letterSpacing="0.1"
+                android:text="@string/cancel"
+                android:fontFamily="@font/vagroun_q"
+                android:background="@drawable/cancal_button_bg"
+                android:textColor="@color/white"
+                android:layout_height="@dimen/dp_43" />
+            <Button
+                android:id="@+id/bt_continue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/dp_6"
+                android:text="@string/continue2"
+                android:letterSpacing="0.1"
+                android:background="@drawable/comfirm_button_bg"
+                android:textColor="@color/mainColor"
+                android:fontFamily="@font/vagroun_q"
+                android:layout_height="@dimen/dp_43" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

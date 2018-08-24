@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+    android:gravity="center"
+  android:orientation="vertical">
+
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@mipmap/img_floating_layer_new_wallet" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:text="@string/qlc_will_be_in_your_wallet"
+      android:fontFamily="@font/vagroundedbt"
+      android:gravity="right"
+      android:textSize="17sp"
+      android:textColor="@color/white"
+      android:layout_height="wrap_content" />
+</LinearLayout>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/adapter_wifi_LinearLayoutContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_click_recycler_item_bg"
+    app:cardCornerRadius="@dimen/x5"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="@dimen/x3"
+    android:layout_marginLeft="@dimen/x32"
+    android:layout_marginRight="@dimen/x32">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x25"
+        android:layout_marginRight="@dimen/x25"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/x15"
+            android:paddingBottom="@dimen/x15"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x128">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_wifi_avater"
+                        android:layout_width="@dimen/x40"
+                        android:layout_height="@dimen/x40"
+                        android:src="@mipmap/logo_wifi_full" />
+
+                    <TextView
+                        android:id="@+id/adapter_wifi_TextViewSSID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x20"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxEms="8"
+                        android:textSize="16sp"
+                        android:text="@string/ssid"
+                        android:fontFamily="@font/roboto_regular_q"
+                        android:textColor="@color/color_333" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x60"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/x10"
+                android:layout_weight="0">
+                <TextView
+                    android:id="@+id/tv_qlc_desc"
+                    android:layout_below="@+id/tv_qlc"
+                    android:fontFamily="@font/roboto_regular_q"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/colorFade"
+                    android:text="@string/Price2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_qlc"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_regular_q"
+                    android:textColor="@color/color_333"
+                    android:textSize="10sp"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/allow_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:text="@string/Users"
+                    android:textColor="@color/colorFade"
+                    android:textSize="@dimen/sp11" />
+                <TextView
+                    android:id="@+id/allow"
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/sp11"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_333" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+        <RelativeLayout
+            android:id="@+id/rl_friend"
+            android:layout_width="@dimen/x90"
+            android:layout_height="@dimen/x90"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_gravity="center_vertical"
+            >
+            <ImageView
+                android:id="@+id/freind_avater"
+                android:layout_width="@dimen/x70"
+                android:layout_height="@dimen/x70"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/img_default_avatar"
+                />
+            <ImageView
+                android:id="@+id/friend_status"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                />
+            <ImageView
+                android:id="@+id/message_status"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x5"
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="@dimen/x70"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_wifi_status"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/x70"
+                android:layout_height="@dimen/x70"
+                android:src="@mipmap/icon_action_one"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

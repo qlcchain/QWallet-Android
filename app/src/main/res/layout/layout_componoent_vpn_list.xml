@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/img_floating_layer_vpn_list" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/x20"
+        android:fontFamily="@font/vagroundedbt"
+        android:text="@string/pick_one_online_vpn_asset_the_little_green_spot_means_online"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+</LinearLayout>

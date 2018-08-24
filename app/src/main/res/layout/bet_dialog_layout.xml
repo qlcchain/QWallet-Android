@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:fontFamily="@font/vagroun_q"
+        android:textColor="@color/white"
+        android:background="@drawable/navigation_shape"
+        android:text="CONFIRM YOU BET"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:textColor="@color/color_333"
+        android:fontFamily="@font/roboto_regular_q"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_weight="1"
+            android:background="@drawable/aler_left_bt_bg"
+            android:textColor="@color/white"
+            android:text="@string/cancel" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="40dp"/>
+
+        <Button
+            android:id="@+id/btn_right"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/vagroun_q"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_height="match_parent"
+            android:background="@drawable/main_color_bt_bg"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:text="@string/confirm" />
+    </LinearLayout>
+</LinearLayout>

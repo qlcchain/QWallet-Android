@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
+
+    <TextView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:gravity="center"
+        android:textColor="@color/color_333"
+        android:textSize="9sp"
+        android:background="@drawable/navigation_shape" />
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/status_bar"
+        android:background="@drawable/navigation_shape"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_avater"
+            android:layout_width="@dimen/x70"
+            android:transitionName="avater"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x42"
+            android:src="@mipmap/img_connected_head_portrait"
+            android:layout_height="@dimen/x70" />
+
+        <ImageView
+            android:id="@+id/my_status"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_below="@id/iv_avater"
+            android:layout_marginTop="-5px"
+            android:layout_alignRight="@+id/iv_avater"
+            android:src="@mipmap/icon_search_red" />
+        <TextView
+            android:letterSpacing="0.1"
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:fontFamily="@font/vagroun_q"
+            android:text="@string/my_wallet"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/x90"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x22"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_wallet"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible"
+                android:layout_width="@dimen/x70"
+                android:layout_height="@dimen/x70"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_free"
+                />
+            <TextView
+                android:id="@+id/tv_free"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="9sp"
+                android:fontFamily="@font/vagroundedbt"
+                android:textColor="@color/white"
+                android:layout_alignBottom="@id/iv_wallet"
+                android:layout_marginBottom="@dimen/x15"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <com.stratagile.qlink.view.NoScrollViewPager
+        android:layout_below="@+id/rl1"
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/rl2"
+        android:layout_height="match_parent">
+
+    </com.stratagile.qlink.view.NoScrollViewPager>
+
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x100">
+        <com.stratagile.qlink.view.BottomNavigationViewEx
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:background="@drawable/navigation_shape"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            app:itemIconTint="@drawable/bottom_navigation_selector"
+            app:itemTextColor="@drawable/bottom_navigation_selector"
+            app:menu="@menu/menu_bottom_navigation" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <View
+                android:id="@+id/view_vpn"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <View
+                android:id="@+id/view_wallet"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <com.stratagile.qlink.view.DownCheckView
+        android:layout_below="@+id/status_bar"
+        android:id="@+id/downCHeckView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

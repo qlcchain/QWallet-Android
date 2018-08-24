@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x126"
+    android:orientation="vertical">
+    <View
+        android:id="@+id/line"
+        android:layout_marginLeft="@dimen/x59"
+        android:layout_marginRight="@dimen/x27"
+        android:background="@color/colorFade"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_one"
+            android:src="@mipmap/icon_trophy"
+            android:layout_width="@dimen/x35"
+            android:layout_marginLeft="@dimen/x14"
+            android:layout_height="@dimen/x35" />
+        <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="@dimen/x35"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="14sp"
+            android:textColor="@color/color_333"
+            android:layout_marginLeft="@dimen/x14"
+            android:gravity="center"
+            android:layout_height="@dimen/x35" />
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/x73"
+            android:layout_marginLeft="@dimen/x14"
+            android:layout_height="@dimen/x73" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/x22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_asset_name"
+                android:fontFamily="@font/vagroundedbt"
+                android:textSize="14sp"
+                android:textColor="@color/color_333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/ll_prized"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_prized_number"
+                    android:textColor="@color/color_333"
+                    android:textSize="12sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_prized"
+                    android:layout_marginLeft="@dimen/x5"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorFade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="0px"
+            android:layout_height="1px"
+            android:layout_weight="1" />
+        <TextView
+            android:id="@+id/tv_connect_count"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="14sp"
+            android:textColor="@color/color_333"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="@dimen/x27"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

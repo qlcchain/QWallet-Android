@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:background="@drawable/navigation_shape">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/navigation_shape"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_avatar"
+            android:layout_marginTop="@dimen/x60"
+            />
+        <TextView
+            android:letterSpacing="0.1"
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/PROFILE_PICTURE"
+            android:textSize="16sp"
+            android:includeFontPadding="false"
+            android:layout_marginTop="@dimen/x40"
+            android:textColor="@color/white"
+            android:fontFamily="@font/vagroun_q"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:src="@mipmap/tab_checked"
+            android:layout_marginTop="@dimen/x35"
+            android:layout_marginLeft="@dimen/x38"
+            android:layout_marginRight="@dimen/x38"
+            android:layout_height="@dimen/x14" />
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x28"
+            android:layout_marginRight="@dimen/x28"
+            android:layout_marginTop="@dimen/x50"
+            android:background="@color/white"
+            android:minHeight="@dimen/x656"
+            app:cardCornerRadius="@dimen/dp_10"
+            app:cardElevation="@dimen/dp_10">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x656"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/iv_picture"
+                    android:layout_width="match_parent"
+                    android:transitionName="avater"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="@dimen/x90"
+                    android:src="@mipmap/img_camera"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x53"
+            android:src="@mipmap/tab_checked"
+            android:layout_marginLeft="@dimen/x28"
+            android:layout_marginRight="@dimen/x28"
+            android:layout_height="@dimen/x14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x53"
+            android:layout_marginLeft="@dimen/x28"
+            android:layout_marginRight="@dimen/x28"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/x40"
+            >
+            <Button
+                android:id="@+id/bt_skip"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/skip"
+                android:fontFamily="@font/vagroun_q"
+                android:background="@drawable/cancal_button_bg"
+                android:textColor="@color/white"
+                android:layout_height="@dimen/dp_43" />
+            <Button
+                android:id="@+id/bt_save"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/dp_6"
+                android:text="@string/save_picture"
+                android:background="@drawable/comfirm_button_bg"
+                android:textColor="@color/mainColor"
+                android:fontFamily="@font/vagroun_q"
+                android:layout_height="@dimen/dp_43" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

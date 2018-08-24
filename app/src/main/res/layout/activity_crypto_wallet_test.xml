@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/bt_create"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/x50"
+        android:text="@string/send"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_wallet_address"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/x160"
+        android:layout_height="wrap_content" />
+</LinearLayout>
