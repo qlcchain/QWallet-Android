@@ -169,7 +169,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     if (!vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && vpnListAdapter.getItem(position).getP2pIdPc() == null) {
                         return;
                     }
-                    if(vpnListAdapter.getItem(position).getP2pIdPc() != null && !vpnListAdapter.getItem(position).getP2pIdPc().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))
+                    if(vpnListAdapter.getItem(position).getOwnerP2pId() != null && !vpnListAdapter.getItem(position).getOwnerP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))
                     {
                         return;
                     }

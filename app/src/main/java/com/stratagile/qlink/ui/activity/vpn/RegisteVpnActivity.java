@@ -81,6 +81,7 @@ import com.stratagile.qlink.fragments.Utils;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.file.FileChooseActivity;
+import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerRegisteVpnComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.RegisteVpnContract;
 import com.stratagile.qlink.ui.activity.vpn.module.RegisteVpnModule;
@@ -920,6 +921,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             addVpnEntity = new VpnEntity();
             addVpnEntity.setP2pId(toxID);
             addVpnEntity.setP2pIdPc(SpUtil.getString(RegisteVpnActivity.this, ConstantValue.P2PID, ""));
+            addVpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
             addVpnEntity.setFriendNum(toxidStr);
             ConstantValue.isWindows = true;
             tragainBtnParent.setVisibility(View.GONE);
@@ -1076,7 +1078,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         overridePendingTransition(0, R.anim.activity_translate_out_1);
     }
 
-    @OnClick({R.id.et_country, R.id.et_configuration, R.id.button1, R.id.button2, R.id.bet_tip, R.id.vpninfo, R.id.paste, R.id.scan, R.id.tragainBtn})
+    @OnClick({R.id.et_country, R.id.et_configuration, R.id.button1, R.id.button2, R.id.bet_tip, R.id.vpninfo, R.id.paste, R.id.scan, R.id.tragainBtn, R.id.studyBtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_country:
@@ -1217,6 +1219,12 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
                 String toxID = toxid.getText().toString();
                 toxid.setText(toxID);
                 break;
+            case R.id.studyBtn:
+                Intent studyActivity = new Intent(this, WebViewActivity.class);
+                studyActivity.putExtra("title", getResources().getString(R.string.Turorial));
+                studyActivity.putExtra("url", "https://github.com/qlcchain/WinQ-Server/blob/master/README.md");
+                startActivity(studyActivity);
+                break;
             default:
                 break;
         }
@@ -1307,6 +1315,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             addVpnEntity = new VpnEntity();
             addVpnEntity.setP2pId(toxid.getText().toString());
             addVpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+            addVpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
             addVpnEntity.setFriendNum(toxid.getText().toString());
             addVpnEntity.setProfileLocalPath(selectProfileLocalPath);
             if (!isUpdate) {
@@ -1323,7 +1332,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             if (profile == null) {
                 ConfigConverter configConverter = new ConfigConverter();
                 Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-                startImportTask(uri, vpnFileName, true);
+                startImportTask(uri, vpnFileName, false);
             }
         }
     }
@@ -2228,6 +2237,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         if (this.vpnEntity.getP2pId() != null && !"".equals(this.vpnEntity.getP2pId())) {
             vpnEntity.setP2pId(this.vpnEntity.getP2pId());
             vpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+            vpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
         } else {
             vpnEntity.setP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
         }
@@ -2264,6 +2274,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         map.put("ipV4Address", vpnEntity.getIpV4Address() == null ? "" : vpnEntity.getIpV4Address());
         map.put("bandWidth", vpnEntity.getBandwidth() == null ? "" : vpnEntity.getBandwidth());
         map.put("hash", vpnEntity.getHash());
+        map.put("ownerP2pId", SpUtil.getString(this, ConstantValue.P2PID, ""));
         if (localVpnEntity.getP2pIdPc() != null) {
             vpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
         }
