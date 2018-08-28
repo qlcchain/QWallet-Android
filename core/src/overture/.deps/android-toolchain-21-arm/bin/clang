@@ -1,7 +1,0 @@
-#!/bin/bash
-if [ "$1" != "-cc1" ]; then
-    `dirname $0`/clang50 -target armv7a-none-linux-androideabi --sysroot `dirname $0`/../sysroot -D__ANDROID_API__=21 "$@"
-else
-    # target/triple already spelled out.
-    `dirname $0`/clang50 "$@"
-fi
