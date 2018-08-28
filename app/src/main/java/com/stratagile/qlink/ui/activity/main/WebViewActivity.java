@@ -47,21 +47,21 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
     @Override
     protected void initData() {
         setTitle(getIntent().getStringExtra("title"));
-//        webView.getSettings().setBuiltInZoomControls(true);
-//        webView.getSettings().setDefaultFontSize(16);
-//        webView.getSettings().setDisplayZoomControls(false);
-//        webView.getSettings().setSupportZoom(true);
-//        webView.getSettings().setLoadWithOverviewMode(true);
-//        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-//        webView.getSettings().setDefaultTextEncodingName("UTF-8");
-//        webView.getSettings().setJavaScriptEnabled(true);
-//        webView.getSettings().setDomStorageEnabled(true);
-//        webView.getSettings().setDomStorageEnabled(true);
-//        webView.getSettings().setAllowContentAccess(true);
-//        webView.getSettings().setAppCacheEnabled(false);
-//        webView.getSettings().setUseWideViewPort(true);
-//        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDefaultFontSize(16);
+        webView.getSettings().setDisplayZoomControls(false);
+        webView.getSettings().setSupportZoom(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webView.getSettings().setDefaultTextEncodingName("UTF-8");
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAllowContentAccess(true);
+        webView.getSettings().setAppCacheEnabled(false);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
         webView.loadUrl(getIntent().getStringExtra("url"));
     }
 

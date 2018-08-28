@@ -49,6 +49,16 @@ public class ChainVpn extends BaseBack {
             private String country;
             private String p2pId;
             private String address;
+            private String ownerP2pId;
+
+            public String getOwnerP2pId() {
+                return ownerP2pId;
+            }
+
+            public void setOwnerP2pId(String ownerP2pId) {
+                this.ownerP2pId = ownerP2pId;
+            }
+
             private int type;
             private double qlc;
             private double registerQlc;

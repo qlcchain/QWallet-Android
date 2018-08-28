@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-    <WebView
+    <com.stratagile.qlink.view.ProgressWebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </WebView>
+    </com.stratagile.qlink.view.ProgressWebView>
 </LinearLayout>

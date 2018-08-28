@@ -244,6 +244,8 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     vpnEntity.setCountry(vpnListBean.getCountry());
                     vpnEntity.setConnsuccessNum(vpnListBean.getConnsuccessNum());
                     vpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
+                    vpnEntity.setOwnerP2pId(vpnListBean.getOwnerP2pId());
+                    vpnEntity.setP2pIdPc(vpnListBean.getOwnerP2pId());
                     if (vpnListBean.getConnectNum() != 0) {
                         vpnEntity.setQlc((float) vpnListBean.getCost());
                         vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
@@ -288,6 +290,8 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 tempVpnEntity.setAvatar(vpnListBean.getImgUrl());
                 tempVpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
                 tempVpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
+                tempVpnEntity.setOwnerP2pId(vpnListBean.getOwnerP2pId());
+                tempVpnEntity.setP2pIdPc(vpnListBean.getOwnerP2pId());
                 toAddList.add(tempVpnEntity);
             }
         }
