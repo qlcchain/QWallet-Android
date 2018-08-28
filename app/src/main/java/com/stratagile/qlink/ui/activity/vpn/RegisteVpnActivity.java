@@ -900,6 +900,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }
         if (qlinkcom.GetP2PConnectionStatus() <= 0) {
             ToastUtil.displayShortToast(getString(R.string.you_offline));
+            tragainBtnParent.setVisibility(View.VISIBLE);
             return;
         }
         showProgressDialog();

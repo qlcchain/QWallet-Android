@@ -122,8 +122,6 @@ android {
         //targetGenDirTest：设置生成单元测试目录
         //generateTests：设置自动生成单元测试用例
     }
-
-
     flavorDimensions "implementation"
     productFlavors {
         noovpn3 {
