@@ -98,9 +98,9 @@ android {
             jniLibs.srcDirs = ['src/main/jniLibs']
             assets.srcDirs = ['src/main/assets', 'build/ovpnassets']
         }
-        normal {
-            java.srcDirs = ["src/ovpn3/java/", openvpn3SwigFiles]
-        }
+//        normal {
+//            java.srcDirs = ["src/ovpn3/java/", openvpn3SwigFiles]
+//        }
 
         noovpn3 {
         }
@@ -129,11 +129,11 @@ android {
             buildConfigField 'boolean', 'openvpn3', 'false'
         }
 
-        normal {
-            dimension "implementation"
-            buildConfigField 'boolean', 'openvpn3', 'true'
-
-        }
+//        normal {
+//            dimension "implementation"
+//            buildConfigField 'boolean', 'openvpn3', 'true'
+//
+//        }
     }
     buildToolsVersion '27.0.3'
 }
