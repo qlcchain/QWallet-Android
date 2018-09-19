@@ -240,28 +240,6 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
 //我们需要判断requestCode是否是我们之前传给startActivityForResult()方法的RESULT_LOAD_IMAGE，并且返回的数据不能为空
         if (requestCode == 0 && resultCode == RESULT_OK && null != data) {
             startPhotoZoom(data.getData());
-//            KLog.i("拿图片返回了.");
-//            Uri uri = data.getData();
-//            KLog.i(uri.getPath());
-//            KLog.i(uri.toString());
-//            String filename = "";
-//            if (uri.getScheme().toString().compareTo("content") == 0) {
-//                Cursor cursor = getContentResolver().query(uri,
-//                        new String[]{MediaStore.Audio.Media.DATA}, null, null, null);
-//                if (cursor.moveToFirst()) {
-//                    filename = cursor.getString(0);
-//                }
-//            } else if (uri.getScheme().toString().compareTo("file") == 0) {
-//                filename = uri.toString();
-//                filename = uri.toString().replace("file://", "");
-//                //替换file://
-//                if (!filename.startsWith("/mnt")) {
-//                    //加上"/mnt"头
-//                    filename += "/mnt";
-//                }
-//            }
-//            KLog.i(filename);
-//            File imageFile = new File(filename);
         } else if (requestCode == 1 && resultCode == RESULT_OK) {
             bitmap = decodeUriAsBitmap(inputUri);
 //            bitmap = rotateBitmapByDegree(bitmap, getBitmapDegree(imageFile.getPath()));
