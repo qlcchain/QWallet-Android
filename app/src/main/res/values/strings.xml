@@ -1038,5 +1038,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="Turorial">Turorial</string>s
     <string name="Choose_One_Configuration_File">Choose One Configuration File</string>
     <string name="Required">* Required</string>
+    <string name="up_to">Up to</string>
+    <string name="testnet_earnings">TestNet Earnings</string>
+    <string name="earn_50_qlc_to_activate_your_asset_ranking">Earn 50+QLC to activate your Asset Ranking</string>
 
 </resources>

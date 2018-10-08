@@ -302,7 +302,7 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
             if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && vpnEntity.getIsInMainWallet()) {//测试网
                 continue;
             }
-            String ownVpnP2pId = vpnEntity.getP2pIdPc() == null ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
+            String ownVpnP2pId = (vpnEntity.getP2pIdPc() == null || "".equals(vpnEntity.getP2pIdPc())) ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
             if (vpnEntity.getP2pId() != null && ownVpnP2pId.equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                 if (!VpnUtil.isInSameNet(vpnEntity)) {
                     continue;

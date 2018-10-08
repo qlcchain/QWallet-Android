@@ -16,16 +16,16 @@ import com.stratagile.qlink.utils.SpUtil;
 
 import java.util.List;
 
-public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRankingBean, BaseViewHolder> {
+public class NewRankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRankingBean, BaseViewHolder> {
     private String currentActStatus = "";
-    private String currentActId = "";
+    private int flagIndex = 0;
 
-    public String getCurrentActId() {
-        return currentActId;
+    public int getFlagIndex() {
+        return flagIndex;
     }
 
-    public void setCurrentActId(String currentActId) {
-        this.currentActId = currentActId;
+    public void setFlagIndex(int flagIndex) {
+        this.flagIndex = flagIndex;
     }
 
     public String getCurrentActStatus() {
@@ -36,8 +36,8 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
         this.currentActStatus = currentActStatus;
     }
 
-    public RankListAdapter(@Nullable List<ActiveList.DataBean.VpnRankingBean> data) {
-        super(R.layout.item_rank_list, data);
+    public NewRankListAdapter(@Nullable List<ActiveList.DataBean.VpnRankingBean> data) {
+        super(R.layout.item_new_rank_list, data);
     }
 
     @Override
@@ -45,6 +45,13 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
         helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.color_333));
         helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.color_333));
         helper.setTextColor(R.id.tv_asset_name, mContext.getResources().getColor(R.color.color_333));
+        if (item.getAssetName() == null || item.getAssetName().equals("")) {
+            helper.setGone(R.id.ll_tip, true);
+            helper.setGone(R.id.ll_content, false);
+        } else {
+            helper.setGone(R.id.ll_tip, false);
+            helper.setGone(R.id.ll_content, true);
+        }
         if (helper.getLayoutPosition() == 0) {
             helper.setVisible(R.id.line, false);
             helper.setGone(R.id.iv_one, true);
@@ -57,18 +64,19 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
                     helper.setGone(R.id.ll_prized, false);
                     break;
                 case "START":
-                    helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, "50%");
-                    helper.setText(R.id.tv_prized, mContext.getString(R.string.of_the_Price_Pool));
+//                    helper.setGone(R.id.ll_prized, true);
+//                    helper.setText(R.id.tv_prized_number, "50%");
+//                    helper.setText(R.id.tv_prized, mContext.getString(R.string.of_the_Price_Pool));
+                    helper.setText(R.id.tv_connect_count, item.getTotalQlc() + "");
                     break;
                 case "END":
-                    helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+//                    helper.setGone(R.id.ll_prized, true);
+                    helper.setText(R.id.tv_connect_count, item.getRewardTotal() + "");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     break;
                 case "PRIZED":
-                    helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+//                    helper.setGone(R.id.ll_prized, true);
+                    helper.setText(R.id.tv_connect_count, item.getRewardTotal() + "");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     break;
                 default:
@@ -87,34 +95,37 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
                     break;
                 case "START":
                     helper.setGone(R.id.ll_prized, false);
+                    if (helper.getLayoutPosition() >= flagIndex) {
+                        helper.setVisible(R.id.tv_rank, false);
+                    } else {
+                        helper.setVisible(R.id.tv_rank, true);
+                    }
+                    helper.setText(R.id.tv_connect_count, item.getTotalQlc() + "");
                     break;
                 case "END":
                     helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+                    helper.setText(R.id.tv_connect_count, item.getRewardTotal() + "");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     break;
                 case "PRIZED":
                     helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+                    helper.setText(R.id.tv_connect_count, item.getRewardTotal() + "");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
-                    if (helper.getLayoutPosition() == mData.size() - 1) {
-                        if (currentActId.equals("32a0cb46e7074333a0c3413853fbb020") || currentActId.equals("4e6fe7fa77ea43a9b2b244df20273c93")) {
-                            helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.mainColor));
-                            helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.mainColor));
-                            helper.setTextColor(R.id.tv_asset_name, mContext.getResources().getColor(R.color.mainColor));
-                        }
-                    } else {
-                        helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.color_333));
-                        helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.color_333));
-                        helper.setTextColor(R.id.tv_asset_name, mContext.getResources().getColor(R.color.color_333));
-                    }
+//                    if (helper.getLayoutPosition() == mData.size() - 1) {
+//                        helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.mainColor));
+//                        helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.mainColor));
+//                        helper.setTextColor(R.id.tv_asset_name, mContext.getResources().getColor(R.color.mainColor));
+//                    } else {
+//                        helper.setTextColor(R.id.tv_rank, mContext.getResources().getColor(R.color.color_333));
+//                        helper.setTextColor(R.id.tv_connect_count, mContext.getResources().getColor(R.color.color_333));
+//                        helper.setTextColor(R.id.tv_asset_name, mContext.getResources().getColor(R.color.color_333));
+//                    }
                     break;
                 default:
                     break;
             }
         }
-        helper.setText(R.id.tv_rank, (helper.getLayoutPosition() + 1) + "")
-                .setText(R.id.tv_connect_count, item.getConnectSuccessNum() + "");
+        helper.setText(R.id.tv_rank, (helper.getLayoutPosition() + 1) + "");
         helper.setText(R.id.tv_asset_name, item.getAssetName());
         ImageView imageView = helper.getView(R.id.iv_avatar);
         if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {

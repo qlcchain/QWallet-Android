@@ -15,6 +15,7 @@ import com.stratagile.qlink.ui.activity.rank.contract.RuleContract;
 import com.stratagile.qlink.ui.activity.rank.module.RuleModule;
 import com.stratagile.qlink.ui.activity.rank.presenter.RulePresenter;
 import com.stratagile.qlink.utils.SpUtil;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.Locale;
 

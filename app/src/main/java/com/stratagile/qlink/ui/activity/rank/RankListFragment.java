@@ -19,9 +19,11 @@ import com.stratagile.qlink.ui.activity.rank.component.DaggerRankListComponent;
 import com.stratagile.qlink.ui.activity.rank.contract.RankListContract;
 import com.stratagile.qlink.ui.activity.rank.module.RankListModule;
 import com.stratagile.qlink.ui.activity.rank.presenter.RankListPresenter;
+import com.stratagile.qlink.ui.adapter.active.NewRankListAdapter;
 import com.stratagile.qlink.ui.adapter.active.RankListAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,6 +46,7 @@ public class RankListFragment extends BaseFragment implements RankListContract.V
 
     private RankViewModel viewModel;
     private RankListAdapter rankListAdapter;
+    private NewRankListAdapter newRankListAdapter;
 
     @Nullable
     @Override
@@ -53,6 +56,7 @@ public class RankListFragment extends BaseFragment implements RankListContract.V
         Bundle mBundle = getArguments();
         viewModel = ViewModelProviders.of(getActivity()).get(RankViewModel.class);
         rankListAdapter = new RankListAdapter(new ArrayList<>());
+        newRankListAdapter = new NewRankListAdapter(new ArrayList<>());
         recyclerView.setAdapter(rankListAdapter);
         setListener();
         return view;
@@ -81,13 +85,45 @@ public class RankListFragment extends BaseFragment implements RankListContract.V
                 if (activeList.getData().getActId().equals(viewModel.getCurrentAct().getValue())) {
                     if (activeList.getData().getActStatus().equals("NEW")) {
                         rankListAdapter.setNewData(new ArrayList<>());
+                        recyclerView.setAdapter(rankListAdapter);
+                        rankListAdapter.setCurrentActStatus(activeList.getData().getActStatus());
+                        rankListAdapter.setCurrentActId(activeList.getData().getActId());
                     } else {
-                        rankListAdapter.setNewData(activeList.getData().getVpnRanking());
+                        if (!activeList.getData().getActStatus().equals("START")) {
+                            rankListAdapter.setNewData(activeList.getData().getVpnRanking());
+                            recyclerView.setAdapter(rankListAdapter);
+                            rankListAdapter.setCurrentActStatus(activeList.getData().getActStatus());
+                            rankListAdapter.setCurrentActId(activeList.getData().getActId());
+                        } else {
+                            if (activeList.getData().getActStatus().equals("START")) {
+                                List<ActiveList.DataBean.VpnRankingBean> list = activeList.getData().getVpnRanking();
+                                ActiveList.DataBean.VpnRankingBean tempVpnRank = new ActiveList.DataBean.VpnRankingBean();
+                                for (int i = 0; i < list.size(); i++) {
+                                    if (list.get(i).getTotalQlc() < 50) {
+                                        if (i == 0) {
+
+                                        } else {
+                                            list.add(i, tempVpnRank);
+                                            newRankListAdapter.setFlagIndex(i);
+                                        }
+                                        break;
+                                    }
+                                }
+                                newRankListAdapter.setNewData(list);
+                                recyclerView.setAdapter(newRankListAdapter);
+                                newRankListAdapter.setCurrentActStatus(activeList.getData().getActStatus());
+                            } else {
+                                newRankListAdapter.setNewData(activeList.getData().getVpnRanking());
+                                recyclerView.setAdapter(newRankListAdapter);
+                                newRankListAdapter.setCurrentActStatus(activeList.getData().getActStatus());
+                            }
+                        }
                     }
-                    rankListAdapter.setCurrentActStatus(activeList.getData().getActStatus());
                 } else {
                     rankListAdapter.setNewData(new ArrayList<>());
                     rankListAdapter.setCurrentActStatus("");
+                    recyclerView.setAdapter(rankListAdapter);
+                    rankListAdapter.setCurrentActId(activeList.getData().getActId());
                 }
             }
         });

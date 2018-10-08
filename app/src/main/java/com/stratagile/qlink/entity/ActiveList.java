@@ -61,6 +61,15 @@ public class ActiveList extends BaseBack {
              */
 
             private double rewardTotal;
+            private double totalQlc;
+
+            public double getTotalQlc() {
+                return totalQlc;
+            }
+
+            public void setTotalQlc(double totalQlc) {
+                this.totalQlc = totalQlc;
+            }
 
             public double getRewardTotal() {
                 return rewardTotal;

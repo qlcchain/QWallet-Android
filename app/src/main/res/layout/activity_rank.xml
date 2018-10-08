@@ -34,6 +34,7 @@
             android:layout_weight="1"
             />
         <TextView
+            android:id="@+id/miaoshu_leixing"
             android:layout_width="@dimen/x350"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"

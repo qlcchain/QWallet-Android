@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/iv_1"
             android:layout_width="match_parent"
-            android:scaleType="fitXY"
+            android:scaleType="matrix"
             android:src="@mipmap/img_activities"
             android:layout_height="wrap_content" />
         <ImageView
