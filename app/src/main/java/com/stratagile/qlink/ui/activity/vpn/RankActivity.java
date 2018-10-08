@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +13,6 @@ import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -60,6 +57,8 @@ public class RankActivity extends BaseActivity implements RankContract.View {
     ViewPager viewPager;
     CardFragmentPagerAdapter cardFragmentPagerAdapter;
     ShadowTransformer mFragmentCardShadowTransformer;
+    @BindView(R.id.miaoshu_leixing)
+    TextView miaoshuLeixing;
 
     private RankViewModel viewModel;
 
@@ -124,6 +123,11 @@ public class RankActivity extends BaseActivity implements RankContract.View {
             public void onPageSelected(int position) {
                 viewModel.getCurrentAct().postValue(((CardFragment) cardFragmentPagerAdapter.getItem(position)).getActId());
 //                KLog.i(((CardFragment)cardFragmentPagerAdapter.getItem(position)).getActId());
+                if (viewModel.getActive().getValue().getData().getActs().get(position).getActStatus().equals("START")) {
+                    miaoshuLeixing.setText(getResources().getString(R.string.testnet_earnings));
+                } else {
+                    miaoshuLeixing.setText(getResources().getString(R.string.number_of_successful_connnections));
+                }
             }
 
             @Override
@@ -146,6 +150,19 @@ public class RankActivity extends BaseActivity implements RankContract.View {
                 mFragmentCardShadowTransformer = new ShadowTransformer(viewPager, cardFragmentPagerAdapter);
                 mFragmentCardShadowTransformer.enableScaling(true);
                 viewPager.setPageTransformer(false, mFragmentCardShadowTransformer);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(200);
+                            if (active.getData().getActs().get(active.getData().getActs().size() - 1).getActStatus().equals("START")) {
+                                viewPager.setCurrentItem(active.getData().getActs().size() - 1, false);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         });
     }

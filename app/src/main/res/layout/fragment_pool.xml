@@ -8,9 +8,18 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
         android:layout_marginTop="@dimen/x30"
         android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:fontFamily="@font/vagroundedbt"
+            android:text="@string/up_to"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_marginRight="@dimen/x10"
+            />
         <TextView
             android:id="@+id/tv_qlc_count"
             android:layout_width="wrap_content"
@@ -24,12 +33,16 @@
             android:shadowDy="0"
             android:textColor="@color/white"
             android:text="2300" />
-        <ImageView
-            android:layout_width="@dimen/x50"
-            android:layout_height="@dimen/x50"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:layout_marginLeft="@dimen/x14"
-            android:src="@mipmap/icon_winq"
+            android:textSize="20sp"
+            android:fontFamily="@font/vagroundedbt"
+            android:text="@string/qlc"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/x10"
             />
     </LinearLayout>
     <TextView

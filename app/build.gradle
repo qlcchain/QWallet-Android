@@ -40,9 +40,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 58
+        versionCode 61
         multiDexEnabled true
-        versionName "1.2.10 release"
+        versionName "1.2.13 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -98,9 +98,9 @@ android {
             jniLibs.srcDirs = ['src/main/jniLibs']
             assets.srcDirs = ['src/main/assets', 'build/ovpnassets']
         }
-        normal {
-            java.srcDirs = ["src/ovpn3/java/", openvpn3SwigFiles]
-        }
+//        normal {
+//            java.srcDirs = ["src/ovpn3/java/", openvpn3SwigFiles]
+//        }
 
         noovpn3 {
         }
@@ -129,11 +129,11 @@ android {
             buildConfigField 'boolean', 'openvpn3', 'false'
         }
 
-        normal {
-            dimension "implementation"
-            buildConfigField 'boolean', 'openvpn3', 'true'
-
-        }
+//        normal {
+//            dimension "implementation"
+//            buildConfigField 'boolean', 'openvpn3', 'true'
+//
+//        }
     }
     buildToolsVersion '27.0.3'
 }
@@ -250,7 +250,7 @@ dependencies {
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 //    implementation 'com.google.firebase:firebase-ads:15.0.1'
     implementation 'com.google.firebase:firebase-config:16.0.0'
-    implementation ('com.google.firebase:firebase-core:16.0.0') {
+    implementation('com.google.firebase:firebase-core:16.0.0') {
         exclude group: 'com.android.support'
     }
     implementation 'org.web3j:core:3.3.1-android'
@@ -263,7 +263,6 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.lifecycle:extensions:$arch_version"
 
-
 //    shadowsocks vpn
 //    implementation project(':core')
     implementation files('libs/core-release.aar')
@@ -273,7 +272,7 @@ dependencies {
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.4'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
     implementation 'net.glxn.qrgen:android:2.0'
-    implementation ('xyz.belvi.mobilevision:barcodescanner:2.0.3') {
+    implementation('xyz.belvi.mobilevision:barcodescanner:2.0.3') {
         exclude group: 'com.android.support'
     }
     androidTestImplementation "android.arch.work:work-testing:$workVersion"
