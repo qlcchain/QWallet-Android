@@ -38,6 +38,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.VpnProfile;
+import com.stratagile.qlink.activities.ConfigConverter;
 import com.stratagile.qlink.activities.DisconnectVPN;
 import com.stratagile.qlink.api.ExternalAppDatabase;
 import com.stratagile.qlink.application.AppConfig;
@@ -61,13 +62,16 @@ import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
+import com.stratagile.qlink.entity.eventbus.ServerVpnSendComplete;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.VpnRegisterSuccess;
 import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
 import com.stratagile.qlink.entity.im.Message;
 import com.stratagile.qlink.entity.vpn.VpnPrivateKeyRsp;
+import com.stratagile.qlink.entity.vpn.VpnServerFileRsp;
 import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordRsp;
+import com.stratagile.qlink.entity.vpn.WindowConfig;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
 import com.stratagile.qlink.guideview.GuideConstantValue;
@@ -89,6 +93,7 @@ import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.VpnSpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.vpn.VpnListAdapter;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
@@ -104,6 +109,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -169,8 +175,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     if (!vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && vpnListAdapter.getItem(position).getP2pIdPc() == null) {
                         return;
                     }
-                    if(vpnListAdapter.getItem(position).getOwnerP2pId() != null && !vpnListAdapter.getItem(position).getOwnerP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))
-                    {
+                    if (vpnListAdapter.getItem(position).getOwnerP2pId() != null && !vpnListAdapter.getItem(position).getOwnerP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                         return;
                     }
                     if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
@@ -727,12 +732,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleConfigFile(VpnSendEnd vpnSendEnd) {
-        KLog.i("c层的vpn配置文件传输完毕了，");
-        if(ConstantValue.isWindows)//注册电脑资产
-        {
-            return;
-        }
-        mPresenter.vpnProfileSendComplete();
+//        KLog.i("c层的vpn配置文件传输完毕了，");
+//        if (ConstantValue.isWindows)//注册电脑资产
+//        {
+//            return;
+//        }
+//        mPresenter.vpnProfileSendComplete();
     }
 
     /**
@@ -927,7 +932,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
             if (resultCode == Activity.RESULT_OK) {
                 KLog.i("开始检查配置文件的类型");
-                if (connectVpnEntity != null  && connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                if (connectVpnEntity != null && connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                     mTransientCertOrPCKS12PW = connectVpnEntity.getPrivateKeyPassword();
                     mResult.mUsername = connectVpnEntity.getUsername();
                     mTransientAuthPW = connectVpnEntity.getPassword();
@@ -960,15 +965,14 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     VpnStatus.logError(R.string.nought_alwayson_warning);
-                    if(connectVpnEntity  != null  && !isReport)
-                    {
-                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
-                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                    if (connectVpnEntity != null && !isReport) {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
                         Map<String, Object> map = new HashMap<>();
-                        map.put("vpnName",connectVpnEntity.getVpnName() );
-                        map.put("status",0 );
-                        map.put("mark",VersionUtil.getAppVersionName(getActivity()) + " If you did not get a VPN confirmation dialog" );
-                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_If you did not get a VPN confirmation dialog" );
+                        map.put("vpnName", connectVpnEntity.getVpnName());
+                        map.put("status", 0);
+                        map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " If you did not get a VPN confirmation dialog");
+                        KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_If you did not get a VPN confirmation dialog");
                         mPresenter.reportVpnInfo(map);
                         isReport = true;
                     }
@@ -1238,8 +1242,44 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 //            readFile(configFile);
         } else {
         }
+        //todo
         Qsdk.getInstance().sendVpnFileRequest(connectVpnEntity.getFriendNum(), connectVpnEntity.getProfileLocalPath(), connectVpnEntity.getVpnName());
-//        mPresenter.handleSendMessage(1);
+        tempDataString = "";
+        VpnServerFileRspList.clear();
+    }
+
+    private String tempDataString = "";
+    List<WindowConfig> WindowConfigList = new ArrayList<>();
+    List<VpnServerFileRsp> VpnServerFileRspList = new ArrayList<>();
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleConfigFileComplete(ServerVpnSendComplete serverVpnSendComplete) {
+        if (progressDialog.isShow()) {
+            if (serverVpnSendComplete.getData() != null) {
+                tempDataString += serverVpnSendComplete.getData().getFileData();
+                if (serverVpnSendComplete.getData().getStatus() == 1) {
+                    serverVpnSendComplete.getData().setFileData(tempDataString);
+                    serverVpnSendComplete.getData().setStatus(1);
+                    VpnServerFileRspList.add(serverVpnSendComplete.getData());
+                    tempDataString = "";
+                }
+            } else {
+                try {
+                    VpnServerFileRsp VpnServerFileRsp = VpnServerFileRspList.get(0);
+                    String path = VpnServerFileRsp.getVpnfileName();
+                    String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
+                    FileUtil.saveVpnServerData(vpnFileName, VpnServerFileRsp.getFileData());
+                    mPresenter.vpnProfileSendComplete();
+                } catch (Exception e) {
+                    closeProgressDialog();
+                    e.printStackTrace();
+                    ToastUtil.displayShortToast("config file error");
+                }
+            }
+        } else {
+            tempDataString = "";
+            VpnServerFileRspList.clear();
+        }
     }
 
 }

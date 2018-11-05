@@ -1,0 +1,74 @@
+{
+  "msg": "Request success",
+  "code": "0",
+  "data": {
+    "operations": [
+      {
+        "timestamp": 1527143605,
+        "transactionHash": "0x67d6eba30a250a080018426acd1d4aff033d3aae739bbf0c9237aac04f98f5a5",
+        "tokenInfo": {
+          "address": "0x7f686b69565522ed7fb05c2ee1406a3a0b45fcaa",
+          "name": "MyTokenC",
+          "decimals": "3",
+          "symbol": "YYC",
+          "totalSupply": "1000000000000",
+          "owner": "0xfdae196edc10a085d95cf157c658d526fb94e4ae",
+          "txsCount": 15,
+          "transfersCount": 10,
+          "lastUpdated": 1527143709,
+          "issuancesCount": 0,
+          "holdersCount": 8,
+          "price": false
+        },
+        "type": "transfer",
+        "value": "10000",
+        "from": "0x980e7917c610e2c2d4e669c920980cb1b915bbc7",
+        "to": "0x980e7917c610e2c2d4e669c920980cb1b915bbc7"
+      },
+      {
+        "timestamp": 1526980654,
+        "transactionHash": "0x6af013f521e902416cb5773bd250db53e18235391c8461c17d55e8e86aa9f9fc",
+        "tokenInfo": {
+          "address": "0x7f686b69565522ed7fb05c2ee1406a3a0b45fcaa",
+          "name": "MyTokenC",
+          "decimals": "3",
+          "symbol": "YYC",
+          "totalSupply": "1000000000000",
+          "owner": "0xfdae196edc10a085d95cf157c658d526fb94e4ae",
+          "txsCount": 15,
+          "transfersCount": 10,
+          "lastUpdated": 1527143709,
+          "issuancesCount": 0,
+          "holdersCount": 8,
+          "price": false
+        },
+        "type": "transfer",
+        "value": "1000",
+        "from": "0x980e7917c610e2c2d4e669c920980cb1b915bbc7",
+        "to": "0x980e7917c610e2c2d4e669c920980cb1b915bbc7"
+      },
+      {
+        "timestamp": 1526476695,
+        "transactionHash": "0x845eb89a919de467fb291caa600fad6c5da82764f3fbba9267ae89c080be510d",
+        "tokenInfo": {
+          "address": "0x7f686b69565522ed7fb05c2ee1406a3a0b45fcaa",
+          "name": "MyTokenC",
+          "decimals": "3",
+          "symbol": "YYC",
+          "totalSupply": "1000000000000",
+          "owner": "0xfdae196edc10a085d95cf157c658d526fb94e4ae",
+          "txsCount": 15,
+          "transfersCount": 10,
+          "lastUpdated": 1527143709,
+          "issuancesCount": 0,
+          "holdersCount": 8,
+          "price": false
+        },
+        "type": "transfer",
+        "value": "5555000",
+        "from": "0xfdae196edc10a085d95cf157c658d526fb94e4ae",
+        "to": "0x980e7917c610e2c2d4e669c920980cb1b915bbc7"
+      }
+    ]
+  }
+}

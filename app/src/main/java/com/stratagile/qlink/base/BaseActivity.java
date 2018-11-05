@@ -50,6 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     public RelativeLayout relativeLayout_root;
     public TextView view;
     public TextView title;
+    public int mainColor = 0;
     /**
      * 公共的加载进度弹窗
      */
@@ -67,6 +68,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             Timber.plant(new Timber.DebugTree());
         }
         getWindow().setBackgroundDrawable(null);
+        if (mainColor == 0) {
+            mainColor = R.color.mainColor;
+        }
         // 经测试在代码里直接声明透明状态栏更有效
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
@@ -245,11 +249,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        title = toolbar.findViewById(R.id.title);
+        title = findViewById(R.id.title);
         relativeLayout_root = (RelativeLayout) findViewById(R.id.root_rl);
         view = findViewById(R.id.view);
+        view.setBackgroundColor(getResources().getColor(mainColor));
+        if (mainColor == R.color.white) {
+            toolbar.setBackgroundColor(getResources().getColor(mainColor));
+            title.setTextColor(getResources().getColor(R.color.color_1F314A));
+            toolbar.setNavigationIcon(getResources().getDrawable(R.mipmap.icon_back_dark));
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+            }
+        } else {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
+        }
         view.setLayoutParams(new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) (UIUtils.getStatusBarHeight(this))));
-        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
             view.setBackgroundColor(getResources().getColor(R.color.color_f51818));
             view.setText(getString(R.string.testnet));
         }
@@ -257,14 +272,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
 //        toolbar.setLayoutParams(rlp);
         toolbar.setTitle("");
         relativeLayout_root.setLayoutParams(new FitRelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) ((UIUtils.getStatusBarHeight(this)) + getResources().getDimension(R.dimen.x110))));
-        if (toolbar != null) {
+        if (toolbar != null && !needFront) {
             setSupportActionBar(toolbar);
         }
     }
 
     @Override
     public void setTitle(CharSequence text) {
-        title.setText(text.toString().toUpperCase(Locale.ENGLISH) + "  ");
+        title.setText(text.toString() + "  ");
     }
 
     @Override

@@ -4,7 +4,8 @@
     <string name="activity_splash_intro">The World\'s First Decentralized Mobile Network</string>
     <string name="powered">Powered by Blockchain</string>
     <string name="apploading">loading...</string>
-    <string name="wallet">WALLET</string>
+    <string name="wallet">Wallet</string>
+    <string name="market">Markets</string>
     <string name="vpn">VPN</string>
     <string name="wifi">WIFI</string>
     <string name="transaction">transaction</string>
@@ -518,8 +519,8 @@
 
     <string name="facebook_app_id">180044462708724</string>
     <string name="fb_login_protocol_scheme">fb180044462708724</string>
-    <string name="my_wallet">MY WALLET</string>
-    <string name="next">next</string>
+    <string name="my_wallet">Wallets</string>
+    <string name="next">Next</string>
     <string name="finish">finish</string>
     <string name="invalid_Private_Key_Password_Try_gain">invalid Private Key Password. Try again</string>
     <string name="Username_username_or_password_error">(Username) username or password error</string>
@@ -529,7 +530,7 @@
     <string name="seize">seize</string>
     <string name="asset">asset</string>
     <string name="THIS_s_NAME_HAS_ALREADY_BEEN_REGISTERED">THIS  %s NAME HAS ALREADY BEEN REGISTERED</string>
-    <string name="if_some">If someone else wants to grab your %s name, they can by paying up to total QLC you earned by sharing this asset. You will then lose the ownership of the %s name, but you will receive your bet and QLC paid by someone who wants to takeover your %s name.</string>
+    <string name="if_some">If someone else wants to grab your %1$s name, they can by paying up to total QLC you earned by sharing this asset. You will then lose the ownership of the %2$s name, but you will receive your bet and QLC paid by someone who wants to takeover your %3$s name.</string>
     <string name="Disconnect_VPN">Disconnect VPN</string>
     <string name="Are_you_sure_to_disconnect">Are you sure to disconnect?</string>
     <string name="PROFILE_PICTURE">PROFILE PICTURE</string>
@@ -601,10 +602,10 @@
     <string name="firend_is_not_online">firend is not online</string>
     <string name="Coming_soon">Coming soon</string>
     <string name="eth_wallet">eth wallet</string>
-    <string name="import_eth_wallet">import eth wallet</string>
+    <string name="import_eth_wallet">Import Wallet</string>
     <string name="SELECT_PROFILE">SELECT PROFILE</string>
     <string name="REGISTER_YOUR_VPN">REGISTER YOUR VPN</string>
-    <string name="settings">settings</string>
+    <string name="settings">Settings</string>
     <string name="VPN_DETAIL">VPN DETAIL</string>
     <string name="VPN">VPN</string>
     <string name="SELECT_WALLET">SELECT WALLET</string>
@@ -684,7 +685,7 @@
     <string name="yes_send_tip">yes, send tip</string>
     <string name="Enter_private_key_to_import_your_wallet">Enter_private key to import your wallet:</string>
     <string name="Private_key">Private key</string>
-    <string name="import2">import</string>
+    <string name="import2">Import</string>
     <string name="No_Wallet">No Wallet</string>
     <string name="Whoops_You_have_no_wallet_yet">Whoops!\n You have no wallet yet</string>
     <string name="create_new_wallet">create new wallet</string>
@@ -898,7 +899,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="port_transproxy">Transproxy port</string>
 
     <string name="remote_dns">Remote DNS</string>
-    <string name="traffic">%s↑\t%s↓</string>
+    <string name="traffic">%1$s↑\t%2$s↓</string>
     <string name="stat_summary">Sent: \t\t\t\t\t%3$s\t↑\t%1$s\nReceived: \t%4$s\t↓\t%2$s</string>
     <string name="speed">%s/s</string>
     <string name="connection_test_testing">Testing…</string>
@@ -1041,5 +1042,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="up_to">Up to</string>
     <string name="testnet_earnings">TestNet Earnings</string>
     <string name="earn_50_qlc_to_activate_your_asset_ranking">Earn 50+QLC to activate your Asset Ranking</string>
+
+    <string name="openvpn3_nostatickeys" ></string>
+    <string name="openvpn3_pkcs12" ></string>
+    <string name="ics_openvpn_log_file" ></string>
+    <string name="app">WINQ per Android</string>
+    <string name="create">Create</string>
+
+    <string name="ETH_JAXX_TYPE">m/44\'/60\'/0\'/0/0 Default</string>
+    <string name="ETH_LEDGER_TYPE">m/44\'/60\'/0\'/0 Ledger</string>
+    <string name="ETH_CUSTOM_TYPE">m/44\'/60\'/1\'/0/0 Custom Path</string>
 
 </resources>

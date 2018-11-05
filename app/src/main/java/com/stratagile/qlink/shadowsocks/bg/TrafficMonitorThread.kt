@@ -22,7 +22,6 @@ package com.stratagile.qlink.shadowsocks.bg
 
 import android.net.LocalSocket
 //import com.github.shadowsocks.App.Companion.app
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.utils.printLog
 //import com.github.shadowsocks.utils.printLog

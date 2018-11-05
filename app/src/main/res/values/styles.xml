@@ -44,8 +44,8 @@
     </style>
 
     <style name="TabLayoutTextStyle">
-        <item name="android:textSize">10sp</item>
-        <item name="android:fontFamily">@font/vagroun_q</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
     <style name="blinkt.baseTheme" parent="android:Theme.DeviceDefault.Light" />
     <style name="blinkt" parent="blinkt.baseTheme" />

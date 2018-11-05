@@ -4,21 +4,25 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x10"
+        android:background="@color/color_f8f9fb"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x78"
-        android:background="@drawable/tablayout_background"
+        android:background="@color/white"
         app:tabIndicatorColor="@color/mainColor"
         app:tabGravity="fill"
         app:tabIndicatorHeight="@dimen/x6"
         app:tabTextAppearance="@style/TabLayoutTextStyle"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/mainColorThree"/>
+        app:tabSelectedTextColor="@color/mainColor"
+        app:tabTextColor="@color/color_1F314A"/>
 
     <com.stratagile.qlink.view.ParentNoDispatchViewpager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/content_background_shape"/>
+        android:background="@color/white"/>
 </LinearLayout>

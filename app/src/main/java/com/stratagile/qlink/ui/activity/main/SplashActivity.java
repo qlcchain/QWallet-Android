@@ -46,7 +46,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     protected void initView() {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Glide.with(this)
                 .load(R.mipmap.splash_img)
                 .into(activitySplashImageViewLogo);

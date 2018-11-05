@@ -81,10 +81,11 @@ public class CreateWalletPasswordActivity extends BaseActivity implements Create
     protected void initView() {
         setContentView(R.layout.activity_create_wallet_password);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+
                 super.handleMessage(msg);
 
                 switch (msg.what) {

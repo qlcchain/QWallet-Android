@@ -721,7 +721,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
         Builder builder = new Builder();
 
-        VpnStatus.logInfo(R.string.last_openvpn_tun_config);
+//        VpnStatus.logInfo(R.string.last_openvpn_tun_config);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mProfile.mAllowLocalLAN) {
             allowAllAFFamilies(builder);

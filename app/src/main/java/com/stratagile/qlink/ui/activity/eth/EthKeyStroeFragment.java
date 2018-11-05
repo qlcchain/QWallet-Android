@@ -14,10 +14,12 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.data.FullWallet;
+import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthKeyStroeComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthKeyStroeContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthKeyStroeModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthKeyStroePresenter;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.utils.eth.OwnWalletUtils;
 import com.stratagile.qlink.utils.eth.WalletStorage;
 
@@ -52,12 +54,12 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     @Inject
     EthKeyStroePresenter mPresenter;
     private static final String ARG_TYPE = "arg_type";
-    @BindView(R.id.et_keystroe)
+    @BindView(R.id.etKeystore)
     EditText etKeystroe;
     @BindView(R.id.et_password)
     EditText etPassword;
-    @BindView(R.id.tv_import)
-    TextView tvImport;
+    @BindView(R.id.btImport)
+    TextView btImport;
 
     private static ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
@@ -113,7 +115,7 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         super.onDestroyView();
     }
 
-    @OnClick(R.id.tv_import)
+    @OnClick(R.id.btImport)
     public void onViewClicked() {
         if (etKeystroe.getText().toString().equals("")) {
             return;
@@ -132,28 +134,32 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
      * @return
      */
     public void loadWalletByKeystore(String keystore, String pwd) {
-        Credentials credentials = null;
-        WalletFile walletFile = null;
-        try {
-            walletFile = objectMapper.readValue(keystore, WalletFile.class);
-
-//            WalletFile walletFile = new Gson().fromJson(keystore, WalletFile.class);
-            credentials = Credentials.create(Wallet.decrypt(pwd, walletFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CipherException e) {
-//            ToastUtils.showToast(R.string.load_wallet_by_official_wallet_keystore_input_tip);
-            e.printStackTrace();
-        }
-        KLog.i(credentials.getEcKeyPair().getPrivateKey());
-        try {
-            OwnWalletUtils.generateWalletFile(pwd, credentials.getEcKeyPair(), new File(AppConfig.getInstance().getFilesDir(), ""), true);
-            WalletStorage.getInstance(getActivity()).add(new FullWallet(walletFile.getAddress(), walletFile.getAddress()), getActivity());
-        } catch (CipherException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        EthWallet wallet;
+        wallet = ETHWalletUtils.loadWalletByKeystore(keystore, pwd);
+        KLog.i(wallet.toString());
+        AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(wallet);
+//        Credentials credentials = null;
+//        WalletFile walletFile = null;
+//        try {
+//            walletFile = objectMapper.readValue(keystore, WalletFile.class);
+//
+////            WalletFile walletFile = new Gson().fromJson(keystore, WalletFile.class);
+//            credentials = Credentials.create(Wallet.decrypt(pwd, walletFile));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (CipherException e) {
+////            ToastUtils.showToast(R.string.load_wallet_by_official_wallet_keystore_input_tip);
+//            e.printStackTrace();
+//        }
+//        KLog.i(credentials.getEcKeyPair().getPrivateKey());
+//        try {
+//            OwnWalletUtils.generateWalletFile(pwd, credentials.getEcKeyPair(), new File(AppConfig.getInstance().getFilesDir(), ""), true);
+//            WalletStorage.getInstance(getActivity()).add(new FullWallet(walletFile.getAddress(), walletFile.getAddress()), getActivity());
+//        } catch (CipherException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

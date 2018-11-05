@@ -29,7 +29,6 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 //import com.github.shadowsocks.App.Companion.app
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.database.migration.RecreateSchemaMigration
 import com.stratagile.qlink.shadowsocks.utils.Key

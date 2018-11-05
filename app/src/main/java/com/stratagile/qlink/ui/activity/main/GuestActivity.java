@@ -105,7 +105,7 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
     protected void initView() {
         setContentView(R.layout.activity_guest);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toolbar.setTitle("");
         toolbar.setVisibility(View.GONE);
         wowo.setAdapter(WoWoViewPagerAdapter.builder()

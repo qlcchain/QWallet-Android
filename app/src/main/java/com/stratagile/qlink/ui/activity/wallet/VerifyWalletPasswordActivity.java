@@ -90,7 +90,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
     protected void initView() {
         setContentView(R.layout.activity_verify_wallet_password);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override

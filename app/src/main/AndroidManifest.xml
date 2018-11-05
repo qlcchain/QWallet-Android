@@ -393,6 +393,16 @@
                 <data android:scheme="ss" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.wallet.SelectWalletTypeActivity" />
+        <activity android:name=".ui.activity.eth.EthWalletCreatedActivity" />
+        <activity android:name=".ui.activity.eth.EthMnemonicbackupActivity" />
+        <activity android:name=".ui.activity.eth.EthMnemonicShowActivity" />
+        <activity android:name=".ui.activity.wallet.AllWalletTokenActivity" />
+        <activity android:name=".ui.activity.eth.EthWalletDetailActivity" />
+        <activity android:name=".ui.activity.setting.CurrencyUnitActivity" />
+        <activity android:name=".ui.activity.wallet.EthTransactionRecordActivity" />
+        <activity android:name=".ui.activity.wallet.WalletQRCodeActivity" />
+        <activity android:name=".ui.activity.wallet.EthTransferActivity" />
 
         <activity-alias
             android:exported="true"

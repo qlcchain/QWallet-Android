@@ -36,7 +36,6 @@ import com.github.shadowsocks.aidl.IShadowsocksServiceCallback
 //import com.github.shadowsocks.aidl.IShadowsocksServiceCallback
 //import com.github.shadowsocks.preference.DataStore
 import com.stratagile.qlink.R
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.ShadowsocksConnection
 import com.stratagile.qlink.shadowsocks.preference.DataStore

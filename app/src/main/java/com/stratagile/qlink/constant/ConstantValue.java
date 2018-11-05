@@ -5,6 +5,7 @@ import android.net.wifi.WifiInfo;
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.im.Message;
 
@@ -132,6 +133,15 @@ public class ConstantValue {
     public static MainAddress.DataBean mainAddressData;
 
     public static String lastRestart = "lastRestart";//上一次自动重启时间
+
+    public static String ETH_JAXX_TYPE = "m/44'/60'/0'/0/0";
+    public static String ETH_LEDGER_TYPE = "m/44'/60'/0'/0";
+    public static String ETH_CUSTOM_TYPE = "m/44'/60'/1'/0/0";
+
+    public static String currencyUnit = "currencyUnit";
+
+    public static CurrencyBean currencyBean;
+
     /**
      * 本次进入app在下载的头像的名字
      */

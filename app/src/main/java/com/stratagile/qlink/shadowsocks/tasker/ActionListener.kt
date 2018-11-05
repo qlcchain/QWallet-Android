@@ -23,7 +23,6 @@ package com.stratagile.qlink.shadowsocks.tasker
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.database.ProfileManager
 

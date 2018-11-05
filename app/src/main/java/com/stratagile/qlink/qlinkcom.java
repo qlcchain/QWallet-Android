@@ -443,24 +443,24 @@ public class qlinkcom {
     }
 
     public void CallFileMessageProcess(String filename, int filesize, String friendnum) {
-        ConstantValue.isLoadingImg = false;
-        KLog.i("c层的文件传输完毕:" + filename);
-        if (filename.contains(".jpg")) {
-            KLog.i("图片文件发送完毕");
-            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
-            for (WifiEntity wifiEntity : wifiEntityList) {
-                if (wifiEntity.getFreindNum().equals(friendnum)) {
-                    wifiEntity.setIsLoadingAvater(false);
-                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                    break;
-                }
-            }
-        } else {
-            KLog.i("vpn文件发送完毕");
-            VpnSendEnd vpnSendEnd = new VpnSendEnd();
-            vpnSendEnd.setProfileLocalPath(filename);
-            EventBus.getDefault().post(vpnSendEnd);
-        }
+//        ConstantValue.isLoadingImg = false;
+//        KLog.i("c层的文件传输完毕:" + filename);
+//        if (filename.contains(".jpg")) {
+//            KLog.i("图片文件发送完毕");
+//            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
+//            for (WifiEntity wifiEntity : wifiEntityList) {
+//                if (wifiEntity.getFreindNum().equals(friendnum)) {
+//                    wifiEntity.setIsLoadingAvater(false);
+//                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
+//                    break;
+//                }
+//            }
+//        } else {
+//            KLog.i("vpn文件发送完毕");
+//            VpnSendEnd vpnSendEnd = new VpnSendEnd();
+//            vpnSendEnd.setProfileLocalPath(filename);
+//            EventBus.getDefault().post(vpnSendEnd);
+//        }
     }
 
     /**

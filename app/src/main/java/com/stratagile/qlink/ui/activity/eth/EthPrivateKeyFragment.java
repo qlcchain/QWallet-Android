@@ -12,11 +12,13 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.data.FullWallet;
+import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthPrivateKeyComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthPrivateKeyContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthPrivateKeyModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthPrivateKeyPresenter;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.utils.eth.OwnWalletUtils;
 import com.stratagile.qlink.utils.eth.WalletStorage;
 
@@ -47,12 +49,10 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
     EthPrivateKeyPresenter mPresenter;
 
     private static final String ARG_TYPE = "arg_type";
-    @BindView(R.id.et_private_key)
+    @BindView(R.id.etPrivateKey)
     EditText etPrivateKey;
-    @BindView(R.id.tv_import)
-    TextView tvImport;
-    @BindView(R.id.et_password)
-    EditText etPassword;
+    @BindView(R.id.btImport)
+    TextView btImport;
 
     @Nullable
     @Override
@@ -107,29 +107,14 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
         super.onDestroyView();
     }
 
-    @OnClick(R.id.tv_import)
+    @OnClick(R.id.btImport)
     public void onViewClicked() {
         showProgressDialog();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ECKeyPair ecKeyPair = ECKeyPair.create(Numeric.toBigInt(etPrivateKey.getText().toString()));
-                try {
-                    String address = OwnWalletUtils.generateWalletFile(etPassword.getText().toString(), ecKeyPair, new File(AppConfig.getInstance().getFilesDir(), ""), true);
-                    WalletStorage.getInstance(getActivity()).add(new FullWallet("0x" + address, address), getActivity());
-                } catch (CipherException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        closeProgressDialog();
-                        ToastUtil.displayShortToast(getString(R.string.import_success));
-                        getActivity().finish();
-                    }
-                });
+                EthWallet ethWallet = ETHWalletUtils.loadWalletByPrivateKey(etPrivateKey.getText().toString());
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
             }
         }).start();
     }

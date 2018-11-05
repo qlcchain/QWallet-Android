@@ -32,7 +32,6 @@ import android.util.Log
 import androidx.core.os.bundleOf
 //import com.crashlytics.android.Crashlytics
 import com.stratagile.qlink.R
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.utils.Commandline
 import com.stratagile.qlink.shadowsocks.utils.printLog

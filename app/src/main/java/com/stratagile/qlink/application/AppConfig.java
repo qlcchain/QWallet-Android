@@ -61,6 +61,7 @@ import com.stratagile.qlink.utils.NickUtil;
 import com.stratagile.qlink.utils.NotificationUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.AppFilePath;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxDataTool;
 import com.vondear.rxtools.RxTool;
@@ -170,6 +171,7 @@ public class AppConfig extends MultiDexApplication {
         RxTool.init(this);
         PRNGFixes.apply();
         ToastUtil.init();
+        AppFilePath.init(this);
 //        LeakCanary.install(this);
         NickUtil.initUserNickName(this);
 //        mAppActivityManager = new AppActivityManager(this);

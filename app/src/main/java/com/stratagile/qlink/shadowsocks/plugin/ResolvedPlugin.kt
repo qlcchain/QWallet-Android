@@ -24,7 +24,6 @@ import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import com.google.android.gms.common.util.ClientLibraryUtils.getPackageInfo
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.utils.signaturesCompat
 

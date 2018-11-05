@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/content_background_shape"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:background="@color/white"
+        />
+    <LinearLayout
+        android:layout_below="@+id/statusBar"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x110"
+            android:background="@color/white"
+            app:navigationIcon="@mipmap/icon_back_dark"
+            android:navigationIcon="@mipmap/icon_back_dark">
+
+        </android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/mainColor"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginLeft="@dimen/x23"
+            android:layout_marginRight="@dimen/x23"
+            app:cardElevation="@dimen/x10"
+            app:cardCornerRadius="@dimen/x10"
+            android:layout_height="@dimen/x211">
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView1"
+                    android:layout_width="@dimen/x92"
+                    android:layout_height="@dimen/x92"
+                    android:layout_marginStart="@dimen/x20"
+                    app:cardCornerRadius="@dimen/x10"
+                    android:layout_marginTop="@dimen/x20"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:layout_width="@dimen/x70"
+                            android:layout_height="@dimen/x70"
+                            android:id="@+id/ivWalletAvatar"
+                            />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvWalletType"
+                    android:textColor="@color/white"
+                    android:text="Eth wallet Address"
+                    android:layout_marginTop="@dimen/x5"
+                    app:layout_constraintStart_toEndOf="@id/cardView1"
+                    app:layout_constraintTop_toTopOf="@+id/cardView1"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvWalletAddress"
+                    app:layout_constraintStart_toEndOf="@id/cardView1"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView1"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:textColor="@color/white"
+                    android:text="0xdssdfsfsfsdfssdsdfsfsdfsdfsdfsdfsfsfdsfdsdfsdf"
+                    android:layout_marginBottom="@dimen/x5"
+                    android:ellipsize="middle"
+                    android:maxEms="8"
+                    android:drawableRight="@mipmap/icon_add"
+                    android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/x20"
+                    android:layout_marginRight="@dimen/x20"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:id="@+id/tvWalletAsset"
+                    android:textColor="@color/white"
+                    android:text="- -"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginRight="@dimen/x20"
+                    android:layout_marginBottom="@dimen/x20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x30"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <com.stratagile.qlink.view.SelectWalletView
+        android:layout_below="@+id/statusBar"
+        android:id="@+id/downCHeckView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

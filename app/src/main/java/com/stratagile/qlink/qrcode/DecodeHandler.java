@@ -106,14 +106,14 @@ final class DecodeHandler extends Handler {
 
         try {
             if (rawResult != null) {
-                long end = System.currentTimeMillis();
-                Log.d(TAG, "Found barcode (" + (end - start) + " ms):\n" + rawResult.toString());
-                Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("barcode_bitmap", source.renderCroppedGreyscaleBitmap());
-                message.setData(bundle);
-                //Log.d(TAG, "Sending decode succeeded message...");
-                message.sendToTarget();
+//                long end = System.currentTimeMillis();
+//                Log.d(TAG, "Found barcode (" + (end - start) + " ms):\n" + rawResult.toString());
+//                Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("barcode_bitmap", source.renderCroppedGreyscaleBitmap());
+//                message.setData(bundle);
+//                //Log.d(TAG, "Sending decode succeeded message...");
+//                message.sendToTarget();
             } else {
 //            Message message = Message.obtain(activity.getHandler(), R.id.decode_failed);
 //            message.sendToTarget();

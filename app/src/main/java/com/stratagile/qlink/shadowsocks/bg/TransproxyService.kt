@@ -23,7 +23,6 @@ package com.stratagile.qlink.shadowsocks.bg
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 //import com.github.shadowsocks.App.Companion.app
 //import com.stratagile.qlink.R.string.app

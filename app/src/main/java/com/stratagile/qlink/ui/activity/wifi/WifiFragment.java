@@ -144,7 +144,6 @@ public class WifiFragment extends BaseFragment implements WifiContract.View {
         mainWifiObj.startScan();
         initData();
         getActivity().getMenuInflater().inflate(R.menu.registe_wifi, toolbar.getMenu());
-        title = toolbar.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.AvailableWiFi));
         title.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

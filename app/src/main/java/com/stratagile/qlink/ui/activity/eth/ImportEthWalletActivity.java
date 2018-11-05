@@ -14,6 +14,7 @@ import com.stratagile.qlink.ui.activity.eth.module.ImportEthWalletModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.ImportEthWalletPresenter;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
 import com.stratagile.qlink.ui.activity.wallet.UseHistoryListFragment;
+import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.ParentNoDispatchViewpager;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
     }
 
@@ -56,17 +58,21 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
 
     @Override
     protected void initData() {
-        titles.add("keystore");
-        titles.add("private key");
+        titles.add("Mnemonic");
+        titles.add("Official");
+        titles.add("Private Key");
+        titles.add("Watch");
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
-                    return EthKeyStroeFragment.newInstance(titles.get(position));
+                    return EthMnemonicFragment.newInstance(titles.get(position));
                 } else if (position == 1) {
+                    return EthKeyStroeFragment.newInstance(titles.get(position));
+                } else if (position == 2) {
                     return EthPrivateKeyFragment.newInstance(titles.get(position));
                 } else {
-                    return new Fragment();
+                    return EthWatchFragment.newInstance(titles.get(position));
                 }
             }
 
@@ -82,6 +88,13 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
         });
         tabLayout.setupWithViewPager(viewPager);
 //        viewPager.setCurrentItem(1);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!CustomPopWindow.onBackPressed()) {
+            super.onBackPressed();
+        }
     }
 
     @Override

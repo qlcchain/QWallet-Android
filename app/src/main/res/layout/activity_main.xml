@@ -40,13 +40,11 @@
             android:layout_alignRight="@+id/iv_avater"
             android:src="@mipmap/icon_search_red" />
         <TextView
-            android:letterSpacing="0.1"
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-
-            android:fontFamily="@font/vagroun_q"
+            android:fontFamily="@font/roboto_regular"
             android:text="@string/my_wallet"
             android:textColor="@color/white"
             android:textSize="18sp" />
@@ -98,7 +96,7 @@
         <com.stratagile.qlink.view.BottomNavigationViewEx
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:background="@drawable/navigation_shape"
+            android:background="@color/white"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             app:itemIconTint="@drawable/bottom_navigation_selector"
@@ -114,6 +112,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
             <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <View
+                android:id="@+id/view_all_wallet"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>

@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,20 +23,11 @@ import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
-import com.stratagile.qlink.entity.eventbus.VpnTitle;
-import com.stratagile.qlink.guideview.Guide;
-import com.stratagile.qlink.guideview.GuideBuilder;
-import com.stratagile.qlink.guideview.GuideConstantValue;
-import com.stratagile.qlink.guideview.GuideSpUtil;
-import com.stratagile.qlink.guideview.compnonet.ChooseCountryComponent;
-import com.stratagile.qlink.guideview.compnonet.VpnListComponent;
 import com.stratagile.qlink.ui.activity.sms.component.DaggerSmsComponent;
 import com.stratagile.qlink.ui.activity.sms.contract.SmsContract;
 import com.stratagile.qlink.ui.activity.sms.module.SmsModule;
 import com.stratagile.qlink.ui.activity.sms.presenter.SmsPresenter;
 import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
-import com.stratagile.qlink.ui.activity.vpn.RegisteWindowVpnActivityActivity;
-import com.stratagile.qlink.ui.activity.vpn.SelectContinentActivity;
 import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
@@ -77,7 +67,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     @Inject
     SmsPresenter mPresenter;
     @BindView(R.id.title)
-    TextView title;
+    AppCompatTextView title;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     //    @BindView(R.id.tabLayout)
@@ -90,6 +80,8 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     View view;
     @BindView(R.id.registerVpn)
     TextView registerVpn;
+//    @BindView(R.id.title)
+//    AppCompatTextView title;
 //    @BindView(R.id.iv_world)
 //    ImageView ivWorld;
 //    @BindView(R.id.ll_select_country_guide)
@@ -101,7 +93,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         View view = inflater.inflate(R.layout.fragment_sms, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
-        title = toolbar.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.vpn));
         ArrayList<String> titles = new ArrayList<>();
         titles.add(ConstantValue.longcountry.toUpperCase());

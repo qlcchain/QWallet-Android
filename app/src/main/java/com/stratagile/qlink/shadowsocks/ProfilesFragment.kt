@@ -41,7 +41,6 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.bg.BaseService
 import com.stratagile.qlink.shadowsocks.database.Profile

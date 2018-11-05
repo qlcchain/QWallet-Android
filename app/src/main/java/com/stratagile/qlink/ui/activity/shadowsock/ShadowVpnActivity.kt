@@ -36,7 +36,6 @@ import javax.inject.Inject
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.pawegio.kandroid.toast
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.shadowsocks.ToolbarFragment
 import com.stratagile.qlink.shadowsocks.bg.Executable
 import com.stratagile.qlink.shadowsocks.database.Profile

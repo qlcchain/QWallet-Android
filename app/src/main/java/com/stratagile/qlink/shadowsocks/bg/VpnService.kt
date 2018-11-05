@@ -37,7 +37,6 @@ import com.github.shadowsocks.JniHelper
 //import com.github.shadowsocks.utils.parseNumericAddress
 //import com.github.shadowsocks.utils.printLog
 import com.stratagile.qlink.R
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.acl.Acl
 import com.stratagile.qlink.shadowsocks.preference.DataStore

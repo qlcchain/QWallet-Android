@@ -43,10 +43,9 @@
         <item name="android:activityCloseExitAnimation">@anim/translate_center_to_right</item>
     </style>
 
-    <style name="TabLayoutTextStyle">
-        <item name="android:textSize">10sp</item>
-        <item name="android:letterSpacing">0.1</item>
-        <item name="android:fontFamily">@font/vagroun_q</item>
-    </style>
+    <!--<style name="TabLayoutTextStyle">-->
+        <!--<item name="android:textSize">13sp</item>-->
+        <!--<item name="android:fontFamily">@font/roboto_regular</item>-->
+    <!--</style>-->
 
 </resources>

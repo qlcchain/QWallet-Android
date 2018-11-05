@@ -113,8 +113,7 @@ public class ColdWallet {
 		Uint256 tokenValue = new Uint256(BigDecimal.valueOf(amount).multiply(BigDecimal.TEN.pow(decimals)).toBigInteger());
 		inputParameters.add(tAddress);
 		inputParameters.add(tokenValue);
-		TypeReference<Bool> typeReference = new TypeReference<Bool>() {
-		};
+		TypeReference<Bool> typeReference = new TypeReference<Bool>() {};
 		outputParameters.add(typeReference);
 		Function function = new Function(methodName, inputParameters, outputParameters);
 		String data = FunctionEncoder.encode(function);

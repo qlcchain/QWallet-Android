@@ -12,11 +12,14 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EthWalletDetail;
+import com.stratagile.qlink.entity.EthWalletInfo;
+import com.stratagile.qlink.entity.EthWalletTransaction;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.MainAddress;
+import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.RaceTimes;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
@@ -26,6 +29,7 @@ import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -49,15 +53,20 @@ import retrofit2.http.QueryMap;
 import static com.stratagile.qlink.data.api.API.act_asset;
 import static com.stratagile.qlink.data.api.API.act_get;
 import static com.stratagile.qlink.data.api.API.act_show;
+import static com.stratagile.qlink.data.api.API.get_eth_wallet_info;
+import static com.stratagile.qlink.data.api.API.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
+import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
 import static com.stratagile.qlink.data.api.API.url_get_server_time;
 import static com.stratagile.qlink.data.api.API.url_main_address;
+import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_queryFreeRecords;
 import static com.stratagile.qlink.data.api.API.url_race_times;
+import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
 import static com.stratagile.qlink.data.api.API.url_zs_free_num;
 import static com.stratagile.qlink.data.api.API.user_update_avatar;
@@ -238,5 +247,30 @@ public interface HttpApi {
     @POST(act_show)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ShowAct> getShowAct(@Body RequestBody map);
+
+    @POST(get_eth_wallet_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EthWalletInfo> getEthWalletInfo(@Body RequestBody map);
+
+    @POST(get_neo_wallet_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<NeoWalletInfo> getNeoWalletInfo(@Body RequestBody map);
+
+
+    @POST(url_token_price)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TokenPrice> getTokenPrice(@Body RequestBody map);
+
+    @POST(url_eth_address_history)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EthWalletTransaction> getEthWalletTransaction(@Body RequestBody map);
+
+    @POST(url_neo_address_history)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getNeoWalletTransaction(@Body RequestBody map);
+
+
+
+
     /*************************************************/
 }

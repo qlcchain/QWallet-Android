@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x100"
+    android:layout_marginLeft="@dimen/x30"
+    android:layout_marginRight="@dimen/x30"
+    android:id="@+id/ll_root"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_country"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_333"
+            android:maxEms="8"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:maxWidth="@dimen/x400"
+            android:id="@+id/tv_country_name"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="@dimen/x46"
+            android:layout_height="@dimen/x46"
+            android:background="@drawable/check_box_selector"
+            android:button="@null"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="#e5e5e5"
+        />
+</LinearLayout>
