@@ -403,6 +403,10 @@
         <activity android:name=".ui.activity.wallet.EthTransactionRecordActivity" />
         <activity android:name=".ui.activity.wallet.WalletQRCodeActivity" />
         <activity android:name=".ui.activity.wallet.EthTransferActivity" />
+        <activity android:name=".ui.activity.wallet.NeoWalletInfoActivity" />
+        <activity android:name=".ui.activity.wallet.ChooseWalletActivity" />
+        <activity android:name=".ui.activity.wallet.ExportEthKeyStoreActivity" />
+        <activity android:name=".ui.activity.wallet.NeoTransferActivity" />
 
         <activity-alias
             android:exported="true"

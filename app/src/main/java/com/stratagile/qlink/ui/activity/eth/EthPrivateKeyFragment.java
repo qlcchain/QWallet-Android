@@ -29,6 +29,7 @@ import org.web3j.utils.Numeric;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -110,13 +111,18 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
     @OnClick(R.id.btImport)
     public void onViewClicked() {
         showProgressDialog();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EthWallet ethWallet = ETHWalletUtils.loadWalletByPrivateKey(etPrivateKey.getText().toString());
-                AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
+        EthWallet ethWallet = ETHWalletUtils.loadWalletByPrivateKey(etPrivateKey.getText().toString());
+        List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
+                ToastUtil.displayShortToast("wallet exist");
+                closeProgressDialog();
+                return;
             }
-        }).start();
+        }
+        AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
+        closeProgressDialog();
+        getActivity().finish();
     }
 
 }

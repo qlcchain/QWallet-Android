@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@drawable/content_background_shape"
+    android:background="@color/white"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/tvTokenValue"
@@ -21,14 +21,14 @@
         android:layout_marginTop="@dimen/x8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <View
-        android:id="@+id/tu"
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_below="@+id/tvTokenMoney"
-        android:layout_height="@dimen/x260"/>
+        android:layout_height="@dimen/x260" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_below="@+id/tu"
+        android:layout_below="@+id/chart"
         android:layout_above="@+id/llOpreate"
         android:layout_width="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"

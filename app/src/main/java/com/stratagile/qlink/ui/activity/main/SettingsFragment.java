@@ -1,22 +1,28 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
 import com.kyleduo.switchbutton.SwitchButton;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.ui.activity.main.component.DaggerSettingsComponent;
 import com.stratagile.qlink.ui.activity.main.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.main.module.SettingsModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SettingsPresenter;
 import com.stratagile.qlink.ui.activity.setting.CurrencyUnitActivity;
+import com.stratagile.qlink.utils.SpUtil;
 
 import javax.inject.Inject;
 
@@ -60,6 +66,17 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
         View view = inflater.inflate(R.layout.fragment_settings, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
+        if (isSupportFingerPrint()) {
+            switchBar.setChecked(SpUtil.getBoolean(getActivity(), ConstantValue.fingerprintUnLock, true));
+        } else {
+            llTouchId.setVisibility(View.GONE);
+        }
+        switchBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtil.putBoolean(getActivity(), ConstantValue.fingerprintUnLock, isChecked);
+            }
+        });
         return view;
     }
 
@@ -122,5 +139,24 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
             default:
                 break;
         }
+    }
+
+    /**
+     * 判断是否支持指纹解锁
+     *
+     * @return
+     */
+    private boolean isSupportFingerPrint() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                FingerprintManager fingerprintManager = (FingerprintManager) AppConfig.getInstance().getSystemService(Context.FINGERPRINT_SERVICE);
+                if (fingerprintManager != null && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints()) {
+                    return true;
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return false;
     }
 }

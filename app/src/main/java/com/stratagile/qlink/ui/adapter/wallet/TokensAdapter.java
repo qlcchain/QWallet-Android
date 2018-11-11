@@ -40,7 +40,9 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                 helper.setText(R.id.tvTokenValue, value);
             }
         } else if (item.getWalletType() == AllWallet.WalletType.NeoWallet) {
-            helper.setText(R.id.tvTokenValue, item.getTokenValue() + "");
+//            BigDecimal bigDecimal = new BigDecimal(item.getTokenValue());
+//            helper.setText(R.id.tvTokenValue, new BigDecimal(item.getTokenValue()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + "");
+            helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()) + "");
         }
         helper.setText(R.id.tvTokenName, item.getTokenSymol());
         ImageView imageView = helper.getView(R.id.ivTokenAvatar);

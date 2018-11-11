@@ -3,12 +3,16 @@ package com.stratagile.qlink.utils.eth;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.utils.MD5Util;
+import com.stratagile.qlink.utils.SpUtil;
 
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.DeterministicKey;
@@ -149,8 +153,8 @@ public class ETHWalletUtils {
     }
 
     /**
-     * @param ds         助记词加密种子
-     * @param pathArray  助记词标准
+     * @param ds        助记词加密种子
+     * @param pathArray 助记词标准
      * @return
      */
     @Nullable
@@ -186,9 +190,9 @@ public class ETHWalletUtils {
     }
 
     /**
-     * @param ds         助记词加密种子
-     * @param pathArray  助记词标准
-     * @param pwd        密码
+     * @param ds        助记词加密种子
+     * @param pathArray 助记词标准
+     * @param pwd       密码
      * @return
      */
     @Nullable
@@ -301,7 +305,7 @@ public class ETHWalletUtils {
         ethWallet.setName(generateNewWalletName());
         ethWallet.setAddress(Keys.toChecksumAddress(walletFile.getAddress()));
         ethWallet.setKeystorePath(destination.getAbsolutePath());
-        ethWallet.setPassword(MD5Util.getStringMD5(pwd));
+        ethWallet.setPassword(pwd);
         return ethWallet;
     }
 
@@ -346,8 +350,30 @@ public class ETHWalletUtils {
         return generateWallet(getPassword(), ecKeyPair);
     }
 
-    private static String getPassword() {
-        return "111111111";
+    /**
+     * 创建钱包的时候，需要每次拿最新的密码
+     * @return
+     */
+    public static String getPassword() {
+        String password = new String(qlinkcom.AES(Base64.decode(SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, ""), Base64.NO_WRAP), 1));
+        KLog.i(password);
+        return password;
+    }
+
+    /**
+     * 使用钱包的时候，要用钱包里边保存的密码
+     * @param content
+     * @return
+     */
+    public static String getPassword(String content) {
+        String password = new String(qlinkcom.AES(Base64.decode(content, Base64.NO_WRAP), 1));
+        KLog.i(password);
+        return password;
+    }
+
+    public static String enCodePassword(String password) {
+        String encode = Base64.encodeToString(qlinkcom.AES(password.getBytes(),0),Base64.NO_WRAP);
+        return encode;
     }
 
 
@@ -399,8 +425,9 @@ public class ETHWalletUtils {
      * @param pwd      钱包密码
      * @return
      */
-    public static String derivePrivateKey(long walletId, String pwd) {
+    public static String derivePrivateKey(long walletId) {
         EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
+        String pwd = getPassword(ethWallet.getPassword());
         Credentials credentials;
         ECKeyPair keypair;
         String privateKey = null;
@@ -423,7 +450,7 @@ public class ETHWalletUtils {
      * @param pwd
      * @return
      */
-    public static String deriveKeystore(long walletId, String pwd) {
+    public static String deriveKeystore(long walletId) {
         EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
         String keystore = null;
         WalletFile walletFile;

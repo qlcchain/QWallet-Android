@@ -3,6 +3,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EthWallet;
@@ -93,34 +94,25 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                 });
     }
 
-//    @Override
-//    public void getUser(HashMap map) {
-//        //mView.showProgressDialog();
-//        Disposable disposable = httpAPIWrapper.getUser(map)
-//                .subscribe(new Consumer<User>() {
-//                    @Override
-//                    public void accept(User user) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                        mView.setText(user);
-//                      //mView.closeProgressDialog();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                      //mView.closeProgressDialog();
-//                      //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
-//    }
+    @Override
+    public void createNeoWallet() {
+        mView.showProgressDialog();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Account.INSTANCE.createNewWallet();
+                neoutils.Wallet wallet = Account.INSTANCE.getWallet();
+                com.stratagile.qlink.db.Wallet walletWinq = new com.stratagile.qlink.db.Wallet();
+                walletWinq.setAddress(wallet.getAddress());
+                walletWinq.setWif(wallet.getWIF());
+                walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
+                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
+                walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
+                walletWinq.setIsMain(true);
+                KLog.i();walletWinq.toString();
+                AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+                mView.createNeoWalletSuccess(walletWinq);
+            }
+        }).start();
+    }
 }

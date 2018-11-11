@@ -29,6 +29,8 @@ public interface EthTransferContract {
         void getEthWalletBack(EthWalletInfo ethWalletInfo);
 
         void getTokenPriceBack(TokenPrice tokenPrice);
+
+        void sendSuccess(String s);
     }
 
     interface EthTransferContractPresenter extends BasePresenter {
@@ -42,5 +44,7 @@ public interface EthTransferContract {
         void getToeknPrice(Map map);
 
         void transaction(TokenInfo tokenInfo, String toAddress, String amount, int limit, int price);
+
+        void transactionEth(TokenInfo tokenInfo, String toAddress, String amount, int limit, int price);
     }
 }

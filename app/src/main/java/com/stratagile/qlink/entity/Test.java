@@ -1,24 +1,18 @@
 package com.stratagile.qlink.entity;
 
+import java.util.List;
+
 public class Test {
 
     /**
-     * msg : Request success
      * code : 0
-     * data : {operations:[{timestamp:1529963627,transactionHash:0xe9bbf27ef03d207392ddfbfc14e28893591ad76d7feea21b6c7ef06ef8e9b3bc,tokenInfo:{address:0x48f775efbe4f5ece6e0df2f7b5932df56823b990,name:R token,decimals:0,symbol:R,totalSupply:1000000000,owner:0x,txsCount:90988,transfersCount:92204,lastUpdated:1540804255,issuancesCount:0,holdersCount:52967,ethTransfersCount:1,price:{rate:0.2472102166,diff:0.27,diff7d:47.74,ts:1540805202,marketCapUsd:82679457.0,availableSupply:334450000.0,volume24h:2435993.20803,diff30d:137.05252,currency:USD}},type:transfer,value:4,from:0x75e2ecbe0d8b83f4bb30bf8ab0f7e3cfa9271429,to:0x7d5114d0eb75beaa24344a8f8adbdf1936525cc5}]}
+     * msg : Request success
+     * data : [[1541579040000,"0.00000843","0.00000843","0.00000843","0.00000843","3167.00000000",1541579099999,"0.02669781",2,"0.00000000","0.00000000","0"],[1541579100000,"0.00000843","0.00000843","0.00000840","0.00000840","36770.00000000",1541579159999,"0.30930505",15,"3893.00000000","0.03277906","0"],[1541579160000,"0.00000840","0.00000840","0.00000837","0.00000840","37878.00000000",1541579219999,"0.31734832",24,"6665.00000000","0.05596678","0"],[1541579220000,"0.00000840","0.00000840","0.00000840","0.00000840","0.00000000",1541579279999,"0.00000000",0,"0.00000000","0.00000000","0"],[1541579280000,"0.00000838","0.00000838","0.00000838","0.00000838","500.00000000",1541579339999,"0.00419000",1,"0.00000000","0.00000000","0"]]
      */
 
-    private String msg;
     private String code;
-    private String data;
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+    private String msg;
+    private List<List<Long>> data;
 
     public String getCode() {
         return code;
@@ -28,11 +22,19 @@ public class Test {
         this.code = code;
     }
 
-    public String getData() {
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public List<List<Long>> getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(List<List<Long>> data) {
         this.data = data;
     }
 }

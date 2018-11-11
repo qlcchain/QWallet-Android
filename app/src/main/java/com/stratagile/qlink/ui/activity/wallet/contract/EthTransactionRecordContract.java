@@ -1,5 +1,7 @@
 package com.stratagile.qlink.ui.activity.wallet.contract;
 
+import com.github.mikephil.charting.data.LineData;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
@@ -26,10 +28,14 @@ public interface EthTransactionRecordContract {
         void closeProgressDialog();
 
         void setEthTransactionHistory(ArrayList<TransactionInfo> transactionInfos);
+
+        void setChartData(KLine data);
     }
 
     interface EthTransactionRecordContractPresenter extends BasePresenter {
         void getEthWalletTransaction(Map map, String walletAddress);
         void getNeoWalletTransaction(Map map);
+
+        void getTokenKline(Map map, double price);
     }
 }

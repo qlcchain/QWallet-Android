@@ -22,8 +22,11 @@ import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.MainAddress;
+import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
+import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
 import com.stratagile.qlink.entity.RaceTimes;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
@@ -34,6 +37,7 @@ import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -481,11 +485,44 @@ public class HttpAPIWrapper {
         }
     }
 
-    public Observable<BaseBack> getNeoWalletTransaction(Map map) {
+    public Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mMainHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+
+    public Observable<AssetsWarpper> getMainUnspentAsset(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getMainUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getMainUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<NeoTransfer> neoTokenTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.neoTokenTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.neoTokenTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Tpcs> getTpcs(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getTpcs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTpcs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<KLine> getTokenKLine(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
     /**
@@ -665,7 +702,7 @@ public class HttpAPIWrapper {
             map.put("appid", "MIFI");
             map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
             map.put("params", JSONObject.toJSON(data));
-            map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
+            map.put("sign", DigestUtils.getSignature((JSONObject)JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }
         KLog.i("传的参数为:" + map);
         MediaType textType = MediaType.parse("text/plain");

@@ -1,5 +1,8 @@
 package com.stratagile.qlink.ui.activity.wallet;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,12 +14,14 @@ import android.widget.TextView;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerWalletQRCodeComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.WalletQRCodeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.WalletQRCodeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.WalletQRCodePresenter;
 import com.stratagile.qlink.utils.ThreadUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import javax.inject.Inject;
 
@@ -39,7 +44,7 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
     ImageView ivQRCode;
     @BindView(R.id.tvWalletAddess)
     TextView tvWalletAddess;
-    private TokenInfo tokenInfo;
+    private QrEntity qrEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +61,17 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
 
     @Override
     protected void initData() {
-        tokenInfo = getIntent().getParcelableExtra("tokenInfo");
-        if (tokenInfo.getTokenImgName() != null) {
-            Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(tokenInfo.getTokenImgName(), "mipmap", getPackageName()));
-            if (tokenInfo.isMainNetToken()) {
-                ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(tokenInfo.getWalletAddress(), ivQRCode, logo);
+        qrEntity = getIntent().getParcelableExtra("qrentity");
+        if (qrEntity.getIcon() != null && !"".equals(qrEntity.getIcon())) {
+            Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(qrEntity.getIcon(), "mipmap", getPackageName()));
+                ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(qrEntity.getContent(), ivQRCode, logo);
                 createEnglishQRCode.execute();
-            }
         } else {
-            ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(tokenInfo.getWalletAddress(), ivQRCode, null);
+            ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(qrEntity.getContent(), ivQRCode, null);
             createEnglishQRCode.execute();
         }
-        setTitle(tokenInfo.getTokenSymol() + " Address");
-        tvWalletAddess.setText(tokenInfo.getWalletAddress());
+        setTitle(qrEntity.getTitle());
+        tvWalletAddess.setText(qrEntity.getContent());
     }
 
     @Override
@@ -110,6 +113,9 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
 
     @OnClick(R.id.tvWalletAddess)
     public void onViewClicked() {
-
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setPrimaryClip(ClipData.newPlainText("", tvWalletAddess.getText().toString()));
+        ToastUtil.displayShortToast("copy success");
     }
 }

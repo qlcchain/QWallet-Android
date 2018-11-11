@@ -3,6 +3,7 @@ package com.stratagile.qlink.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -81,6 +82,7 @@ import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
+import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.WalletFragment;
@@ -116,6 +118,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.stratagile.qlink.utils.AESCipher.aesDecryptString;
+import static com.stratagile.qlink.utils.AESCipher.aesEncryptString;
+
 /**
  * @author hzp
  * @Package com.stratagile.qlink.ui.activity.main
@@ -150,11 +155,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @BindView(R.id.rl2)
     RelativeLayout rl2;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private MainViewModel viewModel;
 
     public static final int START_NO_WALLLET = 0;
     public static final int START_CREATE_PASSWORD = 2;
     public static final int START_VERTIFY_PASSWORD = 3;
     public static final int START_SELECT_PICTURE = 4;
+    public static final int START_QRCODE = 5;
 
     public static MainActivity mainActivity;
     @BindView(R.id.my_status)
@@ -221,7 +228,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showVpnGuide(ShowGuide showGuide) {
         if (showGuide.getNumber() == 3) {
-            showGuideViewVpnFragment();
+//            showGuideViewVpnFragment();
         }
     }
 
@@ -297,12 +304,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     protected void initData() {
-        qlinkcom.init();
+        if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
+            if (ConstantValue.isShouldShowVertifyPassword) {
+                Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+            }
+        } else {
+            Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+        }
         mPresenter.getTox();
         getLocation();
         String addressNames = FileUtil.getAllAddressNames();
         Map<String, String> map = new HashMap<>();
         map.put("key", addressNames);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 //        mPresenter.getShowAct();
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
@@ -405,11 +423,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
-                    return new SmsFragment();
-                } else if (position == 1) {
                     return new AllWalletFragment();
-                } else if (position == 2) {
+                } else if (position == 1) {
                     return new MarketFragment();
+                } else if (position == 2) {
+                    return new SmsFragment();
                 } else {
                     return new SettingsFragment();
                 }
@@ -426,32 +444,33 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         bottomNavigation.enableItemShiftingMode(false);
         bottomNavigation.setTextSize(10);
 //        bottomNavigation.setTypeface(Typeface.createFromAsset(getAssets(), "vagroundedbt.ttf"));
-        viewPager.setOffscreenPageLimit(2);
-        bottomNavigation.setIconSizeAt(0, 17.6f, 21.2f);
-        bottomNavigation.setIconSizeAt(1, 23.6f, 18.8f);
-        bottomNavigation.setIconSizeAt(2, 22, 18.8f);
+        viewPager.setOffscreenPageLimit(4);
+        bottomNavigation.setIconSizeAt(0, 22f, 18.8f);
+        bottomNavigation.setIconSizeAt(1, 22f, 18.8f);
+        bottomNavigation.setIconSizeAt(2, 22f, 18.8f);
+        bottomNavigation.setIconSizeAt(3, 22f, 18.8f);
         bottomNavigation.setIconsMarginTop((int) getResources().getDimension(R.dimen.x22));
-        bottomNavigation.setSelectedItemId(R.id.item_sms);
-        setVpnPage();
+        bottomNavigation.setItemIconTintList(null);
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                resetToDefaultIcon();
                 switch (item.getItemId()) {
                     case R.id.item_sms:
+                        item.setIcon(R.mipmap.icon_vpn_h);
                         setVpnPage();
                         break;
                     case R.id.item_all_wallet:
+                        item.setIcon(R.mipmap.icon_wallet_h);
                         setAllWalletPage();
                         break;
                     case R.id.item_market:
-                        if (ConstantValue.canClickWallet) {
-                            setMarketPage();
-                        }
+                        item.setIcon(R.mipmap.icon_markets_h);
+                        setMarketPage();
                         break;
                     case R.id.item_settings:
-                        if (ConstantValue.canClickWallet) {
-                            setSettingsPage();
-                        }
+                        item.setIcon(R.mipmap.icon_settings_h);
+                        setSettingsPage();
                         break;
                     default:
                         break;
@@ -459,6 +478,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 return true;
             }
         });
+        bottomNavigation.setSelectedItemId(R.id.item_sms);
+        setVpnPage();
         IntentFilter intent = new IntentFilter();
         intent.addAction(BroadCastAction.disconnectVpnSuccess);
         registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
@@ -469,36 +490,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         EventBus.getDefault().post(new NeoRefrash());
         //创建neo钱包。为唯一对象，每次在使用的钱包只有一个。
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        Wallet wallet;
-        if (walletList != null && walletList.size() != 0) {
-            if (SpUtil.getInt(this, ConstantValue.currentWallet, 0) >= walletList.size()) {
-                wallet = walletList.get(0);
-                SpUtil.putInt(this, ConstantValue.currentWallet, 0);
-            } else {
-                wallet = walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
-            }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (Account.INSTANCE.getWallet() == null) {
-                        Account.INSTANCE.fromWIF(wallet.getWif());
+        for (int i = 0; i < walletList.size(); i++) {
+            if (walletList.get(i).getIsCurrent()) {
+                Wallet wallet = walletList.get(i);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (Account.INSTANCE.getWallet() == null) {
+                            Account.INSTANCE.fromWIF(wallet.getWif());
+                        }
                     }
-                }
-            }).start();
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    WalletStorage.getInstance(MainActivity.this).load(MainActivity.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                }).start();
             }
-        }).start();
+        }
 
         ivWallet.post(new Runnable() {
             @Override
@@ -506,6 +510,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 showGuideViewEnterWallet();
             }
         });
+    }
+
+    private void resetToDefaultIcon() {
+        bottomNavigation.getMenu().findItem(R.id.item_all_wallet).setIcon(R.mipmap.icon_wallet_n);
+        bottomNavigation.getMenu().findItem(R.id.item_market).setIcon(R.mipmap.icon_markets_n);
+        bottomNavigation.getMenu().findItem(R.id.item_sms).setIcon(R.mipmap.icon_vpn_n);
+        bottomNavigation.getMenu().findItem(R.id.item_settings).setIcon(R.mipmap.icon_settings_n);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -558,26 +569,39 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
      * 设置为vpn界面
      */
     private void setVpnPage() {
-        viewPager.setCurrentItem(0, false);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+        }
+        viewPager.setCurrentItem(2, false);
         downCHeckView.setVisibility(View.VISIBLE);
         tvTitle.setVisibility(View.GONE);
         tvTitle.setText(R.string.vpn);
+        tvTitle.setTextColor(getResources().getColor(R.color.color_29282a));
+        statusBar.setBackgroundColor(getResources().getColor(R.color.white));
+        rl1.setBackgroundColor(getResources().getColor(R.color.white));
         ivWallet.setVisibility(View.VISIBLE);
         Glide.with(this)
-                .load(R.mipmap.icon_set_active)
+                .load(R.mipmap.icon_rank)
                 .into(ivWallet);
     }
 
     private void setMarketPage() {
-        viewPager.setCurrentItem(2, false);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+        }
+        tvTitle.setVisibility(View.VISIBLE);
+        viewPager.setCurrentItem(1, false);
         downCHeckView.setVisibility(View.GONE);
+        statusBar.setBackgroundColor(getResources().getColor(R.color.white));
+        rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.market);
+        tvTitle.setTextColor(getResources().getColor(R.color.color_29282a));
         if (isShowAct == 0) {
         } else {
         }
         ivWallet.setVisibility(View.VISIBLE);
         Glide.with(this)
-                .load(R.mipmap.icon_set_active)
+                .load(R.mipmap.icon_add)
                 .into(ivWallet);
     }
 
@@ -602,10 +626,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                     bottomNavigation.setSelectedItemId(R.id.item_sms);
                 } else {
-                    viewPager.setCurrentItem(1, false);
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
+                    }
+                    viewPager.setCurrentItem(0, false);
+                    bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+                    statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
+                    rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     tvTitle.setText(R.string.my_wallet);
+                    tvTitle.setTextColor(getResources().getColor(R.color.white));
                     Glide.with(this)
-                            .load(R.mipmap.icon_set1)
+                            .load(R.mipmap.icons_scan_qrcode_n)
                             .into(ivWallet);
                     showGuideViewEnterSetting();
                 }
@@ -624,10 +655,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                     bottomNavigation.setSelectedItemId(R.id.item_sms);
                 } else {
-                    viewPager.setCurrentItem(1, false);
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
+                    }
+                    viewPager.setCurrentItem(0, false);
+                    bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+                    statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
+                    rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     tvTitle.setText(R.string.my_wallet);
+                    tvTitle.setTextColor(getResources().getColor(R.color.white));
                     Glide.with(this)
-                            .load(R.mipmap.icon_set1)
+                            .load(R.mipmap.icons_scan_qrcode_n)
                             .into(ivWallet);
                     showGuideViewEnterSetting();
                 }
@@ -647,12 +685,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     long dangqianshijian = 0;
 
     private void setSettingsPage() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+        }
         ivWallet.setVisibility(View.GONE);
         ivWallet.setClickable(true);
         downCHeckView.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
         viewPager.setCurrentItem(3, false);
+        statusBar.setBackgroundColor(getResources().getColor(R.color.white));
+        rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.settings);
+        tvTitle.setTextColor(getResources().getColor(R.color.color_29282a));
         Glide.with(this)
                 .load(R.mipmap.icon_set1)
                 .into(ivWallet);
@@ -688,7 +732,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         } else if (requestCode == 1) {
             bottomNavigation.setSelectedItemId(R.id.item_sms);
         }
-        if (requestCode == START_SELECT_PICTURE && resultCode == -1) {
+        if (requestCode == START_SELECT_PICTURE && resultCode == RESULT_OK) {
 //            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
                 Glide.with(this)
@@ -702,17 +746,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         .into(ivAvater);
             }
         }
-        if (requestCode == START_CREATE_PASSWORD && resultCode == RESULT_OK) {
-            ivWallet.performClick();
-            return;
-        }
-        if (requestCode == START_NO_WALLLET && resultCode == RESULT_OK) {
-            ivWallet.performClick();
-            return;
-        }
-        if (requestCode == START_VERTIFY_PASSWORD && resultCode == RESULT_OK) {
-            ivWallet.performClick();
-            return;
+        if (requestCode == START_QRCODE && resultCode == RESULT_OK) {
+            viewModel.qrcode.postValue(data.getStringExtra("result"));
         }
     }
 
@@ -905,62 +940,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     morePopWindow.showPopupWindow(ivWallet);
                     return;
                 }
-                List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-                if (SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
-                    if (!isSupportFingerPrint()) {
-                        Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
-                        startActivityForResult(intent, START_CREATE_PASSWORD);
-                        break;
-                    } else {
-                        if (!SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
-                            Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
-                            startActivityForResult(intent, START_CREATE_PASSWORD);
-                            break;
-                        } else {
-                            //继续
-                        }
-                    }
+                if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
+                    startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
                 }
-                if (walletList == null || walletList.size() == 0) {
-                    Intent intent = new Intent(this, NoWalletActivity.class);
-                    intent.putExtra("flag", "nowallet");
-                    startActivityForResult(intent, START_NO_WALLLET);
-                    break;
-                }
-                if (ConstantValue.isShouldShowVertifyPassword) {
-                    Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
-                    startActivityForResult(intent, START_VERTIFY_PASSWORD);
-                    break;
-                }
-//                if (ConstantValue.connectedWifiInfo != null) {
-//                    if (ConstantValue.isConnectToP2p) {
-//                        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-//                            Intent intent = new Intent(this, RegisterWifiActivity.class);
-//                            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-//                            for (WifiEntity wifiEntity : wifiEntityList) {
-//                                if (wifiEntity.getSsid().equals(ConstantValue.connectedWifiInfo.getSSID().replace("\"", ""))) {
-//                                    intent.putExtra("wifiInfo", wifiEntity);
-//                                    KLog.i("打开wifi注册界面");
-//                                    startActivity(intent);
-//                                    this.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-//                                    break;
-//                                }
-//                            }
-//                        } else if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-//                            Intent intent = new Intent(this, RegisteVpnActivity.class);
-//                            intent.putExtra("flag", "");
-//                            startActivity(intent);
-//                            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-//                        } else if (bottomNavigation.getSelectedItemId() == R.id.item_settings) {
-//                            startActivity(new Intent(this, WalletDetailActivity.class));
-//                        }
-//
-//                    } else {
-//                        ToastUtil.displayShortToast(getString(R.string.waitP2pNetWork));
-//                    }
-//                } else {
-//                    ToastUtil.displayShortToast(getString(R.string.pleaseEnableWifi));
-//                }
                 break;
             case R.id.tv_title:
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {

@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.wallet.contract;
 
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 /**
@@ -22,9 +23,13 @@ public interface SelectWalletTypeContract {
         void closeProgressDialog();
 
         void createEthWalletSuccess(EthWallet ethWallet);
+
+        void createNeoWalletSuccess(Wallet wallet);
     }
 
     interface SelectWalletTypeContractPresenter extends BasePresenter {
         void createEthWallet();
+
+        void createNeoWallet();
     }
 }

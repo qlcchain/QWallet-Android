@@ -15,10 +15,12 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.data.FullWallet;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthKeyStroeComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthKeyStroeContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthKeyStroeModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthKeyStroePresenter;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.utils.eth.OwnWalletUtils;
 import com.stratagile.qlink.utils.eth.WalletStorage;
@@ -35,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.acl.Owner;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -123,6 +126,7 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         if (etPassword.getText().toString().equals("")) {
             return;
         }
+        showProgressDialog();
         loadWalletByKeystore(etKeystroe.getText().toString(), etPassword.getText().toString());
     }
 
@@ -137,7 +141,17 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         EthWallet wallet;
         wallet = ETHWalletUtils.loadWalletByKeystore(keystore, pwd);
         KLog.i(wallet.toString());
+        List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getAddress().equals(wallet.getAddress())) {
+                ToastUtil.displayShortToast("wallet exist");
+                closeProgressDialog();
+                return;
+            }
+        }
         AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(wallet);
+        closeProgressDialog();
+        getActivity().finish();
 //        Credentials credentials = null;
 //        WalletFile walletFile = null;
 //        try {

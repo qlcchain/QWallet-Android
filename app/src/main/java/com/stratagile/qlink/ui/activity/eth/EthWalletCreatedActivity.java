@@ -53,7 +53,6 @@ public class EthWalletCreatedActivity extends BaseActivity implements EthWalletC
 
     @Override
     protected void initData() {
-        ivEth.setSelected(true);
         tvEth.setSelected(true);
     }
 

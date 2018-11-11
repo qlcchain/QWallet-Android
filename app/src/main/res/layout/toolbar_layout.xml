@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_rl"
-    android:background="@drawable/navigation_shape"
-    android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x84"
+    android:background="@drawable/navigation_shape">
+
     <TextView
         android:id="@+id/view"
-        android:gravity="center"
-        android:textSize="9sp"
-        android:textColor="@color/color_333"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:gravity="center"
+        android:textColor="@color/color_333"
+        android:textSize="9sp" />
 
-        <android.support.v7.widget.Toolbar
-            android:layout_below="@+id/view"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x110"
-            app:navigationIcon="@mipmap/icon_back"
-            android:navigationIcon="@mipmap/icon_back"
-            android:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x84"
+        android:layout_below="@+id/view"
+        android:navigationIcon="@mipmap/icon_back"
+        android:titleTextColor="@color/white"
+        app:navigationIcon="@mipmap/icon_back"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="250dp"
+        android:layout_height="@dimen/x84"
         android:layout_below="@+id/view"
         android:layout_centerInParent="true"
-        android:minHeight="?attr/actionBarSize"
-        android:gravity="center"
-        android:layout_height="wrap_content">
+        android:gravity="center">
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/x12"
-            android:includeFontPadding="false"
-            android:paddingRight="@dimen/x2"
             android:layout_gravity="center"
             android:ellipsize="end"
             android:fontFamily="@font/roboto_regular"
             android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="@dimen/x12"
+            android:paddingRight="@dimen/x2"
             android:singleLine="true"
             android:text=""
             android:textAppearance="?android:attr/textAppearanceLarge"

@@ -213,7 +213,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Private Key(WIF)"
+                android:text="Export Private Key(HEX)"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -232,4 +232,17 @@
             android:background="@color/color_b2b2b2"
             android:layout_height="@dimen/x1"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/tvDeleteWallet"
+        android:layout_width="@dimen/x200"
+        android:textColor="@color/color_d0021b"
+        android:text="Delete Wallet"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/x44"
+        android:layout_height="@dimen/x80" />
 </LinearLayout>

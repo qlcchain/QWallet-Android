@@ -17,8 +17,11 @@ import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.MainAddress;
+import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
+import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
@@ -27,6 +30,7 @@ import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -54,10 +58,14 @@ import static com.stratagile.qlink.data.api.MainAPI.act_show;
 import static com.stratagile.qlink.data.api.MainAPI.get_eth_wallet_info;
 import static com.stratagile.qlink.data.api.MainAPI.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.MainAPI.sendRow;
+import static com.stratagile.qlink.data.api.MainAPI.url_bina_tpcs;
 import static com.stratagile.qlink.data.api.MainAPI.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.MainAPI.url_eth_address_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_kline;
 import static com.stratagile.qlink.data.api.MainAPI.url_main_address;
+import static com.stratagile.qlink.data.api.MainAPI.url_main_net_unspent;
 import static com.stratagile.qlink.data.api.MainAPI.url_neo_address_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_neo_token_transacation;
 import static com.stratagile.qlink.data.api.MainAPI.url_token_price;
 import static com.stratagile.qlink.data.api.MainAPI.url_transaction_v2;
 import static com.stratagile.qlink.data.api.MainAPI.user_update_avatar;
@@ -257,7 +265,23 @@ public interface MainHttpApi {
 
     @POST(url_neo_address_history)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> getNeoWalletTransaction(@Body RequestBody map);
+    Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(@Body RequestBody map);
 
+    @POST(url_main_net_unspent)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<AssetsWarpper> getMainUnspentAsset(@Body RequestBody map);
+
+    @POST(url_neo_token_transacation)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<NeoTransfer> neoTokenTransaction(@Body RequestBody map);
+
+
+    @POST(url_kline)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<KLine> getTokenKLine(@Body RequestBody map);
+
+    @POST(url_bina_tpcs)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Tpcs> getTpcs(@Body RequestBody map);
     /*************************************************/
 }

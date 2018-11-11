@@ -19,6 +19,8 @@
         android:layout_marginLeft="@dimen/x31"
         android:maxEms="8"
         android:singleLine="true"
+        android:drawableRight="@mipmap/icon_copy_h"
+        android:drawablePadding="@dimen/x10"
         android:ellipsize="middle"
         android:layout_marginTop="@dimen/x29"
         android:textSize="12sp"

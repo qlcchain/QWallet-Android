@@ -203,4 +203,25 @@ public class ColdWallet {
 		return hexValue;
 	}
 
+	/**
+	 * 签名转eth的交易
+	 * @return
+	 */
+	public static String signTransactionEth(BigInteger nonce, String toAddress,  BigInteger gasPrice, BigInteger gasLimit, BigInteger value, String privateKey) {
+		RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
+				nonce,
+				gasPrice,
+				gasLimit,
+				toAddress,
+				value);
+		if (privateKey.startsWith("0x")) {
+			privateKey = privateKey.substring(2);
+		}
+		ECKeyPair ecKeyPair = ECKeyPair.create(new BigInteger(privateKey, 16));
+		Credentials credentials = Credentials.create(ecKeyPair);
+		byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+		String hexValue = Numeric.toHexString(signedMessage);
+		return hexValue;
+	}
+
 }

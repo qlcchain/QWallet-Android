@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -12,6 +13,7 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerSplashComponent;
 import com.stratagile.qlink.ui.activity.main.contract.SplashContract;
 import com.stratagile.qlink.ui.activity.main.module.SplashModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SplashPresenter;
+import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 
@@ -87,24 +89,30 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     public void loginSuccees() {
-        startActivity(MainActivity.class);
-        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+        Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+        intent.putExtra("flag", "splash");
+        startActivity(intent);
+//        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 
     @Override
     public void jumpToLogin() {
-        startActivity(MainActivity.class);
-        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+        Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+        intent.putExtra("flag", "splash");
+        startActivity(intent);
+//        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 
     @Override
     public void jumpToGuest() {
         if (ConstantValue.thisVersionShouldShowGuest) {
-            startActivity(GuestActivity.class);
+            Intent intent = new Intent(this, GuestActivity.class);
+            intent.putExtra("flag", "splash");
+            startActivity(intent);
         } else {
-            startActivity(MainActivity.class);
+            startActivity(VerifyWalletPasswordActivity.class);
         }
         finish();
     }

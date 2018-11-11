@@ -66,18 +66,12 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
 
     @Inject
     SmsPresenter mPresenter;
-    @BindView(R.id.title)
-    AppCompatTextView title;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     //    @BindView(R.id.tabLayout)
 //    TextView tabLayout;
     @BindView(R.id.viewPager)
     NoScrollViewPager viewPager;
 
     public static final int SELECT_CONTINENT = 4;
-    @BindView(R.id.view)
-    View view;
     @BindView(R.id.registerVpn)
     TextView registerVpn;
 //    @BindView(R.id.title)
@@ -93,7 +87,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         View view = inflater.inflate(R.layout.fragment_sms, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
-        title.setText(getResources().getString(R.string.vpn));
         ArrayList<String> titles = new ArrayList<>();
         titles.add(ConstantValue.longcountry.toUpperCase());
         if (ConstantValue.isCloseRegisterAssetsInMain && SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
@@ -106,11 +99,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
 //        titles.add(getResources().getString(R.string.faq));
 //        titles.add(getResources().getString(R.string.about));
         RelativeLayout relativeLayout_root = (RelativeLayout) view.findViewById(R.id.root_rl);
-        View spaceView = view.findViewById(R.id.view);
-        spaceView.setLayoutParams(new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(getActivity()), (int) (UIUtils.getStatusBarHeight(getActivity()))));
-        toolbar.setTitle("");
-        toolbar.setNavigationIcon(null);
-        getActivity().getMenuInflater().inflate(R.menu.registe_vpn, toolbar.getMenu());
         viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -146,39 +134,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            disableToolbarElevation();
         }
-        toolbar.getMenu().getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.add:
-                        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-                        if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
-                            Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
-                            startActivityForResult(intent, START_CREATE_PASSWORD);
-                            return true;
-                        }
-                        if (walletList == null || walletList.size() == 0) {
-                            Intent intent = new Intent(getActivity(), NoWalletActivity.class);
-                            intent.putExtra("flag", "nowallet");
-                            startActivityForResult(intent, START_NO_WALLLET);
-                            return true;
-                        }
-                        if (ConstantValue.isShouldShowVertifyPassword) {
-                            Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
-                            startActivityForResult(intent, START_VERTIFY_PASSWORD);
-                            return true;
-                        }
-                        Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
-                        intent.putExtra("flag", "");
-                        startActivityForResult(intent, 0);
-                        getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                        return true;
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
         return view;
     }
 
@@ -257,18 +212,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == START_CREATE_PASSWORD && resultCode == RESULT_OK) {
-            toolbar.findViewById(R.id.add).performClick();
-            return;
-        }
-        if (requestCode == START_NO_WALLLET && resultCode == RESULT_OK) {
-            toolbar.findViewById(R.id.add).performClick();
-            return;
-        }
-        if (requestCode == START_VERTIFY_PASSWORD && resultCode == RESULT_OK) {
-            toolbar.findViewById(R.id.add).performClick();
-            return;
-        }
         if (requestCode == SELECT_CONTINENT && resultCode == RESULT_OK) {
             String country = data.getStringExtra("country");
 //            tabLayout.setText(country.toUpperCase());

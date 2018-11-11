@@ -1,6 +1,8 @@
 package com.stratagile.qlink.ui.activity.wallet;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
@@ -9,9 +11,11 @@ import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,13 +34,15 @@ import com.stratagile.qlink.guideview.GuideBuilder;
 import com.stratagile.qlink.guideview.GuideConstantValue;
 import com.stratagile.qlink.guideview.GuideSpUtil;
 import com.stratagile.qlink.guideview.compnonet.UnLockComponent;
-import com.stratagile.qlink.guideview.compnonet.VpnListComponent;
+import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerVerifyWalletPasswordComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.VerifyWalletPasswordContract;
 import com.stratagile.qlink.ui.activity.wallet.module.VerifyWalletPasswordModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.VerifyWalletPasswordPresenter;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import java.util.Calendar;
 
@@ -57,17 +63,13 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
 
     @Inject
     VerifyWalletPasswordPresenter mPresenter;
-    @BindView(R.id.et_password)
+    @BindView(R.id.etPassword)
     EditText etPassword;
-    @BindView(R.id.bt_back)
-    Button btBack;
-    @BindView(R.id.bt_continue)
-    Button btContinue;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
+    @BindView(R.id.tvJoin)
+    TextView tvJoin;
     ImageView finger;
-    @BindView(R.id.ll_unlock)
-    LinearLayout llUnlock;
+    @BindView(R.id.tvFingerPrinte)
+    TextView tvFingerPrinte;
 
     private MyAuthCallback myAuthCallback = null;
     private CancellationSignal cancellationSignal = null;
@@ -82,7 +84,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        needFront = true;
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
     }
 
@@ -90,28 +92,53 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
     protected void initView() {
         setContentView(R.layout.activity_verify_wallet_password);
         ButterKnife.bind(this);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
     protected void initData() {
-        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowUnLockGuide, false)) {
+        if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
+            Intent intent = new Intent(AppConfig.getInstance(), CreateWalletPasswordActivity.class);
+            startActivityForResult(intent, 2);
+        }
+//        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowUnLockGuide, false)) {
 //            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //            imm.hideSoftInputFromWindow(etPassword.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            llUnlock.post(new Runnable() {
-                @Override
-                public void run() {
-                    showGuideViewUnlock();
-                }
-            });
-            return;
-        }
-        tvTitle.setText(getString(R.string.unlock_wallet).toUpperCase());
+//            llUnlock.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    showGuideViewUnlock();
+//                }
+//            });
+//            return;
+//        }
+        setTitle("Enter Password");
         etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                btContinue.performClick();
+                etPassword.performClick();
                 return true;
+            }
+        });
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if ("".equals(s.toString())) {
+                    tvJoin.setBackground(getResources().getDrawable(R.drawable.set_password_bt_bg_unenable));
+                } else {
+                    tvJoin.setBackground(getResources().getDrawable(R.drawable.main_color_bt_bg));
+                }
             }
         });
 
@@ -137,21 +164,90 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 }
             }
         };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // init fingerprint.
             try {
                 FingerprintManager fingerprintManager = (FingerprintManager) AppConfig.getInstance().getSystemService(Context.FINGERPRINT_SERVICE);
                 /*if(!SpUtil.getString(this, ConstantValue.fingerPassWord, "").equals(""))
                 {*/
                 if (fingerprintManager != null && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints()) {
-                    try {
-                        myAuthCallback = new MyAuthCallback(handler);
-                        CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
-                        if (cancellationSignal == null) {
-                            cancellationSignal = new CancellationSignal();
-                        }
-                        fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), cancellationSignal, 0,
-                                myAuthCallback, null);
+                    tvFingerPrinte.setVisibility(View.VISIBLE);
+                    if (SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true) && !SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
+                        tvFingerPrinte.performClick();
+                    }
+                } else {
+                    etPassword.requestFocus();
+                    tvFingerPrinte.setVisibility(View.GONE);
+                    SpUtil.putString(this, ConstantValue.fingerPassWord, "");
+                }
+                /*}else{
+                    etPassword.requestFocus();
+                }*/
+            } catch (NoClassDefFoundError e) {
+                SpUtil.putString(this, ConstantValue.fingerPassWord, "");
+            }
+
+        } else {
+            etPassword.requestFocus();
+            SpUtil.putString(this, ConstantValue.fingerPassWord, "");
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                startActivity(MainActivity.class);
+                overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+                ConstantValue.isShouldShowVertifyPassword = false;
+                finish();
+            } else {
+                finish();
+            }
+        }
+
+    }
+
+    @Override
+    protected void setupActivityComponent() {
+        DaggerVerifyWalletPasswordComponent
+                .builder()
+                .appComponent(((AppConfig) getApplication()).getApplicationComponent())
+                .verifyWalletPasswordModule(new VerifyWalletPasswordModule(this))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public void setPresenter(VerifyWalletPasswordContract.VerifyWalletPasswordContractPresenter presenter) {
+        mPresenter = (VerifyWalletPasswordPresenter) presenter;
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void closeProgressDialog() {
+        progressDialog.hide();
+    }
+
+    @OnClick({R.id.tvJoin, R.id.tvFingerPrinte})
+    public void onViewClicked(View view1) {
+        switch (view1.getId()) {
+            case R.id.tvFingerPrinte:
+                try {
+                    myAuthCallback = new MyAuthCallback(handler);
+                    CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
+                    if (cancellationSignal == null) {
+                        cancellationSignal = new CancellationSignal();
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        FingerprintManager fingerprintManager = (FingerprintManager) AppConfig.getInstance().getSystemService(Context.FINGERPRINT_SERVICE);
+                        fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), cancellationSignal, 0, myAuthCallback, null);
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         View view = View.inflate(this, R.layout.finger_dialog_layout, null);
                         builder.setView(view);
@@ -164,15 +260,35 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                         Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
                         btn_comfirm.setText(R.string.cancel_btn_dialog);
 
-                        if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
-                            btn_cancel.setVisibility(View.VISIBLE);
-                            btn_comfirm.setVisibility(View.VISIBLE);
-                            builder.setCancelable(true);
-                        } else {
-                            btn_cancel.setVisibility(View.GONE);
-                            btn_comfirm.setVisibility(View.GONE);
-                            builder.setCancelable(false);
-                        }
+//                        if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
+//                            btn_cancel.setVisibility(View.VISIBLE);
+//                            btn_comfirm.setVisibility(View.VISIBLE);
+//                            builder.setCancelable(true);
+//                        } else {
+                        btn_cancel.setVisibility(View.VISIBLE);
+                        btn_comfirm.setVisibility(View.VISIBLE);
+                        builder.setCancelable(false);
+//                        btn_cancel.setVisibility(View.GONE);
+//                        btn_comfirm.setVisibility(View.GONE);
+//                        builder.setCancelable(false);
+                        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                builderTips.dismiss();
+                                if (cancellationSignal != null) {
+                                    cancellationSignal.cancel();
+                                    cancellationSignal = null;
+                                    if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
+                                        Intent intent = new Intent(AppConfig.getInstance(), CreateWalletPasswordActivity.class);
+                                        startActivityForResult(intent, 1);
+                                        finish();
+                                    } else {
+                                        etPassword.requestFocus();
+                                    }
+                                }
+                            }
+                        });
+//                        }
                         btn_cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -213,107 +329,67 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                         Context currentContext = this;
                         builderTips = builder.create();
                         builderTips.show();
-                    } catch (Exception e) {
-                        try {
-                            myAuthCallback = new MyAuthCallback(handler);
-                            CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
-                            if (cancellationSignal == null) {
-                                cancellationSignal = new CancellationSignal();
-                            }
-                            fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), cancellationSignal, 0,
-                                    myAuthCallback, null);
-                       /* fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), 0,
-                                cancellationSignal, myAuthCallback, null);*/
-                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                            View view = View.inflate(this, R.layout.finger_dialog_layout, null);
-                            builder.setView(view);
-                            builder.setCancelable(false);
-                            TextView title = (TextView) view.findViewById(R.id.title);//设置标题
-                            TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
-                            Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
-                            btn_cancel.setText(R.string.back_btn);
-                            Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-                            btn_comfirm.setText(R.string.cancel_btn_dialog);
-                            finger = (ImageView) view.findViewById(R.id.finger);
-                            tvContent.setText(R.string.choose_finger_dialog_title);
-                            title.setText(R.string.unlock_wallet);
-                            Context currentContext = this;
-                            builderTips = builder.create();
-                            builderTips.show();
-                        } catch (Exception er) {
-                            er.printStackTrace();
-                            if (builderTips != null) {
-                                builderTips.dismiss();
-                            }
-                            Toast.makeText(VerifyWalletPasswordActivity.this, "Fingerprint init failed! Try again!", Toast.LENGTH_SHORT).show();
-                        }
                     }
-                } else {
-                    etPassword.requestFocus();
-                    SpUtil.putString(this, ConstantValue.fingerPassWord, "");
-                    if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
-                        Intent intent = new Intent(AppConfig.getInstance(), CreateWalletPasswordActivity.class);
-                        startActivityForResult(intent, 1);
-                        finish();
+                } catch (Exception e) {
+//                    try {
+//                        myAuthCallback = new MyAuthCallback(handler);
+//                        CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
+//                        if (cancellationSignal == null) {
+//                            cancellationSignal = new CancellationSignal();
+//                        }
+//
+//                        fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), cancellationSignal, 0,
+//                                myAuthCallback, null);
+//                       /* fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), 0,
+//                                cancellationSignal, myAuthCallback, null);*/
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                        View view = View.inflate(this, R.layout.finger_dialog_layout, null);
+//                        builder.setView(view);
+//                        builder.setCancelable(false);
+//                        TextView title = (TextView) view.findViewById(R.id.title);//设置标题
+//                        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+//                        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+//                        btn_cancel.setText(R.string.back_btn);
+//                        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+//                        btn_comfirm.setText(R.string.cancel_btn_dialog);
+//                        finger = (ImageView) view.findViewById(R.id.finger);
+//                        tvContent.setText(R.string.choose_finger_dialog_title);
+//                        title.setText(R.string.unlock_wallet);
+//                        Context currentContext = this;
+//                        builderTips = builder.create();
+//                        builderTips.show();
+//                    } catch (Exception er) {
+                    e.printStackTrace();
+                    if (builderTips != null) {
+                        builderTips.dismiss();
                     }
+                    Toast.makeText(VerifyWalletPasswordActivity.this, "Fingerprint init failed! Try again!", Toast.LENGTH_SHORT).show();
+//                    }
                 }
-                /*}else{
-                    etPassword.requestFocus();
-                }*/
-            } catch (NoClassDefFoundError e) {
-                SpUtil.putString(this, ConstantValue.fingerPassWord, "");
-            }
-
-        } else {
-            etPassword.requestFocus();
-            SpUtil.putString(this, ConstantValue.fingerPassWord, "");
-        }
-
-    }
-
-    @Override
-    protected void setupActivityComponent() {
-        DaggerVerifyWalletPasswordComponent
-                .builder()
-                .appComponent(((AppConfig) getApplication()).getApplicationComponent())
-                .verifyWalletPasswordModule(new VerifyWalletPasswordModule(this))
-                .build()
-                .inject(this);
-    }
-
-    @Override
-    public void setPresenter(VerifyWalletPasswordContract.VerifyWalletPasswordContractPresenter presenter) {
-        mPresenter = (VerifyWalletPasswordPresenter) presenter;
-    }
-
-    @Override
-    public void showProgressDialog() {
-        progressDialog.show();
-    }
-
-    @Override
-    public void closeProgressDialog() {
-        progressDialog.hide();
-    }
-
-    @OnClick({R.id.bt_back, R.id.bt_continue})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.bt_back:
-                onBackPressed();
                 break;
-            case R.id.bt_continue:
-                if (etPassword.getText().toString().trim().equals(SpUtil.getString(this, ConstantValue.walletPassWord, ""))) {
-                    Intent intent = new Intent();
-                    try {
-                        intent.putExtra("position", getIntent().getStringExtra("position"));
-                    } catch (Exception e) {
-
-                    }
-                    setResult(RESULT_OK, intent);
+            case R.id.tvJoin:
+                if ("".equals(etPassword.getText().toString().trim())) {
+                    return;
+                }
+                String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
+                if (password.equals(SpUtil.getString(this, ConstantValue.walletPassWord, ""))) {
                     ConstantValue.isShouldShowVertifyPassword = false;
-                    SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
-                    onBackPressed();
+                    if (getIntent().hasExtra("flag")) {
+                        startActivity(MainActivity.class);
+                        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+                        finish();
+                    } else {
+                        Intent intent = new Intent();
+                        try {
+                            intent.putExtra("position", getIntent().getStringExtra("position"));
+                        } catch (Exception e) {
+
+                        }
+                        setResult(RESULT_OK, intent);
+                        ConstantValue.isShouldShowVertifyPassword = false;
+                        SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                        finishActivity();
+                    }
                 } else {
                     ToastUtil.displayShortToast(getString(R.string.Incorrect_Password));
                 }
@@ -323,10 +399,14 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    private void finishActivity() {
         finish();
         overridePendingTransition(0, R.anim.activity_translate_out_1);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     @Override
@@ -386,17 +466,24 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
             if (finger != null) {
                 finger.setImageDrawable(getResources().getDrawable(R.mipmap.icon_fingerprint_correct));
             }
-            Intent intent = new Intent();
-            try {
-                intent.putExtra("position", getIntent().getStringExtra("position"));
-            } catch (Exception e) {
+            if (getIntent().hasExtra("flag")) {
+                startActivity(MainActivity.class);
+                ConstantValue.isShouldShowVertifyPassword = false;
+                overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+                finish();
+            } else {
+                Intent intent = new Intent();
+                try {
+                    intent.putExtra("position", getIntent().getStringExtra("position"));
+                } catch (Exception e) {
 
+                }
+                setResult(RESULT_OK, intent);
+                ConstantValue.isShouldShowVertifyPassword = false;
+                SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
+                SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                finishActivity();
             }
-            setResult(RESULT_OK, intent);
-            ConstantValue.isShouldShowVertifyPassword = false;
-            SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
-            SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
-            onBackPressed();
         } else {
             Toast.makeText(VerifyWalletPasswordActivity.this, stringId, Toast.LENGTH_SHORT).show();
         }
@@ -406,11 +493,11 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
         if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowUnLockGuide, false)) {
             GuideSpUtil.putBoolean(this, GuideConstantValue.isShowUnLockGuide, true);
             GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(llUnlock)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(true);
+//            builder.setTargetView(llUnlock)
+//                    .setAlpha(150)
+//                    .setHighTargetCorner(20)
+//                    .setOverlayTarget(false)
+//                    .setOutsideTouchable(true);
             builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
                 @Override
                 public void onShown() {

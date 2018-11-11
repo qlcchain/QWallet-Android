@@ -2,6 +2,7 @@ package com.stratagile.qlink.data
 
 import android.util.Log
 import com.github.salomonbrys.kotson.jsonArray
+import com.github.salomonbrys.kotson.jsonObject
 import com.stratagile.qlink.*
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
@@ -68,9 +69,7 @@ class NeoNodeRPC {
         var error: Error?
         val inputData = getInputsNecessaryToSendAsset(asset, amount, assets)
         val payloadPrefix = byteArrayOf(0x80.toUByte(), 0x00.toByte())
-        val rawTransaction = packRawTransactionBytes(payloadPrefix, wallet,
-                asset, inputData.payload!!, inputData.totalAmount!!,
-                amount, toAddress, attributes)
+        val rawTransaction = packRawTransactionBytes(payloadPrefix, wallet, asset, inputData.payload!!, inputData.totalAmount!!, amount, toAddress, attributes)
         val privateKeyHex = wallet.privateKey.toHex()
         val signatureData = Neoutils.sign(rawTransaction, privateKeyHex)
         val finalPayload = concatenatePayloadData(wallet, rawTransaction, signatureData)

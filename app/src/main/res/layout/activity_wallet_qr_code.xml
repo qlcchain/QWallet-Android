@@ -31,6 +31,8 @@
         android:layout_marginTop="@dimen/x134"
         android:background="@drawable/wallet_address_bg"
         android:padding="@dimen/x15"
+        android:drawablePadding="@dimen/x10"
+        android:drawableRight="@mipmap/icon_copy_h"
         android:gravity="center_vertical"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         android:layout_marginLeft="@dimen/x45"

@@ -30,6 +30,9 @@ public class WalletDao extends AbstractDao<Wallet, Long> {
         public final static Property Wif = new Property(5, String.class, "wif", false, "WIF");
         public final static Property Address = new Property(6, String.class, "address", false, "ADDRESS");
         public final static Property IsMain = new Property(7, boolean.class, "isMain", false, "IS_MAIN");
+        public final static Property Name = new Property(8, String.class, "name", false, "NAME");
+        public final static Property IsBackup = new Property(9, boolean.class, "isBackup", false, "IS_BACKUP");
+        public final static Property IsCurrent = new Property(10, boolean.class, "isCurrent", false, "IS_CURRENT");
     }
 
 
@@ -52,7 +55,10 @@ public class WalletDao extends AbstractDao<Wallet, Long> {
                 "\"SCRIPT_HASH\" TEXT," + // 4: scriptHash
                 "\"WIF\" TEXT," + // 5: wif
                 "\"ADDRESS\" TEXT," + // 6: address
-                "\"IS_MAIN\" INTEGER NOT NULL );"); // 7: isMain
+                "\"IS_MAIN\" INTEGER NOT NULL ," + // 7: isMain
+                "\"NAME\" TEXT," + // 8: name
+                "\"IS_BACKUP\" INTEGER NOT NULL ," + // 9: isBackup
+                "\"IS_CURRENT\" INTEGER NOT NULL );"); // 10: isCurrent
     }
 
     /** Drops the underlying database table. */
@@ -100,6 +106,13 @@ public class WalletDao extends AbstractDao<Wallet, Long> {
             stmt.bindString(7, address);
         }
         stmt.bindLong(8, entity.getIsMain() ? 1L: 0L);
+ 
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(9, name);
+        }
+        stmt.bindLong(10, entity.getIsBackup() ? 1L: 0L);
+        stmt.bindLong(11, entity.getIsCurrent() ? 1L: 0L);
     }
 
     @Override
@@ -141,6 +154,13 @@ public class WalletDao extends AbstractDao<Wallet, Long> {
             stmt.bindString(7, address);
         }
         stmt.bindLong(8, entity.getIsMain() ? 1L: 0L);
+ 
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(9, name);
+        }
+        stmt.bindLong(10, entity.getIsBackup() ? 1L: 0L);
+        stmt.bindLong(11, entity.getIsCurrent() ? 1L: 0L);
     }
 
     @Override
@@ -158,7 +178,10 @@ public class WalletDao extends AbstractDao<Wallet, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // scriptHash
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // wif
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // address
-            cursor.getShort(offset + 7) != 0 // isMain
+            cursor.getShort(offset + 7) != 0, // isMain
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // name
+            cursor.getShort(offset + 9) != 0, // isBackup
+            cursor.getShort(offset + 10) != 0 // isCurrent
         );
         return entity;
     }
@@ -173,6 +196,9 @@ public class WalletDao extends AbstractDao<Wallet, Long> {
         entity.setWif(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setAddress(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setIsMain(cursor.getShort(offset + 7) != 0);
+        entity.setName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setIsBackup(cursor.getShort(offset + 9) != 0);
+        entity.setIsCurrent(cursor.getShort(offset + 10) != 0);
      }
     
     @Override

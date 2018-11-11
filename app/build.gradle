@@ -116,7 +116,7 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
     greendao {
-        schemaVersion 47//数据库版本号
+        schemaVersion 50//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -284,6 +284,10 @@ dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.14.3'
     implementation 'com.google.android:flexbox:0.3.2'
     implementation files('libs/commons-collections-3.2.2.jar')
+
+    //    implementation project(':MPChartLib')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation files('libs/BASE64Encoder.jar')
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

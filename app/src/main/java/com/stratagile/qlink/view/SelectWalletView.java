@@ -75,10 +75,6 @@ public class SelectWalletView extends LinearLayout {
         init();
     }
 
-    public void setCurrentSelectItem(int position) {
-        downCheckAdapter.setCurrentSelectItem(position);
-    }
-
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.select_wallet_layout, this, true);
         mask = view.findViewById(R.id.mask);
@@ -200,7 +196,6 @@ public class SelectWalletView extends LinearLayout {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 mask.performClick();
-                downCheckAdapter.setCurrentSelectItem(position);
                 downCheckAdapter.notifyDataSetChanged();
                 if (onItemCheckListener != null) {
                     Message msg = new Message();
@@ -210,24 +205,6 @@ public class SelectWalletView extends LinearLayout {
                 }
             }
         });
-        downCheckAdapter.setOnItemChangeListener(new SelectWalletAdapter.OnItemChangeListener() {
-            @Override
-            public void onItemChange(int position) {
-                close();
-            }
-
-            @Override
-            public void onItemSelect(AllWallet item) {
-                setText(item);
-            }
-        });
-        for (int i = 0; i < contentList.size(); i++) {
-            if (contentList.get(i) == allWallet) {
-                downCheckAdapter.setCurrentSelectItem(i);
-                setText(contentList.get(i));
-                onItemCheckListener.onItemCheck(contentList.get(i));
-            }
-        }
     }
 
     Handler handler = new Handler() {

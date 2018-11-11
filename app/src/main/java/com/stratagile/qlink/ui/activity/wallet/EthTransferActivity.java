@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.animation.DynamicAnimation;
 import android.support.constraint.Group;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +22,16 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerEthTransferComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.module.EthTransferModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.EthTransferPresenter;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
+import com.stratagile.qlink.utils.ToastUtil;
+import com.vondear.rxtools.RxTool;
 
+import org.spongycastle.util.encoders.Hex;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
@@ -40,6 +45,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jnr.ffi.Struct;
 
 /**
  * @author hzp
@@ -72,7 +78,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
     Group group;
     @BindView(R.id.seekBar)
     SeekBar seekBar;
-//    @BindView(R.id.tvGasFee)
+    //    @BindView(R.id.tvGasFee)
 //    TextView tvGasFee;
     @BindView(R.id.tvSend)
     TextView tvSend;
@@ -102,6 +108,8 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     @Override
     protected void initView() {
+        KLog.i(Base64.encodeToString(qlinkcom.AES("123456789".getBytes(),0),Base64.NO_WRAP));
+        KLog.i(new String(qlinkcom.AES(Base64.decode("mcpyeXViSGKv9e/cuN8EOw==", Base64.NO_WRAP),1)));
         setContentView(R.layout.activity_eth_transfer);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -230,6 +238,12 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
         tvCostEth.setText(gasEth + " ether ≈ " + ConstantValue.currencyBean.getCurrencyImg() + f1);
     }
 
+    @Override
+    public void sendSuccess(String s) {
+        ToastUtil.displayShortToast(getResources().getString(R.string.success));
+        finish();
+    }
+
     @OnClick({R.id.llOpen, R.id.tvSend})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -245,13 +259,35 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
     }
 
     private void sendEthToken() {
-        if (etEthTokenSendAddress.getText().equals("")) {
-
+        if (etEthTokenSendAddress.getText().toString().equals("")) {
+            ToastUtil.displayShortToast("Wallet Address Error");
             return;
         }
-        mPresenter.transaction(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+        if (etEthTokenSendAddress.getText().toString().toLowerCase().equals(tokenInfo.getWalletAddress().toLowerCase())) {
+            ToastUtil.displayShortToast(getString(R.string.can_not_send_to_self));
+            return;
+        }
+        if (etEthTokenSendValue.getText().toString().equals("")) {
+            ToastUtil.displayShortToast("illegal value");
+            return;
+        }
+        if (etEthTokenSendValue.getText().toString().equals("0")) {
+            ToastUtil.displayShortToast("illegal value");
+            return;
+        }
+        if (Double.parseDouble(etEthTokenSendValue.getText().toString()) > tokenInfo.getTokenValue()) {
+            ToastUtil.displayShortToast("Not enough " + tokenInfo.getTokenSymol());
+            return;
+        }
+        showProgressDialog();
+        if (tokenInfo.getTokenSymol().toLowerCase().equals("eth")) {
+            mPresenter.transactionEth(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+        } else {
+            mPresenter.transaction(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+        }
 
     }
+
     private void toggleCost() {
         if (isOpen) {
             isOpen = false;

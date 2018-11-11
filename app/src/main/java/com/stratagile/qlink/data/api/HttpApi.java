@@ -6,7 +6,6 @@ import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
-import com.stratagile.qlink.entity.BetResult;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
@@ -18,9 +17,11 @@ import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.MainAddress;
+import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
-import com.stratagile.qlink.entity.RaceTimes;
+import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
@@ -30,6 +31,7 @@ import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -267,10 +269,23 @@ public interface HttpApi {
 
     @POST(url_neo_address_history)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> getNeoWalletTransaction(@Body RequestBody map);
+    Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(@Body RequestBody map);
 
 
+    @POST(API.url_main_net_unspent)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<AssetsWarpper> getMainUnspentAsset(@Body RequestBody map);
 
+    @POST(API.url_neo_token_transacation)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<NeoTransfer> neoTokenTransaction(@Body RequestBody map);
 
+    @POST(API.url_kline)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<KLine> getTokenKLine(@Body RequestBody map);
+
+    @POST(API.url_bina_tpcs)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Tpcs> getTpcs(@Body RequestBody map);
     /*************************************************/
 }

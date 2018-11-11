@@ -46,6 +46,7 @@ import com.stratagile.qlink.db.MySQLiteOpenHelper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.shadowsocks.bg.BaseService;
 import com.stratagile.qlink.shadowsocks.database.Profile;
 import com.stratagile.qlink.shadowsocks.database.ProfileManager;
@@ -171,6 +172,7 @@ public class AppConfig extends MultiDexApplication {
         RxTool.init(this);
         PRNGFixes.apply();
         ToastUtil.init();
+        qlinkcom.init();
         AppFilePath.init(this);
 //        LeakCanary.install(this);
         NickUtil.initUserNickName(this);

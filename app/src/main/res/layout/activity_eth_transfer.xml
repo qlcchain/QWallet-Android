@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/x45"
         android:textColor="@color/color_29282a"
+        android:inputType="numberDecimal"
         android:layout_marginTop="@dimen/x10"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"

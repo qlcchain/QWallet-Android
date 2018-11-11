@@ -6,11 +6,37 @@ import android.os.Parcelable;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 
+import java.util.Objects;
+
 public class AllWallet {
     private WalletType walletType;
     private EthWallet ethWallet;
     private Wallet wallet;
+
+    public String getWalletAddress() {
+        return walletAddress;
+    }
+
+    public void setWalletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
+    }
+
     private String walletName;
+    private String walletAddress;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AllWallet allWallet = (AllWallet) o;
+        return Objects.equals(walletAddress, allWallet.walletAddress);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(walletAddress);
+    }
 
     public String getWalletName() {
         return walletName;

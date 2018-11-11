@@ -42,7 +42,7 @@
             <ImageView
                 android:id="@+id/ivEth"
                 android:layout_width="@dimen/x184"
-                android:background="@drawable/select_wallettype_bg"
+                android:src="@mipmap/eth_wallet_select"
                 android:layout_height="@dimen/x184" />
             <TextView
                 android:id="@+id/tvEth"

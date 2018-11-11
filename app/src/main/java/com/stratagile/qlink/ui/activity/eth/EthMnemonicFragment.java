@@ -151,6 +151,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
                             @Override
                             public void onNext(EthWallet wallet) {
                                 closeProgressDialog();
+                                getActivity().finish();
                             }
 
                             @Override

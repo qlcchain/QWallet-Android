@@ -9,10 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
 import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
@@ -20,6 +23,7 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerSelectWalletTypeC
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.SelectWalletTypeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.SelectWalletTypePresenter;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
@@ -69,10 +73,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     @BindView(R.id.checkBox)
     SmoothCheckBox checkBox;
 
-    private int currentWalletType = ETH_WALLET_TYPE;
-    private static int ETH_WALLET_TYPE = 0;
-    private static int NEO_WALLET_TYPE = 1;
-    private static int EOS_WALLET_TYPE = 2;
+    private AllWallet.WalletType walletType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +91,13 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
 
     @Override
     protected void initData() {
-        currentWalletType = ETH_WALLET_TYPE;
+        walletType = AllWallet.WalletType.EthWallet;
         ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_select));
         ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
         ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
+        tvEth.setSelected(true);
+        tvNeo.setSelected(false);
+        tvEos.setSelected(false);
     }
 
     @Override
@@ -122,8 +127,24 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
 
     @Override
     public void createEthWalletSuccess(EthWallet ethWallet) {
+        closeProgressDialog();
         startActivity(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallet));
         finish();
+    }
+
+    @Override
+    public void createNeoWalletSuccess(Wallet wallet) {
+        closeProgressDialog();
+        startActivityForResult(new Intent(this, WalletCreatedActivity.class).putExtra("wallet", wallet), 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     @OnClick({R.id.llEth, R.id.llEos, R.id.llNeo, R.id.btCreate, R.id.btImport})
@@ -131,37 +152,50 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         KLog.i(view.getId() + "");
         switch (view.getId()) {
             case R.id.llEth:
-                currentWalletType = ETH_WALLET_TYPE;
+                walletType = AllWallet.WalletType.EthWallet;
                 ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_select));
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
-//                List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
-//                for (int i = 0; i < ethWallets.size(); i++) {
-//                    if (!ethWallets.get(i).getIsBackup() && ethWallets.get(i).getMnemonic() != null) {
-//                        startActivity(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallets.get(i)));
-//                        finish();
-//                        return;
-//                    }
-//                }
+                tvEth.setSelected(true);
+                tvNeo.setSelected(false);
+                tvEos.setSelected(false);
                 break;
             case R.id.llEos:
-                currentWalletType = EOS_WALLET_TYPE;
+                walletType = AllWallet.WalletType.EosWallet;
                 ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_unselected));
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_select));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
+                tvEth.setSelected(false);
+                tvNeo.setSelected(true);
+                tvEos.setSelected(false);
                 break;
             case R.id.llNeo:
-                currentWalletType = NEO_WALLET_TYPE;
+                walletType = AllWallet.WalletType.NeoWallet;
                 ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_unselected));
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_select));
+                tvEth.setSelected(false);
+                tvNeo.setSelected(false);
+                tvEos.setSelected(true);
                 break;
             case R.id.btCreate:
-                if (currentWalletType == ETH_WALLET_TYPE) {
+                if (!checkBox.isChecked()) {
+                    ToastUtil.displayShortToast("Privacy Policy");
+                    return;
+                }
+                if (walletType == AllWallet.WalletType.EthWallet) {
                     mPresenter.createEthWallet();
+                } else if (walletType == AllWallet.WalletType.NeoWallet) {
+                    mPresenter.createNeoWallet();
+                } else {
+
                 }
                 break;
             case R.id.btImport:
+                if (!checkBox.isChecked()) {
+                    ToastUtil.displayShortToast("Privacy Policy");
+                    return;
+                }
                 startActivity(new Intent(this, ImportEthWalletActivity.class));
                 break;
             default:

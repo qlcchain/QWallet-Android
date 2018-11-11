@@ -1,9 +1,11 @@
 package com.stratagile.qlink.ui.activity.wallet.presenter;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 
 import com.google.protobuf.ServiceException;
 import com.socks.library.KLog;
 import com.stratagile.qlink.ColdWallet;
+import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
@@ -13,6 +15,7 @@ import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.EthTransferActivity;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import org.web3j.abi.FunctionEncoder;
@@ -22,6 +25,9 @@ import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -30,6 +36,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.ChainId;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -39,6 +46,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
@@ -143,7 +151,42 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
                 break;
             }
         }
-        return ETHWalletUtils.derivePrivateKey(ethWallet.getId(), "111111111");
+        return ETHWalletUtils.derivePrivateKey(ethWallet.getId());
+    }
+
+    @Override
+    public void transactionEth(TokenInfo tokenInfo, String toAddress, String amount, int limit, int price) {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext(generateTransactionEth(tokenInfo.getWalletAddress(), toAddress, derivePrivateKey(tokenInfo.getWalletAddress()), amount, limit, price));
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        mView.sendSuccess(s);
+                        mView.closeProgressDialog();
+                        KLog.i("transaction Hash: " + s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     @Override
@@ -164,6 +207,11 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
                     @Override
                     public void onNext(String s) {
                         mView.closeProgressDialog();
+                        if ("".equals(s)) {
+                            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.error2));
+                        } else {
+                            mView.sendSuccess(s);
+                        }
                         KLog.i("transaction Hash: " + s);
                     }
 
@@ -232,11 +280,58 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
                 } else {
                 }
                 System.out.println("交易的hash为：" + ethSendTransaction.getTransactionHash());
-//                return ethSendTransaction.getTransactionHash();
+                return ethSendTransaction.getTransactionHash();
 //                return signedData;
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return "";
+    }
+
+    private String generateTransactionEth(String fromAddress, String toAddress, String privateKey, String amount, int limit, int price) {
+        final Web3j web3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        try {
+            return testEthTransaction(web3j, fromAddress, privateKey, toAddress, amount, limit, price);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private String testEthTransaction(Web3j web3j, String fromAddress, String privateKey, String toAddress, String amount, int limit, int price) {
+
+        BigInteger gasPrice = Convert.toWei(BigDecimal.valueOf(price), Convert.Unit.GWEI).toBigInteger();
+        BigInteger gasLimit = BigInteger.valueOf(limit);
+        BigInteger value = Convert.toWei(amount, Convert.Unit.ETHER).toBigInteger();
+        KLog.i(value);
+        EthGetTransactionCount ethGetTransactionCount = null;
+        try {
+            ethGetTransactionCount = web3j.ethGetTransactionCount(fromAddress, DefaultBlockParameterName.LATEST).sendAsync().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+
+        String signedData = ColdWallet.signTransactionEth(nonce, toAddress, gasPrice, gasLimit, value, privateKey);
+
+        EthSendTransaction ethSendTransaction = null;
+        try {
+            ethSendTransaction = web3j.ethSendRawTransaction(signedData).sendAsync().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (ethSendTransaction.hasError()) {
+            KLog.i(ethSendTransaction.getError().getMessage());
+        } else {
+            String transactionHash = ethSendTransaction.getTransactionHash();
+            KLog.i(transactionHash);
+            return transactionHash;
         }
         return "";
     }
