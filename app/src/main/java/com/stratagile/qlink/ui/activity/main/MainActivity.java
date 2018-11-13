@@ -3,6 +3,7 @@ package com.stratagile.qlink.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,7 +47,9 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.WifiEntity;
+import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.ContinentAndCountry;
+import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
@@ -82,10 +86,13 @@ import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
+import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
+import com.stratagile.qlink.ui.activity.wallet.QrCodeDetailActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.WalletFragment;
+import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LogUtil;
@@ -212,12 +219,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
                 Glide.with(this)
                         .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().options)
+                        .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivAvater);
             } else {
                 Glide.with(this)
                         .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().options)
+                        .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivAvater);
             }
         }
@@ -248,35 +255,35 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     public void onGetFreeNumBack(int num) {
         ConstantValue.freeNum = num;
-        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            Glide.with(this)
-                    .load(R.mipmap.icon_set_active)
-                    .into(ivWallet);
-            ivWallet.setVisibility(View.VISIBLE);
-        }
+//        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+//            Glide.with(this)
+//                    .load(R.mipmap.icon_set_active)
+//                    .into(ivWallet);
+//            ivWallet.setVisibility(View.VISIBLE);
+//        }
     }
 
     int isShowAct = 0;
 
     @Override
     public void onGetShowActBack(int isShow) {
-        isShowAct = isShow;
-        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            Glide.with(this)
-                    .load(R.mipmap.icon_set_active)
-                    .into(ivWallet);
-            ivWallet.setVisibility(View.VISIBLE);
-        }
+//        isShowAct = isShow;
+//        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+//            Glide.with(this)
+//                    .load(R.mipmap.icon_set_active)
+//                    .into(ivWallet);
+//            ivWallet.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetFreeNumBack(FreeCount freeCount) {
-        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            Glide.with(this)
-                    .load(R.mipmap.icon_set_active)
-                    .into(ivWallet);
-            ivWallet.setVisibility(View.VISIBLE);
-        }
+//        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+//            Glide.with(this)
+//                    .load(R.mipmap.icon_set_active)
+//                    .into(ivWallet);
+//            ivWallet.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -287,19 +294,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ChangeTestUI(ChangeWalletNeedRefesh changeWalletNeedRefesh) {
-        mPresenter.getMainAddress();
-        Map<String, String> infoMap1 = new HashMap<>();
-        infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
-        mPresenter.zsFreeNum(infoMap1);
-        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
-            if (SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
-                statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));
-                statusBar.setText(getString(R.string.testnet));
-            }
-        } else {
-            statusBar.setBackground(getResources().getDrawable(R.drawable.navigation_shape));
-            statusBar.setText("");
-        }
+//        mPresenter.getMainAddress();
+//        Map<String, String> infoMap1 = new HashMap<>();
+//        infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+//        mPresenter.zsFreeNum(infoMap1);
+//        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+//            if (SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
+//                statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));
+//                statusBar.setText(getString(R.string.testnet));
+//            }
+//        } else {
+//            statusBar.setBackground(getResources().getDrawable(R.drawable.navigation_shape));
+//            statusBar.setText("");
+//        }
     }
 
     @Override
@@ -321,7 +328,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Map<String, String> map = new HashMap<>();
         map.put("key", addressNames);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-//        mPresenter.getShowAct();
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
@@ -345,6 +351,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         String p2pId = result;
                         String saveResult = FileUtil.saveP2pId2Local(result);
                         KLog.i("上次的p2pId" + saveResult);
+                        if ("".equals(saveResult)) {
+
+                        } else {
+                            showp2pIdChangeDialog(result, saveResult);
+                        }
                         if (SpUtil.getString(MainActivity.this, ConstantValue.myAvatarPath, "").equals("")) {
                             Map<String, String> infoMap = new HashMap<>();
                             infoMap.put("p2pId", p2pId);
@@ -429,7 +440,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 } else if (position == 2) {
                     return new SmsFragment();
                 } else {
-                    return new SettingsFragment();
+                    return new MarketFragment();
                 }
             }
 
@@ -487,7 +498,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         /**
          * @see WalletFragment#refreshNeo(NeoRefrash)
          */
-        EventBus.getDefault().post(new NeoRefrash());
+//        EventBus.getDefault().post(new NeoRefrash());
         //创建neo钱包。为唯一对象，每次在使用的钱包只有一个。
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         for (int i = 0; i < walletList.size(); i++) {
@@ -504,12 +515,41 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             }
         }
 
-        ivWallet.post(new Runnable() {
+//        ivWallet.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                showGuideViewEnterWallet();
+//            }
+//        });
+    }
+
+    private void showp2pIdChangeDialog(String currentP2pId, String lastP2pId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.p2pid_change_dialog_layout, null);
+        builder.setView(view);
+        builder.setCancelable(true);
+        TextView title = (TextView) view.findViewById(R.id.title);//设置标题
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
+        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
+        tvContent.setText(getString(R.string.currentP2pId) + currentP2pId + "\n\n" + getString(R.string.lastP2pId) + lastP2pId);
+        title.setText(R.string.P2pId_is_changed);
+        //取消或确定按钮监听事件处l
+        AlertDialog dialog = builder.create();
+        btn_cancel.setText(getString(R.string.cancel).toLowerCase());
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                showGuideViewEnterWallet();
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
+        btn_comfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void resetToDefaultIcon() {
@@ -549,10 +589,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (myStatus.getStatus() > 0) {
             this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search));
             SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
-            /*if(countDownTimerUtils != null)
-            {
-                countDownTimerUtils.doOnce();
-            }*/
         } else {
             this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search_red));
             SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
@@ -561,8 +597,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void changeToTestWallet(ChangeToTestWallet changeToTestWallet) {
-        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        Account.INSTANCE.fromWIF(walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0)).getWif());
+//        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+//        Account.INSTANCE.fromWIF(walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0)).getWif());
     }
 
     /**
@@ -583,6 +619,26 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Glide.with(this)
                 .load(R.mipmap.icon_rank)
                 .into(ivWallet);
+        ivAvater.setVisibility(View.VISIBLE);
+        myStatus.setVisibility(View.VISIBLE);
+        if (qlinkcom.GetP2PConnectionStatus() > 0) {
+            this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search));
+            SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
+        } else {
+            this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search_red));
+            SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
+        }
+        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+            Glide.with(this)
+                    .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                    .apply(AppConfig.getInstance().optionsMainColor)
+                    .into(ivAvater);
+        } else {
+            Glide.with(this)
+                    .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                    .apply(AppConfig.getInstance().optionsMainColor)
+                    .into(ivAvater);
+        }
     }
 
     private void setMarketPage() {
@@ -599,9 +655,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (isShowAct == 0) {
         } else {
         }
+        ivAvater.setVisibility(View.GONE);
+        myStatus.setVisibility(View.GONE);
         ivWallet.setVisibility(View.VISIBLE);
         Glide.with(this)
-                .load(R.mipmap.icon_add)
+                .load(R.mipmap.icons_add_wallet)
                 .into(ivWallet);
     }
 
@@ -611,10 +669,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         dangqianshijian = Calendar.getInstance().getTimeInMillis();
         KLog.i("进入钱包页面。。");
-        if (ivWallet != null) {
-            ivWallet.setVisibility(View.VISIBLE);
-            ivWallet.setClickable(true);
-        }
+        ivWallet.setVisibility(View.VISIBLE);
         downCHeckView.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
         //如果支持指纹，但是没有开启
@@ -638,6 +693,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     Glide.with(this)
                             .load(R.mipmap.icons_scan_qrcode_n)
                             .into(ivWallet);
+                    ivAvater.setVisibility(View.VISIBLE);
+                    myStatus.setVisibility(View.GONE);
+                    Glide.with(this)
+                            .load(R.mipmap.qr_code_n)
+                            .into(ivAvater);
                     showGuideViewEnterSetting();
                 }
             } else {
@@ -664,6 +724,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     tvTitle.setText(R.string.my_wallet);
                     tvTitle.setTextColor(getResources().getColor(R.color.white));
+                    ivAvater.setVisibility(View.VISIBLE);
+                    myStatus.setVisibility(View.GONE);
+                    Glide.with(this)
+                            .load(R.mipmap.qr_code_n)
+                            .into(ivAvater);
                     Glide.with(this)
                             .load(R.mipmap.icons_scan_qrcode_n)
                             .into(ivWallet);
@@ -697,6 +762,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.settings);
         tvTitle.setTextColor(getResources().getColor(R.color.color_29282a));
+        ivAvater.setVisibility(View.GONE);
+        myStatus.setVisibility(View.GONE);
         Glide.with(this)
                 .load(R.mipmap.icon_set1)
                 .into(ivWallet);
@@ -737,12 +804,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
                 Glide.with(this)
                         .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().options)
+                        .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivAvater);
             } else {
                 Glide.with(this)
                         .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().options)
+                        .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivAvater);
             }
         }
@@ -764,10 +831,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public void handleToAppToBack(ForegroundCallBack foregroundCallBack) {
         if (!foregroundCallBack.isForeground()) {
             ConstantValue.isShouldShowVertifyPassword = true;
-            if (viewPager.getCurrentItem() == 1) {
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
-                viewPager.setCurrentItem(0, false);
-            }
+            bottomNavigation.setSelectedItemId(R.id.item_sms);
+            setVpnPage();
         }
     }
 
@@ -925,9 +990,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
-//                Intent intent1 = new Intent(this, ProfilePictureActivity.class);
-                Intent intent1 = new Intent(this, SelectWalletTypeActivity.class);
-                startActivityForResult(intent1, START_SELECT_PICTURE);
+                if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+                    Intent intent1 = new Intent(this, ProfilePictureActivity.class);
+//                Intent intent1 = new Intent(this, SelectWalletTypeActivity.class);
+                    startActivityForResult(intent1, START_SELECT_PICTURE);
+                } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
+                    if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), "ETH Address", "eth_eth");
+                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), "NEO Address", "neo_neo");
+                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                    }
+                }
                 break;
             case R.id.iv_wallet:
 //                if (bottomNavigation.getSelectedItemId() == R.id.item_settings) {
@@ -1013,12 +1088,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
             Glide.with(this)
                     .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                    .apply(AppConfig.getInstance().options)
+                    .apply(AppConfig.getInstance().optionsMainColor)
                     .into(ivAvater);
         } else {
             Glide.with(this)
                     .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                    .apply(AppConfig.getInstance().options)
+                    .apply(AppConfig.getInstance().optionsMainColor)
                     .into(ivAvater);
         }
 

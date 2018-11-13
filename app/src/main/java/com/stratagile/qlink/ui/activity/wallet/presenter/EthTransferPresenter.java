@@ -10,6 +10,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
@@ -154,6 +155,31 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
         return ETHWalletUtils.derivePrivateKey(ethWallet.getId());
     }
 
+    private void transferRecord(Map map) {
+        Disposable disposable = httpAPIWrapper.reportWalletTransaction(map)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack baseBack) throws Exception {
+                        //isSuccesse
+                        mView.sendSuccess("success");
+                        mView.closeProgressDialog();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
     @Override
     public void transactionEth(TokenInfo tokenInfo, String toAddress, String amount, int limit, int price) {
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -171,8 +197,14 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
 
                     @Override
                     public void onNext(String s) {
-                        mView.sendSuccess(s);
-                        mView.closeProgressDialog();
+                        Map<String, Object> infoMap = new HashMap<>();
+                        infoMap.put("addressFrom", tokenInfo.getWalletAddress());
+                        infoMap.put("addressTo", toAddress);
+                        infoMap.put("blockChain", "ETH");
+                        infoMap.put("symbol", "ETH");
+                        infoMap.put("amount", amount);
+                        infoMap.put("txid", s);
+                        transferRecord(infoMap);
                         KLog.i("transaction Hash: " + s);
                     }
 
@@ -210,7 +242,14 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
                         if ("".equals(s)) {
                             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.error2));
                         } else {
-                            mView.sendSuccess(s);
+                            Map<String, Object> infoMap = new HashMap<>();
+                            infoMap.put("addressFrom", tokenInfo.getWalletAddress());
+                            infoMap.put("addressTo", toAddress);
+                            infoMap.put("blockChain", "ETH");
+                            infoMap.put("symbol", tokenInfo.getTokenSymol().toUpperCase());
+                            infoMap.put("amount", amount);
+                            infoMap.put("txid", s);
+                            transferRecord(infoMap);
                         }
                         KLog.i("transaction Hash: " + s);
                     }

@@ -275,23 +275,23 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
         LocalAssetsUtils.updateGreanDaoFromLocal();//以本地资产配置为准
         //读取sd卡资产数据begin
         ArrayList<MyAsset> assetArrayList = new ArrayList<>();
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !wifiEntity.getIsInMainWallet()) {//主网
-                continue;
-            }
-            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && wifiEntity.getIsInMainWallet()) {//测试网
-                continue;
-            }
-            if (wifiEntity.getOwnerP2PId() != null && wifiEntity.getOwnerP2PId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
-                if (wifiEntity.getWalletAddress() != null && wifiEntity.getWalletAddress().equals(wallet.getAddress())) {
-                    MyAsset myAsset = new MyAsset();
-                    myAsset.setType(0);
-                    myAsset.setWifiEntity(wifiEntity);
-                    assetArrayList.add(myAsset);
-                }
-            }
-        }
+//        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
+//        for (WifiEntity wifiEntity : wifiEntityList) {
+//            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !wifiEntity.getIsInMainWallet()) {//主网
+//                continue;
+//            }
+//            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && wifiEntity.getIsInMainWallet()) {//测试网
+//                continue;
+//            }
+//            if (wifiEntity.getOwnerP2PId() != null && wifiEntity.getOwnerP2PId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+//                if (wifiEntity.getWalletAddress() != null && wifiEntity.getWalletAddress().equals(wallet.getAddress())) {
+//                    MyAsset myAsset = new MyAsset();
+//                    myAsset.setType(0);
+//                    myAsset.setWifiEntity(wifiEntity);
+//                    assetArrayList.add(myAsset);
+//                }
+//            }
+//        }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         LogUtil.addLog("getasseList Assets count_0：" + vpnEntityList.size(), getClass().getSimpleName());
         String addStr ="";

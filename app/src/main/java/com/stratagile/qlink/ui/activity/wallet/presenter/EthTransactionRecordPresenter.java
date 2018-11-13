@@ -19,6 +19,7 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.EthWalletTransaction;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
+import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransactionRecordContract;
@@ -75,6 +76,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     @Override
                     public void accept(EthWalletTransaction baseBack) throws Exception {
                         //isSuccesse
+                        KLog.i(baseBack.getData());
                         EthWalletTransaction.EthTransactionBean ethTransactionBean = new Gson().fromJson(baseBack.getData(), EthWalletTransaction.EthTransactionBean.class);
                         getEthTransactionInfo(ethTransactionBean.getOperations(), walletAddress);
 
@@ -92,6 +94,53 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     }
                 });
         mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getOnlyEthTransaction(Map map, String walletAddress) {
+        Disposable disposable = httpAPIWrapper.getOnlyEthTransaction(map)
+                .subscribe(new Consumer<OnlyEthTransactionHistory>() {
+                    @Override
+                    public void accept(OnlyEthTransactionHistory baseBack) throws Exception {
+                        //isSuccesse
+                        String data = "{\"operations\":"  + baseBack.getData() + "}";
+                        KLog.i(data);
+                        OnlyEthTransactionHistory.EthTransactionBean ethTransactionBean = new Gson().fromJson(data, OnlyEthTransactionHistory.EthTransactionBean.class);
+                        getOnlyEthTransactionHistory(ethTransactionBean.getOperations(), walletAddress);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void getOnlyEthTransactionHistory(List<OnlyEthTransactionHistory.EthTransactionBean.OperationsBean> dataBean, String walletAddress) {
+        ArrayList<TransactionInfo> transactionInfos = new ArrayList<>();
+        for (int i = 0; i < dataBean.size(); i++) {
+            TransactionInfo transactionInfo = new TransactionInfo();
+            transactionInfo.setTransactionType(AllWallet.WalletType.EthWallet);
+            transactionInfo.setTransactionToken("eth");
+            transactionInfo.setTransactionValue(dataBean.get(i).getValue() + "");
+            transactionInfo.setTransationHash(dataBean.get(i).getHash());
+            transactionInfo.setFrom(dataBean.get(i).getFrom());
+            transactionInfo.setTo(dataBean.get(i).getTo());
+            transactionInfo.setTransactionState(dataBean.get(i).isSuccess()? "success" : "failed");
+            transactionInfo.setOwner(walletAddress);
+            transactionInfo.setTimestamp(dataBean.get(i).getTimestamp());
+            transactionInfo.setTokenDecimals(0);
+            transactionInfos.add(transactionInfo);
+        }
+        mView.setEthTransactionHistory(transactionInfos);
     }
 
     private void getEthTransactionInfo(List<EthWalletTransaction.EthTransactionBean.OperationsBean> operationsBeans, String address) {

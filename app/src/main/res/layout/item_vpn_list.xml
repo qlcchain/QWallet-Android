@@ -64,11 +64,10 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:layout_marginTop="@dimen/x10"
-                    android:fontFamily="@font/vagroundedbt"
                     android:lines="1"
                     android:maxEms="7"
                     android:text="@string/ssid"
-                    android:textColor="@color/color_333"
+                    android:textColor="@color/color_29282a"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -76,24 +75,13 @@
                 android:id="@+id/ll_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/x10"
                 android:layout_weight="0"
                 android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular_q"
-                    android:textColor="@color/color_333"
-                    android:textStyle="bold"
-                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/tv_country"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x20"
                     android:fontFamily="@font/roboto_regular_q"
                     android:text=""
                     android:textColor="@color/color_a8a6a6"
@@ -104,26 +92,37 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/x5"
+                android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
+
+                <ImageView
+                    android:layout_width="@dimen/x20"
+                    android:src="@mipmap/winq_gas_n"
+                    android:layout_height="@dimen/x20" />
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x5"
+                    android:fontFamily="@font/roboto_regular_q"
+                    android:textColor="@color/color_333"
+                    android:textStyle="bold"
+                    android:textSize="10sp" />
+                <ImageView
+                    android:layout_width="@dimen/x20"
+                    android:src="@mipmap/xin"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_height="@dimen/x20" />
                 <TextView
                     android:id="@+id/connect_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular_q"
-                    android:text="@string/Users"
-                    android:textStyle="bold"
-                    android:textColor="@color/color_333"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/max_connect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x20"
+                    android:layout_marginLeft="@dimen/x5"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/total_successful_connection"
-                    android:textColor="@color/color_a8a6a6"
+                    android:textColor="@color/color_333"
                     android:textSize="10sp" />
             </LinearLayout>
         </LinearLayout>

@@ -25,11 +25,14 @@ public interface SelectWalletTypeContract {
         void createEthWalletSuccess(EthWallet ethWallet);
 
         void createNeoWalletSuccess(Wallet wallet);
+
+        void reportCreatedWalletSuccess();
     }
 
     interface SelectWalletTypeContractPresenter extends BasePresenter {
         void createEthWallet();
 
         void createNeoWallet();
+        void reportWalletCreated(String address, String blockChain);
     }
 }

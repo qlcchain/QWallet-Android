@@ -99,6 +99,7 @@
                 android:id="@+id/registerVpn"
                 android:layout_width="wrap_content"
                 android:text="MY ASSETS"
+                android:textStyle="bold"
                 android:layout_gravity="center_vertical"
                 android:textSize="12sp"
                 android:drawableRight="@mipmap/icon_asset"

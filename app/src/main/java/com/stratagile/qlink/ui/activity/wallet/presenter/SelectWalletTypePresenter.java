@@ -1,16 +1,25 @@
 package com.stratagile.qlink.ui.activity.wallet.presenter;
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -31,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
  * @Description: presenter of SelectWalletTypeActivity
  * @date 2018/10/19 10:51:45
  */
-public class SelectWalletTypePresenter implements SelectWalletTypeContract.SelectWalletTypeContractPresenter{
+public class SelectWalletTypePresenter implements SelectWalletTypeContract.SelectWalletTypeContractPresenter {
 
     HttpAPIWrapper httpAPIWrapper;
     private final SelectWalletTypeContract.View mView;
@@ -45,6 +54,7 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
         mCompositeDisposable = new CompositeDisposable();
         this.mActivity = activity;
     }
+
     @Override
     public void subscribe() {
 
@@ -53,7 +63,7 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
     @Override
     public void unsubscribe() {
         if (!mCompositeDisposable.isDisposed()) {
-             mCompositeDisposable.dispose();
+            mCompositeDisposable.dispose();
         }
     }
 
@@ -63,6 +73,22 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
         Observable.create(new ObservableOnSubscribe<EthWallet>() {
             @Override
             public void subscribe(ObservableEmitter<EthWallet> emitter) throws Exception {
+                List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+                for (EthWallet wallet : ethWallets) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallet);
+                        break;
+                    }
+                }
+                List<Wallet> wallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                for (Wallet wallet : wallets) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                        break;
+                    }
+                }
                 EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
                 AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
                 KLog.i(ethWallet.getMnemonic());
@@ -95,21 +121,73 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
     }
 
     @Override
+    public void reportWalletCreated(String address, String blockChain) {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("address", address);
+        infoMap.put("blockChain", blockChain);
+        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack baseBack) throws Exception {
+                        //isSuccesse
+                        mView.closeProgressDialog();
+                        mView.reportCreatedWalletSuccess();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
     public void createNeoWallet() {
         mView.showProgressDialog();
         new Thread(new Runnable() {
             @Override
             public void run() {
+                List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+                for (EthWallet wallet : ethWallets) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallet);
+                        break;
+                    }
+                }
+                List<Wallet> wallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                for (Wallet wallet : wallets) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                        break;
+                    }
+                }
                 Account.INSTANCE.createNewWallet();
                 neoutils.Wallet wallet = Account.INSTANCE.getWallet();
-                com.stratagile.qlink.db.Wallet walletWinq = new com.stratagile.qlink.db.Wallet();
+                Wallet walletWinq = new Wallet();
                 walletWinq.setAddress(wallet.getAddress());
                 walletWinq.setWif(wallet.getWIF());
                 walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
                 walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
                 walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
-                walletWinq.setIsMain(true);
-                KLog.i();walletWinq.toString();
+                walletWinq.setIsCurrent(true);
+                if (wallets.size() < 9) {
+                    walletWinq.setName("NEO-Wallet 0" + (wallets.size() + 1));
+                } else {
+                    walletWinq.setName("NEO-Wallet " + (wallets.size() + 1));
+                }
+                KLog.i();
+                walletWinq.toString();
                 AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
                 mView.createNeoWalletSuccess(walletWinq);
             }

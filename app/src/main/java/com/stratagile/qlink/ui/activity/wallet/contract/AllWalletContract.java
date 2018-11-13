@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.wallet.contract;
 
+import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
@@ -28,6 +29,8 @@ public interface AllWalletContract {
 
         void getNeoWalletInfoBack(ArrayList<TokenInfo> tokenInfos);
         void getTokenPriceBack(ArrayList<TokenInfo> tokenInfos);
+
+        void getWinqGasBack(Balance balance);
     }
 
     interface AllWalletContractPresenter extends BasePresenter {
@@ -36,5 +39,11 @@ public interface AllWalletContract {
         void getNeoWalletDetail(String address, Map map);
 
         void getToeknPrice(ArrayList<TokenInfo> arrayList, HashMap map);
+
+        /**
+         * 获取winqgas，也就是获取测试网的qlc
+         * @param address
+         */
+        void getWinqGas(String address);
     }
 }

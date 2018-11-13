@@ -14,6 +14,16 @@ public class Balance extends BaseBack {
 
     private DataBean data;
 
+    private String walletAddress;
+
+    public String getWalletAddress() {
+        return walletAddress;
+    }
+
+    public void setWalletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
+    }
+
     public DataBean getData() {
         return data;
     }

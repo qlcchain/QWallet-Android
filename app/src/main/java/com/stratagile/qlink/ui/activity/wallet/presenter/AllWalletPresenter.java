@@ -4,15 +4,21 @@ import android.support.annotation.NonNull;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.socks.library.KLog;
+import com.stratagile.qlink.R;
+import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
+import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,6 +139,21 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
         mCompositeDisposable.add(disposable);
     }
 
+    @Override
+    public void getWinqGas(String address) {
+        Map<String, String> map = new HashMap<>();
+        map.put("address", address);
+        httpAPIWrapper.getBalance(map)
+                .subscribe(new HttpObserver<Balance>() {
+                    @Override
+                    public void onNext(Balance balance) {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        balance.setWalletAddress(address);
+                        mView.getWinqGasBack(balance);
+                    }
+                });
+    }
 
 
     private void getTokenPrice(ArrayList<TokenInfo> tokenInfos) {

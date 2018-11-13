@@ -10,12 +10,15 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.entity.CurrencyBean;
+import com.stratagile.qlink.entity.eventbus.ChangeCurrency;
 import com.stratagile.qlink.ui.activity.setting.component.DaggerCurrencyUnitComponent;
 import com.stratagile.qlink.ui.activity.setting.contract.CurrencyUnitContract;
 import com.stratagile.qlink.ui.activity.setting.module.CurrencyUnitModule;
 import com.stratagile.qlink.ui.activity.setting.presenter.CurrencyUnitPresenter;
 import com.stratagile.qlink.ui.adapter.settings.CurrencyUnitAdapter;
 import com.stratagile.qlink.utils.SpUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -72,19 +75,29 @@ public class CurrencyUnitActivity extends BaseActivity implements CurrencyUnitCo
 
     private ArrayList<CurrencyBean> getCurrencyBeans() {
         ArrayList<CurrencyBean> currencyBeans = new ArrayList<>();
-        currencyBeans.add(new CurrencyBean("USD", true));
-        currencyBeans.add(new CurrencyBean("CNY", false));
-        currencyBeans.add(new CurrencyBean("TWD", false));
-        currencyBeans.add(new CurrencyBean("HKD", false));
-        currencyBeans.add(new CurrencyBean("MOP", false));
-        currencyBeans.add(new CurrencyBean("EUR", false));
-        currencyBeans.add(new CurrencyBean("RUB", false));
-        currencyBeans.add(new CurrencyBean("KRW", false));
-        currencyBeans.add(new CurrencyBean("PHP", false));
-        currencyBeans.add(new CurrencyBean("JPY", false));
-        currencyBeans.add(new CurrencyBean("THB", false));
-        currencyBeans.add(new CurrencyBean("TRY", false));
-        currencyBeans.add(new CurrencyBean("VND", false));
+        currencyBeans.add(new CurrencyBean("USD", true, "$"));
+        currencyBeans.add(new CurrencyBean("CNY", false, "¥"));
+        currencyBeans.add(new CurrencyBean("TWD", false, "NT$"));
+        //港币
+        currencyBeans.add(new CurrencyBean("HKD", false, "HK$"));
+        //澳门币
+        currencyBeans.add(new CurrencyBean("MOP", false, "MOP$"));
+        //欧元
+        currencyBeans.add(new CurrencyBean("EUR", false, "€"));
+        //卢布，俄罗斯
+        currencyBeans.add(new CurrencyBean("RUB", false, "Br"));
+        //韩元
+        currencyBeans.add(new CurrencyBean("KRW", false, "₩"));
+        //菲律宾比索
+        currencyBeans.add(new CurrencyBean("PHP", false, "₱"));
+        //日本币
+        currencyBeans.add(new CurrencyBean("JPY", false, "￥"));
+        //泰铢
+        currencyBeans.add(new CurrencyBean("THB", false, "฿"));
+        //土耳其，里拉
+        currencyBeans.add(new CurrencyBean("TRY", false, "₺"));
+        //越南
+        currencyBeans.add(new CurrencyBean("VND", false, "₫"));
         String currency = SpUtil.getString(this, ConstantValue.currencyUnit, "USD");
         for (int i =  0; i < currencyBeans.size(); i++) {
             if (currencyBeans.get(i).getName().equals(currency)) {
@@ -97,22 +110,19 @@ public class CurrencyUnitActivity extends BaseActivity implements CurrencyUnitCo
     }
 
     @Override
-    protected void onDestroy() {
+    public void onBackPressed() {
         for (int i =  0; i < currencyUnitAdapter.getData().size(); i++) {
             if (currencyUnitAdapter.getData().get(i).isCheck()) {
                 SpUtil.putString(this, ConstantValue.currencyUnit, currencyUnitAdapter.getData().get(i).getName());
-                if (currencyUnitAdapter.getData().get(i).getName().equals("USD")) {
-                    CurrencyBean currencyBean = new CurrencyBean("USD", true);
-                    currencyBean.setCurrencyImg("$");
-                    ConstantValue.currencyBean = currencyBean;
-                }
-                if (currencyUnitAdapter.getData().get(i).getName().equals("CNY")) {
-                    CurrencyBean currencyBean = new CurrencyBean("CNY", true);
-                    currencyBean.setCurrencyImg("¥");
-                    ConstantValue.currencyBean = currencyBean;
-                }
+                ConstantValue.currencyBean = currencyUnitAdapter.getData().get(i);
             }
         }
+        EventBus.getDefault().post(new ChangeCurrency());
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 

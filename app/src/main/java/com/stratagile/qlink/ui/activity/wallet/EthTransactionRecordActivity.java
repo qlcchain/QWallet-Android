@@ -200,8 +200,10 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
         if (tokenInfo.getWalletType() == AllWallet.WalletType.EthWallet) {
             if (!tokenInfo.getTokenSymol().toLowerCase().equals("eth")) {
                 infoMap.put("token", tokenInfo.getTokenAddress());
+                mPresenter.getEthWalletTransaction(infoMap, tokenInfo.getWalletAddress());
+            } else {
+                mPresenter.getOnlyEthTransaction(infoMap, tokenInfo.getWalletAddress());
             }
-            mPresenter.getEthWalletTransaction(infoMap, tokenInfo.getWalletAddress());
         } else {
             infoMap.put("page", 1);
             mPresenter.getNeoWalletTransaction(infoMap);

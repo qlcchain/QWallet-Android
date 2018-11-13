@@ -1,5 +1,7 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -63,6 +65,7 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     EditText etPassword;
     @BindView(R.id.btImport)
     TextView btImport;
+    private ImportViewModel viewModel;
 
     private static ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
@@ -71,6 +74,7 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_eth_key_stroe, null);
         ButterKnife.bind(this, view);
+        viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
         Bundle mBundle = getArguments();
         return view;
     }
@@ -120,10 +124,12 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
 
     @OnClick(R.id.btImport)
     public void onViewClicked() {
-        if (etKeystroe.getText().toString().equals("")) {
+        if ("".equals(etKeystroe.getText().toString().trim())) {
+            ToastUtil.displayShortToast("please type keystore");
             return;
         }
         if (etPassword.getText().toString().equals("")) {
+            ToastUtil.displayShortToast("please type password");
             return;
         }
         showProgressDialog();
@@ -140,6 +146,11 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     public void loadWalletByKeystore(String keystore, String pwd) {
         EthWallet wallet;
         wallet = ETHWalletUtils.loadWalletByKeystore(keystore, pwd);
+        if (wallet == null) {
+            closeProgressDialog();
+            ToastUtil.displayShortToast("import eth wallet error");
+            return;
+        }
         KLog.i(wallet.toString());
         List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         for (int i = 0; i < wallets.size(); i++) {
@@ -149,31 +160,17 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
                 return;
             }
         }
+
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).isCurrent()) {
+                wallets.get(i).setCurrent(false);
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallets.get(i));
+                break;
+            }
+        }
         AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(wallet);
         closeProgressDialog();
-        getActivity().finish();
-//        Credentials credentials = null;
-//        WalletFile walletFile = null;
-//        try {
-//            walletFile = objectMapper.readValue(keystore, WalletFile.class);
-//
-////            WalletFile walletFile = new Gson().fromJson(keystore, WalletFile.class);
-//            credentials = Credentials.create(Wallet.decrypt(pwd, walletFile));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (CipherException e) {
-////            ToastUtils.showToast(R.string.load_wallet_by_official_wallet_keystore_input_tip);
-//            e.printStackTrace();
-//        }
-//        KLog.i(credentials.getEcKeyPair().getPrivateKey());
-//        try {
-//            OwnWalletUtils.generateWalletFile(pwd, credentials.getEcKeyPair(), new File(AppConfig.getInstance().getFilesDir(), ""), true);
-//            WalletStorage.getInstance(getActivity()).add(new FullWallet(walletFile.getAddress(), walletFile.getAddress()), getActivity());
-//        } catch (CipherException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        viewModel.walletAddress.postValue(wallet.getAddress());
     }
 
 }

@@ -50,7 +50,6 @@
             android:text=""
             android:layout_marginLeft="@dimen/x10"
             android:textColor="@color/color_29282a"
-            android:fontFamily="@font/vagroundedbt"
             android:textSize="18sp"
             android:layout_height="wrap_content" />
         <ImageView

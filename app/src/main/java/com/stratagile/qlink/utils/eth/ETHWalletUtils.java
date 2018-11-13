@@ -1,5 +1,6 @@
 package com.stratagile.qlink.utils.eth;
 
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -286,10 +287,7 @@ public class ETHWalletUtils {
         BigInteger publicKey = ecKeyPair.getPublicKey();
         String s = publicKey.toString();
         KLog.i("ETHWalletUtils", "publicKey = " + s);
-        String wallet_dir = AppFilePath.Wallet_DIR;
-        KLog.i("ETHWalletUtils", "wallet_dir = " + wallet_dir);
-        String keystorePath = "keystore_" + walletFile.getAddress() + ".json";
-        File destination = new File(wallet_dir, "keystore_" + walletFile.getAddress() + ".json");
+        File destination = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletFile.getAddress() + ".json");
 
         //目录不存在则创建目录，创建不了则报错
         if (!createParentDir(destination)) {
@@ -305,7 +303,8 @@ public class ETHWalletUtils {
         ethWallet.setName(generateNewWalletName());
         ethWallet.setAddress(Keys.toChecksumAddress(walletFile.getAddress()));
         ethWallet.setKeystorePath(destination.getAbsolutePath());
-        ethWallet.setPassword(pwd);
+        ethWallet.setCurrent(true);
+        ethWallet.setPassword(enCodePassword(pwd));
         return ethWallet;
     }
 
@@ -406,7 +405,7 @@ public class ETHWalletUtils {
         try {
             credentials = WalletUtils.loadCredentials(oldPassword, ethWallet.getKeystorePath());
             keypair = credentials.getEcKeyPair();
-            File destinationDirectory = new File(AppFilePath.Wallet_DIR, "keystore_" + walletName + ".json");
+            File destinationDirectory = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletName + ".json");
             WalletUtils.generateWalletFile(newPassword, keypair, destinationDirectory, true);
             ethWallet.setPassword(newPassword);
             AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallet);

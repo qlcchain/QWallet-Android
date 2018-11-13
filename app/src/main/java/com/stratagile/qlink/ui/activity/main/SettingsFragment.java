@@ -3,6 +3,7 @@ package com.stratagile.qlink.ui.activity.main;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,18 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kyleduo.switchbutton.SwitchButton;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.main.component.DaggerSettingsComponent;
 import com.stratagile.qlink.ui.activity.main.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.main.module.SettingsModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SettingsPresenter;
 import com.stratagile.qlink.ui.activity.setting.CurrencyUnitActivity;
+import com.stratagile.qlink.ui.activity.wallet.ChangePasswordActivity;
+import com.stratagile.qlink.ui.activity.wallet.ChooseWalletActivity;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.VersionUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -59,6 +67,10 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
     LinearLayout llCommunity;
     @BindView(R.id.llAboutWinQ)
     LinearLayout llAboutWinQ;
+    @BindView(R.id.currentCurrency)
+    TextView currentCurrency;
+    @BindView(R.id.version)
+    TextView version;
 
     @Nullable
     @Override
@@ -77,6 +89,8 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
                 SpUtil.putBoolean(getActivity(), ConstantValue.fingerprintUnLock, isChecked);
             }
         });
+        currentCurrency.setText(ConstantValue.currencyBean.getName());
+        version.setText("Version：" + VersionUtil.getAppVersionName(getActivity()));
         return view;
     }
 
@@ -116,23 +130,43 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
         super.onDestroyView();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            currentCurrency.setText(ConstantValue.currencyBean.getName());
+        } else if (requestCode == 3) {
+            EventBus.getDefault().post(new ChangeWallet());
+        }
+    }
+
     @OnClick({R.id.llTouchId, R.id.llPassWord, R.id.llCurrencuUnit, R.id.llManageWallets, R.id.llAgreement, R.id.llHepl, R.id.llCommunity, R.id.llAboutWinQ})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llTouchId:
+
                 break;
             case R.id.llPassWord:
+                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
                 break;
             case R.id.llCurrencuUnit:
-                startActivity(new Intent(getActivity(), CurrencyUnitActivity.class));
+                startActivityForResult(new Intent(getActivity(), CurrencyUnitActivity.class), 2);
                 break;
             case R.id.llManageWallets:
+                startActivityForResult(new Intent(getActivity(), ChooseWalletActivity.class), 3);
                 break;
             case R.id.llAgreement:
+
                 break;
             case R.id.llHepl:
+
                 break;
             case R.id.llCommunity:
+                Intent intent1 = new Intent();
+                intent1.setAction("android.intent.action.VIEW");
+                Uri content_url1 = Uri.parse("https://winq.net");
+                intent1.setData(content_url1);
+                startActivity(intent1);
                 break;
             case R.id.llAboutWinQ:
                 break;

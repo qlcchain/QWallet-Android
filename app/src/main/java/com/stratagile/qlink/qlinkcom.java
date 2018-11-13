@@ -76,6 +76,10 @@ public class qlinkcom {
                 if (!addressFile.exists()) {
                     addressFile.mkdir();
                 }
+                File ethKeystore = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "");
+                if (!ethKeystore.exists()) {
+                    ethKeystore.mkdir();
+                }
                 File profileFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Profile", "");
                 if (!profileFile.exists()) {
                     profileFile.mkdir();

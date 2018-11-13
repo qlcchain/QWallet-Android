@@ -97,7 +97,7 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
     protected void initView() {
         setContentView(R.layout.activity_profile_picture);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@drawable/content_background_shape"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TouchId"
+                android:text="TouchId to unlock"
                 android:textColor="@color/color_29282a" />
 
             <View
@@ -58,7 +58,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llPassWord"
@@ -76,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TouchId"
+                android:text="Password Settings"
                 android:textColor="@color/color_29282a" />
 
             <View
@@ -95,7 +95,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llCurrencuUnit"
@@ -121,6 +121,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
+            <TextView
+                android:id="@+id/currentCurrency"
+                android:layout_marginRight="@dimen/x5"
+                android:textColor="@color/color_29282a_40"
+                android:text="USD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <ImageView
                 android:layout_width="@dimen/x30"
                 android:layout_height="@dimen/x30"
@@ -132,7 +140,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llManageWallets"
@@ -150,7 +158,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manage Wallets"
+                android:text="My Wallet"
                 android:textColor="@color/color_29282a" />
 
             <View
@@ -169,7 +177,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llAgreement"
@@ -187,7 +195,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TouchId"
+                android:text="Service agreement"
                 android:textColor="@color/color_29282a" />
 
             <View
@@ -206,7 +214,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llHepl"
@@ -224,7 +232,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TouchId"
+                android:text="Help and feedback"
                 android:textColor="@color/color_29282a" />
 
             <View
@@ -243,7 +251,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llCommunity"
@@ -261,7 +269,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TouchId"
+                android:text="Join the community"
                 android:textColor="@color/color_29282a" />
 
             <View
@@ -280,7 +288,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llAboutWinQ"
@@ -306,6 +314,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
+            <TextView
+                android:id="@+id/version"
+                android:layout_marginRight="@dimen/x5"
+                android:textColor="@color/color_29282a_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <ImageView
                 android:layout_width="@dimen/x30"
                 android:layout_height="@dimen/x30"
@@ -317,6 +331,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/color_b2b2b2" />
+            android:background="@color/color_eceff1" />
     </LinearLayout>
 </LinearLayout>

@@ -38,56 +38,29 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+
     <LinearLayout
+        android:id="@+id/llEthType"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/x56"
         android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x80"
         android:layout_marginRight="@dimen/x45"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
-            android:text="钱包体系"
+            android:text="Retrieve the path"
             android:textColor="@color/color_1F314A"
             android:layout_height="wrap_content" />
         <View
             android:layout_width="0px"
             android:layout_height="1px"
             android:layout_weight="1"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="以太坊底层"
-            android:textColor="@color/color_1F314A"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
-        android:layout_marginLeft="@dimen/x45"
-        android:layout_marginTop="@dimen/x27"
-        android:background="#FFECEFF1"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:text="取回路径"
-        android:layout_marginLeft="@dimen/x45"
-        android:layout_marginTop="@dimen/x27"
-        android:textColor="@color/color_1F314A"
-        android:layout_height="wrap_content" />
-    <LinearLayout
-        android:id="@+id/llEthType"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/x45"
-        android:layout_marginRight="@dimen/x45"
-        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tvEthType"
             android:layout_width="wrap_content"
             android:text="m/44'/60'/0'/0/0"
             android:textColor="@color/color_1F314A"
             android:layout_height="wrap_content" />
-        <View
-            android:layout_width="0px"
-            android:layout_height="1px"
-            android:layout_weight="1"/>
         <ImageView
             android:layout_width="wrap_content"
             android:src="@mipmap/icon_back"

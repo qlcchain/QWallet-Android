@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -16,6 +17,8 @@ import com.stratagile.qlink.ui.activity.main.presenter.SplashPresenter;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.VersionUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import java.util.Calendar;
 
@@ -60,6 +63,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         mPresenter.getLastVersion();
         mPresenter.getPermission();
         mPresenter.observeJump();
+        KLog.i(VersionUtil.getAppVersionCode(this));
     }
 
     @Override

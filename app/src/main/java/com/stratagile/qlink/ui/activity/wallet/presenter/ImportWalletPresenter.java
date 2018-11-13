@@ -2,11 +2,16 @@ package com.stratagile.qlink.ui.activity.wallet.presenter;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.ui.activity.wallet.contract.ImportWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.ImportWalletActivity;
+import com.stratagile.qlink.utils.SpUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -73,6 +78,36 @@ public class ImportWalletPresenter implements ImportWalletContract.ImportWalletC
                         //onComplete
                         mView.closeProgressDialog();
                         KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void reportWalletCreated(String address, String blockChain) {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("address", address);
+        infoMap.put("blockChain", blockChain);
+        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack baseBack) throws Exception {
+                        //isSuccesse
+                        mView.closeProgressDialog();
+                        mView.reportCreatedWalletSuccess();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
                     }
                 });
         mCompositeDisposable.add(disposable);

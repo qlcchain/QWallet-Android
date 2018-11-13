@@ -416,6 +416,38 @@ public class FileUtil {
     }
 
     /**
+     * 读取文件数据
+     * @param file
+     * @return
+     */
+    public static String getStrDataFromFile(File file) {
+            FileInputStream fis = null;
+            ObjectInputStream ois = null;
+            try {
+                if(!file.exists())
+                {
+                    return  "";
+                }
+                fis = new FileInputStream(file);
+                byte[] buffer = new byte[fis.available()];
+                fis.read(buffer);
+                fis.close();
+                String res = EncodingUtils.getString(buffer, "UTF-8");
+                return res;
+            } catch (IOException  e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (fis != null) fis.close();
+                    if (ois != null) ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        return "";
+    }
+
+    /**
      *  保存数据到sd卡
      * @param path 路径包括文件名称
      * @param data 数据

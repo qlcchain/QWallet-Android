@@ -1,8 +1,18 @@
 package com.stratagile.qlink.ui.activity.eth.presenter;
 import android.support.annotation.NonNull;
+
+import com.socks.library.KLog;
+import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.eth.contract.ImportEthWalletContract;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
+import com.stratagile.qlink.utils.SpUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -39,6 +49,37 @@ public class ImportEthWalletPresenter implements ImportEthWalletContract.ImportE
         if (!mCompositeDisposable.isDisposed()) {
              mCompositeDisposable.dispose();
         }
+    }
+
+    @Override
+    public void reportWalletImported(String address) {
+        mView.showProgressDialog();
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("address", address);
+        infoMap.put("blockChain", "ETH");
+        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack baseBack) throws Exception {
+                        //isSuccesse
+                        mView.closeProgressDialog();
+                        mView.reportCreatedWalletSuccess();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
     }
 
 //    @Override

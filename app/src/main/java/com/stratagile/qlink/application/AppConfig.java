@@ -44,6 +44,7 @@ import com.stratagile.qlink.db.DaoMaster;
 import com.stratagile.qlink.db.DaoSession;
 import com.stratagile.qlink.db.MySQLiteOpenHelper;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
@@ -173,6 +174,7 @@ public class AppConfig extends MultiDexApplication {
         PRNGFixes.apply();
         ToastUtil.init();
         qlinkcom.init();
+        initMoney();
         AppFilePath.init(this);
 //        LeakCanary.install(this);
         NickUtil.initUserNickName(this);
@@ -203,6 +205,39 @@ public class AppConfig extends MultiDexApplication {
             list.add(new NotificationChannel("service-transproxy", getText(R.string.service_transproxy), NotificationManager.IMPORTANCE_LOW));
             nm.createNotificationChannels(list);
             nm.deleteNotificationChannel("service-nat");
+        }
+    }
+
+    private void initMoney() {
+        ArrayList<CurrencyBean> currencyBeans = new ArrayList<>();
+        currencyBeans.add(new CurrencyBean("USD", true, "$"));
+        currencyBeans.add(new CurrencyBean("CNY", false, "¥"));
+        currencyBeans.add(new CurrencyBean("TWD", false, "NT$"));
+        //港币
+        currencyBeans.add(new CurrencyBean("HKD", false, "HK$"));
+        //澳门币
+        currencyBeans.add(new CurrencyBean("MOP", false, "MOP$"));
+        //欧元
+        currencyBeans.add(new CurrencyBean("EUR", false, "€"));
+        //卢布，俄罗斯
+        currencyBeans.add(new CurrencyBean("RUB", false, "Br"));
+        //韩元
+        currencyBeans.add(new CurrencyBean("KRW", false, "₩"));
+        //菲律宾比索
+        currencyBeans.add(new CurrencyBean("PHP", false, "₱"));
+        //日本币
+        currencyBeans.add(new CurrencyBean("JPY", false, "￥"));
+        //泰铢
+        currencyBeans.add(new CurrencyBean("THB", false, "฿"));
+        //土耳其，里拉
+        currencyBeans.add(new CurrencyBean("TRY", false, "₺"));
+        //越南
+        currencyBeans.add(new CurrencyBean("VND", false, "₫"));
+        String currency = SpUtil.getString(this, ConstantValue.currencyUnit, "USD");
+        for (CurrencyBean currencyBean : currencyBeans) {
+            if (currencyBean.getName().equals(currency)) {
+                ConstantValue.currencyBean = currencyBean;
+            }
         }
     }
 

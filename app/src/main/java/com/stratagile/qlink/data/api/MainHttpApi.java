@@ -22,6 +22,7 @@ import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
+import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
@@ -61,13 +62,16 @@ import static com.stratagile.qlink.data.api.MainAPI.sendRow;
 import static com.stratagile.qlink.data.api.MainAPI.url_bina_tpcs;
 import static com.stratagile.qlink.data.api.MainAPI.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.MainAPI.url_eth_address_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_eth_history;
 import static com.stratagile.qlink.data.api.MainAPI.url_kline;
 import static com.stratagile.qlink.data.api.MainAPI.url_main_address;
 import static com.stratagile.qlink.data.api.MainAPI.url_main_net_unspent;
 import static com.stratagile.qlink.data.api.MainAPI.url_neo_address_history;
 import static com.stratagile.qlink.data.api.MainAPI.url_neo_token_transacation;
+import static com.stratagile.qlink.data.api.MainAPI.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.MainAPI.url_token_price;
 import static com.stratagile.qlink.data.api.MainAPI.url_transaction_v2;
+import static com.stratagile.qlink.data.api.MainAPI.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.MainAPI.user_update_avatar;
 
 /**
@@ -263,6 +267,10 @@ public interface MainHttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<EthWalletTransaction> getEthWalletTransaction(@Body RequestBody map);
 
+    @POST(url_eth_history)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<OnlyEthTransactionHistory> getOnlyEthTransaction(@Body RequestBody map);
+
     @POST(url_neo_address_history)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(@Body RequestBody map);
@@ -283,5 +291,15 @@ public interface MainHttpApi {
     @POST(url_bina_tpcs)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<Tpcs> getTpcs(@Body RequestBody map);
+
+    @POST(url_report_wallet_create)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> reportWalletCreate(@Body RequestBody map);
+
+    @POST(url_wallet_transaction_report)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> reportWalletTransaction(@Body RequestBody map);
+
+
     /*************************************************/
 }

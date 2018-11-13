@@ -3,6 +3,7 @@ package com.stratagile.qlink.ui.activity.vpn;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -82,6 +83,7 @@ import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.service.ClientVpnService;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
 import com.stratagile.qlink.ui.activity.im.ConversationActivity;
+import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.seize.SeizeActivity;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerVpnListComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.VpnListContract;
@@ -89,6 +91,7 @@ import com.stratagile.qlink.ui.activity.vpn.module.VpnListModule;
 import com.stratagile.qlink.ui.activity.vpn.presenter.VpnListPresenter;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.VpnSpaceItemDecoration;
@@ -142,6 +145,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
 
+    private MainViewModel viewModel;
     int freeNum = 0;
 
     private String country;
@@ -159,6 +163,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.getItemAnimator().setChangeDuration(0);
         recyclerView.setAdapter(vpnListAdapter);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -296,19 +301,19 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         }
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (walletList == null || walletList.size() == 0) {
-            Intent intent = new Intent(getActivity(), NoWalletActivity.class);
-            intent.putExtra("flag", "nowallet");
+            Intent intent = new Intent(getActivity(), SelectWalletTypeActivity.class);
             startActivity(intent);
             vpnListAdapter.notifyDataSetChanged();
+            ToastUtil.displayShortToast("neo wallet not found");
             return;
         }
-        if (mBalance != null) {
-            if (Float.parseFloat(mBalance.getData().getQLC() + "") < vpnEntity.getQlc() || mBalance.getData().getGAS() < 0.0001) {
+        if (viewModel.balanceMutableLiveData.getValue() != null) {
+            if (Float.parseFloat(viewModel.balanceMutableLiveData.getValue().getData().getQLC() + "") < vpnEntity.getQlc() || viewModel.balanceMutableLiveData.getValue().getData().getGAS() < 0.0001) {
                 ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
                 return;
             }
         } else {
-            getbalance(new ChangeWallet());
+//            getbalance(new ChangeWallet());
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -334,7 +339,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                mPresenter.dialogConfirm();
+                mPresenter.checkSharerConnect();
             }
         });
         dialog.show();
@@ -373,20 +378,20 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         dialog.show();
     }
 
-    Balance mBalance;
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void getbalance(ChangeWallet changeWallet) {
-        if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() != 0) {
-            Map<String, String> map = new HashMap<>();
-            map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
-            mPresenter.getWalletBalance(map);
-        }
-    }
+//    Balance mBalance;
+//
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    public void getbalance(ChangeWallet changeWallet) {
+//        if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() != 0) {
+//            Map<String, String> map = new HashMap<>();
+//            map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
+//            mPresenter.getWalletBalance(map);
+//        }
+//    }
 
     @Override
     public void onGetBalancelSuccess(Balance balance) {
-        mBalance = balance;
+//        mBalance = balance;
     }
 
     @Override
@@ -507,8 +512,17 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Override
     public void fetchData() {
         refreshLayout.setRefreshing(true);
-        getVpn();
-        getbalance(new ChangeWallet());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    getVpn();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -636,7 +650,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showGuideVpnList(ShowGuide showGuide) {
         if (showGuide.getNumber() == 1) {
-            showGuideViewVpnList();
+//            showGuideViewVpnList();
         }
     }
 

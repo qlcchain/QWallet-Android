@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
     EditText etPrivateKey;
     @BindView(R.id.btImport)
     TextView btImport;
+    private ImportViewModel viewModel;
 
     @Nullable
     @Override
@@ -61,6 +63,7 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
         View view = inflater.inflate(R.layout.fragment_eth_private_key, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
+        viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
         return view;
     }
 
@@ -110,8 +113,17 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
 
     @OnClick(R.id.btImport)
     public void onViewClicked() {
+        if ("".equals(etPrivateKey.getText().toString().trim())) {
+            ToastUtil.displayShortToast("please type privatekey");
+            return;
+        }
         showProgressDialog();
         EthWallet ethWallet = ETHWalletUtils.loadWalletByPrivateKey(etPrivateKey.getText().toString());
+        if (ethWallet == null) {
+            closeProgressDialog();
+            ToastUtil.displayShortToast("import eth wallet error");
+            return;
+        }
         List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         for (int i = 0; i < wallets.size(); i++) {
             if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
@@ -120,9 +132,16 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
                 return;
             }
         }
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).isCurrent()) {
+                wallets.get(i).setCurrent(false);
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallets.get(i));
+                break;
+            }
+        }
         AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
         closeProgressDialog();
-        getActivity().finish();
+        viewModel.walletAddress.postValue(ethWallet.getAddress());
     }
 
 }

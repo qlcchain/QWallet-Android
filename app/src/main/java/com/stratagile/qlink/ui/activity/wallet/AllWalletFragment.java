@@ -28,8 +28,11 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.TokenInfo;
+import com.stratagile.qlink.entity.eventbus.ChangeCurrency;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.eth.EthWalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
@@ -41,6 +44,10 @@ import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -100,8 +107,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_wallet, null);
         ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         Bundle mBundle = getArguments();
         tokensAdapter = new TokensAdapter(null);
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         recyclerView.setAdapter(tokensAdapter);
         recyclerView.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(10, getActivity())));
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
@@ -127,6 +136,20 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         return view;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getbalance(ChangeWallet changeWallet) {
+        initData();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changeCurrency(ChangeCurrency changeWallet) {
+        initData();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
     @Override
     protected void setupFragmentComponent() {
@@ -162,6 +185,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         walletAsset = 0;
         viewModel.walletTypeMutableLiveData.postValue(tokenInfos.get(0).getWalletType());
         ArrayList<String> symbols = new ArrayList<>();
+        viewModel.tokenInfoMutableLiveData.postValue(tokenInfos);
         tokensAdapter.setNewData(tokenInfos);
         for (int i = 0; i < tokenInfos.size(); i++) {
             symbols.add(tokenInfos.get(i).getTokenSymol());
@@ -191,6 +215,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         setAllWalletMoney();
     }
 
+    @Override
+    public void getWinqGasBack(Balance balance) {
+        tvWalletGas.setText(balance.getData().getQLC() + "");
+        viewModel.balanceMutableLiveData.postValue(balance);
+    }
+
     private void setAllWalletMoney() {
         double allMoney = 0;
         for (AllWallet allWallet : allWalletMoney.keySet()) {
@@ -209,6 +239,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         boolean hasSelectedWallet = false;
         tokensAdapter.setNewData(new ArrayList<>());
         tvWalletAsset.setText("- -");
+        tvWalletGas.setText("- -");
         viewModel.qrcode.observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -228,6 +259,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 if (neoWallets.get(i).getIsCurrent()) {
                     hasSelectedWallet = true;
                     getNeoToken(neoWallets.get(i));
+                    mPresenter.getWinqGas(neoWallets.get(i).getAddress());
                 }
             }
         }
@@ -255,18 +287,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 startActivity(intent);
             }
         });
-
-        String currencyName = SpUtil.getString(getActivity(), ConstantValue.currencyUnit, "USD");
-        if (currencyName.equals("USD")) {
-            CurrencyBean currencyBean = new CurrencyBean("USD", true);
-            currencyBean.setCurrencyImg("$");
-            ConstantValue.currencyBean = currencyBean;
-        }
-        if (currencyName.equals("CNY")) {
-            CurrencyBean currencyBean = new CurrencyBean("CNY", true);
-            currencyBean.setCurrencyImg("¥");
-            ConstantValue.currencyBean = currencyBean;
-        }
     }
 
     @Override
@@ -288,7 +308,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         allWallet.setWalletName(ethWallet.getName());
         allWallet.setWalletAddress(ethWallet.getAddress());
         currentSelectWallet = allWallet;
+        viewModel.allWalletMutableLiveData.postValue(currentSelectWallet);
         allWalletMoney.put(allWallet, 0d);
+        List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+        if (neoWallets.size() != 0) {
+            mPresenter.getWinqGas(neoWallets.get(0).getAddress());
+        }
     }
 
     private void getNeoToken(Wallet wallet) {
@@ -311,6 +336,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         allWallet.setWalletName(wallet.getName());
         allWallet.setWalletAddress(wallet.getAddress());
         currentSelectWallet = allWallet;
+        viewModel.allWalletMutableLiveData.postValue(currentSelectWallet);
         allWalletMoney.put(allWallet, 0d);
     }
 

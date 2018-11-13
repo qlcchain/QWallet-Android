@@ -1,6 +1,9 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -42,6 +45,8 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
 
     private ArrayList<String> titles = new ArrayList<>();
 
+    private ImportViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainColor = R.color.white;
@@ -62,6 +67,13 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
         titles.add("Official");
         titles.add("Private Key");
         titles.add("Watch");
+        viewModel = ViewModelProviders.of(this).get(ImportViewModel.class);
+        viewModel.walletAddress.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                mPresenter.reportWalletImported(s);
+            }
+        });
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -120,6 +132,12 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
     @Override
     public void closeProgressDialog() {
         progressDialog.hide();
+    }
+
+    @Override
+    public void reportCreatedWalletSuccess() {
+        closeProgressDialog();
+        finish();
     }
 
 }

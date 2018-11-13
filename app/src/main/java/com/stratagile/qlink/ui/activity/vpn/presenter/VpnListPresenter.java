@@ -412,9 +412,9 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 
     @Override
     public void dialogConfirm() {
-        Map<String, String> map = new HashMap<>();
-        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
-        getBalance(map);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
+//        getBalance(map);
     }
 
 
@@ -528,21 +528,21 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         }
     }
 
-    private void getBalance(Map map) {
-        httpAPIWrapper.getBalance(map)
-                .subscribe(new HttpObserver<Balance>() {
-                    @Override
-                    public void onNext(Balance balance) {
-                        //isSuccesse
-                        KLog.i("onSuccesse");
-                        if (balance.getData().getQLC() > connectVpnEntity.getQlc()) {
-                            checkSharerConnect();
-                        } else {
-                            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Not_enough_QLC));
-                        }
-                    }
-                });
-    }
+//    private void getBalance(Map map) {
+//        httpAPIWrapper.getBalance(map)
+//                .subscribe(new HttpObserver<Balance>() {
+//                    @Override
+//                    public void onNext(Balance balance) {
+//                        //isSuccesse
+//                        KLog.i("onSuccesse");
+//                        if (balance.getData().getQLC() > connectVpnEntity.getQlc()) {
+//                            checkSharerConnect();
+//                        } else {
+//                            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Not_enough_QLC));
+//                        }
+//                    }
+//                });
+//    }
 
     /**
      * 检查和分享者的连接情况

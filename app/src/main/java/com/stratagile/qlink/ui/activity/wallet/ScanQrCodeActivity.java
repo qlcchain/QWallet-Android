@@ -29,14 +29,19 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerScanQrCodeCompone
 import com.stratagile.qlink.ui.activity.wallet.contract.ScanQrCodeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ScanQrCodeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ScanQrCodePresenter;
+import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.vondear.rxtools.RxAnimationTool;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxQrBarTool;
 import com.vondear.rxtools.interfaces.OnRxScanerListener;
 import com.vondear.rxtools.module.scaner.CameraManager;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -134,7 +139,7 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
     @Override
     protected void onStart() {
         super.onStart();
-        mZXingView.startSpotAndShowRect();
+        getPermission();
     }
 
     @Override
@@ -265,4 +270,54 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
     public void onScanQRCodeOpenCameraError() {
 
     }
+
+    public void getCameraPermissionSuccess() {
+        mZXingView.startSpotAndShowRect();
+    }
+
+    public void getPermission() {
+        AndPermission.with(this)
+                .requestCode(101)
+                .permission(
+                        Manifest.permission.CAMERA
+                )
+                .rationale(rationaleListener)
+                .callback(permission)
+                .start();
+    }
+
+    private PermissionListener permission = new PermissionListener() {
+        @Override
+        public void onSucceed(int requestCode, List<String> grantedPermissions) {
+            LocalAssetsUtils.updateGreanDaoFromLocal();
+            // 权限申请成功回调。
+            if (requestCode == 101) {
+                getCameraPermissionSuccess();
+            }
+        }
+
+        @Override
+        public void onFailed(int requestCode, List<String> deniedPermissions) {
+            // 权限申请失败回调。
+            if (requestCode == 101) {
+                KLog.i("权限申请失败");
+
+            }
+        }
+    };
+
+    /**
+     * Rationale支持，这里自定义对话框。
+     */
+    private RationaleListener rationaleListener = (requestCode, rationale) -> {
+        com.yanzhenjie.alertdialog.AlertDialog.newBuilder(this)
+                .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
+                .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
+                .setPositiveButton(AppConfig.getInstance().getResources().getString(R.string.Agree), (dialog, which) -> {
+                    rationale.resume();
+                })
+                .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.Reject), (dialog, which) -> {
+                    rationale.cancel();
+                }).show();
+    };
 }

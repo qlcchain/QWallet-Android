@@ -27,6 +27,7 @@ import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
+import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.RaceTimes;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
@@ -485,6 +486,14 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<OnlyEthTransactionHistory> getOnlyEthTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getOnlyEthTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getOnlyEthTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     public Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mMainHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -523,6 +532,21 @@ public class HttpAPIWrapper {
             return wrapper(mMainHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> reportWalletTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.reportWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.reportWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> reportWalletCreate(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.reportWalletCreate(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.reportWalletCreate(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
     /**

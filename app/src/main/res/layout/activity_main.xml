@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
 
@@ -23,18 +24,18 @@
         android:layout_height="@dimen/x84">
         <ImageView
             android:id="@+id/iv_avater"
-            android:layout_width="@dimen/x60"
+            android:layout_width="@dimen/x50"
             android:transitionName="avater"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x42"
             android:src="@mipmap/img_connected_head_portrait"
-            android:layout_height="@dimen/x60" />
+            android:layout_height="@dimen/x50" />
 
         <ImageView
             android:id="@+id/my_status"
-            android:layout_width="@dimen/x30"
-            android:layout_height="@dimen/x30"
-            android:layout_marginTop="-12dp"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_marginTop="-8dp"
             android:layout_below="@id/iv_avater"
             android:layout_alignRight="@+id/iv_avater"
             android:src="@mipmap/icon_search_red" />
@@ -86,6 +87,12 @@
         android:layout_height="match_parent">
 
     </com.stratagile.qlink.view.NoScrollViewPager>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_above="@+id/rl2"
+        android:layout_height="@dimen/x1"
+        android:background="@color/color_29282a_40"/>
 
     <RelativeLayout
         android:id="@+id/rl2"

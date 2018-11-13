@@ -18,6 +18,12 @@ public class CurrencyBean {
         this.isCheck = isCheck;
     }
 
+    public CurrencyBean(String name, boolean isCheck, String currencyImg) {
+        this.name = name;
+        this.isCheck = isCheck;
+        this.currencyImg = currencyImg;
+    }
+
     public String getName() {
         return name;
 

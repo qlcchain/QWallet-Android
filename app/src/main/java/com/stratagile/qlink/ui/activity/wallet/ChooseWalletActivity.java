@@ -20,6 +20,7 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerChooseWalletCompo
 import com.stratagile.qlink.ui.activity.wallet.contract.ChooseWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ChooseWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ChooseWalletPresenter;
+import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.view.SelectWalletAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,7 +88,11 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 allWallet.setWallet(neoWallets.get(i));
                 allWallet.setWalletAddress(neoWallets.get(i).getAddress());
                 allWallet.setWalletType(AllWallet.WalletType.NeoWallet);
-                allWallet.setWalletName(neoWallets.get(i).getAddress());
+                if (neoWallets.get(i).getName() == null || "".equals(neoWallets.get(i).getName())) {
+                    allWallet.setWalletName(neoWallets.get(i).getAddress());
+                } else {
+                    allWallet.setWalletName(neoWallets.get(i).getName());
+                }
                 allWallets.add(allWallet);
                 if (neoWallets.get(i).getAddress().equals(getIntent().getStringExtra("walletName"))) {
                     currentSelectWallet = allWallet;
@@ -141,6 +146,9 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 }
             }
         });
+        LocalWalletUtil.updateNeoWallet();
+        LocalWalletUtil.updateEthWallet();
+//        LocalWalletUtil.getLocalNeoWallet();
     }
 
     @Override

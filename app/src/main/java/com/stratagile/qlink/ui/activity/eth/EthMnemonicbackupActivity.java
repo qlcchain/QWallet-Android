@@ -138,12 +138,12 @@ public class EthMnemonicbackupActivity extends BaseActivity implements EthMnemon
     @OnClick(R.id.btBackup)
     public void onViewClicked() {
         if (selectedMnemonicList.size() != mnemonicList.size()) {
-            ToastUtil.displayShortToast("请选择全部朱几次");
+            ToastUtil.displayShortToast("please select all mnemonic");
             return;
         }
         for (int i = 0; i < mnemonicList.size(); i++) {
             if (!mnemonicList.get(i).equals(selectedMnemonicList.get(i))) {
-                ToastUtil.displayShortToast("顺序不正确");
+                ToastUtil.displayShortToast("Incorrect sequence");
                 return;
             }
         }

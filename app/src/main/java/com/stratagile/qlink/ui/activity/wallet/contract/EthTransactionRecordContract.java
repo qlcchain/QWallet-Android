@@ -35,7 +35,7 @@ public interface EthTransactionRecordContract {
     interface EthTransactionRecordContractPresenter extends BasePresenter {
         void getEthWalletTransaction(Map map, String walletAddress);
         void getNeoWalletTransaction(Map map);
-
+        void getOnlyEthTransaction(Map map, String walletAddress);
         void getTokenKline(Map map, double price);
     }
 }

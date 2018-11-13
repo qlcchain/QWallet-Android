@@ -1,141 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:id="@+id/importWalletParent"
-    android:background="@drawable/navigation_shape">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/navigation_shape"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/icon_header_wallet"
-        android:layout_marginTop="@dimen/x80"
-        />
-    <TextView
-        android:letterSpacing="0.1"
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Import_My_Wallet"
-        android:textSize="16sp"
-        android:includeFontPadding="false"
-        android:layout_marginTop="@dimen/x45"
-        android:textColor="@color/white"
-        android:fontFamily="@font/vagroun_q"
-        />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:src="@mipmap/tab_checked"
-        android:layout_marginTop="@dimen/x40"
-        android:layout_marginLeft="@dimen/x38"
-        android:layout_marginRight="@dimen/x38"
-        android:layout_height="@dimen/dp_10" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:gravity="center"
-        android:fontFamily="@font/roboto_regular_q"
-        android:layout_height="wrap_content"
-        android:text="@string/Enter_private_key_to_import_your_wallet"
-        android:includeFontPadding="false"
-        android:layout_marginTop="@dimen/x65"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        />
-
-
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/x28"
-        android:layout_marginRight="@dimen/x28"
-        app:cardElevation="@dimen/dp_10"
-        android:layout_marginTop="@dimen/x72"
-        app:cardCornerRadius="@dimen/dp_10"
-        android:background="@color/white"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/x234">
-        <LinearLayout
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:layout_marginTop="@dimen/x35">
+        <RelativeLayout
             android:layout_width="match_parent"
+            android:minHeight="@dimen/x242"
             android:orientation="vertical"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Private_key"
-                android:layout_marginTop="@dimen/x60"
-                android:includeFontPadding="false"
-                android:textSize="13sp"
-                android:textColor="#a8a6ae"
-                android:layout_marginLeft="@dimen/x84"
-                />
-            <android.support.design.widget.TextInputLayout
+            android:layout_height="@dimen/x242">
+            <EditText
+                android:id="@+id/etPrivateKey"
                 android:layout_width="match_parent"
-                app:passwordToggleEnabled="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/et_private_key"
-                    android:layout_width="match_parent"
-                    android:textSize="14sp"
-                    android:inputType="textPassword"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x84"
-                    android:layout_marginRight="@dimen/x84"
-                    android:layout_marginBottom="@dimen/x40"
-                    />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+                android:layout_margin="@dimen/x20"
+                android:gravity="left"
+                android:textSize="14sp"
+                android:background="@null"
+                android:hint="Please input your private key"
+                android:layout_height="@dimen/x160" />
+            <TextView
+                android:id="@+id/tvWhatsPrivateKey"
+                android:layout_width="wrap_content"
+                android:text="What is a private key?"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x20"
+                android:layout_marginBottom="@dimen/x20"
+                android:textColor="@color/mainColor"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <ImageView
+    <Button
+        android:id="@+id/btImport"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/x134"
-        android:src="@mipmap/tab_checked"
-        android:layout_marginLeft="@dimen/x28"
-        android:layout_marginRight="@dimen/x28"
-        android:layout_height="@dimen/dp_10" />
+        android:layout_height="@dimen/dp_43"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:layout_marginTop="@dimen/x150"
+        android:background="@drawable/change_wallet"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Start Importing"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/x70"
-        android:layout_marginLeft="@dimen/x28"
-        android:layout_marginRight="@dimen/x28"
-        android:orientation="horizontal"
-        android:layout_marginBottom="61dp"
-        >
-        <Button
-            android:id="@+id/bt_back"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/back"
-            android:fontFamily="@font/vagroun_q"
-            android:background="@drawable/cancal_button_bg"
-            android:textColor="@color/white"
-            android:layout_height="@dimen/dp_43" />
-        <Button
-            android:id="@+id/bt_import"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_6"
-            android:text="@string/import2"
-            android:background="@drawable/comfirm_button_bg"
-            android:textColor="@color/mainColor"
-            android:fontFamily="@font/vagroun_q"
-            android:layout_height="@dimen/dp_43" />
-    </LinearLayout>
-
-</LinearLayout>
 </LinearLayout>

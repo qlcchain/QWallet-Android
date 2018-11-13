@@ -554,7 +554,7 @@
     <string name="permission_denied">permission denied</string>
     <string name="please_wait">please wait</string>
     <string name="Please_enter_your_bet">Please enter your bet</string>
-    <string name="Not_enough_QLC_Or_GAS">Not enough QLC Or GAS</string>
+    <string name="Not_enough_QLC_Or_GAS">Not enough Winq gas Or GAS</string>
     <string name="Your_bet_should_be_greater_than_the_current_asset_value">Your bet should be greater than the current asset value</string>
     <string name="configuration_profile_error">configuration profile error</string>
     <string name="Please_select_the_configuration_file">Please select the configuration file</string>

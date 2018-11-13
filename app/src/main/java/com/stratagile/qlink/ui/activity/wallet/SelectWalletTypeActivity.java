@@ -16,6 +16,7 @@ import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
 import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
@@ -26,6 +27,8 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.SelectWalletTypePresent
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.SmoothCheckBox;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -128,14 +131,22 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     @Override
     public void createEthWalletSuccess(EthWallet ethWallet) {
         closeProgressDialog();
+        EventBus.getDefault().post(new ChangeWallet());
         startActivity(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallet));
-        finish();
+        mPresenter.reportWalletCreated(ethWallet.getAddress(), "ETH");
     }
 
     @Override
     public void createNeoWalletSuccess(Wallet wallet) {
         closeProgressDialog();
+        EventBus.getDefault().post(new ChangeWallet());
         startActivityForResult(new Intent(this, WalletCreatedActivity.class).putExtra("wallet", wallet), 0);
+        mPresenter.reportWalletCreated(wallet.getAddress(), "NEO");
+    }
+
+    @Override
+    public void reportCreatedWalletSuccess() {
+        finish();
     }
 
     @Override
@@ -166,8 +177,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_select));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
                 tvEth.setSelected(false);
-                tvNeo.setSelected(true);
-                tvEos.setSelected(false);
+                tvNeo.setSelected(false);
+                tvEos.setSelected(true);
                 break;
             case R.id.llNeo:
                 walletType = AllWallet.WalletType.NeoWallet;
@@ -175,12 +186,12 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_select));
                 tvEth.setSelected(false);
-                tvNeo.setSelected(false);
-                tvEos.setSelected(true);
+                tvNeo.setSelected(true);
+                tvEos.setSelected(false);
                 break;
             case R.id.btCreate:
                 if (!checkBox.isChecked()) {
-                    ToastUtil.displayShortToast("Privacy Policy");
+                    ToastUtil.displayShortToast("Please agree to the service agreement.");
                     return;
                 }
                 if (walletType == AllWallet.WalletType.EthWallet) {
@@ -193,10 +204,15 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 break;
             case R.id.btImport:
                 if (!checkBox.isChecked()) {
-                    ToastUtil.displayShortToast("Privacy Policy");
+                    ToastUtil.displayShortToast("Please agree to the service agreement.");
                     return;
                 }
-                startActivity(new Intent(this, ImportEthWalletActivity.class));
+                if (walletType == AllWallet.WalletType.EthWallet) {
+                    startActivity(new Intent(this, ImportEthWalletActivity.class));
+                } else if (walletType == AllWallet.WalletType.NeoWallet) {
+                    Intent intent = new Intent(this, ImportWalletActivity.class);
+                    startActivityForResult(intent, 1);
+                }
                 break;
             default:
                 break;

@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
@@ -21,12 +22,14 @@ import com.stratagile.qlink.ui.activity.eth.component.DaggerEthMnemonicComponent
 import com.stratagile.qlink.ui.activity.eth.contract.EthMnemonicContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthMnemonicModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthMnemonicPresenter;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.PopWindowUtil;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -68,6 +71,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
     Button btImport;
     @BindView(R.id.tvEthType)
     TextView tvEthType;
+    private ImportViewModel viewModel;
 
     @Nullable
     @Override
@@ -75,6 +79,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
         View view = inflater.inflate(R.layout.fragment_eth_mnemonic, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
+        viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
         return view;
     }
 
@@ -128,12 +133,36 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
                 PopWindowUtil.showSelectEthTypePopWindow(getActivity(), llEthType, clickListener);
                 break;
             case R.id.btImport:
+                if ("".equals(etMnemonic.getText().toString())) {
+                    ToastUtil.displayShortToast("please type mnemonic");
+                    return;
+                }
                 showProgressDialog();
                 Observable.create(new ObservableOnSubscribe<EthWallet>() {
                     @Override
                     public void subscribe(ObservableEmitter<EthWallet> e) throws Exception {
                         EthWallet ethWallet = ETHWalletUtils.importMnemonic(tvEthType.getText().toString(), Arrays.asList(etMnemonic.getText().toString().split(" ")));
+                        if (ethWallet == null) {
+                            ToastUtil.displayShortToast("import eth wallet error");
+                            e.onComplete();
+                            return;
+                        }
                         if (ethWallet != null) {
+                            List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+                            for (int i = 0; i < wallets.size(); i++) {
+                                if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
+                                    ToastUtil.displayShortToast("wallet exist");
+                                    closeProgressDialog();
+                                    return;
+                                }
+                            }
+                            for (int i = 0; i < wallets.size(); i++) {
+                                if (wallets.get(i).isCurrent()) {
+                                    wallets.get(i).setCurrent(false);
+                                    AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallets.get(i));
+                                    break;
+                                }
+                            }
                             AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
                         }
                         KLog.i(ethWallet.toString());
@@ -151,7 +180,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
                             @Override
                             public void onNext(EthWallet wallet) {
                                 closeProgressDialog();
-                                getActivity().finish();
+                                viewModel.walletAddress.postValue(wallet.getAddress());
                             }
 
                             @Override
@@ -161,7 +190,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
 
                             @Override
                             public void onComplete() {
-
+                                closeProgressDialog();
                             }
                         });
                 break;

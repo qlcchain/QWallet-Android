@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,17 +14,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.Tpcs;
+import com.stratagile.qlink.entity.eventbus.ChangeCurrency;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMarketComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MarketContract;
 import com.stratagile.qlink.ui.activity.main.module.MarketModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MarketPresenter;
+import com.stratagile.qlink.ui.activity.wallet.EthTransactionRecordActivity;
 import com.stratagile.qlink.ui.adapter.wallet.TpcsAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,12 +83,18 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market, null);
         ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         Bundle mBundle = getArguments();
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        viewModel.tokens.observe(this, new Observer<ArrayList<String>>() {
+        viewModel.tokenInfoMutableLiveData.observe(this, new Observer<ArrayList<TokenInfo>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<String> strings) {
-                fetechData(strings);
+            public void onChanged(@Nullable ArrayList<TokenInfo> tokenInfos) {
+                ArrayList<String> symbols = new ArrayList<>();
+                for (int i = 0; i < tokenInfos.size(); i++) {
+                    symbols.add(tokenInfos.get(i).getTokenSymol());
+                }
+                fetechData(symbols);
             }
         });
 
@@ -96,8 +111,31 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             }
         });
         tpcsAdapter = new TpcsAdapter(new ArrayList<>());
+        tpcsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                for (int i = 0; i < viewModel.tokenInfoMutableLiveData.getValue().size(); i++) {
+                    if (tpcs.getData().get(position).getSymbol().toLowerCase().equals(viewModel.tokenInfoMutableLiveData.getValue().get(i).getTokenSymol().toLowerCase())) {
+                        Intent intent = new Intent(getActivity(), EthTransactionRecordActivity.class);
+                        intent.putExtra("tokenInfo", viewModel.tokenInfoMutableLiveData.getValue().get(i));
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
         recyclerView.setAdapter(tpcsAdapter);
         return view;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changeCurrency(ChangeCurrency changeWallet) {
+        fetechData(viewModel.tokens.getValue());
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void fetechData(ArrayList<String> list) {
