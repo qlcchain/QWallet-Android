@@ -132,7 +132,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     public void createEthWalletSuccess(EthWallet ethWallet) {
         closeProgressDialog();
         EventBus.getDefault().post(new ChangeWallet());
-        startActivity(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallet));
+        startActivityForResult(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallet), 0);
         mPresenter.reportWalletCreated(ethWallet.getAddress(), "ETH");
     }
 

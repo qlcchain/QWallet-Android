@@ -35,6 +35,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
 
+import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
+
 /**
  * 以太坊钱包创建工具类
  * Created by dwq on 2018/3/15/015.
@@ -238,41 +240,6 @@ public class ETHWalletUtils {
         return sb.toString();
     }
 
-//    @Nullable
-//    private static EthWallet generateWallet(String walletName, String pwd, ECKeyPair ecKeyPair) {
-//        WalletFile walletFile;
-//        try {
-//            walletFile = Wallet.create(pwd, ecKeyPair, 1024, 1); // WalletUtils. .generateNewWalletFile();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//
-//        BigInteger publicKey = ecKeyPair.getPublicKey();
-//        String s = publicKey.toString();
-//        KLog.i("ETHWalletUtils", "publicKey = " + s);
-//        String wallet_dir = AppFilePath.Wallet_DIR;
-//        KLog.i("ETHWalletUtils", "wallet_dir = " + wallet_dir);
-//        String keystorePath = "keystore_" + walletName + ".json";
-//        File destination = new File(wallet_dir, "keystore_" + walletName + ".json");
-//
-//        //目录不存在则创建目录，创建不了则报错
-//        if (!createParentDir(destination)) {
-//            return null;
-//        }
-//        try {
-//            objectMapper.writeValue(destination, walletFile);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        EthWallet ethWallet = new EthWallet();
-//        ethWallet.setName(walletName);
-//        ethWallet.setAddress(Keys.toChecksumAddress(walletFile.getAddress()));
-//        ethWallet.setKeystorePath(destination.getAbsolutePath());
-//        ethWallet.setPassword(MD5Util.getStringMD5(pwd));
-//        return ethWallet;
-//    }
 
     @Nullable
     private static EthWallet generateWallet(String pwd, ECKeyPair ecKeyPair) {
@@ -354,6 +321,7 @@ public class ETHWalletUtils {
      * @return
      */
     public static String getPassword() {
+        KLog.i(SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, ""));
         String password = new String(qlinkcom.AES(Base64.decode(SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, ""), Base64.NO_WRAP), 1));
         KLog.i(password);
         return password;
@@ -365,7 +333,14 @@ public class ETHWalletUtils {
      * @return
      */
     public static String getPassword(String content) {
-        String password = new String(qlinkcom.AES(Base64.decode(content, Base64.NO_WRAP), 1));
+        KLog.i(content);
+        String password = "";
+        try {
+            password = new String(qlinkcom.AES(Base64.decode(content, Base64.NO_WRAP), 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+            password = content;
+        }
         KLog.i(password);
         return password;
     }
@@ -499,5 +474,24 @@ public class ETHWalletUtils {
 //            System.out.println("删除单个文件失败：" + fileName + "不存在！");
             return false;
         }
+    }
+
+    public static boolean isETHValidAddress(String input) {
+        if (input == null || "".equals(input) || !input.startsWith("0x")) {
+            return false;
+        }
+        return isValidAddress(input);
+    }
+
+    public static boolean isValidAddress(String input) {
+        String cleanInput = Numeric.cleanHexPrefix(input);
+
+        try {
+            Numeric.toBigIntNoPrefix(cleanInput);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
     }
 }

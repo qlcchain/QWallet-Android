@@ -1,5 +1,6 @@
 package com.stratagile.qlink.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EthWalletInfo extends BaseBack {
@@ -29,7 +30,7 @@ public class EthWalletInfo extends BaseBack {
         private String address;
         private ETHBean ETH;
         private int countTxs;
-        private List<TokensBean> tokens;
+        private ArrayList<TokensBean> tokens;
 
         public String getAddress() {
             return address;
@@ -55,11 +56,11 @@ public class EthWalletInfo extends BaseBack {
             this.countTxs = countTxs;
         }
 
-        public List<TokensBean> getTokens() {
+        public ArrayList<TokensBean> getTokens() {
             return tokens;
         }
 
-        public void setTokens(List<TokensBean> tokens) {
+        public void setTokens(ArrayList<TokensBean> tokens) {
             this.tokens = tokens;
         }
 

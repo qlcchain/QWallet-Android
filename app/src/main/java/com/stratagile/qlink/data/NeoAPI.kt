@@ -6,10 +6,12 @@ import com.github.salomonbrys.kotson.jsonObject
 import com.stratagile.qlink.*
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.ClaimData
 import com.stratagile.qlink.utils.SpUtil
 import neoutils.Neoutils
 import neoutils.Wallet
 import unsigned.toUByte
+import java.math.BigDecimal
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -91,13 +93,6 @@ class NeoNodeRPC {
      */
     private fun sendRawTransaction(data: ByteArray) :String {
         var string = jsonArray(data.toHex())
-//        Log.i("ddd", nodeURL)
-//        val dataJson = jsonObject(
-//                "jsonrpc" to "2.0",
-//                "method" to RPC.SENDRAWTRANSACTION.methodName(),
-//                "params" to string,
-//                "id" to 3
-//        )
         return data.toHex()
     }
 
@@ -227,4 +222,40 @@ class NeoNodeRPC {
         payload = payload + byteArrayOf(0x21.toByte()) + wallet.publicKey + byteArrayOf(0xac.toByte()) // NeoSigned publicKey
         return payload
     }
+
+    fun claimGAS(wallet: Wallet, storedClaims: ClaimData, gas : String) : String {
+        val payload = generateClaimTransactionPayload(wallet, storedClaims!!, gas)
+        return sendRawTransaction(payload)
+    }
+
+    private fun generateClaimTransactionPayload(wallet: Wallet, claims: ClaimData, gas : String): ByteArray {
+        val rawClaim = generateClaimInputData(wallet, claims, gas)
+        val privateKeyHex = wallet.privateKey.toHex()
+        val signature = Neoutils.sign(rawClaim, privateKeyHex)
+        val finalPayload = concatenatePayloadData(wallet, rawClaim, signature)
+        return finalPayload
+    }
+
+    private fun generateClaimInputData(wallet: Wallet, claims: ClaimData, gas : String): ByteArray {
+        var payload: ByteArray = byteArrayOf(0x02.toByte()) // Claim Transaction Type
+        payload += byteArrayOf(0x00.toByte()) // Version
+        val claimsCount = claims.data.claims.count().toByte()
+        payload += byteArrayOf(claimsCount)
+        for (claim: ClaimData.DataBean.ClaimsBean in claims.data.claims) {
+            payload += hexStringToByteArray(claim.txid.removePrefix("0x")).reversedArray()
+            payload += ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(claim.index.toShort()).array()
+        }
+        payload += byteArrayOf(0x00.toByte()) // Attributes
+        payload += byteArrayOf(0x00.toByte()) // Inputs
+        payload += byteArrayOf(0x01.toByte()) // Output Count
+        payload += hexStringToByteArray(NeoNodeRPC.Asset.GAS.assetID()).reversedArray()
+
+        val claimIntermediate = BigDecimal(gas)
+        val claimLong = claimIntermediate.multiply(BigDecimal(100000000)).toLong()
+        payload += ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(claimLong).array()
+        payload += wallet.hashedSignature
+        Log.d("Claim Payload", payload.toHex())
+        return payload
+    }
+
 }

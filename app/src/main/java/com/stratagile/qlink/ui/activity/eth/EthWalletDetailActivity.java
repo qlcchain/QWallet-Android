@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -25,8 +26,11 @@ import com.stratagile.qlink.ui.activity.eth.contract.EthWalletDetailContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthWalletDetailModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthWalletDetailPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ExportEthKeyStoreActivity;
+import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.view.PopWindowUtil;
+import com.stratagile.qlink.view.SweetAlertDialog;
 
 import javax.inject.Inject;
 
@@ -96,11 +100,9 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         } else if (getIntent().getIntExtra("walletType", 0) == AllWallet.WalletType.NeoWallet.ordinal()) {
             walletType = AllWallet.WalletType.NeoWallet;
             wallet = getIntent().getParcelableExtra("neowallet");
-
             ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_neo_wallet));
             tvWalletName.setText(wallet.getAddress());
             tvWalletAddress.setText(wallet.getAddress());
-
             llAbucoins.setVisibility(View.GONE);
             llExportKeystore.setVisibility(View.GONE);
             llExportPrivateKey.setVisibility(View.GONE);
@@ -110,7 +112,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
 
     @Override
     protected void initData() {
-        setTitle("Administration");
+        setTitle("Manage");
     }
 
     @Override
@@ -142,6 +144,11 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llAbucoins:
+                if (ethWallet.getMnemonic() == null) {
+                    cannotShowMnemonic();
+                } else {
+                    exportMnemonic();
+                }
                 break;
             case R.id.llExportKeystore:
                 startActivity(new Intent(this, ExportEthKeyStoreActivity.class).putExtra("wallet", ethWallet));
@@ -163,14 +170,71 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         }
     }
 
+    private void cannotShowMnemonic() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        tvContent.setText("Wallet can not be seen through the private key and keystore import wallet.");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        ImageView ivTitle = view.findViewById(R.id.ivTitle);
+        ivTitle.setImageDrawable(getResources().getDrawable(R.mipmap.careful_1));
+        TextView tvOk = view.findViewById(R.id.tvOpreate);
+        ivClose.setVisibility(View.INVISIBLE);
+        tvOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvOk.setText(getResources().getString(R.string.ok));
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+    }
+
+    private void exportMnemonic() {
+        startActivity(new Intent(this, EthMnemonicShowActivity.class).putExtra("wallet", ethWallet));
+    }
+
     private void deleteWallet() {
-        if (walletType == AllWallet.WalletType.NeoWallet) {
-            AppConfig.getInstance().getDaoSession().getWalletDao().delete(wallet);
-        } else if (walletType == AllWallet.WalletType.EthWallet) {
-            AppConfig.getInstance().getDaoSession().getEthWalletDao().delete(ethWallet);
+        startActivityForResult(new Intent(this, VerifyWalletPasswordActivity.class).putExtra("flag", ""), 0);
+        overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            if (walletType == AllWallet.WalletType.NeoWallet) {
+                AppConfig.getInstance().getDaoSession().getWalletDao().delete(wallet);
+            } else if (walletType == AllWallet.WalletType.EthWallet) {
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().delete(ethWallet);
+            }
+            showTestDialog();
         }
-        setResult(RESULT_OK);
-        onBackPressed();
+    }
+
+    private void showTestDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
+        tvContent.setText("delete wallet success");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        tvDeleteWallet.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sweetAlertDialog.cancel();
+                tvDeleteWallet.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(RESULT_OK);
+                        onBackPressed();
+                    }
+                }, 200);
+            }
+        }, 2000);
     }
 
     private void ExportPrivateKey() {
@@ -200,7 +264,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
-                ToastUtil.displayShortToast("copy success");
+                ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
                 dialog.cancel();
             }
         });
@@ -235,7 +299,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
-                ToastUtil.displayShortToast("copy success");
+                ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
                 dialog.cancel();
             }
         });
@@ -271,7 +335,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
-                ToastUtil.displayShortToast("copy success");
+                ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
                 dialog.cancel();
             }
         });

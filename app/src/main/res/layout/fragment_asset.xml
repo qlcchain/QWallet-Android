@@ -42,7 +42,7 @@
             android:id="@+id/earn"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/x60"
+            android:layout_marginRight="@dimen/x80"
             android:gravity="center"
             android:textSize="10sp"
             android:fontFamily="@font/roboto_regular_q"

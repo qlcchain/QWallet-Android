@@ -765,16 +765,16 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             if (vpnEntity.getCountry() == null) {
                 return;
             }
-            Gson gson = new Gson();
-            ContinentAndCountry continentAndCountry = gson.fromJson(FileUtil.getJson(this, "ContinentAndCountryBean.json"), ContinentAndCountry.class);
-            for (int i = 0; i < continentAndCountry.getContinent().size(); i++) {
-                for (int j = 0; j < continentAndCountry.getContinent().get(i).getCountry().size(); j++) {
-                    if (continentAndCountry.getContinent().get(i).getCountry().get(j).getName().toLowerCase(Locale.ENGLISH).equals(vpnEntity.getCountry().toLowerCase())) {
-                        continent = continentAndCountry.getContinent().get(i).getContinent();
-                        return;
-                    }
-                }
-            }
+//            Gson gson = new Gson();
+//            ContinentAndCountry continentAndCountry = gson.fromJson(FileUtil.getJson(this, "ContinentAndCountryBean.json"), ContinentAndCountry.class);
+//            for (int i = 0; i < continentAndCountry.getContinent().size(); i++) {
+//                for (int j = 0; j < continentAndCountry.getContinent().get(i).getCountry().size(); j++) {
+//                    if (continentAndCountry.getContinent().get(i).getCountry().get(j).getName().toLowerCase(Locale.ENGLISH).equals(vpnEntity.getCountry().toLowerCase())) {
+//                        continent = continentAndCountry.getContinent().get(i).getContinent();
+//                        return;
+//                    }
+//                }
+//            }
         } else {
             toxidParent.setVisibility(View.VISIBLE);
             toxidBtn.setVisibility(View.VISIBLE);

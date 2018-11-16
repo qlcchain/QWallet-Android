@@ -27,7 +27,7 @@
             android:layout_width="@dimen/x50"
             android:transitionName="avater"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x42"
+            android:layout_marginLeft="@dimen/x23"
             android:src="@mipmap/img_connected_head_portrait"
             android:layout_height="@dimen/x50" />
 
@@ -50,10 +50,9 @@
             android:textSize="18sp" />
 
         <RelativeLayout
-            android:layout_width="@dimen/x90"
+            android:layout_width="@dimen/x96"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/x22"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_wallet"

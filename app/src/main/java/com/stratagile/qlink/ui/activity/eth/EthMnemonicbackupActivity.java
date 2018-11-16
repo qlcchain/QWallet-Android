@@ -1,11 +1,14 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -20,6 +23,7 @@ import com.stratagile.qlink.ui.activity.eth.presenter.EthMnemonicbackupPresenter
 import com.stratagile.qlink.ui.adapter.eth.EthSelectedMnemonicAdapter;
 import com.stratagile.qlink.ui.adapter.eth.EthUnSelectedMnemonicAdapter;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.view.SweetAlertDialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,8 +153,32 @@ public class EthMnemonicbackupActivity extends BaseActivity implements EthMnemon
         }
         ethWallet.setIsBackup(true);
         AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallet);
-        setResult(RESULT_OK);
-        finish();
+        showTestDialog();
+
+    }
+
+    private void showTestDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
+        tvContent.setText("backup success");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        btBackup.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sweetAlertDialog.cancel();
+                btBackup.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }, 200);
+            }
+        }, 2000);
     }
 
 }

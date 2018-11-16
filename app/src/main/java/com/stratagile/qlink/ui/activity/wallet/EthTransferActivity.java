@@ -3,14 +3,18 @@ package com.stratagile.qlink.ui.activity.wallet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.animation.DynamicAnimation;
+import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Group;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -19,24 +23,23 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
-import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerEthTransferComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.module.EthTransferModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.EthTransferPresenter;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.vondear.rxtools.RxTool;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.view.SpinnerPopWindow;
 
-import org.spongycastle.util.encoders.Hex;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +48,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jnr.ffi.Struct;
 
 /**
  * @author hzp
@@ -58,8 +60,6 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     @Inject
     EthTransferPresenter mPresenter;
-    @BindView(R.id.tvEthTokenName)
-    TextView tvEthTokenName;
     @BindView(R.id.tvEthTokenValue)
     TextView tvEthTokenValue;
     @BindView(R.id.etEthTokenSendValue)
@@ -84,6 +84,12 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
     TextView tvSend;
     @BindView(R.id.tvGwei)
     TextView tvGwei;
+    @BindView(R.id.tvEthTokenName)
+    TextView tvEthTokenName;
+    @BindView(R.id.viewLine)
+    View viewLine;
+    @BindView(R.id.ivArrow)
+    ImageView ivArrow;
 
     private TokenInfo tokenInfo;
 
@@ -91,14 +97,24 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     private int costLevel = 1;
 
-    private EthWalletInfo.DataBean.ETHBean ethBean;
-    private EthWalletInfo.DataBean.TokensBean tokensBean;
+    /**
+     * eth当前的市价
+     */
+    private double ethPrice;
 
     private int gasLimit = 60000;
 
     private int gasPrice = 0;
 
     private String gasEth;
+
+    private ArrayList<TokenInfo> tokenInfoArrayList;
+
+    private TokenInfo ethTokenInfo;
+
+    private SpinnerPopWindow<String> mSpinerPopWindow;
+
+    ArrayList<String> ctype = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +124,6 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     @Override
     protected void initView() {
-        KLog.i(Base64.encodeToString(qlinkcom.AES("123456789".getBytes(),0),Base64.NO_WRAP));
-        KLog.i(new String(qlinkcom.AES(Base64.decode("mcpyeXViSGKv9e/cuN8EOw==", Base64.NO_WRAP),1)));
         setContentView(R.layout.activity_eth_transfer);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -117,22 +131,43 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     @Override
     protected void initData() {
-        tokenInfo = getIntent().getParcelableExtra("tokenInfo");
-        getEthToken(tokenInfo);
-
-        HashMap<String, Object> infoMap = new HashMap<>();
-        String[] tokens = new String[2];
-        tokens[0] = "ETH";
-        tokens[1] = tokenInfo.getTokenSymol();
-        infoMap.put("symbols", tokens);
-        infoMap.put("coin", ConstantValue.currencyBean.getName());
-        mPresenter.getToeknPrice(infoMap);
+        tokenInfoArrayList = getIntent().getParcelableArrayListExtra("tokens");
+        for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+            if (tokenInfoArrayList.get(i).getTokenSymol().toLowerCase().equals("eth")) {
+                ethTokenInfo = tokenInfoArrayList.get(0);
+                break;
+            }
+        }
+        if (getIntent().hasExtra("walletAddress")) {
+            tokenInfo = tokenInfoArrayList.get(0);
+            etEthTokenSendAddress.setText(getIntent().getStringExtra("walletAddress"));
+        } else {
+            tokenInfo = getIntent().getParcelableExtra("tokenInfo");
+            setTitle("Send " + tokenInfo.getTokenSymol());
+            String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+            tvEthTokenValue.setText("Balance: " + value);
+        }
 
         tvEthTokenName.setText(tokenInfo.getTokenSymol());
-        setTitle("Send " + tokenInfo.getTokenSymol());
-        String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-        tvEthTokenValue.setText("Balance: " + value);
 
+        ethPrice = ethTokenInfo.getTokenPrice();
+        for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+            ctype.add(tokenInfoArrayList.get(i).getTokenSymol());
+            if (tokenInfo.getTokenSymol().equals(tokenInfoArrayList.get(i).getTokenSymol())) {
+                tokenPositon = i;
+            }
+        }
+        mSpinerPopWindow = new SpinnerPopWindow<String>(this, ctype, itemClickListener);
+        mSpinerPopWindow.setOnDismissListener(dismissListener);
+
+        gasPrice = seekBar.getProgress() + 6;
+        tvGwei.setText(gasPrice + " gwei");
+        BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
+        BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
+        BigDecimal gasMoney = f.multiply(new BigDecimal(ethPrice + ""));
+        double f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
+        tvCostEth.setText(gasEth + " ether ≈ " + ConstantValue.currencyBean.getCurrencyImg() + f1);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -141,7 +176,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
                 BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
                 BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
 
-                BigDecimal gasMoney = f.multiply(new BigDecimal(tokenInfo.getEthPrice() + ""));
+                BigDecimal gasMoney = f.multiply(new BigDecimal(ethPrice + ""));
                 double f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 KLog.i(f1);
                 gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
@@ -158,7 +193,62 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
             }
         });
+
+        tvEthTokenName.post(() -> {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEthTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+            viewLine.setLayoutParams(layoutParams);
+        });
     }
+
+    /**
+     * 监听popupwindow取消
+     */
+    private PopupWindow.OnDismissListener dismissListener = new PopupWindow.OnDismissListener() {
+        @Override
+        public void onDismiss() {
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                @Override
+                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                }
+            });
+        }
+    };
+
+    private void showSpinnerPopWindow() {
+        mSpinerPopWindow.setWidth((tvEthTokenName.getWidth()));
+        mSpinerPopWindow.showAsDropDown(viewLine);
+        SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+            @Override
+            public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+            }
+        });
+    }
+
+    /**
+     * popupwindow显示的ListView的item点击事件
+     */
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            mSpinerPopWindow.dismiss();
+            tvEthTokenValue.setText(ctype.get(position));
+            for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+                if (tokenInfoArrayList.get(i).getTokenSymol().equals(ctype.get(position))) {
+                    tokenInfo = tokenInfoArrayList.get(i);
+                    setTitle("Send " + tokenInfo.getTokenSymol());
+                    String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+                    tvEthTokenValue.setText("Balance: " + value);
+                    tvEthTokenName.setText(tokenInfo.getTokenSymol());
+                    etEthTokenSendValue.setText("");
+
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEthTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+                    viewLine.setLayoutParams(layoutParams);
+                }
+            }
+        }
+    };
 
     @Override
     protected void setupActivityComponent() {
@@ -170,11 +260,10 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
                 .inject(this);
     }
 
-    private void getEthToken(TokenInfo tokenInfo) {
+    private void getEthToken(String address) {
         Map<String, String> infoMap = new HashMap<>();
-        infoMap.put("address", tokenInfo.getWalletAddress());
-        infoMap.put("token", tokenInfo.getTokenAddress());
-        mPresenter.getETHWalletDetail(tokenInfo.getWalletAddress(), infoMap);
+        infoMap.put("address", address);
+        mPresenter.getETHWalletDetail(address, infoMap);
     }
 
     @Override
@@ -214,28 +303,90 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
         progressDialog.hide();
     }
 
+    private ArrayList<EthWalletInfo.DataBean.TokensBean> tokensBeans = new ArrayList<>();
+
+
+    int tokenPositon;
+
     @Override
     public void getEthWalletBack(EthWalletInfo ethWalletInfo) {
-        ethBean = ethWalletInfo.getData().getETH();
-        tokensBean = ethWalletInfo.getData().getTokens().get(0);
+        tokensBeans = ethWalletInfo.getData().getTokens();
+        String[] ctype = new String[1 + ethWalletInfo.getData().getTokens().size()];
+        ctype[0] = "ETH";
+        if (!getIntent().hasExtra("walletAddress")) {
+            for (int i = 0; i < ethWalletInfo.getData().getTokens().size(); i++) {
+                ctype[i + 1] = ethWalletInfo.getData().getTokens().get(i).getTokenInfo().getSymbol();
+                if (ethWalletInfo.getData().getTokens().get(i).getTokenInfo().getSymbol().equals(tokenInfo.getTokenSymol())) {
+                    tokenPositon = 1 + i;
+                    TokenInfo tokenInfo1 = new TokenInfo();
+                    tokenInfo1.setTokenName(ethWalletInfo.getData().getTokens().get(i).getTokenInfo().getSymbol());
+                    tokenInfo1.setTokenSymol(ethWalletInfo.getData().getTokens().get(i).getTokenInfo().getSymbol());
+                    tokenInfo1.setTokenAddress(ethWalletInfo.getData().getTokens().get(i).getTokenInfo().getAddress());
+                    tokenInfo1.setTokenValue(ethWalletInfo.getData().getTokens().get(i).getBalance());
+                    tokenInfo1.setWalletType(AllWallet.WalletType.EthWallet);
+                    tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());
+                    tokenInfo1.setMainNetToken(true);
+                    tokenInfo = tokenInfo1;
+
+                    setTitle("Send " + tokenInfo.getTokenSymol());
+                    String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+                    tvEthTokenValue.setText("Balance: " + value);
+                }
+            }
+        } else {
+            TokenInfo tokenInfo1 = new TokenInfo();
+            tokenInfo1.setTokenName("ETH");
+            tokenInfo1.setTokenSymol("ETH");
+            tokenInfo1.setTokenAddress(ethWalletInfo.getData().getAddress());
+            tokenInfo1.setTokenValue(ethWalletInfo.getData().getETH().getBalance());
+            tokenInfo1.setTokenImgName("eth_eth");
+            tokenInfo1.setWalletType(AllWallet.WalletType.EthWallet);
+            tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());
+            tokenInfo1.setMainNetToken(true);
+            tokenInfo = tokenInfo1;
+            setTitle("Send " + tokenInfo.getTokenSymol());
+            String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+            tvEthTokenValue.setText("Balance: " + value);
+        }
     }
+
 
     @Override
     public void getTokenPriceBack(TokenPrice tokenPrice) {
-        for (int i = 0; i < tokenPrice.getData().size(); i++) {
-            if (tokenPrice.getData().get(i).getSymbol().toLowerCase().equals("eth")) {
-                tokenInfo.setEthPrice(tokenPrice.getData().get(i).getPrice());
-            }
-        }
-
+        ethPrice = tokenPrice.getData().get(0).getPrice();
         gasPrice = seekBar.getProgress() + 6;
         tvGwei.setText(gasPrice + " gwei");
         BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
         BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
-        BigDecimal gasMoney = f.multiply(new BigDecimal(tokenInfo.getEthPrice() + ""));
+        BigDecimal gasMoney = f.multiply(new BigDecimal(ethPrice + ""));
         double f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
         tvCostEth.setText(gasEth + " ether ≈ " + ConstantValue.currencyBean.getCurrencyImg() + f1);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                gasPrice = progress + 6;
+                tvGwei.setText(gasPrice + " gwei");
+                BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
+                BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
+
+                BigDecimal gasMoney = f.multiply(new BigDecimal(ethPrice + ""));
+                double f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                KLog.i(f1);
+                gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
+                tvCostEth.setText(gasEth + " ether ≈ " + ConstantValue.currencyBean.getCurrencyImg() + f1);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     @Override
@@ -244,7 +395,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
         finish();
     }
 
-    @OnClick({R.id.llOpen, R.id.tvSend})
+    @OnClick({R.id.llOpen, R.id.tvSend, R.id.tvEthTokenName})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llOpen:
@@ -253,6 +404,9 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             case R.id.tvSend:
                 sendEthToken();
                 break;
+            case R.id.tvEthTokenName:
+                showSpinnerPopWindow();
+                break;
             default:
                 break;
         }
@@ -260,6 +414,10 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     private void sendEthToken() {
         if (etEthTokenSendAddress.getText().toString().equals("")) {
+            ToastUtil.displayShortToast("Wallet Address Error");
+            return;
+        }
+        if (!ETHWalletUtils.isETHValidAddress(etEthTokenSendAddress.getText().toString().trim())) {
             ToastUtil.displayShortToast("Wallet Address Error");
             return;
         }
@@ -279,11 +437,20 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             ToastUtil.displayShortToast("Not enough " + tokenInfo.getTokenSymol());
             return;
         }
-        showProgressDialog();
         if (tokenInfo.getTokenSymol().toLowerCase().equals("eth")) {
-            mPresenter.transactionEth(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+            if (ethTokenInfo.getTokenValue() >= (Double.parseDouble(gasEth) + Double.parseDouble(etEthTokenSendValue.getText().toString().trim()))) {
+                showProgressDialog();
+                mPresenter.transactionEth(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+            } else {
+                ToastUtil.displayShortToast("Not enough eth");
+            }
         } else {
-            mPresenter.transaction(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+            if (ethTokenInfo.getTokenValue() >= Double.parseDouble(gasEth)) {
+                showProgressDialog();
+                mPresenter.transaction(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
+            } else {
+                ToastUtil.displayShortToast("Not enough eth");
+            }
         }
 
     }

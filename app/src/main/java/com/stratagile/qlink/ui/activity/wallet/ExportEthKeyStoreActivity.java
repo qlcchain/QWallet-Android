@@ -90,6 +90,6 @@ public class ExportEthKeyStoreActivity extends BaseActivity implements ExportEth
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         // 将文本内容放到系统剪贴板里。
         cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
-        ToastUtil.displayShortToast("copy success");
+        ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
     }
 }

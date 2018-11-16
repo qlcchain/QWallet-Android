@@ -32,7 +32,6 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerProfilePictureComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.ProfilePictureContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ProfilePictureModule;
@@ -158,13 +157,6 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
 
     @Override
     public void updateImgSuccess(UpLoadAvatar upLoadAvatar) {
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (wifiEntity.getOwnerP2PId().equals(SpUtil.getString(ProfilePictureActivity.this, ConstantValue.P2PID, ""))) {
-                wifiEntity.setAvatar(upLoadAvatar.getHead());
-                AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-            }
-        }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         String oldP2pId = "";
         for (VpnEntity vpnEntity : vpnEntityList) {

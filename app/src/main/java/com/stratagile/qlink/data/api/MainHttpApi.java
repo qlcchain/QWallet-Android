@@ -8,6 +8,7 @@ import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
+import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EthWalletDetail;
@@ -16,6 +17,7 @@ import com.stratagile.qlink.entity.EthWalletTransaction;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
+import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.MainAddress;
@@ -37,6 +39,7 @@ import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
+import com.stratagile.qlink.entity.WinqGasBack;
 
 import java.util.Map;
 
@@ -52,9 +55,9 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
-import static com.stratagile.qlink.data.api.API.act_get;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.MainAPI.act_asset;
+import static com.stratagile.qlink.data.api.MainAPI.act_get;
 import static com.stratagile.qlink.data.api.MainAPI.act_show;
 import static com.stratagile.qlink.data.api.MainAPI.get_eth_wallet_info;
 import static com.stratagile.qlink.data.api.MainAPI.get_neo_wallet_info;
@@ -63,11 +66,13 @@ import static com.stratagile.qlink.data.api.MainAPI.url_bina_tpcs;
 import static com.stratagile.qlink.data.api.MainAPI.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.MainAPI.url_eth_address_history;
 import static com.stratagile.qlink.data.api.MainAPI.url_eth_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_got_winq_gas;
 import static com.stratagile.qlink.data.api.MainAPI.url_kline;
 import static com.stratagile.qlink.data.api.MainAPI.url_main_address;
 import static com.stratagile.qlink.data.api.MainAPI.url_main_net_unspent;
 import static com.stratagile.qlink.data.api.MainAPI.url_neo_address_history;
 import static com.stratagile.qlink.data.api.MainAPI.url_neo_token_transacation;
+import static com.stratagile.qlink.data.api.MainAPI.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.MainAPI.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.MainAPI.url_token_price;
 import static com.stratagile.qlink.data.api.MainAPI.url_transaction_v2;
@@ -300,6 +305,17 @@ public interface MainHttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> reportWalletTransaction(@Body RequestBody map);
 
+    @POST(url_query_winq_gas)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<WinqGasBack> queryWinqGas(@Body RequestBody map);
+
+    @POST(url_got_winq_gas)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<GotWinqGas> gotWinqGas(@Body RequestBody map);
+
+    @POST(API.url_got_winq_gas)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimData> neoGasClaim(@Body RequestBody map);
 
     /*************************************************/
 }

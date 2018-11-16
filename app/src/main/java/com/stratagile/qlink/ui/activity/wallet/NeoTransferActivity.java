@@ -2,43 +2,37 @@ package com.stratagile.qlink.ui.activity.wallet;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.animation.DynamicAnimation;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
-import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.api.transaction.SendCallBack;
-import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
-import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.db.TransactionRecord;
-import com.stratagile.qlink.db.Wallet;
-import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerNeoTransferComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.NeoTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.module.NeoTransferModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.NeoTransferPresenter;
-import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.utils.eth.OwnWalletUtils;
+import com.stratagile.qlink.view.SpinnerPopWindow;
 import com.vondear.rxtools.RxDataTool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +41,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import neoutils.Neoutils;
 
 /**
  * @author hzp
@@ -81,8 +76,20 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
     View view3;
     @BindView(R.id.tvSend)
     TextView tvSend;
+    @BindView(R.id.viewLine)
+    View viewLine;
+    @BindView(R.id.ivArrow)
+    ImageView ivArrow;
 
     private TokenInfo tokenInfo;
+
+    private ArrayList<TokenInfo> tokenInfoArrayList;
+
+    private TokenInfo gasTokenInfo;
+
+    private SpinnerPopWindow<String> mSpinerPopWindow;
+
+    private ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,15 +107,37 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
 
     @Override
     protected void initData() {
-        tokenInfo = getIntent().getParcelableExtra("tokenInfo");
+        list = new ArrayList<>();
+        tokenInfoArrayList = getIntent().getParcelableArrayListExtra("tokens");
+        if (getIntent().hasExtra("tokenInfo")) {
+            tokenInfo = getIntent().getParcelableExtra("tokenInfo");
+        } else {
+            tokenInfo = tokenInfoArrayList.get(0);
+        }
+        if (getIntent().hasExtra("walletAddress")) {
+            etNeoTokenSendAddress.setText(getIntent().getStringExtra("walletAddress"));
+        }
+        for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+            list.add(tokenInfoArrayList.get(i).getTokenSymol());
+            if (tokenInfoArrayList.get(i).getTokenSymol().toLowerCase().equals("gas")) {
+                gasTokenInfo = tokenInfoArrayList.get(i);
+                break;
+            }
+        }
+        mSpinerPopWindow = new SpinnerPopWindow<String>(this, list, itemClickListener);
+        mSpinerPopWindow.setOnDismissListener(dismissListener);
         setTitle("Send " + tokenInfo.getTokenSymol());
         tvNeoTokenName.setText(tokenInfo.getTokenSymol());
+        tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
 
-        Map<String, String> infoMap = new HashMap<>();
-        infoMap.put("address", tokenInfo.getWalletAddress());
-        mPresenter.getNeoWalletDetail(tokenInfo.getWalletAddress(), infoMap);
+
+//        Map<String, String> infoMap = new HashMap<>();
+//        infoMap.put("address", tokenInfo.getWalletAddress());
+//        mPresenter.getNeoWalletDetail(tokenInfo.getWalletAddress(), infoMap);
         if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
             etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        } else {
+            etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
         }
         mPresenter.getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
             @Override
@@ -142,7 +171,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
-                    if (isChanged){//必须在修改内容前调用
+                    if (isChanged) {//必须在修改内容前调用
                         return;
                     }
                     if (editable != null && !"".equals(editable.toString()) && !".".equals(editable.toString())) {
@@ -150,20 +179,19 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                         int selectionEnd;
                         selectionStart = etNeoTokenSendValue.getSelectionStart();
                         selectionEnd = etNeoTokenSendValue.getSelectionEnd();
-                        if (!isOnlyPointNumber(etNeoTokenSendValue.getText().toString())){
-                            if(selectionStart >= 1 && selectionEnd >= selectionStart)
-                            {
+                        if (!isOnlyPointNumber(etNeoTokenSendValue.getText().toString())) {
+                            if (selectionStart >= 1 && selectionEnd >= selectionStart) {
                                 editable.delete(selectionStart - 1, selectionEnd);
                             }
-                            isChanged=true;
+                            isChanged = true;
                             etNeoTokenSendValue.setText(editable);
                         }
                         float toSendQlcCount = Float.parseFloat(editable.toString());
                         KLog.i(toSendQlcCount);
-                        if (toSendQlcCount > Float.parseFloat(RxDataTool.format2Decimals(tokenInfo.getTokenValue()+ "") + "")) {
+                        if (toSendQlcCount > Float.parseFloat(RxDataTool.format2Decimals(tokenInfo.getTokenValue() + "") + "")) {
                             KLog.i(RxDataTool.format2Decimals(tokenInfo.getTokenValue() + "") + "");
                             etNeoTokenSendValue.setText(RxDataTool.format2Decimals(tokenInfo.getTokenValue() + "") + "");
-                            isChanged=true;
+                            isChanged = true;
                             etNeoTokenSendValue.setSelection((RxDataTool.format2Decimals(tokenInfo.getTokenValue() + "") + "").length());
                         } else {
                             KLog.i("进入else");
@@ -171,14 +199,17 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                         }
                         isChanged = false;
                     }
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    isChanged=true;
+                    isChanged = true;
                     etNeoTokenSendValue.setText("");
                     isChanged = false;
                 }
             }
+        });
+        tvNeoTokenName.post(() -> {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvNeoTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+            viewLine.setLayoutParams(layoutParams);
         });
     }
 
@@ -255,30 +286,95 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         progressDialog.hide();
     }
 
-    @OnClick(R.id.tvSend)
-    public void onViewClicked() {
-        if ("".equals(etNeoTokenSendValue.getText().toString().trim())) {
-            ToastUtil.displayShortToast("illegal value");
-            return;
-        }
-        if ("".equals(etNeoTokenSendAddress.getText().toString().trim())) {
-            ToastUtil.displayShortToast("please enter neo wallet address");
-            return;
-        }
-        if (Float.parseFloat(etNeoTokenSendValue.getText().toString()) <= 0) {
-            ToastUtil.displayShortToast("illegal value");
-            return;
-        }
+    @OnClick({R.id.tvSend, R.id.tvNeoTokenName})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tvSend:
+                if ("".equals(etNeoTokenSendValue.getText().toString().trim())) {
+                    ToastUtil.displayShortToast("illegal value");
+                    return;
+                }
+                if (Float.parseFloat(etNeoTokenSendValue.getText().toString()) <= 0) {
+                    ToastUtil.displayShortToast("illegal value");
+                    return;
+                }
+                if ("".equals(etNeoTokenSendAddress.getText().toString().trim())) {
+                    ToastUtil.displayShortToast("please enter neo wallet address");
+                    return;
+                }
+                if (!Neoutils.validateNEOAddress(etNeoTokenSendAddress.getText().toString().trim())) {
+                    ToastUtil.displayShortToast("please enter neo wallet address");
+                    return;
+                }
+                if (tokenInfo.getWalletAddress().equals(etNeoTokenSendAddress.getText().toString())) {
+                    ToastUtil.displayShortToast(getString(R.string.can_not_send_to_self));
+                    return;
+                }
+                if (gasTokenInfo.getTokenValue() < 0.0001) {
+                    ToastUtil.displayShortToast("Not enough gas");
+                    return;
+                }
 
-        if (tokenInfo.getWalletAddress().equals(etNeoTokenSendAddress.getText().toString())) {
-            ToastUtil.displayShortToast(getString(R.string.can_not_send_to_self));
-            return;
-        }
-        showProgressDialog();
-        if (tokenInfo.getTokenSymol().toLowerCase().equals("neo") || tokenInfo.getTokenSymol().toLowerCase().equals("gas")) {
-            mPresenter.sendNeo(etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), tokenInfo);
-        } else {
-            mPresenter.sendNEP5Token(tokenInfo, etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString());
+                showProgressDialog();
+                if (tokenInfo.getTokenSymol().toLowerCase().equals("neo") || tokenInfo.getTokenSymol().toLowerCase().equals("gas")) {
+                    mPresenter.sendNeo(etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), tokenInfo);
+                } else {
+                    mPresenter.sendNEP5Token(tokenInfo, etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString());
+                }
+                break;
+            case R.id.tvNeoTokenName:
+                showSpinnerPopWindow();
+                break;
+            default:
+                break;
         }
     }
+
+    private void showSpinnerPopWindow() {
+        mSpinerPopWindow.setWidth((tvNeoTokenName.getWidth()));
+        mSpinerPopWindow.showAsDropDown(viewLine);
+        SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+            @Override
+            public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+            }
+        });
+    }
+
+    /**
+     * 监听popupwindow取消
+     */
+    private PopupWindow.OnDismissListener dismissListener = new PopupWindow.OnDismissListener() {
+        @Override
+        public void onDismiss() {
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                @Override
+                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                }
+            });
+        }
+    };
+
+    /**
+     * popupwindow显示的ListView的item点击事件
+     */
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            mSpinerPopWindow.dismiss();
+            tokenInfo = tokenInfoArrayList.get(position);
+            setTitle("Send " + tokenInfo.getTokenSymol());
+            tvNeoTokenName.setText(tokenInfo.getTokenSymol());
+            if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
+                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+            } else {
+                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+            }
+            etNeoTokenSendValue.setText("");
+            tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvNeoTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+            viewLine.setLayoutParams(layoutParams);
+        }
+    };
 }

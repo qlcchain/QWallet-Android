@@ -9,8 +9,6 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnEntityDao;
-import com.stratagile.qlink.db.WifiEntity;
-import com.stratagile.qlink.db.WifiEntityDao;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.qlinkcom;
@@ -156,40 +154,6 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
         LogUtil.addLog("delete Assets：" + delete, getClass().getSimpleName());
         LogUtil.addLog("update Assets：" + update, getClass().getSimpleName());
         LogUtil.addLog("insert Assets：" + insert, getClass().getSimpleName());
-        for (WifiRegisteResult.DataBean dataBean : wifiRegisteResult.getData()) {
-            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
-            List<WifiEntity> wifiEntityListInSql = new ArrayList<>();
-            if ("0".equals(dataBean.getType())) {
-                wifiEntityListInSql = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().where(WifiEntityDao.Properties.Ssid.eq(dataBean.getSsId())).list();
-            }
-            if (wifiEntityListInSql.size() > 0 || "".equals(dataBean.getType())) {
-                for (WifiEntity wifiEntity : wifiEntityList) {
-                    //0代表的是wifi资产
-                    if (dataBean.getSsId().equals(wifiEntity.getSsid()) && dataBean.getP2pId().equals("")) {
-                        AppConfig.getInstance().getDaoSession().getWifiEntityDao().delete(wifiEntity);
-                        break;
-                    } else if (dataBean.getSsId().equals(wifiEntity.getSsid()) && !dataBean.getP2pId().equals("")) {
-                        wifiEntity.setOwnerP2PId(dataBean.getP2pId());
-                        wifiEntity.setWalletAddress(dataBean.getAddress());
-                        wifiEntity.setPriceInQlc((float) dataBean.getQlc());
-                        wifiEntity.setMacAdrees(dataBean.getMac());
-                        AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                    }
-                }
-            } else {
-                if (dataBean.getP2pId() != null && !("".equals(dataBean.getP2pId())) && "0".equals(dataBean.getType())) {
-                    WifiEntity wifiEntity = new WifiEntity();
-                    wifiEntity.setOwnerP2PId(dataBean.getP2pId());
-                    wifiEntity.setSsid(dataBean.getSsId());
-                    wifiEntity.setWalletAddress(dataBean.getAddress());
-                    wifiEntity.setPriceInQlc((float) dataBean.getQlc());
-                    wifiEntity.setMacAdrees(dataBean.getMac());
-                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().insert(wifiEntity);
-                }
-
-            }
-
-        }
         mView.getAssetSuccess();
     }
 }

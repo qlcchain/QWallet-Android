@@ -585,7 +585,7 @@
     <string name="reward_success">reward success</string>
     <string name="this_wallet_is_exist">this wallet is exist</string>
     <string name="wallet_address_error">wallet address error</string>
-    <string name="copy_success">copy success</string>
+    <string name="copy_success">Copied</string>
     <string name="can_not_send_to_self">can not send to self</string>
     <string name="Incorrect_Password">Incorrect Password</string>
     <string name="delete_asset">delete asset</string>
@@ -711,7 +711,7 @@
     <string name="Fields_are_optional">** Fields are optional</string>
     <string name="DEVICE_BANDWIDTH">DEVICE BANDWIDTH</string>
     <string name="Device_bandwidth_automatic_speed_test">Device bandwidth(automatic speed-test)</string>
-    <string name="Hourly_Fee_QLC">Hourly Fee(QLC)</string>
+    <string name="Hourly_Fee_QLC">Hourly Fee(WINQ GAS)</string>
     <string name="Maximal_number_of_Connections">Maximal number of Connections</string>
     <string name="verify">verify</string>
     <string name="CONGRATULATIONS">CONGRATULATIONS!</string>
@@ -878,7 +878,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="hrs">HRS</string>
     <string name="mins">MINS</string>
     <string name="secs">SECS</string>
-    <string name="winner_list_round_1_2300_qlc_prize_pool"><Data><![CDATA[Winner List <br /> <b>\%s\</b><br /><b>\%s\</b> QLC Prize Pool]]></Data></string>
+    <string name="winner_list_round_1_2300_qlc_prize_pool"><Data><![CDATA[Winner List <br /> <b>\%s\</b><br /><b>\%s\</b> WINQ GAS Prize Pool]]></Data></string>
     <string name="coming_soon">COMING SOON...</string>
     <string name="details">Details</string>
     <string name="ranking">Ranking</string>

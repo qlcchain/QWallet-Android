@@ -4,17 +4,25 @@ import android.support.annotation.NonNull;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.api.transaction.SendBackWithTxId;
+import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.EthWalletInfo;
+import com.stratagile.qlink.entity.GotWinqGas;
+import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.utils.SpUtil;
@@ -25,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -155,6 +165,86 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
                 });
     }
 
+    @Override
+    public void queryWinqGas(Map map) {
+        Disposable disposable =  httpAPIWrapper.queryWinqGas(map)
+                .subscribe(new Consumer<WinqGasBack>() {
+                    @Override
+                    public void accept(WinqGasBack winqGasBack) throws Exception {
+                        mView.queryWinqGasBack(winqGasBack);
+                        mView.closeProgressDialog();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void gotWinqGas(Map map) {
+        mView.showProgressDialog();
+        Disposable disposable = httpAPIWrapper.gotWinqGas(map)
+                .subscribe(new Consumer<GotWinqGas>() {
+                    @Override
+                    public void accept(GotWinqGas baseBack) throws Exception {
+                        //isSuccesse
+                        mView.gotWinqGasSuccess("Claimed Successfully");
+                        mView.closeProgressDialog();
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.gotWinqGasSuccess("Network Error. Please try later.");
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.gotWinqGasSuccess("Network Error. Please try later.");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getNeoGasClaim(Map map) {
+        Disposable disposable = httpAPIWrapper.neoGasClaim(map)
+                .subscribe(new Consumer<ClaimData>() {
+                    @Override
+                    public void accept(ClaimData baseBack) throws Exception {
+                        //isSuccesse
+                        mView.queryGasClaimBack(baseBack);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
 
     private void getTokenPrice(ArrayList<TokenInfo> tokenInfos) {
         if (tokenInfos == null || tokenInfos.size() == 0) {
@@ -272,6 +362,39 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
     private String getNeoTokenImg(NeoWalletInfo.DataBean.BalanceBean balanceBean) {
         return "neo_" + balanceBean.getAsset_symbol().toLowerCase();
     }
+
+    @Override
+    public void claimGas(String address, String amount, String txid) {
+        mView.showProgressDialog();
+        Map<String, Object> map = new HashMap<>();
+        map.put("addressFrom", address);
+        map.put("addressTo", address);
+        map.put("symbol", "GAS");
+        map.put("amount", amount);
+        map.put("tx", txid);
+        Disposable disposable = httpAPIWrapper.neoTokenTransaction(map)
+                .subscribe(new Consumer<NeoTransfer>() {
+                    @Override
+                    public void accept(NeoTransfer baseBack) throws Exception {
+                        //isSuccesse
+                        mView.claimGasBack(baseBack);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
 
 
 }

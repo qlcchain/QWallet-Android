@@ -204,13 +204,14 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             } else {
                 mPresenter.getOnlyEthTransaction(infoMap, tokenInfo.getWalletAddress());
             }
+            String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+            tvTokenValue.setText(value);
         } else {
             infoMap.put("page", 1);
             mPresenter.getNeoWalletTransaction(infoMap);
+            tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()) + "");
         }
         setTitle(tokenInfo.getTokenSymol());
-        String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-        tvTokenValue.setText(value);
         BigDecimal b = new BigDecimal(new Double((tokenInfo.getTokenValue() * tokenInfo.getTokenPrice())).toString());
         double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         tvTokenMoney.setText("≈" + ConstantValue.currencyBean.getCurrencyImg() + f1);
@@ -222,7 +223,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", transacationHistoryAdapter.getData().get(position).getTransationHash()));
-                ToastUtil.displayShortToast("copy success");
+                ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
             }
         });
 
@@ -270,10 +271,12 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                 if (tokenInfo.getWalletType() == AllWallet.WalletType.EthWallet) {
                     Intent intent1 = new Intent(this, EthTransferActivity.class);
                     intent1.putExtra("tokenInfo", tokenInfo);
+                    intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
                     startActivity(intent1);
                 } else if (tokenInfo.getWalletType() == AllWallet.WalletType.NeoWallet) {
                     Intent intent1 = new Intent(this, NeoTransferActivity.class);
                     intent1.putExtra("tokenInfo", tokenInfo);
+                    intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
                     startActivity(intent1);
                 }
                 break;

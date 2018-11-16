@@ -107,7 +107,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        throwable.printStackTrace();
                     }
                 }, new Action() {
                     @Override

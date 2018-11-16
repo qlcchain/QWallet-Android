@@ -12,8 +12,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
-import com.stratagile.qlink.db.WifiEntity;
-import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.MyAsset;
 import com.vondear.rxtools.RxDataTool;
 
@@ -43,19 +41,6 @@ public class AssetListAdapter extends BaseQuickAdapter<MyAsset, BaseViewHolder> 
         TextView tvDesc = baseViewHolder.getView(R.id.tv_desc);
         Drawable drawable;
         if (item.getType() == 0) {
-            baseViewHolder.addOnClickListener(R.id.setWifi);
-            baseViewHolder.setImageDrawable(R.id.iv_asset, mContext.getResources().getDrawable(R.mipmap.logo_wifi_full));
-            String connectStr = mContext.getResources().getString(R.string.state_connected) +" : " + item.getWifiEntity().getConnectCount() + "/" + item.getWifiEntity().getDeviceAllowed();
-            SpannableString contentSB = new SpannableString(connectStr);
-            if(contentSB.length() >=11)
-            {
-                contentSB.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.color_333)), 11, contentSB.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            baseViewHolder.setText(R.id.allow, contentSB);
-            baseViewHolder.setText(R.id.tv_qlc, item.getWifiEntity().getAssetTranfer() + "");
-            baseViewHolder.setText(R.id.tv_earn, "+" + (RxDataTool.format2Decimals(item.getWifiEntity().getAssetTranfer() - item.getWifiEntity().getRegisterQlc() + "")) + "");
-            KLog.i((item.getWifiEntity().getAssetTranfer() - item.getWifiEntity().getRegisterQlc()) + "");
-            baseViewHolder.setText(R.id.ssid, item.getWifiEntity().getSsid());
         } else if (item.getType() == 1){
             baseViewHolder.addOnClickListener(R.id.setWifi);
             baseViewHolder.setImageDrawable(R.id.iv_asset, mContext.getResources().getDrawable(R.mipmap.icon_connected_vpn));
@@ -75,6 +60,6 @@ public class AssetListAdapter extends BaseQuickAdapter<MyAsset, BaseViewHolder> 
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         tvDesc.setCompoundDrawables(drawable, null, null, null);
         tvDesc.setCompoundDrawablePadding(10);
-        tvDesc.setText("QLC");
+        tvDesc.setText("WINQ GAS");
     }
 }

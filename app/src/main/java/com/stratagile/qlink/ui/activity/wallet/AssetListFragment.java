@@ -25,14 +25,12 @@ import com.stratagile.qlink.utils.UIUtils;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.eventbus.AssetRefrash;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAssetListComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AssetListContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AssetListModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.AssetListPresenter;
-import com.stratagile.qlink.ui.activity.wifi.RegisterWifiActivity;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.AssetListAdapter;
 import com.stratagile.qlink.utils.VpnUtil;
@@ -103,10 +101,6 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
                 switch (view.getId()) {
                     case R.id.setWifi:
                         if (assetListAdapter.getItem(position).getType() == 0) {
-                            Intent intent = new Intent(getActivity(), RegisterWifiActivity.class);
-                            intent.putExtra("wifiInfo", assetListAdapter.getData().get(position).getWifiEntity());
-                            startActivityForResult(intent, 0);
-                            getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                         } else if (assetListAdapter.getItem(position).getType() == 1) {
                             Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
                             KLog.i(assetListAdapter.getItem(position).getVpnEntity().toString());
@@ -173,7 +167,6 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
         for (int i = 0; i < assetArrayList.size(); i++) {
             //0 wifi
             if (assetArrayList.get(i).getType() == 0) {
-                ssids[i] = assetArrayList.get(i).getWifiEntity().getSsid();
             } else {
                 ssids[i] = assetArrayList.get(i).getVpnEntity().getVpnName();
             }

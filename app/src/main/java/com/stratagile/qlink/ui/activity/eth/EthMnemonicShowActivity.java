@@ -2,7 +2,9 @@ package com.stratagile.qlink.ui.activity.eth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stratagile.qlink.R;
@@ -13,6 +15,7 @@ import com.stratagile.qlink.ui.activity.eth.component.DaggerEthMnemonicShowCompo
 import com.stratagile.qlink.ui.activity.eth.contract.EthMnemonicShowContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthMnemonicShowModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthMnemonicShowPresenter;
+import com.stratagile.qlink.view.SweetAlertDialog;
 
 import javax.inject.Inject;
 
@@ -82,15 +85,44 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
         progressDialog.hide();
     }
 
+    private void showBackupDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.careful));
+        tvContent.setText("The exposure of the mnemonic code will cause the loss of the assets, please copy carefully, do not take a screenshot! ");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView tvOk = view.findViewById(R.id.tvOpreate);
+        tvOk.setText("OK");
+        tvOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(EthMnemonicShowActivity.this, EthMnemonicbackupActivity.class).putExtra("wallet", ethWallet), 0);
+                sweetAlertDialog.cancel();
+            }
+        });
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+    }
+
+
     @OnClick(R.id.btBackup)
     public void onViewClicked() {
-        startActivityForResult(new Intent(this, EthMnemonicbackupActivity.class).putExtra("wallet", ethWallet), 0);
+        showBackupDialog();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            setResult(RESULT_OK);
             finish();
         }
     }

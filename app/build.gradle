@@ -288,6 +288,8 @@ dependencies {
     //    implementation project(':MPChartLib')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     implementation files('libs/BASE64Encoder.jar')
+    //imtoken
+    implementation 'com.github.consenlabs:token-core-android:v0.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

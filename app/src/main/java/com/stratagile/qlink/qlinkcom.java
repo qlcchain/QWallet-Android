@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.eventbus.JoinNewGroup;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
@@ -423,7 +422,6 @@ public class qlinkcom {
         LogUtil.addLog("好友的编号为" + friendNumber + "好友的状态为:" + status, getClass().getSimpleName());
         KLog.i("好友的编号为:" + friendNumber);
         KLog.i("好友的状态为:" + status);
-        Qsdk.getInstance().getFriendSharedWifiInfo(friendNumber, status);
         Qsdk.getInstance().getFriendSharedVpnInfo(friendNumber, status);
 //        Qsdk.getInstance().getFriendCurrentConnectWifiInfo(friendNumber, status);
         if (status > 0) {

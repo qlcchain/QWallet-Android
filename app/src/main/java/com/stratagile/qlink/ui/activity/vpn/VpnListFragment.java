@@ -84,7 +84,6 @@ import com.stratagile.qlink.service.ClientVpnService;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
 import com.stratagile.qlink.ui.activity.im.ConversationActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
-import com.stratagile.qlink.ui.activity.seize.SeizeActivity;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerVpnListComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.VpnListContract;
 import com.stratagile.qlink.ui.activity.vpn.module.VpnListModule;
@@ -707,7 +706,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         KLog.i("国家为：" + country);
         map.put("country", country);
         mPresenter.getVpn(map);
-        refreshLayout.setRefreshing(false);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override

@@ -7,8 +7,6 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.Wallet;
-import com.stratagile.qlink.db.WifiEntity;
-import com.stratagile.qlink.db.WifiEntityDao;
 import com.stratagile.qlink.entity.MyAsset;
 
 import java.util.ArrayList;
@@ -40,7 +38,6 @@ public class LocalAssetsUtils {
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (walletList != null && walletList.size() != 0) {
             //wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
-            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
             for (Wallet wallet : walletList) {
                 Gson gson = new Gson();
@@ -59,28 +56,6 @@ public class LocalAssetsUtils {
 
                             if (myAsset.getType() == 0)//wifi
                             {
-                                for (WifiEntity wifiEntity : wifiEntityList) {
-
-                                    if (myAsset.getWifiEntity().getSsid().equals(wifiEntity.getSsid())) {
-                                        myAsset.getWifiEntity().setId(wifiEntity.getId());//这个很重要，要不没法更新greenDao
-                                        myAsset.getWifiEntity().setIsConnected(wifiEntity.getIsConnected());
-                                        myAsset.getWifiEntity().setOnline(wifiEntity.getOnline());
-                                        myAsset.getWifiEntity().setIsLoadingAvater(wifiEntity.getIsLoadingAvater());
-                                        myAsset.getWifiEntity().setAvaterUpdateTime(wifiEntity.getAvaterUpdateTime());
-                                        myAsset.getWifiEntity().setUnReadMessageCount(wifiEntity.getUnReadMessageCount());
-                                        myAsset.getWifiEntity().setGroupNum(wifiEntity.getGroupNum());
-                                        myAsset.getWifiEntity().setAssetTranfer(wifiEntity.getAssetTranfer());
-                                        myAsset.getWifiEntity().setFreindNum(wifiEntity.getFreindNum());
-                                        myAsset.getWifiEntity().setRegisterQlc(wifiEntity.getRegisterQlc());
-                                        //添加了抢注册功能，p2pId和钱包地址可能会变化
-                                        myAsset.getWifiEntity().setOwnerP2PId(wifiEntity.getOwnerP2PId());
-                                        myAsset.getWifiEntity().setWalletAddress(wifiEntity.getWalletAddress());
-                                        myAsset.getWifiEntity().setIsRegiste(wifiEntity.getIsRegiste());
-                                        myAsset.getWifiEntity().setAvatar(wifiEntity.getAvatar());
-                                        myAsset.getWifiEntity().setWifiPassword(wifiEntity.getWifiPassword());
-                                        AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(myAsset.getWifiEntity());
-                                    }
-                                }
                             } else if (myAsset.getType() == 1)//vpn
                             {
                                 for (VpnEntity vpnEntity : vpnEntityList) {
@@ -173,11 +148,6 @@ public class LocalAssetsUtils {
 
                                 if (myAsset.getType() == 0)//wifi
                                 {
-                                    List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().where(WifiEntityDao.Properties.Ssid.eq(myAsset.getWifiEntity().getSsid())).list();
-                                    if(wifiEntityList != null && wifiEntityList.size() == 0)
-                                    {
-                                        AppConfig.getInstance().getDaoSession().getWifiEntityDao().insert(myAsset.getWifiEntity());
-                                    }
                                 } else if (myAsset.getType() == 1)//vpn
                                 {
                                    /* VpnEntityDao vpnEntityDao = AppConfig.getInstance().getDaoSession().getVpnEntityDao();
@@ -236,10 +206,6 @@ public class LocalAssetsUtils {
 
                     if (myAsset.getType() == 0)//wifi
                     {
-                        if (myAssetItem.getWifiEntity() != null && myAsset.getWifiEntity().getSsid().equals(myAssetItem.getWifiEntity().getSsid()) ) {
-                            isHad = true;
-                            break;
-                        }
                     } else if (myAsset.getType() == 1)//vpn
                     {
                         if (myAssetItem.getVpnEntity() != null && myAsset.getVpnEntity().getVpnName().equals(myAssetItem.getVpnEntity().getVpnName()) && myAsset.getVpnEntity().getIsMainNet() == myAssetItem.getVpnEntity().getIsMainNet()) {
@@ -342,11 +308,6 @@ public class LocalAssetsUtils {
 
                     if (myAsset.getType() == 0)//wifi
                     {
-                        if (asset.getWifiEntity() != null && myAsset.getWifiEntity().getSsid().equals(asset.getWifiEntity().getSsid())) {
-                            newAssetArrayList.add(asset);
-                        } else {
-                            newAssetArrayList.add(myAsset);
-                        }
                     } else if (myAsset.getType() == 1)//vpn
                     {
                         if (asset.getVpnEntity() != null && myAsset.getVpnEntity().getVpnName().equals(asset.getVpnEntity().getVpnName()) && myAsset.getVpnEntity().getIsMainNet() == asset.getVpnEntity().getIsMainNet()) {

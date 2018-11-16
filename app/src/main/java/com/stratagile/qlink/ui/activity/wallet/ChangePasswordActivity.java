@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stratagile.qlink.ColdWallet;
@@ -19,6 +21,7 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.ChangePasswordPresenter
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.view.SweetAlertDialog;
 
 import javax.inject.Inject;
 
@@ -131,18 +134,40 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
             String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
             SpUtil.putString(ChangePasswordActivity.this, ConstantValue.walletPassWord, password);
             ConstantValue.isShouldShowVertifyPassword = false;
-            ToastUtil.displayShortToast(getString(R.string.Passwords_match));
-            Intent intent = new Intent();
-            try {
-                intent.putExtra("position", getIntent().getStringExtra("position"));
-            } catch (Exception e) {
-
-            }
-            setResult(RESULT_OK, intent);
-            finish();
+            showTestDialog();
         } else {
             ToastUtil.displayShortToast(getString(R.string.Passwords_donot_match_Try_again));
         }
         closeProgressDialog();
+    }
+
+    private void showTestDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
+        tvContent.setText("setting success");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        tvJoin.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sweetAlertDialog.cancel();
+                Intent intent = new Intent();
+                try {
+                    intent.putExtra("position", getIntent().getStringExtra("position"));
+                } catch (Exception e) {
+
+                }
+                tvJoin.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                }, 200);
+            }
+        }, 2000);
     }
 }

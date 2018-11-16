@@ -17,7 +17,6 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.db.VpnEntity;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.im.Message;
 import com.stratagile.qlink.utils.SpUtil;
 
@@ -32,16 +31,6 @@ public class ConversationListAdapter extends BaseQuickAdapter<Message, BaseViewH
 
 //    private final File dataFile;
     private VpnEntity vpnEntity;
-
-    private WifiEntity wifiEntity;
-
-    public WifiEntity getWifiEntity() {
-        return wifiEntity;
-    }
-
-    public void setWifiEntity(WifiEntity wifiEntity) {
-        this.wifiEntity = wifiEntity;
-    }
 
     public int getChatType() {
         return chatType;

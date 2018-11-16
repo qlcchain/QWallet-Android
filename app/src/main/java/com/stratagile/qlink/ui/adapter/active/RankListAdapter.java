@@ -63,12 +63,12 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
                     break;
                 case "END":
                     helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " WINQ GAS");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     break;
                 case "PRIZED":
                     helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " WINQ GAS");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     break;
                 default:
@@ -90,12 +90,12 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
                     break;
                 case "END":
                     helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " WINQ GAS");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     break;
                 case "PRIZED":
                     helper.setGone(R.id.ll_prized, true);
-                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " QLC");
+                    helper.setText(R.id.tv_prized_number, item.getRewardTotal() + " WINQ GAS");
                     helper.setText(R.id.tv_prized, mContext.getString(R.string.Rewards));
                     if (helper.getLayoutPosition() == mData.size() - 1) {
                         if (currentActId.equals("32a0cb46e7074333a0c3413853fbb020") || currentActId.equals("4e6fe7fa77ea43a9b2b244df20273c93")) {

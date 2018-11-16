@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -92,7 +93,10 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
     protected void initView() {
         setContentView(R.layout.activity_verify_wallet_password);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        if (getIntent().hasExtra("flag") && getIntent().getStringExtra("flag").equals("")) {
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     @Override
@@ -374,7 +378,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
                 if (password.equals(SpUtil.getString(this, ConstantValue.walletPassWord, ""))) {
                     ConstantValue.isShouldShowVertifyPassword = false;
-                    if (getIntent().hasExtra("flag")) {
+                    if (getIntent().hasExtra("flag") && !getIntent().getStringExtra("flag").equals("")) {
                         startActivity(MainActivity.class);
                         overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
                         finish();
@@ -406,7 +410,9 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
 
     @Override
     public void onBackPressed() {
-
+        if (getIntent().hasExtra("flag") && getIntent().getStringExtra("flag").equals("")) {
+            super.onBackPressed();
+        }
     }
 
     @Override

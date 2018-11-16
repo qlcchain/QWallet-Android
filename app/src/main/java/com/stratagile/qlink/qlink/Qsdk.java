@@ -31,7 +31,6 @@ import com.stratagile.qlink.utils.SpUtil;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.db.Wallet;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.qlink.ServiceConnectedEvent;
 import com.stratagile.qlink.entity.qlink.QlinkEntity;
 import com.stratagile.qlink.entity.wifi.WifiBasicinfoReq;
@@ -80,30 +79,6 @@ public class Qsdk {
             @Override
             public void run() {
                 //将所有的好友的状态置为未在线
-                List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-                List<WifiEntity> wifiEntityList1 = new ArrayList<>();
-                for (WifiEntity wifiEntity : wifiEntityList) {
-                    wifiEntity.setConnectCount(0);
-                    wifiEntity.setUnReadMessageCount(0);
-                    wifiEntity.setOnline(false);
-                    wifiEntity.setGroupNum(-1);
-                    wifiEntity.setFreindNum("");
-                    wifiEntity.setIsConnected(false);
-                    wifiEntity.setIsLoadingAvater(false);
-//                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                    //如果自己是wifi注册者，直接开启服务
-                    if (wifiEntity.getOwnerP2PId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                        wifiEntity.setAvaterUpdateTime(Long.parseLong(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvaterUpdateTime, "0")));
-//                        AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-//                        AppConfig.getInstance().startService(new Intent(AppConfig.getInstance(), ServiceConnectedWIfiRecordSevice.class));
-                    }
-                    wifiEntityList1.add(wifiEntity);
-                }
-                try {
-                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().updateInTx(wifiEntityList1);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
                 List<VpnEntity> vpnEntityList1 = new ArrayList<>();
                 for (VpnEntity vpnEntity : vpnEntityList) {
@@ -158,33 +133,6 @@ public class Qsdk {
         try {
             QlinkEntity qlinkEntity = gson.fromJson(message, QlinkEntity.class);
             switch (qlinkEntity.getType()) {
-                case ConstantValue.wifibasicinfoReq:
-                    WifiBasicinfoReq wifiBasicinfoReq = gson.fromJson(qlinkEntity.getData(), WifiBasicinfoReq.class);
-                    getWifiBasicInfo(wifiBasicinfoReq.getSsid(), wifiBasicinfoReq.getMac(), friendNumber);
-                    break;
-                case ConstantValue.wifibasicinfoRsp:
-                    WifibasicinfoRsp wifibasicinfoRsp = gson.fromJson(qlinkEntity.getData(), WifibasicinfoRsp.class);
-                    handleWifiBasicInfo(wifibasicinfoRsp);
-                    break;
-                case ConstantValue.wifipasswordReq:
-                    WifipasswordReq wifipasswordReq = gson.fromJson(qlinkEntity.getData(), WifipasswordReq.class);
-                    handlerWifiPasswordRequest(friendNumber, wifipasswordReq);
-                    break;
-                case ConstantValue.wifipasswordRsp:
-                    WifipasswordRsp wifipasswordRsp = gson.fromJson(qlinkEntity.getData(), WifipasswordRsp.class);
-                    handlerWifiPasswordReponse(friendNumber, wifipasswordRsp);
-                    break;
-                case ConstantValue.wifiCurrentWifiInfoReq:
-                    handlerGetCurrentWifiInfoRequest(friendNumber);
-                    break;
-                case ConstantValue.wifiCurrentWifiInfoRsp:
-                    WifibasicinfoRsp wifibasicinfoRsp1 = gson.fromJson(qlinkEntity.getData(), WifibasicinfoRsp.class);
-                    handlerGetCurrentWifiInfoResponse(friendNumber, wifibasicinfoRsp1);
-                    break;
-                case ConstantValue.wifiConnectSuccess:
-                    WifiConnectSuccess wifiConnectSuccess = gson.fromJson(qlinkEntity.getData(), WifiConnectSuccess.class);
-                    handlerWifiConnectSuccess(friendNumber, wifiConnectSuccess);
-                    break;
                 case ConstantValue.sendFileRequest:
                     KLog.i("收到发送自己头像的请求，将我自己的头像文件发送出去");
                     qlinkcom.Addfilesender(friendNumber, Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvaterUpdateTime, "") + ".jpg");
@@ -312,15 +260,6 @@ public class Qsdk {
                 }
             }
         } else if (inviteToGroupChatReq.getAssetType() == MyAsset.WIFI_ASSET) {
-            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
-            for (WifiEntity wifiEntity : wifiEntityList) {
-                if (wifiEntity.getSsid().equals(inviteToGroupChatReq.getAssetName()) && wifiEntity.getOwnerP2PId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                    int result = qlinkcom.InviteFriendToGroupChat(friendNum, wifiEntity.getGroupNum());
-                    if (result == 0) {
-                    }
-                    return;
-                }
-            }
         }
     }
 
@@ -649,105 +588,8 @@ public class Qsdk {
     }
 
 
-    /**
-     * @param friendNum
-     * @param ssid      wifi连接成功，告诉wifi提供者，我已经连接成功了
-     * @see com.stratagile.qlink.ui.activity.wifi.presenter.ConnectWifiConfirmPresenter#createLinkToWifi(WifipasswordRsp)
-     */
-    public void wifiConnectSuccessReq(String friendNum, String ssid) {
-        Map<String, Object> infoMap = new HashMap<>();
-        infoMap.put("ssid", ssid);
-        infoMap.put("friendNum", friendNum);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.wifiConnectSuccess, infoMap);
-    }
 
 
-    /**
-     * 这里应该要对我的所有的好友发送我的wifi信息改变的消息
-     *
-     * @param friendNum
-     * @param wifiConnectSuccess
-     */
-    private void handlerWifiConnectSuccess(String friendNum, WifiConnectSuccess wifiConnectSuccess) {
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (wifiEntity.getSsid().equals(wifiConnectSuccess.getSsid())) {
-                wifiEntity.setConnectCount(wifiEntity.getConnectCount() + 1);
-                AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                EventBus.getDefault().post(new ArrayList<WifiEntity>());
-                sendWifiBaseInfoRsp(wifiEntity, friendNum);
-            }
-        }
-    }
-
-    /**
-     * 收到获取WiFi详情的请求，需要发送WiFi详情给p2p
-     * 由外部调用
-     *
-     * @param ssid
-     * @param mac
-     * @param friendNum
-     */
-    private void getWifiBasicInfo(String ssid, String mac, String friendNum) {
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (wifiEntity.getSsid().equals(ssid) && wifiEntity.getMacAdrees().equals(mac)) {
-                sendWifiBaseInfoRsp(wifiEntity, friendNum);
-            }
-        }
-    }
-
-    /**
-     * 由外部调用
-     *
-     * @param friendNum
-     * @param status    好友上线了，更新好友已经分享了的WiFi的状态
-     * @see com.stratagile.qlink.ui.activity.wifi.WifiListFragment#setListData(List)
-     */
-    public void getFriendSharedWifiInfo(String friendNum, int status) {
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        if (status > 0) {
-            for (WifiEntity wifiEntity : wifiEntityList) {
-//                KLog.i(wifiEntity.getOwnerP2PId());
-                if (wifiEntity.getOwnerP2PId().contains(friendNum)) {
-//                    if (wifiEntity.getConnectCount() == 0) {
-//                        LogUtil.addLog("将" + wifiEntity.getSsid() + "的在线状态设置为在线", getClass().getSimpleName());
-//                        Map<String, String> infoMap = new HashMap<>();
-//                        infoMap.put("ssid", wifiEntity.getSsid());
-//                        infoMap.put("mac", wifiEntity.getMacAdrees());
-//                        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.wifibasicinfoReq, infoMap);
-//                        //获取该好友分享的WiFi的详情
-//                    } else {
-//
-//                    }
-                    KLog.i("friendNum和数据库的数据匹配成功");
-                    KLog.i("friendNum=" + friendNum);
-                    KLog.i("将" + wifiEntity.getSsid() + "的在线状态设置为在线");
-                    wifiEntity.setFreindNum(friendNum);
-                    wifiEntity.setOnline(true);
-                    KLog.i("ssid为:" + wifiEntity.getSsid());
-
-                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                    //好友状态改变，更新ui
-                    EventBus.getDefault().post(new ArrayList<WifiEntity>());
-                    //这里不能break，因为一个好友可能注册多个WiFi资产，
-                    //break;
-                }
-            }
-        } else {
-            for (WifiEntity wifiEntity : wifiEntityList) {
-//                KLog.i(wifiEntity.getOwnerP2PId());
-                if (wifiEntity.getOwnerP2PId().contains(friendNum)) {
-                    wifiEntity.setOnline(false);
-                    KLog.i("将" + wifiEntity.getSsid() + "的在线状态设置为不在线");
-                    LogUtil.addLog("将" + wifiEntity.getSsid() + "的在线状态设置为不在线", getClass().getSimpleName());
-                    //好友状态改变，更新ui
-                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                }
-            }
-            EventBus.getDefault().post(new ArrayList<WifiEntity>());
-        }
-    }
 
     public void getFriendSharedVpnInfo(String friendNum, int status) {
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
@@ -841,27 +683,6 @@ public class Qsdk {
 //        }
     }
 
-    /**
-     * 单纯的发送wifi基本信息
-     *
-     * @param wifiEntity
-     * @param friendNum
-     */
-    public void sendWifiBaseInfoRsp(WifiEntity wifiEntity, String friendNum) {
-        Map<String, Object> infoMap = new HashMap<>();
-        infoMap.put("ssid", wifiEntity.getSsid());
-        infoMap.put("mac", wifiEntity.getMacAdrees());
-        infoMap.put("priceMode", wifiEntity.getPriceMode());
-        infoMap.put("priceInQlc", wifiEntity.getPriceInQlc());
-        infoMap.put("paymentType", wifiEntity.getPaymentType());
-        infoMap.put("deviceAllowed", wifiEntity.getDeviceAllowed());
-        infoMap.put("connectCount", wifiEntity.getConnectCount());
-        infoMap.put("timeLimitPerDevice", wifiEntity.getTimeLimitPerDevice());
-        infoMap.put("dailyTotalTimeLimit", wifiEntity.getDailyTotalTimeLimit());
-        infoMap.put("ownerP2pId", wifiEntity.getOwnerP2PId());
-        infoMap.put("avaterUpdateTime", wifiEntity.getAvaterUpdateTime());
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.wifibasicinfoRsp, infoMap);
-    }
 
     /**
      * 添加传送文件的请求，
@@ -876,101 +697,16 @@ public class Qsdk {
         return sendResult;
     }
 
-    /**
-     * 获取WiFi详情的回调
-     *
-     * @param wifibasicinfoRsp
-     * @see com.stratagile.qlink.ui.activity.wifi.WifiListFragment#setListData(List)
-     */
-    private void handleWifiBasicInfo(WifibasicinfoRsp wifibasicinfoRsp) {
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (wifibasicinfoRsp.getSsid().equals(wifiEntity.getSsid())) {
-                WifiEntity tempWifiEntity = wifiEntity;
-                tempWifiEntity.setPriceMode(wifibasicinfoRsp.getPriceMode());
-                tempWifiEntity.setPriceInQlc(wifibasicinfoRsp.getPriceInQlc());
-                tempWifiEntity.setPaymentType(wifibasicinfoRsp.getPaymentType());
-                tempWifiEntity.setDeviceAllowed(wifibasicinfoRsp.getDeviceAllowed());
-                tempWifiEntity.setConnectCount(wifibasicinfoRsp.getConnectCount());
-                tempWifiEntity.setAvaterUpdateTime(wifibasicinfoRsp.getAvaterUpdateTime());
-                tempWifiEntity.setTimeLimitPerDevice(wifibasicinfoRsp.getTimeLimitPerDevice());
-                tempWifiEntity.setDailyTotalTimeLimit(wifibasicinfoRsp.getDailyTotalTimeLimit());
-                AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(tempWifiEntity);
-                EventBus.getDefault().post(new ArrayList<WifiEntity>());
-                return;
-            }
-        }
-    }
-
-    /**
-     * 给请求者发送自己的WiFi密码，并且自己分享的WiFi的当前连接人数增加1
-     *
-     * @param friendNum
-     * @param wifipasswordReq
-     */
-    private void handlerWifiPasswordRequest(String friendNum, WifipasswordReq wifipasswordReq) {
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().queryBuilder().list();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (wifiEntity.getSsid().equals(wifipasswordReq.getSsid()) && wifiEntity.getMacAdrees().equals(wifipasswordReq.getMac())) {
-                //wifiEntity.setConnectCount(wifiEntity.getConnectCount() + 1);
-                Map<String, Object> infoMap = new HashMap<>();
-                infoMap.put("ssid", wifiEntity.getSsid());
-                infoMap.put("mac", wifiEntity.getMacAdrees());
-                infoMap.put("password", wifiEntity.getWifiPassword());
-                infoMap.put("address", wifiEntity.getWalletAddress());
-                //AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                //EventBus.getDefault().post(new ArrayList<WifiEntity>());
-                QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.wifipasswordRsp, infoMap);
-            }
-        }
-    }
-
-    /**
-     * 获取到了密码，发送消息给其他页面去处理
-     *
-     * @param friendNum
-     * @param wifipasswordRsp
-     * @see com.stratagile.qlink.ui.activity.wifi.ConnectWifiConfirmActivity#connectToWifi
-     */
-    private void handlerWifiPasswordReponse(String friendNum, WifipasswordRsp wifipasswordRsp) {
-        KLog.i("获取到的WiFi密码为:" + wifipasswordRsp.getPassword());
-        wifipasswordRsp.setFriendNum(friendNum);
-        EventBus.getDefault().post(wifipasswordRsp);
-    }
 
     /**
      * 更新自己注册的WiFi的信息
      *
      * @param status
      * @see qlinkcom#CallSelfChange(int)
-     * @see com.stratagile.qlink.ui.activity.wifi.WifiListFragment#setListData(List)
      * @see com.stratagile.qlink.ui.activity.main.MainActivity#setMyStatus(MyStatus)
      */
     public void handlerSelfStatusChange(int status) {
         EventBus.getDefault().post(new MyStatus(status));
-        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-        for (WifiEntity wifiEntity : wifiEntityList) {
-            if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "").equals(wifiEntity.getOwnerP2PId())) {
-                if (status > 0) {
-                    wifiEntity.setOnline(true);
-                    if (!ConstantValue.isLogin) {
-                        KLog.i("为" + wifiEntity.getSsid() + "  创建群组。。。");
-                        int groupNum = qlinkcom.CreatedNewGroupChat();
-                        if (groupNum >= 0) {
-                            wifiEntity.setGroupNum(groupNum);
-                        } else {
-                            groupNum = qlinkcom.CreatedNewGroupChat();
-                            wifiEntity.setGroupNum(groupNum);
-                        }
-                    }
-                } else {
-                    wifiEntity.setOnline(false);
-                }
-                AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-            }
-        }
-        EventBus.getDefault().post(new ArrayList<WifiEntity>());
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
             if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "").equals(vpnEntity.getP2pId())) {

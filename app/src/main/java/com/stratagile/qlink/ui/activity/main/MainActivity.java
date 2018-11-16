@@ -41,12 +41,12 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.ContinentAndCountry;
 import com.stratagile.qlink.entity.QrEntity;
@@ -75,6 +75,8 @@ import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.P2PCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.ui.activity.eth.EthMnemonicShowActivity;
+import com.stratagile.qlink.ui.activity.eth.EthMnemonicbackupActivity;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
@@ -94,12 +96,14 @@ import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.WalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
+import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.SystemUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.WalletStorage;
@@ -107,7 +111,10 @@ import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.DownCheckView;
 import com.stratagile.qlink.view.NoScrollViewPager;
+import com.stratagile.qlink.view.SweetAlertDialog;
 
+import org.consenlabs.tokencore.wallet.WalletManager;
+import org.consenlabs.tokencore.wallet.keystore.IMTKeystore;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -365,70 +372,52 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 });
             }
         });
-        if (countDownTimerUtils == null) {
-            countDownTimerUtils = CountDownTimerUtils.creatNewInstance();
-            countDownTimerUtils.setMillisInFuture(Long.MAX_VALUE)
-                    .setCountDownInterval(60 * 1000)
-                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                        @Override
-                        public void onTick(long pMillisUntilFinished) {
-                            KLog.i("heart倒计时");
-                            //if (myStatusFlag != null && myStatusFlag.getStatus() > 0) {
-                            String p2pId = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "");
-                            String currentWifiName = "";
-                            String currentVpnName = "";
-                            for (WifiEntity wifiEntity : AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll()) {
-                                if (wifiEntity.getIsConnected()) {
-                                    currentWifiName = wifiEntity.getSsid();
-                                    break;
-                                }
-                            }
-                            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-                            for (VpnEntity vpnEntity : AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll()) {
-                                if (vpnEntity.getIsConnected()) {
-                                    currentVpnName = vpnEntity.getVpnName();
-                                    break;
-                                }
-                            }
-                            if (p2pId != null && !p2pId.equals("")) {
-                                Map<String, Object> mapHeart = new HashMap<>();
-                                mapHeart.put("p2pId", p2pId);
-                                mapHeart.put("status", myStatusFlag == null ? 0 : (myStatusFlag.getStatus() > 0 ? 1 : 0));
-                                mapHeart.put("wifiName", currentWifiName);
-                                mapHeart.put("vpnName", currentVpnName);
-                                mPresenter.heartBeat(mapHeart);
-                            }
-
-                            long lastRestart = SpUtil.getLong(AppConfig.getInstance(), ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
-                            if ((Calendar.getInstance().getTimeInMillis() - lastRestart) > 2 * 60 * 60 * 1000)//每两小时重启一次
-                            {
-                                SpUtil.putLong(AppConfig.getInstance(), ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
-                                Intent intent = new Intent(mainActivity, SplashActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                Process.killProcess(Process.myPid());
-                                System.exit(0);
-                            }
-                            // }
-                        }
-                    }).start();
-        }
-        if (countDownTimerUtilsOnVpnServer == null) {
-            countDownTimerUtilsOnVpnServer = CountDownTimerUtils.creatNewInstance();
-            countDownTimerUtilsOnVpnServer.setMillisInFuture(Long.MAX_VALUE)
-                    .setCountDownInterval(30 * 1000)
-                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
-                        @Override
-                        public void onTick(long pMillisUntilFinished) {
-                            KLog.i("vpn server上报倒计时");
-                            List<VpnServerRecord> vpnServerRecordList = AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().loadAll();
-                            for (VpnServerRecord vpnServerRecord : vpnServerRecordList) {
-                                QlinkUtil.parseMap2StringAndSend(vpnServerRecord.getP2pId(), ConstantValue.checkConnectReq, new HashMap());
-                            }
-
-                        }
-                    }).start();
-        }
+//        if (countDownTimerUtils == null) {
+//            countDownTimerUtils = CountDownTimerUtils.creatNewInstance();
+//            countDownTimerUtils.setMillisInFuture(Long.MAX_VALUE)
+//                    .setCountDownInterval(60 * 1000 * 5)
+//                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+//                        @Override
+//                        public void onTick(long pMillisUntilFinished) {
+//                            KLog.i("heart倒计时");
+//                            //if (myStatusFlag != null && myStatusFlag.getStatus() > 0) {
+//                            String p2pId = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "");
+//                            String currentWifiName = "";
+//                            String currentVpnName = "";
+//                            for (VpnEntity vpnEntity : AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll()) {
+//                                if (vpnEntity.getIsConnected()) {
+//                                    currentVpnName = vpnEntity.getVpnName();
+//                                    break;
+//                                }
+//                            }
+//                            if (p2pId != null && !p2pId.equals("")) {
+//                                Map<String, Object> mapHeart = new HashMap<>();
+//                                mapHeart.put("p2pId", p2pId);
+//                                mapHeart.put("status", myStatusFlag == null ? 0 : (myStatusFlag.getStatus() > 0 ? 1 : 0));
+//                                mapHeart.put("wifiName", currentWifiName);
+//                                mapHeart.put("vpnName", currentVpnName);
+//                                mPresenter.heartBeat(mapHeart);
+//                            }
+//
+//                        }
+//                    }).start();
+//        }
+//        if (countDownTimerUtilsOnVpnServer == null) {
+//            countDownTimerUtilsOnVpnServer = CountDownTimerUtils.creatNewInstance();
+//            countDownTimerUtilsOnVpnServer.setMillisInFuture(Long.MAX_VALUE)
+//                    .setCountDownInterval(30 * 1000)
+//                    .setTickDelegate(new CountDownTimerUtils.TickDelegate() {
+//                        @Override
+//                        public void onTick(long pMillisUntilFinished) {
+//                            KLog.i("vpn server上报倒计时");
+//                            List<VpnServerRecord> vpnServerRecordList = AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().loadAll();
+//                            for (VpnServerRecord vpnServerRecord : vpnServerRecordList) {
+//                                QlinkUtil.parseMap2StringAndSend(vpnServerRecord.getP2pId(), ConstantValue.checkConnectReq, new HashMap());
+//                            }
+//
+//                        }
+//                    }).start();
+//        }
         LogUtil.addLog(SystemUtil.getDeviceBrand() + "  " + SystemUtil.getSystemModel() + "   " + SystemUtil.getSystemVersion() + "   " + VersionUtil.getAppVersionName(this), getClass().getSimpleName());
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -440,7 +429,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 } else if (position == 2) {
                     return new SmsFragment();
                 } else {
-                    return new MarketFragment();
+                    return new SettingsFragment();
                 }
             }
 
@@ -489,8 +478,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 return true;
             }
         });
-        bottomNavigation.setSelectedItemId(R.id.item_sms);
-        setVpnPage();
+        bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+        setAllWalletPage();
         IntentFilter intent = new IntentFilter();
         intent.addAction(BroadCastAction.disconnectVpnSuccess);
         registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
@@ -623,11 +612,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         myStatus.setVisibility(View.VISIBLE);
         if (qlinkcom.GetP2PConnectionStatus() > 0) {
             this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search));
-            SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
         } else {
             this.myStatus.setImageDrawable(getResources().getDrawable(R.mipmap.icon_search_red));
-            SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
         }
+        SpringAnimationUtil.startScaleSpringViewAnimation(this.myStatus);
+        SpringAnimationUtil.startScaleSpringViewAnimation(this.ivWallet);
+        SpringAnimationUtil.startScaleSpringViewAnimation(this.ivAvater);
         if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
             Glide.with(this)
                     .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
@@ -688,7 +678,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                     statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
-                    tvTitle.setText(R.string.my_wallet);
+                    tvTitle.setText(R.string.wallet);
                     tvTitle.setTextColor(getResources().getColor(R.color.white));
                     Glide.with(this)
                             .load(R.mipmap.icons_scan_qrcode_n)
@@ -722,7 +712,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                     statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
-                    tvTitle.setText(R.string.my_wallet);
+                    tvTitle.setText(R.string.wallet);
                     tvTitle.setTextColor(getResources().getColor(R.color.white));
                     ivAvater.setVisibility(View.VISIBLE);
                     myStatus.setVisibility(View.GONE);
@@ -824,7 +814,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             downCHeckView.close();
             return;
         }
-        moveTaskToBack(true);
+        if (VpnStatus.isVPNActive()) {
+            moveTaskToBack(true);
+        } else {
+            if (DoubleClickHelper.isDoubleClick()) {
+                finish();
+            } else {
+                ToastUtil.displayShortToast("Double click to exit app");
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1005,10 +1003,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 }
                 break;
             case R.id.iv_wallet:
-//                if (bottomNavigation.getSelectedItemId() == R.id.item_settings) {
-//                    startActivity(new Intent(this, SettingsActivity.class));
-//                    return;
-//                }
+                if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
+//                    showTestDialog();
+                    return;
+                }
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
                     ActiveTogglePopWindow morePopWindow = new ActiveTogglePopWindow(this);
                     morePopWindow.setOnItemClickListener(MainActivity.this);
@@ -1038,6 +1036,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             default:
                 break;
         }
+    }
+
+    private void showTestDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
+        tvContent.setText("setting success");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        ivWallet.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sweetAlertDialog.cancel();
+            }
+        }, 2000);
     }
 
     @Override
@@ -1085,18 +1100,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void getAvatarSuccess(UpLoadAvatar upLoadAvatar) {
-        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
-            Glide.with(this)
-                    .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                    .apply(AppConfig.getInstance().optionsMainColor)
-                    .into(ivAvater);
-        } else {
-            Glide.with(this)
-                    .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                    .apply(AppConfig.getInstance().optionsMainColor)
-                    .into(ivAvater);
+        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+                Glide.with(this)
+                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                        .apply(AppConfig.getInstance().optionsMainColor)
+                        .into(ivAvater);
+            } else {
+                Glide.with(this)
+                        .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                        .apply(AppConfig.getInstance().optionsMainColor)
+                        .into(ivAvater);
+            }
         }
-
 
     }
 
@@ -1132,6 +1148,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private void showGuideViewEnterSetting() {
+//        org.consenlabs.tokencore.wallet.Wallet wallet = new org.consenlabs.tokencore.wallet.Wallet();
         if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowEnterSettingGuide, false)) {
             GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterSettingGuide, true);
             GuideBuilder builder = new GuideBuilder();

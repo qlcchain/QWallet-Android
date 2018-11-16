@@ -52,9 +52,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static com.stratagile.qlink.ui.activity.wifi.WifiFragment.START_CREATE_PASSWORD;
-import static com.stratagile.qlink.ui.activity.wifi.WifiFragment.START_NO_WALLLET;
-import static com.stratagile.qlink.ui.activity.wifi.WifiFragment.START_VERTIFY_PASSWORD;
 
 /**
  * @author hzp
