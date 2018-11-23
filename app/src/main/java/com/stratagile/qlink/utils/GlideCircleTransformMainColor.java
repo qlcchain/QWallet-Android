@@ -58,7 +58,7 @@ public class GlideCircleTransformMainColor extends BitmapTransformation {
         float r = size / 2f;
         float r1 = (size - 2 * 4) / 2f;
         canvas.drawCircle(r, r, r1, paint);
-        canvas.drawCircle(r, r, r1, mBorderPaint);//画边框
+//        canvas.drawCircle(r, r, r1, mBorderPaint);//画边框
         return result;
     }
 

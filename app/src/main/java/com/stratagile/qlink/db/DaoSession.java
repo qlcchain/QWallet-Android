@@ -8,8 +8,6 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.stratagile.qlink.db.WifiEntity;
-import com.stratagile.qlink.db.WifiMyRegiste;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.EthWallet;
@@ -17,8 +15,6 @@ import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.TransactionRecord;
 
-import com.stratagile.qlink.db.WifiEntityDao;
-import com.stratagile.qlink.db.WifiMyRegisteDao;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.VpnServerRecordDao;
 import com.stratagile.qlink.db.EthWalletDao;
@@ -35,8 +31,6 @@ import com.stratagile.qlink.db.TransactionRecordDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig wifiEntityDaoConfig;
-    private final DaoConfig wifiMyRegisteDaoConfig;
     private final DaoConfig vpnEntityDaoConfig;
     private final DaoConfig vpnServerRecordDaoConfig;
     private final DaoConfig ethWalletDaoConfig;
@@ -44,8 +38,6 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig walletDaoConfig;
     private final DaoConfig transactionRecordDaoConfig;
 
-    private final WifiEntityDao wifiEntityDao;
-    private final WifiMyRegisteDao wifiMyRegisteDao;
     private final VpnEntityDao vpnEntityDao;
     private final VpnServerRecordDao vpnServerRecordDao;
     private final EthWalletDao ethWalletDao;
@@ -56,12 +48,6 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
-
-        wifiEntityDaoConfig = daoConfigMap.get(WifiEntityDao.class).clone();
-        wifiEntityDaoConfig.initIdentityScope(type);
-
-        wifiMyRegisteDaoConfig = daoConfigMap.get(WifiMyRegisteDao.class).clone();
-        wifiMyRegisteDaoConfig.initIdentityScope(type);
 
         vpnEntityDaoConfig = daoConfigMap.get(VpnEntityDao.class).clone();
         vpnEntityDaoConfig.initIdentityScope(type);
@@ -81,8 +67,6 @@ public class DaoSession extends AbstractDaoSession {
         transactionRecordDaoConfig = daoConfigMap.get(TransactionRecordDao.class).clone();
         transactionRecordDaoConfig.initIdentityScope(type);
 
-        wifiEntityDao = new WifiEntityDao(wifiEntityDaoConfig, this);
-        wifiMyRegisteDao = new WifiMyRegisteDao(wifiMyRegisteDaoConfig, this);
         vpnEntityDao = new VpnEntityDao(vpnEntityDaoConfig, this);
         vpnServerRecordDao = new VpnServerRecordDao(vpnServerRecordDaoConfig, this);
         ethWalletDao = new EthWalletDao(ethWalletDaoConfig, this);
@@ -90,8 +74,6 @@ public class DaoSession extends AbstractDaoSession {
         walletDao = new WalletDao(walletDaoConfig, this);
         transactionRecordDao = new TransactionRecordDao(transactionRecordDaoConfig, this);
 
-        registerDao(WifiEntity.class, wifiEntityDao);
-        registerDao(WifiMyRegiste.class, wifiMyRegisteDao);
         registerDao(VpnEntity.class, vpnEntityDao);
         registerDao(VpnServerRecord.class, vpnServerRecordDao);
         registerDao(EthWallet.class, ethWalletDao);
@@ -101,22 +83,12 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
-        wifiEntityDaoConfig.clearIdentityScope();
-        wifiMyRegisteDaoConfig.clearIdentityScope();
         vpnEntityDaoConfig.clearIdentityScope();
         vpnServerRecordDaoConfig.clearIdentityScope();
         ethWalletDaoConfig.clearIdentityScope();
         recordSaveDaoConfig.clearIdentityScope();
         walletDaoConfig.clearIdentityScope();
         transactionRecordDaoConfig.clearIdentityScope();
-    }
-
-    public WifiEntityDao getWifiEntityDao() {
-        return wifiEntityDao;
-    }
-
-    public WifiMyRegisteDao getWifiMyRegisteDao() {
-        return wifiMyRegisteDao;
     }
 
     public VpnEntityDao getVpnEntityDao() {

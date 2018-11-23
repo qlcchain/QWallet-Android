@@ -1,6 +1,7 @@
 package com.stratagile.qlink.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -103,7 +104,7 @@ public class DigestUtils {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println(("getSignature({})" + stringBuilder.toString()));
+        KLog.i("getSignature({})" + stringBuilder.toString());
         return stringBuilder.toString();
     }
 

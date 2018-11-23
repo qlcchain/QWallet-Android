@@ -1,5 +1,7 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,10 +16,14 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.data.FullWallet;
+import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthKeyStroeComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthKeyStroeContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthKeyStroeModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthKeyStroePresenter;
+import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.utils.eth.OwnWalletUtils;
 import com.stratagile.qlink.utils.eth.WalletStorage;
 
@@ -33,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.acl.Owner;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -52,12 +59,13 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     @Inject
     EthKeyStroePresenter mPresenter;
     private static final String ARG_TYPE = "arg_type";
-    @BindView(R.id.et_keystroe)
+    @BindView(R.id.etKeystore)
     EditText etKeystroe;
     @BindView(R.id.et_password)
     EditText etPassword;
-    @BindView(R.id.tv_import)
-    TextView tvImport;
+    @BindView(R.id.btImport)
+    TextView btImport;
+    private ImportViewModel viewModel;
 
     private static ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
@@ -66,6 +74,7 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_eth_key_stroe, null);
         ButterKnife.bind(this, view);
+        viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
         Bundle mBundle = getArguments();
         return view;
     }
@@ -113,14 +122,17 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         super.onDestroyView();
     }
 
-    @OnClick(R.id.tv_import)
+    @OnClick(R.id.btImport)
     public void onViewClicked() {
-        if (etKeystroe.getText().toString().equals("")) {
+        if ("".equals(etKeystroe.getText().toString().trim())) {
+            ToastUtil.displayShortToast("please type keystore");
             return;
         }
         if (etPassword.getText().toString().equals("")) {
+            ToastUtil.displayShortToast("please type password");
             return;
         }
+        showProgressDialog();
         loadWalletByKeystore(etKeystroe.getText().toString(), etPassword.getText().toString());
     }
 
@@ -132,28 +144,33 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
      * @return
      */
     public void loadWalletByKeystore(String keystore, String pwd) {
-        Credentials credentials = null;
-        WalletFile walletFile = null;
-        try {
-            walletFile = objectMapper.readValue(keystore, WalletFile.class);
+        EthWallet wallet;
+        wallet = ETHWalletUtils.loadWalletByKeystore(keystore, pwd);
+        if (wallet == null) {
+            closeProgressDialog();
+            ToastUtil.displayShortToast("import eth wallet error");
+            return;
+        }
+        KLog.i(wallet.toString());
+        List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getAddress().equals(wallet.getAddress())) {
+                ToastUtil.displayShortToast("wallet exist");
+                closeProgressDialog();
+                return;
+            }
+        }
 
-//            WalletFile walletFile = new Gson().fromJson(keystore, WalletFile.class);
-            credentials = Credentials.create(Wallet.decrypt(pwd, walletFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CipherException e) {
-//            ToastUtils.showToast(R.string.load_wallet_by_official_wallet_keystore_input_tip);
-            e.printStackTrace();
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).isCurrent()) {
+                wallets.get(i).setCurrent(false);
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallets.get(i));
+                break;
+            }
         }
-        KLog.i(credentials.getEcKeyPair().getPrivateKey());
-        try {
-            OwnWalletUtils.generateWalletFile(pwd, credentials.getEcKeyPair(), new File(AppConfig.getInstance().getFilesDir(), ""), true);
-            WalletStorage.getInstance(getActivity()).add(new FullWallet(walletFile.getAddress(), walletFile.getAddress()), getActivity());
-        } catch (CipherException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(wallet);
+        closeProgressDialog();
+        viewModel.walletAddress.postValue(wallet.getAddress());
     }
 
 }

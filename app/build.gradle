@@ -40,9 +40,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 61
+        versionCode 62
         multiDexEnabled true
-        versionName "1.2.13 release"
+        versionName "1.3.0 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -116,7 +116,7 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
     greendao {
-        schemaVersion 46//数据库版本号
+        schemaVersion 50//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -135,7 +135,7 @@ android {
 //
 //        }
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 }
 
 repositories {
@@ -248,7 +248,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
-//    implementation 'com.google.firebase:firebase-ads:15.0.1'
+
+    //    implementation 'com.google.firebase:firebase-ads:15.0.1'
     implementation 'com.google.firebase:firebase-config:16.0.0'
     implementation('com.google.firebase:firebase-core:16.0.0') {
         exclude group: 'com.android.support'
@@ -263,10 +264,11 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.lifecycle:extensions:$arch_version"
 
-//    shadowsocks vpn
-//    implementation project(':core')
+    //    shadowsocks vpn
+
+    //    implementation project(':core')
     implementation files('libs/core-release.aar')
-    implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
     kapt "android.arch.persistence.room:compiler:1.1.1"
     implementation "android.arch.work:work-runtime-ktx:$workVersion"
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.4'
@@ -278,6 +280,17 @@ dependencies {
     androidTestImplementation "android.arch.work:work-testing:$workVersion"
     implementation 'com.jakewharton.timber:timber:4.7.0'
     implementation 'com.pawegio.kandroid:kandroid:0.8.7@aar'
+    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.6'
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.3'
+    implementation 'com.google.android:flexbox:0.3.2'
+    implementation files('libs/commons-collections-3.2.2.jar')
+
+    //    implementation project(':MPChartLib')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation files('libs/BASE64Encoder.jar')
+    //imtoken
+    implementation 'com.github.consenlabs:token-core-android:v0.1'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

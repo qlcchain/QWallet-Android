@@ -42,8 +42,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="@string/openvpn_is_no_free_vpn" />
+                android:autoLink="web" />
 
             <Space
                 android:layout_width="match_parent"

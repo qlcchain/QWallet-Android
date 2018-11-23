@@ -2,15 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/content_background_shape"
+    android:background="@color/white"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <include layout="@layout/toolbar_layout"
-        android:visibility="gone"
-        android:id="@+id/tool"
-        />
     <RelativeLayout
-        android:layout_below="@+id/tool"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent">
@@ -103,18 +98,24 @@
             <TextView
                 android:id="@+id/registerVpn"
                 android:layout_width="wrap_content"
-                android:text="@string/REGISTER_YOUR_VPN_"
+                android:text="MY ASSETS"
+                android:textStyle="bold"
                 android:layout_gravity="center_vertical"
                 android:textSize="12sp"
-                android:drawableRight="@mipmap/icon_add"
+                android:drawableRight="@mipmap/icon_asset"
                 android:drawablePadding="@dimen/x10"
-                android:fontFamily="@font/vagroundedbt"
                 android:textColor="@color/main_color"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_below="@+id/menu"
+            android:background="@color/color_29282a_40"/>
         <com.stratagile.qlink.view.NoScrollViewPager
             android:layout_below="@+id/menu"
+            android:layout_marginTop="@dimen/x1"
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

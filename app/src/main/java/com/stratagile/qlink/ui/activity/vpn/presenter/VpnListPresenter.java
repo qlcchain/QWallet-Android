@@ -120,7 +120,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 
     }
 
-    Handler handler = new Handler() {
+    public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -132,14 +132,14 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                 case 1:
                     KLog.i(msg.what);
                     flag += 1;
-                    if (flag >= 8) {
+                    if (flag >= 10) {
                         mView.closeProgressDialog();
                         KLog.i("error");
                         flag = 0;
                         Map<String, Object> map = new HashMap<>();
                         map.put("vpnName", connectVpnEntity.getVpnName());
                         map.put("status", 0);
-                        map.put("mark", VersionUtil.getAppVersionName(AppConfig.getInstance()) + "  " +  AppConfig.getInstance().getResources().getString(R.string.Connect_to_Sharer_Timeout));
+                        map.put("mark", VersionUtil.getAppVersionName(AppConfig.getInstance()) + "  " + AppConfig.getInstance().getResources().getString(R.string.Connect_to_Sharer_Timeout));
                         KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_no Permission");
                         reportVpnInfo(map);
                         ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Connect_to_Sharer_Timeout));
@@ -246,19 +246,16 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     vpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
                     vpnEntity.setOwnerP2pId(vpnListBean.getOwnerP2pId());
                     vpnEntity.setP2pIdPc(vpnListBean.getOwnerP2pId());
-                    if (vpnListBean.getConnectNum() != 0) {
-                        vpnEntity.setQlc((float) vpnListBean.getCost());
-                        vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
-                        if(vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")))
-                        {
-                            vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
-                        }else{
-                            vpnEntity.setAvatar(vpnListBean.getImgUrl());
-                        }
-                        vpnEntity.setP2pId(vpnListBean.getP2pId());
-                        vpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
-                        vpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
+                    vpnEntity.setQlc((float) vpnListBean.getCost());
+                    vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
+                    if (vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+                        vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
+                    } else {
+                        vpnEntity.setAvatar(vpnListBean.getImgUrl());
                     }
+                    vpnEntity.setP2pId(vpnListBean.getP2pId());
+                    vpnEntity.setRegisterQlc(vpnListBean.getRegisterQlc());
+                    vpnEntity.setProfileLocalPath(vpnListBean.getProfileLocalPath());
                     if (vpnListBean.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
                         if (qlinkcom.GetP2PConnectionStatus() > 0) {
                             vpnEntity.setOnline(true);
@@ -299,10 +296,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
             for (VpnEntity vpnEntity : vpnEntityList) {
-                if (!isInSameNet(vpnEntity)) {
-                    continue;
-                }
-                if (VpnUtil.isInSameNet(vpnEntity) && vpnEntity.getVpnName().equals(vpnListBean.getVpnName()) && "".equals(vpnEntity.getFriendNum())) {
+                if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
                     //判断是否是好友，是好友就把friendNum添加到WiFientity中，不是好友就要添加好友，再添加。
                     int friendNum = qlinkcom.GetFriendNumInFriendlist(vpnListBean.getP2pId());
                     byte[] p2pId = new byte[100];
@@ -324,20 +318,6 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     } else {
                         KLog.i(friendNum + "已经是好友" + vpnEntity.getVpnName());
                         vpnEntity.setFriendNum(friendNumStr);
-//                        try {
-//                            if (qlinkcom.GetFriendConnectionStatus(vpnEntity.getFriendNum()) > 0 && vpnEntity.getConnectMaxnumber() == 0) {
-//                                vpnEntity.setOnline(true);
-//                                if (vpnEntity.getProfileLocalPath() == null || "".equals(vpnEntity.getProfileLocalPath())) {
-//                                    Map<String, String> infoMap = new HashMap<>();
-//                                    infoMap.put("vpnName", vpnEntity.getVpnName());
-//                                    infoMap.put("p2pId", vpnEntity.getP2pId());
-//                                    LogUtil.addLog("要获取信息的资产信息为：" + vpnEntity.toString(), getClass().getSimpleName());
-//                                    QlinkUtil.parseMap2StringAndSend(vpnEntity.getFriendNum(), ConstantValue.vpnBasicInfoReq, infoMap);
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
                     }
                     if (!vpnEntity.getFriendNum().equals("")) {
                         if (qlinkcom.GetFriendConnectionStatus(friendNumStr) > 0) {
@@ -367,10 +347,10 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (ChainVpn.DataBean.VpnListBean vpnListBean : vpnListBeans) {
             for (VpnEntity vpnEntity : vpnEntityList) {
-                if (!isInSameNet(vpnEntity)) {
-                    continue;
-                }
-                if (VpnUtil.isInSameNet(vpnEntity) && vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
+//                if (!isInSameNet(vpnEntity)) {
+//                    continue;
+//                }
+                if (vpnEntity.getVpnName().equals(vpnListBean.getVpnName())) {
                     if (vpnEntity.isConnected()) {
                         isAddConnectedVpn = true;
                     }
@@ -394,66 +374,58 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     public void preConnectVpn(VpnEntity vpnEntity) {
         connectVpnEntity = vpnEntity;
         //如果是连接自己的vpn，那么直接连接
-        String vpnP2pId = vpnEntity.getP2pIdPc() == null ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
-        if (vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-            connectVpnForSelf();
-            ConstantValue.isConnectedVpn = false;
+        //连接的是别人的vpn，先显示需要扣费的弹窗
+        if (vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
+            checkSharerConnect();
         } else {
-            //连接的是别人的vpn，先显示需要扣费的弹窗
-            if(vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")))
-            {
-                checkSharerConnect();
-            }else{
-                mView.showNeedQlcDialog(vpnEntity);
-            }
-
+            mView.showNeedQlcDialog(vpnEntity);
         }
     }
 
     @Override
     public void dialogConfirm() {
-        Map<String, String> map = new HashMap<>();
-        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
-        getBalance(map);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)).getAddress());
+//        getBalance(map);
     }
 
 
-    /**
-     * 连接的是自己的vpn
-     */
-    private void connectVpnForSelf() {
-        mResult = ProfileManager.get(AppConfig.getInstance(), connectVpnEntity.getProfileUUid());
-        if (mResult != null) {
-            if (VpnStatus.isVPNActive()) {
-
-            } else {
-                mView.startOrStopVPN(mResult);
-                mView.showProgressDialog();
-            }
-        } else {
-            KLog.i("profile为空。。。");
-            mResult = ProfileManager.getInstance(AppConfig.getInstance()).getProFile(connectVpnEntity.getConfiguration());
-            if (mResult != null) {
-                connectVpnEntity.setProfileUUid(mResult.getUUIDString());
-                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
-                mView.startOrStopVPN(mResult);
-                mView.showProgressDialog();
-            } else {
-//                        ToastUtil.displayShortToast("vpn profile is null, please import vpn configuration file agin");
-                KLog.i("profile为空。。。");
-                if (connectVpnEntity != null && connectVpnEntity.getProfileLocalPath() != null) {
-                    File configFile = new File(connectVpnEntity.getProfileLocalPath());
-                    if (configFile.exists()) {
-                        mView.showProgressDialog();
-                        readFile(configFile);
-                    } else {
-                        ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.error2));
-                        mView.closeProgressDialog();
-                    }
-                }
-            }
-        }
-    }
+//    /**
+//     * 连接的是自己的vpn
+//     */
+//    private void connectVpnForSelf() {
+//        mResult = ProfileManager.get(AppConfig.getInstance(), connectVpnEntity.getProfileUUid());
+//        if (mResult != null) {
+//            if (VpnStatus.isVPNActive()) {
+//
+//            } else {
+//                mView.startOrStopVPN(mResult);
+//                mView.showProgressDialog();
+//            }
+//        } else {
+//            KLog.i("profile为空。。。");
+//            mResult = ProfileManager.getInstance(AppConfig.getInstance()).getProFile(connectVpnEntity.getConfiguration());
+//            if (mResult != null) {
+//                connectVpnEntity.setProfileUUid(mResult.getUUIDString());
+//                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(connectVpnEntity);
+//                mView.startOrStopVPN(mResult);
+//                mView.showProgressDialog();
+//            } else {
+////                        ToastUtil.displayShortToast("vpn profile is null, please import vpn configuration file agin");
+//                KLog.i("profile为空。。。");
+//                if (connectVpnEntity != null && connectVpnEntity.getProfileLocalPath() != null) {
+//                    File configFile = new File(connectVpnEntity.getProfileLocalPath());
+//                    if (configFile.exists()) {
+//                        mView.showProgressDialog();
+//                        readFile(configFile);
+//                    } else {
+//                        ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.error2));
+//                        mView.closeProgressDialog();
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void getPasswordFromRemote(int type) {
@@ -482,67 +454,68 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     }
 
     @Override
-    public void vpnProfileSendComplete() {
-        if(connectVpnEntity  == null)
-        {
+    public void vpnProfileSendComplete(String content) {
+        if (connectVpnEntity == null) {
             return;
         }
-        String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";
+//        String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";
         String fileName = "";
         if (connectVpnEntity.getProfileLocalPath().contains("/")) {
             fileName = connectVpnEntity.getProfileLocalPath().substring(connectVpnEntity.getProfileLocalPath().lastIndexOf("/"), connectVpnEntity.getProfileLocalPath().length());
         } else {
             fileName = "/" + connectVpnEntity.getProfileLocalPath();
         }
-        File configFile = new File(newPath + fileName);
-        KLog.i("配置文件的hash值为：" + MD5Util.getFileMD5(configFile));
-        Uri uri = new Uri.Builder().path(newPath + fileName).scheme("file").build();
-        mPathsegments = uri.getPathSegments();
+//        File configFile = new File(newPath + fileName);
+//        KLog.i(newPath + fileName);
+        KLog.i("配置文件的hash值为：" + MD5Util.getStringMD5(content));
+        KLog.i("注册的配置文件的hash值为：" + connectVpnEntity.getHash());
+//        Uri uri = new Uri.Builder().path(newPath + fileName).scheme("file").build();
+//        mPathsegments = uri.getPathSegments();
         KLog.i("发送0");
         handler.sendEmptyMessage(0);
-        if (configFile.exists()) {
+//        if (configFile.exists()) {
 //            ToastUtil.displayShortToast("文件传送过来了");
-            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-            for (VpnEntity vpnEntity : vpnEntityList) {
-                if (vpnEntity.getIsConnected()) {
-                    vpnEntity.setIsConnected(false);
-                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-                }
+        List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+        for (VpnEntity vpnEntity : vpnEntityList) {
+            if (vpnEntity.getIsConnected()) {
+                vpnEntity.setIsConnected(false);
+                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
             }
-            EventBus.getDefault().post(new DisconnectVpn());
-            readFile(configFile);
-        } else {
-            if(connectVpnEntity  != null)
-            {
-                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
-                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
-                Map<String, Object> map = new HashMap<>();
-                map.put("vpnName",connectVpnEntity.getVpnName() );
-                map.put("status",0 );
-                map.put("mark","Cannot Read Configuration Profilefile" );
-                KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_Cannot Read Configuration Profilefile" );
-                reportVpnInfo(map);
-            }
-            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Cannot_Read_Configuration_Profilefile));
-            mView.closeProgressDialog();
         }
+        EventBus.getDefault().post(new DisconnectVpn());
+//            readFile(uri, fileName);
+        readString(content, fileName);
+//        } else {
+//            if (connectVpnEntity != null) {
+//                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
+//                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("vpnName", connectVpnEntity.getVpnName());
+//                map.put("status", 0);
+//                map.put("mark", "Cannot Read Configuration Profilefile");
+//                KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_Cannot Read Configuration Profilefile");
+//                reportVpnInfo(map);
+//            }
+//            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Cannot_Read_Configuration_Profilefile));
+//            mView.closeProgressDialog();
+//        }
     }
 
-    private void getBalance(Map map) {
-        httpAPIWrapper.getBalance(map)
-                .subscribe(new HttpObserver<Balance>() {
-                    @Override
-                    public void onNext(Balance balance) {
-                        //isSuccesse
-                        KLog.i("onSuccesse");
-                        if (balance.getData().getQLC() > connectVpnEntity.getQlc()) {
-                            checkSharerConnect();
-                        } else {
-                            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Not_enough_QLC));
-                        }
-                    }
-                });
-    }
+//    private void getBalance(Map map) {
+//        httpAPIWrapper.getBalance(map)
+//                .subscribe(new HttpObserver<Balance>() {
+//                    @Override
+//                    public void onNext(Balance balance) {
+//                        //isSuccesse
+//                        KLog.i("onSuccesse");
+//                        if (balance.getData().getQLC() > connectVpnEntity.getQlc()) {
+//                            checkSharerConnect();
+//                        } else {
+//                            ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.Not_enough_QLC));
+//                        }
+//                    }
+//                });
+//    }
 
     /**
      * 检查和分享者的连接情况
@@ -562,7 +535,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             }
             if (qlinkcom.GetFriendConnectionStatus(connectVpnEntity.getFriendNum()) > 0) {
                 mView.showProgressDialog();
-                QlinkUtil.parseMap2StringAndSend(connectVpnEntity.getFriendNum(), ConstantValue.checkConnectReq, new HashMap());
+                QlinkUtil.parseMap2StringAndSendOld(connectVpnEntity.getFriendNum(), ConstantValue.checkConnectReq, new HashMap());
                 handler.sendEmptyMessage(1);
             } else {
                 ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.The_friend_is_not_online));
@@ -573,43 +546,65 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
     }
 
     @Override
-    public void connectShareSuccess() {
+    public void connectShareSuccess(int version) {
         KLog.i("移除监听");
         flag = 0;
-        if(connectVpnEntity == null)
-        {
+        if (connectVpnEntity == null) {
             return;
         }
         mView.showProgressDialog();
         if (connectVpnEntity.getProfileLocalPath() != null && !connectVpnEntity.getProfileLocalPath().equals("")) {
-            mView.preConnect();
+            mView.preConnect(version);
         } else {
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.data_damage_of_this_asset));
         }
     }
 
-    private void readFile(File configFile) {
-        KLog.i("读取文件,开启子线程");
-        ConfigParser cp = new ConfigParser();
-        FileInputStream fim = null;
-        try {
-            fim = new FileInputStream(configFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            InputStreamReader isr = new InputStreamReader(fim);
-            InputStream inputStream = new ByteArrayInputStream("".getBytes());
-            InputStreamReader isr3 = new InputStreamReader(inputStream);
-            cp.parseConfig(isr);
-            mResult = cp.convertProfile();
-            embedFiles(cp);
-            return;
+    private void readString(String content, String fileName) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                KLog.i("读取文件,开启子线程");
+                ConfigParser cp = new ConfigParser();
+                try {
+                    InputStream is = new ByteArrayInputStream(content.getBytes());
+                    InputStreamReader isr = new InputStreamReader(is);
+                    cp.parseConfig(isr);
+                    mResult = cp.convertProfile();
+                    mResult.mName = connectVpnEntity.getVpnName();
+                    saveProfile();
+//                    embedFiles(cp);
+                    return;
 
-        } catch (IOException | ConfigParser.ConfigParseError e) {
-            e.printStackTrace();
-        }
-        KLog.i("读取文件到流中成功");
+                } catch (IOException | ConfigParser.ConfigParseError e) {
+                    e.printStackTrace();
+                }
+                KLog.i("读取文件到流中成功");
+            }
+        }).start();
+    }
+
+    private void readFile(Uri uri, String fileName) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                KLog.i("读取文件,开启子线程");
+                ConfigParser cp = new ConfigParser();
+                try {
+                    InputStream is = AppConfig.getInstance().getContentResolver().openInputStream(uri);
+                    InputStreamReader isr = new InputStreamReader(is);
+                    cp.parseConfig(isr);
+                    mResult = cp.convertProfile();
+                    mResult.mName = fileName;
+                    embedFiles(cp);
+                    return;
+
+                } catch (IOException | ConfigParser.ConfigParseError e) {
+                    e.printStackTrace();
+                }
+                KLog.i("读取文件到流中成功");
+            }
+        }).start();
     }
 
     void embedFiles(ConfigParser cp) {
@@ -621,6 +616,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
             } else {
                 mAliasName = "Imported PKCS12";
             }
+            mResult.mAlias = mAliasName;
         }
 
         KLog.i("embedfiles2222");
@@ -783,20 +779,15 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
 
     private void saveProfile() {
         KLog.i("保存配置文件");
-        Intent result = new Intent();
         ProfileManager vpl = ProfileManager.getInstance(AppConfig.getInstance());
-
         if (!TextUtils.isEmpty(mEmbeddedPwFile)) {
             ConfigParser.useEmbbedUserAuth(mResult, mEmbeddedPwFile);
         }
-
         vpl.addProfile(mResult);
         vpl.saveProfile(AppConfig.getInstance(), mResult);
         vpl.saveProfileList(AppConfig.getInstance());
-        result.putExtra(VpnProfile.EXTRA_PROFILEUUID, mResult.getUUID().toString());
+        KLog.i(mResult.getUUIDString());
         mView.startOrStopVPN(mResult);
-//        setResult(RESULT_OK, result);
-//        finish();
     }
 
     @Override
@@ -810,6 +801,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     }
                 });
     }
+
     @Override
     public void freeConnection(Map map) {
         httpAPIWrapper.freeConnection(map)
@@ -836,6 +828,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     }
                 });
     }
+
     @Override
     public void reportVpnInfo(Map map) {
         httpAPIWrapper.reportVpnInfo(map)

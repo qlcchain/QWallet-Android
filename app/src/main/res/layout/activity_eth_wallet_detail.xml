@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivWalletAvatar"
+            android:layout_width="@dimen/x92"
+            android:layout_height="@dimen/x92"
+            android:layout_marginStart="@dimen/x45"
+            android:layout_marginTop="@dimen/x70"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvWalletName"
+            android:textColor="@color/color_29282a"
+            android:text="Eth wallet Address"
+            android:layout_marginTop="@dimen/x5"
+            android:maxEms="12"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintStart_toEndOf="@id/ivWalletAvatar"
+            app:layout_constraintTop_toTopOf="@+id/ivWalletAvatar"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvWalletAddress"
+            app:layout_constraintStart_toEndOf="@id/ivWalletAvatar"
+            app:layout_constraintBottom_toBottomOf="@+id/ivWalletAvatar"
+            android:layout_marginLeft="@dimen/x20"
+            android:textColor="@color/color_b2b2b2"
+            android:text="0xdssdfsfsfsdfssdsdfsfsdfsdfsdfsdfsfsfdsfdsdfsdf"
+            android:layout_marginBottom="@dimen/x5"
+            android:ellipsize="middle"
+            android:maxEms="8"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvWalletAsset"
+            android:text="$189,193.00"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="@dimen/x20"
+            android:layout_marginBottom="@dimen/x20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </android.support.constraint.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_b2b2b2"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_height="@dimen/x1"/>
+    <LinearLayout
+        android:id="@+id/llAbucoins"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export Mnemonic Phrase"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llExportKeystore"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export Keystore"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llExportPrivateKey"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export private key"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llExportNeoEncryptedKey"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export Encrypted Key(WIF)"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llExportNeoPrivateKey"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export Private Key(HEX)"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/tvDeleteWallet"
+        android:layout_width="@dimen/x200"
+        android:textColor="@color/color_d0021b"
+        android:text="Delete Wallet"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/x44"
+        android:layout_height="@dimen/x80" />
+</LinearLayout>

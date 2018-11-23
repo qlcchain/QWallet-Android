@@ -25,7 +25,6 @@ import android.util.Log
 //import com.crashlytics.android.Crashlytics
 //import com.github.shadowsocks.App.Companion.app
 import com.github.shadowsocks.JniHelper
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import java.io.File
 import java.io.FileNotFoundException

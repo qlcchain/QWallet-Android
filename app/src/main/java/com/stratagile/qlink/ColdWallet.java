@@ -113,8 +113,7 @@ public class ColdWallet {
 		Uint256 tokenValue = new Uint256(BigDecimal.valueOf(amount).multiply(BigDecimal.TEN.pow(decimals)).toBigInteger());
 		inputParameters.add(tAddress);
 		inputParameters.add(tokenValue);
-		TypeReference<Bool> typeReference = new TypeReference<Bool>() {
-		};
+		TypeReference<Bool> typeReference = new TypeReference<Bool>() {};
 		outputParameters.add(typeReference);
 		Function function = new Function(methodName, inputParameters, outputParameters);
 		String data = FunctionEncoder.encode(function);
@@ -200,6 +199,27 @@ public class ColdWallet {
 			signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
 		}
 
+		String hexValue = Numeric.toHexString(signedMessage);
+		return hexValue;
+	}
+
+	/**
+	 * 签名转eth的交易
+	 * @return
+	 */
+	public static String signTransactionEth(BigInteger nonce, String toAddress,  BigInteger gasPrice, BigInteger gasLimit, BigInteger value, String privateKey) {
+		RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
+				nonce,
+				gasPrice,
+				gasLimit,
+				toAddress,
+				value);
+		if (privateKey.startsWith("0x")) {
+			privateKey = privateKey.substring(2);
+		}
+		ECKeyPair ecKeyPair = ECKeyPair.create(new BigInteger(privateKey, 16));
+		Credentials credentials = Credentials.create(ecKeyPair);
+		byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
 		String hexValue = Numeric.toHexString(signedMessage);
 		return hexValue;
 	}

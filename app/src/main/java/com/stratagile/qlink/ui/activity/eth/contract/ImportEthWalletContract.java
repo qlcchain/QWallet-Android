@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.eth.contract;
 
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
+
 /**
  * @author hzp
  * @Package The contract for ImportEthWalletActivity
@@ -19,12 +20,15 @@ public interface ImportEthWalletContract {
          *
          */
         void closeProgressDialog();
+
+        void reportCreatedWalletSuccess();
     }
 
     interface ImportEthWalletContractPresenter extends BasePresenter {
-//        /**
+        //        /**
 //         *
 //         */
 //        void getBusinessInfo(Map map);
+        void reportWalletImported(String address);
     }
 }

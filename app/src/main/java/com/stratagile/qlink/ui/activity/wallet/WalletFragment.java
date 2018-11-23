@@ -30,6 +30,7 @@ import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.Set2Asset;
 import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
+import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.WalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.WalletModule;
@@ -181,6 +182,7 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
         });
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(1);
+
     }
 
     @Override
@@ -329,7 +331,7 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
         }
     }
 
-    @OnClick({R.id.iv_avater, R.id.iv_wallet, R.id.tv_title, R.id.tv_qlc, R.id.tv_gas})
+    @OnClick({R.id.iv_avater, R.id.iv_wallet, R.id.tv_title, R.id.tv_qlc, R.id.tv_gas, R.id.iv_qlc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
@@ -363,6 +365,9 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
                         mRxPopupViewManager.dismiss(tipvView, true);
                     }
                 }, 3000);
+                break;
+            case R.id.iv_qlc:
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 break;
             default:
                 break;

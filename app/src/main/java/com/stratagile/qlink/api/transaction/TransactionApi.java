@@ -11,6 +11,7 @@ import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.TransactionResult;
@@ -160,6 +161,13 @@ public class TransactionApi {
         });
     }
 
+    public void sendNeo(Assets assets, Wallet wallet, NeoNodeRPC.Asset tokenContractHash, String fromAddress, String toAddress, double amount, SendBackWithTxId sendCallBack) {
+        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
+        neoNodeRPC.sendNativeAssetTransaction(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+            sendCallBack.onSuccess(isSuccess);
+        });
+    }
+
     /**
      * 连接vpn或打赏的主方法, 还有打赏
      *
@@ -237,6 +245,58 @@ public class TransactionApi {
                                 sendCallBack.onSuccess(baseBack.getData().getRecordId());
                             } else {
                                 sendCallBack.onFailure();
+                            }
+                            disposable.dispose();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            KLog.i("onError");
+                            e.printStackTrace();
+                            sendCallBack.onFailure();
+                            disposable.dispose();
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            KLog.i("onComplete");
+                            sendCallBack.onFailure();
+//                            disposable.dispose();
+                        }
+                    });
+        });
+    }
+
+    /**
+     * 向另外的钱包地址发送代币
+     * 新版本开发
+     */
+    public void sendNEP5Token(Assets assets, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
+        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
+        KLog.i("neo钱包为：" + wallet.toString());
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+            KLog.i("开始调用sendRow");
+            KLog.i(isSuccess);
+            Transaction tx = getTxid(isSuccess);
+            KLog.i(tx.getHash());
+            map.put("tx", isSuccess);
+            AppConfig.getInstance().getApplicationComponent().getHttpApiWrapper().neoTokenTransaction(map)
+                    .subscribe(new Observer<NeoTransfer>() {
+                        Disposable disposable;
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            disposable = d;
+                        }
+
+                        @Override
+                        public void onNext(NeoTransfer baseBack) {
+                            KLog.i("onSuccesse");
+                            KLog.i(baseBack);
+                            if (baseBack.getData().isTransferResult()) {
+                                sendCallBack.onSuccess("success");
+                            } else {
+                                sendCallBack.onSuccess("error");
                             }
                             disposable.dispose();
                         }

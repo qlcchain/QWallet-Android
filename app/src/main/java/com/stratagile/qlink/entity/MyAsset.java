@@ -1,7 +1,6 @@
 package com.stratagile.qlink.entity;
 
 import com.stratagile.qlink.db.VpnEntity;
-import com.stratagile.qlink.db.WifiEntity;
 
 /**
  * Created by huzhipeng on 2018/2/11.
@@ -27,13 +26,6 @@ public class MyAsset {
         this.vpnEntity = vpnEntity;
     }
 
-    public WifiEntity getWifiEntity() {
-        return wifiEntity;
-    }
-
-    public void setWifiEntity(WifiEntity wifiEntity) {
-        this.wifiEntity = wifiEntity;
-    }
 
     /**
      * 资产类型
@@ -43,5 +35,4 @@ public class MyAsset {
 
     private int type;
     private VpnEntity vpnEntity;
-    private WifiEntity wifiEntity;
 }

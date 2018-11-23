@@ -10,18 +10,25 @@ import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
-import com.stratagile.qlink.entity.BetResult;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
+import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EthWalletDetail;
+import com.stratagile.qlink.entity.EthWalletInfo;
+import com.stratagile.qlink.entity.EthWalletTransaction;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
+import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.MainAddress;
-import com.stratagile.qlink.entity.RaceTimes;
+import com.stratagile.qlink.entity.NeoTransfer;
+import com.stratagile.qlink.entity.NeoWalletInfo;
+import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
+import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
@@ -30,11 +37,14 @@ import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
+import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -444,6 +454,126 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.getShowAct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
+
+    public Observable<EthWalletInfo> getEthWalletInfo(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getEthWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEthWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<NeoWalletInfo> getNeoWalletInfo(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getNeoWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getNeoWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TokenPrice> getTokenPrice(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getTokenPrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTokenPrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<EthWalletTransaction> getEthWalletTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getEthWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEthWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<OnlyEthTransactionHistory> getOnlyEthTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getOnlyEthTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getOnlyEthTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+
+    public Observable<AssetsWarpper> getMainUnspentAsset(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getMainUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getMainUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<NeoTransfer> neoTokenTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.neoTokenTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.neoTokenTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Tpcs> getTpcs(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getTpcs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTpcs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<KLine> getTokenKLine(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> reportWalletTransaction(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.reportWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.reportWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> reportWalletCreate(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.reportWalletCreate(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.reportWalletCreate(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<WinqGasBack> queryWinqGas(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.queryWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.queryWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<GotWinqGas> gotWinqGas(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.gotWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.gotWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<ClaimData> neoGasClaim(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mMainHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -621,7 +751,7 @@ public class HttpAPIWrapper {
             map.put("appid", "MIFI");
             map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
             map.put("params", JSONObject.toJSON(data));
-            map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
+            map.put("sign", DigestUtils.getSignature((JSONObject)JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }
         KLog.i("传的参数为:" + map);
         MediaType textType = MediaType.parse("text/plain");

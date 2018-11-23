@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.api.transaction.TransactionApi;
@@ -41,6 +42,7 @@ import java.util.UUID;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import neoutils.Neoutils;
 
 /**
  * Created by huzhipeng on 2018/2/11.
@@ -180,10 +182,21 @@ public class ClientVpnService extends Service {
             ToastUtil.displayShortToast(getString(R.string.there_is_no_free_connection_available_please_create_a_wallet_to_continue));
             return;
         }
-        if (walletList.size() <= SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0)) {
-            SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0);
+        neoutils.Wallet neoWallet = Account.INSTANCE.getWallet();
+        Wallet wallet = null;
+        for (Wallet wallet1 : walletList) {
+            if (wallet1.getAddress().equals(neoWallet.getAddress())) {
+                wallet = wallet1;
+            }
         }
-        Wallet wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
+        if (wallet == null) {
+            AppConfig.currentUseVpn = null;
+            Intent intent = new Intent();
+            intent.setAction(BroadCastAction.disconnectVpn);
+            sendBroadcast(intent);
+            ToastUtil.displayShortToast("neo wallet not found");
+            return;
+        }
         Map<String, Object> infoMap = new HashMap<>();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String uuid1 = uuid.substring(0, 32);

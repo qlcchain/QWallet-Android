@@ -3,6 +3,7 @@ package com.stratagile.qlink.ui.activity.vpn;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -14,6 +15,7 @@ import android.content.SharedPreferences;
 import android.media.Image;
 import android.net.Uri;
 import android.net.VpnService;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +40,16 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.VpnProfile;
+import com.stratagile.qlink.activities.ConfigConverter;
 import com.stratagile.qlink.activities.DisconnectVPN;
 import com.stratagile.qlink.api.ExternalAppDatabase;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.core.ConfigParser;
 import com.stratagile.qlink.core.ConnectionStatus;
 import com.stratagile.qlink.core.IServiceStatus;
 import com.stratagile.qlink.core.OpenVPNStatusService;
@@ -61,13 +68,18 @@ import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.SelectCountry;
+import com.stratagile.qlink.entity.eventbus.ServerVpnSendComplete;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.VpnRegisterSuccess;
 import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
 import com.stratagile.qlink.entity.im.Message;
+import com.stratagile.qlink.entity.qlink.SendVpnFileNew;
 import com.stratagile.qlink.entity.vpn.VpnPrivateKeyRsp;
+import com.stratagile.qlink.entity.vpn.VpnServerFileRsp;
 import com.stratagile.qlink.entity.vpn.VpnUserAndPasswordRsp;
+import com.stratagile.qlink.entity.vpn.WindowConfig;
+import com.stratagile.qlink.fragments.Utils;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
 import com.stratagile.qlink.guideview.GuideConstantValue;
@@ -78,32 +90,46 @@ import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.service.ClientVpnService;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
 import com.stratagile.qlink.ui.activity.im.ConversationActivity;
-import com.stratagile.qlink.ui.activity.seize.SeizeActivity;
+import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.vpn.component.DaggerVpnListComponent;
 import com.stratagile.qlink.ui.activity.vpn.contract.VpnListContract;
 import com.stratagile.qlink.ui.activity.vpn.module.VpnListModule;
 import com.stratagile.qlink.ui.activity.vpn.presenter.VpnListPresenter;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.VpnSpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.vpn.VpnListAdapter;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LogUtil;
+import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
+import com.stratagile.qlink.views.FileSelectLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -136,12 +162,14 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
 
+    private MainViewModel viewModel;
     int freeNum = 0;
 
     private String country;
 
     private Boolean isReport = false;
     private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+    private List<String> mPathsegments;
 
     @Nullable
     @Override
@@ -153,6 +181,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.getItemAnimator().setChangeDuration(0);
         recyclerView.setAdapter(vpnListAdapter);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -169,8 +198,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     if (!vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) && vpnListAdapter.getItem(position).getP2pIdPc() == null) {
                         return;
                     }
-                    if(vpnListAdapter.getItem(position).getOwnerP2pId() != null && !vpnListAdapter.getItem(position).getOwnerP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))
-                    {
+                    if (vpnListAdapter.getItem(position).getOwnerP2pId() != null && !vpnListAdapter.getItem(position).getOwnerP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                         return;
                     }
                     if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
@@ -203,17 +231,17 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                     } else {
                         //别人注册的vpn资产，并且在线
-                        if (vpnListAdapter.getItem(position).getIsConnected()) {
-                            Intent intent = new Intent(getActivity(), ConnectVpnSuccessActivity.class);
-                            KLog.i(vpnListAdapter.getData().get(position).toString());
-                            intent.putExtra("vpnentity", vpnListAdapter.getData().get(position));
-                            startActivityForResult(intent, 1);
-                        } else {
-                            Intent intent = new Intent(getActivity(), ConnectVpnActivity.class);
-                            KLog.i(vpnListAdapter.getData().get(position).toString());
-                            intent.putExtra("vpnentity", vpnListAdapter.getData().get(position));
-                            startActivityForResult(intent, 1);
-                        }
+//                        if (vpnListAdapter.getItem(position).getIsConnected()) {
+//                            Intent intent = new Intent(getActivity(), ConnectVpnSuccessActivity.class);
+//                            KLog.i(vpnListAdapter.getData().get(position).toString());
+//                            intent.putExtra("vpnentity", vpnListAdapter.getData().get(position));
+//                            startActivityForResult(intent, 1);
+//                        } else {
+//                            Intent intent = new Intent(getActivity(), ConnectVpnActivity.class);
+//                            KLog.i(vpnListAdapter.getData().get(position).toString());
+//                            intent.putExtra("vpnentity", vpnListAdapter.getData().get(position));
+//                            startActivityForResult(intent, 1);
+//                        }
                     }
                 }
             }
@@ -245,15 +273,21 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     return;
                 }
                 //连接自己的vpn
-                if (vpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
-                    getActivity().startService(new Intent(getActivity(), ClientVpnService.class));
-                } else {
+                if (SpUtil.getString(getActivity(), ConstantValue.P2PID, "").equals(vpnEntity.getOwnerP2pId())) {
 
+                } else {
+                    if (Account.INSTANCE.getWallet() == null) {
+                        ToastUtil.displayShortToast("please create a neo wallet first");
+                        return;
+                    }
                 }
                 //将私钥，密码都置为默认值
                 mTransientCertOrPCKS12PW = null;
                 mTransientAuthPW = null;
-
+                vpnFileStr = "";
+                vpnFileTemp.clear();
+                tempDataString = "";
+                VpnServerFileRspList.clear();
                 mPresenter.preConnectVpn(vpnEntity);
                 connectVpnEntity = vpnEntity;
                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -291,19 +325,19 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         }
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (walletList == null || walletList.size() == 0) {
-            Intent intent = new Intent(getActivity(), NoWalletActivity.class);
-            intent.putExtra("flag", "nowallet");
+            Intent intent = new Intent(getActivity(), SelectWalletTypeActivity.class);
             startActivity(intent);
             vpnListAdapter.notifyDataSetChanged();
+            ToastUtil.displayShortToast("neo wallet not found");
             return;
         }
-        if (mBalance != null) {
-            if (Float.parseFloat(mBalance.getData().getQLC() + "") < vpnEntity.getQlc() || mBalance.getData().getGAS() < 0.0001) {
+        if (viewModel.balanceMutableLiveData.getValue() != null) {
+            if (Float.parseFloat(viewModel.balanceMutableLiveData.getValue().getData().getQLC() + "") < vpnEntity.getQlc() || viewModel.balanceMutableLiveData.getValue().getData().getGAS() < 0.0001) {
                 ToastUtil.displayShortToast(getString(R.string.Not_enough_QLC_Or_GAS));
                 return;
             }
         } else {
-            getbalance(new ChangeWallet());
+//            getbalance(new ChangeWallet());
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -329,7 +363,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                mPresenter.dialogConfirm();
+                mPresenter.checkSharerConnect();
             }
         });
         dialog.show();
@@ -368,20 +402,20 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         dialog.show();
     }
 
-    Balance mBalance;
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void getbalance(ChangeWallet changeWallet) {
-        if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() != 0) {
-            Map<String, String> map = new HashMap<>();
-            map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
-            mPresenter.getWalletBalance(map);
-        }
-    }
+//    Balance mBalance;
+//
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    public void getbalance(ChangeWallet changeWallet) {
+//        if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() != 0) {
+//            Map<String, String> map = new HashMap<>();
+//            map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(getContext(), ConstantValue.currentWallet, 0)).getAddress());
+//            mPresenter.getWalletBalance(map);
+//        }
+//    }
 
     @Override
     public void onGetBalancelSuccess(Balance balance) {
-        mBalance = balance;
+//        mBalance = balance;
     }
 
     @Override
@@ -502,8 +536,17 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Override
     public void fetchData() {
         refreshLayout.setRefreshing(true);
-        getVpn();
-        getbalance(new ChangeWallet());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    getVpn();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -535,6 +578,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Override
     public void showProgressDialog() {
+        progressDialog.setDialogText(getResources().getString(R.string.loading));
+        progressDialog.show();
+    }
+
+    private void showProgressDialog(String content) {
+        progressDialog.setDialogText(content);
         progressDialog.show();
     }
 
@@ -631,7 +680,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showGuideVpnList(ShowGuide showGuide) {
         if (showGuide.getNumber() == 1) {
-            showGuideViewVpnList();
+//            showGuideViewVpnList();
         }
     }
 
@@ -688,7 +737,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         KLog.i("国家为：" + country);
         map.put("country", country);
         mPresenter.getVpn(map);
-        refreshLayout.setRefreshing(false);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -727,12 +781,12 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleConfigFile(VpnSendEnd vpnSendEnd) {
-        KLog.i("c层的vpn配置文件传输完毕了，");
-        if(ConstantValue.isWindows)//注册电脑资产
-        {
-            return;
-        }
-        mPresenter.vpnProfileSendComplete();
+//        KLog.i("c层的vpn配置文件传输完毕了，");
+//        if (ConstantValue.isWindows)//注册电脑资产
+//        {
+//            return;
+//        }
+//        mPresenter.vpnProfileSendComplete();
     }
 
     /**
@@ -806,7 +860,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         closeProgressDialog();
         //showProgressDialog();
         isReport = false;
-        mPresenter.connectShareSuccess();
+        mPresenter.connectShareSuccess(checkConnectRsp.getVersion());
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -841,38 +895,33 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
     @Override
     public void startOrStopVPN(VpnProfile profile) {
+        mResult = profile;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mResult = profile;
-                if (VpnStatus.isVPNActive() && profile.getUUIDString().equals(VpnStatus.getLastConnectedVPNProfile())) {
+                if (VpnStatus.isVPNActive() && mResult.getUUIDString().equals(VpnStatus.getLastConnectedVPNProfile())) {
                     Intent disconnectVPN = new Intent(getActivity(), DisconnectVPN.class);
                     startActivity(disconnectVPN);
                 } else {
-                    if (Preferences.getDefaultSharedPreferences(getActivity()).getBoolean(CLEARLOG, true))
+                    if (Preferences.getDefaultSharedPreferences(getActivity()).getBoolean(CLEARLOG, true)) {
                         VpnStatus.clearLog();
+                    }
 
                     // we got called to be the starting point, most likely a shortcut
-                    String shortcutUUID = profile.getUUID().toString();
-                    String shortcutName = profile.getName().toString();
+                    String shortcutUUID = mResult.getUUID().toString();
+                    String shortcutName = mResult.getName().toString();
 
                     VpnProfile profileToConnect = ProfileManager.get(getActivity(), shortcutUUID);
-                    if (shortcutName != null && profileToConnect == null) {
-                        profileToConnect = ProfileManager.getInstance(getActivity()).getProfileByName(shortcutName);
-                        if (!(new ExternalAppDatabase(getActivity()).checkRemoteActionPermission(getActivity()))) {
-                            if (connectVpnEntity != null && !isReport) {
-                                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
-                                SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
-                                Map<String, Object> map = new HashMap<>();
-                                map.put("vpnName", connectVpnEntity.getVpnName());
-                                map.put("status", 0);
-                                map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " no Permission");
-                                KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_no Permission");
-                                mPresenter.reportVpnInfo(map);
-                                isReport = true;
-                            }
-                            return;
-                        }
+                    if (connectVpnEntity != null && !isReport) {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("vpnName", connectVpnEntity.getVpnName());
+                        map.put("status", 0);
+                        map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " no Permission");
+                        KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_no Permission");
+                        mPresenter.reportVpnInfo(map);
+                        isReport = true;
                     }
                     KLog.i("startOrStopVPN  2222");
 
@@ -882,7 +931,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                         // show Log window to display error
 //                finish();
                     } else {
-//                mSelectedProfile = profileToConnect;
+//                        mResult = profileToConnect;
                         launchVPN();
                     }
                 }
@@ -927,7 +976,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
             KLog.i("onActivityResult的requestCode   为  START_VPN_PROFILE");
             if (resultCode == Activity.RESULT_OK) {
                 KLog.i("开始检查配置文件的类型");
-                if (connectVpnEntity != null  && connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+                if (connectVpnEntity != null && connectVpnEntity.getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
                     mTransientCertOrPCKS12PW = connectVpnEntity.getPrivateKeyPassword();
                     mResult.mUsername = connectVpnEntity.getUsername();
                     mTransientAuthPW = connectVpnEntity.getPassword();
@@ -960,15 +1009,14 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     VpnStatus.logError(R.string.nought_alwayson_warning);
-                    if(connectVpnEntity  != null  && !isReport)
-                    {
-                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_status","0");
-                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName()+"_lasttime",System.currentTimeMillis() +"");
+                    if (connectVpnEntity != null && !isReport) {
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_status", "0");
+                        SpUtil.putString(AppConfig.getInstance(), connectVpnEntity.getVpnName() + "_lasttime", System.currentTimeMillis() + "");
                         Map<String, Object> map = new HashMap<>();
-                        map.put("vpnName",connectVpnEntity.getVpnName() );
-                        map.put("status",0 );
-                        map.put("mark",VersionUtil.getAppVersionName(getActivity()) + " If you did not get a VPN confirmation dialog" );
-                        KLog.i("winqRobot_vpnName:"+ connectVpnEntity.getVpnName()+ "_If you did not get a VPN confirmation dialog" );
+                        map.put("vpnName", connectVpnEntity.getVpnName());
+                        map.put("status", 0);
+                        map.put("mark", VersionUtil.getAppVersionName(getActivity()) + " If you did not get a VPN confirmation dialog");
+                        KLog.i("winqRobot_vpnName:" + connectVpnEntity.getVpnName() + "_If you did not get a VPN confirmation dialog");
                         mPresenter.reportVpnInfo(map);
                         isReport = true;
                     }
@@ -1006,6 +1054,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     }
                     Intent intent = new Intent();
                     intent.setAction(BroadCastAction.disconnectVpn);
+                    ToastUtil.displayShortToast("connect vpn error");
                     getActivity().sendBroadcast(intent);
                     if (connectVpnEntity != null && !isReport && !ConstantValue.isConnectedVpn) {
                         KLog.i("error");
@@ -1063,7 +1112,6 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         }
 
         KLog.i("校验配置文件没有出现错误");
-
         Intent intent = VpnService.prepare(getActivity());
         // Check if we want to fix /dev/tun
         SharedPreferences prefs = Preferences.getDefaultSharedPreferences(getActivity());
@@ -1192,7 +1240,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
     }
 
     @Override
-    public void preConnect() {
+    public void preConnect(int version) {
         ConstantValue.isConnectVpn = true;
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "beginConnectVpn");
@@ -1238,8 +1286,88 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
 //            readFile(configFile);
         } else {
         }
-        Qsdk.getInstance().sendVpnFileRequest(connectVpnEntity.getFriendNum(), connectVpnEntity.getProfileLocalPath(), connectVpnEntity.getVpnName());
-//        mPresenter.handleSendMessage(1);
+        //todo
+        //这里要判断是否为新的server注册的。
+        if (version >= 1) {
+            Qsdk.getInstance().sendVpnFileNewReq(connectVpnEntity.getP2pId(), connectVpnEntity.getVpnName());
+        } else {
+            Qsdk.getInstance().sendVpnFileRequest(connectVpnEntity.getP2pId(), connectVpnEntity.getProfileLocalPath(), connectVpnEntity.getVpnName());
+        }
+        tempDataString = "";
+        VpnServerFileRspList.clear();
+    }
+
+    String vpnFileStr = "";
+    Map<Integer, String> vpnFileTemp = new HashMap<>();
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handlerSendVpnFileNewRsp(SendVpnFileNew sendVpnFileNew) {
+        if (sendVpnFileNew.getData().getRegister() == 0) {
+            vpnFileTemp.put(sendVpnFileNew.getData().getOffset(), sendVpnFileNew.getData().getMsg());
+            if (isSendVpnFile(sendVpnFileNew.getData().getMd5())) {
+                KLog.i(vpnFileStr);
+                closeProgressDialog();
+                showProgressDialog("Connecting...");
+                KLog.i("vpn配置文件传输完毕了：" + vpnFileStr);
+                byte[] bytesAddData = Base64.decode(vpnFileStr, Base64.NO_WRAP);
+                String deVpnFile = new String(bytesAddData);
+                KLog.i(deVpnFile);
+//                FileUtil.saveVpnServerData(connectVpnEntity.getProfileLocalPath(), deVpnFile);
+                mPresenter.vpnProfileSendComplete(deVpnFile);
+            }
+        }
+    }
+
+    private boolean isSendVpnFile(String md5) {
+        String vpnFile = "";
+        List<Map.Entry<Integer, String>> list = new ArrayList<Map.Entry<Integer, String>>(vpnFileTemp.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Integer, String>>() {
+            //升序排序
+            @Override
+            public int compare(Map.Entry<Integer, String> o1, Map.Entry<Integer, String> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+
+        });
+
+        for (Map.Entry<Integer, String> mapping : list) {
+            vpnFile += mapping.getValue();
+        }
+        if (MD5Util.getStringMD5(vpnFile).equals(md5)) {
+            vpnFileStr = vpnFile;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private String tempDataString = "";
+    List<WindowConfig> WindowConfigList = new ArrayList<>();
+    List<VpnServerFileRsp> VpnServerFileRspList = new ArrayList<>();
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleConfigFileComplete(ServerVpnSendComplete serverVpnSendComplete) {
+        if (serverVpnSendComplete.getData() != null) {
+            tempDataString += serverVpnSendComplete.getData().getFileData();
+            if (serverVpnSendComplete.getData().getStatus() == 1) {
+                serverVpnSendComplete.getData().setFileData(tempDataString);
+                serverVpnSendComplete.getData().setStatus(1);
+                VpnServerFileRspList.add(serverVpnSendComplete.getData());
+                tempDataString = "";
+            }
+        } else {
+            try {
+                VpnServerFileRsp VpnServerFileRsp = VpnServerFileRspList.get(0);
+                String path = VpnServerFileRsp.getVpnfileName();
+//                String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
+//                FileUtil.saveVpnServerData(vpnFileName, VpnServerFileRsp.getFileData());
+                mPresenter.vpnProfileSendComplete(VpnServerFileRsp.getFileData());
+            } catch (Exception e) {
+                closeProgressDialog();
+                e.printStackTrace();
+                ToastUtil.displayShortToast("config file error");
+            }
+        }
     }
 
 }

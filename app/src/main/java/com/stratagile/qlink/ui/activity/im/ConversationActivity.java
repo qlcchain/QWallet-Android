@@ -17,7 +17,6 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.VpnEntity;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.eventbus.JoinNewGroup;
 import com.stratagile.qlink.entity.im.Message;
 import com.stratagile.qlink.qlinkcom;
@@ -70,7 +69,6 @@ public class ConversationActivity extends BaseActivity implements ConversationCo
     TextView tvTip;
     private VpnEntity vpnEntity;
 
-    private WifiEntity wifiEntity;
     /**
      * 聊天所在的群组id
      */
@@ -192,60 +190,6 @@ public class ConversationActivity extends BaseActivity implements ConversationCo
                 }
             }
         } else if (getIntent().getStringExtra("assetType").equals("0")) {
-            wifiEntity = getIntent().getParcelableExtra("wifiEntity");
-            LogUtil.addLog("聊天的wifi为：" + wifiEntity.toString(), getClass().getSimpleName());
-            EventBus.getDefault().post(wifiEntity);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            conversationListAdapter.setChatType(0);
-            conversationListAdapter.setWifiEntity(wifiEntity);
-            recyclerView.setAdapter(conversationListAdapter);
-            recyclerView.scrollToPosition(conversationListAdapter.getData().size() - 1);
-            p2pId = SpUtil.getString(this, ConstantValue.P2PID, "");
-            KLog.i(wifiEntity.toString());
-            setTitle(wifiEntity.getSsid());
-            if (wifiEntity.getOwnerP2PId().equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {
-                groupNum = wifiEntity.getGroupNum();
-                if (ConstantValue.messageMap.get(groupNum) != null) {
-                    showMessageList.addAll(ConstantValue.messageMap.get(groupNum));
-                    conversationListAdapter.setNewData(showMessageList);
-                    recyclerView.scrollToPosition(conversationListAdapter.getData().size() - 1);
-                } else {
-                    ConstantValue.messageMap.put(groupNum, new ArrayList<>());
-                    showMessageList.addAll(ConstantValue.messageMap.get(groupNum));
-                    conversationListAdapter.setNewData(showMessageList);
-                    recyclerView.scrollToPosition(conversationListAdapter.getData().size() - 1);
-                }
-            } else {
-                if (wifiEntity.getGroupNum() == -1) {
-                    if (ConstantValue.messageMap.get(wifiEntity.getGroupNum()) != null) {
-                        showMessageList.addAll(ConstantValue.messageMap.get(wifiEntity.getGroupNum()));
-                    }
-                    KLog.i("重新加入群组");
-                    Map<String, Object> infoMap = new HashMap<>();
-                    infoMap.put("assetName", wifiEntity.getSsid());
-                    infoMap.put("assetType", 0);
-                    QlinkUtil.parseMap2StringAndSend(wifiEntity.getFreindNum(), ConstantValue.joinGroupChatReq, infoMap);
-                } else {
-                    groupNum = wifiEntity.getGroupNum();
-                    Map<String, Object> infoMap = new HashMap<>();
-                    infoMap.put("assetName", wifiEntity.getSsid());
-                    infoMap.put("assetType", 0);
-                    QlinkUtil.parseMap2StringAndSend(wifiEntity.getFreindNum(), ConstantValue.joinGroupChatReq, infoMap);
-                    if (ConstantValue.messageMap.get(groupNum) != null) {
-                        showMessageList.addAll(ConstantValue.messageMap.get(groupNum));
-                        conversationListAdapter.setNewData(showMessageList);
-                        recyclerView.scrollToPosition(conversationListAdapter.getData().size() - 1);
-                    } else {
-                        ConstantValue.messageMap.put(groupNum, new ArrayList<>());
-                        showMessageList.addAll(ConstantValue.messageMap.get(groupNum));
-                        conversationListAdapter.setNewData(showMessageList);
-                        recyclerView.scrollToPosition(conversationListAdapter.getData().size() - 1);
-                    }
-                    if (conversationListAdapter.getData().size() == 0) {
-                        tvTip.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
         }
 
         new Thread(new Runnable() {
@@ -322,10 +266,6 @@ public class ConversationActivity extends BaseActivity implements ConversationCo
             message1.setAssetType(3);
             messageMap.put("assetType", 3);
         } else if (getIntent().getStringExtra("assetType").equals("0")) {
-            messageMap.put("assetName", wifiEntity.getSsid());
-            message1.setAssetName(wifiEntity.getSsid());
-            message1.setAssetType(0);
-            messageMap.put("assetType", 0);
         }
         String result = JSONObject.toJSON(messageMap).toString();
         KLog.i("发送消息的结果为：" + qlinkcom.SendMessageToGroupChat(groupNum, result));
@@ -351,9 +291,6 @@ public class ConversationActivity extends BaseActivity implements ConversationCo
             AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
             EventBus.getDefault().post(new ArrayList<VpnEntity>());
         } else if (getIntent().getStringExtra("assetType").equals("0")) {
-            wifiEntity.setGroupNum(groupNum);
-            AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-            EventBus.getDefault().post(new ArrayList<VpnEntity>());
         }
         if (ConstantValue.messageMap.get(groupNum) != null) {
             ConstantValue.messageMap.get(groupNum).clear();
@@ -379,7 +316,6 @@ public class ConversationActivity extends BaseActivity implements ConversationCo
             if (getIntent().getStringExtra("assetType").equals("3")) {
                 EventBus.getDefault().post(vpnEntity);
             } else if (getIntent().getStringExtra("assetType").equals("0")) {
-                EventBus.getDefault().post(wifiEntity);
             }
 //            KLog.i("适配器里的数据个数为：" + conversationListAdapter.getData().size());
             conversationListAdapter.addData(message);

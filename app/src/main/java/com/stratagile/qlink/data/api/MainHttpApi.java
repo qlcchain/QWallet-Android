@@ -6,31 +6,40 @@ import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
-import com.stratagile.qlink.entity.BetResult;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
+import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EthWalletDetail;
+import com.stratagile.qlink.entity.EthWalletInfo;
+import com.stratagile.qlink.entity.EthWalletTransaction;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
+import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.MainAddress;
-import com.stratagile.qlink.entity.RaceTimes;
+import com.stratagile.qlink.entity.NeoTransfer;
+import com.stratagile.qlink.entity.NeoWalletInfo;
+import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
+import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
-import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.TokenPrice;
+import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
+import com.stratagile.qlink.entity.WinqGasBack;
 
 import java.util.Map;
 
@@ -46,18 +55,28 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
-import static com.stratagile.qlink.data.api.API.act_get;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
-import static com.stratagile.qlink.data.api.API.url_zs_free_num;
 import static com.stratagile.qlink.data.api.MainAPI.act_asset;
+import static com.stratagile.qlink.data.api.MainAPI.act_get;
 import static com.stratagile.qlink.data.api.MainAPI.act_show;
+import static com.stratagile.qlink.data.api.MainAPI.get_eth_wallet_info;
+import static com.stratagile.qlink.data.api.MainAPI.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.MainAPI.sendRow;
-import static com.stratagile.qlink.data.api.MainAPI.url_bet;
+import static com.stratagile.qlink.data.api.MainAPI.url_bina_tpcs;
 import static com.stratagile.qlink.data.api.MainAPI.url_bnb_2_qlc;
-import static com.stratagile.qlink.data.api.MainAPI.url_get_server_time;
+import static com.stratagile.qlink.data.api.MainAPI.url_eth_address_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_eth_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_got_winq_gas;
+import static com.stratagile.qlink.data.api.MainAPI.url_kline;
 import static com.stratagile.qlink.data.api.MainAPI.url_main_address;
-import static com.stratagile.qlink.data.api.MainAPI.url_race_times;
+import static com.stratagile.qlink.data.api.MainAPI.url_main_net_unspent;
+import static com.stratagile.qlink.data.api.MainAPI.url_neo_address_history;
+import static com.stratagile.qlink.data.api.MainAPI.url_neo_token_transacation;
+import static com.stratagile.qlink.data.api.MainAPI.url_query_winq_gas;
+import static com.stratagile.qlink.data.api.MainAPI.url_report_wallet_create;
+import static com.stratagile.qlink.data.api.MainAPI.url_token_price;
 import static com.stratagile.qlink.data.api.MainAPI.url_transaction_v2;
+import static com.stratagile.qlink.data.api.MainAPI.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.MainAPI.user_update_avatar;
 
 /**
@@ -236,6 +255,67 @@ public interface MainHttpApi {
     @POST(act_show)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ShowAct> getShowAct(@Body RequestBody map);
+
+    @POST(get_eth_wallet_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EthWalletInfo> getEthWalletInfo(@Body RequestBody map);
+
+    @POST(get_neo_wallet_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<NeoWalletInfo> getNeoWalletInfo(@Body RequestBody map);
+
+    @POST(url_token_price)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TokenPrice> getTokenPrice(@Body RequestBody map);
+
+    @POST(url_eth_address_history)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EthWalletTransaction> getEthWalletTransaction(@Body RequestBody map);
+
+    @POST(url_eth_history)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<OnlyEthTransactionHistory> getOnlyEthTransaction(@Body RequestBody map);
+
+    @POST(url_neo_address_history)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(@Body RequestBody map);
+
+    @POST(url_main_net_unspent)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<AssetsWarpper> getMainUnspentAsset(@Body RequestBody map);
+
+    @POST(url_neo_token_transacation)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<NeoTransfer> neoTokenTransaction(@Body RequestBody map);
+
+
+    @POST(url_kline)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<KLine> getTokenKLine(@Body RequestBody map);
+
+    @POST(url_bina_tpcs)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Tpcs> getTpcs(@Body RequestBody map);
+
+    @POST(url_report_wallet_create)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> reportWalletCreate(@Body RequestBody map);
+
+    @POST(url_wallet_transaction_report)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> reportWalletTransaction(@Body RequestBody map);
+
+    @POST(url_query_winq_gas)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<WinqGasBack> queryWinqGas(@Body RequestBody map);
+
+    @POST(url_got_winq_gas)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<GotWinqGas> gotWinqGas(@Body RequestBody map);
+
+    @POST(API.url_got_winq_gas)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimData> neoGasClaim(@Body RequestBody map);
 
     /*************************************************/
 }

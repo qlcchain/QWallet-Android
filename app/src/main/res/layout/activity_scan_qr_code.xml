@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/capture_containter"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <SurfaceView
-        android:id="@+id/capture_preview"
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/mZXingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:clipToPadding="true"
-        android:fitsSystemWindows="true"/>
+
+        app:qrcv_animTime="1000"
+        app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
+        app:qrcv_barcodeRectHeight="120dp"
+        app:qrcv_borderColor="@android:color/white"
+        app:qrcv_borderSize="1dp"
+        app:qrcv_cornerColor="@color/colorPrimaryDark"
+        app:qrcv_cornerDisplayType="center"
+        app:qrcv_cornerLength="20dp"
+        app:qrcv_cornerSize="3dp"
+        app:qrcv_isBarcode="false"
+        app:qrcv_isOnlyDecodeScanBoxArea="false"
+        app:qrcv_isScanLineReverse="true"
+        app:qrcv_isShowDefaultGridScanLineDrawable="false"
+        app:qrcv_isShowDefaultScanLineDrawable="true"
+        app:qrcv_isShowLocationPoint="false"
+        app:qrcv_isShowTipBackground="true"
+        app:qrcv_isShowTipTextAsSingleLine="false"
+        app:qrcv_isTipTextBelowRect="false"
+        app:qrcv_maskColor="#33FFFFFF"
+        app:qrcv_rectWidth="200dp"
+        app:qrcv_scanLineColor="@color/colorPrimaryDark"
+        app:qrcv_scanLineMargin="0dp"
+        app:qrcv_scanLineSize="0.5dp"
+        app:qrcv_tipTextColor="@android:color/white"
+        app:qrcv_tipTextSize="12sp"
+        app:qrcv_toolbarHeight="56dp"
+        app:qrcv_topOffset="80dp"
+        app:qrcv_verticalBias="-1"
+        app:qrcv_qrCodeTipText="Please Scan the QR Code of WinQ" />
 
     <RelativeLayout
         android:id="@+id/rl_title"
+        android:layout_marginTop="@dimen/x40"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/capture_crop_layout"
-        android:background="@drawable/scan_mask"
         android:layout_alignParentTop="true"
         >
 
@@ -25,8 +52,9 @@
             android:id="@+id/top_mask"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
             android:alpha="0.5"
             android:onClick="btn"
             android:src="@drawable/s_light"/>
@@ -41,67 +69,6 @@
             android:alpha="0.5"
             android:onClick="btn"
             android:src="@drawable/s_img"/>
-
-        <ImageView
-            android:id="@+id/top_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="40dp"
-            android:alpha="0.5"
-            android:onClick="btn"
-            android:src="@drawable/s_left_jiantou"/>
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/capture_crop_layout"
-        android:layout_width="@dimen/x600"
-        android:layout_height="@dimen/x600"
-        android:layout_centerInParent="true"
-        android:background="@drawable/capture"
-        android:contentDescription="@string/app_name">
-
-        <ImageView
-            android:id="@+id/capture_scan_line"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/kakalib_scan_ray"
-            android:contentDescription="@string/app_name"/>
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/bottom_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/capture_crop_layout"
-        android:background="@drawable/scan_mask"
-        android:contentDescription="@string/app_name"/>
-
-    <ImageView
-        android:id="@+id/left_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_mask"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/rl_title"
-        android:layout_toLeftOf="@id/capture_crop_layout"
-        android:background="@drawable/scan_mask"
-        android:contentDescription="@string/app_name"/>
-
-    <ImageView
-        android:id="@+id/right_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_mask"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/rl_title"
-        android:layout_toRightOf="@id/capture_crop_layout"
-        android:background="@drawable/scan_mask"
-        android:contentDescription="@string/app_name"/>
 
 </RelativeLayout>

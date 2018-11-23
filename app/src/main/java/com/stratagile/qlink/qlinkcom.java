@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.db.WifiEntity;
 import com.stratagile.qlink.entity.eventbus.JoinNewGroup;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
@@ -75,6 +74,10 @@ public class qlinkcom {
                 File addressFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Address", "");
                 if (!addressFile.exists()) {
                     addressFile.mkdir();
+                }
+                File ethKeystore = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "");
+                if (!ethKeystore.exists()) {
+                    ethKeystore.mkdir();
                 }
                 File profileFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Profile", "");
                 if (!profileFile.exists()) {
@@ -417,9 +420,8 @@ public class qlinkcom {
      */
     public void CallFriendChange(String friendNumber, int status) {
         LogUtil.addLog("好友的编号为" + friendNumber + "好友的状态为:" + status, getClass().getSimpleName());
-        KLog.i("好友的编号为:" + friendNumber);
-        KLog.i("好友的状态为:" + status);
-        Qsdk.getInstance().getFriendSharedWifiInfo(friendNumber, status);
+//        KLog.i("好友的编号为:" + friendNumber);
+//        KLog.i("好友的状态为:" + status);
         Qsdk.getInstance().getFriendSharedVpnInfo(friendNumber, status);
 //        Qsdk.getInstance().getFriendCurrentConnectWifiInfo(friendNumber, status);
         if (status > 0) {
@@ -434,7 +436,7 @@ public class qlinkcom {
     public void CallFriendMessageProcess(String message, String friendNumber) {
         KLog.i("好友传过来的消息为:" + message);
         LogUtil.addLog("收到的消息为：" + message, getClass().getSimpleName());
-        KLog.i("好友的编号为:" + friendNumber);
+//        KLog.i("好友的编号为:" + friendNumber);
         Qsdk.getInstance().handlerFriendMessage(message, friendNumber);
     }
 
@@ -443,24 +445,24 @@ public class qlinkcom {
     }
 
     public void CallFileMessageProcess(String filename, int filesize, String friendnum) {
-        ConstantValue.isLoadingImg = false;
-        KLog.i("c层的文件传输完毕:" + filename);
-        if (filename.contains(".jpg")) {
-            KLog.i("图片文件发送完毕");
-            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
-            for (WifiEntity wifiEntity : wifiEntityList) {
-                if (wifiEntity.getFreindNum().equals(friendnum)) {
-                    wifiEntity.setIsLoadingAvater(false);
-                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-                    break;
-                }
-            }
-        } else {
-            KLog.i("vpn文件发送完毕");
-            VpnSendEnd vpnSendEnd = new VpnSendEnd();
-            vpnSendEnd.setProfileLocalPath(filename);
-            EventBus.getDefault().post(vpnSendEnd);
-        }
+//        ConstantValue.isLoadingImg = false;
+//        KLog.i("c层的文件传输完毕:" + filename);
+//        if (filename.contains(".jpg")) {
+//            KLog.i("图片文件发送完毕");
+//            List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
+//            for (WifiEntity wifiEntity : wifiEntityList) {
+//                if (wifiEntity.getFreindNum().equals(friendnum)) {
+//                    wifiEntity.setIsLoadingAvater(false);
+//                    AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
+//                    break;
+//                }
+//            }
+//        } else {
+//            KLog.i("vpn文件发送完毕");
+//            VpnSendEnd vpnSendEnd = new VpnSendEnd();
+//            vpnSendEnd.setProfileLocalPath(filename);
+//            EventBus.getDefault().post(vpnSendEnd);
+//        }
     }
 
     /**

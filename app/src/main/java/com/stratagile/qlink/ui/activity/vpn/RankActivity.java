@@ -156,7 +156,12 @@ public class RankActivity extends BaseActivity implements RankContract.View {
                         try {
                             Thread.sleep(200);
                             if (active.getData().getActs().get(active.getData().getActs().size() - 1).getActStatus().equals("START")) {
-                                viewPager.setCurrentItem(active.getData().getActs().size() - 1, false);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        viewPager.setCurrentItem(active.getData().getActs().size() - 1, false);
+                                    }
+                                });
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();

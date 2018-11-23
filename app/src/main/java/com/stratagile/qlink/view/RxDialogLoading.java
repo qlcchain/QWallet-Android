@@ -66,6 +66,10 @@ public class RxDialogLoading {
 
     }
 
+    public boolean isShow() {
+        return mDialog.isShowing();
+    }
+
     public void hide() {
         if (mDialog.getWindow().getDecorView() != null) {
             mDialog.dismiss();

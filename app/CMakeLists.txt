@@ -43,8 +43,8 @@ add_library( # Sets the name of the library.
             src/main/java/com/stratagile/qlink/jni/ping.c
             src/main/java/com/stratagile/qlink/jni/crypto_core_mem.c
             src/main/java/com/stratagile/qlink/jni/tox_api.c
-            src/main/java/com/stratagile/qlink/jni/cJSON.c )
-             src/main/java/com/stratagile/qlink/c/native-lib.cpp )
+            src/main/java/com/stratagile/qlink/jni/cJSON.c
+            src/main/java/com/stratagile/qlink/c/native-lib.cpp )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by

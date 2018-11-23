@@ -42,4 +42,15 @@ public class TimeUtil {
         SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return sdr.format(new Date(Calendar.getInstance().getTimeInMillis()));
     }
+
+    public static String getTransactionTime(long timestamp) {
+        timestamp = timestamp * 1000;
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.CHINA);
+        return sdr.format(new Date(timestamp));
+    }
+
+    public static String getTransactionHistoryTime(long timestamp) {
+        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm", Locale.CHINA);
+        return sdr.format(new Date(timestamp));
+    }
 }

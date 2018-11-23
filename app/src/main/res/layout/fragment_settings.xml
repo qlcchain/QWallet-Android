@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/content_background_shape"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/llTouchId"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TouchId to unlock"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/switchBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/x35"
+                app:kswAnimationDuration="300"
+                android:checked="false"
+                app:kswBackColor="@color/white"
+                app:kswBackDrawable="@drawable/ios_back_drawable"
+                app:kswThumbDrawable="@drawable/ios_thumb_drawable"
+                app:kswThumbHeight="@dimen/x35"
+                app:kswThumbRangeRatio="2.0"
+                app:kswThumbMargin="0px"
+                app:kswThumbWidth="@dimen/x35"
+                app:kswTintColor="@color/content_background" />
+
+            <!--<ImageView-->
+                <!--android:layout_width="@dimen/x30"-->
+                <!--android:layout_height="@dimen/x30"-->
+                <!--android:layout_marginRight="@dimen/x35"-->
+                <!--android:rotation="180"-->
+                <!--android:src="@mipmap/icon_back_dark" />-->
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llPassWord"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password Settings"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llCurrencuUnit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Currency Unit"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/currentCurrency"
+                android:layout_marginRight="@dimen/x5"
+                android:textColor="@color/color_29282a_40"
+                android:text="USD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llManageWallets"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Wallet"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llAgreement"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service agreement"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llHepl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help and feedback"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Join the community"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llAboutWinQ"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x93"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About WinQ"
+                android:textColor="@color/color_29282a" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/version"
+                android:layout_marginRight="@dimen/x5"
+                android:textColor="@color/color_29282a_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30"
+                android:layout_marginRight="@dimen/x35"
+                android:rotation="180"
+                android:src="@mipmap/icon_back_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_eceff1" />
+    </LinearLayout>
+</LinearLayout>

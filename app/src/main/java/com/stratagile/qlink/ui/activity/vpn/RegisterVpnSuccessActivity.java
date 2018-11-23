@@ -51,7 +51,7 @@ public class RegisterVpnSuccessActivity extends BaseActivity implements Register
     protected void initView() {
         setContentView(R.layout.activity_register_vpn_success);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

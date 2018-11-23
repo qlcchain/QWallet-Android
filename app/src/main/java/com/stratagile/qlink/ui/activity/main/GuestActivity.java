@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerGuestComponent;
 import com.stratagile.qlink.ui.activity.main.contract.GuestContract;
 import com.stratagile.qlink.ui.activity.main.module.GuestModule;
 import com.stratagile.qlink.ui.activity.main.presenter.GuestPresenter;
+import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
@@ -105,7 +107,7 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
     protected void initView() {
         setContentView(R.layout.activity_guest);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toolbar.setTitle("");
         toolbar.setVisibility(View.GONE);
         wowo.setAdapter(WoWoViewPagerAdapter.builder()
@@ -274,7 +276,10 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
 
     @OnClick(R.id.got_it)
     public void onViewClicked() {
-        startActivity(MainActivity.class);
+        Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+        intent.putExtra("flag", "splash");
+        startActivity(intent);
+        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 }

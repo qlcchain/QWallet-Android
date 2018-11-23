@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x30"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x10"
+            android:layout_height="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
+            android:src="@drawable/dot" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x15"
+            android:includeFontPadding="false"
+            android:text="Store Offline"
+            android:textColor="@color/color_29282a" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/x46"
+        android:layout_height="wrap_content"
+        android:text="Please store the Keystore to a safe offline place likea USE drive, Never put it on internet." />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x30"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x10"
+            android:layout_height="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
+            android:src="@drawable/dot" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x15"
+            android:includeFontPadding="false"
+            android:text="Don't Transfer via Internet Tools "
+            android:textColor="@color/color_29282a" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/x46"
+        android:layout_height="wrap_content"
+        android:text="Don't use Email/Cloud Storage/Notepad/lIM tools to transfer Keystore. It easily gets hacked and result in loss." />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x30"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x10"
+            android:layout_height="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
+            android:src="@drawable/dot" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x15"
+            android:includeFontPadding="false"
+            android:text="Store to Password Vault"
+            android:textColor="@color/color_29282a" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/x46"
+        android:layout_height="wrap_content"
+        android:text="If you like to store online please make sure some password vault apps, like 1Password/Keeppass. " />
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="match_parent"
+        android:background="@drawable/wallet_address_bg_2"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginLeft="@dimen/x30"
+        android:padding="@dimen/x10"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x20"
+        android:minHeight="60dp"
+        android:textColor="@color/color_333" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/tvCopy"
+        android:layout_width="match_parent"
+        android:background="@drawable/main_color_bt_bg"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:textColor="@color/white"
+        android:text="Copy Keystore"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/x100"
+        android:layout_height="@dimen/x94" />
+</LinearLayout>

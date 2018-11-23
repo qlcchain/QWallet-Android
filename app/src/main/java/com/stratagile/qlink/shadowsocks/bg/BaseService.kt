@@ -52,7 +52,6 @@ import com.github.shadowsocks.aidl.IShadowsocksServiceCallback
 //import com.github.shadowsocks.utils.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.stratagile.qlink.R
-import com.stratagile.qlink.R.string.app
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.shadowsocks.acl.Acl
 import com.stratagile.qlink.shadowsocks.acl.AclSyncer

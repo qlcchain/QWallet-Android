@@ -19,11 +19,12 @@ public class MD5Util {
 
     public static void main(String[] args) {
         //此处我测试的是我本机jdk源码文件的MD5值
-        String filePath = "/Users/huzhipeng/Desktop/aaa.ovpn";
-        String md5Hashcode2 = MD5Util.getFileMD5(new File(filePath));
-
-        System.out.println("MD5Util2计算文件md5值为：" + md5Hashcode2);
-        System.out.println("MD5Util2计算文件md5值的长度为：" + md5Hashcode2.length());
+//        String filePath = "/Users/huzhipeng/Desktop/aaa.ovpn";
+//        String md5Hashcode2 = MD5Util.getFileMD5(new File(filePath));
+//
+//        System.out.println("MD5Util2计算文件md5值为：" + md5Hashcode2);
+//        System.out.println("MD5Util2计算文件md5值的长度为：" + md5Hashcode2.length());
+        System.out.println(getStringMD5("123"));
     }
 
     /**
@@ -59,7 +60,7 @@ public class MD5Util {
      * @return 'null' if cannot get MessageDigest
      */
 
-    private static String getStringMD5( String s) {
+    public static String getStringMD5( String s) {
         MessageDigest mdInst;
         try {
             // 获得MD5摘要算法的 MessageDigest 对象

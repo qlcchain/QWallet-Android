@@ -2,18 +2,22 @@ package com.stratagile.qlink.ui.activity.wallet;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerImportWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.ImportWalletContract;
@@ -21,7 +25,8 @@ import com.stratagile.qlink.ui.activity.wallet.module.ImportWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ImportWalletPresenter;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.view.TextSpaceView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,20 +49,18 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
 
     @Inject
     ImportWalletPresenter mPresenter;
-    @BindView(R.id.et_private_key)
+    @BindView(R.id.etPrivateKey)
     EditText etPrivateKey;
-    @BindView(R.id.bt_back)
-    Button btBack;
-    @BindView(R.id.bt_import)
+    @BindView(R.id.tvWhatsPrivateKey)
+    TextView tvWhatsPrivateKey;
+    @BindView(R.id.cardView)
+    CardView cardView;
+    @BindView(R.id.btImport)
     Button btImport;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
-    @BindView(R.id.importWalletParent)
-    LinearLayout importWalletParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        needFront = true;
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
     }
 
@@ -65,14 +68,13 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
     protected void initView() {
         setContentView(R.layout.activity_import_wallet);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Import Neo Wallet");
     }
 
     @Override
     protected void initData() {
-        tvTitle.setText(R.string.Import_My_Wallet);
-        importWalletParent.setBackgroundResource(R.drawable.navigation_shape);
-        importWalletParent.setBackgroundResource(R.drawable.navigation_shape);
+
     }
 
     @Override
@@ -121,33 +123,90 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
         finish();
     }
 
-    @OnClick({R.id.bt_back, R.id.bt_import})
+    @Override
+    public void reportCreatedWalletSuccess() {
+        closeProgressDialog();
+        setResult(RESULT_OK);
+        onBackPressed();
+    }
+
+    @OnClick({R.id.btImport, R.id.tvWhatsPrivateKey})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.bt_back:
-                finish();
+            case R.id.tvWhatsPrivateKey:
+
                 break;
-            case R.id.bt_import:
-                String  privateKey = etPrivateKey.getText().toString().replace(" ", "");
+            case R.id.btImport:
+                String privateKey = etPrivateKey.getText().toString().replace(" ", "");
                 if (privateKey.equals("")) {
                     ToastUtil.displayShortToast(getResources().getString(R.string.privatekeyisnone));
                     return;
                 }
                 if (privateKey.length() >= 42) {
-                    Intent intent = new Intent();
-                    boolean isSupperCase = StringUitl.isBase64(privateKey);
-                    if(isSupperCase)
-                    {
-                        byte[] bytesPrivateKey = Base64.decode(privateKey, Base64.NO_WRAP);
-                        byte[] bytes = qlinkcom.AES(bytesPrivateKey,1);
-                        String decryptPrivateKey = new String(bytes);
-                        intent.putExtra("result", decryptPrivateKey);
-                    }else{
-                        intent.putExtra("result", privateKey);
+                    for (Wallet wallet : AppConfig.getInstance().getDaoSession().getWalletDao().loadAll()) {
+                        KLog.i(wallet.toString());
+                        if (privateKey.toLowerCase().equals(wallet.getPrivateKey().toLowerCase()) || privateKey.equals(wallet.getWif())) {
+                            ToastUtil.displayShortToast(getString(R.string.this_wallet_is_exist));
+                            return;
+                        }
                     }
 
-                    setResult(RESULT_OK, intent);
-                    onBackPressed();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean result = Account.INSTANCE.fromWIF(privateKey);
+                            if (!result) {
+                                result = Account.INSTANCE.fromHex(privateKey);
+                            }
+                            if (result) {
+                                List<Wallet> wallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                                for (Wallet wallet : wallets) {
+                                    if (wallet.getIsCurrent()) {
+                                        wallet.setIsCurrent(false);
+                                        AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                                        break;
+                                    }
+                                }
+                                List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+                                for (EthWallet wallet : ethWallets) {
+                                    if (wallet.getIsCurrent()) {
+                                        wallet.setIsCurrent(false);
+                                        AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallet);
+                                        break;
+                                    }
+                                }
+                                neoutils.Wallet wallet = Account.INSTANCE.getWallet();
+                                Wallet walletWinq = new Wallet();
+                                walletWinq.setAddress(wallet.getAddress());
+                                walletWinq.setWif(wallet.getWIF());
+                                if (wallets.size() < 9) {
+                                    walletWinq.setName("NEO-Wallet 0" + (wallets.size() + 1));
+                                } else {
+                                    walletWinq.setName("NEO-Wallet " + (wallets.size() + 1));
+                                }
+                                walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
+                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
+                                walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
+                                walletWinq.setIsCurrent(true);
+                                AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO");
+                                        EventBus.getDefault().post(new ChangeWallet());
+                                    }
+                                });
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastUtil.displayShortToast("import wallet error");
+                                        closeProgressDialog();
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
                 } else {
                     ToastUtil.displayShortToast(getResources().getString(R.string.privatekeyerror));
                 }

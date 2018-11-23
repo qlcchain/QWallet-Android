@@ -318,7 +318,7 @@ public class RxDataTool {
      * @return
      */
     public static String format2Decimals(String str) {
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#.00000");
         if (df.format(stringToDouble(str)).startsWith(".")) {
             return "0" + df.format(stringToDouble(str));
         } else {

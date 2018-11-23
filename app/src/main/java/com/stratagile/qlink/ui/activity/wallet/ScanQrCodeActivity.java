@@ -4,22 +4,19 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,26 +25,30 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
-import com.stratagile.qlink.qrcode.CaptureActivityHandler;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerScanQrCodeComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.ScanQrCodeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ScanQrCodeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ScanQrCodePresenter;
+import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.vondear.rxtools.RxAnimationTool;
-import com.vondear.rxtools.RxBeepTool;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxQrBarTool;
 import com.vondear.rxtools.interfaces.OnRxScanerListener;
 import com.vondear.rxtools.module.scaner.CameraManager;
-import com.vondear.rxtools.module.scaner.decoding.InactivityTimer;
-import com.vondear.rxtools.view.dialog.RxDialogSure;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bingoogolapple.qrcode.core.QRCodeView;
+import cn.bingoogolapple.qrcode.zxing.ZXingView;
 
 /**
  * @author hzp
@@ -56,23 +57,23 @@ import butterknife.ButterKnife;
  * @date 2018/03/05 17:42:26
  */
 
-public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContract.View {
+public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContract.View, QRCodeView.Delegate {
 
     @Inject
     ScanQrCodePresenter mPresenter;
     private static OnRxScanerListener mScanerListener;//扫描结果监听
-    private InactivityTimer inactivityTimer;
-    private CaptureActivityHandler handler;//扫描处理
-    private RelativeLayout mContainer = null;//整体根布局
-    private RelativeLayout mCropLayout = null;//扫描框根布局
-    private int mCropWidth = 0;//扫描边界的宽度
-    private int mCropHeight = 0;//扫描边界的高度
-    private boolean hasSurface;//是否有预览
+    @BindView(R.id.mZXingView)
+    ZXingView mZXingView;
+    @BindView(R.id.top_mask)
+    ImageView topMask;
+    @BindView(R.id.top_openpicture)
+    ImageView topOpenpicture;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
+    @BindView(R.id.capture_containter)
+    RelativeLayout captureContainter;
     private boolean vibrate = true;//扫描成功后是否震动
-    private boolean mFlashing = true;//闪光灯开启状态
-    private LinearLayout mLlScanHelp;//生成二维码 & 条形码 布局
-    private ImageView mIvLight;//闪光灯 按钮
-    private RxDialogSure rxDialogSure;//扫描结果显示框
+    private boolean mFlashing = false;//闪光灯开启状态
 
     public static void setScanerListener(OnRxScanerListener scanerListener) {
         mScanerListener = scanerListener;
@@ -80,19 +81,17 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        needFront = true;
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void initView() {
+        setTitle("Scan");
         setContentView(R.layout.activity_scan_qr_code);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mIvLight = (ImageView) findViewById(R.id.top_mask);
-        mContainer = (RelativeLayout) findViewById(R.id.capture_containter);
-        mCropLayout = (RelativeLayout) findViewById(R.id.capture_crop_layout);
-        mLlScanHelp = (LinearLayout) findViewById(R.id.ll_scan_help);
+        mZXingView.setDelegate(this);
         //请求Camera权限 与 文件读写 权限
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -102,71 +101,47 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
 
     @Override
     protected void initData() {
-        initScanerAnimation();//扫描动画初始化
-        CameraManager.init(this);//初始化 CameraManager
-        hasSurface = false;
-        inactivityTimer = new InactivityTimer(this);
     }
 
     @Override
     protected void setupActivityComponent() {
-       DaggerScanQrCodeComponent
-               .builder()
-               .appComponent(((AppConfig) getApplication()).getApplicationComponent())
-               .scanQrCodeModule(new ScanQrCodeModule(this))
-               .build()
-               .inject(this);
+        DaggerScanQrCodeComponent
+                .builder()
+                .appComponent(((AppConfig) getApplication()).getApplicationComponent())
+                .scanQrCodeModule(new ScanQrCodeModule(this))
+                .build()
+                .inject(this);
     }
-    
+
     @SuppressWarnings("deprecation")
     @Override
     protected void onResume() {
         super.onResume();
-        SurfaceView surfaceView = (SurfaceView) findViewById(com.vondear.rxtools.R.id.capture_preview);
-        SurfaceHolder surfaceHolder = surfaceView.getHolder();
-        if (hasSurface) {
-            initCamera(surfaceHolder);//Camera初始化
-        } else {
-            surfaceHolder.addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-                }
-
-                @Override
-                public void surfaceCreated(SurfaceHolder holder) {
-                    if (!hasSurface) {
-                        hasSurface = true;
-                        initCamera(holder);
-                    }
-                }
-
-                @Override
-                public void surfaceDestroyed(SurfaceHolder holder) {
-                    hasSurface = false;
-
-                }
-            });
-            surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (handler != null) {
-            handler.quitSynchronously();
-            handler = null;
-        }
-        CameraManager.get().closeDriver();
+    }
+
+    @Override
+    protected void onStop() {
+        mZXingView.stopCamera();
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        inactivityTimer.shutdown();
-        mScanerListener = null;
+        mZXingView.onDestroy();
         super.onDestroy();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getPermission();
+    }
+
     @Override
     public void setPresenter(ScanQrCodeContract.ScanQrCodeContractPresenter presenter) {
         mPresenter = (ScanQrCodePresenter) presenter;
@@ -182,29 +157,6 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
         progressDialog.hide();
     }
 
-    private void initScanerAnimation() {
-        ImageView mQrLineView = (ImageView) findViewById(R.id.capture_scan_line);
-        RxAnimationTool.ScaleUpDowm(mQrLineView);
-    }
-
-    public int getCropWidth() {
-        return mCropWidth;
-    }
-
-    public void setCropWidth(int cropWidth) {
-        mCropWidth = cropWidth;
-        CameraManager.FRAME_WIDTH = mCropWidth;
-
-    }
-
-    public int getCropHeight() {
-        return mCropHeight;
-    }
-
-    public void setCropHeight(int cropHeight) {
-        this.mCropHeight = cropHeight;
-        CameraManager.FRAME_HEIGHT = mCropHeight;
-    }
 
     public void btn(View view) {
         int viewId = view.getId();
@@ -218,37 +170,18 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
     }
 
     private void light() {
-        if (mFlashing) {
+        if (!mFlashing) {
             mFlashing = false;
             // 开闪光灯
-            CameraManager.get().openLight();
+            mZXingView.openFlashlight();
         } else {
             mFlashing = true;
             // 关闪光灯
-            CameraManager.get().offLight();
+            mZXingView.closeFlashlight(); // 打开闪光灯
         }
 
     }
 
-    private void initCamera(SurfaceHolder surfaceHolder) {
-        try {
-            CameraManager.get().openDriver(surfaceHolder);
-            Point point = CameraManager.get().getCameraResolution();
-            AtomicInteger width = new AtomicInteger(point.y);
-            AtomicInteger height = new AtomicInteger(point.x);
-            int cropWidth = mCropLayout.getWidth();
-            int cropHeight = mCropLayout.getHeight();
-            KLog.i(cropWidth);
-            KLog.i(cropHeight);
-            setCropWidth(cropWidth);
-            setCropHeight(cropHeight);
-        } catch (IOException | RuntimeException ioe) {
-            return;
-        }
-        if (handler == null) {
-            handler = new CaptureActivityHandler(this);
-        }
-    }
     //========================================打开本地图片识别二维码 end=================================
 
     //--------------------------------------打开本地图片识别二维码 start---------------------------------
@@ -262,22 +195,22 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
             try {
                 // 使用ContentProvider通过URI获取原始图片
                 Bitmap photo = MediaStore.Images.Media.getBitmap(resolver, originalUri);
-
+                mZXingView.decodeQRCode(photo);
                 // 开始对图像资源解码
-                Result rawResult = RxQrBarTool.decodeFromPhoto(photo);
-                if (rawResult != null) {
-                    if (mScanerListener == null) {
-                        initDialogResult(rawResult);
-                    } else {
-                        mScanerListener.onSuccess("From to Picture", rawResult);
-                    }
-                } else {
-                    if (mScanerListener == null) {
-//                        RxToast.error("图片识别失败.");
-                    } else {
-                        mScanerListener.onFail("From to Picture", "图片识别失败");
-                    }
-                }
+//                Result rawResult = RxQrBarTool.decodeFromPhoto(photo);
+//                if (rawResult != null) {
+//                    if (mScanerListener == null) {
+//                        initDialogResult(rawResult);
+//                    } else {
+//                        mScanerListener.onSuccess("From to Picture", rawResult);
+//                    }
+//                } else {
+//                    if (mScanerListener == null) {
+////                        RxToast.error("图片识别失败.");
+//                    } else {
+//                        mScanerListener.onFail("From to Picture", "图片识别失败");
+//                    }
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -285,8 +218,7 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
     }
     //==============================================================================================解析结果 及 后续处理 end
 
-    private void initDialogResult(Result result) {
-        String realContent = result.getText();
+    private void initDialogResult(String result) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.dialog_layout, null);
         builder.setView(view);
@@ -296,7 +228,7 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
         Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
         Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
         title.setText(R.string.result);
-        tvContent.setText(realContent);
+        tvContent.setText(result);
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
         btn_cancel.setText(getString(R.string.cancel).toLowerCase());
@@ -304,8 +236,8 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                mZXingView.startSpot(); // 延迟0.5秒后开始识别
                 // 连续扫描，不发送此消息扫描一次结束后就不能再次扫描
-                handler.sendEmptyMessage(com.vondear.rxtools.R.id.restart_preview);
             }
         });
         btn_comfirm.setOnClickListener(new View.OnClickListener() {
@@ -313,7 +245,7 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent intent = new Intent();
-                intent.putExtra("result", realContent);
+                intent.putExtra("result", result);
                 setResult(RESULT_OK, intent);
                 onBackPressed();
             }
@@ -321,22 +253,71 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
         dialog.show();
     }
 
-    public void handleDecode(Result result) {
-        inactivityTimer.onActivity();
-        RxBeepTool.playBeep(this, vibrate);//扫描成功之后的振动与声音提示
+    @Override
+    public void onScanQRCodeSuccess(String result) {
+        KLog.i( "result:$result");
+        initDialogResult(result);
+        mZXingView.stopSpot();
+        vibrate();
+    }
 
-        String result1 = result.getText();
-        KLog.i("二维码/条形码 扫描结果", result1);
-        if (mScanerListener == null) {
-//            RxToast.success(result1);
-            initDialogResult(result);
-        } else {
-            mScanerListener.onSuccess("From to Camera", result);
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(new long[]{50, 50}, -1);
+    }
+
+    @Override
+    public void onScanQRCodeOpenCameraError() {
+
+    }
+
+    public void getCameraPermissionSuccess() {
+        mZXingView.startSpotAndShowRect();
+    }
+
+    public void getPermission() {
+        AndPermission.with(this)
+                .requestCode(101)
+                .permission(
+                        Manifest.permission.CAMERA
+                )
+                .rationale(rationaleListener)
+                .callback(permission)
+                .start();
+    }
+
+    private PermissionListener permission = new PermissionListener() {
+        @Override
+        public void onSucceed(int requestCode, List<String> grantedPermissions) {
+            LocalAssetsUtils.updateGreanDaoFromLocal();
+            // 权限申请成功回调。
+            if (requestCode == 101) {
+                getCameraPermissionSuccess();
+            }
         }
-    }
 
-    public Handler getHandler() {
-        return handler;
-    }
+        @Override
+        public void onFailed(int requestCode, List<String> deniedPermissions) {
+            // 权限申请失败回调。
+            if (requestCode == 101) {
+                KLog.i("权限申请失败");
 
+            }
+        }
+    };
+
+    /**
+     * Rationale支持，这里自定义对话框。
+     */
+    private RationaleListener rationaleListener = (requestCode, rationale) -> {
+        com.yanzhenjie.alertdialog.AlertDialog.newBuilder(this)
+                .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
+                .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
+                .setPositiveButton(AppConfig.getInstance().getResources().getString(R.string.Agree), (dialog, which) -> {
+                    rationale.resume();
+                })
+                .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.Reject), (dialog, which) -> {
+                    rationale.cancel();
+                }).show();
+    };
 }

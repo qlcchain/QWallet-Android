@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
 
@@ -19,50 +20,46 @@
         android:id="@+id/rl1"
         android:layout_width="match_parent"
         android:layout_below="@+id/status_bar"
-        android:background="@drawable/navigation_shape"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_height="wrap_content">
+        android:background="@color/mainColor"
+        android:layout_height="@dimen/x84">
         <ImageView
             android:id="@+id/iv_avater"
-            android:layout_width="@dimen/x70"
+            android:layout_width="@dimen/x50"
             android:transitionName="avater"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x42"
+            android:layout_marginLeft="@dimen/x23"
             android:src="@mipmap/img_connected_head_portrait"
-            android:layout_height="@dimen/x70" />
+            android:layout_height="@dimen/x50" />
 
         <ImageView
             android:id="@+id/my_status"
-            android:layout_width="@dimen/x30"
-            android:layout_height="@dimen/x30"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_marginTop="-8dp"
             android:layout_below="@id/iv_avater"
-            android:layout_marginTop="-5px"
             android:layout_alignRight="@+id/iv_avater"
             android:src="@mipmap/icon_search_red" />
         <TextView
-            android:letterSpacing="0.1"
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-
-            android:fontFamily="@font/vagroun_q"
+            android:fontFamily="@font/roboto_regular"
             android:text="@string/my_wallet"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
         <RelativeLayout
-            android:layout_width="@dimen/x90"
+            android:layout_width="@dimen/x96"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/x22"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_wallet"
                 android:layout_centerHorizontal="true"
                 android:visibility="invisible"
-                android:layout_width="@dimen/x70"
-                android:layout_height="@dimen/x70"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/icon_free"
                 />
@@ -90,6 +87,12 @@
 
     </com.stratagile.qlink.view.NoScrollViewPager>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_above="@+id/rl2"
+        android:layout_height="@dimen/x1"
+        android:background="@color/color_29282a_40"/>
+
     <RelativeLayout
         android:id="@+id/rl2"
         android:layout_alignParentBottom="true"
@@ -98,7 +101,7 @@
         <com.stratagile.qlink.view.BottomNavigationViewEx
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:background="@drawable/navigation_shape"
+            android:background="@color/white"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             app:itemIconTint="@drawable/bottom_navigation_selector"
@@ -114,6 +117,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
             <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <View
+                android:id="@+id/view_all_wallet"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>

@@ -15,6 +15,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.FullWallet;
+import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.interfaces.StorableWallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthWalletComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthWalletContract;
@@ -35,6 +36,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -79,7 +81,7 @@ public class EthWalletActivity extends BaseActivity implements EthWalletContract
     @Override
     protected void initData() {
 
-        ArrayList<StorableWallet> wallets = WalletStorage.getInstance(this).get();
+        List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
 //        ToastUtil.displayShortToast(wallets.size() + "");
         ethWalletsAdapter = new EthWalletsAdapter(wallets);
         recyclerView.setAdapter(ethWalletsAdapter);
@@ -87,7 +89,7 @@ public class EthWalletActivity extends BaseActivity implements EthWalletContract
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(EthWalletActivity.this, BnbToQlcActivity.class);
-                intent.putExtra("walletAddress", ethWalletsAdapter.getItem(position).getPubKey());
+                intent.putExtra("ethwallet", ethWalletsAdapter.getItem(position));
                 SpUtil.putInt(EthWalletActivity.this, ConstantValue.currentEthWallet, position);
                 startActivity(intent);
             }
@@ -123,42 +125,7 @@ public class EthWalletActivity extends BaseActivity implements EthWalletContract
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_new_wallet:
-                KLog.i("点击新建钱包");
-                showProgressDialog();
-                new AsyncTask<String, String, String>() {
 
-                    @Override
-                    protected String doInBackground(String... objects) {
-                        String walletAddress = "";
-                        try {
-                            walletAddress = OwnWalletUtils.generateNewWalletFile("11111111", new File(EthWalletActivity.this.getFilesDir(), ""), true);
-                        } catch (CipherException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (InvalidAlgorithmParameterException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchProviderException e) {
-                            e.printStackTrace();
-                        }
-                        WalletStorage.getInstance(EthWalletActivity.this).add(new FullWallet("0x" + walletAddress, walletAddress), EthWalletActivity.this);
-//                AddressNameConverter.getInstance(this).put("0x" + walletAddress, "Wallet " + ("0x" + walletAddress).substring(0, 6), this);
-                        Settings.walletBeingGenerated = false;
-                        KLog.i("创建钱包成功: " + walletAddress);
-                        return walletAddress;
-                    }
-
-                    @Override
-                    protected void onPostExecute(String o) {
-//                        ToastUtil.displayShortToast(o);
-                        closeProgressDialog();
-                        ArrayList<StorableWallet> wallets = WalletStorage.getInstance(EthWalletActivity.this).get();
-                        ToastUtil.displayShortToast(wallets.size() + "");
-                        ethWalletsAdapter.setNewData(wallets);
-                    }
-                }.execute();
                 break;
             case R.id.tv_import:
                 startActivity(new Intent(this, ImportEthWalletActivity.class));

@@ -25,9 +25,13 @@ public interface ImportWalletContract {
         void closeProgressDialog();
 
         void onImportWalletSuccess(CreateWallet createWallet);
+
+        void reportCreatedWalletSuccess();
     }
 
     interface ImportWalletContractPresenter extends BasePresenter {
         void importWallet(Map map);
+
+        void reportWalletCreated(String address, String blockChain);
     }
 }

@@ -305,7 +305,7 @@ public class RegisteWindowVpnActivityActivity extends BaseActivity implements Re
             walletListAdapter.setSelectItem(0);
             selectProfileLocalPath = WindowConfigList.get(0).getVpnfileName();
             ConstantValue.getWindowsVpnPath = WindowConfigList.get(0).getServerVpnfileName();
-            walletListAdapter.setNewData(WindowConfigList);
+//            walletListAdapter.setNewData(WindowConfigList);
         }
 
         /*ConfigParser cp = new ConfigParser();

@@ -65,7 +65,7 @@ constructor(context: Activity) : PopupWindow() {
     fun showPopupWindow(parent: View) {
         if (!isShowing) {
             // 以下拉方式显示popupwindow
-            showAsDropDown(parent, -parent.context.resources.getDimension(R.dimen.x180).toInt(), parent.context.resources.getDimension(R.dimen.x25).toInt())
+            showAsDropDown(parent, -parent.context.resources.getDimension(R.dimen.x195).toInt(), parent.context.resources.getDimension(R.dimen.x25).toInt())
         } else {
             dismiss()
         }

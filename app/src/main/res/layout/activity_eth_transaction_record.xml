@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tvTokenValue"
+        android:textColor="@color/color_29282a"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvTokenMoney"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvTokenValue"
+        android:layout_marginTop="@dimen/x8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/tvTokenMoney"
+        android:layout_height="@dimen/x260" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_below="@+id/chart"
+        android:layout_above="@+id/llOpreate"
+        android:layout_width="match_parent"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_above="@+id/llOpreate"
+        android:background="@color/content_background"/>
+    <LinearLayout
+        android:id="@+id/llOpreate"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:layout_height="@dimen/x92">
+        <LinearLayout
+            android:id="@+id/llSend"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icons_recive"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/mainColor"
+                android:text="@string/send"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llRecive"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icons_send"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/mainColor"
+                android:text="Recive"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

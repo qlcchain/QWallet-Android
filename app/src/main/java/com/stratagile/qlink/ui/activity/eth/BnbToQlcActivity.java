@@ -8,6 +8,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerBnbToQlcComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.BnbToQlcContract;
@@ -45,6 +46,7 @@ public class BnbToQlcActivity extends BaseActivity implements BnbToQlcContract.V
     EditText etWalletPassword;
     private Wallet wallet;
 
+    private EthWallet ethWallet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +62,7 @@ public class BnbToQlcActivity extends BaseActivity implements BnbToQlcContract.V
     @Override
     protected void initData() {
         wallet = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
-
+        ethWallet = getIntent().getParcelableExtra("ethwallet");
     }
 
     @Override
@@ -94,7 +96,7 @@ public class BnbToQlcActivity extends BaseActivity implements BnbToQlcContract.V
         uuid = uuid.substring(0, 32);
         HashMap<String, String> infoMap = new HashMap<>();
         infoMap.put("exchangeId", uuid);
-        infoMap.put("ethAddress", getIntent().getStringExtra("walletAddress"));
+        infoMap.put("ethAddress", ethWallet.getAddress());
         infoMap.put("neoAddress", wallet.getAddress());
         infoMap.put("bnb", etAmount.getText().toString());
         infoMap.put("tx", transactionHash);
@@ -110,7 +112,6 @@ public class BnbToQlcActivity extends BaseActivity implements BnbToQlcContract.V
 
     @OnClick(R.id.tv_transaction)
     public void onViewClicked() {
-        String fromAddress = getIntent().getStringExtra("walletAddress");
-        mPresenter.parseWallet(etWalletPassword.getText().toString(), fromAddress, etAmount.getText().toString());
+        mPresenter.parseWallet(etWalletPassword.getText().toString(), ethWallet.getAddress(), etAmount.getText().toString());
     }
 }

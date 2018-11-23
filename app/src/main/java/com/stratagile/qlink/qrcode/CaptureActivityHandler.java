@@ -41,7 +41,7 @@ public final class CaptureActivityHandler extends Handler {
             restartPreviewAndDecode();
         } else if (message.what == R.id.decode_succeeded) {
             state = State.SUCCESS;
-            activity.handleDecode((Result) message.obj);// 解析成功，回调
+//            activity.handleDecode((Result) message.obj);// 解析成功，回调
         } else if (message.what == R.id.decode_failed) {
             state = State.PREVIEW;
             CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);

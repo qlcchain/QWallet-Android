@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    app:layout_constraintLeft_toRightOf="parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvEthTokenName"
+        android:layout_marginLeft="@dimen/x45"
+        android:textColor="@color/color_29282a"
+        android:text="xxxx"
+        android:layout_width="wrap_content"
+        android:includeFontPadding="false"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvEthTokenName"
+        app:layout_constraintRight_toRightOf="@+id/tvEthTokenName"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tvEthTokenName"
+        android:layout_height="@dimen/x3">
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_29282a"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:layout_width="@dimen/x16"
+        app:layout_constraintTop_toTopOf="@+id/tvEthTokenName"
+        app:layout_constraintBottom_toBottomOf="@+id/tvEthTokenName"
+        android:layout_marginLeft="@dimen/x10"
+        app:layout_constraintLeft_toRightOf="@+id/tvEthTokenName"
+        android:src="@mipmap/icon_enter"
+        android:layout_height="@dimen/x16" />
+
+    <TextView
+        android:id="@+id/tvEthTokenValue"
+        android:layout_width="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/mainColor"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x56"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/etEthTokenSendValue"
+        app:layout_constraintTop_toBottomOf="@+id/tvEthTokenName"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:textColor="@color/color_29282a"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"
+        android:layout_marginRight="@dimen/x40"
+        android:hint="tokenValue"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEthTokenSendValue"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/sendto"
+        android:text="Send to"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"
+        app:layout_constraintTop_toBottomOf="@+id/view1"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etEthTokenSendAddress"
+        app:layout_constraintTop_toBottomOf="@+id/sendto"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="15sp"
+        android:textColor="@color/color_29282a"
+        android:hint="address"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        app:layout_constraintTop_toBottomOf="@+id/etEthTokenSendAddress"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/Memo"
+        android:text="Memo"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etEthTokenSendMemo"
+        app:layout_constraintTop_toBottomOf="@+id/Memo"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="15sp"
+        android:textColor="@color/color_29282a"
+        android:hint="if any"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        app:layout_constraintTop_toBottomOf="@+id/etEthTokenSendMemo"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+    <TextView
+        android:id="@+id/cost"
+        android:text="Miner cost"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"
+        app:layout_constraintTop_toBottomOf="@+id/view3"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/llOpen"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/x25"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="@dimen/x40"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/view3"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvCostEth"
+            android:layout_width="wrap_content"
+            android:text="0.0006 eth"
+            android:includeFontPadding="false"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/ivShow"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/icon_back_3"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <android.support.constraint.Group
+        app:layout_constraintTop_toBottomOf="@+id/cost"
+        app:constraint_referenced_ids="seekBar,llCost"
+        android:id="@+id/group"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/cost"
+        android:max="34"
+        android:layout_marginLeft="@dimen/x25"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/llCost"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginRight="@dimen/x30"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Slow"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tvGwei"
+            android:layout_width="wrap_content"
+            android:text="In"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="fast"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!--<TextView-->
+        <!--android:id="@+id/gasFee"-->
+        <!--android:text="GAS FEE"-->
+        <!--android:visibility="gone"-->
+        <!--android:textColor="@color/color_29282a_40"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/llCost"-->
+        <!--android:layout_marginTop="@dimen/x25"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+    <!--<TextView-->
+        <!--android:id="@+id/tvGasFee"-->
+        <!--android:visibility="gone"-->
+        <!--android:textColor="@color/color_29282a"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--android:text="21000"-->
+        <!--android:layout_marginRight="@dimen/x30"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/llCost"-->
+        <!--android:layout_marginTop="@dimen/x25"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        app:layout_constraintTop_toBottomOf="@+id/llCost"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/tvSend"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/llOpen"
+        android:layout_marginTop="@dimen/x300"
+        android:layout_marginLeft="@dimen/x45"
+        android:text="@string/send"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/x45"
+        android:background="@drawable/main_color_bt_bg"
+        android:layout_height="@dimen/x94" />
+</android.support.constraint.ConstraintLayout>

@@ -20,9 +20,11 @@
     <color name="color_40ffffff">#40ffffff</color>
     <color name="main_color">#490080</color>
     <color name="white">#ffffff</color>
+    <color name="white40">#4cffffff</color>
     <color name="black">#000</color>
     <color name="histroy">#330055</color>
     <color name="color_333">#333333</color>
+    <color name="color_FF007AFF">#FF007AFF</color>
     <!-- 上传图片添加的颜色 -->
     <color name="style_divider_color">#C9C7CD</color>
     <color name="color_323232">#323232</color>
@@ -69,6 +71,19 @@
 
     <color name="color_primary">@color/material_blue_grey_500</color>
     <color name="color_primary_dark">@color/material_blue_grey_700</color>
+    <color name="color_f8f9fb">#f8f9fb</color>
+    <color name="color_1F314A">#1F314A</color>
+    <color name="color_9b9b9bb">#FF9B9B9B</color>
+    <color name="color_e9e3ef">#e9e3ef</color>
+    <color name="color_707070">#707070</color>
+    <color name="color_29282a_40">#4c29282a</color>
+    <color name="color_29282a">#29282a</color>
+    <color name="color_b2b2b2">#b2b2b2</color>
+    <color name="color_d0021b">#D0021B</color>
+    <color name="color_eaf1fe">#eaf1fe</color>
+    <color name="color_07cdb3">#07CDB3</color>
+    <color name="color_ff3669">#FF3669</color>
+    <color name="color_eceff1">#ECEFF1</color>
 
 
 </resources>

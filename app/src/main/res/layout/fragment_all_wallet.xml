@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:minHeight="@dimen/x530"
+            android:layout_height="wrap_content"
+            app:elevation="0px">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x300"
+                app:layout_scrollFlags="scroll|snap">
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:layout_marginTop="@dimen/x20"
+                    android:text="TOTAL"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvWalletMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv1" />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:text="WINQ GAS"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvWalletMoney"
+                    app:layout_goneMarginTop="@dimen/x10" />
+
+                <ImageView
+                    android:id="@+id/ivClaim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/claim"
+                    android:layout_marginLeft="@dimen/x10"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv2"
+                    app:layout_constraintStart_toEndOf="@+id/tv2"
+                    app:layout_constraintTop_toTopOf="@+id/tv2" />
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv2">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x15"
+                        android:src="@mipmap/icon_winq_gas" />
+
+                    <TextView
+                        android:id="@+id/tvWalletGas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="0.00"
+                        android:textColor="@color/white"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginRight="@dimen/x20"
+                    android:src="@mipmap/enter_n"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:minHeight="@dimen/x230"
+                android:background="@color/white"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x105"
+                    android:background="@color/mainColor" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_below="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x105" />
+                <!--76.5-->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x210"
+                    android:layout_marginLeft="@dimen/x13"
+                    android:layout_marginRight="@dimen/x13"
+                    app:cardCornerRadius="@dimen/x10"
+                    app:cardElevation="@dimen/x10">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/cardView1"
+                            android:layout_width="@dimen/x90"
+                            android:layout_height="@dimen/x92"
+                            android:layout_marginStart="@dimen/x10"
+                            android:layout_marginTop="@dimen/x20"
+                            app:cardCornerRadius="@dimen/x10"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/ivWalletAvatar"
+                                    android:layout_width="@dimen/x70"
+                                    android:layout_height="@dimen/x70" />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:src="@mipmap/details"
+                            android:layout_marginTop="@dimen/x48"
+                            android:layout_marginRight="@dimen/x17"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tvWalletName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x20"
+                            android:layout_marginTop="@dimen/x5"
+                            android:drawableRight="@mipmap/down_y"
+                            android:drawablePadding="@dimen/x10"
+                            android:ellipsize="middle"
+                            android:gravity="center"
+                            android:maxEms="8"
+                            android:singleLine="true"
+                            android:textColor="@color/mainColor"
+                            app:layout_constraintStart_toEndOf="@id/cardView1"
+                            app:layout_constraintTop_toTopOf="@+id/cardView1" />
+
+                        <TextView
+                            android:id="@+id/tvWalletAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x20"
+                            android:layout_marginBottom="@dimen/x5"
+                            android:drawableRight="@mipmap/icon_copy_h"
+                            android:drawablePadding="@dimen/x10"
+                            android:ellipsize="middle"
+                            android:gravity="center"
+                            android:maxEms="8"
+                            android:singleLine="true"
+                            android:textColor="@color/color_29282a_40"
+                            app:layout_constraintBottom_toBottomOf="@+id/cardView1"
+                            app:layout_constraintStart_toEndOf="@id/cardView1" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x20"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="@dimen/x20"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvWalletAsset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/x20"
+                            android:layout_marginBottom="@dimen/x20"
+                            android:text="- -"
+                            android:textColor="@color/color_29282a"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent" />
+                    </android.support.constraint.ConstraintLayout>
+                </android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:id="@+id/llGetGas"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/view2"
+                    android:layout_height="@dimen/x123">
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="@dimen/x54"
+                        android:layout_height="@dimen/x119">
+
+                        <ImageView
+                            android:id="@+id/ivTokenAvatar"
+                            android:layout_width="@dimen/x45"
+                            android:src="@mipmap/neo_gas"
+                            android:layout_height="@dimen/x45"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvGasValue"
+                            android:layout_width="wrap_content"
+                            android:textSize="15sp"
+                            android:text="0.0000001"
+                            android:layout_marginTop="@dimen/x10"
+                            android:textColor="@color/color_29282a"
+                            app:layout_constraintStart_toEndOf="@+id/ivTokenAvatar"
+                            android:layout_marginLeft="@dimen/x40"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tvGasIntroduce"
+                            app:layout_constraintTop_toBottomOf="@+id/tvGasValue"
+                            app:layout_constraintStart_toEndOf="@+id/ivTokenAvatar"
+                            android:layout_marginLeft="@dimen/x40"
+                            android:text="Extractable WINQ GAS"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tvClaim"
+                            android:layout_width="@dimen/x120"
+                            android:layout_height="@dimen/x40"
+                            android:layout_marginRight="@dimen/x54"
+                            android:textColor="@color/color_29282a_40"
+                            android:text="Claim"
+                            android:includeFontPadding="false"
+                            android:gravity="center"
+                            android:background="@drawable/claim_bg"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </android.support.constraint.ConstraintLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x4"
+                        android:background="#eff1f5"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -48,7 +48,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
         helper.setText(R.id.vpn_name, item.getVpnName());
         helper.addOnClickListener(R.id.freind_avater);
         helper.setText(R.id.connect_times, item.getConnsuccessNum() + "");
-        helper.setText(R.id.price, item.getQlc() + " QLC/hour");
+        helper.setText(R.id.price, item.getQlc() + "/hour");
         helper.setText(R.id.tv_country, item.getCountry());
         ImageView avater = (ImageView) helper.getView(R.id.freind_avater);
         if (item.getAvatar() == null || item.getAvatar().equals("")) {

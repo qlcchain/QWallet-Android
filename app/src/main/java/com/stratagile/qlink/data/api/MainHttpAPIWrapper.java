@@ -2,10 +2,10 @@ package com.stratagile.qlink.data.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
+import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
-import com.stratagile.qlink.entity.BetResult;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
@@ -14,7 +14,6 @@ import com.stratagile.qlink.entity.EthWalletDetail;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.MainAddress;
-import com.stratagile.qlink.entity.RaceTimes;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
@@ -369,7 +368,7 @@ public class MainHttpAPIWrapper {
         map.put("appid", "WINQ");
         map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
         map.put("params", JSONObject.toJSON(data));
-        map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), "ca799da6e13cbf4732b41f050e6574d2eb17f75107da4f53e82c5e25870a91e7", "UTF-8"));
+        map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         KLog.i("传的参数为:" + map);
         MediaType textType = MediaType.parse("text/plain");
         String bodyStr = JSONObject.toJSON(map).toString();

@@ -13,6 +13,7 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.ui.activity.main.contract.SplashContract;
 import com.stratagile.qlink.ui.activity.main.SplashActivity;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.yanzhenjie.alertdialog.AlertDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
@@ -165,6 +166,13 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
     public void getLastVersion() {
         hasUpdate = false;
         //如果本地记录的应用版本和获取的应用版本不一致,就需要跳转到欢迎页面
+        if (SpUtil.getInt(AppConfig.getInstance(), ConstantValue.LOCALVERSIONCODE, 0) < 62) {
+            String password = SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "");
+            if (!"".equals(password)) {
+                String encode = ETHWalletUtils.enCodePassword(password);
+                SpUtil.putString(AppConfig.getInstance(), ConstantValue.walletPassWord, encode);
+            }
+        }
         if (SpUtil.getInt(AppConfig.getInstance(), ConstantValue.LOCALVERSIONCODE, 0) != VersionUtil.getAppVersionCode(AppConfig.getInstance())) {
             KLog.i("需要跳转到guest.........................");
             KLog.i(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.LOCALVERSIONCODE, 0));
