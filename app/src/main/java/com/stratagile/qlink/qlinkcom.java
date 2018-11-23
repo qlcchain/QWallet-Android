@@ -420,8 +420,8 @@ public class qlinkcom {
      */
     public void CallFriendChange(String friendNumber, int status) {
         LogUtil.addLog("好友的编号为" + friendNumber + "好友的状态为:" + status, getClass().getSimpleName());
-        KLog.i("好友的编号为:" + friendNumber);
-        KLog.i("好友的状态为:" + status);
+//        KLog.i("好友的编号为:" + friendNumber);
+//        KLog.i("好友的状态为:" + status);
         Qsdk.getInstance().getFriendSharedVpnInfo(friendNumber, status);
 //        Qsdk.getInstance().getFriendCurrentConnectWifiInfo(friendNumber, status);
         if (status > 0) {
@@ -436,7 +436,7 @@ public class qlinkcom {
     public void CallFriendMessageProcess(String message, String friendNumber) {
         KLog.i("好友传过来的消息为:" + message);
         LogUtil.addLog("收到的消息为：" + message, getClass().getSimpleName());
-        KLog.i("好友的编号为:" + friendNumber);
+//        KLog.i("好友的编号为:" + friendNumber);
         Qsdk.getInstance().handlerFriendMessage(message, friendNumber);
     }
 

@@ -147,8 +147,7 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
             }
         });
         LocalWalletUtil.updateNeoWallet();
-        LocalWalletUtil.updateEthWallet();
-//        LocalWalletUtil.getLocalNeoWallet();
+        LocalWalletUtil.updateLocalEthWallet();
     }
 
     @Override

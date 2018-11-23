@@ -173,6 +173,7 @@ public class AppConfig extends MultiDexApplication {
         RxTool.init(this);
         PRNGFixes.apply();
         ToastUtil.init();
+        com.stratagile.qlink.core.ProfileManager.removeAllProfile(this);
         qlinkcom.init();
         initMoney();
         AppFilePath.init(this);

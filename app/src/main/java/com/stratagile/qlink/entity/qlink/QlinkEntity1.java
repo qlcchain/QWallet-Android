@@ -4,11 +4,11 @@ package com.stratagile.qlink.entity.qlink;
  * Created by huzhipeng on 2018/1/19.
  */
 
-public class QlinkEntity<T> {
+public class QlinkEntity1 {
     private String type;
-    private T data;
+    private String data;
 
-    public QlinkEntity(String type, T data) {
+    public QlinkEntity1(String type, String data) {
         this.type = type;
         this.data = data;
     }
@@ -22,11 +22,11 @@ public class QlinkEntity<T> {
         this.type = type;
     }
 
-    public T getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

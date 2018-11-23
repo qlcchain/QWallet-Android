@@ -2,19 +2,25 @@ package com.stratagile.qlink.qlink;
 
 import android.os.Environment;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
+import com.stratagile.qlink.entity.eventbus.JoinGroupChatSuccess;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.ServerVpnSendComplete;
 import com.stratagile.qlink.entity.im.InviteToGroupChatReq;
+import com.stratagile.qlink.entity.im.InviteToGroupChatRsp;
 import com.stratagile.qlink.entity.qlink.DefaultRsp;
 import com.stratagile.qlink.entity.qlink.GratuitySuccess;
+import com.stratagile.qlink.entity.qlink.QlinkEntity1;
 import com.stratagile.qlink.entity.qlink.RecordSaveReq;
 import com.stratagile.qlink.entity.qlink.RecordSaveRsp;
+import com.stratagile.qlink.entity.qlink.SendVpnFileList;
+import com.stratagile.qlink.entity.qlink.SendVpnFileNew;
 import com.stratagile.qlink.entity.qlink.SendVpnFileRequest;
 import com.stratagile.qlink.entity.vpn.VpnBasicInfoReq;
 import com.stratagile.qlink.entity.vpn.VpnBasicInfoRsp;
@@ -133,100 +139,76 @@ public class Qsdk {
         try {
             QlinkEntity qlinkEntity = gson.fromJson(message, QlinkEntity.class);
             switch (qlinkEntity.getType()) {
-                case ConstantValue.sendFileRequest:
-                    KLog.i("收到发送自己头像的请求，将我自己的头像文件发送出去");
-                    qlinkcom.Addfilesender(friendNumber, Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvaterUpdateTime, "") + ".jpg");
-                    break;
-                case ConstantValue.sendVpnFileRequest:
-                    KLog.i("收到发送自己注册的vpn的配置文件的请求，将自己注册的vpn的配置文件发送出去");
-                    SendVpnFileRequest sendVpnFileRequest = gson.fromJson(qlinkEntity.getData(), SendVpnFileRequest.class);
-                    qlinkcom.Addfilesender(friendNumber, sendVpnFileRequest.getFilePath());
-                    break;
-                case ConstantValue.heartBetSend:
-                    ServiceConnectedEvent serviceConnectedEvent = gson.fromJson(qlinkEntity.getData(), ServiceConnectedEvent.class);
-                    serviceConnectedEvent.setFriendNum(friendNumber);
-                    handlerHeartBet(serviceConnectedEvent);
-                    break;
-                case ConstantValue.vpnBasicInfoReq:
-                    VpnBasicInfoReq vpnBasicInfoReq = gson.fromJson(qlinkEntity.getData(), VpnBasicInfoReq.class);
-                    handleVpnBasicInfoReq(friendNumber, vpnBasicInfoReq);
-                    break;
-                case ConstantValue.vpnBasicInfoRsp:
-                    VpnBasicInfoRsp vpnBasicInfoRsp = gson.fromJson(qlinkEntity.getData(), VpnBasicInfoRsp.class);
-                    handleVpnBasicInfoRsp(vpnBasicInfoRsp);
-                    break;
-                case ConstantValue.vpnPrivateKeyReq:
-                    VpnPrivateKeyReq vpnPrivateKeyReq = gson.fromJson(qlinkEntity.getData(), VpnPrivateKeyReq.class);
-                    handleVpnPrivateKeyReq(friendNumber, vpnPrivateKeyReq);
-                    break;
-                case ConstantValue.vpnPrivateKeyRsp:
-                    VpnPrivateKeyRsp vpnPrivateKeyRsp = gson.fromJson(qlinkEntity.getData(), VpnPrivateKeyRsp.class);
-                    handleVpnPrivateKeyRsp(friendNumber, vpnPrivateKeyRsp);
-                    break;
-                case ConstantValue.vpnUserAndPasswordReq:
-                    VpnUserAndPasswordReq vpnUserAndPasswordReq = gson.fromJson(qlinkEntity.getData(), VpnUserAndPasswordReq.class);
-                    handleVpnUserAndPasswordReq(friendNumber, vpnUserAndPasswordReq);
-                    break;
-                case ConstantValue.vpnUserAndPasswordRsp:
-                    VpnUserAndPasswordRsp vpnUserAndPasswordRsp = gson.fromJson(qlinkEntity.getData(), VpnUserAndPasswordRsp.class);
-                    handleVpnUserAndPasswordRsp(friendNumber, vpnUserAndPasswordRsp);
-                    break;
-                case ConstantValue.vpnUserPassAndPrivateKeyReq:
-                    VpnUserPassAndPrivateKeyReq vpnUserPassAndPrivateKeyReq = gson.fromJson(qlinkEntity.getData(), VpnUserPassAndPrivateKeyReq.class);
-                    handleVpnUserAndPasswordAndPrivateKeyReq(friendNumber, vpnUserPassAndPrivateKeyReq);
-                    break;
-                case ConstantValue.recordSaveReq:
-                    RecordSaveReq recordSaveReq = gson.fromJson(qlinkEntity.getData(), RecordSaveReq.class);
-                    handleRecordSaveReq(friendNumber, recordSaveReq);
-                    break;
-                case ConstantValue.recordSaveRsp:
-                    RecordSaveRsp recordSaveRsp = gson.fromJson(qlinkEntity.getData(), RecordSaveRsp.class);
-                    handleRecordSaveRsp(friendNumber, recordSaveRsp);
-                    break;
-                case ConstantValue.gratuitySuccess://
-                    GratuitySuccess gratuitySuccess = gson.fromJson(qlinkEntity.getData(), GratuitySuccess.class);
-                    double qlc = gratuitySuccess.getQlc();
-                    AppConfig.getInstance().showNotificationChannels(qlc, TransactionRecordActivity.class);
-                    break;
-                case ConstantValue.joinGroupChatReq:
-                    InviteToGroupChatReq inviteToGroupChatReq = gson.fromJson(qlinkEntity.getData(), InviteToGroupChatReq.class);
-                    handleInviteToGroupChatReq(friendNumber, inviteToGroupChatReq);
-                    break;
-                case ConstantValue.joinGroupChatRsp:
-//                    InviteToGroupChatRsp inviteToGroupChatRsp = gson.fromJson(qlinkEntity.getData(), InviteToGroupChatRsp.class);
-//                    EventBus.getDefault().post(new JoinGroupChatSuccess(inviteToGroupChatRsp.getGroupNum()));
-                    break;
-                case ConstantValue.checkConnectReq:
-                    QlinkUtil.parseMap2StringAndSend(friendNumber, ConstantValue.checkConnectRsp, new HashMap());
-                    break;
+//                case ConstantValue.checkConnectReq:
+//                    QlinkUtil.parseMap2StringAndSend(friendNumber, ConstantValue.checkConnectRsp, new HashMap());
+//                    break;
                 case ConstantValue.checkConnectRsp:
-                    EventBus.getDefault().post(new CheckConnectRsp());
+                    CheckConnectRsp checkConnectRsp = gson.fromJson(qlinkEntity.getData().toString(), CheckConnectRsp.class);
+                    EventBus.getDefault().post(checkConnectRsp);
                     break;
-                case ConstantValue.allVpnBasicInfoReq:
-                    handleAllVpnBasicInfoReq(friendNumber);
-                    break;
-                case ConstantValue.allVpnBasicInfoRsp:
 
-                    break;
                 case ConstantValue.sendVpnFileRsp:
+                    QlinkEntity1 qlinkEntity1 = gson.fromJson(message, QlinkEntity1.class);
                     ServerVpnSendComplete vpnSendEnd = new ServerVpnSendComplete();
                     KLog.i("vpnServerFileRsp0:"+qlinkEntity.getData());
-                    VpnServerFileRsp vpnServerFileRsp = gson.fromJson(qlinkEntity.getData(), VpnServerFileRsp.class);
+                    VpnServerFileRsp vpnServerFileRsp = gson.fromJson(qlinkEntity1.getData(), VpnServerFileRsp.class);
                     KLog.i("vpnServerFileRsp1:"+vpnServerFileRsp);
                     vpnSendEnd.setData(vpnServerFileRsp);
                     EventBus.getDefault().post(vpnSendEnd);
                     break;
+
+                case ConstantValue.vpnUserPassAndPrivateKeyReq:
+                    VpnUserPassAndPrivateKeyReq vpnUserPassAndPrivateKeyReq = gson.fromJson(qlinkEntity.getData().toString(), VpnUserPassAndPrivateKeyReq.class);
+                    handleVpnUserAndPasswordAndPrivateKeyReq(friendNumber, vpnUserPassAndPrivateKeyReq);
+                    break;
+
+                case ConstantValue.vpnUserAndPasswordReq:
+                    VpnUserAndPasswordReq vpnUserAndPasswordReq = gson.fromJson(qlinkEntity.getData().toString(), VpnUserAndPasswordReq.class);
+                    handleVpnUserAndPasswordReq(friendNumber, vpnUserAndPasswordReq);
+                    break;
+                case ConstantValue.vpnUserAndPasswordRsp:
+                    VpnUserAndPasswordRsp vpnUserAndPasswordRsp = gson.fromJson(qlinkEntity.getData().toString(), VpnUserAndPasswordRsp.class);
+                    handleVpnUserAndPasswordRsp(friendNumber, vpnUserAndPasswordRsp);
+                    break;
+
+                case ConstantValue.vpnPrivateKeyReq:
+                    VpnPrivateKeyReq vpnPrivateKeyReq = gson.fromJson(qlinkEntity.getData().toString(), VpnPrivateKeyReq.class);
+                    handleVpnPrivateKeyReq(friendNumber, vpnPrivateKeyReq);
+                    break;
+                case ConstantValue.vpnPrivateKeyRsp:
+                    VpnPrivateKeyRsp vpnPrivateKeyRsp = gson.fromJson(qlinkEntity.getData().toString(), VpnPrivateKeyRsp.class);
+                    handleVpnPrivateKeyRsp(friendNumber, vpnPrivateKeyRsp);
+                    break;
+
+                case ConstantValue.joinGroupChatReq:
+                    InviteToGroupChatReq inviteToGroupChatReq = gson.fromJson(qlinkEntity.getData().toString(), InviteToGroupChatReq.class);
+                    handleInviteToGroupChatReq(friendNumber, inviteToGroupChatReq);
+                    break;
+                case ConstantValue.joinGroupChatRsp:
+                    InviteToGroupChatRsp inviteToGroupChatRsp = gson.fromJson(qlinkEntity.getData().toString(), InviteToGroupChatRsp.class);
+                    EventBus.getDefault().post(new JoinGroupChatSuccess(inviteToGroupChatRsp.getGroupNum()));
+                    break;
+
+                case ConstantValue.recordSaveReq:
+                    RecordSaveReq recordSaveReq = gson.fromJson(qlinkEntity.getData().toString(), RecordSaveReq.class);
+                    handleRecordSaveReq(friendNumber, recordSaveReq);
+                    break;
+                case ConstantValue.recordSaveRsp:
+                    RecordSaveRsp recordSaveRsp = gson.fromJson(qlinkEntity.getData().toString(), RecordSaveRsp.class);
+                    handleRecordSaveRsp(friendNumber, recordSaveRsp);
+                    break;
+
+                case ConstantValue.sendVpnFileListRsp:
+                    handlerSendVpnFileListRsp(friendNumber, gson.fromJson(message, SendVpnFileList.class));
+                    break;
+                case ConstantValue.sendVpnFileNewRsp:
+                    handlerSendVpnFileNewRsp(friendNumber, gson.fromJson(message, SendVpnFileNew.class));
+//                    handlerSendVpnFileNewRsp(friendNumber, JSONObject.parseObject(qlinkEntity.getData().toString(), SendVpnFileNew.class));
+                    break;
+
                 case ConstantValue.defaultRsp:
                     //处理低版本没有这个type，的返回，可以在这里做默认处理。。
-                    DefaultRsp defaultRsp = gson.fromJson(qlinkEntity.getData(), DefaultRsp.class);
-                    switch (defaultRsp.getType()) {
-                        //这个case在1.1.6版本加上的，可以不用加。
-                        case ConstantValue.checkConnectReq:
-                            EventBus.getDefault().post(new CheckConnectRsp());
-                            break;
-                        default:
-                            break;
-                    }
+//                    DefaultRsp defaultRsp = gson.fromJson(qlinkEntity.getData(), DefaultRsp.class);
                     break;
                 default:
                     KLog.i("没有匹配上。。。");
@@ -414,7 +396,7 @@ public class Qsdk {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnName);
         infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnUserAndPasswordReq, infoMap);
+        QlinkUtil.parseMap2StringAndSendOld(friendNum, ConstantValue.vpnUserAndPasswordReq, infoMap);
     }
 
     /**
@@ -431,7 +413,7 @@ public class Qsdk {
                 Map<String, Object> infoMap = new HashMap<>();
                 infoMap.put("vpnName", vpnEntity.getVpnName());
                 infoMap.put("privateKey", vpnEntity.getPrivateKeyPassword());
-                QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnPrivateKeyRsp, infoMap);
+                QlinkUtil.parseMap2StringAndSendOld(friendNum, ConstantValue.vpnPrivateKeyRsp, infoMap);
                 return;
             }
         }
@@ -444,7 +426,7 @@ public class Qsdk {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnName);
         infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnPrivateKeyReq, infoMap);
+        QlinkUtil.parseMap2StringAndSendOld(friendNum, ConstantValue.vpnPrivateKeyReq, infoMap);
     }
 
     /**
@@ -457,101 +439,26 @@ public class Qsdk {
         EventBus.getDefault().post(vpnPrivateKeyRsp);
     }
 
-
-    /**
-     * 处理vpn基础信息的请求
-     *
-     * @param vpnBasicInfoReq
-     */
-    private void handleVpnBasicInfoReq(String friendNum, VpnBasicInfoReq vpnBasicInfoReq) {
-        if (vpnBasicInfoReq.getP2pId() != null && vpnBasicInfoReq.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-            for (VpnEntity vpnEntity : vpnEntityList) {
-                if (VpnUtil.isInSameNet(vpnEntity ) && vpnEntity.getVpnName().equals(vpnBasicInfoReq.getVpnName())) {
-                    sendVpnBasicInfoRsp(friendNum, vpnEntity);
-                    return;
-                }
-            }
-//            Map<String, Object> infoMap = new HashMap<>();
-//            infoMap.put("vpnName", vpnBasicInfoReq.getVpnName());
-//            infoMap.put("exist", false);
-//            QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnBasicInfoRsp, infoMap);
-        }
-        if (vpnBasicInfoReq.getP2pId() == null) {
-            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-            for (VpnEntity vpnEntity : vpnEntityList) {
-                if (VpnUtil.isInSameNet(vpnEntity ) && vpnEntity.getVpnName().equals(vpnBasicInfoReq.getVpnName())) {
-                    sendVpnBasicInfoRsp(friendNum, vpnEntity);
-                    return;
-                }
-            }
-//            Map<String, Object> infoMap = new HashMap<>();
-//            infoMap.put("vpnName", vpnBasicInfoReq.getVpnName());
-//            infoMap.put("exist", false);
-//            QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnBasicInfoRsp, infoMap);
-        }
-    }
-
-    /**
-     * 将自己的所有vpn资产的基础信息发送出去
-     */
-    private void handleAllVpnBasicInfoReq(String friendNum) {
+    public void sendVpnFileListReq(String friendNum) {
         Map<String, Object> infoMap = new HashMap<>();
-        infoMap.put("vpn", LocalAssetsUtils.getVpnList());
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.allVpnBasicInfoRsp, infoMap);
+        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.sendVpnFileListReq, infoMap);
     }
 
-    /**
-     * 发送vpn基础信息的返回
-     *
-     * @param friendNum
-     * @param vpnEntity
-     */
-    private void sendVpnBasicInfoRsp(String friendNum, VpnEntity vpnEntity) {
+    public void handlerSendVpnFileListRsp(String friendNum, SendVpnFileList sendVpnFileList) {
+        KLog.i(sendVpnFileList.toString());
         Map<String, Object> infoMap = new HashMap<>();
-        infoMap.put("vpnName", vpnEntity.getVpnName());
-        infoMap.put("p2pId", vpnEntity.getP2pId());
-        infoMap.put("country", vpnEntity.getCountry());
-        infoMap.put("continent", vpnEntity.getContinent());
-        infoMap.put("connectMaxnumber", vpnEntity.getConnectMaxnumber());
-        infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath());
-        infoMap.put("bandwidth", vpnEntity.getBandwidth());
-        infoMap.put("currentConnect", vpnEntity.getCurrentConnect());
-        infoMap.put("avaterUpdateTime", vpnEntity.getAvaterUpdateTime());
-        infoMap.put("qlc", vpnEntity.getQlc());
-        infoMap.put("exist", true);
-        infoMap.put("ipV4Address", vpnEntity.getIpV4Address());
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.vpnBasicInfoRsp, infoMap);
+        infoMap.put("msgid", sendVpnFileList.getData().getMsgid());
+        infoMap.put("offset", sendVpnFileList.getData().getOffset());
+        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.sendVpnFileListRsp, infoMap);
+        EventBus.getDefault().post(sendVpnFileList);
     }
 
-    /**
-     * 处理vpn基础信息的返回
-     *
-     * @param vpnBasicInfoRsp
-     */
-    public void handleVpnBasicInfoRsp(VpnBasicInfoRsp vpnBasicInfoRsp) {
-        List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-        for (VpnEntity vpnEntity : vpnEntityList) {
-            if (VpnUtil.isInSameNet(vpnEntity )&&vpnEntity.getVpnName().equals(vpnBasicInfoRsp.getVpnName())) {
-                if (vpnBasicInfoRsp.isExist()) {
-                    vpnEntity.setConnectMaxnumber(vpnBasicInfoRsp.getConnectMaxnumber());
-                    vpnEntity.setProfileLocalPath(vpnBasicInfoRsp.getProfileLocalPath());
-                    vpnEntity.setBandwidth(vpnBasicInfoRsp.getBandwidth());
-                    vpnEntity.setAvaterUpdateTime(vpnBasicInfoRsp.getAvaterUpdateTime());
-                    vpnEntity.setCurrentConnect(vpnBasicInfoRsp.getCurrentConnect());
-                    vpnEntity.setIpV4Address(vpnBasicInfoRsp.getIpV4Address());
-                    vpnEntity.setQlc(vpnBasicInfoRsp.getQlc());
-                    if (vpnBasicInfoRsp.getContinent() != null) {
-                        vpnEntity.setContinent(vpnBasicInfoRsp.getContinent());
-                    }
-                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-                    return;
-                } else if (VpnUtil.isInSameNet(vpnEntity )&& vpnEntity.getVpnName().equals(vpnBasicInfoRsp.getVpnName()) && !vpnBasicInfoRsp.isExist()) {
-//                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
-                    return;
-                }
-            }
-        }
+    public void handlerSendVpnFileNewRsp(String friendNum, SendVpnFileNew sendVpnFileNew) {
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("msgid", sendVpnFileNew.getData().getMsgid());
+        infoMap.put("offset", sendVpnFileNew.getData().getOffset());
+        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.sendVpnFileNewRsp, infoMap);
+        EventBus.getDefault().post(sendVpnFileNew);
     }
 
     /**
@@ -561,34 +468,16 @@ public class Qsdk {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("filePath", filePath);
         infoMap.put("vpnName", vpnName);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.sendVpnFileRequest, infoMap);
+        QlinkUtil.parseMap2StringAndSendOld(friendNum, ConstantValue.sendVpnFileRequest, infoMap);
     }
 
-    /**
-     * 心跳包发送
-     *
-     * @see com.stratagile.qlink.service.ClientConnectedWifiRecordService
-     */
-    public void heartBetSend(int eventType, int useType, String ssid, String friendNum) {
+    public void sendVpnFileNewReq(String friendNum, String vpnName) {
         Map<String, Object> infoMap = new HashMap<>();
-        infoMap.put("ssid", ssid);
-        infoMap.put("friendNum", friendNum);
-        infoMap.put("eventType", eventType);
-        infoMap.put("useType", useType);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.heartBetSend, infoMap);
+        infoMap.put("vpnName", vpnName);
+        infoMap.put("register", 0);
+        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.sendVpnFileNewReq, infoMap);
+        KLog.i("请求发送新版本的配置文件");
     }
-
-    /**
-     * 处理心跳包
-     *
-     * @see com.stratagile.qlink.service.ServiceConnectedWIfiRecordSevice#handlerEvent(ServiceConnectedEvent)
-     */
-    private void handlerHeartBet(ServiceConnectedEvent serviceConnectedEvent) {
-        EventBus.getDefault().post(serviceConnectedEvent);
-    }
-
-
-
 
 
     public void getFriendSharedVpnInfo(String friendNum, int status) {
@@ -598,9 +487,9 @@ public class Qsdk {
             for (VpnEntity vpnEntity : vpnEntityList) {
                 if (vpnEntity.getP2pId() != null && vpnEntity.getP2pId().contains(friendNum)) {
                     hasVpn = true;
-                    KLog.i("friendNum和数据库的数据匹配成功");
-                    KLog.i("friendNum=" + friendNum);
-                    KLog.i("将" + vpnEntity.getVpnName() + "的在线状态设置为在线");
+//                    KLog.i("friendNum和数据库的数据匹配成功");
+//                    KLog.i("friendNum=" + friendNum);
+//                    KLog.i("将" + vpnEntity.getVpnName() + "的在线状态设置为在线");
                     vpnEntity.setFriendNum(friendNum);
                     vpnEntity.setOnline(true);
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
@@ -627,62 +516,6 @@ public class Qsdk {
             }
         }
     }
-
-    /**
-     * 由外部调用
-     * 获取好友当前连接的WiFi的信息
-     * 当好友上线的时候调用，或者心跳的时候调用
-     * 如果他连接的WiFi是我分享的WiFi，那么我分享的WiFi的使用者就要加1
-     */
-    public void getFriendCurrentConnectWifiInfo(String friendNum, int status) {
-        if (status > 0) {
-            Map<String, Object> infoMap = new HashMap<>();
-            infoMap.put("ssid", "");
-            infoMap.put("mac", "");
-            QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.wifiCurrentWifiInfoReq, infoMap);
-        }
-    }
-
-    /**
-     * 处理获取当前连接的WiFi的信息的请求
-     *
-     * @see#getFriendCurrentConnectWifiInfo
-     */
-    private void handlerGetCurrentWifiInfoRequest(String friendNum) {
-        Map<String, Object> infoMap = new HashMap<>();
-        String ssid = ConstantValue.connectedWifiInfo.getSSID().replace("\"", "");
-        if (ssid.contains("0x")) {
-            ssid = "";
-        }
-        KLog.i(ssid);
-        infoMap.put("ssid", ssid);
-        infoMap.put("mac", ConstantValue.connectedWifiInfo.getBSSID());
-        KLog.i("当前wifi返回的数据为:" + infoMap);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.wifiCurrentWifiInfoRsp, infoMap);
-    }
-
-    /**
-     * 获取该好友的当前连接的WiFi的返回
-     *
-     * @param friendNum
-     */
-    private void handlerGetCurrentWifiInfoResponse(String friendNum, WifibasicinfoRsp wifibasicinfoRsp) {
-        EventBus.getDefault().post(new ServiceConnectedEvent(0, 0, wifibasicinfoRsp.getSsid(), friendNum));
-//        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().loadAll();
-//        for (WifiEntity wifiEntity : wifiEntityList) {
-//                if (wifiEntity.getSsid().equals(wifibasicinfoRsp.getSsid())) {
-//                    if (wifiEntity.getOwnerP2PId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-//                        wifiEntity.setConnectCount(wifiEntity.getConnectCount() + 1);
-//                        AppConfig.getInstance().getDaoSession().getWifiEntityDao().update(wifiEntity);
-//                        EventBus.getDefault().post(new ArrayList<WifiEntity>());
-//                        //告诉该好友，自己的WiFi的连接数量
-//                        sendWifiBaseInfoRsp(wifiEntity, friendNum);
-//                        return;
-//                    }
-//                }
-//        }
-    }
-
 
     /**
      * 添加传送文件的请求，
@@ -732,15 +565,18 @@ public class Qsdk {
         EventBus.getDefault().post(new ArrayList<VpnEntity>());
     }
 
-    /**
-     * wifi使用者给提供者打赏成功的通知
-     *
-     * @param friendNum 好友id
-     * @param qlc       打赏金额
-     */
-    public void gratuitySuccess(String friendNum, double qlc) {
-        Map<String, Object> infoMap = new HashMap<>();
-        infoMap.put("qlc", qlc);
-        QlinkUtil.parseMap2StringAndSend(friendNum, ConstantValue.gratuitySuccess, infoMap);
+    public static void main(String[] args) {
+        Gson gson = new Gson();
+        String string1 = "{\"type\":\"sendVpnFileNewRsp\",\"data\":{\"msgid\":18,\"msglen\":5761,\"md5\":\"328bfe622565d20a7dceb74257f23302\",\"more\":0,\"offset\":0,\"msg\":\"\\nclient\\nnobind\\ndev tun\\nremote-cert-tls server\\n\\nremote 121.60.36.234 18888 udp\\n\\n<key>\\n-----BEGIN PRIVATE KEY-----\\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDIXQ8oYrtB2l4n\\ndHeWmpqPZAGhSyIaqieqFOL3D5ol17bKV5gCZ2Qgbe3ly8NMy8Lkbs0vVX94ftcf\\nHFhzLH3iLpM6X0nQKfG/TYtPLkrhTjJpq+wuERrDKB/Jn6wgwyFIU9Lcpyztg3YB\\n/RmfMylYhpuYJESW+IjUBb1R2yZxjvx4qLGImb2nUSzYJ/IhDrxIxsHHFmuxzzZz\\nSjXoztxQpQgsRFwdqq3QtYrhOIzjp1rninerAykMbdMWVSJ7d6NckdvhSqETm5Bv\\nez5rynA1e1CkJ1KFXfDZsE8XiG02WTjBKTOSZubdyZu527XO6BZ563saR7b4PhSN\\nsLUdZ39nAgMBAAECggEBAIal0yvmvcTRhPiq0jsJhtjZ8iZ8oVyeAK3R/3zcpVDN\\nGG/+UY88ABOzDG6jconHXR+6PnWS1WkahGLJ3772pVo8xoAxzR7xMR7Ic9gwWe3z\\naPmOqdeDcyK3cjVC8p/JwjIi8s+KIS00bTeE6ZUNAroVK7cgmF+Egh9KBCJgTgN9\\nTIkeQ6M3pgmLTGxODuk/2z5GWUNYyNK70sJOyaby0J3/648hVUDYcQ+7iAve9311\\nKxmkShsPkhqcZ2L78C3M8rBpVgSGYjXAtVIKfR5B++K02XO3LGy1JcanH5boWZs5\\nq49er/UdgRaDz2t8sVCengGSO2njXJWPHv8dsXh/SMECgYEA82AvR6mhIMbbHrtx\\nMpHsGmob/4l4vAGmOaffaM7Nfc6wvoeXOJRz8xaOtOTiY14kXBWB4PoCg+8PT8mz\\nriUZI1gssVs8l2AKaqcQ8rKkHACNc8GsVoXrScQVhC\"}}";
+        String string2 = "{\"type\":\"sendVpnFileNewRsp\",\"data\":\"{\"msgid\":18,\"msglen\":5761,\"md5\":\"328bfe622565d20a7dceb74257f23302\",\"more\":0,\"offset\":0,\"msg\":\"\\nclient\\nnobind\\ndev tun\\nremote-cert-tls server\\n\\nremote 121.60.36.234 18888 udp\\n\\n<key>\\n-----BEGIN PRIVATE KEY-----\\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDIXQ8oYrtB2l4n\\ndHeWmpqPZAGhSyIaqieqFOL3D5ol17bKV5gCZ2Qgbe3ly8NMy8Lkbs0vVX94ftcf\\nHFhzLH3iLpM6X0nQKfG/TYtPLkrhTjJpq+wuERrDKB/Jn6wgwyFIU9Lcpyztg3YB\\n/RmfMylYhpuYJESW+IjUBb1R2yZxjvx4qLGImb2nUSzYJ/IhDrxIxsHHFmuxzzZz\\nSjXoztxQpQgsRFwdqq3QtYrhOIzjp1rninerAykMbdMWVSJ7d6NckdvhSqETm5Bv\\nez5rynA1e1CkJ1KFXfDZsE8XiG02WTjBKTOSZubdyZu527XO6BZ563saR7b4PhSN\\nsLUdZ39nAgMBAAECggEBAIal0yvmvcTRhPiq0jsJhtjZ8iZ8oVyeAK3R/3zcpVDN\\nGG/+UY88ABOzDG6jconHXR+6PnWS1WkahGLJ3772pVo8xoAxzR7xMR7Ic9gwWe3z\\naPmOqdeDcyK3cjVC8p/JwjIi8s+KIS00bTeE6ZUNAroVK7cgmF+Egh9KBCJgTgN9\\nTIkeQ6M3pgmLTGxODuk/2z5GWUNYyNK70sJOyaby0J3/648hVUDYcQ+7iAve9311\\nKxmkShsPkhqcZ2L78C3M8rBpVgSGYjXAtVIKfR5B++K02XO3LGy1JcanH5boWZs5\\nq49er/UdgRaDz2t8sVCengGSO2njXJWPHv8dsXh/SMECgYEA82AvR6mhIMbbHrtx\\nMpHsGmob/4l4vAGmOaffaM7Nfc6wvoeXOJRz8xaOtOTiY14kXBWB4PoCg+8PT8mz\\nriUZI1gssVs8l2AKaqcQ8rKkHACNc8GsVoXrScQVhC\"}\"}";
+        QlinkEntity qlinkEntity = gson.fromJson(string1, QlinkEntity.class);
+//        QlinkEntity1 qlinkEntity1 = gson.fromJson(string2, QlinkEntity1.class);
+
+//        SendVpnFileNew sendVpnFileNew = gson.fromJson(qlinkEntity1.getData(), SendVpnFileNew.class);
+//        System.out.println(sendVpnFileNew.toString());
+
+        SendVpnFileNew sendVpnFileNew1 = gson.fromJson(qlinkEntity.getData().toString(), SendVpnFileNew.class);
+        System.out.println(sendVpnFileNew1.toString());
+
     }
 }

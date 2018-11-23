@@ -13,33 +13,33 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
+import com.stratagile.qlink.R;
+import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.db.WalletDao;
 import com.stratagile.qlink.entity.MyAsset;
-import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
-import com.stratagile.qlink.utils.LocalAssetsUtils;
-import com.stratagile.qlink.utils.LogUtil;
-import com.stratagile.qlink.utils.SpUtil;
-import com.stratagile.qlink.utils.UIUtils;
-import com.socks.library.KLog;
-import com.stratagile.qlink.R;
-import com.stratagile.qlink.application.AppConfig;
-import com.stratagile.qlink.entity.eventbus.AssetRefrash;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
+import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAssetListComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AssetListContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AssetListModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.AssetListPresenter;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.AssetListAdapter;
+import com.stratagile.qlink.utils.LocalAssetsUtils;
+import com.stratagile.qlink.utils.LogUtil;
+import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +48,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.stratagile.qlink.entity.MyAsset.VPN_ASSET;
-import static com.stratagile.qlink.entity.MyAsset.VPN_ASSET_1;
 
 /**
  * @author hzp
@@ -73,6 +70,8 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
     LinearLayout llNoContent;
     @BindView(R.id.rl_asset_tip)
     RelativeLayout rlAssetTip;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     private String mType;
     private int mNextPage;
     private static final int ONE_PAGE_SIZE = 5;
@@ -89,6 +88,12 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
         recyclerView.setAdapter(assetListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(10, getActivity())));
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                onRefrash();
+            }
+        });
         assetListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -115,6 +120,7 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
                 }
             }
         });
+        onRefrash();
         return view;
     }
 
@@ -130,7 +136,6 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         if (getArguments() != null) {
             mType = getArguments().getString(ARG_TYPE);
         }
@@ -139,15 +144,12 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     /**
-     * @param assetRefrash
-     * @see WalletFragment#onCreateView
+     *
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRefrash(AssetRefrash assetRefrash) {
+    public void onRefrash() {
         ArrayList<MyAsset> assetArrayList = getasseList();
         assetListAdapter.setNewData(assetArrayList);
         if (assetListAdapter.getData() == null || assetListAdapter.getData().size() == 0) {
@@ -158,9 +160,8 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
             rlAssetTip.setVisibility(View.VISIBLE);
         }
         Map<String, Object> ssidMap = new HashMap<>();
-        ArrayList<MyAsset> localAssetsList = LocalAssetsUtils.getLocalAssetsList();
-        assetArrayList = localAssetsList;
         if (assetArrayList == null || assetArrayList.size() == 0) {
+            refreshLayout.setRefreshing(false);
             return;
         }
         String[] ssids = new String[assetArrayList.size()];
@@ -184,14 +185,14 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
     @Override
     public void onResume() {
         super.onResume();
-        assetListAdapter.setNewData(getasseList());
-        if (assetListAdapter.getData() == null || assetListAdapter.getData().size() == 0) {
-            llNoContent.setVisibility(View.VISIBLE);
-            rlAssetTip.setVisibility(View.GONE);
-        } else {
-            llNoContent.setVisibility(View.GONE);
-            rlAssetTip.setVisibility(View.VISIBLE);
-        }
+//        assetListAdapter.setNewData(getasseList());
+//        if (assetListAdapter.getData() == null || assetListAdapter.getData().size() == 0) {
+//            llNoContent.setVisibility(View.VISIBLE);
+//            rlAssetTip.setVisibility(View.GONE);
+//        } else {
+//            llNoContent.setVisibility(View.GONE);
+//            rlAssetTip.setVisibility(View.VISIBLE);
+//        }
 //        refreshLayout.setRefreshing(false);
     }
 
@@ -248,19 +249,21 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
 
     @Override
     public void getAssetSuccess() {
+        refreshLayout.setRefreshing(false);
         assetListAdapter.setNewData(getasseList());
+        List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+        ArrayList<MyAsset> assetArrayList = new ArrayList<>();
+        for (VpnEntity vpnEntity : vpnEntityList) {
+            MyAsset myAsset = new MyAsset();
+            myAsset.setType(1);
+            myAsset.setVpnEntity(vpnEntity);
+            assetArrayList.add(myAsset);
+        }
+        LocalAssetsUtils.updateList(assetArrayList);
     }
 
     private ArrayList<MyAsset> getasseList() {
-        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        Wallet wallet;
-        if (walletList != null && walletList.size() != 0) {
-            int currentWallet = SpUtil.getInt(getActivity(), ConstantValue.currentWallet, 0);
-            if (currentWallet >= walletList.size()) {
-                return null;
-            }
-            wallet = walletList.get(currentWallet);
-        } else {
+        if (Account.INSTANCE.getWallet() == null) {
             return null;
         }
         //读取sd卡资产数据begin
@@ -268,51 +271,36 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
         LocalAssetsUtils.updateGreanDaoFromLocal();//以本地资产配置为准
         //读取sd卡资产数据begin
         ArrayList<MyAsset> assetArrayList = new ArrayList<>();
-//        List<WifiEntity> wifiEntityList = AppConfig.getInstance().getDaoSession().getWifiEntityDao().queryBuilder().list();
-//        for (WifiEntity wifiEntity : wifiEntityList) {
-//            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !wifiEntity.getIsInMainWallet()) {//主网
-//                continue;
-//            }
-//            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && wifiEntity.getIsInMainWallet()) {//测试网
-//                continue;
-//            }
-//            if (wifiEntity.getOwnerP2PId() != null && wifiEntity.getOwnerP2PId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
-//                if (wifiEntity.getWalletAddress() != null && wifiEntity.getWalletAddress().equals(wallet.getAddress())) {
-//                    MyAsset myAsset = new MyAsset();
-//                    myAsset.setType(0);
-//                    myAsset.setWifiEntity(wifiEntity);
-//                    assetArrayList.add(myAsset);
-//                }
-//            }
-//        }
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         LogUtil.addLog("getasseList Assets count_0：" + vpnEntityList.size(), getClass().getSimpleName());
-        String addStr ="";
-        for (VpnEntity vpnEntity : vpnEntityList) {
-            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !vpnEntity.getIsInMainWallet()) {//主网
-                continue;
-            }
-            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && vpnEntity.getIsInMainWallet()) {//测试网
-                continue;
-            }
-            String ownVpnP2pId = (vpnEntity.getP2pIdPc() == null || "".equals(vpnEntity.getP2pIdPc())) ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
-            if (vpnEntity.getP2pId() != null && ownVpnP2pId.equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
-                if (!VpnUtil.isInSameNet(vpnEntity)) {
-                    continue;
-                }
-                if (vpnEntity.getAddress() != null && vpnEntity.getAddress().equals(wallet.getAddress())) {
-                    MyAsset myAsset = new MyAsset();
-                    myAsset.setType(1);
-                    myAsset.setVpnEntity(vpnEntity);
-                    addStr += vpnEntity.getVpnName() +",";
+        String addStr = "";
+        ArrayList<MyAsset> localAssetsList = LocalAssetsUtils.getLocalAssetsList();
+        for (MyAsset myAsset : localAssetsList) {
+            if (myAsset.getType() == 1 && Account.INSTANCE.getWallet().getAddress().equals(myAsset.getVpnEntity().getAddress())) {
+                if (SpUtil.getString(getActivity(), ConstantValue.P2PID, "").equals(myAsset.getVpnEntity().getOwnerP2pId())) {
                     assetArrayList.add(myAsset);
                 }
             }
         }
-        LogUtil.addLog("getasseList Assets count_1：" + addStr, getClass().getSimpleName());
-        LogUtil.addLog("getasseList Assets count_2：" + assetArrayList.size(), getClass().getSimpleName());
+//        for (VpnEntity vpnEntity : vpnEntityList) {
+//            String ownVpnP2pId = (vpnEntity.getP2pIdPc() == null || "".equals(vpnEntity.getP2pIdPc())) ? vpnEntity.getP2pId() : vpnEntity.getP2pIdPc();
+//            if (vpnEntity.getP2pId() != null && ownVpnP2pId.equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, ""))) {
+//                if (!VpnUtil.isInSameNet(vpnEntity)) {
+//                    continue;
+//                }
+//                if (vpnEntity.getAddress() != null && vpnEntity.getAddress().equals(wallet.getAddress())) {
+//                    MyAsset myAsset = new MyAsset();
+//                    myAsset.setType(1);
+//                    myAsset.setVpnEntity(vpnEntity);
+//                    addStr += vpnEntity.getVpnName() + ",";
+//                    assetArrayList.add(myAsset);
+//                }
+//            }
+//        }
+//        LogUtil.addLog("getasseList Assets count_1：" + addStr, getClass().getSimpleName());
+//        LogUtil.addLog("getasseList Assets count_2：" + assetArrayList.size(), getClass().getSimpleName());
         //更新sd卡资产数据begin
-        LocalAssetsUtils.updateList(assetArrayList);
+//        LocalAssetsUtils.updateList(assetArrayList);
         //更新sd卡资产数据end
         return assetArrayList;
     }

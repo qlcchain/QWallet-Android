@@ -211,9 +211,12 @@ public class ProfileManager {
         }
     }
 
-    public void removeAllProfile(Context context) {
-        profiles.clear();
-        saveProfileList(context);
+    public static void removeAllProfile(Context context) {
+        if (instance == null) {
+            getInstance(context);
+        }
+        instance.profiles.clear();
+        instance.saveProfileList(context);
     }
 
 

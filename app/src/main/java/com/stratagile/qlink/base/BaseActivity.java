@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jaeger.library.StatusBarUtil;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
@@ -72,9 +73,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             mainColor = R.color.mainColor;
         }
         // 经测试在代码里直接声明透明状态栏更有效
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (android.os.Build.MANUFACTURER.toUpperCase().equals("MEIZU")) {
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        } else {
+            StatusBarUtil.setTransparent(this);
         }
         initToolbar();
 //        AppConfig.getInstance().mAppActivityManager.addActivity(this);

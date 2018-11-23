@@ -473,10 +473,24 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 finger.setImageDrawable(getResources().getDrawable(R.mipmap.icon_fingerprint_correct));
             }
             if (getIntent().hasExtra("flag")) {
-                startActivity(MainActivity.class);
-                ConstantValue.isShouldShowVertifyPassword = false;
-                overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
-                finish();
+                if (getIntent().getStringExtra("flag").equals("")) {
+                    Intent intent = new Intent();
+                    try {
+                        intent.putExtra("position", getIntent().getStringExtra("position"));
+                    } catch (Exception e) {
+
+                    }
+                    setResult(RESULT_OK, intent);
+                    ConstantValue.isShouldShowVertifyPassword = false;
+                    SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
+                    SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                    finishActivity();
+                } else {
+                    startActivity(MainActivity.class);
+                    ConstantValue.isShouldShowVertifyPassword = false;
+                    overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+                    finish();
+                }
             } else {
                 Intent intent = new Intent();
                 try {

@@ -65,8 +65,8 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
     CardView cardView;
     @BindView(R.id.llEthType)
     LinearLayout llEthType;
-    @BindView(R.id.checkBox)
-    SmoothCheckBox checkBox;
+//    @BindView(R.id.checkBox)
+//    SmoothCheckBox checkBox;
     @BindView(R.id.btImport)
     Button btImport;
     @BindView(R.id.tvEthType)

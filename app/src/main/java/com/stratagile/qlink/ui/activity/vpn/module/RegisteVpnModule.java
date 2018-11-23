@@ -43,6 +43,6 @@ public class RegisteVpnModule {
     @Provides
     @ActivityScope
     public WindowConfigAdapter provideWindowConfigAdapter() {
-        return new WindowConfigAdapter(new ArrayList<WindowConfig>());
+        return new WindowConfigAdapter(new ArrayList<String>());
     }
 }

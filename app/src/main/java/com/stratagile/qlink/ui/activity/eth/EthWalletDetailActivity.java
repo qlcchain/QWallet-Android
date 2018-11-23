@@ -27,6 +27,7 @@ import com.stratagile.qlink.ui.activity.eth.module.EthWalletDetailModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthWalletDetailPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ExportEthKeyStoreActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
+import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.PopWindowUtil;
@@ -163,7 +164,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 ExportNeoPrivateKey();
                 break;
             case R.id.tvDeleteWallet:
-                deleteWallet();
+                showDeleteWalletDialog();
                 break;
             default:
                 break;
@@ -195,6 +196,34 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         startActivity(new Intent(this, EthMnemonicShowActivity.class).putExtra("wallet", ethWallet));
     }
 
+    private void showDeleteWalletDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_choose, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        TextView tvConform = view.findViewById(R.id.tvConform);
+        TextView tvCancel = view.findViewById(R.id.tvCancel);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.careful));
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvConform.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+                deleteWallet();
+            }
+        });
+
+        tvContent.setText("Do you confirm to delete the wallet?");
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+
+    }
+
     private void deleteWallet() {
         startActivityForResult(new Intent(this, VerifyWalletPasswordActivity.class).putExtra("flag", ""), 0);
         overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
@@ -209,6 +238,8 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             } else if (walletType == AllWallet.WalletType.EthWallet) {
                 AppConfig.getInstance().getDaoSession().getEthWalletDao().delete(ethWallet);
             }
+            LocalWalletUtil.updateNeoWallet();
+            LocalWalletUtil.updateLocalEthWallet();
             showTestDialog();
         }
     }
@@ -239,23 +270,21 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
 
     private void ExportPrivateKey() {
         String privateKey = ETHWalletUtils.derivePrivateKey(ethWallet.getId());
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.dialog_export_privatekey_layout, null);
-        builder.setView(view);
-        builder.setCancelable(true);
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         tvContent.setText(privateKey);
         //取消或确定按钮监听事件处l
-        AlertDialog dialog = builder.create();
-        Window window = dialog.getWindow();
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
+                sweetAlertDialog.cancel();
             }
         });
         tvCopy.setOnClickListener(new View.OnClickListener() {
@@ -265,16 +294,13 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
                 ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
-                dialog.cancel();
+                sweetAlertDialog.cancel();
             }
         });
     }
 
     private void ExportNeoPrivateKey() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.dialog_export_privatekey_layout, null);
-        builder.setView(view);
-        builder.setCancelable(true);
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         TextView tv_warn = (TextView) view.findViewById(R.id.tv_warn);//输入内容
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);//输入内容
@@ -283,14 +309,15 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         tvContent.setText(wallet.getPrivateKey());
         //取消或确定按钮监听事件处l
-        AlertDialog dialog = builder.create();
-        Window window = dialog.getWindow();
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
+                sweetAlertDialog.cancel();
             }
         });
         tvCopy.setOnClickListener(new View.OnClickListener() {
@@ -300,16 +327,13 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
                 ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
-                dialog.cancel();
+                sweetAlertDialog.cancel();
             }
         });
     }
 
     private void ExportNeoEncryptedKey() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.dialog_export_privatekey_layout, null);
-        builder.setView(view);
-        builder.setCancelable(true);
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         TextView tv_warn = (TextView) view.findViewById(R.id.tv_warn);//输入内容
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);//输入内容
@@ -319,14 +343,15 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         tvContent.setText(wallet.getWif());
         //取消或确定按钮监听事件处l
-        AlertDialog dialog = builder.create();
-        Window window = dialog.getWindow();
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
+                sweetAlertDialog.cancel();
             }
         });
         tvCopy.setOnClickListener(new View.OnClickListener() {
@@ -336,7 +361,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 // 将文本内容放到系统剪贴板里。
                 cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
                 ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
-                dialog.cancel();
+                sweetAlertDialog.cancel();
             }
         });
     }

@@ -5,4 +5,28 @@ package com.stratagile.qlink.entity.eventbus;
  */
 
 public class CheckConnectRsp {
+
+    /**
+     * appVersion : 62
+     * version : 1
+     */
+
+    private int appVersion;
+    private int version;
+
+    public int getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(int appVersion) {
+        this.appVersion = appVersion;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }

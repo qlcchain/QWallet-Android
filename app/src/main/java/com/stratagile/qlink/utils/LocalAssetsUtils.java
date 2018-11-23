@@ -2,11 +2,13 @@ package com.stratagile.qlink.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.db.WalletDao;
 import com.stratagile.qlink.entity.MyAsset;
 
 import java.util.ArrayList;
@@ -75,6 +77,7 @@ public class LocalAssetsUtils {
                                         myAsset.getVpnEntity().setRegisterQlc(vpnEntity.getRegisterQlc());
                                         myAsset.getVpnEntity().setConnsuccessNum(vpnEntity.getConnsuccessNum());
                                         myAsset.getVpnEntity().setOwnerP2pId(vpnEntity.getOwnerP2pId());
+                                        myAsset.getVpnEntity().setProfileLocalPath(vpnEntity.getProfileLocalPath());
                                         myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
                                         //添加了抢注册功能，p2pId和钱包地址可能会变化
                                         myAsset.getVpnEntity().setP2pId(vpnEntity.getP2pId());
@@ -129,12 +132,11 @@ public class LocalAssetsUtils {
 
                 }
             }
-        }else{
+        } else {
             String allWalletNames = FileUtil.getAllWalletNames();
-            if(!"".equals(allWalletNames))
-            {
+            if (!"".equals(allWalletNames)) {
                 String[] allWalletNamesArray = allWalletNames.split(",");
-                for (int i=0; i<allWalletNamesArray.length; i++) {
+                for (int i = 0; i < allWalletNamesArray.length; i++) {
                     Gson gson = new Gson();
                     ArrayList<MyAsset> localAssetArrayList;
                     try {
@@ -214,10 +216,9 @@ public class LocalAssetsUtils {
                         }
                     }
                 }
-                if(isHad)
-                {
+                if (isHad) {
                     LocalAssetsUtils.updateLocalAssets(myAsset);
-                }else{
+                } else {
                     localAssetArrayList.add(myAsset);
                     FileUtil.saveAssetsData(wallet.getAddress(), gson.toJson(localAssetArrayList));
                 }
@@ -245,35 +246,33 @@ public class LocalAssetsUtils {
         if (myAssets == null) {
             return;
         }
-        ArrayList<MyAsset> newList = new ArrayList();     //创建新集合
-        Iterator it = myAssets.iterator();        //根据传入的集合(旧集合)获取迭代器
-        while (it.hasNext()) {          //遍历老集合
-            MyAsset obj = (MyAsset) it.next();       //记录每一个元素
-            if (!newList.contains(obj)) {      //如果新集合中不包含旧集合中的元素
-                newList.add(obj);       //将元素添加
-            }
-        }
-        myAssets = newList;
-        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        Wallet wallet;
-        if (walletList != null && walletList.size() != 0) {
-            wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
-        } else {
+//        ArrayList<MyAsset> newList = new ArrayList();     //创建新集合
+//        Iterator it = myAssets.iterator();        //根据传入的集合(旧集合)获取迭代器
+//        while (it.hasNext()) {          //遍历老集合
+//            MyAsset obj = (MyAsset) it.next();       //记录每一个元素
+//            if (!newList.contains(obj)) {      //如果新集合中不包含旧集合中的元素
+//                newList.add(obj);       //将元素添加
+//            }
+//        }
+//        myAssets = newList;
+        Wallet wallet = AppConfig.getInstance().getDaoSession().getWalletDao().queryBuilder().where(WalletDao.Properties.Address.eq(Account.INSTANCE.getWallet().getAddress())).unique();
+        if (wallet == null) {
             return;
         }
         Gson gson = new Gson();
-        try {
-            Iterator itadd = myAssets.iterator();        //根据传入的集合(旧集合)获取迭代器
-            while (itadd.hasNext()) {          //遍历老集合
-                MyAsset obj = (MyAsset) itadd.next();
-                insertLocalAssets(obj);
-            }
-            //FileUtil.saveAssetsData(wallet.getAddress(), gson.toJson(myAssets));
-        } catch (Exception e) {
-
-        } finally {
-
-        }
+        FileUtil.saveAssetsData(wallet.getAddress(), gson.toJson(myAssets));
+//        try {
+//            Iterator itadd = myAssets.iterator();        //根据传入的集合(旧集合)获取迭代器
+//            while (itadd.hasNext()) {          //遍历老集合
+//                MyAsset obj = (MyAsset) itadd.next();
+//                insertLocalAssets(obj);
+//            }
+//            //FileUtil.saveAssetsData(wallet.getAddress(), gson.toJson(myAssets));
+//        } catch (Exception e) {
+//
+//        } finally {
+//
+//        }
     }
 
     /**
@@ -326,16 +325,16 @@ public class LocalAssetsUtils {
 
         }
     }
+
     /**
      * 获取全部本地资产
+     *
      * @return
      */
     public static ArrayList<MyAsset> getLocalAssetsList() {
         ArrayList<MyAsset> localAssetArrayList = new ArrayList<>();
-        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        Wallet wallet;
-        if (walletList != null && walletList.size() != 0) {
-            wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
+        if (Account.INSTANCE.getWallet() != null) {
+
         } else {
             return localAssetArrayList;
         }
@@ -344,9 +343,7 @@ public class LocalAssetsUtils {
         try {
             //开始读取sd卡的资产数据
             String assetStr = "";
-            if (wallet != null) {
-                assetStr = FileUtil.readAssetsData(wallet.getAddress());
-            }
+            assetStr = FileUtil.readAssetsData((Account.INSTANCE.getWallet().getAddress()));
             if (!assetStr.equals("")) {
                 localAssetArrayList = gson.fromJson(assetStr, new TypeToken<ArrayList<MyAsset>>() {
                 }.getType());
@@ -361,7 +358,7 @@ public class LocalAssetsUtils {
         Iterator it = localAssetArrayList.iterator();        //根据传入的集合(旧集合)获取迭代器
         while (it.hasNext()) {          //遍历老集合
             MyAsset obj = (MyAsset) it.next();       //记录每一个元素
-            if (obj.getType() == 1 &&  !VpnUtil.isInSameNet(obj.getVpnEntity())) {
+            if (obj.getType() == 1 && !VpnUtil.isInSameNet(obj.getVpnEntity())) {
                 it.remove();
             }
         }

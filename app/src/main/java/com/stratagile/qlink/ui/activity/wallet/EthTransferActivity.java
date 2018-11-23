@@ -31,11 +31,14 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerEthTransferCompon
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.module.EthTransferModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.EthTransferPresenter;
+import com.stratagile.qlink.utils.PopWindowUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.SpinnerPopWindow;
 
+import org.jetbrains.annotations.NotNull;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
@@ -216,8 +219,33 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
     };
 
     private void showSpinnerPopWindow() {
-        mSpinerPopWindow.setWidth((tvEthTokenName.getWidth()));
-        mSpinerPopWindow.showAsDropDown(viewLine);
+        PopWindowUtil.INSTANCE.showSharePopWindow(this, ivArrow, ctype, new PopWindowUtil.OnItemSelectListener() {
+            @Override
+            public void onSelect(@NotNull String content) {
+                if (!"".equals(content)) {
+                    for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+                        if (tokenInfoArrayList.get(i).getTokenSymol().equals(content)) {
+                            tokenInfo = tokenInfoArrayList.get(i);
+                            setTitle("Send " + tokenInfo.getTokenSymol());
+                            String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+                            tvEthTokenValue.setText("Balance: " + value);
+                            tvEthTokenName.setText(tokenInfo.getTokenSymol());
+                            etEthTokenSendValue.setText("");
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEthTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+                            viewLine.setLayoutParams(layoutParams);
+                        }
+                    }
+                }
+                SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                    }
+                });
+            }
+        });
+//        mSpinerPopWindow.setWidth((tvEthTokenName.getWidth()));
+//        mSpinerPopWindow.showAsDropDown(viewLine);
         SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
             @Override
             public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
@@ -453,6 +481,20 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             }
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (CustomPopWindow.onBackPressed()) {
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                @Override
+                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                }
+            });
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void toggleCost() {

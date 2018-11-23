@@ -26,10 +26,14 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerNeoTransferCompon
 import com.stratagile.qlink.ui.activity.wallet.contract.NeoTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.module.NeoTransferModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.NeoTransferPresenter;
+import com.stratagile.qlink.utils.PopWindowUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.SpinnerPopWindow;
 import com.vondear.rxtools.RxDataTool;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -331,14 +335,55 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
     }
 
     private void showSpinnerPopWindow() {
-        mSpinerPopWindow.setWidth((tvNeoTokenName.getWidth()));
-        mSpinerPopWindow.showAsDropDown(viewLine);
+        PopWindowUtil.INSTANCE.showSharePopWindow(this, ivArrow, list, new PopWindowUtil.OnItemSelectListener() {
+            @Override
+            public void onSelect(@NotNull String content) {
+                if (!"".equals(content)) {
+                    for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+                        if (tokenInfoArrayList.get(i).getTokenSymol().equals(content)) {
+                            tokenInfo = tokenInfoArrayList.get(i);
+                            setTitle("Send " + tokenInfo.getTokenSymol());
+                            tvNeoTokenName.setText(tokenInfo.getTokenSymol());
+                            if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
+                                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+                            } else {
+                                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                            }
+                            etNeoTokenSendValue.setText("");
+                            tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvNeoTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+                            viewLine.setLayoutParams(layoutParams);
+                        }
+                    }
+                }
+                SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                    }
+                });
+            }
+        });
         SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
             @Override
             public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (CustomPopWindow.onBackPressed()) {
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                @Override
+                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                }
+            });
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**

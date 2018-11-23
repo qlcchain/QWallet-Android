@@ -52,6 +52,9 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ethWallet = getIntent().getParcelableExtra("wallet");
+        if (ethWallet.getMnemonic() == null || ethWallet.isBackup()) {
+            btBackup.setVisibility(View.GONE);
+        }
     }
 
     @Override

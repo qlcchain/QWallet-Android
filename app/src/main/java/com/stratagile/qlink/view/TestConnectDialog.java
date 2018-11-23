@@ -2,6 +2,7 @@ package com.stratagile.qlink.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,10 @@ import android.widget.TextView;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
+import com.stratagile.qlink.activities.DisconnectVPN;
+import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.BroadCastAction;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 
 /**
@@ -47,6 +52,9 @@ public class TestConnectDialog {
             @Override
             public void onClick(View v) {
                 CustomPopWindow.onBackPressed();
+                Intent intent = new Intent();
+                intent.setAction(BroadCastAction.disconnectVpn);
+                AppConfig.getInstance().sendBroadcast(intent);
             }
         });
         vpnNameImageView = maskView.findViewById(R.id.iv_vpnName);

@@ -28,6 +28,10 @@ import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
+import org.consenlabs.tokencore.wallet.Identity;
+import org.consenlabs.tokencore.wallet.WalletManager;
+import org.consenlabs.tokencore.wallet.model.Metadata;
+import org.consenlabs.tokencore.wallet.model.Network;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;

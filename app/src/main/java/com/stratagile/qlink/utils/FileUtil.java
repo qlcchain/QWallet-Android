@@ -529,7 +529,7 @@ public class FileUtil {
      * @param jsonStr 数据内容
      */
     public static void saveVpnServerData(String name,String jsonStr) {
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn/"+name+".ovpn";
+        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn/"+name;
         File jsonFile = new File(jsonPath);
 
         FileWriter fw = null;

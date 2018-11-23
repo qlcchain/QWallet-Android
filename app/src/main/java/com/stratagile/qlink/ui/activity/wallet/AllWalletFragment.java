@@ -69,6 +69,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import neoutils.Neoutils;
 
+import static java.math.BigDecimal.ROUND_HALF_UP;
+
 /**
  * @author hzp
  * @Package com.stratagile.qlink.ui.activity.wallet
@@ -173,7 +175,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         ToastUtil.displayShortToast("Please scan the NEO wallet address and make a transfer.");
                     }
                 } else {
-
+                    ToastUtil.displayShortToast("Invalid QR code");
                 }
             }
         });
@@ -246,7 +248,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         }
         viewModel.tokens.postValue(symbols);
         BigDecimal b = new BigDecimal(new Double((walletAsset)).toString());
-        walletAsset = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        walletAsset = b.setScale(2, ROUND_HALF_UP).doubleValue();
         if (walletAsset != 0) {
             tvWalletAsset.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + walletAsset);
         } else {
@@ -263,7 +265,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     @Override
     public void getWinqGasBack(Balance balance) {
-        tvWalletGas.setText(BigDecimal.valueOf(balance.getData().getQLC()).setScale(8, BigDecimal.ROUND_HALF_UP) + "");
+        tvWalletGas.setText(BigDecimal.valueOf(balance.getData().getQLC()).setScale(8, ROUND_HALF_UP) + "");
         viewModel.balanceMutableLiveData.postValue(balance);
     }
 
@@ -286,8 +288,19 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             llGetGas.setVisibility(View.GONE);
         } else {
             llGetGas.setVisibility(View.VISIBLE);
-            tvGasValue.setText(claimData.getData().getClaims().get(0).getClaim());
+            tvGasValue.setText(setGasValue(claimData.getData()));
         }
+    }
+
+    private String setGasValue(ClaimData.DataBean dataBean) {
+        BigDecimal bigDecimal = new BigDecimal(0.00000007);
+        int value = 0;
+        for (ClaimData.DataBean.ClaimsBean claimsBean : dataBean.getClaims()) {
+            value += claimsBean.getValue() * (Integer.parseInt(claimsBean.getEnd()) - Integer.parseInt(claimsBean.getStart()));
+        }
+        bigDecimal = bigDecimal.multiply(BigDecimal.valueOf(value)).setScale(8, ROUND_HALF_UP);
+        KLog.i(bigDecimal.toPlainString());
+        return bigDecimal.toPlainString();
     }
 
     @Override
@@ -306,7 +319,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         for (AllWallet allWallet : allWalletMoney.keySet()) {
             allMoney += allWalletMoney.get(allWallet);
         }
-        tvWalletMoney.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + BigDecimal.valueOf(allMoney).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
+        tvWalletMoney.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + BigDecimal.valueOf(allMoney).setScale(2, ROUND_HALF_UP).toPlainString());
     }
 
 
@@ -390,6 +403,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         allWalletMoney.put(allWallet, 0d);
         List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (neoWallets.size() != 0) {
+            Account.INSTANCE.fromWIF(neoWallets.get(0).getWif());
             mPresenter.getWinqGas(neoWallets.get(0).getAddress());
         }
     }

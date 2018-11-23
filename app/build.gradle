@@ -290,6 +290,7 @@ dependencies {
     implementation files('libs/BASE64Encoder.jar')
     //imtoken
     implementation 'com.github.consenlabs:token-core-android:v0.1'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

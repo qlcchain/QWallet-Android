@@ -47,6 +47,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.VpnProfile;
 import com.stratagile.qlink.activities.ConfigConverter;
@@ -75,6 +76,8 @@ import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.ServerVpnSendComplete;
 import com.stratagile.qlink.entity.eventbus.VpnRegisterSuccess;
 import com.stratagile.qlink.entity.eventbus.VpnSendEnd;
+import com.stratagile.qlink.entity.qlink.SendVpnFileList;
+import com.stratagile.qlink.entity.qlink.SendVpnFileNew;
 import com.stratagile.qlink.entity.vpn.VpnServerFileRsp;
 import com.stratagile.qlink.entity.vpn.WindowConfig;
 import com.stratagile.qlink.fragments.Utils;
@@ -106,6 +109,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -116,7 +120,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -377,40 +384,40 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.connect:
-                currentConnectType = CONNECT_ME;
-                KLog.i(vpnEntity.getConfiguration());
-                KLog.i(vpnEntity.getProfileUUid());
-                profile = ProfileManager.get(this, vpnEntity.getProfileUUid());
-                if (profile != null) {
-                    if (VpnStatus.isVPNActive()) {
-                        showVpnDisconnectDialog();
-                    } else {
-                        startOrStopVPN(profile);
-                        showProgressDialog();
-                    }
-                } else {
-                    KLog.i("profile为空。。。");
-                    profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
-                    if (profile != null) {
-                        vpnEntity.setProfileUUid(profile.getUUIDString());
-                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-                        startOrStopVPN(profile);
-                        showProgressDialog();
-                    } else {
-//                        ToastUtil.displayShortToast("vpn profile is null, please import vpn configuration file agin");
-                        KLog.i("profile为空。。。");
-                        if (vpnEntity != null && vpnEntity.getProfileLocalPath() != null) {
-                            File configFile = new File(vpnEntity.getProfileLocalPath());
-                            if (configFile.exists()) {
-                                showProgressDialog();
-                                readFile(configFile);
-                            } else {
-                                ToastUtil.displayShortToast(getString(R.string.error2));
-                                closeProgressDialog();
-                            }
-                        }
-                    }
-                }
+//                currentConnectType = CONNECT_ME;
+//                KLog.i(vpnEntity.getConfiguration());
+//                KLog.i(vpnEntity.getProfileUUid());
+//                profile = ProfileManager.get(this, vpnEntity.getProfileUUid());
+//                if (profile != null) {
+//                    if (VpnStatus.isVPNActive()) {
+//                        showVpnDisconnectDialog();
+//                    } else {
+//                        startOrStopVPN(profile);
+//                        showProgressDialog();
+//                    }
+//                } else {
+//                    KLog.i("profile为空。。。");
+//                    profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
+//                    if (profile != null) {
+//                        vpnEntity.setProfileUUid(profile.getUUIDString());
+//                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
+//                        startOrStopVPN(profile);
+//                        showProgressDialog();
+//                    } else {
+////                        ToastUtil.displayShortToast("vpn profile is null, please import vpn configuration file agin");
+//                        KLog.i("profile为空。。。");
+//                        if (vpnEntity != null && vpnEntity.getProfileLocalPath() != null) {
+//                            File configFile = new File(vpnEntity.getProfileLocalPath());
+//                            if (configFile.exists()) {
+//                                showProgressDialog();
+//                                readFile(configFile);
+//                            } else {
+//                                ToastUtil.displayShortToast(getString(R.string.error2));
+//                                closeProgressDialog();
+//                            }
+//                        }
+//                    }
+//                }
                 break;
             default:
                 break;
@@ -427,26 +434,26 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     private Map<Utils.FileType, FileSelectLayout> fileSelectMap = new HashMap<>();
 
     private void readFile(File configFile) {
-        KLog.i("读取文件,开启子线程");
-        ConfigParser cp = new ConfigParser();
-        FileInputStream fim = null;
-        try {
-            fim = new FileInputStream(configFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            InputStreamReader isr = new InputStreamReader(fim);
-
-            cp.parseConfig(isr);
-            profile = cp.convertProfile();
-            embedFiles(cp, true, true);
-            return;
-
-        } catch (IOException | ConfigParser.ConfigParseError e) {
-            e.printStackTrace();
-        }
-        KLog.i("读取文件到流中成功");
+//        KLog.i("读取文件,开启子线程");
+//        ConfigParser cp = new ConfigParser();
+//        FileInputStream fim = null;
+//        try {
+//            fim = new FileInputStream(configFile);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            InputStreamReader isr = new InputStreamReader(fim);
+//
+//            cp.parseConfig(isr);
+//            profile = cp.convertProfile();
+//            embedFiles(cp, true, true);
+//            return;
+//
+//        } catch (IOException | ConfigParser.ConfigParseError e) {
+//            e.printStackTrace();
+//        }
+//        KLog.i("读取文件到流中成功");
     }
 
     void embedFiles(ConfigParser cp, boolean saveProfile, boolean flag) {
@@ -780,22 +787,22 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             toxidBtn.setVisibility(View.VISIBLE);
             fileParent.setVisibility(View.GONE);
             fileParentLine.setVisibility(View.GONE);
-            vpnEntity = getIntent().getParcelableExtra("vpnentity");
-            if (vpnEntity == null) {
-                vpnEntity = new VpnEntity();
-            } else {
-                String path = vpnEntity.getProfileLocalPath();
-                String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
-                etConfiguration.setText(vpnFileName);
-                vpnFilePath = vpnEntity.getProfileLocalPath();
-                vpnEntity.setConfiguration(vpnFileName);
-                profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
-                if (profile == null) {
-                    ConfigConverter configConverter = new ConfigConverter();
-                    Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-                    startImportTask(uri, vpnFileName, true);
-                }
-            }
+            vpnEntity = new VpnEntity();
+//            if (vpnEntity == null) {
+//
+//            } else {
+//                String path = vpnEntity.getProfileLocalPath();
+//                String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
+//                etConfiguration.setText(vpnFileName);
+//                vpnFilePath = vpnEntity.getProfileLocalPath();
+//                vpnEntity.setConfiguration(vpnFileName);
+//                profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
+//                if (profile == null) {
+//                    ConfigConverter configConverter = new ConfigConverter();
+//                    Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
+//                    startImportTask(uri, vpnFileName, true);
+//                }
+//            }
             llYourBet.setVisibility(View.VISIBLE);
             setTitle(getString(R.string.REGISTER_YOUR_VPN).toUpperCase());
 //            infoUserid.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -826,7 +833,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
         //获取钱包数据
         Map<String, String> map = new HashMap<>();
-        map.put("address", AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(RegisteVpnActivity.this, ConstantValue.currentWallet, 0)).getAddress());
+        map.put("address", Account.INSTANCE.getWallet().getAddress());
         mPresenter.getBalance(map);
         toxid.addTextChangedListener(new TextWatcher() {
             @Override
@@ -926,41 +933,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             ConstantValue.isWindows = true;
             tragainBtnParent.setVisibility(View.GONE);
             tragainBtnLing.setVisibility(View.GONE);
-            Qsdk.getInstance().sendVpnFileRequest(addVpnEntity.getFriendNum(), "", "");
+            Qsdk.getInstance().sendVpnFileListReq(addVpnEntity.getFriendNum());
+            msg = "";
         } else {
             KLog.i(friendNum + "离线");
             ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
             tragainBtnParent.setVisibility(View.VISIBLE);
             tragainBtnLing.setVisibility(View.VISIBLE);
-          /*  ToastUtil.displayShortToast(getString(R.string.The_friend_is_not_online));
-            AlertDialog.Builder builder = new AlertDialog.Builder(RegisteVpnActivity.this);
-            View view = View.inflate(RegisteVpnActivity.this, R.layout.dialog_need_qlc_layout, null);
-            builder.setView(view);
-            builder.setCancelable(true);
-            TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
-            Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
-            Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-            tvContent.setText(getString(R.string.The_friend_is_not_online) +"," + getString(R.string.AcquiredToSlow_warning) +"?");*/
-            //取消或确定按钮监听事件处l
-           /* AlertDialog dialog = builder.create();
-            Window window = dialog.getWindow();
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-            btn_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    finish();
-                }
-            });
-            btn_comfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String toxID = toxid.getText().toString();
-                    toxid.setText(toxID);
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();*/
             closeProgressDialog();
         }
     }
@@ -996,9 +975,9 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         MyAsset myAsset = new MyAsset();
         myAsset.setType(1);
         if (localVpnEntity != null) {
-            if (localVpnEntity.getP2pIdPc() != null) {
-                localVpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
-            }
+//            if (localVpnEntity.getP2pIdPc() != null) {
+//                localVpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
+//            }
             myAsset.setVpnEntity(localVpnEntity);
             LocalAssetsUtils.insertLocalAssets(myAsset);
         }
@@ -1015,7 +994,13 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         VpnServerRecord.setMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
         AppConfig.getInstance().getDaoSession().getVpnServerRecordDao().insert(VpnServerRecord);
         mPresenter.upLoadImg(vpnEntity.getP2pId());
-        QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.checkConnectReq, new HashMap());
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("password", vpnEntity.getPassword());
+        infoMap.put("vpnName", vpnEntity.getVpnName());
+        infoMap.put("privateKeyPassword", vpnEntity.getPrivateKeyPassword());
+        infoMap.put("userName", vpnEntity.getUsername());
+        infoMap.put("vpnfileName", vpnEntity.getConfiguration());
+        QlinkUtil.parseMap2StringAndSend(vpnEntity.getP2pId(), ConstantValue.vpnRegisterSuccessNotify, infoMap);
         CustomPopWindow.onBackPressed();
         getMenuInflater().inflate(R.menu.connect_vpn, toolbar.getMenu());
         button2.setText(getString(R.string.update).toLowerCase());
@@ -1261,80 +1246,165 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         //mPresenter.vpnProfileSendComplete();
     }
 
+
+    String msg = "";
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleConfigFileComplete(ServerVpnSendComplete serverVpnSendComplete) {
-        if (serverVpnSendComplete.getData() != null) {
-            tempDataString += serverVpnSendComplete.getData().getFileData();
-            if (serverVpnSendComplete.getData().getStatus() == 1) {
-                serverVpnSendComplete.getData().setFileData(tempDataString);
-                serverVpnSendComplete.getData().setStatus(1);
-                VpnServerFileRspList.add(serverVpnSendComplete.getData());
-                tempDataString = "";
-            }
-        } else {
+    public void handleSendVpnFileListRsp(SendVpnFileList sendVpnFileList) {
+        msg += sendVpnFileList.getData().getMsg();
+        if (MD5Util.getStringMD5(msg).equals(sendVpnFileList.getData().getMd5())) {
+            KLog.i("vpn配置文件的列表传输完成：" + msg);
             closeProgressDialog();
-            Iterator it1 = VpnServerFileRspList.iterator();
-            int index = 0;
-            int i = 0;
-            while (it1.hasNext()) {
-                VpnServerFileRsp VpnServerFileRsp = (VpnServerFileRsp) it1.next();
-                String path = VpnServerFileRsp.getVpnfileName();
-                String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
-                FileUtil.saveVpnServerData(vpnFileName, VpnServerFileRsp.getFileData());
-                WindowConfig windowConfig = new WindowConfig();
-                String fileName = Environment.getExternalStorageDirectory() + "/Qlink/vpn/" + vpnFileName + ".ovpn";
-                windowConfig.setVpnfileName(fileName);
-                windowConfig.setServerVpnfileName(path);
-                windowConfig.setVpnName(vpnFileName + ".ovpn");
-                WindowConfigList.add(windowConfig);
-                if (isUpdate && vpnEntity.getProfileLocalPath().contains(vpnFileName)) {
-                    index = i;
-                }
-                i++;
-            }
-            ConstantValue.isWindows = false;
-
-
-            walletListAdapter.setSelectItem(index);
-            selectProfileLocalPath = WindowConfigList.get(index).getVpnfileName();
-            ConstantValue.getWindowsVpnPath = WindowConfigList.get(index).getServerVpnfileName();
-
-            List<WindowConfig> windowConfigListTemp = new ArrayList<>();
-            String windowConfigStr = "";
-            Iterator windowConfigListIt = WindowConfigList.iterator();
-            while (windowConfigListIt.hasNext()) {
-                WindowConfig indowConfig = (WindowConfig) windowConfigListIt.next();
-                if (!windowConfigStr.contains(indowConfig.getServerVpnfileName())) {
-                    windowConfigListTemp.add(indowConfig);
-                }
-                windowConfigStr += indowConfig.getServerVpnfileName() + ",";
-            }
             tvConfiguration.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
-            walletListAdapter.setNewData(windowConfigListTemp);
-            addVpnEntity = new VpnEntity();
-            addVpnEntity.setP2pId(toxid.getText().toString());
-            addVpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
-            addVpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
-            addVpnEntity.setFriendNum(toxid.getText().toString());
-            addVpnEntity.setProfileLocalPath(selectProfileLocalPath);
-            if (!isUpdate) {
-                vpnEntity = addVpnEntity;
-            }
-            String path = vpnEntity.getProfileLocalPath();
-            String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
-            etConfiguration.setText(vpnFileName);
-            vpnFilePath = vpnEntity.getProfileLocalPath();
-            if (!isUpdate) {
-                vpnEntity.setConfiguration(vpnFileName);
-            }
-            profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
-            if (profile == null) {
-                ConfigConverter configConverter = new ConfigConverter();
-                Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-                startImportTask(uri, vpnFileName, false);
-            }
+            String[] strings = msg.split(";");
+            List<String> list = Arrays.asList(strings);
+            walletListAdapter.setNewData(list);
+            etConfiguration.setText(list.get(0));
+            return;
+        } else {
+
         }
+    }
+
+
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void handleConfigFileComplete(ServerVpnSendComplete serverVpnSendComplete) {
+//        if (serverVpnSendComplete.getData() != null) {
+//            tempDataString += serverVpnSendComplete.getData().getFileData();
+//            if (serverVpnSendComplete.getData().getStatus() == 1) {
+//                serverVpnSendComplete.getData().setFileData(tempDataString);
+//                serverVpnSendComplete.getData().setStatus(1);
+//                VpnServerFileRspList.add(serverVpnSendComplete.getData());
+//                tempDataString = "";
+//            }
+//        } else {
+//            closeProgressDialog();
+//            Iterator it1 = VpnServerFileRspList.iterator();
+//            int index = 0;
+//            int i = 0;
+//            while (it1.hasNext()) {
+//                VpnServerFileRsp VpnServerFileRsp = (VpnServerFileRsp) it1.next();
+//                String path = VpnServerFileRsp.getVpnfileName();
+//                String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
+//                WindowConfig windowConfig = new WindowConfig();
+//                FileUtil.saveVpnServerData(vpnFileName, VpnServerFileRsp.getFileData());
+//                String fileName = Environment.getExternalStorageDirectory() + "/Qlink/vpn/" + vpnFileName + ".ovpn";
+//                windowConfig.setVpnfileName(fileName);
+//                windowConfig.setServerVpnfileName(path);
+//                windowConfig.setVpnName(vpnFileName + ".ovpn");
+//                WindowConfigList.add(windowConfig);
+//                if (isUpdate && vpnEntity.getProfileLocalPath().contains(vpnFileName)) {
+//                    index = i;
+//                }
+//                i++;
+//            }
+//            ConstantValue.isWindows = false;
+//
+//
+//            walletListAdapter.setSelectItem(index);
+//            selectProfileLocalPath = WindowConfigList.get(index).getVpnfileName();
+//            ConstantValue.getWindowsVpnPath = WindowConfigList.get(index).getServerVpnfileName();
+//
+//            List<WindowConfig> windowConfigListTemp = new ArrayList<>();
+//            String windowConfigStr = "";
+//            Iterator windowConfigListIt = WindowConfigList.iterator();
+//            while (windowConfigListIt.hasNext()) {
+//                WindowConfig indowConfig = (WindowConfig) windowConfigListIt.next();
+//                if (!windowConfigStr.contains(indowConfig.getServerVpnfileName())) {
+//                    windowConfigListTemp.add(indowConfig);
+//                }
+//                windowConfigStr += indowConfig.getServerVpnfileName() + ",";
+//            }
+//            tvConfiguration.setVisibility(View.VISIBLE);
+//            recyclerView.setVisibility(View.VISIBLE);
+////            walletListAdapter.setNewData(windowConfigListTemp);
+//            addVpnEntity = new VpnEntity();
+//            addVpnEntity.setP2pId(toxid.getText().toString());
+//            addVpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+//            addVpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
+//            addVpnEntity.setFriendNum(toxid.getText().toString());
+//            addVpnEntity.setProfileLocalPath(selectProfileLocalPath);
+//            if (!isUpdate) {
+//                vpnEntity = addVpnEntity;
+//            }
+//            String path = vpnEntity.getProfileLocalPath();
+//            String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
+//            etConfiguration.setText(vpnFileName);
+//            vpnFilePath = vpnEntity.getProfileLocalPath();
+//            if (!isUpdate) {
+//                vpnEntity.setConfiguration(vpnFileName);
+//            }
+//            profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
+//            if (profile == null) {
+//                Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
+//                startImportTask(uri, vpnFileName, false);
+//            }
+//        }
+//    }
+
+    String vpnFileStr = "";
+    Map<Integer, String> vpnFileTemp = new HashMap<>();
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handlerSendVpnFileNewRsp(SendVpnFileNew sendVpnFileNew) {
+        vpnFileStr += sendVpnFileNew.getData().getMsg();
+        KLog.i(sendVpnFileNew.getData().getOffset());
+        vpnFileTemp.put(sendVpnFileNew.getData().getOffset(), sendVpnFileNew.getData().getMsg());
+        KLog.i(vpnFileStr);
+        if (isSendVpnFile(sendVpnFileNew.getData().getMd5())) {
+            closeProgressDialog();
+            KLog.i("vpn配置文件传输完毕了：" + vpnFileStr);
+            byte[] bytesAddData = Base64.decode(vpnFileStr, Base64.NO_WRAP);
+            String deVpnFile = new String(bytesAddData);
+            KLog.i(deVpnFile);
+            vpnEntity.setP2pId(toxid.getText().toString());
+            vpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+            vpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
+            vpnEntity.setFriendNum(toxid.getText().toString());
+//            FileUtil.saveVpnServerData(walletListAdapter.getData().get(walletListAdapter.getSelectItem()), deVpnFile);
+            vpnEntity.setConfiguration(walletListAdapter.getData().get(walletListAdapter.getSelectItem()));
+            vpnFilePath = Environment.getExternalStorageDirectory() + "/Qlink/vpn/" + walletListAdapter.getData().get(walletListAdapter.getSelectItem());
+            vpnEntity.setProfileLocalPath(vpnEntity.getConfiguration());
+            vpnEntity.setHash(sendVpnFileNew.getData().getMd5());
+//            Uri uri = new Uri.Builder().path(vpnFilePath).scheme("file").build();
+            startImportTask(deVpnFile, vpnEntity.getConfiguration(), false);
+            showTestConnectDialog();
+
+        }
+    }
+
+    private boolean isSendVpnFile(String md5) {
+        String vpnFile = "";
+        List<Map.Entry<Integer, String>> list = new ArrayList<Map.Entry<Integer, String>>(vpnFileTemp.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Integer, String>>() {
+            //升序排序
+            @Override
+            public int compare(Map.Entry<Integer, String> o1, Map.Entry<Integer, String> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+
+        });
+
+        for (Map.Entry<Integer, String> mapping : list) {
+            vpnFile += mapping.getValue();
+        }
+        if (MD5Util.getStringMD5(vpnFile).equals(md5)) {
+            vpnFileStr = vpnFile;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void getVpnFileNewReq() {
+        showProgressDialog();
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("vpnName", walletListAdapter.getData().get(walletListAdapter.getSelectItem()));
+        infoMap.put("register", 1);
+        vpnFileStr = "";
+        vpnFileTemp.clear();
+        QlinkUtil.parseMap2StringAndSend(addVpnEntity.getFriendNum(), ConstantValue.sendVpnFileNewReq, infoMap);
     }
 
     @Override
@@ -1346,27 +1416,34 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
     @Override
     public void onItemChange(int position) {
         KLog.i("item改变了");
-        selectProfileLocalPath = WindowConfigList.get(position).getVpnfileName();
-        ConstantValue.getWindowsVpnPath = WindowConfigList.get(position).getServerVpnfileName();
-        isUpdateConfigFile = true;
-        String path = selectProfileLocalPath;
-        String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
-        etConfiguration.setText(vpnFileName);
-        vpnFilePath = selectProfileLocalPath;
-        vpnEntity.setProfileLocalPath(path);
-        vpnEntity.setConfiguration(vpnFileName);
-        profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
-        if (profile == null) {
-            ConfigConverter configConverter = new ConfigConverter();
-            Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
-            startImportTask(uri, vpnFileName, false);
-        }
-        Log.i("selectProfileLocalPath", selectProfileLocalPath);
+        walletListAdapter.setSelectItem(position);
+        etConfiguration.setText(walletListAdapter.getData().get(position));
         tvPrivatekeyFlag.setText(R.string.private_Key_Password2);
         tvPrivatekeyFlag.setTextColor(getResources().getColor(R.color.color_333));
 
         tvUsernameFlag.setText(R.string.Username2);
         tvUsernameFlag.setTextColor(getResources().getColor(R.color.color_333));
+//        selectProfileLocalPath = WindowConfigList.get(position).getVpnfileName();
+//        ConstantValue.getWindowsVpnPath = WindowConfigList.get(position).getServerVpnfileName();
+//        isUpdateConfigFile = true;
+//        String path = selectProfileLocalPath;
+//        String vpnFileName = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".ovpn"));
+//        etConfiguration.setText(vpnFileName);
+//        vpnFilePath = selectProfileLocalPath;
+//        vpnEntity.setProfileLocalPath(path);
+//        vpnEntity.setConfiguration(vpnFileName);
+//        profile = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
+//        if (profile == null) {
+//            ConfigConverter configConverter = new ConfigConverter();
+//            Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
+//            startImportTask(uri, vpnFileName, false);
+//        }
+//        Log.i("selectProfileLocalPath", selectProfileLocalPath);
+//        tvPrivatekeyFlag.setText(R.string.private_Key_Password2);
+//        tvPrivatekeyFlag.setTextColor(getResources().getColor(R.color.color_333));
+//
+//        tvUsernameFlag.setText(R.string.Username2);
+//        tvUsernameFlag.setTextColor(getResources().getColor(R.color.color_333));
     }
 
     private void startUpdateVpnInfo() {
@@ -1407,7 +1484,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             ToastUtil.displayShortToast(getString(R.string.Please_select_the_configuration_file));
             return;
         }
-        showTestConnectDialog();
+        getVpnFileNewReq();
     }
 
     private boolean startImportConfigFilePicker() {
@@ -1487,32 +1564,32 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             getPM().saveProfile(this, profile);
             // Name could be modified, reset List adapter
         } else if (requestCode == SELECT_PROFILE) {
-            KLog.i("返回。。。。。。。SELECT_PROFILE");
-//            String fileData = data.getStringExtra(FileSelect.RESULT_DATA);
-            String fileData = data.getStringExtra("path");
-            if (!fileData.contains(".ovpn")) {
-                ToastUtil.displayShortToast(getString(R.string.configuration_profile_error));
-                return;
-            }
-            KLog.i(fileData);
-            if (!fileData.equals(vpnEntity.getProfileLocalPath())) {
-                isUpdateConfigFile = true;
-            }
-            Uri uri = new Uri.Builder().path(fileData).scheme("file").build();
-            startConfigImport(uri);
+//            KLog.i("返回。。。。。。。SELECT_PROFILE");
+////            String fileData = data.getStringExtra(FileSelect.RESULT_DATA);
+//            String fileData = data.getStringExtra("path");
+//            if (!fileData.contains(".ovpn")) {
+//                ToastUtil.displayShortToast(getString(R.string.configuration_profile_error));
+//                return;
+//            }
+//            KLog.i(fileData);
+//            if (!fileData.equals(vpnEntity.getProfileLocalPath())) {
+//                isUpdateConfigFile = true;
+//            }
+//            Uri uri = new Uri.Builder().path(fileData).scheme("file").build();
+//            startConfigImport(uri);
         } else if (requestCode == IMPORT_PROFILE) {
             profileUUID = data.getStringExtra(VpnProfile.EXTRA_PROFILEUUID);
             profile = ProfileManager.get(this, profileUUID);
             etConfiguration.setText(ProfileManager.get(this, profileUUID).getName());
         } else if (requestCode == FILE_PICKER_RESULT_KITKAT) {
-            KLog.i("返回。。。。FILE_PICKER_RESULT_KITKAT");
-            if (data != null) {
-                if (button2.getText().toString().toLowerCase(Locale.ENGLISH).equals("update")) {
-                    isUpdateConfigFile = true;
-                }
-                Uri uri = data.getData();
-                startConfigImport(uri);
-            }
+//            KLog.i("返回。。。。FILE_PICKER_RESULT_KITKAT");
+//            if (data != null) {
+//                if (button2.getText().toString().toLowerCase(Locale.ENGLISH).equals("update")) {
+//                    isUpdateConfigFile = true;
+//                }
+//                Uri uri = data.getData();
+//                startConfigImport(uri);
+//            }
         }
 
         if (requestCode == START_VPN_PROFILE) {
@@ -1577,97 +1654,97 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         startActivityForResult(vprefintent, START_VPN_CONFIG);
     }
 
-    private void startConfigImport(Uri uri) {
-        KLog.i(uri.getPath());
-        File file = new File(uri.getPath());
-        if (file.exists()) {
-            KLog.i("file 存在");
-            vpnFilePath = uri.getPath();
-            Intent startImport = new Intent(this, ConfigConverter.class);
-            startImport.setAction(ConfigConverter.IMPORT_PROFILE);
-            startImport.setData(uri);
-            mPathsegments = uri.getPathSegments();
-            startActivityForResult(startImport, IMPORT_PROFILE);
-            return;
-        }
-        KLog.i(uri.toString());
-        KLog.i(uri.getScheme().toString());
-        LogUtil.addLog("uri的path为：" + uri.getPath(), getClass().getSimpleName());
-        LogUtil.addLog("uri的Scheme为：" + uri.getScheme().toString(), getClass().getSimpleName());
-        LogUtil.addLog("uri为：" + uri.toString(), getClass().getSimpleName());
-        String filename = "";
-        if (uri.getScheme().toString().compareTo("content") == 0) {  //MediaStore.Images.Media.DATA
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null) {
-                KLog.i(cursor.getCount());
-                LogUtil.addLog("路径放在cursor的第" + cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA) + "列", getClass().getSimpleName());
-                KLog.i("路径放在cursor的第" + cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA) + "列");
-                if (cursor.moveToFirst()) {
-                    int xiabiao = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
-                    if (xiabiao >= 0) {
-                        try {
-                            KLog.i(cursor.getString(cursor.getColumnIndex("_data")));
-                            LogUtil.addLog("cursor的data为:" + cursor.getString(cursor.getColumnIndex("_data")), getClass().getSimpleName());
-                            filename = cursor.getString(cursor.getColumnIndex("_data"));
-                            if ("".equals(filename)) {
-                                try {
-                                    filename = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            if ("".equals(filename)) {
-                                try {
-                                    filename = cursor.getString(0);
-                                    KLog.i("cursor.getString(0):" + cursor.getString(0));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            if (filename.length() < 25) {
-                                LogUtil.addLog("通过getpath获取路径", getClass().getSimpleName());
-                                filename = uri.getPath();
-                                if (filename.contains("/root")) {
-                                    filename = filename.replace("/root", "");
-                                }
-                            }
-                            KLog.i(filename);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-
-                    }
-                } else {
-                    filename = uri.getPath();
-                    if (filename.contains("/root")) {
-                        filename = filename.replace("/root", "");
-                    }
-                }
-            }
-        } else if (uri.getScheme().toString().compareTo("file") == 0) {
-            filename = uri.toString();
-            filename = uri.toString().replace("file://", "");
-        }
-        if (filename == null || filename.equals("")) {
-            KLog.i("文件未找到，重新生成路径.");
-            filename = Environment.getExternalStorageDirectory() + "/" + uri.getPath().substring(uri.getPath().lastIndexOf(":") + 1, uri.getPath().length());
-        }
-        if (filename.contains("primary:")) {
-            filename = Environment.getExternalStorageDirectory() + "/" + filename.substring(filename.lastIndexOf(":") + 1, filename.length());
-        }
-        LogUtil.addLog("注册vpn的配置文件解析出来的路径为：" + filename, getClass().getSimpleName());
-        KLog.i(filename);
-        vpnFilePath = filename;
-        if (!filename.contains(".ovpn")) {
-            ToastUtil.displayShortToast(getString(R.string.configuration_profile_error));
-            return;
-        }
-        Intent startImport = new Intent(this, ConfigConverter.class);
-        startImport.setAction(ConfigConverter.IMPORT_PROFILE);
-        startImport.setData(uri);
-        startActivityForResult(startImport, IMPORT_PROFILE);
-    }
+//    private void startConfigImport(Uri uri) {
+//        KLog.i(uri.getPath());
+//        File file = new File(uri.getPath());
+//        if (file.exists()) {
+//            KLog.i("file 存在");
+//            vpnFilePath = uri.getPath();
+//            Intent startImport = new Intent(this, ConfigConverter.class);
+//            startImport.setAction(ConfigConverter.IMPORT_PROFILE);
+//            startImport.setData(uri);
+//            mPathsegments = uri.getPathSegments();
+//            startActivityForResult(startImport, IMPORT_PROFILE);
+//            return;
+//        }
+//        KLog.i(uri.toString());
+//        KLog.i(uri.getScheme().toString());
+//        LogUtil.addLog("uri的path为：" + uri.getPath(), getClass().getSimpleName());
+//        LogUtil.addLog("uri的Scheme为：" + uri.getScheme().toString(), getClass().getSimpleName());
+//        LogUtil.addLog("uri为：" + uri.toString(), getClass().getSimpleName());
+//        String filename = "";
+//        if (uri.getScheme().toString().compareTo("content") == 0) {  //MediaStore.Images.Media.DATA
+//            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+//            if (cursor != null) {
+//                KLog.i(cursor.getCount());
+//                LogUtil.addLog("路径放在cursor的第" + cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA) + "列", getClass().getSimpleName());
+//                KLog.i("路径放在cursor的第" + cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA) + "列");
+//                if (cursor.moveToFirst()) {
+//                    int xiabiao = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
+//                    if (xiabiao >= 0) {
+//                        try {
+//                            KLog.i(cursor.getString(cursor.getColumnIndex("_data")));
+//                            LogUtil.addLog("cursor的data为:" + cursor.getString(cursor.getColumnIndex("_data")), getClass().getSimpleName());
+//                            filename = cursor.getString(cursor.getColumnIndex("_data"));
+//                            if ("".equals(filename)) {
+//                                try {
+//                                    filename = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                            if ("".equals(filename)) {
+//                                try {
+//                                    filename = cursor.getString(0);
+//                                    KLog.i("cursor.getString(0):" + cursor.getString(0));
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                            if (filename.length() < 25) {
+//                                LogUtil.addLog("通过getpath获取路径", getClass().getSimpleName());
+//                                filename = uri.getPath();
+//                                if (filename.contains("/root")) {
+//                                    filename = filename.replace("/root", "");
+//                                }
+//                            }
+//                            KLog.i(filename);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+//
+//                    }
+//                } else {
+//                    filename = uri.getPath();
+//                    if (filename.contains("/root")) {
+//                        filename = filename.replace("/root", "");
+//                    }
+//                }
+//            }
+//        } else if (uri.getScheme().toString().compareTo("file") == 0) {
+//            filename = uri.toString();
+//            filename = uri.toString().replace("file://", "");
+//        }
+//        if (filename == null || filename.equals("")) {
+//            KLog.i("文件未找到，重新生成路径.");
+//            filename = Environment.getExternalStorageDirectory() + "/" + uri.getPath().substring(uri.getPath().lastIndexOf(":") + 1, uri.getPath().length());
+//        }
+//        if (filename.contains("primary:")) {
+//            filename = Environment.getExternalStorageDirectory() + "/" + filename.substring(filename.lastIndexOf(":") + 1, filename.length());
+//        }
+//        LogUtil.addLog("注册vpn的配置文件解析出来的路径为：" + filename, getClass().getSimpleName());
+//        KLog.i(filename);
+//        vpnFilePath = filename;
+//        if (!filename.contains(".ovpn")) {
+//            ToastUtil.displayShortToast(getString(R.string.configuration_profile_error));
+//            return;
+//        }
+//        Intent startImport = new Intent(this, ConfigConverter.class);
+//        startImport.setAction(ConfigConverter.IMPORT_PROFILE);
+//        startImport.setData(uri);
+//        startActivityForResult(startImport, IMPORT_PROFILE);
+//    }
 
     private void onAddOrDuplicateProfile(final VpnProfile mCopyProfile) {
         Context context = this;
@@ -1740,6 +1817,11 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         verifyConfigurationProfile();
     }
 
+//    private void getProfile() {
+//        Uri uri = new Uri.Builder().path(vpnEntity.getProfileLocalPath()).scheme("file").build();
+//        startImportTask(uri, vpnEntity.getConfiguration(), true);
+//    }
+
     private void verifyVpnName() {
         if (infoUserid.getText().toString().trim().equals("")) {
             ToastUtil.displayShortToast(getString(R.string.cannot_register_empty_vpn_asset));
@@ -1780,15 +1862,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
     private void verifyConfigurationProfile() {
         KLog.i(vpnFilePath);
-        File configurationFile = new File(vpnFilePath);
-        if (configurationFile.exists()) {
-            vpnEntity.setHash(MD5Util.getFileMD5(configurationFile));
-            KLog.i(configurationFile.getParent());
-            KLog.i(configurationFile.getName());
-            copyFile(configurationFile.getPath(), Environment.getExternalStorageDirectory() + "/Qlink/" + Calendar.getInstance().getTimeInMillis() + "." + configurationFile.getName().substring(configurationFile.getName().lastIndexOf(".") + 1));
-        } else {
-            verifyError(1);
-        }
+        testConnectDialog.stopAnimation(1, true);
+        startOrStopVPN(profile);
     }
 
     /**
@@ -1806,48 +1881,48 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }
     }
 
-    /**
-     * 复制单个文件
-     *
-     * @param oldPath String 原文件路径 如：c:/fqf.txt
-     * @param newPath String 复制后路径 如：f:/fqf.txt
-     * @return boolean
-     */
-    public void copyFile(String oldPath, String newPath) {
-        KLog.i("复制文件。。。。。。");
-        try {
-            int bytesum = 0;
-            int byteread = 0;
-            File oldfile = new File(oldPath);
-            if (oldfile.exists()) { //文件存在时
-                InputStream inStream = new FileInputStream(oldPath); //读入原文件
-                FileOutputStream fs = new FileOutputStream(newPath);
-                byte[] buffer = new byte[1444];
-                int length;
-                while ((byteread = inStream.read(buffer)) != -1) {
-                    bytesum += byteread; //字节数 文件大小
-                    System.out.println(bytesum);
-                    fs.write(buffer, 0, byteread);
-                }
-                inStream.close();
-            }
-            testConnectDialog.stopAnimation(1, true);
-            vpnFilePath = newPath;
-            LogUtil.addLog("配置文件复制到 " + newPath + " 成功", getClass().getSimpleName());
-            VpnProfile profileTemp = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
-            if (profileTemp == null) {
-                saveProfile(true);
-            } else {
-                verifyConnectVpn();
-            }
-        } catch (Exception e) {
-            System.out.println("复制单个文件操作出错");
-            LogUtil.addLog("配置文件复制到 " + newPath + " 失败", getClass().getSimpleName());
-            e.printStackTrace();
-            verifyError(1);
-        }
-
-    }
+//    /**
+//     * 复制单个文件
+//     *
+//     * @param oldPath String 原文件路径 如：c:/fqf.txt
+//     * @param newPath String 复制后路径 如：f:/fqf.txt
+//     * @return boolean
+//     */
+//    public void copyFile(String oldPath, String newPath) {
+//        KLog.i("复制文件。。。。。。");
+//        try {
+//            int bytesum = 0;
+//            int byteread = 0;
+//            File oldfile = new File(oldPath);
+//            if (oldfile.exists()) { //文件存在时
+//                InputStream inStream = new FileInputStream(oldPath); //读入原文件
+//                FileOutputStream fs = new FileOutputStream(newPath);
+//                byte[] buffer = new byte[1444];
+//                int length;
+//                while ((byteread = inStream.read(buffer)) != -1) {
+//                    bytesum += byteread; //字节数 文件大小
+//                    System.out.println(bytesum);
+//                    fs.write(buffer, 0, byteread);
+//                }
+//                inStream.close();
+//            }
+//            testConnectDialog.stopAnimation(1, true);
+//            vpnFilePath = newPath;
+//            LogUtil.addLog("配置文件复制到 " + newPath + " 成功", getClass().getSimpleName());
+//            VpnProfile profileTemp = ProfileManager.getInstance(this).getProFile(vpnEntity.getConfiguration());
+//            if (profileTemp == null) {
+//                saveProfile(true);
+//            } else {
+//                verifyConnectVpn();
+//            }
+//        } catch (Exception e) {
+//            System.out.println("复制单个文件操作出错");
+//            LogUtil.addLog("配置文件复制到 " + newPath + " 失败", getClass().getSimpleName());
+//            e.printStackTrace();
+//            verifyError(1);
+//        }
+//
+//    }
 
     /**
      * 复制单个文件
@@ -2234,13 +2309,9 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         } else {
             vpnEntity.setIpV4Address(profile.mIPv4Address);
         }
-        if (this.vpnEntity.getP2pId() != null && !"".equals(this.vpnEntity.getP2pId())) {
-            vpnEntity.setP2pId(this.vpnEntity.getP2pId());
-            vpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
-            vpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
-        } else {
-            vpnEntity.setP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
-        }
+        vpnEntity.setP2pId(this.vpnEntity.getP2pId());
+        vpnEntity.setP2pIdPc(SpUtil.getString(this, ConstantValue.P2PID, ""));
+        vpnEntity.setOwnerP2pId(SpUtil.getString(this, ConstantValue.P2PID, ""));
         vpnEntity.setOnline(true);
         vpnEntity.setProfileUUid(profileUUID);
         vpnEntity.setConfiguration(etConfiguration.getText().toString());
@@ -2248,7 +2319,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         vpnEntity.setAvaterUpdateTime(Long.parseLong(SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "0")));
         vpnEntity.setConnectMaxnumber(connectSeekbar.getProgress());
         vpnEntity.setPrice(Float.parseFloat((qlcSeekbar.getProgress() / 10.0) + ""));
-        vpnEntity.setProfileLocalPath(vpnFilePath);
+        vpnEntity.setProfileLocalPath(this.vpnEntity.getProfileLocalPath());
         vpnEntity.setFriendNum("");
         vpnEntity.setHash(this.vpnEntity.getHash());
         vpnEntity.setIsMainNet(SpUtil.getBoolean(this, ConstantValue.isMainNet, false));
@@ -2259,7 +2330,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         this.vpnEntity = vpnEntity;
         localVpnEntity = vpnEntity;
 //        AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
-        String walletAddress = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(this, ConstantValue.currentWallet, 0)).getAddress();
+        String walletAddress = Account.INSTANCE.getWallet().getAddress();
         //更新sd卡资产数据end
         Map<String, String> map = new HashMap<>();
         map.put("vpnName", infoUserid.getText().toString());
@@ -2278,7 +2349,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         if (localVpnEntity.getP2pIdPc() != null) {
             vpnEntity.setProfileLocalPath(ConstantValue.getWindowsVpnPath);
         }
-        map.put("profileLocalPath", vpnEntity.getProfileLocalPath() == null ? "" : vpnEntity.getProfileLocalPath());
+        map.put("profileLocalPath", vpnEntity.getConfiguration());
         KLog.i(map);
         showProgressDialog();
         if (!p2pId.equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {
@@ -2318,10 +2389,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
         }).start();
     }
 
-    private void startImportTask(final Uri data, final String possibleName, boolean flag) {
+    private void startImportTask(final String data, final String possibleName, boolean flag) {
         mImportTask = new AsyncTask<Void, Void, Integer>() {
-            private ProgressBar mProgress;
-
             @Override
             protected void onPreExecute() {
 
@@ -2330,52 +2399,49 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             @Override
             protected Integer doInBackground(Void... params) {
                 try {
-                    InputStream is = getContentResolver().openInputStream(data);
-
+                    InputStream is = new ByteArrayInputStream(data.getBytes());
+//                    mPathsegments = data.getPathSegments();
                     doImport(is, possibleName, flag);
-                    if (mResult == null)
+                    if (mResult == null) {
                         return -3;
-                } catch (FileNotFoundException |
-                        SecurityException se)
-
-                {
+                    }
+                } catch (SecurityException se) {
                     return -2;
                 }
-
                 return 0;
             }
 
             @Override
             protected void onPostExecute(Integer errorCode) {
                 if (errorCode == 0) {
-                    mResult.mName = getUniqueProfileName(possibleName);
+                    mResult.mName = possibleName;
                 }
             }
         }.execute();
     }
 
-    private String getUniqueProfileName(String possibleName) {
-
-        int i = 0;
-
-        ProfileManager vpl = ProfileManager.getInstance(this);
-
-        String newname = possibleName;
-
-        // 	Default to
-        if (mResult.mName != null && !ConfigParser.CONVERTED_PROFILE.equals(mResult.mName))
-            newname = mResult.mName;
-
-        while (newname == null || vpl.getProfileByName(newname) != null) {
-            i++;
-            if (i == 1)
-                newname = getString(R.string.converted_profile);
-            else
-                newname = getString(R.string.converted_profile_i, i);
-        }
-
-        return newname;
-    }
+//    private String getUniqueProfileName(String possibleName) {
+//
+//        int i = 0;
+//
+//        ProfileManager vpl = ProfileManager.getInstance(this);
+//
+//        String newname = possibleName;
+//
+//        // 	Default to
+//        if (mResult.mName != null && !ConfigParser.CONVERTED_PROFILE.equals(mResult.mName))
+//            newname = mResult.mName;
+//
+//        while (newname == null || vpl.getProfileByName(newname) != null) {
+//            i++;
+//            if (i == 1)
+//                newname = getString(R.string.converted_profile);
+//            else
+//                newname = getString(R.string.converted_profile_i, i);
+//        }
+//
+//        return newname;
+//    }
 
     private void doImport(InputStream is, String possibleName, boolean flag) {
         ConfigParser cp = new ConfigParser();
@@ -2386,8 +2452,8 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
             mResult = cp.convertProfile();
             mResult.mName = possibleName;
             profile = mResult;
-
-            embedFiles(cp, true, flag);
+            saveProfile(flag);
+//            embedFiles(cp, true, flag);
             return;
 
         } catch (IOException | ConfigParser.ConfigParseError e) {

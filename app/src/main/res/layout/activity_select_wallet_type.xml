@@ -134,13 +134,13 @@
         android:layout_height="wrap_content">
         <com.stratagile.qlink.view.SmoothCheckBox
             android:id="@+id/checkBox"
-            android:layout_width="@dimen/x31"
+            android:layout_width="@dimen/x40"
             android:layout_marginRight="@dimen/x12"
             app:color_unchecked_stroke="@color/mainColor"
             app:color_unchecked="@color/white"
             app:color_checked="@color/mainColor"
-            app:stroke_width="@dimen/x2"
-            android:layout_height="@dimen/x31"/>
+            app:stroke_width="@dimen/x4"
+            android:layout_height="@dimen/x40"/>
         <TextView
             android:layout_width="wrap_content"
             android:text="Agree on"

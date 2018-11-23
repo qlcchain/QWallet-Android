@@ -111,17 +111,15 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
         LogUtil.addLog("server Assets count：" + wifiRegisteResult.getData().size(), getClass().getSimpleName());
         for (WifiRegisteResult.DataBean dataBean : wifiRegisteResult.getData()) {
             List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-            List<VpnEntity> vpnEntityListInSql = new ArrayList<>();
-            if ("3".equals(dataBean.getType())) {
-                vpnEntityListInSql = AppConfig.getInstance().getDaoSession().getVpnEntityDao().queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(dataBean.getSsId())).list();
-            }
-
-            if (vpnEntityListInSql.size() > 0 || "".equals(dataBean.getType())) {
+            VpnEntity vpnEntity1 ;
+            vpnEntity1 = AppConfig.getInstance().getDaoSession().getVpnEntityDao().queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(dataBean.getSsId())).unique();
+            if (vpnEntity1 != null || "".equals(dataBean.getType())) {
                 for (VpnEntity vpnEntity : vpnEntityList) {
                     //3代表的是vpn资产
                     if (dataBean.getSsId().equals(vpnEntity.getVpnName()) && dataBean.getP2pId().equals("")) {
                         //ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.delete_asset));
-                        delete += vpnEntity.getVpnName()+",";
+                        delete += vpnEntity.getVpnName() + ",";
+                        KLog.i("删除：" + vpnEntity.getVpnName());
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().delete(vpnEntity);
                         break;
                     } else if (VpnUtil.isInSameNet(vpnEntity) && dataBean.getSsId().equals(vpnEntity.getVpnName()) && !dataBean.getP2pId().equals("")) {
@@ -130,7 +128,7 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                         vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
 //                        vpnEntity.setQlc((float) dataBean.getQlc());
                         vpnEntity.setAssetTranfer(dataBean.getQlc());
-                        update +=  vpnEntity.getVpnName()+",";
+                        update += vpnEntity.getVpnName() + ",";
                         AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
                     }
                 }
@@ -141,10 +139,10 @@ public class AssetListPresenter implements AssetListContract.AssetListContractPr
                     vpnEntity.setVpnName(dataBean.getSsId());
                     vpnEntity.setAddress(dataBean.getAddress());
                     vpnEntity.setRegisterQlc(dataBean.getRegisterQlc());
-                    vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
+                    vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
 //                    vpnEntity.setQlc((float) dataBean.getQlc());
                     vpnEntity.setAssetTranfer(dataBean.getQlc());
-                    insert += vpnEntity.getVpnName()+",";
+                    insert += vpnEntity.getVpnName() + ",";
                     AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
                 }
 

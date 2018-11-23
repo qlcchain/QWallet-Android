@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2018/08/10 15:08:22
  */
 
-public class WindowConfigAdapter extends BaseQuickAdapter<WindowConfig, BaseViewHolder> {
+public class WindowConfigAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     private int selectItem = 0;
 
@@ -51,19 +51,19 @@ public class WindowConfigAdapter extends BaseQuickAdapter<WindowConfig, BaseView
         this.onItemChangeListener = onItemChangeListener;
     }
 
-    public WindowConfigAdapter(@Nullable List<WindowConfig> data) {
+    public WindowConfigAdapter(@Nullable List<String> data) {
         super(R.layout.item_config_list, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, WindowConfig item) {
+    protected void convert(BaseViewHolder baseViewHolder, String item) {
         CheckBox checkBox = baseViewHolder.getView(R.id.checkbox);
         if (baseViewHolder.getLayoutPosition() == 0) {
             baseViewHolder.setVisible(R.id.line1, true);
         } else {
             baseViewHolder.setVisible(R.id.line1, false);
         }
-        baseViewHolder.setText(R.id.publicAddress, item.getVpnName());
+        baseViewHolder.setText(R.id.publicAddress, item);
         if (baseViewHolder.getLayoutPosition() == selectItem) {
             checkBox.setChecked(true);
         } else {

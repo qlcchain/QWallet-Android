@@ -16,6 +16,7 @@ import com.stratagile.qlink.ui.activity.main.module.SplashModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SplashPresenter;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
+import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;

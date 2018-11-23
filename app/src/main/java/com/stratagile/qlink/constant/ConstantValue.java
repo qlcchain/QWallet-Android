@@ -142,41 +142,7 @@ public class ConstantValue {
 
     public static CurrencyBean currencyBean;
 
-    /**
-     * 本次进入app在下载的头像的名字
-     */
-    public static ArrayList<String> loadingAvatarList = new ArrayList<>();
-
-
     ///**********************************************************///
-    /**
-     *
-     */
-    public static final String wifibasicinfoReq = "wifibasicinfoReq";
-    /**
-     *
-     */
-    public static final String wifibasicinfoRsp = "wifibasicinfoRsp";
-    /**
-     *
-     */
-    public static final String wifipasswordReq = "wifipasswordReq";
-    /**
-     *
-     */
-    public static final String wifipasswordRsp = "wifipasswordRsp";
-    /**
-     *
-     */
-    public static final String wifiCurrentWifiInfoReq = "wifiCurrentWifiInfoReq";
-    /**
-     *
-     */
-    public static final String wifiCurrentWifiInfoRsp = "wifiCurrentWifiInfoRsp";
-    /**
-     *wifi连接成功，没有返回
-     */
-    public static final String wifiConnectSuccess = "wifiConnectSuccess";
 
     /**
      * 发送文件的请求，这个可以不要回应
@@ -188,32 +154,6 @@ public class ConstantValue {
      * 发送vpn配置文件的请求
      */
     public static final String sendVpnFileRequest = "sendVpnFileRequest";
-
-    /**
-     * 发送心跳，可以不需要回应
-     */
-    public static final String heartBetSend = "heartBetSend";
-
-    /**
-     * vpn基础信息的请求
-     */
-    public static final String vpnBasicInfoReq = "vpnBasicInfoReq";
-
-    /**
-     * vpn基础信息的返回
-     */
-    public static final String vpnBasicInfoRsp = "vpnBasicInfoRsp";
-
-
-    /**
-     * 所有vpn资产信息的请求
-     */
-    public static final String allVpnBasicInfoReq = "allVpnBasicInfoReq";
-
-    /**
-     * 所有vpn资产信息的返回
-     */
-    public static final String allVpnBasicInfoRsp = "allVpnBasicInfoRsp";
 
     /**
      * vpn私钥的请求而
@@ -243,10 +183,6 @@ public class ConstantValue {
      * vpn或者wifi连接成功后，告诉提供端做连接记录的返回
      */
     public static final String recordSaveRsp = "recordSaveRsp";
-    /**
-     * wifi使用者给提供者打赏成功的通知
-     */
-    public static final String gratuitySuccess = "gratuitySuccess";
 
     /**
      * 申请加入群聊的请求
@@ -288,4 +224,13 @@ public class ConstantValue {
      * 拿server 所有文件传输完成
      */
     public static final String sendVpnFileRsp = "sendVpnFileRsp";
+
+
+    public static final String sendVpnFileListReq = "sendVpnFileListReq";
+    public static final String sendVpnFileListRsp = "sendVpnFileListRsp";
+
+    public static final String sendVpnFileNewReq = "sendVpnFileNewReq";
+    public static final String sendVpnFileNewRsp = "sendVpnFileNewRsp";
+
+    public static final String vpnRegisterSuccessNotify = "vpnRegisterSuccessNotify";
 }

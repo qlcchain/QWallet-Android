@@ -98,6 +98,7 @@ import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
@@ -332,21 +333,21 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         mPresenter.getTox();
         getLocation();
         String addressNames = FileUtil.getAllAddressNames();
-        Map<String, String> map = new HashMap<>();
-        map.put("key", addressNames);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("key", addressNames);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
             mPresenter.zsFreeNum(infoMap1);
         }
-        if (!("".equals(addressNames))) {
-            List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-            if (walletList.size() == 0) {
-                ConstantValue.canClickWallet = false;
-                mPresenter.importWallet(map);
-            }
-        }
+//        if (!("".equals(addressNames))) {
+//            List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+//            if (walletList.size() == 0) {
+//                ConstantValue.canClickWallet = false;
+//                mPresenter.importWallet(map);
+//            }
+//        }
         qlinkcom.getP2PConnnectStatus(new P2PCallBack() {
             @Override
             public void onResult(String result) {
@@ -356,6 +357,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         SpUtil.putString(MainActivity.this, ConstantValue.P2PID, result);
                         EventBus.getDefault().post(new P2pBack());
                         String p2pId = result;
+                        LocalWalletUtil.initGreenDaoFromLocal();
                         String saveResult = FileUtil.saveP2pId2Local(result);
                         KLog.i("上次的p2pId" + saveResult);
                         if ("".equals(saveResult)) {
@@ -688,7 +690,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     Glide.with(this)
                             .load(R.mipmap.qr_code_n)
                             .into(ivAvater);
-                    showGuideViewEnterSetting();
+//                    showGuideViewEnterSetting();
                 }
             } else {
                 Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
@@ -722,7 +724,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     Glide.with(this)
                             .load(R.mipmap.icons_scan_qrcode_n)
                             .into(ivWallet);
-                    showGuideViewEnterSetting();
+//                    showGuideViewEnterSetting();
                 }
             } else {
                 Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
@@ -757,7 +759,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Glide.with(this)
                 .load(R.mipmap.icon_set1)
                 .into(ivWallet);
-        showGuideViewEnterSetting();
+//        showGuideViewEnterSetting();
     }
 
     /**

@@ -32,7 +32,7 @@ public interface VpnListContract {
 
         void startOrStopVPN(VpnProfile vpnProfile);
 
-        void preConnect();
+        void preConnect(int version);
 
         void showNeedQlcDialog(VpnEntity vpnEntity);
 
@@ -48,13 +48,13 @@ public interface VpnListContract {
 
         void preConnectVpn(VpnEntity vpnEntity);
 
-        void vpnProfileSendComplete();
+        void vpnProfileSendComplete(String content);
 
         void getPasswordFromRemote(int type);
 
         void handleSendMessage(int message);
 
-        void connectShareSuccess();
+        void connectShareSuccess(int version);
 
         void dialogConfirm();
 
