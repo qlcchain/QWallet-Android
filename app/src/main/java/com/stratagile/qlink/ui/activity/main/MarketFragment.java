@@ -140,6 +140,9 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
 
     private void fetechData(ArrayList<String> list) {
         refreshLayout.setRefreshing(false);
+        if (list == null) {
+            return;
+        }
         Map<String, Object> map = new HashMap<>();
         String[] strings = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {

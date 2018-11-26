@@ -267,10 +267,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
         }
         view.setLayoutParams(new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) (UIUtils.getStatusBarHeight(this))));
-        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
-            view.setBackgroundColor(getResources().getColor(R.color.color_f51818));
-            view.setText(getString(R.string.testnet));
-        }
+//        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
+//            view.setBackgroundColor(getResources().getColor(R.color.color_f51818));
+//            view.setText(getString(R.string.testnet));
+//        }
 //        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.dip2px(getResources().getDimension(R.dimen.dp_69), this) - (UIUtils.getStatusBarHeight(this)));
 //        toolbar.setLayoutParams(rlp);
         toolbar.setTitle("");

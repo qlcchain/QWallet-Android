@@ -145,6 +145,10 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llAbucoins:
+                if (ethWallet.getIsLook()) {
+                    ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot look Mnemonic");
+                    return;
+                }
                 if (ethWallet.getMnemonic() == null) {
                     cannotShowMnemonic();
                 } else {
@@ -152,9 +156,17 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 }
                 break;
             case R.id.llExportKeystore:
+                if (ethWallet.getIsLook()) {
+                    ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot ExportKeystore");
+                    return;
+                }
                 startActivity(new Intent(this, ExportEthKeyStoreActivity.class).putExtra("wallet", ethWallet));
                 break;
             case R.id.llExportPrivateKey:
+                if (ethWallet.getIsLook()) {
+                    ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot ExportPrivateKey");
+                    return;
+                }
                 ExportPrivateKey();
                 break;
             case R.id.llExportNeoEncryptedKey:

@@ -76,10 +76,14 @@ public class LocalWalletUtil {
 
     public static void initGreenDaoFromLocal() {
         if (AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll().size() == 0) {
-            AppConfig.getInstance().getDaoSession().getEthWalletDao().insertInTx(getLocalEthWallet());
+            if (getLocalEthWallet() != null) {
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().insertInTx(getLocalEthWallet());
+            }
         }
         if (AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() == 0) {
-            AppConfig.getInstance().getDaoSession().getWalletDao().insertInTx(getLocalNeoWallet());
+            if (getLocalNeoWallet() != null) {
+                AppConfig.getInstance().getDaoSession().getWalletDao().insertInTx(getLocalNeoWallet());
+            }
         }
     }
 

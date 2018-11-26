@@ -23,6 +23,8 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.EthWalletDao;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;

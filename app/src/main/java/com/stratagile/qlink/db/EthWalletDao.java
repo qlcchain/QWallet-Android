@@ -30,6 +30,7 @@ public class EthWalletDao extends AbstractDao<EthWallet, Long> {
         public final static Property Mnemonic = new Property(5, String.class, "mnemonic", false, "MNEMONIC");
         public final static Property IsCurrent = new Property(6, boolean.class, "isCurrent", false, "IS_CURRENT");
         public final static Property IsBackup = new Property(7, boolean.class, "isBackup", false, "IS_BACKUP");
+        public final static Property IsLook = new Property(8, boolean.class, "isLook", false, "IS_LOOK");
     }
 
 
@@ -52,7 +53,8 @@ public class EthWalletDao extends AbstractDao<EthWallet, Long> {
                 "\"KEYSTORE_PATH\" TEXT," + // 4: keystorePath
                 "\"MNEMONIC\" TEXT," + // 5: mnemonic
                 "\"IS_CURRENT\" INTEGER NOT NULL ," + // 6: isCurrent
-                "\"IS_BACKUP\" INTEGER NOT NULL );"); // 7: isBackup
+                "\"IS_BACKUP\" INTEGER NOT NULL ," + // 7: isBackup
+                "\"IS_LOOK\" INTEGER NOT NULL );"); // 8: isLook
     }
 
     /** Drops the underlying database table. */
@@ -96,6 +98,7 @@ public class EthWalletDao extends AbstractDao<EthWallet, Long> {
         }
         stmt.bindLong(7, entity.getIsCurrent() ? 1L: 0L);
         stmt.bindLong(8, entity.getIsBackup() ? 1L: 0L);
+        stmt.bindLong(9, entity.getIsLook() ? 1L: 0L);
     }
 
     @Override
@@ -133,6 +136,7 @@ public class EthWalletDao extends AbstractDao<EthWallet, Long> {
         }
         stmt.bindLong(7, entity.getIsCurrent() ? 1L: 0L);
         stmt.bindLong(8, entity.getIsBackup() ? 1L: 0L);
+        stmt.bindLong(9, entity.getIsLook() ? 1L: 0L);
     }
 
     @Override
@@ -150,7 +154,8 @@ public class EthWalletDao extends AbstractDao<EthWallet, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // keystorePath
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // mnemonic
             cursor.getShort(offset + 6) != 0, // isCurrent
-            cursor.getShort(offset + 7) != 0 // isBackup
+            cursor.getShort(offset + 7) != 0, // isBackup
+            cursor.getShort(offset + 8) != 0 // isLook
         );
         return entity;
     }
@@ -165,6 +170,7 @@ public class EthWalletDao extends AbstractDao<EthWallet, Long> {
         entity.setMnemonic(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setIsCurrent(cursor.getShort(offset + 6) != 0);
         entity.setIsBackup(cursor.getShort(offset + 7) != 0);
+        entity.setIsLook(cursor.getShort(offset + 8) != 0);
      }
     
     @Override

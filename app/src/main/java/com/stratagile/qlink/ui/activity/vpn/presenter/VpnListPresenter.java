@@ -246,6 +246,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     vpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
                     vpnEntity.setOwnerP2pId(vpnListBean.getOwnerP2pId());
                     vpnEntity.setP2pIdPc(vpnListBean.getOwnerP2pId());
+                    vpnEntity.setHash(vpnListBean.getHash());
                     vpnEntity.setQlc((float) vpnListBean.getCost());
                     vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
                     if (vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {

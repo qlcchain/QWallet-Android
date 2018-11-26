@@ -48,8 +48,18 @@ public class ChainVpn extends BaseBack {
             private String vpnName;
             private String country;
             private String p2pId;
+
+            public String getHash() {
+                return hash;
+            }
+
+            public void setHash(String hash) {
+                this.hash = hash;
+            }
+
             private String address;
             private String ownerP2pId;
+            private String hash;
 
             public String getOwnerP2pId() {
                 return ownerP2pId;

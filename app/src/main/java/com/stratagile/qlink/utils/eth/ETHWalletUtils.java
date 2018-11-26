@@ -111,7 +111,7 @@ public class ETHWalletUtils {
     }
 
     @NonNull
-    private static String generateNewWalletName() {
+    public static String generateNewWalletName() {
         List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         int size = ethWallets.size();
         if (size < 9) {
@@ -271,6 +271,7 @@ public class ETHWalletUtils {
         ethWallet.setAddress(Keys.toChecksumAddress(walletFile.getAddress()));
         ethWallet.setKeystorePath(destination.getAbsolutePath());
         ethWallet.setCurrent(true);
+        ethWallet.setIsLook(false);
         ethWallet.setPassword(enCodePassword(pwd));
         return ethWallet;
     }
@@ -483,7 +484,7 @@ public class ETHWalletUtils {
         return isValidAddress(input);
     }
 
-    public static boolean isValidAddress(String input) {
+    private static boolean isValidAddress(String input) {
         String cleanInput = Numeric.cleanHexPrefix(input);
 
         try {

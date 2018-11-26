@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.EthWalletDao;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerImportEthWalletComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.ImportEthWalletContract;
 import com.stratagile.qlink.ui.activity.eth.module.ImportEthWalletModule;
@@ -71,7 +73,13 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
         viewModel.walletAddress.observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                mPresenter.reportWalletImported(s);
+                EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.Address.eq(s)).unique();
+                if (!ethWallet.getIsLook()) {
+                    mPresenter.reportWalletImported(s);
+                } else {
+                    closeProgressDialog();
+                    finish();
+                }
             }
         });
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {

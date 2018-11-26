@@ -17,7 +17,8 @@ class TransacationHistoryAdapter(arrayList: ArrayList<TransactionInfo>) : BaseQu
             helper.setText(R.id.tvTransactionValue, "- " + BigDecimal.valueOf(tokenValue) + " " + item.transactionToken)
             helper.setImageResource(R.id.ivTransactionType, R.mipmap.icons_transaction_out)
         } else {
-            helper.setText(R.id.tvTransactionValue, "+ " + BigDecimal.valueOf(tokenValue) + " " + item.transactionToken)
+            var bigDecimal = BigDecimal.valueOf(tokenValue)
+            helper.setText(R.id.tvTransactionValue, "+ " + bigDecimal.toPlainString() + " " + item.transactionToken)
             helper.setImageResource(R.id.ivTransactionType, R.mipmap.icons_transaction_in)
         }
         helper.addOnClickListener(R.id.tvTransactionHash)

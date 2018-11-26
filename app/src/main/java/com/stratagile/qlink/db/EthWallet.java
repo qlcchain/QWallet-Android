@@ -25,10 +25,26 @@ public class EthWallet implements Parcelable{
     private String mnemonic;
     private boolean isCurrent;
     private boolean isBackup;
+    private boolean isLook;
 
 
     @Keep()
     public EthWallet() {
+    }
+
+    @Generated(hash = 1397269304)
+    public EthWallet(Long id, String address, String name, String password,
+            String keystorePath, String mnemonic, boolean isCurrent,
+            boolean isBackup, boolean isLook) {
+        this.id = id;
+        this.address = address;
+        this.name = name;
+        this.password = password;
+        this.keystorePath = keystorePath;
+        this.mnemonic = mnemonic;
+        this.isCurrent = isCurrent;
+        this.isBackup = isBackup;
+        this.isLook = isLook;
     }
 
     protected EthWallet(Parcel in) {
@@ -44,20 +60,7 @@ public class EthWallet implements Parcelable{
         mnemonic = in.readString();
         isCurrent = in.readByte() != 0;
         isBackup = in.readByte() != 0;
-    }
-
-    @Generated(hash = 382360440)
-    public EthWallet(Long id, String address, String name, String password,
-            String keystorePath, String mnemonic, boolean isCurrent,
-            boolean isBackup) {
-        this.id = id;
-        this.address = address;
-        this.name = name;
-        this.password = password;
-        this.keystorePath = keystorePath;
-        this.mnemonic = mnemonic;
-        this.isCurrent = isCurrent;
-        this.isBackup = isBackup;
+        isLook = in.readByte() != 0;
     }
 
     public static final Creator<EthWallet> CREATOR = new Creator<EthWallet>() {
@@ -187,5 +190,14 @@ public class EthWallet implements Parcelable{
         dest.writeString(mnemonic);
         dest.writeByte((byte) (isCurrent ? 1 : 0));
         dest.writeByte((byte) (isBackup ? 1 : 0));
+        dest.writeByte((byte) (isLook ? 1 : 0));
+    }
+
+    public boolean getIsLook() {
+        return this.isLook;
+    }
+
+    public void setIsLook(boolean isLook) {
+        this.isLook = isLook;
     }
 }

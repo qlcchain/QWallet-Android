@@ -28,6 +28,8 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.EthWalletDao;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.QrEntity;
@@ -269,6 +271,13 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
         switch (view.getId()) {
             case R.id.llSend:
                 if (tokenInfo.getWalletType() == AllWallet.WalletType.EthWallet) {
+                    EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.Address.like(tokenInfo.getWalletAddress())).unique();
+                    if (!ethWallet.getIsLook()) {
+
+                    } else {
+                        ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot Transfer");
+                        return;
+                    }
                     Intent intent1 = new Intent(this, EthTransferActivity.class);
                     intent1.putExtra("tokenInfo", tokenInfo);
                     intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
