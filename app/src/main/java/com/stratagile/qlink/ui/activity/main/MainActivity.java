@@ -319,6 +319,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     protected void initData() {
+        LocalWalletUtil.initGreenDaoFromLocal();
         if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
             if (ConstantValue.isShouldShowVertifyPassword) {
                 Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
@@ -332,22 +333,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         mPresenter.getTox();
         getLocation();
-        String addressNames = FileUtil.getAllAddressNames();
-//        Map<String, String> map = new HashMap<>();
-//        map.put("key", addressNames);
+
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
             mPresenter.zsFreeNum(infoMap1);
         }
-//        if (!("".equals(addressNames))) {
-//            List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-//            if (walletList.size() == 0) {
-//                ConstantValue.canClickWallet = false;
-//                mPresenter.importWallet(map);
-//            }
-//        }
         qlinkcom.getP2PConnnectStatus(new P2PCallBack() {
             @Override
             public void onResult(String result) {
@@ -357,7 +349,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         SpUtil.putString(MainActivity.this, ConstantValue.P2PID, result);
                         EventBus.getDefault().post(new P2pBack());
                         String p2pId = result;
-                        LocalWalletUtil.initGreenDaoFromLocal();
                         String saveResult = FileUtil.saveP2pId2Local(result);
                         KLog.i("上次的p2pId" + saveResult);
                         if ("".equals(saveResult)) {
@@ -1000,6 +991,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
                         QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), "NEO Address", "neo_neo");
+                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EosWallet) {
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), "Eos Address", "eos_neo");
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     }
                 }

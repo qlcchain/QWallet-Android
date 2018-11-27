@@ -94,8 +94,6 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
 
     private TokenInfo gasTokenInfo;
 
-    private SpinnerPopWindow<String> mSpinerPopWindow;
-
     private ArrayList<String> list;
 
     @Override
@@ -131,8 +129,6 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                 break;
             }
         }
-        mSpinerPopWindow = new SpinnerPopWindow<String>(this, list, itemClickListener);
-        mSpinerPopWindow.setOnDismissListener(dismissListener);
         setTitle("Send " + tokenInfo.getTokenSymol());
         tvNeoTokenName.setText(tokenInfo.getTokenSymol());
         tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
@@ -392,41 +388,4 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
             super.onBackPressed();
         }
     }
-
-    /**
-     * 监听popupwindow取消
-     */
-    private PopupWindow.OnDismissListener dismissListener = new PopupWindow.OnDismissListener() {
-        @Override
-        public void onDismiss() {
-            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
-                @Override
-                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-
-                }
-            });
-        }
-    };
-
-    /**
-     * popupwindow显示的ListView的item点击事件
-     */
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            mSpinerPopWindow.dismiss();
-            tokenInfo = tokenInfoArrayList.get(position);
-            setTitle("Send " + tokenInfo.getTokenSymol());
-            tvNeoTokenName.setText(tokenInfo.getTokenSymol());
-            if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
-                etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-            } else {
-                etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
-            }
-            etNeoTokenSendValue.setText("");
-            tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvNeoTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
-            viewLine.setLayoutParams(layoutParams);
-        }
-    };
 }

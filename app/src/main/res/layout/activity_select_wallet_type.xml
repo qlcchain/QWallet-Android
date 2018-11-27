@@ -148,6 +148,7 @@
             android:layout_marginRight="@dimen/x8"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/servicePrivacyPolicy"
             android:layout_width="wrap_content"
             android:textSize="12sp"
             android:text="Terms of Service and Privacy Policy"

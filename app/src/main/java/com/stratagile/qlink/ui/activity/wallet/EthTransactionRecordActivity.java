@@ -35,6 +35,7 @@ import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TransactionInfo;
+import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerEthTransactionRecordComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransactionRecordContract;
 import com.stratagile.qlink.ui.activity.wallet.module.EthTransactionRecordModule;
@@ -61,6 +62,7 @@ import butterknife.OnClick;
  * @Package com.stratagile.qlink.ui.activity.wallet
  * @Description: $description
  * @date 2018/10/29 16:12:21
+ * 这个页面本来是做了单独给eth的，后来三个链上的可以放在一起，名字就没有改了
  */
 
 public class EthTransactionRecordActivity extends BaseActivity implements EthTransactionRecordContract.View {
@@ -198,8 +200,8 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
     protected void initData() {
         HashMap infoMap = new HashMap<String, Object>();
         tokenInfo = getIntent().getParcelableExtra("tokenInfo");
-        infoMap.put("address", tokenInfo.getWalletAddress());
         if (tokenInfo.getWalletType() == AllWallet.WalletType.EthWallet) {
+            infoMap.put("address", tokenInfo.getWalletAddress());
             if (!tokenInfo.getTokenSymol().toLowerCase().equals("eth")) {
                 infoMap.put("token", tokenInfo.getTokenAddress());
                 mPresenter.getEthWalletTransaction(infoMap, tokenInfo.getWalletAddress());
@@ -208,9 +210,15 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             }
             String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
             tvTokenValue.setText(value);
-        } else {
+        } else if (tokenInfo.getWalletType() == AllWallet.WalletType.NeoWallet){
+            infoMap.put("address", tokenInfo.getWalletAddress());
             infoMap.put("page", 1);
             mPresenter.getNeoWalletTransaction(infoMap);
+            tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()) + "");
+        } else if (tokenInfo.getWalletType() == AllWallet.WalletType.EosWallet) {
+            infoMap.put("account", tokenInfo.getWalletAddress());
+            infoMap.put("symbol", tokenInfo.getTokenSymol());
+            mPresenter.getEosAccountTransaction(tokenInfo.getWalletAddress(), infoMap);
             tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()) + "");
         }
         setTitle(tokenInfo.getTokenSymol());
@@ -284,6 +292,11 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                     startActivity(intent1);
                 } else if (tokenInfo.getWalletType() == AllWallet.WalletType.NeoWallet) {
                     Intent intent1 = new Intent(this, NeoTransferActivity.class);
+                    intent1.putExtra("tokenInfo", tokenInfo);
+                    intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
+                    startActivity(intent1);
+                } else if (tokenInfo.getWalletType() == AllWallet.WalletType.EosWallet) {
+                    Intent intent1 = new Intent(this, EosTransferActivity.class);
                     intent1.putExtra("tokenInfo", tokenInfo);
                     intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
                     startActivity(intent1);

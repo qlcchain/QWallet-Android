@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,6 +130,28 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
         closeProgressDialog();
         setResult(RESULT_OK);
         onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.qrcode_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.qrcode) {
+            startActivityForResult(new Intent(this, ScanQrCodeActivity.class), 1);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            etPrivateKey.setText(data.getStringExtra("result"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @OnClick({R.id.btImport, R.id.tvWhatsPrivateKey})

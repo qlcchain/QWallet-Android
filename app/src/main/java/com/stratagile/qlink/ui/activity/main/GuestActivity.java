@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -20,14 +21,21 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.ui.activity.main.component.DaggerGuestComponent;
 import com.stratagile.qlink.ui.activity.main.contract.GuestContract;
 import com.stratagile.qlink.ui.activity.main.module.GuestModule;
 import com.stratagile.qlink.ui.activity.main.presenter.GuestPresenter;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -125,6 +133,19 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
 
     @Override
     protected void initData() {
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/neoWallet");
+        if (!file.exists()) {
+            String addressNames = FileUtil.getAllAddressNames();
+            Map<String, String> map = new HashMap<>();
+            map.put("key", addressNames);
+            if (!("".equals(addressNames))) {
+                List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                if (walletList.size() == 0) {
+                    ConstantValue.canClickWallet = false;
+                    mPresenter.importWallet(map);
+                }
+            }
+        }
         SpUtil.putInt(this, ConstantValue.LOCALVERSIONCODE, VersionUtil.getAppVersionCode(this));
     }
 
@@ -239,11 +260,11 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
     private void addDot() {
         ViewAnimation viewAnimation = new ViewAnimation(dot);
         viewAnimation.add(WoWoPositionAnimation.builder().page(0)
-                .fromX(- getResources().getDimension(R.dimen.x18) + dot.getWidth()).toX(dot.getX())
+                .fromX(-getResources().getDimension(R.dimen.x18) + dot.getWidth()).toX(dot.getX())
                 .keepY(0)
                 .ease(Ease.Linear).build());
         viewAnimation.add(WoWoPositionAnimation.builder().page(1)
-                .fromX(dot.getX()).toX( dot.getX() + getResources().getDimension(R.dimen.x20) + dot.getWidth())
+                .fromX(dot.getX()).toX(dot.getX() + getResources().getDimension(R.dimen.x20) + dot.getWidth())
                 .keepY(0)
                 .ease(Ease.Linear).build());
         wowo.addAnimation(viewAnimation);

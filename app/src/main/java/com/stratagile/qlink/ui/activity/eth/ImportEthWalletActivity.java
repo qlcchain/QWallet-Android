@@ -2,11 +2,14 @@ package com.stratagile.qlink.ui.activity.eth;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -18,6 +21,7 @@ import com.stratagile.qlink.ui.activity.eth.contract.ImportEthWalletContract;
 import com.stratagile.qlink.ui.activity.eth.module.ImportEthWalletModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.ImportEthWalletPresenter;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
+import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.UseHistoryListFragment;
 import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.ParentNoDispatchViewpager;
@@ -125,6 +129,28 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
                 .importEthWalletModule(new ImportEthWalletModule(this))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.qrcode_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.qrcode) {
+            startActivityForResult(new Intent(this, ScanQrCodeActivity.class), 1);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            viewModel.qrCode.postValue(data.getStringExtra("result"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

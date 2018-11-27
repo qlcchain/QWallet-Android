@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
-import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -17,24 +16,18 @@ import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
-import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
+import com.stratagile.qlink.ui.activity.eos.EosImportActivity;
 import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
+import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerSelectWalletTypeComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.SelectWalletTypeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.SelectWalletTypePresenter;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
-import org.consenlabs.tokencore.wallet.Identity;
-import org.consenlabs.tokencore.wallet.WalletManager;
-import org.consenlabs.tokencore.wallet.model.Metadata;
-import org.consenlabs.tokencore.wallet.model.Network;
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -79,6 +72,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     Button btImport;
     @BindView(R.id.checkBox)
     SmoothCheckBox checkBox;
+    @BindView(R.id.servicePrivacyPolicy)
+    TextView servicePrivacyPolicy;
 
     private AllWallet.WalletType walletType;
 
@@ -162,7 +157,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         }
     }
 
-    @OnClick({R.id.llEth, R.id.llEos, R.id.llNeo, R.id.btCreate, R.id.btImport})
+    @OnClick({R.id.llEth, R.id.llEos, R.id.llNeo, R.id.btCreate, R.id.btImport, R.id.servicePrivacyPolicy})
     public void onViewClicked(View view) {
         KLog.i(view.getId() + "");
         switch (view.getId()) {
@@ -216,11 +211,19 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 } else if (walletType == AllWallet.WalletType.NeoWallet) {
                     Intent intent = new Intent(this, ImportWalletActivity.class);
                     startActivityForResult(intent, 1);
+                } else {
+                    Intent intent = new Intent(this, EosImportActivity.class);
+                    startActivityForResult(intent, 2);
                 }
+                break;
+            case R.id.servicePrivacyPolicy:
+                Intent intent = new Intent(this, WebViewActivity.class);
+                intent.putExtra("url", "https://winq.net/disclaimer.html");
+                intent.putExtra("title", "Service agreement");
+                startActivity(intent);
                 break;
             default:
                 break;
         }
     }
-
 }

@@ -118,6 +118,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                     if (tpcs.getData().get(position).getSymbol().toLowerCase().equals(viewModel.tokenInfoMutableLiveData.getValue().get(i).getTokenSymol().toLowerCase())) {
                         Intent intent = new Intent(getActivity(), EthTransactionRecordActivity.class);
                         intent.putExtra("tokenInfo", viewModel.tokenInfoMutableLiveData.getValue().get(i));
+                        intent.putParcelableArrayListExtra("tokens", viewModel.tokenInfoMutableLiveData.getValue());
                         startActivity(intent);
                     }
                 }

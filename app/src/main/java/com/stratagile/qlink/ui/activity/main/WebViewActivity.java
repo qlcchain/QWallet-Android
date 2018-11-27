@@ -39,6 +39,7 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
 
     @Override
     protected void initView() {
+        mainColor = R.color.white;
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -11,6 +11,9 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EosAccountInfo;
+import com.stratagile.qlink.entity.EosAccountTransaction;
+import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletDetail;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.EthWalletTransaction;
@@ -65,6 +68,9 @@ import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
+import static com.stratagile.qlink.data.api.API.url_eos_account_info;
+import static com.stratagile.qlink.data.api.API.url_eos_account_transaction_info;
+import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
@@ -321,6 +327,18 @@ public interface HttpApi {
     @POST(url_neo_gas_claim)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ClaimData> neoGasClaim(@Body RequestBody map);
+
+    @POST(url_eos_account_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosAccountInfo> getEosAccountInfo(@Body RequestBody map);
+
+    @POST(url_eos_token_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosTokens> getEosTokenList(@Body RequestBody map);
+
+    @POST(url_eos_account_transaction_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosAccountTransaction> getEosAccountTransaction(@Body RequestBody map);
 
 
     /*************************************************/

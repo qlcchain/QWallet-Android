@@ -16,6 +16,7 @@ import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.ClaimData;
+import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.NeoTransfer;
@@ -121,6 +122,30 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
     }
 
     @Override
+    public void getEosWalletDetail(String address, Map map) {
+        Disposable disposable = httpAPIWrapper.getEosTokenList(map)
+                .subscribe(new Consumer<EosTokens>() {
+                    @Override
+                    public void accept(EosTokens baseBack) throws Exception {
+                        //isSuccesse
+                        getEosTokensInfo(address, baseBack);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
     public void getToeknPrice(ArrayList<TokenInfo> arrayList, HashMap map) {
         Disposable disposable = httpAPIWrapper.getTokenPrice(map)
                 .subscribe(new Consumer<TokenPrice>() {
@@ -128,8 +153,10 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
                     public void accept(TokenPrice baseBack) throws Exception {
                         //isSuccesse
                         for (int i = 0; i < baseBack.getData().size(); i++) {
-                            if (arrayList.get(i).isMainNetToken()) {
-                                arrayList.get(i).setTokenPrice(baseBack.getData().get(i).getPrice());
+                            for (int j = 0; j < arrayList.size(); j++) {
+                                if (arrayList.get(j).getTokenSymol().toLowerCase().equals(baseBack.getData().get(i).getSymbol().toLowerCase())) {
+                                    arrayList.get(j).setTokenPrice(baseBack.getData().get(i).getPrice());
+                                }
                             }
                         }
                         mView.getTokenPriceBack(arrayList);
@@ -330,6 +357,23 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
         }
     }
 
+    private void getEosTokensInfo(String accountName, EosTokens eosTokens) {
+        ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
+        for (int i = 0; i < eosTokens.getData().getData().getSymbol_list().size(); i++) {
+            TokenInfo tokenInfo = new TokenInfo();
+            tokenInfo.setTokenName(eosTokens.getData().getData().getSymbol_list().get(i).getSymbol());
+            tokenInfo.setTokenSymol(eosTokens.getData().getData().getSymbol_list().get(i).getSymbol());
+            tokenInfo.setTokenValue(Double.parseDouble(eosTokens.getData().getData().getSymbol_list().get(i).getBalance()));
+            tokenInfo.setTokenAddress(eosTokens.getData().getData().getSymbol_list().get(i).getCodeX());
+            tokenInfo.setTokenImgName(getEosTokenImg(eosTokens.getData().getData().getSymbol_list().get(i)));
+            tokenInfo.setWalletAddress(accountName);
+            tokenInfo.setMainNetToken(true);
+            tokenInfo.setWalletType(AllWallet.WalletType.EosWallet);
+            tokenInfos.add(tokenInfo);
+        }
+        getTokenPrice(tokenInfos);
+    }
+
     private void getNeoTokensInfo(NeoWalletInfo neoWalletInfo) {
         ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
         if (neoWalletInfo.getData().getBalance().size() == 0) {
@@ -361,6 +405,10 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
 
     private String getNeoTokenImg(NeoWalletInfo.DataBean.BalanceBean balanceBean) {
         return "neo_" + balanceBean.getAsset_symbol().toLowerCase();
+    }
+
+    private String getEosTokenImg(EosTokens.DataBeanX.DataBean.SymbolListBean balanceBean) {
+        return "eos_" + balanceBean.getSymbol().toLowerCase();
     }
 
     @Override

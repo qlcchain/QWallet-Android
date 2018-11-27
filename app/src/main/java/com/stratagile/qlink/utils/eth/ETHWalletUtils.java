@@ -334,7 +334,7 @@ public class ETHWalletUtils {
      * @return
      */
     public static String getPassword(String content) {
-        KLog.i(content);
+//        KLog.i(content);
         String password = "";
         try {
             password = new String(qlinkcom.AES(Base64.decode(content, Base64.NO_WRAP), 1));
@@ -342,7 +342,7 @@ public class ETHWalletUtils {
             e.printStackTrace();
             password = content;
         }
-        KLog.i(password);
+//        KLog.i(password);
         return password;
     }
 

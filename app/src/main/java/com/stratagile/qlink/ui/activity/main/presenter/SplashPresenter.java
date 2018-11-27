@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.VersionUtil;
@@ -187,6 +188,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
             LocalAssetsUtils.updateGreanDaoFromLocal();
             // 权限申请成功回调。
             if (requestCode == 101) {
+                qlinkcom.init();
                 permissionState = 0;
                 if (timeOver) {
                     if (jumpToGuest) {

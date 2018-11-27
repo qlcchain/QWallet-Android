@@ -25,6 +25,10 @@ class TpcsAdapter(arrayList: ArrayList<Tpcs.DataBean>) : BaseQuickAdapter<Tpcs.D
             Glide.with(mContext)
                     .load(mContext.resources.getIdentifier("eth_" + item.symbol.toLowerCase(), "mipmap", mContext.packageName))
                     .into(imageView)
+        }else if (walletTpye == AllWallet.WalletType.EosWallet) {
+            Glide.with(mContext)
+                    .load(mContext.resources.getIdentifier("eos_" + item.symbol.toLowerCase(), "mipmap", mContext.packageName))
+                    .into(imageView)
         }
         helper.setText(R.id.tvRiseOrDown, item.priceChangePercent + "%")
         helper.setText(R.id.tvTokenValue, item.lastPrice)

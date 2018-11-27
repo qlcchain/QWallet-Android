@@ -174,7 +174,6 @@ public class AppConfig extends MultiDexApplication {
         PRNGFixes.apply();
         ToastUtil.init();
         com.stratagile.qlink.core.ProfileManager.removeAllProfile(this);
-        qlinkcom.init();
         initMoney();
         AppFilePath.init(this);
 //        LeakCanary.install(this);

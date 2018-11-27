@@ -1,0 +1,225 @@
+package com.stratagile.qlink.ui.activity.eos;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.animation.DynamicAnimation;
+import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.stratagile.qlink.R;
+import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.entity.TokenInfo;
+import com.stratagile.qlink.ui.activity.eos.component.DaggerEosTransferComponent;
+import com.stratagile.qlink.ui.activity.eos.contract.EosTransferContract;
+import com.stratagile.qlink.ui.activity.eos.module.EosTransferModule;
+import com.stratagile.qlink.ui.activity.eos.presenter.EosTransferPresenter;
+import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
+import com.stratagile.qlink.utils.PopWindowUtil;
+import com.stratagile.qlink.utils.SpringAnimationUtil;
+import com.stratagile.qlink.view.CustomPopWindow;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
+
+/**
+ * @author hzp
+ * @Package com.stratagile.qlink.ui.activity.eos
+ * @Description: $description
+ * @date 2018/11/27 14:27:47
+ */
+
+public class EosTransferActivity extends BaseActivity implements EosTransferContract.View {
+
+    @Inject
+    EosTransferPresenter mPresenter;
+    @BindView(R.id.tvEosTokenName)
+    TextView tvEosTokenName;
+    @BindView(R.id.viewLine)
+    View viewLine;
+    @BindView(R.id.ivArrow)
+    ImageView ivArrow;
+    @BindView(R.id.tvEosTokenValue)
+    TextView tvEosTokenValue;
+    @BindView(R.id.etEosTokenSendValue)
+    EditText etEosTokenSendValue;
+    @BindView(R.id.view1)
+    View view1;
+    @BindView(R.id.sendto)
+    TextView sendto;
+    @BindView(R.id.etEosTokenSendAddress)
+    EditText etEosTokenSendAddress;
+    @BindView(R.id.view2)
+    View view2;
+    @BindView(R.id.Memo)
+    TextView Memo;
+    @BindView(R.id.etEthTokenSendMemo)
+    EditText etEthTokenSendMemo;
+    @BindView(R.id.view3)
+    View view3;
+    @BindView(R.id.tvSend)
+    TextView tvSend;
+
+    private TokenInfo tokenInfo;
+
+    private ArrayList<TokenInfo> tokenInfoArrayList;
+
+    private ArrayList<String> list;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initView() {
+        mainColor = R.color.white;
+        setContentView(R.layout.activity_eos_transfer);
+        ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void initData() {
+        list = new ArrayList<>();
+        tokenInfoArrayList = getIntent().getParcelableArrayListExtra("tokens");
+        if (getIntent().hasExtra("tokenInfo")) {
+            tokenInfo = getIntent().getParcelableExtra("tokenInfo");
+        } else {
+            tokenInfo = tokenInfoArrayList.get(0);
+        }
+        if (getIntent().hasExtra("walletAddress")) {
+            etEosTokenSendAddress.setText(getIntent().getStringExtra("walletAddress"));
+        }
+        for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+            list.add(tokenInfoArrayList.get(i).getTokenSymol());
+        }
+        setTitle("Send " + tokenInfo.getTokenSymol());
+        tvEosTokenName.setText(tokenInfo.getTokenSymol());
+        tvEosTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+    }
+
+    @Override
+    protected void setupActivityComponent() {
+        DaggerEosTransferComponent
+                .builder()
+                .appComponent(((AppConfig) getApplication()).getApplicationComponent())
+                .eosTransferModule(new EosTransferModule(this))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public void setPresenter(EosTransferContract.EosTransferContractPresenter presenter) {
+        mPresenter = (EosTransferPresenter) presenter;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.qrcode_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.qrcode) {
+            startActivityForResult(new Intent(this, ScanQrCodeActivity.class), 1);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            etEosTokenSendAddress.setText(data.getStringExtra("result"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void closeProgressDialog() {
+        progressDialog.hide();
+    }
+
+    @OnClick({R.id.tvEosTokenName, R.id.tvSend})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tvEosTokenName:
+                showSpinnerPopWindow();
+                break;
+            case R.id.tvSend:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showSpinnerPopWindow() {
+        PopWindowUtil.INSTANCE.showSharePopWindow(this, ivArrow, list, new PopWindowUtil.OnItemSelectListener() {
+            @Override
+            public void onSelect(@NotNull String content) {
+                if (!"".equals(content)) {
+                    for (int i = 0; i < tokenInfoArrayList.size(); i++) {
+                        if (tokenInfoArrayList.get(i).getTokenSymol().equals(content)) {
+                            tokenInfo = tokenInfoArrayList.get(i);
+                            setTitle("Send " + tokenInfo.getTokenSymol());
+                            tvEosTokenName.setText(tokenInfo.getTokenSymol());
+                            etEosTokenSendValue.setText("");
+                            tvEosTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEosTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
+                            viewLine.setLayoutParams(layoutParams);
+                        }
+                    }
+                }
+                SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                    }
+                });
+            }
+        });
+        SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+            @Override
+            public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (CustomPopWindow.onBackPressed()) {
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                @Override
+                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+
+                }
+            });
+        } else {
+            super.onBackPressed();
+        }
+    }
+}

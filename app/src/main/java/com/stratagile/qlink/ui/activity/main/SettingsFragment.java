@@ -156,7 +156,10 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
                 startActivityForResult(new Intent(getActivity(), ChooseWalletActivity.class), 3);
                 break;
             case R.id.llAgreement:
-
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("url", "https://winq.net/disclaimer.html");
+                intent.putExtra("title", "Service agreement");
+                startActivity(intent);
                 break;
             case R.id.llHepl:
 

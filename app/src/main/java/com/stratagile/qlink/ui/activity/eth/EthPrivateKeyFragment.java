@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.data.FullWallet;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthPrivateKeyComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthPrivateKeyContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthPrivateKeyModule;
@@ -64,6 +66,14 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
         viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
+        viewModel.qrCode.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                if (getUserVisibleHint()) {
+                    etPrivateKey.setText(s);
+                }
+            }
+        });
         return view;
     }
 
@@ -125,20 +135,37 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
             return;
         }
         List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
-        for (int i = 0; i < wallets.size(); i++) {
-            if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
-                ToastUtil.displayShortToast("wallet exist");
-                closeProgressDialog();
-                return;
+        if (wallets != null && wallets.size() != 0) {
+            for (int i = 0; i < wallets.size(); i++) {
+                if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
+                    ToastUtil.displayShortToast("wallet exist");
+                    closeProgressDialog();
+                    return;
+                }
             }
         }
-        for (int i = 0; i < wallets.size(); i++) {
-            if (wallets.get(i).isCurrent()) {
-                wallets.get(i).setCurrent(false);
-                AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallets.get(i));
-                break;
+        List<Wallet> wallets1 = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+        if (wallets1 != null && wallets1.size() != 0 ) {
+            for (int i = 0; i < wallets1.size(); i++) {
+                if (wallets1.get(i).getIsCurrent()) {
+                    wallets1.get(i).setIsCurrent(false);
+                    AppConfig.getInstance().getDaoSession().getWalletDao().update(wallets1.get(i));
+                    break;
+                }
+            }
+
+        }
+
+        if (wallets != null && wallets.size() != 0) {
+            for (int i = 0; i < wallets.size(); i++) {
+                if (wallets.get(i).isCurrent()) {
+                    wallets.get(i).setCurrent(false);
+                    AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallets.get(i));
+                    break;
+                }
             }
         }
+
         AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
         closeProgressDialog();
         viewModel.walletAddress.postValue(ethWallet.getAddress());

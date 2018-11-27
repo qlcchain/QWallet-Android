@@ -380,6 +380,8 @@
         <activity android:name=".ui.activity.wallet.NeoTransferActivity" />
         <activity android:name=".ui.activity.vpn.MyAssetsActivity" />
         <activity android:name=".ui.activity.wallet.ChangePasswordActivity" />
+        <activity android:name=".ui.activity.eos.EosImportActivity" />
+        <activity android:name=".ui.activity.eos.EosTransferActivity" />
 
         <activity-alias
             android:exported="true"

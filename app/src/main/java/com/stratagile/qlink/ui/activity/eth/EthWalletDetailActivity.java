@@ -18,6 +18,7 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -75,6 +76,8 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
 
     private Wallet wallet;
 
+    private EosAccount eosAccount;
+
     private AllWallet.WalletType walletType;
 
     @Override
@@ -107,6 +110,17 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             llAbucoins.setVisibility(View.GONE);
             llExportKeystore.setVisibility(View.GONE);
             llExportPrivateKey.setVisibility(View.GONE);
+        } else if (getIntent().getIntExtra("walletType", 0) == AllWallet.WalletType.EosWallet.ordinal()) {
+            walletType = AllWallet.WalletType.EosWallet;
+            eosAccount = getIntent().getParcelableExtra("eoswallet");
+            ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
+            tvWalletName.setText(eosAccount.getAccountName());
+            tvWalletAddress.setText(eosAccount.getAccountName());
+            llAbucoins.setVisibility(View.GONE);
+            llExportKeystore.setVisibility(View.GONE);
+            llExportPrivateKey.setVisibility(View.GONE);
+            llExportNeoEncryptedKey.setVisibility(View.GONE);
+            llExportNeoPrivateKey.setVisibility(View.GONE);
         }
 
     }
@@ -249,9 +263,12 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 AppConfig.getInstance().getDaoSession().getWalletDao().delete(wallet);
             } else if (walletType == AllWallet.WalletType.EthWallet) {
                 AppConfig.getInstance().getDaoSession().getEthWalletDao().delete(ethWallet);
+            } else if (walletType == AllWallet.WalletType.EosWallet) {
+                AppConfig.getInstance().getDaoSession().getEosAccountDao().delete(eosAccount);
             }
-            LocalWalletUtil.updateNeoWallet();
+            LocalWalletUtil.updateLocalNeoWallet();
             LocalWalletUtil.updateLocalEthWallet();
+            LocalWalletUtil.updateLocalEosWallet();
             showTestDialog();
         }
     }

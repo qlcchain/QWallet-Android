@@ -148,10 +148,11 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             etEthTokenSendAddress.setText(getIntent().getStringExtra("walletAddress"));
         } else {
             tokenInfo = getIntent().getParcelableExtra("tokenInfo");
-            setTitle("Send " + tokenInfo.getTokenSymol());
-            String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-            tvEthTokenValue.setText("Balance: " + value);
         }
+
+        setTitle("Send " + tokenInfo.getTokenSymol());
+        String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+        tvEthTokenValue.setText("Balance: " + value);
 
         tvEthTokenName.setText(tokenInfo.getTokenSymol());
 

@@ -49,6 +49,8 @@ public interface AllWalletContract {
 
         void getNeoWalletDetail(String address, Map map);
 
+        void getEosWalletDetail(String address, Map map);
+
         void getToeknPrice(ArrayList<TokenInfo> arrayList, HashMap map);
 
         /**

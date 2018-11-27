@@ -75,6 +75,14 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         View view = inflater.inflate(R.layout.fragment_eth_key_stroe, null);
         ButterKnife.bind(this, view);
         viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
+        viewModel.qrCode.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                if (getUserVisibleHint()) {
+                    etKeystroe.setText(s);
+                }
+            }
+        });
         Bundle mBundle = getArguments();
         return view;
     }

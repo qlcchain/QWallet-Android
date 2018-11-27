@@ -15,6 +15,9 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EosAccountInfo;
+import com.stratagile.qlink.entity.EosAccountTransaction;
+import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletDetail;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.EthWalletTransaction;
@@ -573,6 +576,16 @@ public class HttpAPIWrapper {
         } else {
             return wrapper(mHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
+    }
+
+    public Observable<EosAccountInfo> getEosAccountInfo(Map map) {
+        return wrapper(mHttpAPI.getEosAccountInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+    public Observable<EosTokens> getEosTokenList(Map map) {
+        return wrapper(mHttpAPI.getEosTokenList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+    public Observable<EosAccountTransaction> getEosAccountTransaction(Map map) {
+        return wrapper(mHttpAPI.getEosAccountTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
     /**
      * 给任何Http的Observable加上通用的线程调度器

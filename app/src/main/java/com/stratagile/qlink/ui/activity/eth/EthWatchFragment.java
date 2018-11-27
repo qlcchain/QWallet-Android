@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.eth;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,6 +58,14 @@ public class EthWatchFragment extends BaseFragment implements EthWatchContract.V
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
         viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
+        viewModel.qrCode.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                if (getUserVisibleHint()) {
+                    etAddress.setText(s);
+                }
+            }
+        });
         return view;
     }
 
