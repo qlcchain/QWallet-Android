@@ -78,6 +78,8 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
                         .into(avater);
             }
         }
+        helper.setGone(R.id.viewOnline, !item.isOnline());
+        helper.setVisible(R.id.switchBar, item.isOnline());
         if (item.isOnline()) {
             helper.setImageDrawable(R.id.friend_status, mContext.getResources().getDrawable(R.mipmap.icon_search));
             helper.setTextColor(R.id.vpn_name, mContext.getResources().getColor(R.color.color_333));

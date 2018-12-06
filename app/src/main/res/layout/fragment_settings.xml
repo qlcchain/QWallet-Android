@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TouchId to unlock"
+                android:text="Fingerprint to unlock"
                 android:textColor="@color/color_29282a" />
 
             <View

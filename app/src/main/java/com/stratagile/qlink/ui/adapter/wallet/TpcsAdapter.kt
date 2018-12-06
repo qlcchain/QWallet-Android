@@ -19,15 +19,15 @@ class TpcsAdapter(arrayList: ArrayList<Tpcs.DataBean>) : BaseQuickAdapter<Tpcs.D
         var imageView = helper.getView<ImageView>(R.id.ivTokenAvatar)
         if (walletTpye == AllWallet.WalletType.NeoWallet) {
             Glide.with(mContext)
-                    .load(mContext.resources.getIdentifier("neo_" + item.symbol.toLowerCase(), "mipmap", mContext.packageName))
+                    .load(mContext.resources.getIdentifier(item.symbol.toLowerCase(), "mipmap", mContext.packageName))
                     .into(imageView)
         } else if (walletTpye == AllWallet.WalletType.EthWallet) {
             Glide.with(mContext)
-                    .load(mContext.resources.getIdentifier("eth_" + item.symbol.toLowerCase(), "mipmap", mContext.packageName))
+                    .load(mContext.resources.getIdentifier(item.symbol.toLowerCase(), "mipmap", mContext.packageName))
                     .into(imageView)
         }else if (walletTpye == AllWallet.WalletType.EosWallet) {
             Glide.with(mContext)
-                    .load(mContext.resources.getIdentifier("eos_" + item.symbol.toLowerCase(), "mipmap", mContext.packageName))
+                    .load(mContext.resources.getIdentifier(item.symbol.toLowerCase(), "mipmap", mContext.packageName))
                     .into(imageView)
         }
         helper.setText(R.id.tvRiseOrDown, item.priceChangePercent + "%")

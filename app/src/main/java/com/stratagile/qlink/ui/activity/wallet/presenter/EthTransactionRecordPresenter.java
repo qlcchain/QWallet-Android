@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -279,7 +280,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                             transactionInfo.setFrom(baseBack.getData().getData().getTrace_list().get(i).getSender());
                             transactionInfo.setTo(baseBack.getData().getData().getTrace_list().get(i).getReceiver());
                             transactionInfo.setTransactionState(baseBack.getData().getData().getTrace_list().get(i).getStatus());
-                            transactionInfo.setOwner((String) map.get("address"));
+                            transactionInfo.setOwner((String) map.get("account"));
                             transactionInfo.setTimestamp(parseEosTransactionTimestamp(baseBack.getData().getData().getTrace_list().get(i).getTimestamp()));
                             transactionInfos.add(transactionInfo);
                         }
@@ -301,13 +302,14 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
     }
 
     private long parseEosTransactionTimestamp(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        sdr.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date;
         String times = null;
         try {
-            date = sdr.parse(time.replace("T", " "));
-            long l = date.getTime();
-//            KLog.i(l);
+            date = sdr.parse(time);
+            long l = date.getTime() / 1000;
+            KLog.i(l);
             return l;
         } catch (Exception e) {
             e.printStackTrace();

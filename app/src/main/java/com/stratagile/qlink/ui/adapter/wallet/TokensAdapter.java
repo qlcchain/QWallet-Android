@@ -33,33 +33,80 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
         if (item.getWalletType() == AllWallet.WalletType.EthWallet) {
             if (item.getTokenSymol().equals("ETH")) {
                 helper.setText(R.id.tvTokenValue, weiToEth(BigDecimal.valueOf(item.getTokenValue()).multiply(BigDecimal.TEN.pow(18)).toBigInteger(), 5));
+                ImageView imageView = helper.getView(R.id.ivTokenAvatar);
+                KLog.i(item.getTokenImgName());
+                if (item.isMainNetToken()) {
+                    imageView.setVisibility(View.VISIBLE);
+                    if (item.getTokenImgName() != null && !item.getTokenImgName().equals("")) {
+                        Glide.with(mContext)
+                                .load(mContext.getResources().getIdentifier(item.getTokenSymol().toLowerCase(), "mipmap", mContext.getPackageName()))
+                                .into(imageView);
+                    }
+                    BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
+                    double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                } else {
+                    helper.setText(R.id.tvTokenMoney, "- -");
+                    imageView.setVisibility(View.INVISIBLE);
+                }
             } else {
-                BigDecimal decimalDivisor = new BigDecimal(Math.pow(10, item.getTokenDecimals()));
-                BigDecimal ethBalance = item.getTokenDecimals() > 0 ? new BigDecimal(item.getTokenValue()).divide(decimalDivisor) : new BigDecimal(item.getTokenValue());
-                String value = ethBalance.compareTo(BigDecimal.ZERO) == 0 ? "0" : ethBalance.toPlainString();
+                String value = item.getTokenValue() / (Math.pow(10.0, item.getTokenDecimals())) + "";
                 helper.setText(R.id.tvTokenValue, value);
+
+                ImageView imageView = helper.getView(R.id.ivTokenAvatar);
+                KLog.i(item.getTokenImgName());
+                if (item.isMainNetToken()) {
+                    imageView.setVisibility(View.VISIBLE);
+                    if (item.getTokenImgName() != null && !item.getTokenImgName().equals("")) {
+                        Glide.with(mContext)
+                                .load(mContext.getResources().getIdentifier(item.getTokenSymol().toLowerCase(), "mipmap", mContext.getPackageName()))
+                                .into(imageView);
+                    }
+                    BigDecimal b = new BigDecimal(Double.parseDouble(value) * item.getTokenPrice());
+                    double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                } else {
+                    helper.setText(R.id.tvTokenMoney, "- -");
+                    imageView.setVisibility(View.INVISIBLE);
+                }
             }
         } else if (item.getWalletType() == AllWallet.WalletType.NeoWallet) {
             helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()) + "");
+            ImageView imageView = helper.getView(R.id.ivTokenAvatar);
+            KLog.i(item.getTokenImgName());
+            if (item.isMainNetToken()) {
+                imageView.setVisibility(View.VISIBLE);
+                if (item.getTokenImgName() != null && !item.getTokenImgName().equals("")) {
+                    Glide.with(mContext)
+                            .load(mContext.getResources().getIdentifier(item.getTokenSymol().toLowerCase(), "mipmap", mContext.getPackageName()))
+                            .into(imageView);
+                }
+                BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
+                double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+            } else {
+                helper.setText(R.id.tvTokenMoney, "- -");
+                imageView.setVisibility(View.INVISIBLE);
+            }
         } else if (item.getWalletType() == AllWallet.WalletType.EosWallet) {
             helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()) + "");
+            ImageView imageView = helper.getView(R.id.ivTokenAvatar);
+            KLog.i(item.getTokenImgName());
+            if (item.isMainNetToken()) {
+                imageView.setVisibility(View.VISIBLE);
+                if (item.getTokenImgName() != null && !item.getTokenImgName().equals("")) {
+                    Glide.with(mContext)
+                            .load(mContext.getResources().getIdentifier(item.getTokenSymol().toLowerCase(), "mipmap", mContext.getPackageName()))
+                            .into(imageView);
+                }
+                BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
+                double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+            } else {
+                helper.setText(R.id.tvTokenMoney, "- -");
+                imageView.setVisibility(View.INVISIBLE);
+            }
         }
         helper.setText(R.id.tvTokenName, item.getTokenSymol());
-        ImageView imageView = helper.getView(R.id.ivTokenAvatar);
-        KLog.i(item.getTokenImgName());
-        if (item.isMainNetToken()) {
-            imageView.setVisibility(View.VISIBLE);
-            if (item.getTokenImgName() != null && !item.getTokenImgName().equals("")) {
-                Glide.with(mContext)
-                        .load(mContext.getResources().getIdentifier(item.getTokenImgName(), "mipmap", mContext.getPackageName()))
-                        .into(imageView);
-            }
-            BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
-            double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-            helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
-        } else {
-            helper.setText(R.id.tvTokenMoney, "- -");
-            imageView.setVisibility(View.INVISIBLE);
-        }
     }
 }

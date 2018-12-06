@@ -166,32 +166,32 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         }
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        try {
-            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-                View v = getCurrentFocus();
-                if (isShouldHideInput(v, ev)) {
-
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    }
-                }
-                return super.dispatchTouchEvent(ev);
-            }
-            // 必不可少，否则所有的组件都不会有TouchEvent了
-            if (getWindow() != null && getWindow().superDispatchTouchEvent(ev)) {
-                return true;
-            }
-        }catch (Exception e)
-        {
-
-        }finally {
-            return onTouchEvent(ev);
-        }
-
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        try {
+//            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+//                View v = getCurrentFocus();
+//                if (isShouldHideInput(v, ev)) {
+//
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    if (imm != null) {
+//                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                    }
+//                }
+//                return super.dispatchTouchEvent(ev);
+//            }
+//            // 必不可少，否则所有的组件都不会有TouchEvent了
+//            if (getWindow() != null && getWindow().superDispatchTouchEvent(ev)) {
+//                return true;
+//            }
+//        }catch (Exception e)
+//        {
+//
+//        }finally {
+//            return onTouchEvent(ev);
+//        }
+//
+//    }
 
     public  boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && ((v instanceof EditText) && !(v.getParent() instanceof ShowKeyRelativeLayout))) {

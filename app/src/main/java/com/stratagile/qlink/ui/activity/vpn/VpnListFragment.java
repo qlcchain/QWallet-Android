@@ -223,6 +223,19 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     }
                     if (vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) || (vpnListAdapter.getItem(position).getP2pIdPc() != null && vpnListAdapter.getItem(position).getP2pIdPc().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))) {
                         //自己注册的vpn资产
+                        if (!SpUtil.getString(getActivity(), ConstantValue.walletPassWord, "").equals("")) {
+                            if (ConstantValue.isShouldShowVertifyPassword) {
+                                Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                                startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                                return;
+                            }
+                        } else {
+                            Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                            return;
+                        }
                         Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
                         KLog.i(vpnListAdapter.getData().get(position).toString());
                         intent.putExtra("flag", "update");
@@ -278,6 +291,19 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 } else {
                     if (Account.INSTANCE.getWallet() == null) {
                         ToastUtil.displayShortToast("please create a neo wallet first");
+                        return;
+                    }
+                    if (!SpUtil.getString(getActivity(), ConstantValue.walletPassWord, "").equals("")) {
+                        if (ConstantValue.isShouldShowVertifyPassword) {
+                            Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                            return;
+                        }
+                    } else {
+                        Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                         return;
                     }
                 }

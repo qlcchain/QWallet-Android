@@ -1,79 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/x500"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/x20"
-    android:layout_gravity="center"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
 
-    <LinearLayout
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.CardView
         android:layout_width="@dimen/x500"
         android:layout_height="wrap_content"
-        android:background="@null"
-        android:gravity="center_horizontal"
+        app:cardCornerRadius="@dimen/x20"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/ivClose"
-            android:layout_width="wrap_content"
-            android:src="@mipmap/close_h"
-            android:layout_gravity="right"
-            android:layout_marginRight="@dimen/x20"
-            android:layout_marginTop="@dimen/x20"
-            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="@dimen/x500"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="@dimen/x500"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:text="Export Private Key"
-            android:textColor="@color/color_29282a"
-            android:textSize="16sp"
-            android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/ivClose"
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/close_h"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/x20"
+                    android:layout_marginTop="@dimen/x20"
+                    android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tv_content"
-            android:layout_width="match_parent"
-            android:background="@drawable/wallet_address_bg_2"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/x10"
-            android:padding="@dimen/x10"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_marginTop="@dimen/x20"
-            android:minHeight="60dp"
-            android:textColor="@color/color_333" />
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:text="Export Private Key"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tv_warn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/x10"
-            android:layout_marginLeft="@dimen/x30"
-            android:text="Warning: Export plain private key is very dangerous. We recommend you backup withmnemonic or keystore."
-            android:layout_marginRight="@dimen/x30"
-            android:layout_marginTop="@dimen/x20"
-            android:textColor="@color/color_d0021b" />
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/wallet_address_bg_2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x10"
+                    android:padding="@dimen/x10"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginRight="@dimen/x30"
+                    android:layout_marginTop="@dimen/x20"
+                    android:minHeight="60dp"
+                    android:textColor="@color/color_333" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x96"
-            android:layout_marginLeft="17dp"
-            android:layout_marginTop="@dimen/x20"
-            android:layout_marginRight="17dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_warn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x10"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:text="Warning: Export plain private key is very dangerous. We recommend you backup withmnemonic or keystore."
+                    android:layout_marginRight="@dimen/x30"
+                    android:layout_marginTop="@dimen/x20"
+                    android:textColor="@color/color_d0021b" />
 
-            <TextView
-                android:id="@+id/tvCopy"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:text="Copy"
-                android:textColor="@color/mainColor" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x1"
+                    android:layout_marginTop="@dimen/x20"
+                    android:background="@color/color_29282a_40"/>
 
-        </LinearLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x96"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/tvQrCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="QRCode"
+                        android:textColor="@color/mainColor" />
+
+                    <View
+                        android:layout_width="@dimen/x1"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_29282a_40"/>
+
+                    <TextView
+                        android:id="@+id/tvCopy"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="Copy"
+                        android:textColor="@color/mainColor" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivQRCode"
+                android:visibility="gone"
+                android:background="@color/white"
+                android:padding="@dimen/x20"
+                android:layout_width="@dimen/x500"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/x120"
+                android:layout_height="@dimen/x340" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

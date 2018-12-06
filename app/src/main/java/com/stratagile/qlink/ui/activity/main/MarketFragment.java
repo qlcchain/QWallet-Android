@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.Tpcs;
@@ -29,15 +31,20 @@ import com.stratagile.qlink.ui.activity.main.module.MarketModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MarketPresenter;
 import com.stratagile.qlink.ui.activity.wallet.EthTransactionRecordActivity;
 import com.stratagile.qlink.ui.adapter.wallet.TpcsAdapter;
+import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.LocalWalletUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -87,14 +94,10 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         Bundle mBundle = getArguments();
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        viewModel.tokenInfoMutableLiveData.observe(this, new Observer<ArrayList<TokenInfo>>() {
+        viewModel.timeStampLiveData.observe(this, new Observer<Long>() {
             @Override
-            public void onChanged(@Nullable ArrayList<TokenInfo> tokenInfos) {
-                ArrayList<String> symbols = new ArrayList<>();
-                for (int i = 0; i < tokenInfos.size(); i++) {
-                    symbols.add(tokenInfos.get(i).getTokenSymol());
-                }
-                fetechData(symbols);
+            public void onChanged(@Nullable Long tokenInfos) {
+                fetechData(LocalWalletUtil.getLocalTokens());
             }
         });
 
@@ -107,30 +110,46 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetechData(viewModel.tokens.getValue());
+                fetechData(LocalWalletUtil.getLocalTokens());
             }
         });
         tpcsAdapter = new TpcsAdapter(new ArrayList<>());
         tpcsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                for (int i = 0; i < viewModel.tokenInfoMutableLiveData.getValue().size(); i++) {
-                    if (tpcs.getData().get(position).getSymbol().toLowerCase().equals(viewModel.tokenInfoMutableLiveData.getValue().get(i).getTokenSymol().toLowerCase())) {
-                        Intent intent = new Intent(getActivity(), EthTransactionRecordActivity.class);
-                        intent.putExtra("tokenInfo", viewModel.tokenInfoMutableLiveData.getValue().get(i));
-                        intent.putParcelableArrayListExtra("tokens", viewModel.tokenInfoMutableLiveData.getValue());
-                        startActivity(intent);
-                    }
-                }
+//                for (int i = 0; i < viewModel.tokenInfoMutableLiveData.getValue().size(); i++) {
+//                    if (tpcs.getData().get(position).getSymbol().toLowerCase().equals(viewModel.tokenInfoMutableLiveData.getValue().get(i).getTokenSymol().toLowerCase())) {
+//                        Intent intent = new Intent(getActivity(), EthTransactionRecordActivity.class);
+//                        intent.putExtra("tokenInfo", viewModel.tokenInfoMutableLiveData.getValue().get(i));
+//                        intent.putParcelableArrayListExtra("tokens", viewModel.tokenInfoMutableLiveData.getValue());
+//                        startActivity(intent);
+//                    }
+//                }
             }
         });
         recyclerView.setAdapter(tpcsAdapter);
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/tokens");
+        ArrayList<String> list = new ArrayList<>();
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            list.add("ETH");
+            list.add("NEO");
+            list.add("EOS");
+            LocalWalletUtil.updateLocalTokens(list);
+        } else {
+            list.addAll(LocalWalletUtil.getLocalTokens());
+        }
+        fetechData(list);
         return view;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void changeCurrency(ChangeCurrency changeWallet) {
-        fetechData(viewModel.tokens.getValue());
+        fetechData(LocalWalletUtil.getLocalTokens());
     }
 
     @Override

@@ -103,4 +103,23 @@ public class LocalWalletUtil {
             return null;
         }
     }
+
+    public static ArrayList<String> getLocalTokens() {
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/tokens");
+        if (file.exists()) {
+            String neoWalletStr = FileUtil.getStrDataFromFile(file);
+            Gson gson = new Gson();
+            ArrayList<String> wallets = gson.fromJson(neoWalletStr, new TypeToken<ArrayList<String>>() {
+            }.getType());
+            return wallets;
+        } else {
+            return null;
+        }
+    }
+    public static void updateLocalTokens(ArrayList<String> list) {
+        Gson gson = new Gson();
+        String saveData = gson.toJson(list);
+        FileUtil.savaData("/Qlink/tokens", saveData);
+    }
+
 }

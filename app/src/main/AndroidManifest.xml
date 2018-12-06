@@ -382,6 +382,14 @@
         <activity android:name=".ui.activity.wallet.ChangePasswordActivity" />
         <activity android:name=".ui.activity.eos.EosImportActivity" />
         <activity android:name=".ui.activity.eos.EosTransferActivity" />
+        <activity android:name=".ui.activity.market.AddTokenActivity" />
+        <activity android:name=".ui.activity.eos.EosResourceManagementActivity" />
+
+        <activity android:name=".ui.activity.eos.EosBuyCpuAndNetActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.eos.EosBuyRamActivity" />
 
         <activity-alias
             android:exported="true"

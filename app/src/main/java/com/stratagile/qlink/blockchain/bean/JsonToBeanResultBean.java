@@ -5,11 +5,13 @@ import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.eblock.eos4j.api.vo.BaseVo;
+
 /**
  * Created by swapnibble on 2017-09-12.
  */
 
-public class JsonToBeanResultBean {
+public class JsonToBeanResultBean extends BaseVo {
 
     @Expose
     private String binargs;

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/x138"
     android:layout_marginLeft="@dimen/x30"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/x30"
-        android:layout_marginBottom="@dimen/x20"
         android:layout_marginTop="@dimen/x12"
         android:layout_weight="1"
         android:orientation="horizontal">
@@ -33,6 +33,7 @@
                 android:id="@+id/friend_status"
                 android:layout_width="@dimen/x30"
                 android:layout_height="@dimen/x30"
+                android:visibility="gone"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="@dimen/x2"
@@ -42,6 +43,7 @@
             <ImageView
                 android:id="@+id/message_status"
                 android:layout_width="@dimen/x30"
+                android:visibility="gone"
                 android:layout_height="@dimen/x30"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/x5" />
@@ -63,7 +65,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:layout_marginTop="@dimen/x10"
+                    android:includeFontPadding="false"
+                    android:layout_marginTop="@dimen/x6"
                     android:lines="1"
                     android:maxEms="7"
                     android:text="@string/ssid"
@@ -85,7 +88,7 @@
                     android:fontFamily="@font/roboto_regular_q"
                     android:text=""
                     android:textColor="@color/color_a8a6a6"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
 
             </LinearLayout>
@@ -99,31 +102,32 @@
 
 
                 <ImageView
-                    android:layout_width="@dimen/x20"
+                    android:layout_width="@dimen/x23"
                     android:src="@mipmap/winq_gas_n"
-                    android:layout_height="@dimen/x20" />
+                    android:layout_height="@dimen/x23" />
                 <TextView
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:layout_marginLeft="@dimen/x5"
                     android:fontFamily="@font/roboto_regular_q"
                     android:textColor="@color/color_333"
-                    android:textStyle="bold"
-                    android:textSize="10sp" />
+                    android:textSize="13sp" />
                 <ImageView
-                    android:layout_width="@dimen/x20"
+                    android:layout_width="@dimen/x23"
                     android:src="@mipmap/xin"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_height="@dimen/x20" />
+                    android:layout_marginLeft="@dimen/x15"
+                    android:layout_height="@dimen/x23" />
                 <TextView
                     android:id="@+id/connect_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:layout_marginLeft="@dimen/x5"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/color_333"
-                    android:textSize="10sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -154,5 +158,11 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x1"
+        android:layout_alignParentBottom="true"
         android:background="@color/color_a8a6a6" />
-</LinearLayout>
+    <View
+        android:id="@+id/viewOnline"
+        android:layout_width="match_parent"
+        android:background="#6cffffff"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

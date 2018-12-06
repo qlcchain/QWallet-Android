@@ -17,6 +17,7 @@ import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
+import com.stratagile.qlink.entity.EosResource;
 import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletDetail;
 import com.stratagile.qlink.entity.EthWalletInfo;
@@ -27,6 +28,7 @@ import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.KLine;
+import com.stratagile.qlink.entity.LocalTokenBean;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
@@ -584,9 +586,18 @@ public class HttpAPIWrapper {
     public Observable<EosTokens> getEosTokenList(Map map) {
         return wrapper(mHttpAPI.getEosTokenList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
+
+    public Observable<EosResource> getEosTResource(Map map) {
+        return wrapper(mHttpAPI.getEosTResource(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
     public Observable<EosAccountTransaction> getEosAccountTransaction(Map map) {
         return wrapper(mHttpAPI.getEosAccountTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
+
+    public Observable<LocalTokenBean> getBinaTokens(Map map) {
+        return wrapper(mHttpAPI.getBinaTokens(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */

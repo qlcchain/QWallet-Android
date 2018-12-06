@@ -1,20 +1,17 @@
 package com.stratagile.qlink.ui.activity.eth;
 
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -22,6 +19,7 @@ import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.ui.activity.eos.EosResourceManagementActivity;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthWalletDetailComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthWalletDetailContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthWalletDetailModule;
@@ -31,8 +29,8 @@ import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
-import com.stratagile.qlink.view.PopWindowUtil;
 import com.stratagile.qlink.view.SweetAlertDialog;
+import com.vondear.rxtools.view.RxQRCode;
 
 import javax.inject.Inject;
 
@@ -71,6 +69,8 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
     LinearLayout llExportNeoPrivateKey;
     @BindView(R.id.tvDeleteWallet)
     TextView tvDeleteWallet;
+    @BindView(R.id.ResourceManagement)
+    LinearLayout ResourceManagement;
 
     private EthWallet ethWallet;
 
@@ -101,6 +101,8 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
 
             llExportNeoEncryptedKey.setVisibility(View.GONE);
             llExportNeoPrivateKey.setVisibility(View.GONE);
+
+            ResourceManagement.setVisibility(View.GONE);
         } else if (getIntent().getIntExtra("walletType", 0) == AllWallet.WalletType.NeoWallet.ordinal()) {
             walletType = AllWallet.WalletType.NeoWallet;
             wallet = getIntent().getParcelableExtra("neowallet");
@@ -110,6 +112,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             llAbucoins.setVisibility(View.GONE);
             llExportKeystore.setVisibility(View.GONE);
             llExportPrivateKey.setVisibility(View.GONE);
+            ResourceManagement.setVisibility(View.GONE);
         } else if (getIntent().getIntExtra("walletType", 0) == AllWallet.WalletType.EosWallet.ordinal()) {
             walletType = AllWallet.WalletType.EosWallet;
             eosAccount = getIntent().getParcelableExtra("eoswallet");
@@ -155,7 +158,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         progressDialog.hide();
     }
 
-    @OnClick({R.id.llAbucoins, R.id.llExportKeystore, R.id.llExportPrivateKey, R.id.llExportNeoEncryptedKey, R.id.llExportNeoPrivateKey, R.id.tvDeleteWallet})
+    @OnClick({R.id.llAbucoins, R.id.llExportKeystore, R.id.llExportPrivateKey, R.id.llExportNeoEncryptedKey, R.id.llExportNeoPrivateKey, R.id.tvDeleteWallet, R.id.ResourceManagement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llAbucoins:
@@ -191,6 +194,9 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 break;
             case R.id.tvDeleteWallet:
                 showDeleteWalletDialog();
+                break;
+            case R.id.ResourceManagement:
+                startActivity(new Intent(this, EosResourceManagementActivity.class).putExtra("eosAccount", eosAccount));
                 break;
             default:
                 break;
@@ -303,6 +309,13 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
+        TextView tvQrCode = view.findViewById(R.id.tvQrCode);
+        ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
+        Bitmap bitmap = RxQRCode.builder(privateKey).
+                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
+                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
+                codeSide(800).
+                into(ivQRCode);
         tvContent.setText(privateKey);
         //取消或确定按钮监听事件处l
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
@@ -314,6 +327,16 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             @Override
             public void onClick(View v) {
                 sweetAlertDialog.cancel();
+            }
+        });
+        tvQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ivQRCode.getVisibility() == View.VISIBLE) {
+                    ivQRCode.setVisibility(View.GONE);
+                } else {
+                    ivQRCode.setVisibility(View.VISIBLE);
+                }
             }
         });
         tvCopy.setOnClickListener(new View.OnClickListener() {
@@ -337,6 +360,25 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         tvContent.setText(wallet.getPrivateKey());
+        TextView tvQrCode = view.findViewById(R.id.tvQrCode);
+        ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
+        Bitmap bitmap = RxQRCode.builder(wallet.getPrivateKey()).
+                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
+                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
+                codeSide(800).
+                into(ivQRCode);
+        tvQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ivQRCode.getVisibility() == View.VISIBLE) {
+                    ivQRCode.setVisibility(View.GONE);
+                    tv_warn.setVisibility(View.GONE);
+                } else {
+                    ivQRCode.setVisibility(View.VISIBLE);
+                    tv_warn.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         //取消或确定按钮监听事件处l
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         Window window = sweetAlertDialog.getWindow();
@@ -371,6 +413,25 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         tvContent.setText(wallet.getWif());
+        TextView tvQrCode = view.findViewById(R.id.tvQrCode);
+        ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
+        Bitmap bitmap = RxQRCode.builder(wallet.getWif()).
+                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
+                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
+                codeSide(800).
+                into(ivQRCode);
+        tvQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ivQRCode.getVisibility() == View.VISIBLE) {
+                    ivQRCode.setVisibility(View.GONE);
+                    tv_warn.setVisibility(View.GONE);
+                } else {
+                    ivQRCode.setVisibility(View.VISIBLE);
+                    tv_warn.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         //取消或确定按钮监听事件处l
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         Window window = sweetAlertDialog.getWindow();
@@ -393,5 +454,9 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
                 sweetAlertDialog.cancel();
             }
         });
+    }
+
+    @OnClick()
+    public void onViewClicked() {
     }
 }

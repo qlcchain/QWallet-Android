@@ -186,6 +186,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 }
             }
         });
+        viewModel.timeStampAllWalletInitData.observe(this, new Observer<Long>() {
+            @Override
+            public void onChanged(@Nullable Long aLong) {
+                initData();
+            }
+        });
         tokensAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -257,7 +263,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         tokensAdapter.setNewData(tokenInfos);
         for (int i = 0; i < tokenInfos.size(); i++) {
             symbols.add(tokenInfos.get(i).getTokenSymol());
-            walletAsset += tokenInfos.get(i).getTokenValue() * tokenInfos.get(i).getTokenPrice();
+            String value = tokenInfos.get(i).getTokenValue() / (Math.pow(10.0, tokenInfos.get(i).getTokenDecimals())) + "";
+            walletAsset += Double.parseDouble(value) * tokenInfos.get(i).getTokenPrice();
             if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EthWallet) {
                 ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eth_wallet));
             } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.NeoWallet) {

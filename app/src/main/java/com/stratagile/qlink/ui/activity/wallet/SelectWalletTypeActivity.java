@@ -151,7 +151,10 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (requestCode == 0) {
+            setResult(RESULT_OK);
+            finish();
+        } else if (resultCode == RESULT_OK) {
             setResult(RESULT_OK);
             finish();
         }

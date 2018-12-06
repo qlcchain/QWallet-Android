@@ -1,5 +1,6 @@
 package com.stratagile.qlink.blockchain.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.Expose;
 
 import java.text.DateFormat;
@@ -11,7 +12,7 @@ import java.util.Date;
 /**
  * Created by swapnibble on 2017-09-12.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EosChainInfo {
 
     @Expose

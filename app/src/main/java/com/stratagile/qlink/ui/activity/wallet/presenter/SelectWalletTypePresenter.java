@@ -8,6 +8,7 @@ import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.BaseBack;
@@ -86,6 +87,14 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                     if (wallet.getIsCurrent()) {
                         wallet.setIsCurrent(false);
                         AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                        break;
+                    }
+                }
+                List<EosAccount> eosAccounts = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+                for (EosAccount wallet : eosAccounts) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallet);
                         break;
                     }
                 }
@@ -169,6 +178,14 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                     if (wallet.getIsCurrent()) {
                         wallet.setIsCurrent(false);
                         AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                        break;
+                    }
+                }
+                List<EosAccount> eosAccounts = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+                for (EosAccount wallet : eosAccounts) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallet);
                         break;
                     }
                 }

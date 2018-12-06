@@ -511,7 +511,7 @@
     <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again.</string>
 
     <!-- Dialog info -->
-    <string name="choose_finger_dialog_title">Use the fingerprint continue</string>
+    <string name="choose_finger_dialog_title">Confirm fingerprint to continue</string>
     <string name="ok_btn_dialog">OK</string>
     <string name="cancel_btn_dialog">CANCEL</string>
     <string name="AcquiredToSlow_warning">try again</string>

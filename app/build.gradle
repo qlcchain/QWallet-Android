@@ -40,9 +40,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 64
+        versionCode 65
         multiDexEnabled true
-        versionName "1.3.01 release"
+        versionName "1.3.02 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -288,9 +288,11 @@ dependencies {
     //    implementation project(':MPChartLib')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     implementation files('libs/BASE64Encoder.jar')
+
     //imtoken
     implementation 'com.github.consenlabs:token-core-android:v0.1'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

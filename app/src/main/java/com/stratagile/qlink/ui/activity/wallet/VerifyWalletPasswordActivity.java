@@ -270,7 +270,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
 //                            builder.setCancelable(true);
 //                        } else {
                         btn_cancel.setVisibility(View.VISIBLE);
-                        btn_comfirm.setVisibility(View.VISIBLE);
+//                        btn_comfirm.setVisibility(View.VISIBLE);
                         builder.setCancelable(false);
 //                        btn_cancel.setVisibility(View.GONE);
 //                        btn_comfirm.setVisibility(View.GONE);

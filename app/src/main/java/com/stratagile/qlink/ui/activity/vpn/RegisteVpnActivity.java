@@ -704,6 +704,7 @@ public class RegisteVpnActivity extends BaseActivity implements RegisteVpnContra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
     }

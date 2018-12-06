@@ -3,7 +3,6 @@ package com.stratagile.qlink.ui.activity.eos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.animation.DynamicAnimation;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.blockchain.bean.TransferEosMessageBean;
+import com.stratagile.qlink.db.EosAccount;
+import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.ui.activity.eos.component.DaggerEosTransferComponent;
 import com.stratagile.qlink.ui.activity.eos.contract.EosTransferContract;
@@ -23,6 +27,7 @@ import com.stratagile.qlink.ui.activity.eos.presenter.EosTransferPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.utils.PopWindowUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.CustomPopWindow;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.text.InputType.TYPE_CLASS_NUMBER;
-import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
+import com.stratagile.qlink.blockchain.EoscDataManager;
 
 /**
  * @author hzp
@@ -83,6 +87,8 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
 
     private ArrayList<String> list;
 
+    private EosAccount eosAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +120,7 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
         setTitle("Send " + tokenInfo.getTokenSymol());
         tvEosTokenName.setText(tokenInfo.getTokenSymol());
         tvEosTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+        eosAccount = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.AccountName.eq(tokenInfo.getWalletAddress())).unique();
     }
 
     @Override
@@ -170,6 +177,8 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                 showSpinnerPopWindow();
                 break;
             case R.id.tvSend:
+//                transfer(eosAccount.getOwnerPrivateKey(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), etEosTokenSendAddress.getText().toString(), etEosTokenSendValue.getText().toString() + " " + tokenInfo.getTokenSymol(), etEthTokenSendMemo.getText().toString());
+                transfer(eosAccount.getOwnerPrivateKey(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), etEosTokenSendAddress.getText().toString(), etEosTokenSendValue.getText().toString(), etEthTokenSendMemo.getText().toString(), tokenInfo.getTokenSymol());
                 break;
             default:
                 break;
@@ -207,6 +216,38 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
 
             }
         });
+    }
+
+    private void transfer(String privateKey, String contractAccount, String from, String to, String quantity, String memo, String token) {
+        showProgressDialog();
+        System.out.println("============= 转账EOS ===============");
+        KLog.i(privateKey);
+        KLog.i(contractAccount);
+        KLog.i(from);
+        KLog.i(to);
+        KLog.i(quantity);
+        KLog.i(memo);
+        KLog.i(token);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String message = new Gson().toJson(new TransferEosMessageBean(memo, to, quantity + " " + token, from));
+                new EoscDataManager(EosTransferActivity.this, privateKey, contractAccount).pushAction(message, from, txid -> {
+                    tvSend.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeProgressDialog();
+                        }
+                    });
+                    if (txid == null || txid.equals("")) {
+                        ToastUtil.displayShortToast("transfer error");
+                    } else {
+                        ToastUtil.displayShortToast("transfer success");
+                        finish();
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override

@@ -76,7 +76,7 @@
 //            public void onSuccess(Response<ResponseBean> response) {
 //                if (response.body().code == 0) {
 //                    mChainInfoBean = (EosChainInfo) JsonUtil.parseStringToBean(mGson.toJson(response.body().data), EosChainInfo.class);
-//                    getabi_json_to_bin();
+//                    getAbiJsonBean();
 //                } else {
 //                    if (ShowDialog.dialog != null) {
 //                        ShowDialog.dissmiss();
@@ -87,7 +87,7 @@
 //        });
 //    }
 //
-//    public void getabi_json_to_bin() {
+//    public void getAbiJsonBean() {
 //        JsonToBinRequest jsonToBinRequest = new JsonToBinRequest(contract, action, message.replaceAll("\\r|\\n", ""));
 //        HttpUtils.postRequest(BaseUrl.HTTP_get_abi_json_to_bin, this, mGson.toJson(jsonToBinRequest), new JsonCallback<ResponseBean>() {
 //            @Override

@@ -29,6 +29,7 @@ import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -323,6 +324,12 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
             tokenInfos.add(tokenInfo);
         }
         getTokenPrice(tokenInfos);
+    }
+
+    private String getEthTokenValue(int deCimals, double decimalValue) {
+        BigDecimal decimalDivisor = new BigDecimal(Math.pow(10, deCimals));
+        BigDecimal ethBalance = decimalValue > 0 ? new BigDecimal(decimalValue).divide(decimalDivisor) : new BigDecimal(decimalValue);
+        return ethBalance.toPlainString();
     }
 
     private int getTokenCount(EthWalletInfo.DataBean.TokensBean tokensBean) {

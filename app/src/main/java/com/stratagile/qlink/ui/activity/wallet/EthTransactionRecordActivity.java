@@ -222,7 +222,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()) + "");
         }
         setTitle(tokenInfo.getTokenSymol());
-        BigDecimal b = new BigDecimal(new Double((tokenInfo.getTokenValue() * tokenInfo.getTokenPrice())).toString());
+        BigDecimal b = new BigDecimal(new Double((Double.parseDouble(tvTokenValue.getText().toString()) * tokenInfo.getTokenPrice())).toString());
         double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         tvTokenMoney.setText("≈" + ConstantValue.currencyBean.getCurrencyImg() + f1);
         transacationHistoryAdapter = new TransacationHistoryAdapter(new ArrayList<>());
