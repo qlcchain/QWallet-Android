@@ -69,13 +69,13 @@ public class EthWalletInfo extends BaseBack {
              * balance : 0
              */
 
-            private double balance;
+            private Object balance;
 
-            public double getBalance() {
+            public Object getBalance() {
                 return balance;
             }
 
-            public void setBalance(double balance) {
+            public void setBalance(Object balance) {
                 this.balance = balance;
             }
         }

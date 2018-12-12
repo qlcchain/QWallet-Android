@@ -10,54 +10,42 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/x20"
-        android:paddingRight="@dimen/x20">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="Account"
-            android:layout_height="@dimen/x40"
-            android:gravity="center_vertical" />
-
-        <EditText
-            android:id="@+id/accountName"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/x10"
-            android:layout_height="@dimen/x80"
-            android:text=""
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:textColorHint="#d9d9d9" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/x5"
-        android:background="@color/color_29282a_40"
-        android:layout_height="@dimen/x1" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
+        android:layout_marginTop="@dimen/x20"
         android:paddingLeft="@dimen/x20"
         android:paddingRight="@dimen/x20">
 
         <TextView
             android:layout_width="wrap_content"
             android:text="Owner Private Key"
+            android:layout_marginLeft="@dimen/x20"
             android:layout_height="@dimen/x40"
             android:gravity="center_vertical" />
-
-        <EditText
-            android:id="@+id/accountOwnerKey"
-            android:layout_marginTop="@dimen/x10"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x80"
-            android:text=""
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:textColorHint="#d9d9d9" />
+            android:minHeight="@dimen/x242"
+            android:orientation="vertical"
+            android:layout_height="@dimen/x242">
+            <EditText
+                android:id="@+id/accountOwnerKey"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/x20"
+                android:gravity="left"
+                android:textSize="14sp"
+                android:background="@null"
+                android:hint="Please input your owner private key"
+                android:layout_height="@dimen/x160" />
+            <TextView
+                android:id="@+id/tvWhatsMnemonic"
+                android:layout_width="wrap_content"
+                android:text="What is a private key?"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x20"
+                android:layout_marginBottom="@dimen/x20"
+                android:textColor="@color/mainColor"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <View
@@ -76,47 +64,36 @@
         <TextView
             android:layout_width="wrap_content"
             android:text="Active Private Key"
+            android:layout_marginLeft="@dimen/x20"
             android:layout_height="@dimen/x40"
             android:gravity="center_vertical" />
 
-        <EditText
-            android:id="@+id/accountActiveKey"
-            android:layout_marginTop="@dimen/x10"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:text=""
-            android:layout_height="@dimen/x80"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:textColorHint="#d9d9d9" />
-    </LinearLayout>
+            android:minHeight="@dimen/x242"
+            android:orientation="vertical"
+            android:layout_height="@dimen/x242">
+            <EditText
+                android:id="@+id/accountActiveKey"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/x20"
+                android:gravity="left"
+                android:textSize="14sp"
+                android:background="@null"
+                android:hint="Please input your active private key"
+                android:layout_height="@dimen/x160" />
+            <TextView
+                android:id="@+id/tvWhatsMnemonic1"
+                android:layout_width="wrap_content"
+                android:text="What is a private key?"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x20"
+                android:layout_marginBottom="@dimen/x20"
+                android:textColor="@color/mainColor"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/x5"
-        android:background="@color/color_29282a_40"
-        android:layout_height="@dimen/x1" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/x20"
-        android:paddingRight="@dimen/x20">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="Account Password"
-            android:layout_height="@dimen/x40"
-            android:gravity="center_vertical" />
-
-        <EditText
-            android:id="@+id/accountPassword"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/x10"
-            android:layout_height="@dimen/x80"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:textColorHint="#d9d9d9" />
     </LinearLayout>
 
     <View
@@ -132,10 +109,10 @@
         android:layout_marginLeft="@dimen/x44"
         android:layout_marginRight="@dimen/x44"
         android:layout_marginTop="@dimen/x80"
-        android:background="@drawable/bt_white_bg"
+        android:background="@drawable/main_color_bt_bg"
         android:fontFamily="@font/roboto_regular"
         android:text="@string/import2"
         android:textAllCaps="false"
-        android:textColor="@color/mainColor" />
+        android:textColor="@color/white" />
 
 </LinearLayout>

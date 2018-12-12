@@ -3,6 +3,8 @@ package com.stratagile.qlink.ui.activity.eos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.animation.DynamicAnimation;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +44,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import com.stratagile.qlink.blockchain.EoscDataManager;
+import com.stratagile.qlink.view.DecimalDigitsInputFilter;
+
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
 
 /**
  * @author hzp
@@ -119,8 +125,22 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
         }
         setTitle("Send " + tokenInfo.getTokenSymol());
         tvEosTokenName.setText(tokenInfo.getTokenSymol());
-        tvEosTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+        tvEosTokenValue.setText("Balance: " + tokenInfo.getEosTokenValue());
         eosAccount = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.AccountName.eq(tokenInfo.getWalletAddress())).unique();
+
+        etEosTokenSendValue.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(getDot())});
+    }
+
+    private int getDot() {
+        if (!tokenInfo.getEosTokenValue().contains(".")) {
+            etEosTokenSendValue.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+            return 0;
+        } else {
+            etEosTokenSendValue.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
+            int dot = tokenInfo.getEosTokenValue().length() - tokenInfo.getEosTokenValue().indexOf(".") - 1;
+            KLog.i(dot);
+            return dot;
+        }
     }
 
     @Override
@@ -177,8 +197,16 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                 showSpinnerPopWindow();
                 break;
             case R.id.tvSend:
-//                transfer(eosAccount.getOwnerPrivateKey(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), etEosTokenSendAddress.getText().toString(), etEosTokenSendValue.getText().toString() + " " + tokenInfo.getTokenSymol(), etEthTokenSendMemo.getText().toString());
-                transfer(eosAccount.getOwnerPrivateKey(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), etEosTokenSendAddress.getText().toString(), etEosTokenSendValue.getText().toString(), etEthTokenSendMemo.getText().toString(), tokenInfo.getTokenSymol());
+                String privateKey = "";
+                String permission = "";
+                if (eosAccount.getOwnerPrivateKey() != null && !"".equals(eosAccount.getOwnerPrivateKey())) {
+                    privateKey = eosAccount.getOwnerPrivateKey();
+                    permission = "owner";
+                } else {
+                    privateKey = eosAccount.getActivePrivateKey();
+                    permission = "active";
+                }
+                transfer(privateKey, permission, tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), etEosTokenSendAddress.getText().toString(), etEosTokenSendValue.getText().toString(), etEthTokenSendMemo.getText().toString(), tokenInfo.getTokenSymol());
                 break;
             default:
                 break;
@@ -196,7 +224,8 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                             setTitle("Send " + tokenInfo.getTokenSymol());
                             tvEosTokenName.setText(tokenInfo.getTokenSymol());
                             etEosTokenSendValue.setText("");
-                            tvEosTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+                            etEosTokenSendValue.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(getDot())});
+                            tvEosTokenValue.setText("Balance: " + tokenInfo.getEosTokenValue());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEosTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
                             viewLine.setLayoutParams(layoutParams);
                         }
@@ -218,7 +247,13 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
         });
     }
 
-    private void transfer(String privateKey, String contractAccount, String from, String to, String quantity, String memo, String token) {
+    private String setTransferTokenValue(String value, String token) {
+        BigDecimal bigDecimal = BigDecimal.valueOf(Double.parseDouble(value));
+        KLog.i(bigDecimal.setScale(getDot(), BigDecimal.ROUND_HALF_UP).toPlainString() + " " + token);
+        return bigDecimal.setScale(getDot(), BigDecimal.ROUND_HALF_UP).toPlainString() + " " + token;
+    }
+
+    private void transfer(String privateKey, String permission, String contractAccount, String from, String to, String quantity, String memo, String token) {
         showProgressDialog();
         System.out.println("============= 转账EOS ===============");
         KLog.i(privateKey);
@@ -231,8 +266,9 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String message = new Gson().toJson(new TransferEosMessageBean(memo, to, quantity + " " + token, from));
-                new EoscDataManager(EosTransferActivity.this, privateKey, contractAccount).pushAction(message, from, txid -> {
+                String message = new Gson().toJson(new TransferEosMessageBean(memo, to, setTransferTokenValue(quantity, token), from));
+                KLog.i(message);
+                new EoscDataManager(EosTransferActivity.this, privateKey, contractAccount, permission).pushAction(message, from, txid -> {
                     tvSend.post(new Runnable() {
                         @Override
                         public void run() {

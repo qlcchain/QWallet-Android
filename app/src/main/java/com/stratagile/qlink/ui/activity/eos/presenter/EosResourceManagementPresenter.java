@@ -108,11 +108,27 @@ public class EosResourceManagementPresenter implements EosResourceManagementCont
 
     private void getEosTokensInfo(String accountName, EosTokens eosTokens) {
         ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
+        if (eosTokens.getData().getData().getSymbol_list().size() == 0) {
+            TokenInfo tokenInfo = new TokenInfo();
+            tokenInfo.setTokenName("EOS");
+            tokenInfo.setTokenSymol("EOS");
+            tokenInfo.setTokenValue(0.0000);
+            tokenInfo.setEosTokenValue("0.0000");
+            tokenInfo.setTokenAddress("eosio.token");
+            tokenInfo.setTokenImgName("EOS");
+            tokenInfo.setWalletAddress(accountName);
+            tokenInfo.setMainNetToken(true);
+            tokenInfo.setWalletType(AllWallet.WalletType.EosWallet);
+            tokenInfos.add(tokenInfo);
+            mView.getTokenPriceBack(tokenInfos);
+            return;
+        }
         for (int i = 0; i < eosTokens.getData().getData().getSymbol_list().size(); i++) {
             TokenInfo tokenInfo = new TokenInfo();
             tokenInfo.setTokenName(eosTokens.getData().getData().getSymbol_list().get(i).getSymbol());
             tokenInfo.setTokenSymol(eosTokens.getData().getData().getSymbol_list().get(i).getSymbol());
             tokenInfo.setTokenValue(Double.parseDouble(eosTokens.getData().getData().getSymbol_list().get(i).getBalance()));
+            tokenInfo.setEosTokenValue(eosTokens.getData().getData().getSymbol_list().get(i).getBalance());
             tokenInfo.setTokenAddress(eosTokens.getData().getData().getSymbol_list().get(i).getCodeX());
             tokenInfo.setWalletAddress(accountName);
             tokenInfo.setMainNetToken(true);

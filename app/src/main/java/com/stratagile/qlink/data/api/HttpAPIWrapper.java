@@ -17,6 +17,7 @@ import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
+import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.entity.EosResource;
 import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletDetail;
@@ -50,6 +51,7 @@ import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
+import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -59,6 +61,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -598,6 +601,19 @@ public class HttpAPIWrapper {
         return wrapper(mHttpAPI.getBinaTokens(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
 
+    public Observable<BaseBack> createEosAccount(Map map) {
+        return wrapper(mHttpAPI.createEosAccount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<EosNeedInfo> getEosNeedInfo(Map map) {
+        return wrapper(mHttpAPI.getEosNeedInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+
+    public Observable<ArrayList<EosKeyAccount>> getKeyAccount(Map map) {
+        return wrapperArrayList(mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -739,6 +755,32 @@ public class HttpAPIWrapper {
      * @return
      */
     private <T extends String> Observable<T> wrapperGetToxJson(Observable<T> resourceObservable) {
+        return resourceObservable
+                .flatMap(new Function<T, ObservableSource<? extends T>>() {
+                    @Override
+                    public ObservableSource<? extends T> apply(@NonNull T baseResponse) throws Exception {
+                        return Observable.create(
+                                new ObservableOnSubscribe<T>() {
+                                    @Override
+                                    public void subscribe(@NonNull ObservableEmitter<T> e) throws Exception {
+                                        if (baseResponse == null) {
+
+                                        } else {
+                                            e.onNext(baseResponse);
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable e) throws Exception {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    private <T extends ArrayList> Observable<T> wrapperArrayList(Observable<T> resourceObservable) {
         return resourceObservable
                 .flatMap(new Function<T, ObservableSource<? extends T>>() {
                     @Override

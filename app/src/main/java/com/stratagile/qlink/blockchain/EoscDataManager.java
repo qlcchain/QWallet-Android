@@ -56,22 +56,25 @@ public class EoscDataManager {
     SignedTransaction txnBeforeSign;
     String contract, action, message;
     String privateKeyStr;
+
+    private String permission;
     EosRpcService rpc;
     private EosCallBack eosCallBack;
     Gson mGson = new GsonBuilder()
             .registerTypeAdapterFactory(new GsonEosTypeAdapterFactory())
             .excludeFieldsWithoutExposeAnnotation().create();
-    public EoscDataManager(Context context, String privateKeyStr, String contract) {
+    public EoscDataManager(Context context, String privateKeyStr, String contract, String permission) {
         mContext = context;
         this.contract = contract;
         this.privateKeyStr = privateKeyStr;
         rpc = new EosRpcService(eosNode);
+        this.permission = permission;
     }
 
     public void pushAction(String message, String permissionAccount, EosCallBack eosCallBack) {
         this.message = message;
         this.action = "transfer";
-        permissions = new String[]{permissionAccount + "@" + "owner"};
+        permissions = new String[]{permissionAccount + "@" + permission};
         this.eosCallBack = eosCallBack;
         getChainInfo();
     }

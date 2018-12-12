@@ -3,12 +3,12 @@ package com.stratagile.qlink.blockchain.bean;
 public class BuyRamBean {
     private String payer;
     private String receiver;
-    private Long bytes;
+    private String quant;
 
-    public BuyRamBean(String payer, String receiver, Long bytes) {
+    public BuyRamBean(String payer, String receiver, String quant) {
         this.payer = payer;
         this.receiver = receiver;
-        this.bytes = bytes;
+        this.quant = quant;
     }
 
     public String getPayer() {
@@ -28,11 +28,11 @@ public class BuyRamBean {
         this.receiver = receiver;
     }
 
-    public Long getBytes() {
-        return bytes;
+    public String getBytes() {
+        return quant;
     }
 
-    public void setBytes(Long bytes) {
-        this.bytes = bytes;
+    public void setBytes(String bytes) {
+        this.quant = quant;
     }
 }

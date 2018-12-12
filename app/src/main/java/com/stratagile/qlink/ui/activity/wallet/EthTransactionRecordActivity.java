@@ -219,7 +219,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             infoMap.put("account", tokenInfo.getWalletAddress());
             infoMap.put("symbol", tokenInfo.getTokenSymol());
             mPresenter.getEosAccountTransaction(tokenInfo.getWalletAddress(), infoMap);
-            tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()) + "");
+            tvTokenValue.setText(tokenInfo.getEosTokenValue());
         }
         setTitle(tokenInfo.getTokenSymol());
         BigDecimal b = new BigDecimal(new Double((Double.parseDouble(tvTokenValue.getText().toString()) * tokenInfo.getTokenPrice())).toString());

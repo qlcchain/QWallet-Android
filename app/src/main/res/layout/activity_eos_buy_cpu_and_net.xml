@@ -1,204 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/refreshLayout"
     android:background="@color/white"
     android:layout_height="match_parent">
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/x92"
-        android:background="@color/white">
-
-        <LinearLayout
+        android:layout_height="match_parent">
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x23"
-                android:background="#F9F9F9" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x45"
-                android:layout_marginTop="@dimen/x56"
-                android:text="CPU"
-                android:textColor="@color/color_29282a" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x92"
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x45"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Staked" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <View
-                    android:layout_width="0px"
-                    android:layout_height="@dimen/x1"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/stakedCpuEos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/x45" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x45"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x23"
+                    android:background="#F9F9F9" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Available" />
+                    android:layout_marginLeft="@dimen/x45"
+                    android:layout_marginTop="@dimen/x56"
+                    android:text="CPU"
+                    android:textColor="@color/color_29282a" />
 
-                <View
-                    android:layout_width="0px"
-                    android:layout_height="@dimen/x1"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/avaliableCpu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/x45"
-                    android:textColor="@color/mainColor" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x45"
-                android:layout_marginTop="@dimen/x36"
-                android:text="NET"
-                android:textColor="@color/color_29282a" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x45"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Staked" />
-
-                <View
-                    android:layout_width="0px"
-                    android:layout_height="@dimen/x1"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/stakedNetEos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/x45" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x45"
-                android:layout_marginBottom="@dimen/x20"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Available" />
-
-                <View
-                    android:layout_width="0px"
-                    android:layout_height="@dimen/x1"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/avaliableNet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/x45"
-                    android:textColor="@color/mainColor" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x23"
-                android:background="#F9F9F9" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/x35"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.stratagile.qlink.view.SmoothCheckBox
-                        android:id="@+id/checkBoxStake"
-                        android:layout_width="@dimen/x45"
-                        android:layout_height="@dimen/x45"
-                        android:layout_marginRight="@dimen/x12"
-                        app:color_checked="@color/mainColor"
-                        app:color_unchecked="@color/white"
-                        app:stroke_width="@dimen/x4" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/x10"
-                        android:text="Stake" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.stratagile.qlink.view.SmoothCheckBox
-                        android:id="@+id/checkBoxReclaim"
-                        android:layout_width="@dimen/x45"
-                        android:layout_height="@dimen/x45"
-                        android:layout_marginRight="@dimen/x12"
-                        app:color_checked="@color/mainColor"
-                        app:color_unchecked="@color/white"
-                        app:stroke_width="@dimen/x4" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/x10"
-                        android:text="Reclaim" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llStake"
-                android:layout_marginTop="@dimen/x35"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,8 +42,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_29282a"
-                        android:text="Amount to stake" />
+                        android:text="Staked" />
 
                     <View
                         android:layout_width="0px"
@@ -218,66 +50,69 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/eosBalance"
+                        android:id="@+id/stakedCpuEos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x45" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x45"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available" />
+
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="@dimen/x1"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/avaliableCpu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/x45"
                         android:textColor="@color/mainColor" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/etStakeEos"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x45"
-                    android:layout_marginTop="@dimen/x5"
-                    android:layout_marginRight="@dimen/x45"
-                    android:background="@null"
-                    android:hint="Input EOS Amount"
-                    android:layout_height="wrap_content" />
-                <View
+                    android:layout_marginTop="@dimen/x36"
+                    android:text="NET"
+                    android:textColor="@color/color_29282a" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginTop="@dimen/x10"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x45"
-                    android:background="@color/color_29282a_40"/>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="@dimen/x45"
-                    android:layout_marginRight="@dimen/x45"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Stake ration"
-                        android:layout_centerVertical="true"
-                        android:layout_height="wrap_content" />
-                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:text="Staked" />
+
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="@dimen/x1"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/stakedNetEos"
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="@dimen/x20"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/x20"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:id="@+id/cpuRation"
-                            android:layout_width="wrap_content"
-                            android:text="CPU ≈ 0.00ms"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/netRation"
-                            android:layout_width="wrap_content"
-                            android:text="NET ≈ 0.00KB"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </RelativeLayout>
-                <SeekBar
-                    android:id="@+id/seekBar"
-                    android:layout_width="match_parent"
-                    android:max="100"
-                    android:layout_marginLeft="@dimen/x25"
-                    android:layout_marginRight="@dimen/x10"
-                    android:layout_marginTop="@dimen/x10"
-                    android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x45" />
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -289,7 +124,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CPU" />
+                        android:text="Available" />
 
                     <View
                         android:layout_width="0px"
@@ -297,14 +132,301 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        android:id="@+id/avaliableNet"
                         android:layout_width="wrap_content"
-                        android:text="NET"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/x45" />
+                        android:layout_marginRight="@dimen/x45"
+                        android:textColor="@color/mainColor" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x23"
+                    android:background="#F9F9F9" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x35"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.stratagile.qlink.view.SmoothCheckBox
+                            android:id="@+id/checkBoxStake"
+                            android:layout_width="@dimen/x45"
+                            android:layout_height="@dimen/x45"
+                            android:layout_marginRight="@dimen/x12"
+                            app:color_checked="@color/mainColor"
+                            app:color_unchecked="@color/white"
+                            app:stroke_width="@dimen/x4" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:text="Stake" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.stratagile.qlink.view.SmoothCheckBox
+                            android:id="@+id/checkBoxReclaim"
+                            android:layout_width="@dimen/x45"
+                            android:layout_height="@dimen/x45"
+                            android:layout_marginRight="@dimen/x12"
+                            app:color_checked="@color/mainColor"
+                            app:color_unchecked="@color/white"
+                            app:stroke_width="@dimen/x4" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:text="Reclaim" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llStake"
+                    android:layout_marginTop="@dimen/x35"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="13sp"
+                            android:textColor="@color/color_29282a"
+                            android:text="Amount to stake" />
+
+                        <View
+                            android:layout_width="0px"
+                            android:layout_height="@dimen/x1"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/eosBalance"
+                            android:layout_width="wrap_content"
+                            android:textSize="11sp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/x45"
+                            android:textColor="@color/mainColor" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etStakeEos"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:layout_marginTop="@dimen/x5"
+                        android:layout_marginRight="@dimen/x45"
+                        android:inputType="numberDecimal"
+                        android:textSize="13sp"
+                        android:background="@null"
+                        android:hint="Input EOS Amount"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginTop="@dimen/x10"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:background="@color/color_29282a_40"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:layout_marginRight="@dimen/x45"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="Stake ration"
+                            android:layout_centerVertical="true"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/x20"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/x20"
+                            android:layout_alignParentRight="true"
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/cpuRation"
+                                android:layout_width="wrap_content"
+                                android:text="CPU ≈ 0.00ms"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/netRation"
+                                android:layout_width="wrap_content"
+                                android:text="NET ≈ 0.00KB"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        android:layout_width="match_parent"
+                        android:max="100"
+                        android:layout_marginLeft="@dimen/x25"
+                        android:layout_marginRight="@dimen/x10"
+                        android:layout_marginTop="@dimen/x10"
+                        android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:layout_marginBottom="@dimen/x20"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CPU" />
+
+                        <View
+                            android:layout_width="0px"
+                            android:layout_height="@dimen/x1"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="NET"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/x45" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llReclaim"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/x35"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:padding="@dimen/x17"
+                        android:textSize="11sp"
+                        android:background="@drawable/relclaim_tip_bg"
+                        android:layout_marginRight="@dimen/x45"
+                        android:text="Tip: Reclaimable resources = Total resources - Consumed resources - Consumption From reclaiming process - Resources staked by others"
+                        android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x25"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="13sp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_29282a"
+                            android:text="Reclaim CPU Amount" />
+
+                        <View
+                            android:layout_width="0px"
+                            android:layout_height="@dimen/x1"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/cpuBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="11sp"
+                            android:layout_marginRight="@dimen/x45"
+                            android:textColor="@color/color_29282a_40" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etReclaimCpu"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:layout_marginTop="@dimen/x5"
+                        android:textSize="13sp"
+                        android:inputType="numberDecimal"
+                        android:layout_marginRight="@dimen/x45"
+                        android:background="@null"
+                        android:hint="Input CPU Amount"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginTop="@dimen/x10"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:background="@color/color_29282a_40"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x25"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="13sp"
+                            android:textColor="@color/color_29282a"
+                            android:text="Reclaim NET Amount" />
+
+                        <View
+                            android:layout_width="0px"
+                            android:layout_height="@dimen/x1"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/netBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="11sp"
+                            android:layout_marginRight="@dimen/x45"
+                            android:textColor="@color/color_29282a_40" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etReclaimNet"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:textSize="13sp"
+                        android:inputType="numberDecimal"
+                        android:layout_marginTop="@dimen/x5"
+                        android:layout_marginRight="@dimen/x45"
+                        android:background="@null"
+                        android:hint="Input NET Amount"
+                        android:layout_height="wrap_content" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginTop="@dimen/x10"
+                        android:layout_marginLeft="@dimen/x45"
+                        android:background="@color/color_29282a_40"/>
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="Recipient Account"
+                    android:layout_marginTop="@dimen/x23"
+                    android:textSize="13sp"
                     android:layout_marginLeft="@dimen/x45"
                     android:layout_height="wrap_content" />
                 <EditText
@@ -312,6 +434,7 @@
                     android:layout_width="match_parent"
                     android:layout_marginLeft="@dimen/x45"
                     android:layout_marginTop="@dimen/x5"
+                    android:textSize="13sp"
                     android:layout_marginRight="@dimen/x45"
                     android:background="@null"
                     android:layout_height="wrap_content" />
@@ -323,16 +446,17 @@
                     android:background="@color/color_29282a_40"/>
             </LinearLayout>
 
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/tvOpreate"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:background="@color/mainColor"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:text="Stake"
-        android:layout_height="@dimen/x92" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tvOpreate"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@color/mainColor"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Stake"
+            android:layout_height="@dimen/x92" />
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

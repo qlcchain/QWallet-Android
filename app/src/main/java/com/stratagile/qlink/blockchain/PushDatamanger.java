@@ -29,7 +29,7 @@ import static com.stratagile.qlink.blockchain.EoscDataManager.eosNode;
 
 public class PushDatamanger {
 
-    public final static String PERMISSONION = "owner";
+    public String permissonion = "owner";
     Callback mCallback;
     Context mContext;
     EosChainInfo mChainInfoBean = new EosChainInfo();
@@ -45,10 +45,11 @@ public class PushDatamanger {
 
     String contract, message;
 
-    public PushDatamanger(Context context, String privateKeyStr) {
+    public PushDatamanger(Context context, String privateKeyStr, String permiss) {
         mContext = context;
         rpc = new EosRpcService(eosNode);
         this.privateKeyStr = privateKeyStr;
+        permissonion = permiss;
     }
 
     public void createAccount(String message, String buyRamBean, String permissionAccount, Callback callback) {
@@ -56,7 +57,7 @@ public class PushDatamanger {
         this.contract = "eosio";
         mCallback = callback;
         this.permissionAccount = permissionAccount;
-        permissions = new String[]{permissionAccount + "@" + PERMISSONION};
+        permissions = new String[]{permissionAccount + "@" + permissonion};
         getChainInfo();
 
         String buyRamBin = getAbiJsonBean(contract, "buyrambytes", buyRamBean);
@@ -99,10 +100,39 @@ public class PushDatamanger {
         this.contract = "eosio";
         mCallback = callback;
         this.permissionAccount = permissionAccount;
-        permissions = new String[]{permissionAccount + "@" + PERMISSONION};
+        permissions = new String[]{permissionAccount + "@" + permissonion};
         getChainInfo();
         String stakeCpuBin = getAbiJsonBean(contract, "delegatebw", cpuAndNetMessage);
         Action stakeAction = new Action(contract, "delegatebw");
+        stakeAction.setAuthorization(permissions);
+        stakeAction.setData(stakeCpuBin);
+
+        SignedTransaction txn = new SignedTransaction();
+        txn.addAction(stakeAction);
+
+        txn.putSignatures(new ArrayList<String>());
+
+
+        if (null != mChainInfoBean) {
+            txn.setReferenceBlock(mChainInfoBean.getHeadBlockId());
+            txn.setExpiration(mChainInfoBean.getTimeAfterHeadBlockTime(60000));
+        }
+        EosPrivateKey eosPrivateKey = new EosPrivateKey(privateKeyStr);
+        txn.sign(eosPrivateKey, new TypeChainId(mChainInfoBean.getChain_id()));
+        pushTransactionRetJson(new PackedTransaction(txn));
+    }
+
+    /**
+     * 赎回cpu和net
+     */
+    public void unStakeCpuAndNet(String cpuAndNetMessage, String permissionAccount, Callback callback) {
+        this.contract = "eosio";
+        mCallback = callback;
+        this.permissionAccount = permissionAccount;
+        permissions = new String[]{permissionAccount + "@" + permissonion};
+        getChainInfo();
+        String stakeCpuBin = getAbiJsonBean(contract, "undelegatebw", cpuAndNetMessage);
+        Action stakeAction = new Action(contract, "undelegatebw");
         stakeAction.setAuthorization(permissions);
         stakeAction.setData(stakeCpuBin);
 
@@ -128,10 +158,39 @@ public class PushDatamanger {
         this.contract = "eosio";
         mCallback = callback;
         this.permissionAccount = permissionAccount;
-        permissions = new String[]{permissionAccount + "@" + PERMISSONION};
+        permissions = new String[]{permissionAccount + "@" + permissonion};
         getChainInfo();
-        String buyRamBin = getAbiJsonBean(contract, "buyrambytes", ramMessage);
-        Action buyRamAction = new Action(contract, "buyrambytes");
+        String buyRamBin = getAbiJsonBean(contract, "buyram", ramMessage);
+        Action buyRamAction = new Action(contract, "buyram");
+        buyRamAction.setAuthorization(permissions);
+        buyRamAction.setData(buyRamBin);
+
+        SignedTransaction txn = new SignedTransaction();
+        txn.addAction(buyRamAction);
+
+        txn.putSignatures(new ArrayList<String>());
+
+
+        if (null != mChainInfoBean) {
+            txn.setReferenceBlock(mChainInfoBean.getHeadBlockId());
+            txn.setExpiration(mChainInfoBean.getTimeAfterHeadBlockTime(60000));
+        }
+        EosPrivateKey eosPrivateKey = new EosPrivateKey(privateKeyStr);
+        txn.sign(eosPrivateKey, new TypeChainId(mChainInfoBean.getChain_id()));
+        pushTransactionRetJson(new PackedTransaction(txn));
+    }
+
+    /**
+     * 出售ram
+     */
+    public void sellRam(String ramMessage, String permissionAccount, Callback callback) {
+        this.contract = "eosio";
+        mCallback = callback;
+        this.permissionAccount = permissionAccount;
+        permissions = new String[]{permissionAccount + "@" + permissonion};
+        getChainInfo();
+        String buyRamBin = getAbiJsonBean(contract, "sellram", ramMessage);
+        Action buyRamAction = new Action(contract, "sellram");
         buyRamAction.setAuthorization(permissions);
         buyRamAction.setData(buyRamBin);
 
@@ -155,7 +214,7 @@ public class PushDatamanger {
         this.contract = "eosio";
         mCallback = callback;
         this.permissionAccount = permissionAccount;
-        permissions = new String[]{permissionAccount + "@" + PERMISSONION};
+        permissions = new String[]{permissionAccount + "@" + permissonion};
         getChainInfo();
     }
 

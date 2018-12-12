@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_4c000000">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/ll_popup"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/x20"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivClose"
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/close_h"
+                    android:layout_marginLeft="@dimen/x20"
+                    android:layout_marginTop="@dimen/x20"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Payment details"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/tvEthValue"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/x50"
+                android:textSize="15sp"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/x45"
+                android:layout_marginTop="@dimen/x10"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Send to"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvTo"
+                    android:text="ETH Transfer"
+                    android:textColor="@color/color_29282a"
+                    android:layout_marginLeft="@dimen/x45"
+                    android:layout_marginRight="@dimen/x45"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x1"
+                android:layout_marginTop="@dimen/x10"
+                android:layout_marginBottom="@dimen/x10"
+                android:layout_marginLeft="@dimen/x45"
+                android:background="@color/color_29282a_40"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/x45"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="From"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvFrom"
+                    android:text="ETH Transfer"
+                    android:textColor="@color/color_29282a"
+                    android:layout_marginLeft="@dimen/x45"
+                    android:layout_marginRight="@dimen/x45"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x1"
+                android:layout_marginTop="@dimen/x10"
+                android:layout_marginBottom="@dimen/x10"
+                android:layout_marginLeft="@dimen/x45"
+                android:background="@color/color_29282a_40"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/x45"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Gas fee"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/x45"
+                    android:layout_marginRight="@dimen/x45"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvCost"
+                        android:text="ETH Transfer"
+                        android:textColor="@color/color_29282a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tvCostDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvNext"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/x20"
+                android:text="@string/next"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@color/mainColor"
+                android:layout_height="@dimen/x92" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

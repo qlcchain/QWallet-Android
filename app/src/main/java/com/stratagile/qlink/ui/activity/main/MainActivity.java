@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alipay.android.phone.mrpc.core.NetworkUtils;
 import com.bumptech.glide.Glide;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -75,8 +74,6 @@ import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.P2PCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
-import com.stratagile.qlink.ui.activity.eth.EthMnemonicShowActivity;
-import com.stratagile.qlink.ui.activity.eth.EthMnemonicbackupActivity;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
@@ -86,12 +83,9 @@ import com.stratagile.qlink.ui.activity.shadowsock.ShadowVpnActivity;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
 import com.stratagile.qlink.ui.activity.vpn.RankActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
-import com.stratagile.qlink.ui.activity.wallet.ChooseWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
-import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
-import com.stratagile.qlink.ui.activity.wallet.QrCodeDetailActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
@@ -109,20 +103,16 @@ import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
-import com.stratagile.qlink.utils.eth.WalletStorage;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.DownCheckView;
 import com.stratagile.qlink.view.NoScrollViewPager;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
-import org.consenlabs.tokencore.wallet.WalletManager;
-import org.consenlabs.tokencore.wallet.keystore.IMTKeystore;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -134,9 +124,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.stratagile.qlink.utils.AESCipher.aesDecryptString;
-import static com.stratagile.qlink.utils.AESCipher.aesEncryptString;
 
 /**
  * @author hzp
@@ -171,6 +158,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     RelativeLayout rl1;
     @BindView(R.id.rl2)
     RelativeLayout rl2;
+    @BindView(R.id.ivQRCode)
+    ImageView ivQRCode;
     private FirebaseAnalytics mFirebaseAnalytics;
     private MainViewModel viewModel;
 
@@ -222,10 +211,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         countryBeans.add(new ContinentAndCountry.ContinentBean.CountryBean("Others", "icon_others"));
         downCHeckView.setData(countryBeans);
         downCHeckView.setText(new ContinentAndCountry.ContinentBean.CountryBean(getString(R.string.choose_location), "icon_choose_location"));
-        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
-            statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));
-            statusBar.setText(getString(R.string.testnet));
-        }
+//        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
+//            statusBar.setBackgroundColor(getResources().getColor(R.color.color_f51818));
+//            statusBar.setText(getString(R.string.testnet));
+//        }
 //        File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
         if (!SpUtil.getString(this, ConstantValue.myAvatarPath, "").equals("")) {
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
@@ -552,6 +541,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         downCHeckView.setVisibility(View.VISIBLE);
         tvTitle.setVisibility(View.GONE);
         tvTitle.setText(R.string.vpn);
+        ivQRCode.setVisibility(View.GONE);
         tvTitle.setTextColor(getResources().getColor(R.color.color_29282a));
         statusBar.setBackgroundColor(getResources().getColor(R.color.white));
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
@@ -589,6 +579,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setVisibility(View.VISIBLE);
         viewPager.setCurrentItem(1, false);
         downCHeckView.setVisibility(View.GONE);
+        ivQRCode.setVisibility(View.GONE);
         statusBar.setBackgroundColor(getResources().getColor(R.color.white));
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.market);
@@ -627,6 +618,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     }
                     viewPager.setCurrentItem(2, false);
                     bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+                    ivQRCode.setVisibility(View.VISIBLE);
                     statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     tvTitle.setText(R.string.wallet);
@@ -660,6 +652,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
                     }
                     viewPager.setCurrentItem(2, false);
+                    ivQRCode.setVisibility(View.VISIBLE);
                     bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                     statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -698,6 +691,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         ivWallet.setClickable(true);
         downCHeckView.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
+        ivQRCode.setVisibility(View.GONE);
         viewPager.setCurrentItem(3, false);
         statusBar.setBackgroundColor(getResources().getColor(R.color.white));
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
@@ -813,7 +807,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Intent intent = new Intent();
         intent.setAction(BroadCastAction.disconnectVpn);
         sendBroadcast(intent);
-        android.os.Process.killProcess(android.os.Process.myPid());
+        Process.killProcess(Process.myPid());
         System.exit(0);
         super.onDestroy();
         EventBus.getDefault().unregister(this);
@@ -941,7 +935,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     @SuppressLint("RestrictedApi")
-    @OnClick({R.id.iv_avater, R.id.iv_wallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn})
+    @OnClick({R.id.iv_avater, R.id.iv_wallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
@@ -951,13 +945,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     startActivityForResult(intent1, START_SELECT_PICTURE);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
                     if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), "ETH Address", "eth_eth");
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), "ETH Address", "eth");
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), "NEO Address", "neo_neo");
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), "NEO Address", "neo");
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EosWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), "Eos Address", "eos_neo");
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), "Eos Address", "eos");
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     }
                 }
@@ -993,6 +987,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 break;
             case R.id.view_vpn:
                 bottomNavigation.setSelectedItemId(R.id.item_sms);
+                break;
+            case R.id.ivQRCode:
+                startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
                 break;
             default:
                 break;

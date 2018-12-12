@@ -24,7 +24,7 @@ import io.eblock.eos4j.api.vo.transaction.Transaction;
 public class RpcTest {
 
 	public static void main(String[] args) {
-		transfer();
+		getAccount();
 	}
 	
 	public void getBalance() {
@@ -36,11 +36,11 @@ public class RpcTest {
 		
 	}
 	
-	public void getAccount() {
+	public static void getAccount() {
 
 		// 主网
-		EosRpcService rpc = new EosRpcService("https://node1.zbeos.com");
-		Account account = rpc.getAccount("yfhuangeos2g");
+		EosRpcService rpc = new EosRpcService("http://api-mainnet.starteos.io");
+		Account account = rpc.getAccount("huzhipeng124");
 		System.out.println(account.toString());
 		
 	}
@@ -71,15 +71,15 @@ public class RpcTest {
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
-		try {
-			//eos转账
-			Transaction t1 = rpc.transfer("5Hv72iQk7sjR5xjdMsgH56bBRamvPg1gvh1kZ2SY8RSTvZy9xTb", "eosio.token", "yfhuangeos4g", "yfhuangeos2g", "0.0001 EOS", "hhhh");
-			//代币转账
-//			Transaction t1 = rpc.transfer("5KBWYsYudu9APDdUrHVPPDdyVMhjrRVq3zqDAEzhuogDR3caApb","machaoxiaoai", "machaoxiaoai","test12344444", "10.0000 SYS", "");
-			System.out.println("转账成功 = " + t1.getTransactionId()+" \n ");
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
+//		try {
+//			//eos转账
+//			Transaction t1 = rpc.transfer("5Hv72iQk7sjR5xjdMsgH56bBRamvPg1gvh1kZ2SY8RSTvZy9xTb", "eosio.token", "yfhuangeos4g", "yfhuangeos2g", "0.0001 EOS", "hhhh");
+//			//代币转账
+////			Transaction t1 = rpc.transfer("5KBWYsYudu9APDdUrHVPPDdyVMhjrRVq3zqDAEzhuogDR3caApb","machaoxiaoai", "machaoxiaoai","test12344444", "10.0000 SYS", "");
+//			System.out.println("转账成功 = " + t1.getTransactionId()+" \n ");
+//		}catch(Exception ex) {
+//			ex.printStackTrace();
+//		}
 		
 	}
 }

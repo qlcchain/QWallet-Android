@@ -1,8 +1,16 @@
 package com.stratagile.qlink.ui.activity.eos;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.InputFilter;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -14,6 +22,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.blockchain.PushDatamanger;
 import com.stratagile.qlink.blockchain.bean.StakeCpuAndNet;
+import com.stratagile.qlink.blockchain.bean.UnDelegatebwBean;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EosResource;
 import com.stratagile.qlink.entity.TokenInfo;
@@ -21,12 +30,16 @@ import com.stratagile.qlink.ui.activity.eos.component.DaggerEosBuyCpuAndNetCompo
 import com.stratagile.qlink.ui.activity.eos.contract.EosBuyCpuAndNetContract;
 import com.stratagile.qlink.ui.activity.eos.module.EosBuyCpuAndNetModule;
 import com.stratagile.qlink.ui.activity.eos.presenter.EosBuyCpuAndNetPresenter;
+import com.stratagile.qlink.utils.EosUtil;
+import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.view.DecimalDigitsInputFilter;
 import com.stratagile.qlink.view.SmoothCheckBox;
+import com.stratagile.qlink.view.SweetAlertDialog;
+import com.vondear.rxtools.view.RxQRCode;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -34,10 +47,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.eblock.eos4j.api.vo.transaction.push.TxAction;
-import io.eblock.eos4j.ese.Action;
-import io.eblock.eos4j.ese.DataParam;
-import io.eblock.eos4j.ese.DataType;
 
 /**
  * @author hzp
@@ -78,6 +87,18 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
     EditText etStakeEos;
     @BindView(R.id.etRecipientAccount)
     EditText etRecipientAccount;
+    @BindView(R.id.cpuBalance)
+    TextView cpuBalance;
+    @BindView(R.id.etReclaimCpu)
+    EditText etReclaimCpu;
+    @BindView(R.id.netBalance)
+    TextView netBalance;
+    @BindView(R.id.etReclaimNet)
+    EditText etReclaimNet;
+    @BindView(R.id.llReclaim)
+    LinearLayout llReclaim;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
     private EosAccount eosAccount;
 
@@ -104,6 +125,9 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
             public void onClick(View v) {
                 checkBoxReclaim.setChecked(true);
                 checkBoxStake.setChecked(false);
+                llReclaim.setVisibility(View.VISIBLE);
+                llStake.setVisibility(View.GONE);
+                tvOpreate.setText("Reclaim");
             }
         });
         checkBoxStake.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +135,9 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
             public void onClick(View v) {
                 checkBoxReclaim.setChecked(false);
                 checkBoxStake.setChecked(true);
+                llReclaim.setVisibility(View.GONE);
+                llStake.setVisibility(View.VISIBLE);
+                tvOpreate.setText("Stake");
             }
         });
         checkBoxStake.setChecked(true);
@@ -123,7 +150,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         Map map = new HashMap<String, Object>();
         map.put("account", eosAccount.getAccountName());
         mPresenter.getEosResource(map);
-        eosBalance.setText("Balance:" + eosToken.getTokenValue() + " EOS");
+        eosBalance.setText("Balance:" + eosToken.getEosTokenValue() + " EOS");
         etRecipientAccount.setText(eosAccount.getAccountName());
         seekBar.setProgress(50);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -142,6 +169,15 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Map map = new HashMap<String, Object>();
+                map.put("account", eosAccount.getAccountName());
+                mPresenter.getEosResource(map);
+                refreshLayout.setRefreshing(false);
             }
         });
     }
@@ -164,6 +200,14 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         return bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS";
     }
 
+    private String setReclaimEos(String value) {
+        if (value == null || "".equals(value)) {
+            value = "0.0";
+        }
+        BigDecimal bigDecimal = BigDecimal.valueOf(Double.parseDouble(value));
+        KLog.i(bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
+        return bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS";
+    }
 
 
     @Override
@@ -173,6 +217,8 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         avaliableCpu.setText(parseCpu(eosResource.getData().getData().getCpu().getAvailable()) + "/" + parseCpu(eosResource.getData().getData().getCpu().getMax()));
         stakedCpuEos.setText(eosResource.getData().getData().getStaked().getCpu_weight());
         stakedNetEos.setText(eosResource.getData().getData().getStaked().getNet_weight());
+        cpuBalance.setText("Balance: " + eosResource.getData().getData().getCpu().getAvailable() + " us");
+        netBalance.setText("Balance: " + eosResource.getData().getData().getNet().getAvailable() + " bytes");
     }
 
     private String parseRam(int ram) {
@@ -192,7 +238,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
     private String parseCpu(int cpu) {
         DecimalFormat df = new DecimalFormat("#.00");
         if (cpu < 1000) {
-            return df.format(cpu) + " us";
+            return cpu + " us";
         }
         double ms = cpu / 1000d;
         if (ms > 1000) {
@@ -230,7 +276,42 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
 
     @OnClick(R.id.tvOpreate)
     public void onViewClicked() {
-        stake();
+        if (checkBoxStake.isChecked()) {
+            if ("".equals(etStakeEos.getText().toString())) {
+                ToastUtil.displayShortToast("please input stake EOS");
+                return;
+            }
+        } else {
+            if ("".equals(etReclaimCpu.getText().toString().trim()) && "".equals(etReclaimNet.getText().toString().trim())) {
+                ToastUtil.displayShortToast("please input reclaim cpu or net");
+                return;
+            }
+        }
+        showPaymentDetail();
+    }
+
+    private void showTestDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
+        TextView tvContent = view.findViewById(R.id.tvContent);
+        ImageView imageView = view.findViewById(R.id.ivTitle);
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
+        tvContent.setText("Success");
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        tvOpreate.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sweetAlertDialog.cancel();
+                tvOpreate.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(RESULT_OK);
+                        onBackPressed();
+                    }
+                }, 200);
+            }
+        }, 2000);
     }
 
     /**
@@ -238,6 +319,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
      */
     private void stake() {
         if ("".equals(etStakeEos.getText().toString().trim())) {
+            closeProgressDialog();
             return;
         }
         StakeCpuAndNet stakeCpuAndNet = new StakeCpuAndNet();
@@ -252,8 +334,121 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
             @Override
             public void run() {
                 try {
-                    new PushDatamanger(EosBuyCpuAndNetActivity.this, eosAccount.getOwnerPrivateKey()).stakeCpuAndNet(stakeStr, eosAccount.getAccountName(), result -> {
+                    String privateKey = "";
+                    String permission = "";
+                    if (eosAccount.getOwnerPrivateKey() != null && !"".equals(eosAccount.getOwnerPrivateKey())) {
+                        privateKey = eosAccount.getOwnerPrivateKey();
+                        permission = "owner";
+                    } else {
+                        privateKey = eosAccount.getActivePrivateKey();
+                        permission = "active";
+                    }
+                    new PushDatamanger(EosBuyCpuAndNetActivity.this, privateKey, permission).stakeCpuAndNet(stakeStr, eosAccount.getAccountName(), result -> {
                         KLog.i(result);
+                        tvOpreate.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                closeProgressDialog();
+                                if (result == null || "".equals(result)) {
+
+                                } else {
+                                    showTestDialog();
+                                }
+                            }
+                        });
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void showPaymentDetail() {
+        View view = View.inflate(this, R.layout.payment_info_layout, null);
+        TextView tvPaymentType = (TextView) view.findViewById(R.id.tvPaymentType);//输入内容
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView tvNext = view.findViewById(R.id.tvNext);//取消按钮
+        TextView tvTo = view.findViewById(R.id.tvTo);
+        TextView tvCount = view.findViewById(R.id.tvCount);
+        TextView tvFrom = view.findViewById(R.id.tvFrom);
+
+        if (checkBoxStake.isChecked()) {
+            tvPaymentType.setText("Stake");
+            tvCount.setText(EosUtil.setEosValue(etStakeEos.getText().toString()));
+        } else {
+            tvPaymentType.setText("Reclaim");
+        }
+
+        tvTo.setText(etRecipientAccount.getText().toString());
+        tvFrom.setText(eosAccount.getAccountName());
+
+        //取消或确定按钮监听事件处l
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+                showProgressDialog();
+                if (checkBoxStake.isChecked()) {
+                    stake();
+                } else {
+                    reClaim();
+                }
+            }
+        });
+    }
+
+    /**
+     * 赎回操作
+     */
+    private void reClaim() {
+        if ("".equals(etReclaimCpu.getText().toString().trim()) && "".equals(etReclaimNet.getText().toString().trim())) {
+            closeProgressDialog();
+            return;
+        }
+        UnDelegatebwBean unDelegatebwBean = new UnDelegatebwBean();
+        unDelegatebwBean.setFrom(eosAccount.getAccountName());
+        unDelegatebwBean.setReceiver(etRecipientAccount.getText().toString().trim());
+        unDelegatebwBean.setUnstake_cpu_quantity(setReclaimEos(etReclaimCpu.getText().toString()));
+        unDelegatebwBean.setUnstake_net_quantity(setReclaimEos(etReclaimNet.getText().toString()));
+        String unStakeStr = new Gson().toJson(unDelegatebwBean);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String privateKey = "";
+                    String permission = "";
+                    if (eosAccount.getOwnerPrivateKey() != null && !"".equals(eosAccount.getOwnerPrivateKey())) {
+                        privateKey = eosAccount.getOwnerPrivateKey();
+                        permission = "owner";
+                    } else {
+                        privateKey = eosAccount.getActivePrivateKey();
+                        permission = "active";
+                    }
+                    new PushDatamanger(EosBuyCpuAndNetActivity.this, privateKey, permission).unStakeCpuAndNet(unStakeStr, eosAccount.getAccountName(), result -> {
+                        KLog.i(result);
+                        tvOpreate.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                closeProgressDialog();
+                                if (result == null || "".equals(result)) {
+
+                                } else {
+                                    showTestDialog();
+                                }
+                            }
+                        });
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

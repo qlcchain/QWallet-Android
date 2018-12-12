@@ -1,6 +1,7 @@
 package io.eblock.eos4j.api.utils;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -45,6 +46,7 @@ public class Generator {
 			} else {
 				ApiError apiError = getApiError(response);
 				KLog.i(apiError.getMessage());
+				ToastUtil.displayShortToast(apiError.getMessage());
 				KLog.i(Arrays.asList(apiError.getError().getDetails()));
 				throw new ApiException(apiError);
 			}

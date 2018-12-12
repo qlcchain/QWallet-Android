@@ -6,9 +6,11 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.EosAccountInfo;
+import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.ui.activity.eos.contract.EosImportContract;
 import com.stratagile.qlink.ui.activity.eos.EosImportActivity;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -47,6 +49,35 @@ public class EosImportPresenter implements EosImportContract.EosImportContractPr
         if (!mCompositeDisposable.isDisposed()) {
              mCompositeDisposable.dispose();
         }
+    }
+
+    public void getEosKeyAccount(Map map) {
+        Disposable disposable = httpAPIWrapper.getKeyAccount(map)
+                .subscribe(new Consumer<ArrayList<EosKeyAccount>>() {
+                    @Override
+                    public void accept(ArrayList<EosKeyAccount> baseBack) throws Exception {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        mView.getEosKeyAccountBack(baseBack);
+                        mView.closeProgressDialog();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
     }
 
     @Override

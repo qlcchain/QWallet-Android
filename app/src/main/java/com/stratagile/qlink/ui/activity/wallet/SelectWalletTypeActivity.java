@@ -16,6 +16,7 @@ import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
+import com.stratagile.qlink.ui.activity.eos.EosCreateActivity;
 import com.stratagile.qlink.ui.activity.eos.EosImportActivity;
 import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
@@ -201,7 +202,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 } else if (walletType == AllWallet.WalletType.NeoWallet) {
                     mPresenter.createNeoWallet();
                 } else {
-
+                    Intent intent = new Intent(this, EosCreateActivity.class);
+                    startActivityForResult(intent, 2);
                 }
                 break;
             case R.id.btImport:

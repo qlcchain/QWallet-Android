@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -37,8 +38,12 @@ import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.WinqGasBack;
+import com.stratagile.qlink.entity.eos.EosQrBean;
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
+import com.stratagile.qlink.ui.activity.eos.EosActivationActivity;
+import com.stratagile.qlink.ui.activity.eos.EosResourceManagementActivity;
+import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
 import com.stratagile.qlink.ui.activity.eth.EthWalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
@@ -47,6 +52,7 @@ import com.stratagile.qlink.ui.activity.wallet.module.AllWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.AllWalletPresenter;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
+import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
@@ -59,6 +65,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +76,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import neoutils.Neoutils;
+import sun.misc.BASE64Decoder;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
 
@@ -112,6 +120,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     TextView tvClaim;
     @BindView(R.id.llGetGas)
     LinearLayout llGetGas;
+    @BindView(R.id.llResouces)
+    LinearLayout llResouces;
 
     private double walletAsset;
 
@@ -181,8 +191,27 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     } else {
                         ToastUtil.displayShortToast("Please scan the NEO wallet address and make a transfer.");
                     }
+                } else if (EosUtil.isEosName(s)){
+                    if (currentSelectWallet.getWalletType() == AllWallet.WalletType.EosWallet) {
+                        ArrayList<TokenInfo> arrayList = new ArrayList<>();
+                        arrayList.addAll(tokensAdapter.getData());
+                        Intent intent = new Intent(getActivity(), EosTransferActivity.class).putExtra("walletAddress", s);
+                        intent.putParcelableArrayListExtra("tokens", arrayList);
+                        startActivity(intent);
+                    } else {
+                        ToastUtil.displayShortToast("Please scan the EOS wallet address and make a transfer.");
+                    }
                 } else {
-                    ToastUtil.displayShortToast("Invalid QR code");
+                    try {
+                        EosQrBean eosQrBean = new Gson().fromJson(s, EosQrBean.class);
+                        if (currentSelectWallet.getWalletType() == AllWallet.WalletType.EosWallet) {
+                            startActivity(new Intent(getActivity(), EosActivationActivity.class).putExtra("eosQrBean", eosQrBean).putExtra("eoswallet", currentSelectWallet.getEosAccount()));
+                        } else {
+                            startActivity(new Intent(getActivity(), EosActivationActivity.class).putExtra("eosQrBean", eosQrBean));
+                        }
+                    } catch (Exception e) {
+                        ToastUtil.displayShortToast("Invalid QR code");
+                    }
                 }
             }
         });
@@ -357,12 +386,14 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     }
 
     boolean hasSelectedWallet = false;
+
     private void initData() {
         hasSelectedWallet = false;
         tokensAdapter.setNewData(new ArrayList<>());
         tvWalletAsset.setText("- -");
         tvWalletGas.setText("- -");
         llGetGas.setVisibility(View.GONE);
+        llResouces.setVisibility(View.GONE);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -441,6 +472,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         allWallet.setWalletAddress(ethWallet.getAddress());
         currentSelectWallet = allWallet;
         viewModel.allWalletMutableLiveData.postValue(currentSelectWallet);
+        viewModel.walletTypeMutableLiveData.postValue(AllWallet.WalletType.EthWallet);
         allWalletMoney.put(allWallet, 0d);
         List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (neoWallets.size() != 0) {
@@ -457,11 +489,13 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             @Override
             public void run() {
                 tvWalletAddress.setText(eosAccount.getAccountName());
-                tvWalletName.setText(eosAccount.getAccountName());
+                llResouces.setVisibility(View.VISIBLE);
+                tvWalletName.setText(eosAccount.getWalletName() == null ? eosAccount.getAccountName() : eosAccount.getWalletName());
                 ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
                 llGetGas.setVisibility(View.GONE);
             }
         });
+        viewModel.walletTypeMutableLiveData.postValue(AllWallet.WalletType.EosWallet);
         AllWallet allWallet = new AllWallet();
         allWallet.setWalletType(AllWallet.WalletType.EosWallet);
         allWallet.setEosAccount(eosAccount);
@@ -476,6 +510,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             mPresenter.getWinqGas(neoWallets.get(0).getAddress());
         }
     }
+
     private void getNeoToken(Wallet wallet) {
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("address", wallet.getAddress());
@@ -495,6 +530,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
             }
         });
+        viewModel.walletTypeMutableLiveData.postValue(AllWallet.WalletType.NeoWallet);
         mPresenter.getNeoWalletDetail(wallet.getAddress(), infoMap);
         queryGas(wallet.getAddress());
         AllWallet allWallet = new AllWallet();
@@ -522,7 +558,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         super.onDestroyView();
     }
 
-    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.ivClaim, R.id.tvClaim, R.id.tvWalletGas})
+    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.ivClaim, R.id.tvClaim, R.id.tvWalletGas, R.id.llResouces})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvWalletName:
@@ -550,8 +586,11 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             case R.id.tvClaim:
                 getGas();
                 break;
-            case  R.id.tvWalletGas:
+            case R.id.tvWalletGas:
                 queryWinqGas();
+                break;
+            case R.id.llResouces:
+                startActivity(new Intent(getActivity(), EosResourceManagementActivity.class).putExtra("eosAccount", currentSelectWallet.getEosAccount()));
                 break;
             default:
                 break;

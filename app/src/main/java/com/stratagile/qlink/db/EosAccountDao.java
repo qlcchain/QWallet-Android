@@ -24,12 +24,14 @@ public class EosAccountDao extends AbstractDao<EosAccount, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property AccountName = new Property(1, String.class, "accountName", false, "ACCOUNT_NAME");
-        public final static Property ActivePrivateKey = new Property(2, String.class, "activePrivateKey", false, "ACTIVE_PRIVATE_KEY");
-        public final static Property ActivePublicKey = new Property(3, String.class, "activePublicKey", false, "ACTIVE_PUBLIC_KEY");
-        public final static Property OwnerPrivateKey = new Property(4, String.class, "ownerPrivateKey", false, "OWNER_PRIVATE_KEY");
-        public final static Property OwnerPublicKey = new Property(5, String.class, "ownerPublicKey", false, "OWNER_PUBLIC_KEY");
-        public final static Property IsCurrent = new Property(6, boolean.class, "isCurrent", false, "IS_CURRENT");
-        public final static Property AccountPassword = new Property(7, String.class, "accountPassword", false, "ACCOUNT_PASSWORD");
+        public final static Property WalletName = new Property(2, String.class, "walletName", false, "WALLET_NAME");
+        public final static Property ActivePrivateKey = new Property(3, String.class, "activePrivateKey", false, "ACTIVE_PRIVATE_KEY");
+        public final static Property ActivePublicKey = new Property(4, String.class, "activePublicKey", false, "ACTIVE_PUBLIC_KEY");
+        public final static Property OwnerPrivateKey = new Property(5, String.class, "ownerPrivateKey", false, "OWNER_PRIVATE_KEY");
+        public final static Property OwnerPublicKey = new Property(6, String.class, "ownerPublicKey", false, "OWNER_PUBLIC_KEY");
+        public final static Property IsCurrent = new Property(7, boolean.class, "isCurrent", false, "IS_CURRENT");
+        public final static Property AccountPassword = new Property(8, String.class, "accountPassword", false, "ACCOUNT_PASSWORD");
+        public final static Property IsCreating = new Property(9, boolean.class, "isCreating", false, "IS_CREATING");
     }
 
 
@@ -47,12 +49,14 @@ public class EosAccountDao extends AbstractDao<EosAccount, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"EOS_ACCOUNT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ACCOUNT_NAME\" TEXT," + // 1: accountName
-                "\"ACTIVE_PRIVATE_KEY\" TEXT," + // 2: activePrivateKey
-                "\"ACTIVE_PUBLIC_KEY\" TEXT," + // 3: activePublicKey
-                "\"OWNER_PRIVATE_KEY\" TEXT," + // 4: ownerPrivateKey
-                "\"OWNER_PUBLIC_KEY\" TEXT," + // 5: ownerPublicKey
-                "\"IS_CURRENT\" INTEGER NOT NULL ," + // 6: isCurrent
-                "\"ACCOUNT_PASSWORD\" TEXT);"); // 7: accountPassword
+                "\"WALLET_NAME\" TEXT," + // 2: walletName
+                "\"ACTIVE_PRIVATE_KEY\" TEXT," + // 3: activePrivateKey
+                "\"ACTIVE_PUBLIC_KEY\" TEXT," + // 4: activePublicKey
+                "\"OWNER_PRIVATE_KEY\" TEXT," + // 5: ownerPrivateKey
+                "\"OWNER_PUBLIC_KEY\" TEXT," + // 6: ownerPublicKey
+                "\"IS_CURRENT\" INTEGER NOT NULL ," + // 7: isCurrent
+                "\"ACCOUNT_PASSWORD\" TEXT," + // 8: accountPassword
+                "\"IS_CREATING\" INTEGER NOT NULL );"); // 9: isCreating
     }
 
     /** Drops the underlying database table. */
@@ -75,31 +79,37 @@ public class EosAccountDao extends AbstractDao<EosAccount, Long> {
             stmt.bindString(2, accountName);
         }
  
+        String walletName = entity.getWalletName();
+        if (walletName != null) {
+            stmt.bindString(3, walletName);
+        }
+ 
         String activePrivateKey = entity.getActivePrivateKey();
         if (activePrivateKey != null) {
-            stmt.bindString(3, activePrivateKey);
+            stmt.bindString(4, activePrivateKey);
         }
  
         String activePublicKey = entity.getActivePublicKey();
         if (activePublicKey != null) {
-            stmt.bindString(4, activePublicKey);
+            stmt.bindString(5, activePublicKey);
         }
  
         String ownerPrivateKey = entity.getOwnerPrivateKey();
         if (ownerPrivateKey != null) {
-            stmt.bindString(5, ownerPrivateKey);
+            stmt.bindString(6, ownerPrivateKey);
         }
  
         String ownerPublicKey = entity.getOwnerPublicKey();
         if (ownerPublicKey != null) {
-            stmt.bindString(6, ownerPublicKey);
+            stmt.bindString(7, ownerPublicKey);
         }
-        stmt.bindLong(7, entity.getIsCurrent() ? 1L: 0L);
+        stmt.bindLong(8, entity.getIsCurrent() ? 1L: 0L);
  
         String accountPassword = entity.getAccountPassword();
         if (accountPassword != null) {
-            stmt.bindString(8, accountPassword);
+            stmt.bindString(9, accountPassword);
         }
+        stmt.bindLong(10, entity.getIsCreating() ? 1L: 0L);
     }
 
     @Override
@@ -116,31 +126,37 @@ public class EosAccountDao extends AbstractDao<EosAccount, Long> {
             stmt.bindString(2, accountName);
         }
  
+        String walletName = entity.getWalletName();
+        if (walletName != null) {
+            stmt.bindString(3, walletName);
+        }
+ 
         String activePrivateKey = entity.getActivePrivateKey();
         if (activePrivateKey != null) {
-            stmt.bindString(3, activePrivateKey);
+            stmt.bindString(4, activePrivateKey);
         }
  
         String activePublicKey = entity.getActivePublicKey();
         if (activePublicKey != null) {
-            stmt.bindString(4, activePublicKey);
+            stmt.bindString(5, activePublicKey);
         }
  
         String ownerPrivateKey = entity.getOwnerPrivateKey();
         if (ownerPrivateKey != null) {
-            stmt.bindString(5, ownerPrivateKey);
+            stmt.bindString(6, ownerPrivateKey);
         }
  
         String ownerPublicKey = entity.getOwnerPublicKey();
         if (ownerPublicKey != null) {
-            stmt.bindString(6, ownerPublicKey);
+            stmt.bindString(7, ownerPublicKey);
         }
-        stmt.bindLong(7, entity.getIsCurrent() ? 1L: 0L);
+        stmt.bindLong(8, entity.getIsCurrent() ? 1L: 0L);
  
         String accountPassword = entity.getAccountPassword();
         if (accountPassword != null) {
-            stmt.bindString(8, accountPassword);
+            stmt.bindString(9, accountPassword);
         }
+        stmt.bindLong(10, entity.getIsCreating() ? 1L: 0L);
     }
 
     @Override
@@ -153,12 +169,14 @@ public class EosAccountDao extends AbstractDao<EosAccount, Long> {
         EosAccount entity = new EosAccount( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // accountName
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // activePrivateKey
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // activePublicKey
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // ownerPrivateKey
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ownerPublicKey
-            cursor.getShort(offset + 6) != 0, // isCurrent
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // accountPassword
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // walletName
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // activePrivateKey
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // activePublicKey
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ownerPrivateKey
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ownerPublicKey
+            cursor.getShort(offset + 7) != 0, // isCurrent
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // accountPassword
+            cursor.getShort(offset + 9) != 0 // isCreating
         );
         return entity;
     }
@@ -167,12 +185,14 @@ public class EosAccountDao extends AbstractDao<EosAccount, Long> {
     public void readEntity(Cursor cursor, EosAccount entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setAccountName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setActivePrivateKey(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setActivePublicKey(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setOwnerPrivateKey(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setOwnerPublicKey(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setIsCurrent(cursor.getShort(offset + 6) != 0);
-        entity.setAccountPassword(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setWalletName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setActivePrivateKey(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setActivePublicKey(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setOwnerPrivateKey(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setOwnerPublicKey(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setIsCurrent(cursor.getShort(offset + 7) != 0);
+        entity.setAccountPassword(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setIsCreating(cursor.getShort(offset + 9) != 0);
      }
     
     @Override

@@ -14,6 +14,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.blockchain.PushDatamanger;
 import com.stratagile.qlink.blockchain.bean.BuyRamBean;
+import com.stratagile.qlink.blockchain.bean.BuyRamBytesBean;
 import com.stratagile.qlink.blockchain.bean.CreateAccountBean;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EosResource;
@@ -97,6 +98,7 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
 
     @Override
     protected void initData() {
+        showProgressDialog();
         refreshLayout.setRefreshing(false);
         eosAccount = getIntent().getParcelableExtra("eosAccount");
         Map map = new HashMap<String, Object>();
@@ -138,6 +140,7 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
 
     @Override
     public void setEosResource(EosResource eosResource) {
+        closeProgressDialog();
         this.eosResource = eosResource;
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("account", eosAccount.getAccountName());
@@ -157,7 +160,7 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
             double staked = Double.parseDouble(eosResource.getData().getData().getStaked().getCpu_weight().replace(" EOS", "")) + Double.parseDouble(eosResource.getData().getData().getStaked().getNet_weight().replace(" EOS", ""));
             BigDecimal bigDecimal = BigDecimal.valueOf(total + staked);
             totalAssets.setText("Total Assets " + bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
-            balanceAsset.setText(eosToken.getTokenValue() + " EOS");
+            balanceAsset.setText(eosToken.getEosTokenValue() + " EOS");
             stakeAsset.setText(BigDecimal.valueOf(staked).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
         } else {
             double total = Double.parseDouble(eosResource.getData().getData().getStaked().getCpu_weight().replace(" EOS", "")) + Double.parseDouble(eosResource.getData().getData().getStaked().getNet_weight().replace(" EOS", ""));
@@ -228,21 +231,22 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
         String message = new Gson().toJson(createAccountBean);
         KLog.i(message);
 
-        BuyRamBean buyRamBean = new BuyRamBean(eosAccount.getAccountName(), createAccountBean.getName(), 3042L);
+        BuyRamBytesBean buyRamBean = new BuyRamBytesBean(eosAccount.getAccountName(), createAccountBean.getName(), 3042L);
         String buyRamBeanStr = new Gson().toJson(buyRamBean);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new PushDatamanger(EosResourceManagementActivity.this, eosAccount.getOwnerPrivateKey()).createAccount(message, buyRamBeanStr, eosAccount.getAccountName(), result -> {
-                        KLog.i(result);
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//
+//                    new PushDatamanger(EosResourceManagementActivity.this, eosAccount.getOwnerPrivateKey()).createAccount(message, buyRamBeanStr, eosAccount.getAccountName(), result -> {
+//                        KLog.i(result);
+//                    });
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
 
     }
 
@@ -256,9 +260,17 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llRam:
+                if (eosToken == null) {
+                    initData();
+                    return;
+                }
                 startActivityForResult(new Intent(this, EosBuyRamActivity.class).putExtra("eosAccount", eosAccount).putExtra("eosToken", eosToken), 0);
                 break;
             case R.id.llCpuAndNet:
+                if (eosToken == null) {
+                    initData();
+                    return;
+                }
                 startActivityForResult(new Intent(this, EosBuyCpuAndNetActivity.class).putExtra("eosAccount", eosAccount).putExtra("eosToken", eosToken), 0);
                 break;
             default:

@@ -296,7 +296,11 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
         tokenInfo1.setTokenName("ETH");
         tokenInfo1.setTokenSymol("ETH");
         tokenInfo1.setTokenAddress(ethWalletInfo.getData().getAddress());
-        tokenInfo1.setTokenValue(ethWalletInfo.getData().getETH().getBalance());
+        if ("false".equals(ethWalletInfo.getData().getETH().getBalance().toString()) || "-1.0".equals(ethWalletInfo.getData().getETH().getBalance().toString())) {
+            tokenInfo1.setTokenValue(0);
+        } else {
+            tokenInfo1.setTokenValue(Double.parseDouble(ethWalletInfo.getData().getETH().getBalance().toString()));
+        }
         tokenInfo1.setTokenImgName("eth_eth");
         tokenInfo1.setWalletType(AllWallet.WalletType.EthWallet);
         tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());
@@ -366,11 +370,27 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
 
     private void getEosTokensInfo(String accountName, EosTokens eosTokens) {
         ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
+        if (eosTokens.getData().getData().getSymbol_list().size() == 0) {
+            TokenInfo tokenInfo = new TokenInfo();
+            tokenInfo.setTokenName("EOS");
+            tokenInfo.setTokenSymol("EOS");
+            tokenInfo.setTokenValue(0.0000);
+            tokenInfo.setEosTokenValue("0.0000");
+            tokenInfo.setTokenAddress("eosio.token");
+            tokenInfo.setTokenImgName("EOS");
+            tokenInfo.setWalletAddress(accountName);
+            tokenInfo.setMainNetToken(true);
+            tokenInfo.setWalletType(AllWallet.WalletType.EosWallet);
+            tokenInfos.add(tokenInfo);
+            getTokenPrice(tokenInfos);
+            return;
+        }
         for (int i = 0; i < eosTokens.getData().getData().getSymbol_list().size(); i++) {
             TokenInfo tokenInfo = new TokenInfo();
             tokenInfo.setTokenName(eosTokens.getData().getData().getSymbol_list().get(i).getSymbol());
             tokenInfo.setTokenSymol(eosTokens.getData().getData().getSymbol_list().get(i).getSymbol());
             tokenInfo.setTokenValue(Double.parseDouble(eosTokens.getData().getData().getSymbol_list().get(i).getBalance()));
+            tokenInfo.setEosTokenValue(eosTokens.getData().getData().getSymbol_list().get(i).getBalance());
             tokenInfo.setTokenAddress(eosTokens.getData().getData().getSymbol_list().get(i).getCodeX());
             tokenInfo.setTokenImgName(getEosTokenImg(eosTokens.getData().getData().getSymbol_list().get(i)));
             tokenInfo.setWalletAddress(accountName);

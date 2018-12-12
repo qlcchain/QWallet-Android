@@ -390,6 +390,8 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.eos.EosBuyRamActivity" />
+        <activity android:name=".ui.activity.eos.EosCreateActivity" />
+        <activity android:name=".ui.activity.eos.EosActivationActivity" />
 
         <activity-alias
             android:exported="true"

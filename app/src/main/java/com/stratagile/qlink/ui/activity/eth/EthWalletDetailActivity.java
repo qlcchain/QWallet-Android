@@ -71,6 +71,10 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
     TextView tvDeleteWallet;
     @BindView(R.id.ResourceManagement)
     LinearLayout ResourceManagement;
+    @BindView(R.id.ownerPrivateKey)
+    LinearLayout ownerPrivateKey;
+    @BindView(R.id.activePrivateKey)
+    LinearLayout activePrivateKey;
 
     private EthWallet ethWallet;
 
@@ -103,6 +107,9 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             llExportNeoPrivateKey.setVisibility(View.GONE);
 
             ResourceManagement.setVisibility(View.GONE);
+
+            ownerPrivateKey.setVisibility(View.GONE);
+            activePrivateKey.setVisibility(View.GONE);
         } else if (getIntent().getIntExtra("walletType", 0) == AllWallet.WalletType.NeoWallet.ordinal()) {
             walletType = AllWallet.WalletType.NeoWallet;
             wallet = getIntent().getParcelableExtra("neowallet");
@@ -113,17 +120,27 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             llExportKeystore.setVisibility(View.GONE);
             llExportPrivateKey.setVisibility(View.GONE);
             ResourceManagement.setVisibility(View.GONE);
+
+            ownerPrivateKey.setVisibility(View.GONE);
+            activePrivateKey.setVisibility(View.GONE);
+
         } else if (getIntent().getIntExtra("walletType", 0) == AllWallet.WalletType.EosWallet.ordinal()) {
             walletType = AllWallet.WalletType.EosWallet;
             eosAccount = getIntent().getParcelableExtra("eoswallet");
             ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
-            tvWalletName.setText(eosAccount.getAccountName());
+            tvWalletName.setText(eosAccount.getWalletName());
             tvWalletAddress.setText(eosAccount.getAccountName());
             llAbucoins.setVisibility(View.GONE);
             llExportKeystore.setVisibility(View.GONE);
             llExportPrivateKey.setVisibility(View.GONE);
             llExportNeoEncryptedKey.setVisibility(View.GONE);
             llExportNeoPrivateKey.setVisibility(View.GONE);
+            if (eosAccount.getOwnerPrivateKey() == null || "".equals(eosAccount.getOwnerPrivateKey())) {
+                ownerPrivateKey.setVisibility(View.GONE);
+            }
+            if (eosAccount.getActivePrivateKey() == null || "".equals(eosAccount.getActivePrivateKey())) {
+                activePrivateKey.setVisibility(View.GONE);
+            }
         }
 
     }
@@ -158,7 +175,7 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
         progressDialog.hide();
     }
 
-    @OnClick({R.id.llAbucoins, R.id.llExportKeystore, R.id.llExportPrivateKey, R.id.llExportNeoEncryptedKey, R.id.llExportNeoPrivateKey, R.id.tvDeleteWallet, R.id.ResourceManagement})
+    @OnClick({R.id.llAbucoins, R.id.llExportKeystore, R.id.llExportPrivateKey, R.id.llExportNeoEncryptedKey, R.id.llExportNeoPrivateKey, R.id.tvDeleteWallet, R.id.ResourceManagement, R.id.ownerPrivateKey, R.id.activePrivateKey})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llAbucoins:
@@ -198,9 +215,110 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
             case R.id.ResourceManagement:
                 startActivity(new Intent(this, EosResourceManagementActivity.class).putExtra("eosAccount", eosAccount));
                 break;
+            case R.id.ownerPrivateKey:
+                exportOwnerPrivateKey();
+                break;
+            case R.id.activePrivateKey:
+                exporActivePrivateKey();
+                break;
             default:
                 break;
         }
+    }
+
+    private void exportOwnerPrivateKey() {
+        String privateKey = eosAccount.getOwnerPrivateKey();
+        View view = View.inflate(this, R.layout.dialog_export_privatekey_layout, null);
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
+        TextView tvQrCode = view.findViewById(R.id.tvQrCode);
+        ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
+        Bitmap bitmap = RxQRCode.builder(privateKey).
+                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
+                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
+                codeSide(800).
+                into(ivQRCode);
+        tvContent.setText(privateKey);
+        //取消或确定按钮监听事件处l
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ivQRCode.getVisibility() == View.VISIBLE) {
+                    ivQRCode.setVisibility(View.GONE);
+                } else {
+                    ivQRCode.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        tvCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 将文本内容放到系统剪贴板里。
+                cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
+                ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
+                sweetAlertDialog.cancel();
+            }
+        });
+    }
+    private void exporActivePrivateKey() {
+        String privateKey = eosAccount.getActivePrivateKey();
+        View view = View.inflate(this, R.layout.dialog_export_privatekey_layout, null);
+        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
+        TextView tvQrCode = view.findViewById(R.id.tvQrCode);
+        ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
+        Bitmap bitmap = RxQRCode.builder(privateKey).
+                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
+                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
+                codeSide(800).
+                into(ivQRCode);
+        tvContent.setText(privateKey);
+        //取消或确定按钮监听事件处l
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ivQRCode.getVisibility() == View.VISIBLE) {
+                    ivQRCode.setVisibility(View.GONE);
+                } else {
+                    ivQRCode.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        tvCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 将文本内容放到系统剪贴板里。
+                cm.setPrimaryClip(ClipData.newPlainText("", tvContent.getText().toString()));
+                ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
+                sweetAlertDialog.cancel();
+            }
+        });
     }
 
     private void cannotShowMnemonic() {
@@ -459,4 +577,5 @@ public class EthWalletDetailActivity extends BaseActivity implements EthWalletDe
     @OnClick()
     public void onViewClicked() {
     }
+
 }

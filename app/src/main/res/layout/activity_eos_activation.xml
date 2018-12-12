@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x23"
+        android:background="@color/color_f9f9f9"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Account name"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/etEosAccountName"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x5"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXWZabcdefghijklmnopqrstuvwxwz12345"
+        android:maxLength="12"
+        android:textColor="@color/color_29282a"
+        android:inputType="textEmailAddress"
+        android:layout_marginRight="@dimen/x45"
+        android:background="@null"
+        android:textSize="15sp"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x45"
+        android:background="@color/color_29282a_40"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Owner Key"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/etOwnerKey"
+        android:textColor="@color/color_29282a"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x5"
+        android:layout_marginRight="@dimen/x45"
+        android:textSize="15sp"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x45"
+        android:background="@color/color_29282a_40"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Active Key"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/etActiveKey"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x5"
+        android:textColor="@color/color_29282a"
+        android:layout_marginRight="@dimen/x45"
+        android:textSize="15sp"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x45"
+        android:background="@color/color_29282a_40"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Payment Account"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/etPaymentAccount"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:hint="Please swith to EOS wallet"
+        android:layout_marginTop="@dimen/x5"
+        android:textColor="@color/color_29282a"
+        android:layout_marginRight="@dimen/x45"
+        android:textSize="15sp"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x45"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x96"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:background="@drawable/main_color_bt_bg"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="Activation"
+        android:layout_height="@dimen/x94" />
+</LinearLayout>

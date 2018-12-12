@@ -1,9 +1,11 @@
 package com.stratagile.qlink.ui.activity.eos.contract;
 
 import com.stratagile.qlink.entity.EosAccountInfo;
+import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -25,6 +27,8 @@ public interface EosImportContract {
         void closeProgressDialog();
 
         void accountInfoBack(EosAccountInfo eosAccountInfo);
+
+        void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts);
     }
 
     interface EosImportContractPresenter extends BasePresenter {

@@ -30,6 +30,7 @@ public class TokenInfo implements Parcelable {
         walletAddress = in.readString();
         ethPrice = in.readDouble();
         tokenDecimals = in.readInt();
+        eosTokenValue = in.readString();
         isMainNetToken = in.readByte() != 0;
     }
 
@@ -44,6 +45,17 @@ public class TokenInfo implements Parcelable {
             return new TokenInfo[size];
         }
     };
+
+    public String getEosTokenValue() {
+        return eosTokenValue;
+    }
+
+    public void setEosTokenValue(String eosTokenValue) {
+        this.eosTokenValue = eosTokenValue;
+    }
+
+    private String eosTokenValue;
+
 
     public int getTokenDecimals() {
         return tokenDecimals;
@@ -175,6 +187,7 @@ public class TokenInfo implements Parcelable {
         dest.writeString(walletAddress);
         dest.writeDouble(ethPrice);
         dest.writeInt(tokenDecimals);
+        dest.writeString(eosTokenValue);
         dest.writeByte((byte) (isMainNetToken ? 1 : 0));
     }
 }
