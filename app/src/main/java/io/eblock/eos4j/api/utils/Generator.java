@@ -51,6 +51,7 @@ public class Generator {
 				throw new ApiException(apiError);
 			}
 		} catch (IOException e) {
+			ToastUtil.displayShortToast("EOS Transaction error");
 			throw new ApiException(e);
 		}
 	}

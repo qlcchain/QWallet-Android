@@ -139,7 +139,10 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
     protected void initData() {
         setTitle("Register EOS Account");
         ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.IsLook.eq(false)).list();
-        eosAccount = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.IsCreating.eq(true)).unique();
+        List<EosAccount> eosAccounts = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.IsCreating.eq(true)).list();
+        if (eosAccounts.size() != 0) {
+            eosAccount = eosAccounts.get(0);
+        }
 
 
         if (eosAccount == null) {
@@ -268,17 +271,27 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
             eosAccount.setAccountName(eosKeyAccounts.get(0).getAccount());
             eosAccount.setIsCreating(false);
             AppConfig.getInstance().getDaoSession().getEosAccountDao().update(eosAccount);
-
-            mOwnerKey = PublicAndPrivateKeyUtils.getPrivateKey(2)[0];
-            eosAccount = new EosAccount();
-            eosAccount.setOwnerPrivateKey(mOwnerKey.toString());
-            eosAccount.setOwnerPublicKey(mOwnerKey.getPublicKey().toString());
-            eosAccount.setAccountPassword(ETHWalletUtils.getPassword());
-            eosAccount.setActivePrivateKey(mOwnerKey.toString());
-            eosAccount.setIsCreating(true);
-            eosAccount.setActivePublicKey(mOwnerKey.getPublicKey().toString());
-            eosAccount.setWalletName(getEosWalletName());
-            AppConfig.getInstance().getDaoSession().getEosAccountDao().insert(eosAccount);
+            mPresenter.reportWalletCreated(eosAccount.getAccountName(), eosAccount.getOwnerPublicKey(), eosAccount.getOwnerPrivateKey());
+            List<EosAccount> eosAccounts = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.IsCreating.eq(true)).list();
+            if (eosAccounts.size() != 0) {
+                eosAccount = eosAccounts.get(0);
+                showProgressDialog();
+                mOwnerKey = new EosPrivateKey(eosAccount.getOwnerPrivateKey());
+                Map<String, String> infoMap = new HashMap<>();
+                infoMap.put("public_key", eosAccount.getOwnerPublicKey());
+                mPresenter.getEosKeyAccount(infoMap);
+            } else {
+                mOwnerKey = PublicAndPrivateKeyUtils.getPrivateKey(2)[0];
+                eosAccount = new EosAccount();
+                eosAccount.setOwnerPrivateKey(mOwnerKey.toString());
+                eosAccount.setOwnerPublicKey(mOwnerKey.getPublicKey().toString());
+                eosAccount.setAccountPassword(ETHWalletUtils.getPassword());
+                eosAccount.setActivePrivateKey(mOwnerKey.toString());
+                eosAccount.setIsCreating(true);
+                eosAccount.setActivePublicKey(mOwnerKey.getPublicKey().toString());
+                eosAccount.setWalletName(getEosWalletName());
+                AppConfig.getInstance().getDaoSession().getEosAccountDao().insert(eosAccount);
+            }
 
             etOwnerKey.setText(mOwnerKey.getPublicKey().toString());
             etActiveKey.setText(mOwnerKey.getPublicKey().toString());

@@ -12,6 +12,7 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -25,7 +26,9 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerSelectWalletTypeC
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.SelectWalletTypeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.SelectWalletTypePresenter;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
 import org.greenrobot.eventbus.EventBus;
@@ -133,7 +136,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         closeProgressDialog();
         EventBus.getDefault().post(new ChangeWallet());
         startActivityForResult(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallet), 0);
-        mPresenter.reportWalletCreated(ethWallet.getAddress(), "ETH");
+        String signData = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + ethWallet.getAddress();
+        mPresenter.reportWalletCreated(ethWallet.getAddress(), "ETH", ETHWalletUtils.derivePublickKey(ethWallet.getId()), ETHWalletUtils.signPublickKey(ethWallet.getId(), signData));
     }
 
     @Override
@@ -141,7 +145,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         closeProgressDialog();
         EventBus.getDefault().post(new ChangeWallet());
         startActivityForResult(new Intent(this, WalletCreatedActivity.class).putExtra("wallet", wallet), 0);
-        mPresenter.reportWalletCreated(wallet.getAddress(), "NEO");
+        mPresenter.reportWalletCreated(wallet.getAddress(), "NEO", wallet.getPublicKey(), "");
     }
 
     @Override

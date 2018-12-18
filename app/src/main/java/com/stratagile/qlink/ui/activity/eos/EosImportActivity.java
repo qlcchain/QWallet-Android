@@ -114,7 +114,6 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
     @Override
     public void accountInfoBack(EosAccountInfo eosAccountInfo) {
         boolean noError = true;
-        closeProgressDialog();
         for (EosAccountInfo.DataBeanX.DataBean.PermissionsBean permissionsBean : eosAccountInfo.getData().getData().getPermissions()) {
             if ("owner".equals(permissionsBean.getPerm_name()) && eosAccount.getOwnerPublicKey() != null) {
                 if (permissionsBean.getRequired_auth().getKeys().get(0).getKey().equals(mOwnerKey.getPublicKey().toString())) {
@@ -168,9 +167,11 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
             eosAccount.setWalletName(getEosWalletName());
             eosAccount.setAccountPassword(SpUtil.getString(this, ConstantValue.walletPassWord, ""));
             AppConfig.getInstance().getDaoSession().getEosAccountDao().insert(eosAccount);
-            ToastUtil.displayShortToast("import eos account success");
-            setResult(RESULT_OK);
-            finish();
+            if (eosAccount.getOwnerPrivateKey() != null) {
+                mPresenter.reportWalletCreated(eosAccount.getAccountName(), eosAccount.getOwnerPublicKey(), eosAccount.getOwnerPrivateKey());
+            } else {
+                mPresenter.reportWalletCreated(eosAccount.getAccountName(), eosAccount.getActivePublicKey(), eosAccount.getActivePrivateKey());
+            }
         } else {
             ToastUtil.displayShortToast("ownerKey or activeKey error");
         }
@@ -234,6 +235,14 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
         if (eosKeyAccounts.size() != 0) {
             showAccountNName(eosKeyAccounts.get(0).getAccount());
         }
+    }
+
+    @Override
+    public void reportCreatedWalletSuccess() {
+        closeProgressDialog();
+        ToastUtil.displayShortToast("import eos account success");
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void showAccountNName(String accountName) {

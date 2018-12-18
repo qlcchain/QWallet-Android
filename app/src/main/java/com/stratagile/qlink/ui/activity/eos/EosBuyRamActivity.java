@@ -21,15 +21,18 @@ import com.stratagile.qlink.blockchain.bean.SellRamBean;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EosResource;
 import com.stratagile.qlink.entity.TokenInfo;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.eos.component.DaggerEosBuyRamComponent;
 import com.stratagile.qlink.ui.activity.eos.contract.EosBuyRamContract;
 import com.stratagile.qlink.ui.activity.eos.module.EosBuyRamModule;
 import com.stratagile.qlink.ui.activity.eos.presenter.EosBuyRamPresenter;
 import com.stratagile.qlink.utils.EosUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.DecimalDigitsInputFilter;
 import com.stratagile.qlink.view.SmoothCheckBox;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +85,8 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
     private EosResource eosResource;
 
     private TokenInfo eosToken;
+
+    private EosResourcePrice eosResourcePrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +155,9 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
         mPresenter.getEosResource(map);
         etRecipientAccount.setText(eosAccount.getAccountName());
         etPurchaseEos.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(4)});
+
+        Map map1 = new HashMap<String, Object>();
+        mPresenter.getEosResourcePrice(map1);
     }
 
     @Override
@@ -157,8 +165,13 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
         this.eosResource = eosResource;
         availableRam.setText(parseRam((eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed())) + "/" + parseRam(eosResource.getData().getData().getRam().getAvailable()));
         if (checkBoxSell.isChecked()) {
-            amountEos.setText("Balance: " + (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed()) + " bytes");
+            amountEos.setText("Balance: " + (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed()) + " Bytes");
         }
+    }
+
+    @Override
+    public void setEosResourcePrice(EosResourcePrice eosResourcePrice) {
+        this.eosResourcePrice = eosResourcePrice;
     }
 
     private String parseRam(int ram) {
@@ -202,7 +215,7 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
 
     @OnClick(R.id.tvOpreate)
     public void onViewClicked() {
-        if ("".equals(etPurchaseEos.getText().toString())) {
+        if ("".equals(etPurchaseEos.getText().toString()) || "0".equals(etPurchaseEos.getText().toString())) {
             return;
         }
         showPaymentDetail();
@@ -222,8 +235,10 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
             tvPaymentType.setText("Purchase RAM");
             tvCount.setText(EosUtil.setEosValue(etPurchaseEos.getText().toString()));
         } else {
+            String sellEos = BigDecimal.valueOf(eosResourcePrice.getData().getRamPrice()).multiply(new BigDecimal(etPurchaseEos.getText().toString())).divide(BigDecimal.valueOf(1024)).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
+            KLog.i(sellEos);
             tvPaymentType.setText("Sell RAM");
-            tvCount.setText(etPurchaseEos.getText().toString() + " Bytes");
+            tvCount.setText(sellEos + " EOS");
         }
 
         tvTo.setText(etRecipientAccount.getText().toString());
@@ -280,6 +295,11 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
     }
 
     private void buyRam() {
+        if (Double.parseDouble(etPurchaseEos.getText().toString()) > Double.parseDouble(eosToken.getEosTokenValue())) {
+            ToastUtil.displayShortToast("Not enough EOS");
+            closeProgressDialog();
+            return;
+        }
         BuyRamBean buyRamBean = new BuyRamBean(eosAccount.getAccountName(), etRecipientAccount.getText().toString(), EosUtil.setEosValue(etPurchaseEos.getText().toString()));
         String buyRamBeanStr = new Gson().toJson(buyRamBean);
         new Thread(new Runnable() {
@@ -317,6 +337,13 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
     }
 
     private void sellRam() {
+        if (Double.parseDouble(etPurchaseEos.getText().toString()) > (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed())) {
+            ToastUtil.displayShortToast("Not enough RAM");
+            closeProgressDialog();
+            return;
+        }
+        String sellEos = BigDecimal.valueOf(eosResourcePrice.getData().getRamPrice()).multiply(new BigDecimal(etPurchaseEos.getText().toString())).divide(BigDecimal.valueOf(1000)).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
+        KLog.i(sellEos);
         SellRamBean sellRamBean = new SellRamBean();
         sellRamBean.setAccount(eosAccount.getAccountName());
         sellRamBean.setBytes(Long.parseLong(etPurchaseEos.getText().toString()));

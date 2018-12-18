@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.EthWalletDao;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerImportEthWalletComponent;
@@ -23,6 +24,8 @@ import com.stratagile.qlink.ui.activity.eth.presenter.ImportEthWalletPresenter;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.UseHistoryListFragment;
+import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.ParentNoDispatchViewpager;
 
@@ -79,7 +82,8 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
             public void onChanged(@Nullable String s) {
                 EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.Address.eq(s)).unique();
                 if (!ethWallet.getIsLook()) {
-                    mPresenter.reportWalletImported(s);
+                    String signData = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + ethWallet.getAddress();
+                    mPresenter.reportWalletImported(s, ETHWalletUtils.derivePublickKey(ethWallet.getId()), ETHWalletUtils.signPublickKey(ethWallet.getId(), signData));
                 } else {
                     closeProgressDialog();
                     finish();

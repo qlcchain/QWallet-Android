@@ -23,6 +23,7 @@ import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Keys;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
 import org.web3j.crypto.WalletUtils;
@@ -416,6 +417,57 @@ public class ETHWalletUtils {
             e.printStackTrace();
         }
         return privateKey;
+    }
+    /**
+     * 导出明文私钥
+     *
+     * @param walletId 钱包Id
+     * @param pwd      钱包密码
+     * @return
+     */
+    public static String derivePublickKey(long walletId) {
+        EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
+        String pwd = getPassword(ethWallet.getPassword());
+        Credentials credentials;
+        ECKeyPair keypair;
+        String publicKey = null;
+        try {
+            credentials = WalletUtils.loadCredentials(pwd, ethWallet.getKeystorePath());
+            keypair = credentials.getEcKeyPair();
+            publicKey = Numeric.toHexStringNoPrefixZeroPadded(keypair.getPublicKey(), 64<<1);
+        } catch (CipherException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "0x" + publicKey;
+    }
+    /**
+     *
+     * @param walletId 钱包Id
+     * @param pwd      钱包密码
+     * @return
+     */
+    public static String signPublickKey(long walletId, String message) {
+        EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
+        String pwd = getPassword(ethWallet.getPassword());
+        Credentials credentials;
+        ECKeyPair keypair;
+        String publicKey = null;
+        try {
+            credentials = WalletUtils.loadCredentials(pwd, ethWallet.getKeystorePath());
+            keypair = credentials.getEcKeyPair();
+            publicKey = Numeric.toHexStringNoPrefixZeroPadded(keypair.getPublicKey(), 64<<1);
+            Sign.SignatureData signatureData = Sign.signMessage(message.getBytes(), keypair);
+            String ret = ((int)signatureData.getV()) + ":" + Numeric.toHexString(signatureData.getR()) + ":"+ Numeric.toHexString(signatureData.getS());
+            KLog.i(ret);
+            return ret;
+        } catch (CipherException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return publicKey;
     }
 
     /**

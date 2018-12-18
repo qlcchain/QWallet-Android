@@ -29,6 +29,6 @@ public interface ImportEthWalletContract {
 //         *
 //         */
 //        void getBusinessInfo(Map map);
-        void reportWalletImported(String address);
+        void reportWalletImported(String address, String publicKey, String signData);
     }
 }

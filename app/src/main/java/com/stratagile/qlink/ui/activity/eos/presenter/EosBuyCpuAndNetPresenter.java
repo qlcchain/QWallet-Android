@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.socks.library.KLog;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.EosResource;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.eos.contract.EosBuyCpuAndNetContract;
 import com.stratagile.qlink.ui.activity.eos.EosBuyCpuAndNetActivity;
 
@@ -56,6 +57,36 @@ public class EosBuyCpuAndNetPresenter implements EosBuyCpuAndNetContract.EosBuyC
                         //isSuccesse
                         KLog.i("onSuccesse");
                         mView.setEosResource(baseBack);
+                        mView.closeProgressDialog();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getEosResourcePrice(Map map) {
+        Disposable disposable = httpAPIWrapper.getEosResourcePrice(map)
+                .subscribe(new Consumer<EosResourcePrice>() {
+                    @Override
+                    public void accept(EosResourcePrice baseBack) throws Exception {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        mView.setEosResourcePrice(baseBack);
                         mView.closeProgressDialog();
                     }
                 }, new Consumer<Throwable>() {

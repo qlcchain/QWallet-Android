@@ -410,7 +410,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         if (neoWallets.get(i).getIsCurrent()) {
                             hasSelectedWallet = true;
                             getNeoToken(neoWallets.get(i));
-                            mPresenter.getWinqGas(neoWallets.get(i).getAddress());
                         }
                     }
                 }
@@ -531,8 +530,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             }
         });
         viewModel.walletTypeMutableLiveData.postValue(AllWallet.WalletType.NeoWallet);
-        mPresenter.getNeoWalletDetail(wallet.getAddress(), infoMap);
-        queryGas(wallet.getAddress());
         AllWallet allWallet = new AllWallet();
         allWallet.setWalletType(AllWallet.WalletType.NeoWallet);
         allWallet.setWallet(wallet);
@@ -541,6 +538,21 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         currentSelectWallet = allWallet;
         viewModel.allWalletMutableLiveData.postValue(currentSelectWallet);
         allWalletMoney.put(allWallet, 0d);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    mPresenter.getNeoWalletDetail(wallet.getAddress(), infoMap);
+                    Thread.sleep(1000);
+                    queryGas(wallet.getAddress());
+                    Thread.sleep(1000);
+                    mPresenter.getWinqGas(wallet.getAddress());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override

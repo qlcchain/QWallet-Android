@@ -392,6 +392,7 @@
         <activity android:name=".ui.activity.eos.EosBuyRamActivity" />
         <activity android:name=".ui.activity.eos.EosCreateActivity" />
         <activity android:name=".ui.activity.eos.EosActivationActivity" />
+        <activity android:name=".ui.activity.main.TestActivity" />
 
         <activity-alias
             android:exported="true"

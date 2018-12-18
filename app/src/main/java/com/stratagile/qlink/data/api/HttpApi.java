@@ -48,6 +48,7 @@ import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +80,7 @@ import static com.stratagile.qlink.data.api.API.url_create_eos_account;
 import static com.stratagile.qlink.data.api.API.url_create_eos_need_info;
 import static com.stratagile.qlink.data.api.API.url_eos_account_info;
 import static com.stratagile.qlink.data.api.API.url_eos_account_transaction_info;
+import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
 import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
@@ -366,6 +368,10 @@ public interface HttpApi {
     @POST(url_create_eos_need_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<EosNeedInfo> getEosNeedInfo(@Body RequestBody map);
+
+    @POST(url_eos_resource_price)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosResourcePrice> getEosResourcePrice(@Body RequestBody map);
 
 
     @GET(url_key_account)

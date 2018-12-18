@@ -177,7 +177,7 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
     private String parseRam(int ram) {
         DecimalFormat df = new DecimalFormat("#.00");
         if (ram < 1024) {
-            return df.format(ram) + " Bytes";
+            return ram + " Bytes";
         }
         double kb = ram / 1024d;
         if (kb > 1024) {
@@ -190,11 +190,11 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
 
     private String parseCpu(int cpu) {
         DecimalFormat df = new DecimalFormat("#.00");
-        if (cpu < 1000) {
-            return df.format(cpu) + " us";
+        if (cpu < 1024) {
+            return cpu + " us";
         }
-        double ms = cpu / 1000d;
-        if (ms > 1000) {
+        double ms = cpu / 1024d;
+        if (ms > 1024) {
             double s = ms / 1024d;
             return df.format(s) + " s";
         } else {

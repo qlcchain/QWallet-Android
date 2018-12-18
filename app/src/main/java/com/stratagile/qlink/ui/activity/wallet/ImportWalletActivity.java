@@ -128,6 +128,7 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
     @Override
     public void reportCreatedWalletSuccess() {
         closeProgressDialog();
+        EventBus.getDefault().post(new ChangeWallet());
         setResult(RESULT_OK);
         onBackPressed();
     }
@@ -168,12 +169,14 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                 }
                 if (privateKey.length() >= 42) {
                     for (Wallet wallet : AppConfig.getInstance().getDaoSession().getWalletDao().loadAll()) {
-                        KLog.i(wallet.toString());
+//                        KLog.i(wallet.toString());
                         if (privateKey.toLowerCase().equals(wallet.getPrivateKey().toLowerCase()) || privateKey.equals(wallet.getWif())) {
                             ToastUtil.displayShortToast(getString(R.string.this_wallet_is_exist));
                             return;
                         }
                     }
+
+                    showProgressDialog();
 
                     new Thread(new Runnable() {
                         @Override
@@ -209,15 +212,14 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                     walletWinq.setName("NEO-Wallet " + (wallets.size() + 1));
                                 }
                                 walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
+                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()));
                                 walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
                                 walletWinq.setIsCurrent(true);
                                 AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO");
-                                        EventBus.getDefault().post(new ChangeWallet());
+                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO", walletWinq.getPublicKey());
                                     }
                                 });
                             } else {

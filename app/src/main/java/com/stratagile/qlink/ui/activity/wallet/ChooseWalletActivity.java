@@ -23,6 +23,7 @@ import com.stratagile.qlink.ui.activity.wallet.contract.ChooseWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ChooseWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ChooseWalletPresenter;
 import com.stratagile.qlink.utils.LocalWalletUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SelectWalletAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -102,16 +103,19 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
             }
         }
 
-        List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.IsCreating.eq("false")).list();
+        List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
         if (wallets2 != null && wallets2.size() != 0) {
             for (int i = 0; i < wallets2.size(); i++) {
+                if (wallets2.get(i).getAccountName() == null) {
+                    continue;
+                }
                 AllWallet allWallet = new AllWallet();
                 allWallet.setEosAccount(wallets2.get(i));
                 allWallet.setWalletAddress(wallets2.get(i).getAccountName());
                 allWallet.setWalletName(wallets2.get(i).getWalletName() == null? wallets2.get(i).getAccountName() : wallets2.get(i).getWalletName());
                 allWallet.setWalletType(AllWallet.WalletType.EosWallet);
                 allWallets.add(allWallet);
-                if (wallets2.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
+                if (wallets2.get(i).getAccountName() != null && wallets2.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
                     currentSelectWallet = allWallet;
                 }
             }
@@ -122,6 +126,10 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
         downCheckAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (downCheckAdapter.getItem(position).getWalletType() == AllWallet.WalletType.EosWallet && downCheckAdapter.getItem(position).getWalletAddress() == null) {
+                    ToastUtil.displayShortToast("This is a wallet waiting to be created.");
+                    return;
+                }
                 showProgressDialog();
                 downCheckAdapter.notifyDataSetChanged();
                 currentSelectWallet = downCheckAdapter.getItem(position);

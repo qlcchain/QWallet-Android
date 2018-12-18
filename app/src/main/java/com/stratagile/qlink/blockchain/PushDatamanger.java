@@ -52,7 +52,7 @@ public class PushDatamanger {
         permissonion = permiss;
     }
 
-    public void createAccount(String message, String buyRamBean, String permissionAccount, Callback callback) {
+    public void createAccount(String message, String buyRamBean,String cpuAndNetMessage,  String permissionAccount, Callback callback) {
         this.message = message;
         this.contract = "eosio";
         mCallback = callback;
@@ -75,10 +75,17 @@ public class PushDatamanger {
         createAccountAction.setAuthorization(permissions);
         createAccountAction.setData(createAccountBin);
 
+        //购买cpu和内存
+        String stakeCpuBin = getAbiJsonBean(contract, "delegatebw", cpuAndNetMessage);
+        Action stakeAction = new Action(contract, "delegatebw");
+        stakeAction.setAuthorization(permissions);
+        stakeAction.setData(stakeCpuBin);
+
 
         SignedTransaction txn = new SignedTransaction();
         txn.addAction(createAccountAction);
         txn.addAction(buyRamAction);
+        txn.addAction(stakeAction);
 
         txn.putSignatures(new ArrayList<String>());
 

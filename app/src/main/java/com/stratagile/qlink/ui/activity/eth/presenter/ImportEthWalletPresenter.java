@@ -4,10 +4,12 @@ import android.support.annotation.NonNull;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.eth.contract.ImportEthWalletContract;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
+import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 
 import java.util.HashMap;
@@ -52,12 +54,14 @@ public class ImportEthWalletPresenter implements ImportEthWalletContract.ImportE
     }
 
     @Override
-    public void reportWalletImported(String address) {
+    public void reportWalletImported(String address, String publicKey, String signData) {
         mView.showProgressDialog();
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("address", address);
         infoMap.put("blockChain", "ETH");
         infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        infoMap.put("pubKey", publicKey);
+        infoMap.put("signData", signData);
         Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
                 .subscribe(new Consumer<BaseBack>() {
                     @Override

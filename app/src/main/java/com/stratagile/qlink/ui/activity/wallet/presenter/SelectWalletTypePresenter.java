@@ -3,10 +3,13 @@ package com.stratagile.qlink.ui.activity.wallet.presenter;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.constant.MainConstant;
+import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
@@ -15,6 +18,7 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
+import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
@@ -24,6 +28,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.eblock.eos4j.Ecc;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -130,11 +135,20 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
     }
 
     @Override
-    public void reportWalletCreated(String address, String blockChain) {
+    public void reportWalletCreated(String address, String blockChain, String publicKey, String signData) {
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("address", address);
         infoMap.put("blockChain", blockChain);
         infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        infoMap.put("pubKey", publicKey);
+        if (blockChain.equals("NEO")) {
+            NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
+            infoMap.put("signData", neoNodeRPC.signStr(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")));
+        } else if (blockChain.equals("ETH")) {
+            infoMap.put("signData", signData);
+        } else if (blockChain.equals("EOS")) {
+            infoMap.put("signData", signData);
+        }
         Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
                 .subscribe(new Consumer<BaseBack>() {
                     @Override

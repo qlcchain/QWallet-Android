@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.eos.contract;
 
 import com.stratagile.qlink.entity.EosResource;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
@@ -25,6 +26,8 @@ public interface EosBuyCpuAndNetContract {
         void closeProgressDialog();
 
         void setEosResource(EosResource eosResource);
+
+        void setEosResourcePrice(EosResourcePrice eosResourcePrice);
     }
 
     interface EosBuyCpuAndNetContractPresenter extends BasePresenter {
@@ -34,5 +37,7 @@ public interface EosBuyCpuAndNetContract {
 //        void getBusinessInfo(Map map);
 
         void getEosResource(Map map);
+
+        void getEosResourcePrice(Map map);
     }
 }

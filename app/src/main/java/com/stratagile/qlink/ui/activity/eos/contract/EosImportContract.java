@@ -29,6 +29,8 @@ public interface EosImportContract {
         void accountInfoBack(EosAccountInfo eosAccountInfo);
 
         void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts);
+
+        void reportCreatedWalletSuccess();
     }
 
     interface EosImportContractPresenter extends BasePresenter {
@@ -36,5 +38,7 @@ public interface EosImportContract {
          *
          */
         void getEosAccountInfo(Map map);
+
+        void reportWalletCreated(String address, String publicKey, String privateKey);
     }
 }

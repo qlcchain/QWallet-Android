@@ -1,9 +1,22 @@
 package com.stratagile.qlink.ui.activity.eos.presenter;
 import android.support.annotation.NonNull;
+
+import com.socks.library.KLog;
+import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.eos.contract.EosActivationContract;
 import com.stratagile.qlink.ui.activity.eos.EosActivationActivity;
+import com.stratagile.qlink.utils.SpUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
+
+import io.eblock.eos4j.Ecc;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -41,34 +54,33 @@ public class EosActivationPresenter implements EosActivationContract.EosActivati
         }
     }
 
-//    @Override
-//    public void getUser(HashMap map) {
-//        //mView.showProgressDialog();
-//        Disposable disposable = httpAPIWrapper.getUser(map)
-//                .subscribe(new Consumer<User>() {
-//                    @Override
-//                    public void accept(User user) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                        mView.setText(user);
-//                      //mView.closeProgressDialog();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                      //mView.closeProgressDialog();
-//                      //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
-//    }
+    @Override
+    public void getEosResourcePrice(Map map) {
+        Disposable disposable = httpAPIWrapper.getEosResourcePrice(map)
+                .subscribe(new Consumer<EosResourcePrice>() {
+                    @Override
+                    public void accept(EosResourcePrice baseBack) throws Exception {
+                        //isSuccesse
+                        KLog.i("onSuccesse");
+                        mView.setEosResourcePrice(baseBack);
+                        mView.closeProgressDialog();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        KLog.i("onError");
+                        throwable.printStackTrace();
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
 }

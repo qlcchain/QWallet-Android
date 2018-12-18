@@ -39,6 +39,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -62,7 +63,6 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ContinentAndCountry;
-import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
@@ -279,7 +279,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         });
         vpnListAdapter.setOnVpnOpreateListener(new VpnListAdapter.OnVpnOpreateListener() {
             @Override
-            public void onConnect(VpnEntity vpnEntity) {
+            public void onConnect(VpnEntity vpnEntity, SwitchButton switchButton) {
                 //vpn已经连接，需要先断开已经连接的vpn
                 if (VpnStatus.isVPNActive() && vpnListAdapter.getData().get(0).isConnected()) {
                     showChangeVpnDialog(vpnEntity);
@@ -298,12 +298,14 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                             Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
                             startActivity(intent);
                             getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                            switchButton.setEnabled(true);
                             return;
                         }
                     } else {
                         Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                        switchButton.setEnabled(true);
                         return;
                     }
                 }

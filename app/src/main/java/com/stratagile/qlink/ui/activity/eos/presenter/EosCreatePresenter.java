@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import com.socks.library.KLog;
 import com.stratagile.qlink.ColdWallet;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -15,6 +17,8 @@ import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.ui.activity.eos.contract.EosCreateContract;
 import com.stratagile.qlink.ui.activity.eos.EosCreateActivity;
+import com.stratagile.qlink.utils.DigestUtils;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import org.web3j.protocol.Web3j;
@@ -28,12 +32,14 @@ import org.web3j.utils.Convert;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
+import io.eblock.eos4j.Ecc;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -324,6 +330,38 @@ public class EosCreatePresenter implements EosCreateContract.EosCreateContractPr
             }
         }
         return ETHWalletUtils.derivePrivateKey(ethWallet.getId());
+    }
+
+    @Override
+    public void reportWalletCreated(String address, String publicKey, String privateKey) {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("address", address);
+        infoMap.put("blockChain", "EOS");
+        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        infoMap.put("pubKey", publicKey);
+        String str = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + address;
+        infoMap.put("signData", Ecc.sign(privateKey, str));
+        Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack baseBack) throws Exception {
+                        //isSuccesse
+                        mView.closeProgressDialog();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.closeProgressDialog();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                        mView.closeProgressDialog();
+                    }
+                });
+        mCompositeDisposable.add(disposable);
     }
 
 

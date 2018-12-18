@@ -52,6 +52,7 @@ import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -65,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -609,6 +611,10 @@ public class HttpAPIWrapper {
         return wrapper(mHttpAPI.getEosNeedInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
 
+    public Observable<EosResourcePrice> getEosResourcePrice(Map map) {
+        return wrapper(mHttpAPI.getEosResourcePrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
 
     public Observable<ArrayList<EosKeyAccount>> getKeyAccount(Map map) {
         return wrapperArrayList(mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
@@ -806,20 +812,20 @@ public class HttpAPIWrapper {
                 });
     }
     //需要额外的添加其他的参数进去，所以把原有的参数和额外的参数通过这个方法一起添加进去.
-    public static RequestBody addParams(Map<String, String> data) {
+    private static RequestBody addParams(Map<String, String> data) {
         Map<String, Object> map = new HashMap<>();
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
-            map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject)JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }
-        KLog.i("传的参数为:" + map);
+//        KLog.i("传的参数为:" + map);
         MediaType textType = MediaType.parse("text/plain");
         String bodyStr = JSONObject.toJSON(map).toString();
         KLog.i("加密前的:" + bodyStr);

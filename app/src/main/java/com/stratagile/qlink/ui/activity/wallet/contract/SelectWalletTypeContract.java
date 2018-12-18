@@ -33,6 +33,6 @@ public interface SelectWalletTypeContract {
         void createEthWallet();
 
         void createNeoWallet();
-        void reportWalletCreated(String address, String blockChain);
+        void reportWalletCreated(String address, String blockChain, String publicKey, String signData);
     }
 }

@@ -1,7 +1,11 @@
 package com.stratagile.qlink.ui.activity.eos.contract;
 
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
+
+import java.util.Map;
+
 /**
  * @author hzp
  * @Package The contract for EosActivationActivity
@@ -19,6 +23,8 @@ public interface EosActivationContract {
          *
          */
         void closeProgressDialog();
+
+        void setEosResourcePrice(EosResourcePrice eosResourcePrice);
     }
 
     interface EosActivationContractPresenter extends BasePresenter {
@@ -26,5 +32,7 @@ public interface EosActivationContract {
 //         *
 //         */
 //        void getBusinessInfo(Map map);
+
+        void getEosResourcePrice(Map map);
     }
 }

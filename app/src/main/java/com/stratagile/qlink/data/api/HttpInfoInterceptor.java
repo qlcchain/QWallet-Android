@@ -36,8 +36,8 @@ public class HttpInfoInterceptor implements Interceptor {
 //        KLog.i("网络请求的网址为:" + request.toString());
         long contentLength = responseBody.contentLength();
         KLog.i("请求的地址为：" + request.url());
-        KLog.i("reqeust的body为:" + request.body());
-        KLog.i("reqeust的head为:" + request.headers());
+//        KLog.i("reqeust的body为:" + request.body());
+//        KLog.i("reqeust的head为:" + request.headers());
         //注意 >>>>>>>>> okhttp3.4.1这里变成了 !HttpHeader.hasBody(response)
         //!HttpEngine.hasBody(response)
         if (false) {

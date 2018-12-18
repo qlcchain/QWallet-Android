@@ -58,5 +58,7 @@ public interface EosCreateContract {
         void getEosNeedInfo(Map map);
 
         void getEosKeyAccount(Map map);
+
+        void reportWalletCreated(String address, String publicKey, String privateKey);
     }
 }

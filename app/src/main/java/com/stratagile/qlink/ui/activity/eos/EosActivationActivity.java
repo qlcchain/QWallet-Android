@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,20 +18,26 @@ import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.blockchain.PushDatamanger;
 import com.stratagile.qlink.blockchain.bean.BuyRamBytesBean;
 import com.stratagile.qlink.blockchain.bean.CreateAccountBean;
+import com.stratagile.qlink.blockchain.bean.StakeCpuAndNet;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.entity.eos.EosQrBean;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.eos.component.DaggerEosActivationComponent;
 import com.stratagile.qlink.ui.activity.eos.contract.EosActivationContract;
 import com.stratagile.qlink.ui.activity.eos.module.EosActivationModule;
 import com.stratagile.qlink.ui.activity.eos.presenter.EosActivationPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ChooseWalletActivity;
 import com.stratagile.qlink.utils.DialogUtils;
+import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -63,6 +70,8 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
     TextView tvRegister;
     EosAccount eosAccount;
 
+    private EosResourcePrice eosResourcePrice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainColor = R.color.white;
@@ -89,6 +98,9 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
         etEosAccountName.setText(eosQrBean.getAccountName());
         etOwnerKey.setText(eosQrBean.getOwnerPublicKey());
         etActiveKey.setText(eosQrBean.getActivePublicKey());
+
+        Map map1 = new HashMap<String, Object>();
+        mPresenter.getEosResourcePrice(map1);
     }
 
     private void getEosAccount() {
@@ -132,7 +144,7 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvRegister:
-                activateAccount();
+                showPaymentDetail();
                 break;
             case R.id.etPaymentAccount:
                 startActivityForResult(new Intent(this, ChooseWalletActivity.class), 0);
@@ -140,6 +152,11 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
             default:
                 break;
         }
+    }
+
+    @Override
+    public void setEosResourcePrice(EosResourcePrice eosResourcePrice) {
+        this.eosResourcePrice = eosResourcePrice;
     }
 
     @Override
@@ -153,8 +170,46 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
         }
     }
 
+    private void showPaymentDetail() {
+        View view = View.inflate(this, R.layout.payment_info_layout, null);
+        TextView tvPaymentType = (TextView) view.findViewById(R.id.tvPaymentType);//输入内容
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView tvNext = view.findViewById(R.id.tvNext);//取消按钮
+        TextView tvTo = view.findViewById(R.id.tvTo);
+        TextView tvCount = view.findViewById(R.id.tvCount);
+        TextView tvFrom = view.findViewById(R.id.tvFrom);
+
+        tvPaymentType.setText("Activation Account");
+
+        //激活 ≈0.1880， cpu 0.2500， net 0.0400 ram 计算得出
+        tvCount.setText("≈ " + (BigDecimal.valueOf(0.4780).add(BigDecimal.valueOf(eosResourcePrice.getData().getRamPrice() * 3))).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
+
+        tvTo.setText(eosQrBean.getAccountName());
+        tvFrom.setText(eosAccount.getAccountName());
+
+        //取消或确定按钮监听事件处l
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        Window window = sweetAlertDialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.cancel();
+                showProgressDialog();
+                activateAccount();
+            }
+        });
+    }
+
     private void activateAccount() {
-        showProgressDialog();
         CreateAccountBean createAccountBean = new CreateAccountBean();
         createAccountBean.setCreator(eosAccount.getAccountName());
         createAccountBean.setName(eosQrBean.getAccountName());
@@ -182,8 +237,16 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
         String message = new Gson().toJson(createAccountBean);
         KLog.i(message);
 
-        BuyRamBytesBean buyRamBean = new BuyRamBytesBean(eosAccount.getAccountName(), createAccountBean.getName(), 3042L);
+        BuyRamBytesBean buyRamBean = new BuyRamBytesBean(eosAccount.getAccountName(), createAccountBean.getName(), 3072L);
         String buyRamBeanStr = new Gson().toJson(buyRamBean);
+
+        StakeCpuAndNet stakeCpuAndNet = new StakeCpuAndNet();
+        stakeCpuAndNet.setFrom(eosAccount.getAccountName());
+        stakeCpuAndNet.setReceiver(createAccountBean.getName());
+        stakeCpuAndNet.setStake_cpu_quantity("0.2500 EOS");
+        stakeCpuAndNet.setStake_net_quantity("0.0400 EOS");
+        stakeCpuAndNet.setTransfer(0);
+        String stakeStr = new Gson().toJson(stakeCpuAndNet);
 
         new Thread(new Runnable() {
             @Override
@@ -198,14 +261,14 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
                         privateKey = eosAccount.getActivePrivateKey();
                         permission = "active";
                     }
-                    new PushDatamanger(EosActivationActivity.this, privateKey, permission).createAccount(message, buyRamBeanStr, eosAccount.getAccountName(), result -> {
+                    new PushDatamanger(EosActivationActivity.this, privateKey, permission).createAccount(message, buyRamBeanStr,stakeStr,  eosAccount.getAccountName(), result -> {
                         KLog.i(result);
                         tvRegister.post(new Runnable() {
                             @Override
                             public void run() {
                                 closeProgressDialog();
                                 if (result == null || "".equals(result)) {
-
+                                    ToastUtil.displayShortToast("create eos account error");
                                 } else {
                                     showTestDialog();
                                 }

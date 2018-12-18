@@ -27,9 +27,11 @@ import com.stratagile.qlink.ui.activity.eos.contract.EosTransferContract;
 import com.stratagile.qlink.ui.activity.eos.module.EosTransferModule;
 import com.stratagile.qlink.ui.activity.eos.presenter.EosTransferPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
+import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.PopWindowUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.CustomPopWindow;
 
 import org.jetbrains.annotations.NotNull;
@@ -197,6 +199,30 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                 showSpinnerPopWindow();
                 break;
             case R.id.tvSend:
+                if (etEosTokenSendAddress.getText().toString().equals("")) {
+                    ToastUtil.displayShortToast("Wallet Address Error");
+                    return;
+                }
+                if (!EosUtil.isEosName(etEosTokenSendAddress.getText().toString().trim())) {
+                    ToastUtil.displayShortToast("Wallet Address Error");
+                    return;
+                }
+                if (etEosTokenSendAddress.getText().toString().toLowerCase().equals(tokenInfo.getWalletAddress().toLowerCase())) {
+                    ToastUtil.displayShortToast(getString(R.string.can_not_send_to_self));
+                    return;
+                }
+                if (etEosTokenSendValue.getText().toString().equals("")) {
+                    ToastUtil.displayShortToast("illegal value");
+                    return;
+                }
+                if (etEosTokenSendValue.getText().toString().equals("0")) {
+                    ToastUtil.displayShortToast("illegal value");
+                    return;
+                }
+                if (Double.parseDouble(etEosTokenSendValue.getText().toString()) > Double.parseDouble(tokenInfo.getEosTokenValue())) {
+                    ToastUtil.displayShortToast("Not enough " + tokenInfo.getTokenSymol());
+                    return;
+                }
                 String privateKey = "";
                 String permission = "";
                 if (eosAccount.getOwnerPrivateKey() != null && !"".equals(eosAccount.getOwnerPrivateKey())) {

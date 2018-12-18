@@ -1,12 +1,7 @@
 package com.stratagile.qlink.ui.activity.eos;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.InputFilter;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -26,16 +21,15 @@ import com.stratagile.qlink.blockchain.bean.UnDelegatebwBean;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EosResource;
 import com.stratagile.qlink.entity.TokenInfo;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.ui.activity.eos.component.DaggerEosBuyCpuAndNetComponent;
 import com.stratagile.qlink.ui.activity.eos.contract.EosBuyCpuAndNetContract;
 import com.stratagile.qlink.ui.activity.eos.module.EosBuyCpuAndNetModule;
 import com.stratagile.qlink.ui.activity.eos.presenter.EosBuyCpuAndNetPresenter;
 import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.view.DecimalDigitsInputFilter;
 import com.stratagile.qlink.view.SmoothCheckBox;
 import com.stratagile.qlink.view.SweetAlertDialog;
-import com.vondear.rxtools.view.RxQRCode;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -106,8 +100,10 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
 
     private TokenInfo eosToken;
 
-    private int netRate = 50;
+    private int cpuRate = 85;
 
+
+    private EosResourcePrice eosResourcePrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainColor = R.color.white;
@@ -152,11 +148,11 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         mPresenter.getEosResource(map);
         eosBalance.setText("Balance:" + eosToken.getEosTokenValue() + " EOS");
         etRecipientAccount.setText(eosAccount.getAccountName());
-        seekBar.setProgress(50);
+        seekBar.setProgress(cpuRate);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                netRate = progress;
+                cpuRate = progress;
                 setCupEos();
                 setNetEos();
             }
@@ -180,14 +176,21 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
                 refreshLayout.setRefreshing(false);
             }
         });
+
+        Map map1 = new HashMap<String, Object>();
+        mPresenter.getEosResourcePrice(map1);
     }
 
     private String setCupEos() {
         if ("".equals(etStakeEos.getText().toString().trim())) {
             return "";
         }
-        BigDecimal bigDecimal = BigDecimal.valueOf(Double.parseDouble(etStakeEos.getText().toString()) * (100d - netRate) / 100);
-        KLog.i(bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
+        if (eosResourcePrice == null) {
+            return "";
+        }
+        BigDecimal bigDecimal = BigDecimal.valueOf(Double.parseDouble(etStakeEos.getText().toString()) * cpuRate / 100);
+        cpuRation.setText("CPU ≈ " + bigDecimal.divide(BigDecimal.valueOf(eosResourcePrice.getData().getCpuPrice()), 2, BigDecimal.ROUND_HALF_UP).setScale(2, BigDecimal.ROUND_HALF_UP) + " ms");
+//        KLog.i(bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
         return bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS";
     }
 
@@ -195,8 +198,12 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         if ("".equals(etStakeEos.getText().toString().trim())) {
             return "";
         }
-        BigDecimal bigDecimal = BigDecimal.valueOf(Double.parseDouble(etStakeEos.getText().toString()) * netRate / 100d);
-        KLog.i(bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
+        if (eosResourcePrice == null) {
+            return "";
+        }
+        BigDecimal bigDecimal = BigDecimal.valueOf(Double.parseDouble(etStakeEos.getText().toString()) * (100d - cpuRate) / 100d);
+        netRation.setText("NET ≈ " + bigDecimal.divide(BigDecimal.valueOf(eosResourcePrice.getData().getNetPrice()), 2, BigDecimal.ROUND_HALF_UP).setScale(2, BigDecimal.ROUND_HALF_UP) + " KB");
+//        KLog.i(bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
         return bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS";
     }
 
@@ -218,7 +225,12 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         stakedCpuEos.setText(eosResource.getData().getData().getStaked().getCpu_weight());
         stakedNetEos.setText(eosResource.getData().getData().getStaked().getNet_weight());
         cpuBalance.setText("Balance: " + eosResource.getData().getData().getCpu().getAvailable() + " us");
-        netBalance.setText("Balance: " + eosResource.getData().getData().getNet().getAvailable() + " bytes");
+        netBalance.setText("Balance: " + eosResource.getData().getData().getNet().getAvailable() + " Bytes");
+    }
+
+    @Override
+    public void setEosResourcePrice(EosResourcePrice eosResourcePrice) {
+        this.eosResourcePrice = eosResourcePrice;
     }
 
     private String parseRam(int ram) {
@@ -281,11 +293,29 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
                 ToastUtil.displayShortToast("please input stake EOS");
                 return;
             }
+            if (Double.parseDouble(etStakeEos.getText().toString()) > Double.parseDouble(eosToken.getEosTokenValue())) {
+                ToastUtil.displayShortToast("Not enough EOS");
+                closeProgressDialog();
+                return;
+            }
         } else {
             if ("".equals(etReclaimCpu.getText().toString().trim()) && "".equals(etReclaimNet.getText().toString().trim())) {
                 ToastUtil.displayShortToast("please input reclaim cpu or net");
                 return;
             }
+            if ("0".equals(etReclaimCpu.getText().toString().trim()) && "0".equals(etReclaimNet.getText().toString().trim())) {
+                ToastUtil.displayShortToast("please input reclaim cpu or net");
+                return;
+            }
+            if (!"".equals(etReclaimCpu.getText().toString()) && Double.parseDouble(etReclaimCpu.getText().toString()) > eosResource.getData().getData().getCpu().getAvailable()) {
+                ToastUtil.displayShortToast("Not enough CPU to Reclaim");
+                return;
+            }
+            if (!"".equals(etReclaimNet.getText().toString()) && Double.parseDouble(etReclaimNet.getText().toString()) > eosResource.getData().getData().getNet().getAvailable()) {
+                ToastUtil.displayShortToast("Not enough NET to Reclaim");
+                return;
+            }
+
         }
         showPaymentDetail();
     }
@@ -377,6 +407,9 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
             tvPaymentType.setText("Stake");
             tvCount.setText(EosUtil.setEosValue(etStakeEos.getText().toString()));
         } else {
+            setUnstakeCpu();
+            setUnstakeNet();
+            tvCount.setText(new BigDecimal(setUnstakeCpu()).add(new BigDecimal(setUnstakeNet())).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
             tvPaymentType.setText("Reclaim");
         }
 
@@ -409,6 +442,26 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         });
     }
 
+    private String setUnstakeCpu() {
+        if ("".equals(etReclaimCpu.getText().toString()) || "0".equals(etReclaimCpu.getText().toString())) {
+            return "0.0000";
+        }
+        KLog.i((new BigDecimal(etReclaimCpu.getText().toString()).divide(BigDecimal.valueOf(1000), 3, BigDecimal.ROUND_HALF_UP)));
+        BigDecimal decimal = (new BigDecimal(etReclaimCpu.getText().toString()).divide(BigDecimal.valueOf(1000), 3, BigDecimal.ROUND_HALF_UP)).multiply(new BigDecimal(eosResourcePrice.getData().getCpuPrice())).setScale(4, BigDecimal.ROUND_HALF_UP);
+        KLog.i(decimal.toPlainString() + " EOS");
+        return decimal.toPlainString();
+    }
+
+    private String setUnstakeNet() {
+        if ("".equals(etReclaimNet.getText().toString()) || "0".equals(etReclaimNet.getText().toString())) {
+            return "0.0000";
+        }
+        KLog.i((new BigDecimal(etReclaimNet.getText().toString()).divide(BigDecimal.valueOf(1024), 3, BigDecimal.ROUND_HALF_UP)));
+        BigDecimal decimal = (new BigDecimal(etReclaimNet.getText().toString()).divide(BigDecimal.valueOf(1024), 3, BigDecimal.ROUND_HALF_UP)).multiply(new BigDecimal(eosResourcePrice.getData().getNetPrice())).setScale(4, BigDecimal.ROUND_HALF_UP);
+        KLog.i(decimal.toPlainString() + " EOS");
+        return decimal.toPlainString();
+    }
+
     /**
      * 赎回操作
      */
@@ -420,8 +473,8 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         UnDelegatebwBean unDelegatebwBean = new UnDelegatebwBean();
         unDelegatebwBean.setFrom(eosAccount.getAccountName());
         unDelegatebwBean.setReceiver(etRecipientAccount.getText().toString().trim());
-        unDelegatebwBean.setUnstake_cpu_quantity(setReclaimEos(etReclaimCpu.getText().toString()));
-        unDelegatebwBean.setUnstake_net_quantity(setReclaimEos(etReclaimNet.getText().toString()));
+        unDelegatebwBean.setUnstake_cpu_quantity(setUnstakeCpu() + " EOS");
+        unDelegatebwBean.setUnstake_net_quantity(setUnstakeNet() + " EOS");
         String unStakeStr = new Gson().toJson(unDelegatebwBean);
         new Thread(new Runnable() {
             @Override
