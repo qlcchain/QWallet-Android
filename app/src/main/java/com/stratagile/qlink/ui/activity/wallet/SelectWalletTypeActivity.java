@@ -216,7 +216,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                     return;
                 }
                 if (walletType == AllWallet.WalletType.EthWallet) {
-                    startActivity(new Intent(this, ImportEthWalletActivity.class));
+                    startActivityForResult(new Intent(this, ImportEthWalletActivity.class), 1);
                 } else if (walletType == AllWallet.WalletType.NeoWallet) {
                     Intent intent = new Intent(this, ImportWalletActivity.class);
                     startActivityForResult(intent, 1);

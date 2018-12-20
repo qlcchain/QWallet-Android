@@ -16,6 +16,7 @@ import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.CreateWallet;
@@ -128,7 +129,7 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
     @Override
     public void reportCreatedWalletSuccess() {
         closeProgressDialog();
-        EventBus.getDefault().post(new ChangeWallet());
+//        EventBus.getDefault().post(new ChangeWallet());
         setResult(RESULT_OK);
         onBackPressed();
     }
@@ -200,6 +201,16 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                         wallet.setIsCurrent(false);
                                         AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallet);
                                         break;
+                                    }
+                                }
+                                List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+                                if (wallets2 != null && wallets2.size() != 0) {
+                                    for (int i = 0; i < wallets2.size(); i++) {
+                                        if (wallets2.get(i).getIsCurrent()) {
+                                            wallets2.get(i).setIsCurrent(false);
+                                            AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallets2.get(i));
+                                            break;
+                                        }
                                     }
                                 }
                                 neoutils.Wallet wallet = Account.INSTANCE.getWallet();

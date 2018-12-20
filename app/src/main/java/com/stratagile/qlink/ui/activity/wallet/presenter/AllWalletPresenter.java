@@ -370,7 +370,7 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
 
     private void getEosTokensInfo(String accountName, EosTokens eosTokens) {
         ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
-        if (eosTokens.getData().getData().getSymbol_list().size() == 0) {
+        if (eosTokens.getData().getData() == null || eosTokens.getData().getData().getSymbol_list().size() == 0) {
             TokenInfo tokenInfo = new TokenInfo();
             tokenInfo.setTokenName("EOS");
             tokenInfo.setTokenSymol("EOS");

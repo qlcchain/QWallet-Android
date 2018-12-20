@@ -412,6 +412,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
         Window window = dialog.getWindow();
+        dialog.setCancelable(false);
         window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -471,6 +472,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         tvContent.setText(getString(R.string.Do_you_want_to_disconnect));
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -512,6 +514,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
         Window window = dialog.getWindow();
+        dialog.setCancelable(false);
         window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override

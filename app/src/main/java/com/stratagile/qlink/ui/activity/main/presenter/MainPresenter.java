@@ -176,6 +176,8 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                     }
                 }
             }).start();
+        } else {
+            KLog.i("json文件存在，不再拉取");
         }
     }
 

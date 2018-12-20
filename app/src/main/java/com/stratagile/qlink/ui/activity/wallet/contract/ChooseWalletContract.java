@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.wallet.contract;
 
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 /**
@@ -26,5 +27,7 @@ public interface ChooseWalletContract {
 //         *
 //         */
 //        void getBusinessInfo(Map map);
+
+        void getEosAccountInfo(EosAccount eosAccount);
     }
 }

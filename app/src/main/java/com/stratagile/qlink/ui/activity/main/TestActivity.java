@@ -9,11 +9,14 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.EthWalletDao;
 import com.stratagile.qlink.ui.activity.main.component.DaggerTestComponent;
 import com.stratagile.qlink.ui.activity.main.contract.TestContract;
 import com.stratagile.qlink.ui.activity.main.module.TestModule;
 import com.stratagile.qlink.ui.activity.main.presenter.TestPresenter;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import javax.inject.Inject;
 
@@ -81,6 +84,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
 
     @OnClick(R.id.test)
     public void onViewClicked() {
-
+        KLog.i(ETHWalletUtils.derivePublickKey(AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.IsCurrent.eq(true)).unique().getId()));
     }
 }

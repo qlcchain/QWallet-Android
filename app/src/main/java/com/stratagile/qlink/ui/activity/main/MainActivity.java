@@ -365,9 +365,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 if (position == 0) {
                     return new SmsFragment();
                 } else if (position == 1) {
-                    return new MarketFragment();
-                } else if (position == 2) {
                     return new AllWalletFragment();
+                } else if (position == 2) {
+                    return new SettingsFragment();
                 } else {
                     return new SettingsFragment();
                 }
@@ -375,7 +375,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             @Override
             public int getCount() {
-                return 4;
+                return 3;
             }
         });
         //设置BottomNavigationMenuView的字体
@@ -388,7 +388,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         bottomNavigation.setIconSizeAt(0, 25f, 20.8f);
         bottomNavigation.setIconSizeAt(1, 25f, 20.8f);
         bottomNavigation.setIconSizeAt(2, 25f, 20.8f);
-        bottomNavigation.setIconSizeAt(3, 25f, 20.8f);
+//        bottomNavigation.setIconSizeAt(3, 25f, 20.8f);
         bottomNavigation.setIconsMarginTop((int) getResources().getDimension(R.dimen.x22));
         bottomNavigation.setItemIconTintList(null);
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -404,10 +404,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         item.setIcon(R.mipmap.icon_wallet_h);
                         setAllWalletPage();
                         break;
-                    case R.id.item_market:
-                        item.setIcon(R.mipmap.icon_markets_h);
-                        setMarketPage();
-                        break;
+//                    case R.id.item_market:
+//                        item.setIcon(R.mipmap.icon_markets_h);
+//                        setMarketPage();
+//                        break;
                     case R.id.item_settings:
                         item.setIcon(R.mipmap.icon_settings_h);
                         setSettingsPage();
@@ -483,7 +483,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     private void resetToDefaultIcon() {
         bottomNavigation.getMenu().findItem(R.id.item_all_wallet).setIcon(R.mipmap.icon_wallet_n);
-        bottomNavigation.getMenu().findItem(R.id.item_market).setIcon(R.mipmap.icon_markets_n);
+//        bottomNavigation.getMenu().findItem(R.id.item_market).setIcon(R.mipmap.icon_markets_n);
         bottomNavigation.getMenu().findItem(R.id.item_sms).setIcon(R.mipmap.icon_vpn_n);
         bottomNavigation.getMenu().findItem(R.id.item_settings).setIcon(R.mipmap.icon_settings_n);
     }
@@ -616,7 +616,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
                     }
-                    viewPager.setCurrentItem(2, false);
+                    viewPager.setCurrentItem(1, false);
                     bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                     ivQRCode.setVisibility(View.VISIBLE);
                     statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -651,7 +651,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
                     }
-                    viewPager.setCurrentItem(2, false);
+                    viewPager.setCurrentItem(1, false);
                     ivQRCode.setVisibility(View.VISIBLE);
                     bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                     statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -692,7 +692,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         downCHeckView.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
         ivQRCode.setVisibility(View.GONE);
-        viewPager.setCurrentItem(3, false);
+        viewPager.setCurrentItem(2, false);
         statusBar.setBackgroundColor(getResources().getColor(R.color.white));
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.settings);
@@ -824,7 +824,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                 break;
             case 2:
-                bottomNavigation.setSelectedItemId(R.id.item_market);
+                bottomNavigation.setSelectedItemId(R.id.item_settings);
                 break;
             case 3:
                 bottomNavigation.setSelectedItemId(R.id.item_settings);
@@ -957,10 +957,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 }
                 break;
             case R.id.iv_wallet:
-                if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
-                    startActivityForResult(new Intent(this, AddTokenActivity.class), START_ADD_TOKEN);
-                    return;
-                }
+//                if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
+//                    startActivityForResult(new Intent(this, AddTokenActivity.class), START_ADD_TOKEN);
+//                    return;
+//                }
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
                     ActiveTogglePopWindow morePopWindow = new ActiveTogglePopWindow(this);
                     morePopWindow.setOnItemClickListener(MainActivity.this);
@@ -975,12 +975,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             case R.id.tv_title:
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
                     startActivity(new Intent(this, LogActivity.class));
-                } else if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
-                    startActivity(new Intent(this, LogActivity.class));
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_settings) {
                     startActivity(new Intent(this, ShadowVpnActivity.class));
 //                    clearGuide();
                 }
+//                else if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
+//                    startActivity(new Intent(this, LogActivity.class));
+//                }
                 break;
             case R.id.view_wallet:
                 bottomNavigation.setSelectedItemId(R.id.item_settings);

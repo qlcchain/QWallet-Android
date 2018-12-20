@@ -51,14 +51,14 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
         helper.setText(R.id.price, item.getQlc() + "/hour");
         helper.setText(R.id.tv_country, item.getCountry());
         ImageView avater = (ImageView) helper.getView(R.id.freind_avater);
-        if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {
+        if (item.getAvatar() != null && !"".equals(item.getAvatar())) {
             Glide.with(mContext)
-                    .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
+                    .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
                     .apply(AppConfig.getInstance().optionsAvater)
                     .into(avater);
         } else {
             Glide.with(mContext)
-                    .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
+                    .load(R.mipmap.img_connected_head_portrait)
                     .apply(AppConfig.getInstance().optionsAvater)
                     .into(avater);
         }

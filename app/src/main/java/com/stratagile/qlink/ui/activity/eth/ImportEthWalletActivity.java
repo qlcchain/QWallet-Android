@@ -15,8 +15,11 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.EthWalletDao;
+import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerImportEthWalletComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.ImportEthWalletContract;
 import com.stratagile.qlink.ui.activity.eth.module.ImportEthWalletModule;
@@ -29,7 +32,10 @@ import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.CustomPopWindow;
 import com.stratagile.qlink.view.ParentNoDispatchViewpager;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -80,7 +86,35 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
         viewModel.walletAddress.observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
+                List<Wallet> wallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+                for (Wallet wallet : wallets) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                        break;
+                    }
+                }
+                List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+                for (EthWallet wallet : ethWallets) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallet);
+                        break;
+                    }
+                }
+                List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+                if (wallets2 != null && wallets2.size() != 0) {
+                    for (int i = 0; i < wallets2.size(); i++) {
+                        if (wallets2.get(i).getIsCurrent()) {
+                            wallets2.get(i).setIsCurrent(false);
+                            AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallets2.get(i));
+                            break;
+                        }
+                    }
+                }
                 EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.Address.eq(s)).unique();
+                ethWallet.setIsCurrent(true);
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallet);
                 if (!ethWallet.getIsLook()) {
                     String signData = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + ethWallet.getAddress();
                     mPresenter.reportWalletImported(s, ETHWalletUtils.derivePublickKey(ethWallet.getId()), ETHWalletUtils.signPublickKey(ethWallet.getId(), signData));
@@ -175,6 +209,8 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
     @Override
     public void reportCreatedWalletSuccess() {
         closeProgressDialog();
+//        EventBus.getDefault().post(new ChangeWallet());
+        setResult(RESULT_OK);
         finish();
     }
 

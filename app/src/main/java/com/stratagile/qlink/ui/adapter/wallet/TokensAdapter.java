@@ -91,7 +91,7 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
         } else if (item.getWalletType() == AllWallet.WalletType.EosWallet) {
             helper.setText(R.id.tvTokenValue, item.getEosTokenValue());
             ImageView imageView = helper.getView(R.id.ivTokenAvatar);
-            KLog.i(item.getTokenImgName());
+//            KLog.i(item.getTokenImgName());
             if (item.isMainNetToken()) {
                 imageView.setVisibility(View.VISIBLE);
                 if (item.getTokenImgName() != null && !item.getTokenImgName().equals("")) {

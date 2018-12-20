@@ -235,7 +235,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
     public void createEosAccountSuccess(String s) {
         closeProgressDialog();
         ToastUtil.displayShortToast(s);
-        AppConfig.getInstance().getDaoSession().getEosAccountDao().insert(eosAccount);
+        AppConfig.getInstance().getDaoSession().getEosAccountDao().update(eosAccount);
         setResult(RESULT_OK);
         finish();
     }

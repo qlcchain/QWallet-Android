@@ -29,7 +29,9 @@ import com.stratagile.qlink.view.SelectWalletAdapter;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -108,6 +110,9 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
             for (int i = 0; i < wallets2.size(); i++) {
                 if (wallets2.get(i).getAccountName() == null) {
                     continue;
+                }
+                if (wallets2.get(i).getIsCreating()) {
+                    mPresenter.getEosAccountInfo(wallets2.get(i));
                 }
                 AllWallet allWallet = new AllWallet();
                 allWallet.setEosAccount(wallets2.get(i));
