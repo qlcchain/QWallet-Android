@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    app:layout_constraintLeft_toRightOf="parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvEosTokenName"
+        android:layout_marginLeft="@dimen/x45"
+        android:textColor="@color/color_29282a"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvEosTokenName"
+        app:layout_constraintRight_toRightOf="@+id/tvEosTokenName"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tvEosTokenName"
+        android:layout_height="@dimen/x3">
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_29282a"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:layout_width="@dimen/x16"
+        app:layout_constraintTop_toTopOf="@+id/tvEosTokenName"
+        app:layout_constraintBottom_toBottomOf="@+id/tvEosTokenName"
+        android:layout_marginLeft="@dimen/x10"
+        app:layout_constraintLeft_toRightOf="@+id/tvEosTokenName"
+        android:src="@mipmap/icon_enter"
+        android:layout_height="@dimen/x16" />
+
+    <TextView
+        android:id="@+id/tvEosTokenValue"
+        android:layout_width="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/mainColor"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x56"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/etEosTokenSendValue"
+        app:layout_constraintTop_toBottomOf="@+id/tvEosTokenName"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:textColor="@color/color_29282a"
+        android:layout_marginTop="@dimen/x10"
+        android:inputType="numberDecimal"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEosTokenName"
+        android:layout_marginRight="@dimen/x40"
+        android:hint="Amount"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEosTokenSendValue"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/sendto"
+        android:text="Send to"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEosTokenName"
+        app:layout_constraintTop_toBottomOf="@+id/view1"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etEosTokenSendAddress"
+        app:layout_constraintTop_toBottomOf="@+id/sendto"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_marginLeft="@dimen/x45"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="15sp"
+        android:textColor="@color/color_29282a"
+        android:hint="Eos Wallet Address"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        app:layout_constraintTop_toBottomOf="@+id/etEosTokenSendAddress"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/Memo"
+        android:text="Memo"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEosTokenName"
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etEthTokenSendMemo"
+        app:layout_constraintTop_toBottomOf="@+id/Memo"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="15sp"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/color_29282a"
+        android:hint="if any"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        app:layout_constraintTop_toBottomOf="@+id/etEthTokenSendMemo"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/tvSend"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3"
+        android:layout_marginTop="@dimen/x300"
+        android:layout_marginLeft="@dimen/x45"
+        android:text="@string/send"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/x45"
+        android:background="@drawable/main_color_bt_bg"
+        android:layout_height="@dimen/x94" />
+
+</android.support.constraint.ConstraintLayout>

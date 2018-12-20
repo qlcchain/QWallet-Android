@@ -47,6 +47,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import neoutils.Neoutils;
 
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
+
 /**
  * @author hzp
  * @Package com.stratagile.qlink.ui.activity.wallet
@@ -91,8 +94,6 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
 
     private TokenInfo gasTokenInfo;
 
-    private SpinnerPopWindow<String> mSpinerPopWindow;
-
     private ArrayList<String> list;
 
     @Override
@@ -128,8 +129,6 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                 break;
             }
         }
-        mSpinerPopWindow = new SpinnerPopWindow<String>(this, list, itemClickListener);
-        mSpinerPopWindow.setOnDismissListener(dismissListener);
         setTitle("Send " + tokenInfo.getTokenSymol());
         tvNeoTokenName.setText(tokenInfo.getTokenSymol());
         tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
@@ -139,9 +138,9 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
 //        infoMap.put("address", tokenInfo.getWalletAddress());
 //        mPresenter.getNeoWalletDetail(tokenInfo.getWalletAddress(), infoMap);
         if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
-            etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+            etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
         } else {
-            etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+            etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
         }
         mPresenter.getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
             @Override
@@ -314,15 +313,19 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                     ToastUtil.displayShortToast(getString(R.string.can_not_send_to_self));
                     return;
                 }
-                if (gasTokenInfo.getTokenValue() < 0.0001) {
-                    ToastUtil.displayShortToast("Not enough gas");
-                    return;
-                }
-
-                showProgressDialog();
                 if (tokenInfo.getTokenSymol().toLowerCase().equals("neo") || tokenInfo.getTokenSymol().toLowerCase().equals("gas")) {
+                    showProgressDialog();
                     mPresenter.sendNeo(etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), tokenInfo);
                 } else {
+                    if (gasTokenInfo == null) {
+                        ToastUtil.displayShortToast("Not enough gas");
+                        return;
+                    }
+                    if (gasTokenInfo.getTokenValue() < 0.00000001) {
+                        ToastUtil.displayShortToast("Not enough gas");
+                        return;
+                    }
+                    showProgressDialog();
                     mPresenter.sendNEP5Token(tokenInfo, etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString());
                 }
                 break;
@@ -345,9 +348,9 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                             setTitle("Send " + tokenInfo.getTokenSymol());
                             tvNeoTokenName.setText(tokenInfo.getTokenSymol());
                             if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
-                                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+                                etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
                             } else {
-                                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                                etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
                             }
                             etNeoTokenSendValue.setText("");
                             tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
@@ -385,41 +388,4 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
             super.onBackPressed();
         }
     }
-
-    /**
-     * 监听popupwindow取消
-     */
-    private PopupWindow.OnDismissListener dismissListener = new PopupWindow.OnDismissListener() {
-        @Override
-        public void onDismiss() {
-            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
-                @Override
-                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-
-                }
-            });
-        }
-    };
-
-    /**
-     * popupwindow显示的ListView的item点击事件
-     */
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            mSpinerPopWindow.dismiss();
-            tokenInfo = tokenInfoArrayList.get(position);
-            setTitle("Send " + tokenInfo.getTokenSymol());
-            tvNeoTokenName.setText(tokenInfo.getTokenSymol());
-            if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
-                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-            } else {
-                etNeoTokenSendValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-            }
-            etNeoTokenSendValue.setText("");
-            tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvNeoTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
-            viewLine.setLayoutParams(layoutParams);
-        }
-    };
 }

@@ -222,29 +222,6 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <!--<TextView-->
-        <!--android:id="@+id/gasFee"-->
-        <!--android:text="GAS FEE"-->
-        <!--android:visibility="gone"-->
-        <!--android:textColor="@color/color_29282a_40"-->
-        <!--app:layout_constraintLeft_toLeftOf="@+id/tvEthTokenName"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/llCost"-->
-        <!--android:layout_marginTop="@dimen/x25"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
-    <!--<TextView-->
-        <!--android:id="@+id/tvGasFee"-->
-        <!--android:visibility="gone"-->
-        <!--android:textColor="@color/color_29282a"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--android:text="21000"-->
-        <!--android:layout_marginRight="@dimen/x30"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/llCost"-->
-        <!--android:layout_marginTop="@dimen/x25"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
-
-
     <View
         android:id="@+id/view4"
         android:layout_width="match_parent"

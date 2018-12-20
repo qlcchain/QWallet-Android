@@ -2,6 +2,9 @@ package com.stratagile.qlink.ui.activity.main.contract;
 
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
+
+import java.util.Map;
+
 /**
  * @author hzp
  * @Package The contract for GuestActivity
@@ -22,9 +25,9 @@ public interface GuestContract {
     }
 
     interface GuestContractPresenter extends BasePresenter {
-//        /**
-//         *
-//         */
-//        void getBusinessInfo(Map map);
+        /**
+         *
+         */
+        void importWallet(Map map);
     }
 }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/x20"
+    app:cardElevation="@dimen/x10"
+    android:layout_width="@dimen/x500">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/loading"
+        android:layout_width="@dimen/x500"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_29282a"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="@dimen/x40"
+            android:layout_marginTop="@dimen/x20"
+            android:paddingRight="@dimen/x40"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_marginTop="@dimen/x30"
+            app:layout_constraintTop_toBottomOf="@+id/tvContent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_29282a_40"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="@dimen/x80">
+            <TextView
+                android:id="@+id/tvCancel"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:textSize="15sp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/mainColor"
+                android:layout_height="@dimen/x80" />
+            <View
+                android:layout_width="@dimen/x1"
+                android:layout_height="match_parent"
+                android:background="@color/color_29282a_40"/>
+            <TextView
+                android:id="@+id/tvConform"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="@string/confirm"
+                android:textSize="15sp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/mainColor"
+                android:layout_height="@dimen/x80" />
+
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

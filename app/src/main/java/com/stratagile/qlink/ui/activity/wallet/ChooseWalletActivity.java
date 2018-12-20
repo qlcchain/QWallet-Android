@@ -12,6 +12,8 @@ import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.db.EosAccount;
+import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -21,12 +23,15 @@ import com.stratagile.qlink.ui.activity.wallet.contract.ChooseWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ChooseWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ChooseWalletPresenter;
 import com.stratagile.qlink.utils.LocalWalletUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SelectWalletAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -100,11 +105,36 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
             }
         }
 
+        List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+        if (wallets2 != null && wallets2.size() != 0) {
+            for (int i = 0; i < wallets2.size(); i++) {
+                if (wallets2.get(i).getAccountName() == null) {
+                    continue;
+                }
+                if (wallets2.get(i).getIsCreating()) {
+                    mPresenter.getEosAccountInfo(wallets2.get(i));
+                }
+                AllWallet allWallet = new AllWallet();
+                allWallet.setEosAccount(wallets2.get(i));
+                allWallet.setWalletAddress(wallets2.get(i).getAccountName());
+                allWallet.setWalletName(wallets2.get(i).getWalletName() == null? wallets2.get(i).getAccountName() : wallets2.get(i).getWalletName());
+                allWallet.setWalletType(AllWallet.WalletType.EosWallet);
+                allWallets.add(allWallet);
+                if (wallets2.get(i).getAccountName() != null && wallets2.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
+                    currentSelectWallet = allWallet;
+                }
+            }
+        }
+
         downCheckAdapter = new SelectWalletAdapter(allWallets);
         recyclerView.setAdapter(downCheckAdapter);
         downCheckAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (downCheckAdapter.getItem(position).getWalletType() == AllWallet.WalletType.EosWallet && downCheckAdapter.getItem(position).getWalletAddress() == null) {
+                    ToastUtil.displayShortToast("This is a wallet waiting to be created.");
+                    return;
+                }
                 showProgressDialog();
                 downCheckAdapter.notifyDataSetChanged();
                 currentSelectWallet = downCheckAdapter.getItem(position);
@@ -116,6 +146,18 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                     if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.NeoWallet && downCheckAdapter.getData().get(i).getWallet().getIsCurrent()) {
                         downCheckAdapter.getData().get(i).getWallet().setIsCurrent(false);
                         AppConfig.getInstance().getDaoSession().getWalletDao().update(downCheckAdapter.getData().get(i).getWallet());
+                    }
+                    if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.EosWallet && downCheckAdapter.getData().get(i).getEosAccount().getIsCurrent()) {
+                        downCheckAdapter.getData().get(i).getEosAccount().setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getEosAccountDao().update(downCheckAdapter.getData().get(i).getEosAccount());
+                    }
+
+                    if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.EosWallet && position == i) {
+                        downCheckAdapter.getData().get(i).getEosAccount().setIsCurrent(true);
+                        AppConfig.getInstance().getDaoSession().getEosAccountDao().update(downCheckAdapter.getData().get(i).getEosAccount());
+                        closeProgressDialog();
+                        setResult(RESULT_OK);
+                        onBackPressed();
                     }
                     if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.EthWallet && position == i) {
                         downCheckAdapter.getData().get(i).getEthWallet().setCurrent(true);
@@ -146,8 +188,11 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 }
             }
         });
-        LocalWalletUtil.updateNeoWallet();
+        reNmaeEosWalletName();
+        reNmaeNeoWalletName();
+        LocalWalletUtil.updateLocalNeoWallet();
         LocalWalletUtil.updateLocalEthWallet();
+        LocalWalletUtil.updateLocalEosWallet();
     }
 
     @Override
@@ -158,6 +203,38 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 .chooseWalletModule(new ChooseWalletModule(this))
                 .build()
                 .inject(this);
+    }
+
+    private void reNmaeNeoWalletName() {
+        List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+        if (neoWallets.size() != 0) {
+            for (int i = 0; i < neoWallets.size(); i++) {
+                if (neoWallets.get(i).getName() == null) {
+                    neoWallets.get(i).setName("NEO-Wallet " + getIndex(i));
+                    AppConfig.getInstance().getDaoSession().getWalletDao().update(neoWallets.get(i));
+                }
+            }
+        }
+    }
+
+    private void reNmaeEosWalletName() {
+        List<EosAccount> neoWallets = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+        if (neoWallets.size() != 0) {
+            for (int i = 0; i < neoWallets.size(); i++) {
+                if (neoWallets.get(i).getWalletName() == null) {
+                    neoWallets.get(i).setWalletName("EOS-Wallet " + getIndex(i));
+                    AppConfig.getInstance().getDaoSession().getEosAccountDao().update(neoWallets.get(i));
+                }
+            }
+        }
+    }
+
+    private String getIndex(int i) {
+        if (i < 9) {
+            return "0" + (i +1);
+        } else {
+            return "" + (i +1);
+        }
     }
 
     @Override

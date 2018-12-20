@@ -39,6 +39,50 @@ public class VpnEntity implements Parcelable, Comparable<VpnEntity> {
     private String hash;
 
 
+    @Override
+    public String toString() {
+        return "VpnEntity{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", isMainNet=" + isMainNet +
+                ", ownerP2pId='" + ownerP2pId + '\'' +
+                ", hash='" + hash + '\'' +
+                ", userId='" + userId + '\'' +
+                ", profileLocalPath='" + profileLocalPath + '\'' +
+                ", password='" + password + '\'' +
+                ", privateKeyPassword='" + privateKeyPassword + '\'' +
+                ", profileUUid='" + profileUUid + '\'' +
+                ", ipV4Address='" + ipV4Address + '\'' +
+                ", continent='" + continent + '\'' +
+                ", username='" + username + '\'' +
+                ", groupNum=" + groupNum +
+                ", bandwidth='" + bandwidth + '\'' +
+                ", connectMaxnumber=" + connectMaxnumber +
+                ", assetTranfer=" + assetTranfer +
+                ", avatar='" + avatar + '\'' +
+                ", registerQlc=" + registerQlc +
+                ", onlineTime=" + onlineTime +
+                ", connsuccessNum=" + connsuccessNum +
+                ", isInMainWallet=" + isInMainWallet +
+                ", unReadMessageCount=" + unReadMessageCount +
+                ", friendNum='" + friendNum + '\'' +
+                ", configuration='" + configuration + '\'' +
+                ", vpnName='" + vpnName + '\'' +
+                ", p2pId='" + p2pId + '\'' +
+                ", p2pIdPc='" + p2pIdPc + '\'' +
+                ", address='" + address + '\'' +
+                ", type=" + type +
+                ", currentConnect=" + currentConnect +
+                ", qlc=" + qlc +
+                ", isConnected=" + isConnected +
+                ", lastFreeTime=" + lastFreeTime +
+                ", online=" + online +
+                ", isLoadingAvater=" + isLoadingAvater +
+                ", avaterUpdateTime=" + avaterUpdateTime +
+                ", price=" + price +
+                '}';
+    }
+
     protected VpnEntity(Parcel in) {
         if (in.readByte() == 0) {
             id = null;

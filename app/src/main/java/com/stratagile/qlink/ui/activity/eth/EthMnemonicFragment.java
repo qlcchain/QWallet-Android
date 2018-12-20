@@ -80,6 +80,14 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
         viewModel = ViewModelProviders.of(getActivity()).get(ImportViewModel.class);
+        viewModel.qrCode.observe(this, new android.arch.lifecycle.Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                if (getUserVisibleHint()) {
+                    etMnemonic.setText(s);
+                }
+            }
+        });
         return view;
     }
 

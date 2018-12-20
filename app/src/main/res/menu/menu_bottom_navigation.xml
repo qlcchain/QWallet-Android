@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_all_wallet"
-        android:icon="@mipmap/icon_wallet_n"
-        android:title="@string/wallet" />
-    <item
-        android:id="@+id/item_market"
-        android:icon="@mipmap/icon_markets_n"
-        android:title="@string/market" />
-    <item
         android:id="@+id/item_sms"
         android:icon="@mipmap/icon_vpn_n"
         android:title="@string/vpn" />
+    <!--<item-->
+        <!--android:id="@+id/item_market"-->
+        <!--android:visible="false"-->
+        <!--android:icon="@mipmap/icon_markets_n"-->
+        <!--android:title="@string/market" />-->
+    <item
+        android:id="@+id/item_all_wallet"
+        android:icon="@mipmap/icon_wallet_n"
+        android:title="@string/wallet" />
     <item
         android:id="@+id/item_settings"
         android:icon="@mipmap/icon_settings_n"

@@ -494,7 +494,7 @@ public class qlinkcom {
         KLog.i("开始获取tox的json数据");
         String toxJsonResult = "";
         toxJsonResult = FileUtil.getJson(AppConfig.getInstance(), "tox.json");
-        KLog.i(toxJsonResult);
+//        KLog.i(toxJsonResult);
         String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
         File jsonFile = new File(jsonPath);
         if (jsonFile.exists()) {
@@ -513,14 +513,14 @@ public class qlinkcom {
                     stringBuffer.append(line);
                 }
                 if (stringBuffer.length() >= 100) {
-                    KLog.i(stringBuffer.toString());
+//                    KLog.i(stringBuffer.toString());
                     toxJsonResult = stringBuffer.toString();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        KLog.i(toxJsonResult);
+//        KLog.i(toxJsonResult);
         return toxJsonResult;
     }
     /* Java_com_stratagile_qlink_qlinkcom_Encrypt

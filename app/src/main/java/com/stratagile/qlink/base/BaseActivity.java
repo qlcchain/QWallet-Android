@@ -166,32 +166,32 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         }
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        try {
-            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-                View v = getCurrentFocus();
-                if (isShouldHideInput(v, ev)) {
-
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    }
-                }
-                return super.dispatchTouchEvent(ev);
-            }
-            // 必不可少，否则所有的组件都不会有TouchEvent了
-            if (getWindow() != null && getWindow().superDispatchTouchEvent(ev)) {
-                return true;
-            }
-        }catch (Exception e)
-        {
-
-        }finally {
-            return onTouchEvent(ev);
-        }
-
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        try {
+//            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+//                View v = getCurrentFocus();
+//                if (isShouldHideInput(v, ev)) {
+//
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    if (imm != null) {
+//                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                    }
+//                }
+//                return super.dispatchTouchEvent(ev);
+//            }
+//            // 必不可少，否则所有的组件都不会有TouchEvent了
+//            if (getWindow() != null && getWindow().superDispatchTouchEvent(ev)) {
+//                return true;
+//            }
+//        }catch (Exception e)
+//        {
+//
+//        }finally {
+//            return onTouchEvent(ev);
+//        }
+//
+//    }
 
     public  boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && ((v instanceof EditText) && !(v.getParent() instanceof ShowKeyRelativeLayout))) {
@@ -267,10 +267,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
         }
         view.setLayoutParams(new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) (UIUtils.getStatusBarHeight(this))));
-        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
-            view.setBackgroundColor(getResources().getColor(R.color.color_f51818));
-            view.setText(getString(R.string.testnet));
-        }
+//        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
+//            view.setBackgroundColor(getResources().getColor(R.color.color_f51818));
+//            view.setText(getString(R.string.testnet));
+//        }
 //        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.dip2px(getResources().getDimension(R.dimen.dp_69), this) - (UIUtils.getStatusBarHeight(this)));
 //        toolbar.setLayoutParams(rlp);
         toolbar.setTitle("");

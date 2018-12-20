@@ -23,6 +23,8 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.EthWalletDao;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
@@ -146,10 +148,11 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             etEthTokenSendAddress.setText(getIntent().getStringExtra("walletAddress"));
         } else {
             tokenInfo = getIntent().getParcelableExtra("tokenInfo");
-            setTitle("Send " + tokenInfo.getTokenSymol());
-            String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-            tvEthTokenValue.setText("Balance: " + value);
         }
+
+        setTitle("Send " + tokenInfo.getTokenSymol());
+        String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
+        tvEthTokenValue.setText("Balance: " + value);
 
         tvEthTokenName.setText(tokenInfo.getTokenSymol());
 
@@ -366,7 +369,11 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             tokenInfo1.setTokenName("ETH");
             tokenInfo1.setTokenSymol("ETH");
             tokenInfo1.setTokenAddress(ethWalletInfo.getData().getAddress());
-            tokenInfo1.setTokenValue(ethWalletInfo.getData().getETH().getBalance());
+            if ("false".equals(ethWalletInfo.getData().getETH().getBalance().toString()) || "-1.0".equals(ethWalletInfo.getData().getETH().getBalance().toString())) {
+                tokenInfo1.setTokenValue(0);
+            } else {
+                tokenInfo1.setTokenValue(Double.parseDouble(ethWalletInfo.getData().getETH().getBalance().toString()));
+            }
             tokenInfo1.setTokenImgName("eth_eth");
             tokenInfo1.setWalletType(AllWallet.WalletType.EthWallet);
             tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());

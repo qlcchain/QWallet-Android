@@ -53,16 +53,6 @@ public class CreateWalletPasswordActivity extends BaseActivity implements Create
     @BindView(R.id.tvJoin)
     TextView tvJoin;
 
-    /*private FingerprintManagerCompat fingerprintManager = null;*/
-//    private MyAuthCallback myAuthCallback = null;
-//    private CancellationSignal cancellationSignal = null;
-//
-//    private Handler handler = null;
-//    public static final int MSG_AUTH_SUCCESS = 100;
-//    public static final int MSG_AUTH_FAILED = 101;
-//    public static final int MSG_AUTH_ERROR = 102;
-//    public static final int MSG_AUTH_HELP = 103;
-
     private AlertDialog builderTips;
 
     @Override
@@ -75,36 +65,6 @@ public class CreateWalletPasswordActivity extends BaseActivity implements Create
     protected void initView() {
         setContentView(R.layout.activity_create_wallet_password);
         ButterKnife.bind(this);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//        handler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//
-//                super.handleMessage(msg);
-//
-//                switch (msg.what) {
-//                    case MSG_AUTH_SUCCESS:
-//                        setResultInfo(R.string.fingerprint_success);
-//                        /*  mCancelBtn.setEnabled(false);
-//                        mStartBtn.setEnabled(true);*/
-//                        cancellationSignal = null;
-//                        break;
-//                    case MSG_AUTH_FAILED:
-//                        setResultInfo(R.string.fingerprint_not_recognized);
-//                        /*mCancelBtn.setEnabled(false);
-//                        mStartBtn.setEnabled(true);*/
-//                        cancellationSignal = null;
-//                        break;
-//                    case MSG_AUTH_ERROR:
-//                        handleErrorCode(msg.arg1);
-//                        break;
-//                    case MSG_AUTH_HELP:
-//                        handleHelpCode(msg.arg1);
-//                        break;
-//                }
-//            }
-//        };
-
         etRepeatPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -155,85 +115,6 @@ public class CreateWalletPasswordActivity extends BaseActivity implements Create
                 }
             }
         });
-        // init fingerprint.
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
-//        try {
-//            FingerprintManager fingerprintManager =(FingerprintManager)AppConfig.getInstance().getSystemService(Context.FINGERPRINT_SERVICE);
-//            if (fingerprintManager!= null && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints())
-//            {
-//                if(SpUtil.getString(this, ConstantValue.fingerPassWord, "").equals(""))
-//                {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                    View view = View.inflate(this, R.layout.finger_dialog_layout, null);
-//                    builder.setView(view);
-//                    builder.setCancelable(false);
-//                    TextView title = (TextView) view.findViewById(R.id.title);//设置标题
-//                    TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
-//                    Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
-//                    btn_cancel.setText(R.string.back_btn);
-//                    Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-//                    btn_comfirm.setText(R.string.cancel_btn_dialog);
-//                    finger = (ImageView) view.findViewById(R.id.finger);
-//                    tvContent.setText(R.string.choose_finger_dialog_title);
-//                    title.setText(R.string.unlock_wallet);
-//                    Context currentContext = this;
-//                    builderTips = builder.create();
-//                    builderTips.show();
-//                    btn_cancel.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            builderTips.dismiss();
-//                            if (cancellationSignal != null) {
-//                                cancellationSignal.cancel();
-//                                cancellationSignal = null;
-//                            }
-//                        }
-//                    });
-//                    btn_comfirm.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            builderTips.dismiss();
-//                            if (cancellationSignal != null) {
-//                                cancellationSignal.cancel();
-//                                cancellationSignal = null;
-//                            }
-//                           }
-//                    });
-//                    try {
-//                        myAuthCallback = new MyAuthCallback(handler);
-//                        CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
-//                        if (cancellationSignal == null) {
-//                            cancellationSignal = new CancellationSignal();
-//                        }
-//                        fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(),cancellationSignal, 0,
-//                                myAuthCallback, null);
-//                    } catch (Exception e) {
-//                        try {
-//                            myAuthCallback = new MyAuthCallback(handler);
-//                            CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
-//                            if (cancellationSignal == null) {
-//                                cancellationSignal = new CancellationSignal();
-//                            }
-//                            fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), cancellationSignal,0,
-//                                    myAuthCallback, null);
-//                        } catch (Exception er) {
-//                            er.printStackTrace();
-//                            builderTips.dismiss();
-//                            //Toast.makeText(CreateWalletPasswordActivity.this, "Fingerprint init failed! Try again!", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }
-//
-//            }else{
-//                SpUtil.putString(this, ConstantValue.fingerPassWord, "");
-//            }
-//        }catch (NoClassDefFoundError e)
-//        {
-//            SpUtil.putString(this, ConstantValue.fingerPassWord, "");
-//        }
-//        }else{
-//            SpUtil.putString(this, ConstantValue.fingerPassWord, "");
-//        }
 
     }
 

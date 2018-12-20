@@ -7,10 +7,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
+import com.stratagile.qlink.entity.eos.TransferEthToCreateEos
 import com.stratagile.qlink.view.CustomPopWindow
 
 import java.util.ArrayList
@@ -106,6 +109,46 @@ object PopWindowUtil {
         maskView.setOnClickListener {
             onItemSelectListener.onSelect("")
             CustomPopWindow.onBackPressed()
+        }
+    }
+
+    fun showTransferEthPopWindow(transferEthToCreateEos: TransferEthToCreateEos, activity: Activity, showView: View, onClickListener: View.OnClickListener) {
+        val maskView = LayoutInflater.from(activity).inflate(R.layout.transfer_eth_to_create_eos_layout, null)
+        val contentView = maskView.findViewById<View>(R.id.ll_popup)
+        maskView.animation = AnimationUtils.loadAnimation(activity, R.anim.open_fade)
+        contentView.animation = AnimationUtils.loadAnimation(activity, R.anim.pop_manage_product_in)
+
+        var tvTo = maskView.findViewById<TextView>(R.id.tvTo)
+        var tvFrom = maskView.findViewById<TextView>(R.id.tvFrom)
+        var tvCost = maskView.findViewById<TextView>(R.id.tvCost)
+        var tvEthValue = maskView.findViewById<TextView>(R.id.tvEthValue)
+        var tvCostDetail = maskView.findViewById<TextView>(R.id.tvCostDetail)
+        var tvNext = maskView.findViewById<TextView>(R.id.tvNext)
+        val ivClose = maskView.findViewById<ImageView>(R.id.ivClose)
+        ivClose.setOnClickListener {
+            CustomPopWindow.onBackPressed()
+        }
+        tvNext.setOnClickListener(onClickListener)
+        tvTo.text = transferEthToCreateEos.to
+        tvFrom.text = transferEthToCreateEos.from
+        tvCost.text = "" + transferEthToCreateEos.cost + " ether"
+        tvCostDetail.text = transferEthToCreateEos.costDetail
+        tvEthValue.text = "" + transferEthToCreateEos.ethValue + " ETH"
+
+        //对具体的view的事件的处理
+        CustomPopWindow.PopupWindowBuilder(activity)
+                .setView(maskView)
+                .setClippingEnable(false)
+                .setContenView(contentView)
+                .setFocusable(false)
+                .size(UIUtils.getDisplayWidth(activity), UIUtils.getDisplayHeigh(activity))
+                .create()
+                .showAtLocation(showView, Gravity.NO_GRAVITY, 0, 0)
+        maskView.setOnClickListener {
+            CustomPopWindow.onBackPressed()
+        }
+        contentView.setOnClickListener{
+
         }
     }
 

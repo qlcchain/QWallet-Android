@@ -16,6 +16,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.EosAccountTransaction;
 import com.stratagile.qlink.entity.EthWalletTransaction;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.NeoWalletTransactionHistory;
@@ -25,9 +26,13 @@ import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransactionRecordContract;
 import com.stratagile.qlink.ui.activity.wallet.EthTransactionRecordActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -253,6 +258,63 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     }
                 });
         mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getEosAccountTransaction(String account, Map map) {
+        Disposable disposable = httpAPIWrapper.getEosAccountTransaction(map)
+                .subscribe(new Consumer<EosAccountTransaction>() {
+                    @Override
+                    public void accept(EosAccountTransaction baseBack) throws Exception {
+                        //isSuccesse
+                        ArrayList<TransactionInfo> transactionInfos = new ArrayList<>();
+                        for (int i = 0; i < baseBack.getData().getData().getTrace_list().size(); i++) {
+                            if (!baseBack.getData().getData().getTrace_list().get(i).getSender().equals(account) && !baseBack.getData().getData().getTrace_list().get(i).getReceiver().equals(account)) {
+                                continue;
+                            }
+                            TransactionInfo transactionInfo = new TransactionInfo();
+                            transactionInfo.setTransactionType(AllWallet.WalletType.EosWallet);
+                            transactionInfo.setTransactionToken(baseBack.getData().getData().getTrace_list().get(i).getSymbol());
+                            transactionInfo.setTransactionValue(baseBack.getData().getData().getTrace_list().get(i).getQuantity());
+                            transactionInfo.setTransationHash(baseBack.getData().getData().getTrace_list().get(i).getTrx_id());
+                            transactionInfo.setFrom(baseBack.getData().getData().getTrace_list().get(i).getSender());
+                            transactionInfo.setTo(baseBack.getData().getData().getTrace_list().get(i).getReceiver());
+                            transactionInfo.setTransactionState(baseBack.getData().getData().getTrace_list().get(i).getStatus());
+                            transactionInfo.setOwner((String) map.get("account"));
+                            transactionInfo.setTimestamp(parseEosTransactionTimestamp(baseBack.getData().getData().getTrace_list().get(i).getTimestamp()));
+                            transactionInfos.add(transactionInfo);
+                        }
+                        mView.setEthTransactionHistory(transactionInfos);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    private long parseEosTransactionTimestamp(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        sdr.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date;
+        String times = null;
+        try {
+            date = sdr.parse(time);
+            long l = date.getTime() / 1000;
+            KLog.i(l);
+            return l;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Long("123");
+        }
     }
 
     private void getChartData(KLine baseBack, double tokenPrice) {

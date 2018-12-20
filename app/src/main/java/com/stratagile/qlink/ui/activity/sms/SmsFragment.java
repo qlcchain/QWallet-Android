@@ -231,27 +231,19 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.registerVpn:
-//                if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
-//                    return;
-//                }
-//                dangqianshijian = Calendar.getInstance().getTimeInMillis();
-//                List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-//                if (SpUtil.getString(getContext(), ConstantValue.walletPassWord, "").equals("") && SpUtil.getString(getContext(), ConstantValue.fingerPassWord, "").equals("")) {
-//                    Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
-//                    startActivityForResult(intent, START_CREATE_PASSWORD);
-//                    return;
-//                }
-//                if (walletList == null || walletList.size() == 0) {
-//                    Intent intent = new Intent(getActivity(), NoWalletActivity.class);
-//                    intent.putExtra("flag", "nowallet");
-//                    startActivityForResult(intent, START_NO_WALLLET);
-//                    return;
-//                }
-//                if (ConstantValue.isShouldShowVertifyPassword) {
-//                    Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
-//                    startActivityForResult(intent, START_VERTIFY_PASSWORD);
-//                    return;
-//                }
+                if (!SpUtil.getString(getActivity(), ConstantValue.walletPassWord, "").equals("")) {
+                    if (ConstantValue.isShouldShowVertifyPassword) {
+                        Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                        return;
+                    }
+                } else {
+                    Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), MyAssetsActivity.class);
 //                intent.putExtra("flag", "");
                 startActivityForResult(intent, 0);

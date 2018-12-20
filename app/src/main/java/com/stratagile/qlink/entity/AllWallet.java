@@ -3,6 +3,7 @@ package com.stratagile.qlink.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 
@@ -11,6 +12,16 @@ import java.util.Objects;
 public class AllWallet {
     private WalletType walletType;
     private EthWallet ethWallet;
+    private EosAccount eosAccount;
+
+    public EosAccount getEosAccount() {
+        return eosAccount;
+    }
+
+    public void setEosAccount(EosAccount eosAccount) {
+        this.eosAccount = eosAccount;
+    }
+
     private Wallet wallet;
 
     public String getWalletAddress() {

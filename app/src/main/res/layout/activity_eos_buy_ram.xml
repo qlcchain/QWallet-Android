@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/refreshLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x23"
+            android:background="#F9F9F9" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x56"
+            android:text="RAM"
+            android:textColor="@color/color_29282a" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginBottom="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Available" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="@dimen/x1"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/availableRam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/x45" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x23"
+            android:background="#F9F9F9" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x92"
+            android:layout_marginLeft="@dimen/x12"
+            android:layout_marginTop="@dimen/x20"
+            android:background="@drawable/main_color_bt_bg"
+            android:layout_marginRight="@dimen/x12"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x35"
+                android:textColor="@color/white"
+                android:text="Current Price" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="@dimen/x1"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/ramPrice"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/x35" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x35"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.stratagile.qlink.view.SmoothCheckBox
+                    android:id="@+id/checkBoxBuy"
+                    android:layout_width="@dimen/x45"
+                    android:layout_height="@dimen/x45"
+                    android:layout_marginRight="@dimen/x12"
+                    app:color_checked="@color/mainColor"
+                    app:color_unchecked="@color/white"
+                    app:stroke_width="@dimen/x4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:text="Buy" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.stratagile.qlink.view.SmoothCheckBox
+                    android:id="@+id/checkBoxSell"
+                    android:layout_width="@dimen/x45"
+                    android:layout_height="@dimen/x45"
+                    android:layout_marginRight="@dimen/x12"
+                    app:color_checked="@color/mainColor"
+                    app:color_unchecked="@color/white"
+                    app:stroke_width="@dimen/x4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:text="Sell" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x65"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvRamTitle"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a"
+                android:text="Purchase Amount" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="@dimen/x1"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/amountEos"
+                android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/x45" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/etPurchaseEos"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x5"
+            android:layout_marginRight="@dimen/x45"
+            android:inputType="numberDecimal"
+            android:textSize="13sp"
+            android:background="@null"
+            android:hint="Input EOS Amount"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x45"
+            android:background="@color/color_29282a_40"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Recipient Account"
+            android:textSize="13sp"
+            android:layout_marginLeft="@dimen/x45"
+            android:textColor="@color/color_29282a"
+            android:layout_marginTop="@dimen/x23"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/etRecipientAccount"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x5"
+            android:inputType="textEmailAddress"
+            android:textSize="13sp"
+            android:layout_marginRight="@dimen/x45"
+            android:background="@null"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x45"
+            android:background="@color/color_29282a_40"/>
+        <TextView
+            android:id="@+id/tvTip"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:textSize="11sp"
+            android:layout_marginRight="@dimen/x45"
+            android:text="*Purchase RAM for another account"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvOpreate"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x86"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginRight="@dimen/x45"
+            android:background="@drawable/main_color_bt_bg"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Buy"
+            android:layout_height="@dimen/x92" />
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

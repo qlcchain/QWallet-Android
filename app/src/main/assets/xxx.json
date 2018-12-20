@@ -1,0 +1,30 @@
+{
+  "action": "newaccount",
+  "args": {
+    "active": {
+      "accounts": [],
+      "keys": [
+        {
+          "key": "EOS7gj7mB78GhJ7e7qUy5vVfeTsUXR7m96kZsAgHwe4xGgfxhiCkT",
+          "weight": 1
+        }
+      ],
+      "threshold": 1,
+      "waits": []
+    },
+    "creator": "yfhuangeos2g",
+    "name": "huzhipeng123",
+    "owner": {
+      "accounts": [],
+      "keys": [
+        {
+          "key": "EOS4tgAYa6rEySee9dEe4JnFWczgTDCBSPK62ifJfAhuRaZ3Pgc1D",
+          "weight": 1
+        }
+      ],
+      "threshold": 1,
+      "waits": []
+    }
+  },
+  "code": "eosio"
+}

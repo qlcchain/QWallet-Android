@@ -11,6 +11,11 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EosAccountInfo;
+import com.stratagile.qlink.entity.EosAccountTransaction;
+import com.stratagile.qlink.entity.EosKeyAccount;
+import com.stratagile.qlink.entity.EosResource;
+import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletDetail;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.EthWalletTransaction;
@@ -20,6 +25,7 @@ import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.KLine;
+import com.stratagile.qlink.entity.LocalTokenBean;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
@@ -41,7 +47,11 @@ import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
+import com.stratagile.qlink.entity.eos.EosNeedInfo;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -64,12 +74,21 @@ import static com.stratagile.qlink.data.api.API.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.url_bet;
+import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
+import static com.stratagile.qlink.data.api.API.url_create_eos_account;
+import static com.stratagile.qlink.data.api.API.url_create_eos_need_info;
+import static com.stratagile.qlink.data.api.API.url_eos_account_info;
+import static com.stratagile.qlink.data.api.API.url_eos_account_transaction_info;
+import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
+import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
+import static com.stratagile.qlink.data.api.API.url_get_account_resource;
 import static com.stratagile.qlink.data.api.API.url_get_server_time;
 import static com.stratagile.qlink.data.api.API.url_got_winq_gas;
+import static com.stratagile.qlink.data.api.API.url_key_account;
 import static com.stratagile.qlink.data.api.API.url_main_address;
 import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
@@ -321,6 +340,42 @@ public interface HttpApi {
     @POST(url_neo_gas_claim)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ClaimData> neoGasClaim(@Body RequestBody map);
+
+    @POST(url_eos_account_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosAccountInfo> getEosAccountInfo(@Body RequestBody map);
+
+    @POST(url_eos_token_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosTokens> getEosTokenList(@Body RequestBody map);
+
+    @POST(url_get_account_resource)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosResource> getEosTResource(@Body RequestBody map);
+
+    @POST(url_eos_account_transaction_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosAccountTransaction> getEosAccountTransaction(@Body RequestBody map);
+
+    @POST(url_bina_gettokens)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<LocalTokenBean> getBinaTokens(@Body RequestBody map);
+
+    @POST(url_create_eos_account)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> createEosAccount(@Body RequestBody map);
+
+    @POST(url_create_eos_need_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosNeedInfo> getEosNeedInfo(@Body RequestBody map);
+
+    @POST(url_eos_resource_price)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EosResourcePrice> getEosResourcePrice(@Body RequestBody map);
+
+
+    @GET(url_key_account)
+    Observable<ArrayList<EosKeyAccount>> getKeyAccount(@Path("public_key") String address);
 
 
     /*************************************************/

@@ -246,6 +246,7 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     vpnEntity.setOnlineTime(vpnListBean.getOnlineTime());
                     vpnEntity.setOwnerP2pId(vpnListBean.getOwnerP2pId());
                     vpnEntity.setP2pIdPc(vpnListBean.getOwnerP2pId());
+                    vpnEntity.setHash(vpnListBean.getHash());
                     vpnEntity.setQlc((float) vpnListBean.getCost());
                     vpnEntity.setConnectMaxnumber(vpnListBean.getConnectNum());
                     if (vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
@@ -303,7 +304,9 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                     String friendNumStr = "";
                     qlinkcom.GetFriendP2PPublicKey(vpnListBean.getP2pId(), p2pId);
                     friendNumStr = new String(p2pId).trim();
+                    KLog.i(vpnListBean.getP2pId());
                     KLog.i(friendNumStr);
+                    KLog.i("friendNum为：" + friendNum);
                     if (friendNumStr == null) {
                         friendNumStr = "";
                     }
@@ -314,6 +317,8 @@ public class VpnListPresenter implements VpnListContract.VpnListContractPresente
                         if (friendNum >= 0) {
                             KLog.i(friendNum + "添加后好友" + vpnEntity.getVpnName());
                             vpnEntity.setFriendNum(new String(p2pId).trim());
+                        } else {
+                            KLog.i("添加好友失败，" + friendNum);
                         }
                     } else {
                         KLog.i(friendNum + "已经是好友" + vpnEntity.getVpnName());

@@ -104,7 +104,7 @@ public class DigestUtils {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        KLog.i("getSignature({})" + stringBuilder.toString());
+//        KLog.i("getSignature({})" + stringBuilder.toString());
         return stringBuilder.toString();
     }
 

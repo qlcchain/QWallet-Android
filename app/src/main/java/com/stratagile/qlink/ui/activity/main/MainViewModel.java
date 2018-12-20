@@ -12,6 +12,8 @@ import java.util.ArrayList;
 public class MainViewModel extends ViewModel {
     public MutableLiveData<String> qrcode = new MutableLiveData<>();
 
+    public MutableLiveData<Long> timeStampAllWalletInitData = new MutableLiveData<>();
+
     public MutableLiveData<ArrayList<String>> tokens = new MutableLiveData<>();
 
     public MutableLiveData<AllWallet.WalletType> walletTypeMutableLiveData = new MutableLiveData<>();
@@ -21,4 +23,6 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<ArrayList<TokenInfo>> tokenInfoMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<Balance> balanceMutableLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<Long> timeStampLiveData = new MutableLiveData<>();
 }

@@ -37,5 +37,7 @@ public interface EthTransactionRecordContract {
         void getNeoWalletTransaction(Map map);
         void getOnlyEthTransaction(Map map, String walletAddress);
         void getTokenKline(Map map, double price);
+
+        void getEosAccountTransaction(String account, Map map);
     }
 }

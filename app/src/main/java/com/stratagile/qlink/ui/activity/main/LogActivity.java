@@ -46,9 +46,9 @@ public class LogActivity extends BaseActivity implements LogContract.View {
     protected void initView() {
         setContentView(R.layout.activity_log);
         TextView title = toolbar.findViewById(R.id.title);
-        title.setText(R.string.Log);
+        setTitle(R.string.Log);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

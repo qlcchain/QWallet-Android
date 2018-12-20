@@ -380,6 +380,19 @@
         <activity android:name=".ui.activity.wallet.NeoTransferActivity" />
         <activity android:name=".ui.activity.vpn.MyAssetsActivity" />
         <activity android:name=".ui.activity.wallet.ChangePasswordActivity" />
+        <activity android:name=".ui.activity.eos.EosImportActivity" />
+        <activity android:name=".ui.activity.eos.EosTransferActivity" />
+        <activity android:name=".ui.activity.market.AddTokenActivity" />
+        <activity android:name=".ui.activity.eos.EosResourceManagementActivity" />
+
+        <activity android:name=".ui.activity.eos.EosBuyCpuAndNetActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.eos.EosBuyRamActivity" />
+        <activity android:name=".ui.activity.eos.EosCreateActivity" />
+        <activity android:name=".ui.activity.eos.EosActivationActivity" />
+        <activity android:name=".ui.activity.main.TestActivity" />
 
         <activity-alias
             android:exported="true"

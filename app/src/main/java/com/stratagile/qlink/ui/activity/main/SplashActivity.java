@@ -1,10 +1,14 @@
 package com.stratagile.qlink.ui.activity.main;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -54,8 +58,18 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         ButterKnife.bind(this);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Glide.with(this)
-                .load(R.mipmap.splash_img)
-                .into(activitySplashImageViewLogo);
+                .load(R.mipmap.launch_nimate)
+                .into(new SimpleTarget<Drawable>() {
+                            @Override
+                            public void onResourceReady(Drawable drawable, Transition<? super Drawable> transition) {
+                                if (drawable instanceof GifDrawable) {
+                                    GifDrawable gifDrawable = (GifDrawable) drawable;
+                                    gifDrawable.setLoopCount(1);
+                                    activitySplashImageViewLogo.setImageDrawable(drawable);
+                                    gifDrawable.start();
+                                }
+                            }
+                        });
     }
 
     @Override
@@ -94,19 +108,19 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     public void loginSuccees() {
-        Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
         startActivity(intent);
-//        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 
     @Override
     public void jumpToLogin() {
-        Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
         startActivity(intent);
-//        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
+        overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
     }
 

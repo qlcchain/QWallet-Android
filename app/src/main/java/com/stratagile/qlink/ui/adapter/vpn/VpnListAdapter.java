@@ -51,32 +51,22 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
         helper.setText(R.id.price, item.getQlc() + "/hour");
         helper.setText(R.id.tv_country, item.getCountry());
         ImageView avater = (ImageView) helper.getView(R.id.freind_avater);
-        if (item.getAvatar() == null || item.getAvatar().equals("")) {
-            if (item.getAvaterUpdateTime() != 0) {
-                File imageFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + item.getAvaterUpdateTime() + ".jpg");
-                if (imageFile.exists()) {
-                    Glide.with(mContext)
-                            .load(imageFile)
-                            .apply(AppConfig.getInstance().optionsAvater)
-                            .into(avater);
-                } else {
-                    avater.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_default_avatar));
-                }
-            } else {
-                avater.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_default_avatar));
-            }
+        if (item.getAvatar() != null && !"".equals(item.getAvatar())) {
+            Glide.with(mContext)
+                    .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
+                    .apply(AppConfig.getInstance().optionsAvater)
+                    .into(avater);
         } else {
-            if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {
-                Glide.with(mContext)
-                        .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsAvater)
-                        .into(avater);
-            } else {
-                Glide.with(mContext)
-                        .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsAvater)
-                        .into(avater);
-            }
+            Glide.with(mContext)
+                    .load(R.mipmap.img_connected_head_portrait)
+                    .apply(AppConfig.getInstance().optionsAvater)
+                    .into(avater);
+        }
+        helper.setGone(R.id.viewOnline, !item.isOnline());
+        if (item.isConnected()) {
+            helper.setVisible(R.id.switchBar, true);
+        } else {
+            helper.setVisible(R.id.switchBar, item.isOnline());
         }
         if (item.isOnline()) {
             helper.setImageDrawable(R.id.friend_status, mContext.getResources().getDrawable(R.mipmap.icon_search));
@@ -109,9 +99,9 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
                         }
                     } else {
                         if (onVpnOpreateListener != null && !item.isConnected()) {
-                            onVpnOpreateListener.onConnect(item);
                             switchButton.setChecked(false);
                             switchButton.setEnabled(false);
+                            onVpnOpreateListener.onConnect(item, switchButton);
                         }
                     }
                 } else {
@@ -125,7 +115,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
     }
 
     public interface OnVpnOpreateListener {
-        void onConnect(VpnEntity vpnEntity);
+        void onConnect(VpnEntity vpnEntity, SwitchButton switchButton);
 
         void onDisConnect();
     }

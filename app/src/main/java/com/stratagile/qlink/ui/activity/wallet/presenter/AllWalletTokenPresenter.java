@@ -186,7 +186,11 @@ public class AllWalletTokenPresenter implements AllWalletTokenContract.AllWallet
         tokenInfo1.setTokenName("ETH");
         tokenInfo1.setTokenSymol("ETH");
         tokenInfo1.setTokenAddress(ethWalletInfo.getData().getAddress());
-        tokenInfo1.setTokenValue(ethWalletInfo.getData().getETH().getBalance());
+        if ("false".equals(ethWalletInfo.getData().getETH().getBalance().toString()) || "-1.0".equals(ethWalletInfo.getData().getETH().getBalance().toString())) {
+            tokenInfo1.setTokenValue(0);
+        } else {
+            tokenInfo1.setTokenValue(Double.parseDouble(ethWalletInfo.getData().getETH().getBalance().toString()));
+        }
         tokenInfo1.setTokenImgName("eth_eth");
         tokenInfo1.setWalletType(AllWallet.WalletType.EthWallet);
         tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());

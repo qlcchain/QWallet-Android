@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.CreateWallet;
@@ -126,8 +129,31 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
     @Override
     public void reportCreatedWalletSuccess() {
         closeProgressDialog();
+//        EventBus.getDefault().post(new ChangeWallet());
         setResult(RESULT_OK);
         onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.qrcode_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.qrcode) {
+            startActivityForResult(new Intent(this, ScanQrCodeActivity.class), 1);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            etPrivateKey.setText(data.getStringExtra("result"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @OnClick({R.id.btImport, R.id.tvWhatsPrivateKey})
@@ -144,12 +170,14 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                 }
                 if (privateKey.length() >= 42) {
                     for (Wallet wallet : AppConfig.getInstance().getDaoSession().getWalletDao().loadAll()) {
-                        KLog.i(wallet.toString());
+//                        KLog.i(wallet.toString());
                         if (privateKey.toLowerCase().equals(wallet.getPrivateKey().toLowerCase()) || privateKey.equals(wallet.getWif())) {
                             ToastUtil.displayShortToast(getString(R.string.this_wallet_is_exist));
                             return;
                         }
                     }
+
+                    showProgressDialog();
 
                     new Thread(new Runnable() {
                         @Override
@@ -175,6 +203,16 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                         break;
                                     }
                                 }
+                                List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+                                if (wallets2 != null && wallets2.size() != 0) {
+                                    for (int i = 0; i < wallets2.size(); i++) {
+                                        if (wallets2.get(i).getIsCurrent()) {
+                                            wallets2.get(i).setIsCurrent(false);
+                                            AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallets2.get(i));
+                                            break;
+                                        }
+                                    }
+                                }
                                 neoutils.Wallet wallet = Account.INSTANCE.getWallet();
                                 Wallet walletWinq = new Wallet();
                                 walletWinq.setAddress(wallet.getAddress());
@@ -185,15 +223,14 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                     walletWinq.setName("NEO-Wallet " + (wallets.size() + 1));
                                 }
                                 walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
+                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()));
                                 walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
                                 walletWinq.setIsCurrent(true);
                                 AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO");
-                                        EventBus.getDefault().post(new ChangeWallet());
+                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO", walletWinq.getPublicKey());
                                     }
                                 });
                             } else {

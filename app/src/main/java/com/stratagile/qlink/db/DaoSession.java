@@ -11,6 +11,7 @@ import org.greenrobot.greendao.internal.DaoConfig;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.TransactionRecord;
@@ -18,6 +19,7 @@ import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.VpnServerRecordDao;
 import com.stratagile.qlink.db.EthWalletDao;
+import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.db.RecordSaveDao;
 import com.stratagile.qlink.db.WalletDao;
 import com.stratagile.qlink.db.TransactionRecordDao;
@@ -34,6 +36,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig vpnEntityDaoConfig;
     private final DaoConfig vpnServerRecordDaoConfig;
     private final DaoConfig ethWalletDaoConfig;
+    private final DaoConfig eosAccountDaoConfig;
     private final DaoConfig recordSaveDaoConfig;
     private final DaoConfig walletDaoConfig;
     private final DaoConfig transactionRecordDaoConfig;
@@ -41,6 +44,7 @@ public class DaoSession extends AbstractDaoSession {
     private final VpnEntityDao vpnEntityDao;
     private final VpnServerRecordDao vpnServerRecordDao;
     private final EthWalletDao ethWalletDao;
+    private final EosAccountDao eosAccountDao;
     private final RecordSaveDao recordSaveDao;
     private final WalletDao walletDao;
     private final TransactionRecordDao transactionRecordDao;
@@ -58,6 +62,9 @@ public class DaoSession extends AbstractDaoSession {
         ethWalletDaoConfig = daoConfigMap.get(EthWalletDao.class).clone();
         ethWalletDaoConfig.initIdentityScope(type);
 
+        eosAccountDaoConfig = daoConfigMap.get(EosAccountDao.class).clone();
+        eosAccountDaoConfig.initIdentityScope(type);
+
         recordSaveDaoConfig = daoConfigMap.get(RecordSaveDao.class).clone();
         recordSaveDaoConfig.initIdentityScope(type);
 
@@ -70,6 +77,7 @@ public class DaoSession extends AbstractDaoSession {
         vpnEntityDao = new VpnEntityDao(vpnEntityDaoConfig, this);
         vpnServerRecordDao = new VpnServerRecordDao(vpnServerRecordDaoConfig, this);
         ethWalletDao = new EthWalletDao(ethWalletDaoConfig, this);
+        eosAccountDao = new EosAccountDao(eosAccountDaoConfig, this);
         recordSaveDao = new RecordSaveDao(recordSaveDaoConfig, this);
         walletDao = new WalletDao(walletDaoConfig, this);
         transactionRecordDao = new TransactionRecordDao(transactionRecordDaoConfig, this);
@@ -77,6 +85,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(VpnEntity.class, vpnEntityDao);
         registerDao(VpnServerRecord.class, vpnServerRecordDao);
         registerDao(EthWallet.class, ethWalletDao);
+        registerDao(EosAccount.class, eosAccountDao);
         registerDao(RecordSave.class, recordSaveDao);
         registerDao(Wallet.class, walletDao);
         registerDao(TransactionRecord.class, transactionRecordDao);
@@ -86,6 +95,7 @@ public class DaoSession extends AbstractDaoSession {
         vpnEntityDaoConfig.clearIdentityScope();
         vpnServerRecordDaoConfig.clearIdentityScope();
         ethWalletDaoConfig.clearIdentityScope();
+        eosAccountDaoConfig.clearIdentityScope();
         recordSaveDaoConfig.clearIdentityScope();
         walletDaoConfig.clearIdentityScope();
         transactionRecordDaoConfig.clearIdentityScope();
@@ -101,6 +111,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public EthWalletDao getEthWalletDao() {
         return ethWalletDao;
+    }
+
+    public EosAccountDao getEosAccountDao() {
+        return eosAccountDao;
     }
 
     public RecordSaveDao getRecordSaveDao() {

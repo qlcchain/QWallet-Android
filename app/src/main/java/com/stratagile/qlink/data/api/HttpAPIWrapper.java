@@ -15,6 +15,11 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EosAccountInfo;
+import com.stratagile.qlink.entity.EosAccountTransaction;
+import com.stratagile.qlink.entity.EosKeyAccount;
+import com.stratagile.qlink.entity.EosResource;
+import com.stratagile.qlink.entity.EosTokens;
 import com.stratagile.qlink.entity.EthWalletDetail;
 import com.stratagile.qlink.entity.EthWalletInfo;
 import com.stratagile.qlink.entity.EthWalletTransaction;
@@ -24,6 +29,7 @@ import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.KLine;
+import com.stratagile.qlink.entity.LocalTokenBean;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
@@ -45,6 +51,8 @@ import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
+import com.stratagile.qlink.entity.eos.EosNeedInfo;
+import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -54,9 +62,11 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -574,6 +584,42 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
+
+    public Observable<EosAccountInfo> getEosAccountInfo(Map map) {
+        return wrapper(mHttpAPI.getEosAccountInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+    public Observable<EosTokens> getEosTokenList(Map map) {
+        return wrapper(mHttpAPI.getEosTokenList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<EosResource> getEosTResource(Map map) {
+        return wrapper(mHttpAPI.getEosTResource(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+    public Observable<EosAccountTransaction> getEosAccountTransaction(Map map) {
+        return wrapper(mHttpAPI.getEosAccountTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<LocalTokenBean> getBinaTokens(Map map) {
+        return wrapper(mHttpAPI.getBinaTokens(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<BaseBack> createEosAccount(Map map) {
+        return wrapper(mHttpAPI.createEosAccount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<EosNeedInfo> getEosNeedInfo(Map map) {
+        return wrapper(mHttpAPI.getEosNeedInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<EosResourcePrice> getEosResourcePrice(Map map) {
+        return wrapper(mHttpAPI.getEosResourcePrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+
+    public Observable<ArrayList<EosKeyAccount>> getKeyAccount(Map map) {
+        return wrapperArrayList(mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -739,21 +785,47 @@ public class HttpAPIWrapper {
                     }
                 });
     }
+
+    private <T extends ArrayList> Observable<T> wrapperArrayList(Observable<T> resourceObservable) {
+        return resourceObservable
+                .flatMap(new Function<T, ObservableSource<? extends T>>() {
+                    @Override
+                    public ObservableSource<? extends T> apply(@NonNull T baseResponse) throws Exception {
+                        return Observable.create(
+                                new ObservableOnSubscribe<T>() {
+                                    @Override
+                                    public void subscribe(@NonNull ObservableEmitter<T> e) throws Exception {
+                                        if (baseResponse == null) {
+
+                                        } else {
+                                            e.onNext(baseResponse);
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable e) throws Exception {
+                        e.printStackTrace();
+                    }
+                });
+    }
     //需要额外的添加其他的参数进去，所以把原有的参数和额外的参数通过这个方法一起添加进去.
-    public static RequestBody addParams(Map<String, String> data) {
+    private static RequestBody addParams(Map<String, String> data) {
         Map<String, Object> map = new HashMap<>();
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
-            map.put("timestamp", Calendar.getInstance().getTimeInMillis() + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject)JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }
-        KLog.i("传的参数为:" + map);
+//        KLog.i("传的参数为:" + map);
         MediaType textType = MediaType.parse("text/plain");
         String bodyStr = JSONObject.toJSON(map).toString();
         KLog.i("加密前的:" + bodyStr);

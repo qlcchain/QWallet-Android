@@ -3,6 +3,7 @@ package com.stratagile.qlink.data
 import android.util.Log
 import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
+import com.socks.library.KLog
 import com.stratagile.qlink.*
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
@@ -123,9 +124,12 @@ class NeoNodeRPC {
 
     }
 
+    fun signStr(message: String) : String{
+        return Neoutils.bytesToHex(Neoutils.sign(message.hexStringToByteArray(), Account?.getWallet()?.privateKey?.toHex()))
+    }
+
     data class SendAssetReturn(val totalAmount: Double?, val payload: ByteArray?, val error: Error?)
     data class TransactionAttritbute(val messaeg: String?)
-
     private fun getInputsNecessaryToSendAsset(asset: Asset, amount: Double, assets: Assets): SendAssetReturn {
         var sortedUnspents: List<Unspent>
         var neededForTransaction: MutableList<Unspent> = arrayListOf()

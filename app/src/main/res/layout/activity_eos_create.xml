@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x23"
+            android:background="@color/color_f9f9f9"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Account name"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/etEosAccountName"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x5"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXWZabcdefghijklmnopqrstuvwxwz12345"
+            android:maxLength="12"
+            android:inputType="textEmailAddress"
+            android:layout_marginRight="@dimen/x45"
+            android:background="@null"
+            android:hint="A-z and 1-5 combination of 12-bit characters"
+            android:textSize="15sp"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x45"
+            android:background="@color/color_29282a_40"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="owner Key"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/etOwnerKey"
+            android:textColor="@color/color_29282a"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x5"
+            android:layout_marginRight="@dimen/x45"
+            android:textSize="15sp"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x45"
+            android:background="@color/color_29282a_40"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="active Key"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/etActiveKey"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginTop="@dimen/x5"
+            android:textColor="@color/color_29282a"
+            android:layout_marginRight="@dimen/x45"
+            android:textSize="15sp"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x45"
+            android:background="@color/color_29282a_40"/>
+        <LinearLayout
+            android:id="@+id/ll_controllerQrCode"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x30"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginRight="@dimen/x45"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="0px"
+                android:layout_height="@dimen/x1"
+                android:background="@color/color_29282a_40"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvControllerQrcode"
+                android:layout_width="wrap_content"
+                android:text="Open QR code"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="@dimen/x1"
+                android:layout_marginLeft="@dimen/x10"
+                android:background="@color/color_29282a_40"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/ivQRCode"
+            android:layout_width="@dimen/x275"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/x27"
+            android:layout_height="@dimen/x275" />
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x38"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginRight="@dimen/x45"
+            android:background="@drawable/main_color_bt_bg"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="Register EOS Account"
+            android:layout_height="@dimen/x94" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/x10"
+                android:layout_height="@dimen/x10"
+                android:layout_marginLeft="@dimen/x18"
+                android:src="@drawable/dot" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x17"
+                android:includeFontPadding="false"
+                android:text="ETH payment, self-registration"
+                android:textColor="@color/color_29282a" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginRight="@dimen/x45"
+            android:text="Input the desired EOS account name and make payment in ETH to complete the registration."
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x35"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/x10"
+                android:layout_height="@dimen/x10"
+                android:layout_marginLeft="@dimen/x18"
+                android:src="@drawable/dot" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x17"
+                android:includeFontPadding="false"
+                android:text="Share the QR Code with a friend to help with registration "
+                android:textColor="@color/color_29282a" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_marginRight="@dimen/x45"
+            android:text="1. Input a desired EOS account name and share the QR Code with a friend. \n2. Your friend uses WinQ to scan and pay with EOS."
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

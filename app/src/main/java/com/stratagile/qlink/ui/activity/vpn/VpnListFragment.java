@@ -39,6 +39,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -62,7 +63,6 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ContinentAndCountry;
-import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
@@ -223,6 +223,19 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                     }
                     if (vpnListAdapter.getItem(position).getP2pId().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")) || (vpnListAdapter.getItem(position).getP2pIdPc() != null && vpnListAdapter.getItem(position).getP2pIdPc().equals(SpUtil.getString(getActivity(), ConstantValue.P2PID, "")))) {
                         //自己注册的vpn资产
+                        if (!SpUtil.getString(getActivity(), ConstantValue.walletPassWord, "").equals("")) {
+                            if (ConstantValue.isShouldShowVertifyPassword) {
+                                Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                                startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                                return;
+                            }
+                        } else {
+                            Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                            return;
+                        }
                         Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
                         KLog.i(vpnListAdapter.getData().get(position).toString());
                         intent.putExtra("flag", "update");
@@ -266,7 +279,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         });
         vpnListAdapter.setOnVpnOpreateListener(new VpnListAdapter.OnVpnOpreateListener() {
             @Override
-            public void onConnect(VpnEntity vpnEntity) {
+            public void onConnect(VpnEntity vpnEntity, SwitchButton switchButton) {
                 //vpn已经连接，需要先断开已经连接的vpn
                 if (VpnStatus.isVPNActive() && vpnListAdapter.getData().get(0).isConnected()) {
                     showChangeVpnDialog(vpnEntity);
@@ -278,6 +291,21 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
                 } else {
                     if (Account.INSTANCE.getWallet() == null) {
                         ToastUtil.displayShortToast("please create a neo wallet first");
+                        return;
+                    }
+                    if (!SpUtil.getString(getActivity(), ConstantValue.walletPassWord, "").equals("")) {
+                        if (ConstantValue.isShouldShowVertifyPassword) {
+                            Intent intent = new Intent(getActivity(), VerifyWalletPasswordActivity.class);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                            switchButton.setEnabled(true);
+                            return;
+                        }
+                    } else {
+                        Intent intent = new Intent(getActivity(), CreateWalletPasswordActivity.class);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                        switchButton.setEnabled(true);
                         return;
                     }
                 }
@@ -384,6 +412,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
         Window window = dialog.getWindow();
+        dialog.setCancelable(false);
         window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -443,6 +472,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         tvContent.setText(getString(R.string.Do_you_want_to_disconnect));
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -484,6 +514,7 @@ public class VpnListFragment extends MyBaseFragment implements VpnListContract.V
         //取消或确定按钮监听事件处l
         AlertDialog dialog = builder.create();
         Window window = dialog.getWindow();
+        dialog.setCancelable(false);
         window.setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
