@@ -56,6 +56,7 @@ import java.util.*
  */
 
 class ShadowVpnActivity : BaseActivity(), ShadowsocksConnection.Interface, OnPreferenceDataStoreChangeListener {
+
     companion object {
         private const val TAG = "ShadowsocksMainActivity"
         private const val REQUEST_CONNECT = 1

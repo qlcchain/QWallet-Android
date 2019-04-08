@@ -364,6 +364,7 @@ public class FileChooseActivity extends BaseActivity implements FileChooseContra
         showDirectory(null, OPERATION_BACK_PRESSED);
     }
 
+
     @NonNull
     private FileInfo getTabTag(TabLayout.Tab tab) {
         FileInfo tabTag = (FileInfo) tab.getTag();

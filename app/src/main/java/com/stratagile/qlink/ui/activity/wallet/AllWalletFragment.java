@@ -349,13 +349,13 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     }
 
     private String setGasValue(ClaimData.DataBean dataBean) {
-        BigDecimal bigDecimal = new BigDecimal(0.00000007);
-        int value = 0;
+        BigDecimal bigDecimal = new BigDecimal(0.00000000);
+//        int value = 0;
         for (ClaimData.DataBean.ClaimsBean claimsBean : dataBean.getClaims()) {
-//            bigDecimal.add(BigDecimal.valueOf(new Double(claimsBean.getClaim())));
-            value += claimsBean.getValue() * (Integer.parseInt(claimsBean.getEnd()) - Integer.parseInt(claimsBean.getStart()));
+            bigDecimal = bigDecimal.add(BigDecimal.valueOf(Double.valueOf(claimsBean.getClaim())));
+//            value += claimsBean.getValue() * (Integer.parseInt(claimsBean.getEnd()) - Integer.parseInt(claimsBean.getStart()));
         }
-        bigDecimal = bigDecimal.multiply(BigDecimal.valueOf(value)).setScale(8, ROUND_HALF_UP);
+        bigDecimal = bigDecimal.setScale(8, ROUND_HALF_UP);
         KLog.i(bigDecimal.toPlainString());
         return bigDecimal.toPlainString();
     }

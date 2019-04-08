@@ -122,7 +122,8 @@ public class FileUtil {
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
             fis.close();
-            p2pIdJson = EncodingUtils.getString(buffer, "UTF-8");
+//            String res = new String(buffer);
+            p2pIdJson = new String(buffer);
         } catch (IOException  e) {
             e.printStackTrace();
         } finally {
@@ -248,7 +249,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -399,7 +401,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -432,7 +435,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -507,7 +511,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();

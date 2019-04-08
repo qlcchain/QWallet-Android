@@ -3,6 +3,7 @@ package com.stratagile.qlink.ui.activity.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
@@ -38,6 +39,7 @@ import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.core.VpnStatus;
@@ -534,7 +536,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
      * 设置为vpn界面
      */
     private void setVpnPage() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
         }
         viewPager.setCurrentItem(0, false);
@@ -573,7 +575,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private void setMarketPage() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
         }
         tvTitle.setVisibility(View.VISIBLE);
@@ -613,7 +615,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                     bottomNavigation.setSelectedItemId(R.id.item_sms);
                 } else {
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
                     }
                     viewPager.setCurrentItem(1, false);
@@ -648,7 +650,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                     bottomNavigation.setSelectedItemId(R.id.item_sms);
                 } else {
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
                     }
                     viewPager.setCurrentItem(1, false);
@@ -684,7 +686,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     long dangqianshijian = 0;
 
     private void setSettingsPage() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
         }
         ivWallet.setVisibility(View.GONE);
@@ -804,14 +806,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     protected void onDestroy() {
         KLog.i("mainactivity关闭");
+        BitUtil.closedWallet();
         Intent intent = new Intent();
         intent.setAction(BroadCastAction.disconnectVpn);
         sendBroadcast(intent);
+        EventBus.getDefault().unregister(this);
+        unregisterReceiver(disconnectVpnSuccessBroadReceiver);
+        ActivityManager activityMgr = (ActivityManager) AppConfig.getInstance()
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        activityMgr.killBackgroundProcesses(AppConfig.getInstance().getPackageName());
         Process.killProcess(Process.myPid());
         System.exit(0);
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-        unregisterReceiver(disconnectVpnSuccessBroadReceiver);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

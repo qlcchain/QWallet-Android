@@ -2,13 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@color/white"
+    android:orientation="vertical"
     android:layout_gravity="center"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/test"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:text="signNeo"
+        android:text="signBtc"
+        android:layout_marginTop="@dimen/x200"
+        android:gravity="center"
+        android:background="@color/mainColor"
+        android:layout_width="@dimen/x200"
+        android:layout_height="@dimen/x80" />
+    <TextView
+        android:id="@+id/getBtc"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/x200"
+        android:textColor="@color/white"
+        android:text="getBtc"
+        android:gravity="center"
+        android:background="@color/mainColor"
+        android:layout_width="@dimen/x200"
+        android:layout_height="@dimen/x80" />
+
+    <TextView
+        android:id="@+id/transferBtc"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:text="transferBtc"
+        android:layout_marginTop="@dimen/x200"
+        android:gravity="center"
+        android:background="@color/mainColor"
+        android:layout_width="@dimen/x200"
+        android:layout_height="@dimen/x80" />
+
+    <TextView
+        android:id="@+id/importBtc"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:text="importBtc"
+        android:layout_marginTop="@dimen/x200"
         android:gravity="center"
         android:background="@color/mainColor"
         android:layout_width="@dimen/x200"

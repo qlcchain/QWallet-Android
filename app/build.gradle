@@ -40,9 +40,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 68
+        versionCode 70
         multiDexEnabled true
-        versionName "1.3.05 release"
+        versionName "2.0.1 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -116,7 +116,7 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
     greendao {
-        schemaVersion 57//数据库版本号
+        schemaVersion 59//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -293,6 +293,8 @@ dependencies {
     implementation 'com.github.consenlabs:token-core-android:v0.1'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
+//    implementation 'com.qmuiteam:qmui:1.2.0'
+//    implementation 'com.qmuiteam:arch:0.3.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

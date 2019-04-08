@@ -1,5 +1,7 @@
 package com.stratagile.qlink.ui.activity.wallet.presenter;
 import android.support.annotation.NonNull;
+import android.util.Base64;
+import android.util.Log;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
@@ -16,6 +18,10 @@ import com.stratagile.qlink.ui.activity.wallet.contract.ImportWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.ImportWalletActivity;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
+
+import org.bitcoinj.core.DumpedPrivateKey;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.Sha256Hash;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -125,4 +131,5 @@ public class ImportWalletPresenter implements ImportWalletContract.ImportWalletC
                 });
         mCompositeDisposable.add(disposable);
     }
+
 }

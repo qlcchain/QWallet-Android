@@ -31,11 +31,11 @@ import android.util.DisplayMetrics;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.FacebookSdk;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
+import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.core.OpenVPNService;
 import com.stratagile.qlink.core.PRNGFixes;
@@ -68,6 +68,8 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxDataTool;
 import com.vondear.rxtools.RxTool;
 
+import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.params.TestNet3Params;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -102,6 +104,8 @@ public class AppConfig extends MultiDexApplication {
     public Application deviceStorage;
 //    public FirebaseRemoteConfig remoteConfig;
     public Handler handler;
+
+    public WalletAppKit walletAppKit;
 
     public Profile getCurrentProfile() {
 //        DataStore.INSTANCE.setProfileId(2);
@@ -193,6 +197,11 @@ public class AppConfig extends MultiDexApplication {
         mStatus = new StatusListener();
         mStatus.init(getApplicationContext());
         updateNotificationChannels();
+        //初始化btc钱包
+        org.bitcoinj.core.Context.enableStrictMode();
+        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
+        KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
+        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
     }
 
@@ -207,6 +216,7 @@ public class AppConfig extends MultiDexApplication {
             nm.deleteNotificationChannel("service-nat");
         }
     }
+
 
     private void initMoney() {
         ArrayList<CurrencyBean> currencyBeans = new ArrayList<>();

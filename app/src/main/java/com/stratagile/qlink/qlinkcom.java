@@ -92,6 +92,10 @@ public class qlinkcom {
                 if (!backupFile.exists()) {
                     backupFile.mkdir();
                 }
+                File btcFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/btc", "");
+                if (!btcFile.exists()) {
+                    btcFile.mkdir();
+                }
                 String path = dataFile.getPath() + "/";
                 try {
                     if (qlinkcom.GetP2PConnectionStatus() <= 0) {
