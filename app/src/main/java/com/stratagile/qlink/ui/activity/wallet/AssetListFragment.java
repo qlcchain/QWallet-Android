@@ -23,7 +23,6 @@ import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.WalletDao;
 import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.ui.activity.base.MyBaseFragment;
-import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAssetListComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AssetListContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AssetListModule;
@@ -107,12 +106,6 @@ public class AssetListFragment extends MyBaseFragment implements AssetListContra
                     case R.id.setWifi:
                         if (assetListAdapter.getItem(position).getType() == 0) {
                         } else if (assetListAdapter.getItem(position).getType() == 1) {
-                            Intent intent = new Intent(getActivity(), RegisteVpnActivity.class);
-                            KLog.i(assetListAdapter.getItem(position).getVpnEntity().toString());
-                            intent.putExtra("flag", "update");
-                            intent.putExtra("vpnentity", assetListAdapter.getItem(position).getVpnEntity());
-                            startActivityForResult(intent, 0);
-                            getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                         }
                         break;
                     default:

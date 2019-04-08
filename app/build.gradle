@@ -12,7 +12,7 @@ checkstyle {
     showViolations true
 }
 
-def openvpn3SwigFiles = new File(buildDir, "generated/source/ovpn3swig/ovpn3")
+//def openvpn3SwigFiles = new File(buildDir, "generated/source/ovpn3swig/ovpn3")
 
 //def getCurrentFlavor() {
 //    String task = getGradle().getStartParameter().getTaskRequests().toString()
@@ -23,16 +23,16 @@ def openvpn3SwigFiles = new File(buildDir, "generated/source/ovpn3swig/ovpn3")
 //    }
 //}
 
-task("generateOpenVPN3Swig", type: Exec) {
-    doFirst {
-        mkdir openvpn3SwigFiles
-    }
-    commandLine "swig", "-outdir", openvpn3SwigFiles, "-outcurrentdir", "-c++", "-java", "-package", "net.qlink.ovpn3",
-            "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
-            "-o", "${openvpn3SwigFiles}/ovpncli_wrap.cxx", "-oh", "${openvpn3SwigFiles}/ovpncli_wrap.h",
-            "src/main/cpp/openvpn3/javacli/ovpncli.i"
-
-}
+//task("generateOpenVPN3Swig", type: Exec) {
+//    doFirst {
+//        mkdir openvpn3SwigFiles
+//    }
+//    commandLine "swig", "-outdir", openvpn3SwigFiles, "-outcurrentdir", "-c++", "-java", "-package", "net.qlink.ovpn3",
+//            "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
+//            "-o", "${openvpn3SwigFiles}/ovpncli_wrap.cxx", "-oh", "${openvpn3SwigFiles}/ovpncli_wrap.h",
+//            "src/main/cpp/openvpn3/javacli/ovpncli.i"
+//
+//}
 
 android {
     compileSdkVersion 27
@@ -45,12 +45,12 @@ android {
         versionName "2.0.1 release"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        externalNativeBuild {
-            cmake {
-                arguments '-DANDROID_TOOLCHAIN=clang',
-                        '-DANDROID_STL=c++_static'
-            }
-        }
+//        externalNativeBuild {
+//            cmake {
+//                arguments '-DANDROID_TOOLCHAIN=clang',
+//                        '-DANDROID_STL=c++_static'
+//            }
+//        }
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
         }
@@ -88,15 +88,15 @@ android {
     configurations {
         all*.exclude group: 'com.android.support', module: 'support-v13'
     }
-    externalNativeBuild {
-        cmake {
-            path "src/main/cpp/CMakeLists.txt"
-        }
-    }
+//    externalNativeBuild {
+//        cmake {
+//            path "src/main/cpp/CMakeLists.txt"
+//        }
+//    }
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
-            assets.srcDirs = ['src/main/assets', 'build/ovpnassets']
+//            assets.srcDirs = ['src/main/assets', 'build/ovpnassets']
         }
 //        normal {
 //            java.srcDirs = ["src/ovpn3/java/", openvpn3SwigFiles]

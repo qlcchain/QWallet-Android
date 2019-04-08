@@ -24,7 +24,6 @@ import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
-import com.stratagile.qlink.core.VpnStatus;
 
 /**
  * A very simple content provider that can serve arbitrary asset files from
@@ -58,7 +57,6 @@ implements PipeDataWriter<InputStream> {
 			c.addRow(row);
 			return c;
 		} catch (FileNotFoundException e) {
-            VpnStatus.logException(e);
             return null;
 		}
 

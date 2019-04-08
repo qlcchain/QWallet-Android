@@ -42,7 +42,6 @@ import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.core.VpnStatus;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
@@ -76,14 +75,12 @@ import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.P2PCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.ui.activity.finance.FinanceFragment;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
-import com.stratagile.qlink.ui.activity.market.AddTokenActivity;
-import com.stratagile.qlink.ui.activity.shadowsock.ShadowVpnActivity;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
-import com.stratagile.qlink.ui.activity.vpn.RankActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
@@ -365,7 +362,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
-                    return new SmsFragment();
+                    return new FinanceFragment();
                 } else if (position == 1) {
                     return new AllWalletFragment();
                 } else if (position == 2) {
@@ -767,14 +764,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             downCHeckView.close();
             return;
         }
-        if (VpnStatus.isVPNActive()) {
-            moveTaskToBack(true);
+        if (DoubleClickHelper.isDoubleClick()) {
+            finish();
         } else {
-            if (DoubleClickHelper.isDoubleClick()) {
-                finish();
-            } else {
-                ToastUtil.displayShortToast("Double click to exit app");
-            }
+            ToastUtil.displayShortToast("Double click to exit app");
         }
     }
 
@@ -981,13 +974,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             case R.id.tv_title:
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
                     startActivity(new Intent(this, LogActivity.class));
-                } else if (bottomNavigation.getSelectedItemId() == R.id.item_settings) {
-                    startActivity(new Intent(this, ShadowVpnActivity.class));
-//                    clearGuide();
                 }
-//                else if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
-//                    startActivity(new Intent(this, LogActivity.class));
-//                }
                 break;
             case R.id.view_wallet:
                 bottomNavigation.setSelectedItemId(R.id.item_settings);
@@ -1027,7 +1014,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 startActivity(new Intent(this, FreeConnectActivity.class));
                 break;
             case R.id.rl_rank:
-                startActivity(new Intent(this, RankActivity.class));
                 break;
             default:
                 break;

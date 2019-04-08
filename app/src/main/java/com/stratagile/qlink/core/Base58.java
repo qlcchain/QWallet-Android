@@ -5,6 +5,8 @@ package com.stratagile.qlink.core;
  * A modified version of https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/Base58.java
  */
 
+import org.bitcoinj.core.Sha256Hash;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 
