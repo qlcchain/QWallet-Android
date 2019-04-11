@@ -123,18 +123,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.main.WebViewActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.vpn.RegisteVpnActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.vpn.RegisteWindowVpnActivityActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.vpn.ConnectVpnActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.vpn.RegisterVpnSuccessActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.vpn.ConnectVpnSuccessActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.eth.EthWalletActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.eth.BnbToQlcActivity"
@@ -155,165 +143,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
-        <activity
-            android:name="com.stratagile.qlink.activities.VPNPreferences"
-            android:exported="false"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="com.stratagile.qlink.activities.DisconnectVPN"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:taskAffinity=".DisconnectVPN"
-            android:theme="@style/blinkt.dialog" />
-        <activity
-            android:name="com.stratagile.qlink.activities.LogWindow"
-            android:allowTaskReparenting="true"
-            android:label="@string/openvpn_log"
-            android:launchMode="singleTask" />
-        <activity android:name="com.stratagile.qlink.activities.FileSelect" />
-        <service
-            android:name="com.stratagile.qlink.core.OpenVPNService"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:process=":qlink">
-            <intent-filter>
-                <action android:name="android.net.VpnService" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="com.stratagile.qlink.api.ExternalOpenVPNService"
-            android:process=":qlink"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="com.stratagile.qlink.api.IOpenVPNAPIService" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="com.stratagile.qlink.core.OpenVPNStatusService"
-            android:exported="false"
-            android:process=":qlink" />
-        <service
-            android:name="com.stratagile.qlink.OpenVPNTileService"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/qs_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:value="true">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.service.quicksettings.ACTIVE_TILE"
-                android:value="false" />
-        </service>
-
-        <activity android:name="com.stratagile.qlink.api.GrantPermissionsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.stratagile.qlink.api.ConfirmDialog">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <receiver android:name="com.stratagile.qlink.OnBootReceiver">
-            <intent-filter android:priority="999">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-        <activity
-            android:name="com.stratagile.qlink.activities.ConfigConverter"
-            android:excludeFromRecents="true"
-            android:label="Convert Config File"
-            android:taskAffinity=".ConfigConverter"
-            android:uiOptions="splitActionBarWhenNarrow"
-            tools:ignore="ExportedActivity">
-            <intent-filter
-                android:label="@string/import_config"
-                tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:mimeType="application/x-openvpn-profile" />
-            </intent-filter>
-            <intent-filter
-                android:label="@string/import_config"
-                tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:mimeType="application/ovpn" />
-            </intent-filter>
-            <intent-filter android:label="@string/import_config">
-
-                <!-- http://stackoverflow.com/questions/7f030832/associating-certain-file-extension-to-my-android-application/7102838#7102838 -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="*/*" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:host="*" />
-                <data android:pathPattern=".*..*..*..*..*.ovpn" />
-                <data android:pathPattern=".*..*..*..*.ovpn" />
-                <data android:pathPattern=".*..*..*.ovpn" />
-                <data android:pathPattern=".*..*.ovpn" />
-                <data android:pathPattern=".*.ovpn" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.stratagile.qlink.LaunchVPN"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:label="@string/vpn_launch_title"
-            android:taskAffinity=".LaunchVPN"
-            android:theme="@style/blinkt.dialog"
-            tools:ignore="ExportedActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".api.Intents"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:label="@string/vpn_launch_title"
-            android:taskAffinity=".LaunchVPN"
-            android:theme="@style/blinkt.dialog"
-            tools:ignore="ExportedActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.stratagile.qlink.activities.CreateShortcuts"
-            android:excludeFromRecents="true"
-            android:label="@string/vpn_shortcut"
-            android:taskAffinity=".CreateShortcuts"
-            android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name="service.eth.WalletGenService"
-            android:exported="false" />
 
         <provider
             android:name="com.stratagile.qlink.FileProvider"
@@ -322,48 +151,13 @@
             android:grantUriPermissions="true"
             tools:ignore="ExportedContentProvider" />
 
-        <!--
-        <receiver android:name="core.GetRestrictionReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.GET_RESTRICTION_ENTRIES" />
-            </intent-filter>
-        </receiver>
-        -->
-        <activity
-            android:name="com.stratagile.qlink.activities.OpenSSLSpeed"
-            android:label="@string/title_activity_open_sslspeed"
-            android:parentActivityName="com.stratagile.qlink.activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.stratagile.qlink.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name="com.stratagile.qlink.api.RemoteAction"
-            />
         <activity android:name=".ui.activity.file.FileChooseActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.setting.SettingsActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.setting.SelectLanguageActivityActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.vpn.RankActivity" />
         <activity android:name=".ui.activity.rank.RuleActivity" />
-        <activity android:name=".ui.activity.shadowsock.ShadowVpnActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="ss"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="ss" />
-            </intent-filter>
-        </activity>
         <activity android:name=".ui.activity.wallet.SelectWalletTypeActivity" />
         <activity android:name=".ui.activity.eth.EthWalletCreatedActivity" />
         <activity android:name=".ui.activity.eth.EthMnemonicbackupActivity" />
@@ -378,7 +172,6 @@
         <activity android:name=".ui.activity.wallet.ChooseWalletActivity" />
         <activity android:name=".ui.activity.wallet.ExportEthKeyStoreActivity" />
         <activity android:name=".ui.activity.wallet.NeoTransferActivity" />
-        <activity android:name=".ui.activity.vpn.MyAssetsActivity" />
         <activity android:name=".ui.activity.wallet.ChangePasswordActivity" />
         <activity android:name=".ui.activity.eos.EosImportActivity" />
         <activity android:name=".ui.activity.eos.EosTransferActivity" />
@@ -393,11 +186,12 @@
         <activity android:name=".ui.activity.eos.EosCreateActivity" />
         <activity android:name=".ui.activity.eos.EosActivationActivity" />
         <activity android:name=".ui.activity.main.TestActivity" />
+        <activity android:name=".ui.activity.my.AccountActivity" />
+        <activity android:name=".ui.activity.my.RetrievePasswordActivity" />
+        <activity android:name=".ui.activity.my.SelectCountryActivity" />
+        <activity android:name=".ui.activity.finance.ProductDetailActivity" />
+        <activity android:name=".ui.activity.finance.MyProductActivity" />
 
-        <activity-alias
-            android:exported="true"
-            android:name=".api.DisconnectVPN"
-            android:targetActivity="com.stratagile.qlink.api.RemoteAction" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -455,56 +249,6 @@
         </receiver>
 
 
-        <!--shadowsorcks-->
-
-        <service
-            android:name=".shadowsocks.bg.VpnService"
-            android:directBootAware="true"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.net.VpnService"/>
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".shadowsocks.bg.TransproxyService"
-            android:directBootAware="true"
-            android:exported="false">
-        </service>
-
-        <service
-            android:name=".shadowsocks.bg.ProxyService"
-            android:directBootAware="true"
-            android:exported="false">
-        </service>
-
-        <service android:name=".shadowsocks.bg.TileService" android:label="@string/quick_toggle"
-            android:directBootAware="true"
-            android:icon="@drawable/ic_service_active"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <receiver android:name=".shadowsocks.BootReceiver"
-            android:directBootAware="true"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".shadowsocks.tasker.ActionListener"
-            android:directBootAware="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

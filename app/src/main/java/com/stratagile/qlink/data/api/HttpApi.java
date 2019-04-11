@@ -1,6 +1,7 @@
 package com.stratagile.qlink.data.api;
 
 
+import com.github.mikephil.charting.data.BaseEntry;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
@@ -49,6 +50,9 @@ import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.newwinq.Product;
+import com.stratagile.qlink.entity.newwinq.ProductDetail;
+import com.stratagile.qlink.entity.newwinq.Register;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +77,7 @@ import static com.stratagile.qlink.data.api.API.get_eth_wallet_info;
 import static com.stratagile.qlink.data.api.API.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
+import static com.stratagile.qlink.data.api.API.ulr_user_sign_up;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
@@ -84,6 +89,9 @@ import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
 import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
+import static com.stratagile.qlink.data.api.API.url_financial_product_info;
+import static com.stratagile.qlink.data.api.API.url_financial_product_list;
+import static com.stratagile.qlink.data.api.API.url_financial_product_order;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
 import static com.stratagile.qlink.data.api.API.url_get_account_resource;
 import static com.stratagile.qlink.data.api.API.url_get_server_time;
@@ -98,6 +106,8 @@ import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
+import static com.stratagile.qlink.data.api.API.url_user_sign_in;
+import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.API.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.API.url_zs_free_num;
 import static com.stratagile.qlink.data.api.API.user_update_avatar;
@@ -377,6 +387,30 @@ public interface HttpApi {
     @GET(url_key_account)
     Observable<ArrayList<EosKeyAccount>> getKeyAccount(@Path("public_key") String address);
 
+
+    @POST(url_vcode_signup_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getSignUpVcode(@Body RequestBody map);
+
+    @POST(ulr_user_sign_up)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Register> userRegister(@Body RequestBody map);
+
+    @POST(url_user_sign_in)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Register> userLogin(@Body RequestBody map);
+
+    @POST(url_financial_product_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Product> getProductList(@Body RequestBody map);
+
+    @POST(url_financial_product_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ProductDetail> getProductDetail(@Body RequestBody map);
+
+    @POST(url_financial_product_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> buyQLCProduct(@Body RequestBody map);
 
     /*************************************************/
 }

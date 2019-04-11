@@ -31,14 +31,6 @@
             android:src="@mipmap/img_connected_head_portrait"
             android:layout_height="@dimen/x50" />
 
-        <ImageView
-            android:id="@+id/my_status"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20"
-            android:layout_marginTop="-8dp"
-            android:layout_below="@id/iv_avater"
-            android:layout_alignRight="@+id/iv_avater"
-            android:src="@mipmap/icon_search_red" />
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
@@ -64,7 +56,7 @@
 
         <RelativeLayout
             android:id="@+id/rlWallet"
-            android:layout_width="@dimen/x96"
+            android:layout_width="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content">
@@ -80,12 +72,11 @@
             <TextView
                 android:id="@+id/tv_free"
                 android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textSize="9sp"
-                android:fontFamily="@font/vagroundedbt"
+                android:layout_centerVertical="true"
+                android:textSize="13sp"
+                android:text="My Portfolio"
+                android:layout_marginRight="@dimen/x30"
                 android:textColor="@color/white"
-                android:layout_alignBottom="@id/iv_wallet"
-                android:layout_marginBottom="@dimen/x15"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
 
@@ -146,9 +137,4 @@
                 android:layout_weight="1"/>
         </LinearLayout>
     </RelativeLayout>
-    <com.stratagile.qlink.view.DownCheckView
-        android:layout_below="@+id/status_bar"
-        android:id="@+id/downCHeckView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </RelativeLayout>

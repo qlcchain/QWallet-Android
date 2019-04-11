@@ -1054,5 +1054,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="ETH_CUSTOM_TYPE">m/44\'/60\'/1\'/0/0 Custom Path</string>
 
     <string name="success">success</string>
+    <string name="me">Me</string>
+    <string name="finance">Finance</string>
 
 </resources>

@@ -162,7 +162,7 @@ public class AppConfig extends MultiDexApplication {
         org.bitcoinj.core.Context.enableStrictMode();
         org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
         KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
-        BitUtil.getWalletKit(this);
+//        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
     }
 

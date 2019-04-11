@@ -233,4 +233,10 @@ public class ConstantValue {
     public static final String sendVpnFileNewRsp = "sendVpnFileNewRsp";
 
     public static final String vpnRegisterSuccessNotify = "vpnRegisterSuccessNotify";
+
+    public static final String userPhone = "userPhone";
+    public static final String userPassword = "userPassword";
+    public static final String userEmail = "userEmail";
+    public static final String userRsaPubKey = "userRsaPubKey";
+    public static final String isUserLogin = "isUserLogin";
 }

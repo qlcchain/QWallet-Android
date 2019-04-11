@@ -9,7 +9,6 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.qlinkcom;
 
-import org.apache.http.util.EncodingUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -294,7 +294,7 @@ public class TransactionApi {
                             KLog.i("onSuccesse");
                             KLog.i(baseBack);
                             if (baseBack.getData().isTransferResult()) {
-                                sendCallBack.onSuccess("success");
+                                sendCallBack.onSuccess(tx.getHash().toHexString());
                             } else {
                                 sendCallBack.onSuccess("error");
                             }
@@ -316,6 +316,18 @@ public class TransactionApi {
 //                            disposable.dispose();
                         }
                     });
+        });
+    }
+
+    public void buyQLCProduct(Assets assets, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
+        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
+        KLog.i("neo钱包为：" + wallet.toString());
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+            KLog.i("开始调用sendRow");
+            KLog.i(isSuccess);
+            Transaction tx = getTxid(isSuccess);
+            KLog.i(tx.getHash());
+            sendCallBack.onSuccess(isSuccess);
         });
     }
 

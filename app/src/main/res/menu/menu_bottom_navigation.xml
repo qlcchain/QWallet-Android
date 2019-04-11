@@ -3,7 +3,7 @@
     <item
         android:id="@+id/item_sms"
         android:icon="@mipmap/icon_vpn_n"
-        android:title="@string/vpn" />
+        android:title="@string/finance" />
     <!--<item-->
         <!--android:id="@+id/item_market"-->
         <!--android:visible="false"-->
@@ -16,5 +16,5 @@
     <item
         android:id="@+id/item_settings"
         android:icon="@mipmap/icon_settings_n"
-        android:title="@string/settings" />
+        android:title="@string/me" />
 </menu>

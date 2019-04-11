@@ -7,6 +7,7 @@ import com.stratagile.qlink.Crypto.EncryptedSettingsRepository.setProperty
 import com.stratagile.qlink.Crypto.Encryptor
 import com.stratagile.qlink.R.id.wif
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.view.sidebar.SideBean
 import neoutils.Neoutils.generateFromWIF
 import neoutils.Neoutils.generateFromPrivateKey
 import neoutils.Wallet
@@ -125,5 +126,11 @@ object Account {
 
     fun byteArray2String(byteArray: ByteArray) : String {
         return byteArray.toHex()
+    }
+
+    fun sort(arrayList: List<SideBean>) : List<SideBean>{
+        return arrayList.sortedBy {
+            it.indexTag
+        }
     }
 }

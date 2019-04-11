@@ -221,6 +221,7 @@ dependencies {
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.yanzhenjie:permission:1.1.2'
     implementation files('libs/org.apache.http.legacy.jar')
+//    implementation files('libs/commons-codec-1.9.jar')
     implementation files('libs/json-lib-2.4-jdk15.jar')
     implementation files('libs/wowoviewpager.aar')
     implementation 'com.alibaba:fastjson:1.2.37'
@@ -293,8 +294,11 @@ dependencies {
     implementation 'com.github.consenlabs:token-core-android:v0.1'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
-//    implementation 'com.qmuiteam:qmui:1.2.0'
-//    implementation 'com.qmuiteam:arch:0.3.1'
+    implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
+
+    //    implementation 'com.qmuiteam:qmui:1.2.0'
+
+    //    implementation 'com.qmuiteam:arch:0.3.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

@@ -21,6 +21,7 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x300"
+                android:background="@color/mainColor"
                 app:layout_scrollFlags="scroll|snap">
 
                 <TextView

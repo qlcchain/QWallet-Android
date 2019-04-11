@@ -77,4 +77,13 @@
         <attr name="color_unchecked_stroke" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="MyItemView">
+        <attr name="textmy" format="string"/>
+        <attr name="subtitle" format="string"/>
+        <attr name="textSizemy" format="dimension"/>
+        <attr name="textColormy" format="reference"/>
+        <attr name="showNextmy" format="boolean"/>
+        <attr name="srcmy" format="reference"/>
+    </declare-styleable>
+
 </resources>

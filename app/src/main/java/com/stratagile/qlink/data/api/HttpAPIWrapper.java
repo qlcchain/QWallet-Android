@@ -1,6 +1,7 @@
 package com.stratagile.qlink.data.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.mikephil.charting.data.BaseEntry;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
@@ -53,6 +54,9 @@ import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.newwinq.Product;
+import com.stratagile.qlink.entity.newwinq.ProductDetail;
+import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -620,6 +624,53 @@ public class HttpAPIWrapper {
         return wrapperArrayList(mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
     }
 
+    public Observable<BaseBack> getSignUpVcode(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getSignUpVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getSignUpVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Register> userRegister(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<Register> userLogin(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.userLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.userLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Product> getProductList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<ProductDetail> getProductDetail(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getProductDetail(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getProductDetail(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> buyQLCProduct(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.buyQLCProduct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.buyQLCProduct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -814,7 +865,8 @@ public class HttpAPIWrapper {
     //需要额外的添加其他的参数进去，所以把原有的参数和额外的参数通过这个方法一起添加进去.
     private static RequestBody addParams(Map<String, String> data) {
         Map<String, Object> map = new HashMap<>();
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+        //SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)
+        if (false) {
             map.put("appid", MainConstant.MainAppid);
             map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));

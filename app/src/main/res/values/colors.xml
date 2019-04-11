@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mainColor">#490080</color>
+    <color name="mainColor">#108EE9</color>
     <color name="f6f6f6">#f6f6f6</color>
     <color name="mainColorTwo">#5b4278</color>
     <color name="mainColorThree">#8F74AC</color>
@@ -18,7 +18,7 @@
     <color name="color_45cf80">#45cf80ff</color>
     <color name="color_8F74AC">#8F74AC</color>
     <color name="color_40ffffff">#40ffffff</color>
-    <color name="main_color">#490080</color>
+    <color name="main_color">#108EE9</color>
     <color name="white">#ffffff</color>
     <color name="white40">#4cffffff</color>
     <color name="black">#000</color>
@@ -85,6 +85,9 @@
     <color name="color_ff3669">#FF3669</color>
     <color name="color_eceff1">#ECEFF1</color>
     <color name="color_f9f9f9">#F9F9F9</color>
+    <color name="color_f2f2f2">#f2f2f2</color>
+    <color name="color_b3b3b3">#B3B3B3</color>
+    <color name="color_4b494d">#4B494D</color>
 
 
 </resources>
