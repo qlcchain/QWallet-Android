@@ -191,6 +191,10 @@
         <activity android:name=".ui.activity.my.SelectCountryActivity" />
         <activity android:name=".ui.activity.finance.ProductDetailActivity" />
         <activity android:name=".ui.activity.finance.MyProductActivity" />
+        <activity android:name=".ui.activity.my.PersonActivity" />
+        <activity android:name=".ui.activity.my.LoginActivity" />
+        <activity android:name=".ui.activity.my.RegisgerActivity" />
+        <activity android:name=".ui.activity.finance.InviteActivity" />
 
 
         <meta-data

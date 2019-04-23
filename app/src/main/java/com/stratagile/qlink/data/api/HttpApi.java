@@ -25,6 +25,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
 import com.stratagile.qlink.entity.MainAddress;
@@ -45,11 +46,13 @@ import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
@@ -89,9 +92,11 @@ import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
 import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
+import static com.stratagile.qlink.data.api.API.url_financial_order_list;
 import static com.stratagile.qlink.data.api.API.url_financial_product_info;
 import static com.stratagile.qlink.data.api.API.url_financial_product_list;
 import static com.stratagile.qlink.data.api.API.url_financial_product_order;
+import static com.stratagile.qlink.data.api.API.url_financial_redeem;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
 import static com.stratagile.qlink.data.api.API.url_get_account_resource;
 import static com.stratagile.qlink.data.api.API.url_get_server_time;
@@ -106,7 +111,11 @@ import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
+import static com.stratagile.qlink.data.api.API.url_user_invite;
+import static com.stratagile.qlink.data.api.API.url_user_invite_ranking;
 import static com.stratagile.qlink.data.api.API.url_user_sign_in;
+import static com.stratagile.qlink.data.api.API.url_user_signin_code;
+import static com.stratagile.qlink.data.api.API.url_vcode_sign_in_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.API.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.API.url_zs_free_num;
@@ -392,6 +401,11 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> getSignUpVcode(@Body RequestBody map);
 
+
+    @POST(url_vcode_sign_in_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getSignInVcode(@Body RequestBody map);
+
     @POST(ulr_user_sign_up)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<Register> userRegister(@Body RequestBody map);
@@ -399,6 +413,10 @@ public interface HttpApi {
     @POST(url_user_sign_in)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<Register> userLogin(@Body RequestBody map);
+
+    @POST(url_user_signin_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VcodeLogin> vCodeLogin(@Body RequestBody map);
 
     @POST(url_financial_product_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -411,6 +429,22 @@ public interface HttpApi {
     @POST(url_financial_product_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> buyQLCProduct(@Body RequestBody map);
+
+    @POST(url_financial_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Order> getOrderList(@Body RequestBody map);
+
+    @POST(url_financial_redeem)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Order> redeemOrder(@Body RequestBody map);
+
+    @POST(url_user_invite_ranking)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getRankings(@Body RequestBody map);
+
+    @POST(url_user_invite)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<InviteList> getInivteTop5(@Body RequestBody map);
 
     /*************************************************/
 }

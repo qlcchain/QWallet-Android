@@ -2,7 +2,7 @@ package com.stratagile.qlink.ui.activity.my.component;
 
 import com.stratagile.qlink.application.AppComponent;
 import com.stratagile.qlink.ui.activity.base.ActivityScope;
-import com.stratagile.qlink.ui.activity.my.LoginFragment;
+import com.stratagile.qlink.ui.activity.my.LoginActivity;
 import com.stratagile.qlink.ui.activity.my.module.LoginModule;
 
 import dagger.Component;
@@ -10,11 +10,11 @@ import dagger.Component;
 /**
  * @author hzp
  * @Package com.stratagile.qlink.ui.activity.my
- * @Description: The component for LoginFragment
- * @date 2019/04/09 11:45:22
+ * @Description: The component for LoginActivity
+ * @date 2019/04/23 10:05:31
  */
 @ActivityScope
 @Component(dependencies = AppComponent.class, modules = LoginModule.class)
 public interface LoginComponent {
-    LoginFragment inject(LoginFragment Fragment);
+    LoginActivity inject(LoginActivity Activity);
 }

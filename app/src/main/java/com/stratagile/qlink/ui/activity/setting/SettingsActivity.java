@@ -6,9 +6,8 @@ import android.hardware.fingerprint.FingerprintManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
@@ -16,6 +15,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.MyAsset;
@@ -23,12 +23,7 @@ import com.stratagile.qlink.entity.SettingBean;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.Set2Asset;
-import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.guideview.Guide;
-import com.stratagile.qlink.guideview.GuideBuilder;
-import com.stratagile.qlink.guideview.GuideConstantValue;
-import com.stratagile.qlink.guideview.GuideSpUtil;
-import com.stratagile.qlink.guideview.compnonet.WalletDetailComponent;
 import com.stratagile.qlink.ui.activity.setting.component.DaggerSettingsComponent;
 import com.stratagile.qlink.ui.activity.setting.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.setting.module.SettingsModule;
@@ -39,6 +34,7 @@ import com.stratagile.qlink.ui.activity.wallet.WalletDetailActivity;
 import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 
@@ -67,16 +63,13 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     SettingsPresenter mPresenter;
 
     SettingsAdapter settingsAdapter;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.tv_join_telegram)
-    TextView tvJoinTelegram;
-    @BindView(R.id.tv_share_facebook)
-    TextView tvShareFacebook;
+    @BindView(R.id.llLoginOut)
+    LinearLayout llLoginOut;
     private Guide guide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
     }
 
@@ -91,7 +84,6 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     protected void initData() {
         setTitle(R.string.settings);
         settingsAdapter = new SettingsAdapter(new ArrayList<>());
-        recyclerView.setAdapter(settingsAdapter);
         ArrayList<SettingBean> settingBeanArrayList = new ArrayList<>();
         Wallet wallet = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
         settingBeanArrayList.add(new SettingBean("icon_wallet", getString(R.string.Wallet_Details), wallet.getAddress(), 0));
@@ -135,7 +127,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                     selectLanguage = "English";
                     break;
             }
-        }else{
+        } else {
             switch (selectLanguage) {
                 case "Turkish"://土耳其语
                     selectLanguage = "Türkçe";
@@ -209,42 +201,43 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
             }
         });
 
-        tvJoinTelegram.post(new Runnable() {
-            @Override
-            public void run() {
-                showGuideView();
+        List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+        for (UserAccount userAccount : userAccounts) {
+            if (userAccount.getIsLogin()) {
+                llLoginOut.setVisibility(View.VISIBLE);
             }
-        });
-    }
-
-    private void showGuideView() {
-        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowSettingGuide, false)) {
-            EventBus.getDefault().post(new ShowGuide(3));
-            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowSettingGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(recyclerView.getChildAt(0))
-                    .setAlpha(150)
-                    .setHighTargetCorner(15)
-                    .setHighTargetPadding(0)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(false);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-                }
-
-                @Override
-                public void onDismiss() {
-
-                }
-            });
-
-            builder.addComponent(new WalletDetailComponent());
-            guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(this);
         }
+
     }
+
+//    private void showGuideView() {
+//        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowSettingGuide, false)) {
+//            EventBus.getDefault().post(new ShowGuide(3));
+//            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowSettingGuide, true);
+//            GuideBuilder builder = new GuideBuilder();
+//            builder.setTargetView(recyclerView.getChildAt(0))
+//                    .setAlpha(150)
+//                    .setHighTargetCorner(15)
+//                    .setHighTargetPadding(0)
+//                    .setOverlayTarget(false)
+//                    .setOutsideTouchable(false);
+//            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+//                @Override
+//                public void onShown() {
+//                }
+//
+//                @Override
+//                public void onDismiss() {
+//
+//                }
+//            });
+//
+//            builder.addComponent(new WalletDetailComponent());
+//            guide = builder.createGuide();
+//            guide.setShouldCheckLocInWindow(false);
+//            guide.show(this);
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -366,30 +359,20 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         progressDialog.hide();
     }
 
-    @OnClick({R.id.tv_join_telegram, R.id.tv_share_facebook})
+    @OnClick({R.id.llLoginOut})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_join_telegram:
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                Uri content_url = Uri.parse("https://t.me/winqdapp");
-                intent.setData(content_url);
-                startActivity(intent);
-//                Intent telegram = new Intent(this, WebViewActivity.class);
-//                telegram.putExtra("url", "https://t.me/winqdapp");
-//                telegram.putExtra("title", "telegram");
-//                startActivity(telegram);
-                break;
-            case R.id.tv_share_facebook:
-                Intent intent1 = new Intent();
-                intent1.setAction("android.intent.action.VIEW");
-                Uri content_url1 = Uri.parse("https://www.facebook.com/dAppWINQ");
-                intent1.setData(content_url1);
-                startActivity(intent1);
-//                Intent facebook = new Intent(this, WebViewActivity.class);
-//                facebook.putExtra("url", "https://www.facebook.com/dAppWINQ");
-//                facebook.putExtra("title", "facebook");
-//                startActivity(facebook);
+            case R.id.llLoginOut:
+                List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+                for (UserAccount userAccount : userAccounts) {
+                    if (userAccount.getIsLogin()) {
+                        userAccount.setIsLogin(false);
+                        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(userAccount);
+                        setResult(1);
+                        finish();
+                        ToastUtil.displayShortToast("logout success");
+                    }
+                }
                 break;
             default:
                 break;

@@ -1,20 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/refreshLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_f2f2f2"
         android:orientation="vertical">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+            android:background="@color/white"
+            android:layout_height="@dimen/x420">
+            <View
+                android:layout_width="match_parent"
+                android:background="@drawable/main_bg_shape"
+                android:layout_height="@dimen/x286"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:clipChildren="false"
+                    android:layout_marginTop="@dimen/x20"
+                    android:layout_marginRight="@dimen/x30"
+                    android:layout_height="@dimen/x388"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:background="@drawable/icon_more_finance"
+                    android:gravity="center_horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textColor="#01b5ab"
+                        android:text="4.23%"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_999"
+                        android:text="Annual Percentage Rate"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textColor="#4d4d4d"
+                        android:layout_marginTop="@dimen/x20"
+                        android:text="Flexible From 1 QLC"
+                        android:layout_height="wrap_content" />
 
-        </android.support.v7.widget.RecyclerView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/x30"
+                        android:background="@drawable/main_color_bt_bg"
+                        android:gravity="center"
+                        android:text="Join NOW"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="@dimen/x40"
+                        android:layout_marginRight="@dimen/x40"
+                        android:layout_height="@dimen/x77" />
+
+                </LinearLayout>
+
+            <TextView
+                android:id="@+id/qlcDaily"
+                android:layout_width="wrap_content"
+                android:text="QLC Daily Gain Program"
+                android:textSize="13sp"
+                android:textColor="@color/mainColor"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/x35"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_height="match_parent">
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:background="@color/color_f2f2f2"
+                app:elevation="0px"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rlInvite"
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginBottom="@dimen/x20"
+                    app:layout_scrollFlags="scroll"
+                    android:layout_height="@dimen/x175">
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:background="@color/white"
+                        android:layout_height="@dimen/x175">
+                    </android.support.v4.view.ViewPager>
+                    <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/indicator"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/x20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x20" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:background="@color/white"
+                    android:layout_marginBottom="@dimen/x1"
+                    android:orientation="horizontal"
+                    android:layout_height="@dimen/x92">
+                    <View
+                        android:layout_width="@dimen/x8"
+                        android:background="@color/mainColor"
+                        android:layout_marginLeft="@dimen/x30"
+                        android:layout_marginRight="@dimen/x13"
+                        android:layout_height="@dimen/x29"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:includeFontPadding="false"
+                        android:gravity="center"
+                        android:textColor="@color/color_29282a"
+                        android:text="Highly Recommend"
+                        android:layout_height="@dimen/x92" />
+                </LinearLayout>
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refreshLayout"
+                android:layout_width="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+
+                </android.support.v7.widget.RecyclerView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>

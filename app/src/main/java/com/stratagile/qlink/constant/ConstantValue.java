@@ -4,6 +4,7 @@ import android.net.wifi.WifiInfo;
 
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.TransactionRecord;
+import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.MainAddress;
@@ -34,6 +35,8 @@ public class ConstantValue {
     public static String unlockTime = "unlocktime";
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
+
+    public static UserAccount currentUser;
     /**
      * 拥有的免费连接次数
      */

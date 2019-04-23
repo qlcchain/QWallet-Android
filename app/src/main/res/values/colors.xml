@@ -4,10 +4,10 @@
     <color name="f6f6f6">#f6f6f6</color>
     <color name="mainColorTwo">#5b4278</color>
     <color name="mainColorThree">#8F74AC</color>
-    <color name="mainColorDark">#3B0060</color>
-    <color name="colorPrimary">#490080</color>
-    <color name="colorPrimaryDark">#3B0060</color>
-    <color name="colorAccent">#490080</color>
+    <color name="mainColorDark">#108EE9</color>
+    <color name="colorPrimary">#108EE9</color>
+    <color name="colorPrimaryDark">#108EE9</color>
+    <color name="colorAccent">#108EE9</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="splashtext">#9100c8</color>
     <color name="colorFade">#D1D1D1</color>
@@ -88,6 +88,10 @@
     <color name="color_f2f2f2">#f2f2f2</color>
     <color name="color_b3b3b3">#B3B3B3</color>
     <color name="color_4b494d">#4B494D</color>
+    <color name="color_01b5ab">#01B5AB</color>
+    <color name="color_108ee9">#108EE9</color>
+    <color name="color_808080">#808080</color>
+    <color name="color_ececec">#ececec</color>
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.my;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
@@ -21,6 +25,8 @@ import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.view.MyItemView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -57,6 +63,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     MyItemView contactUs;
     @BindView(R.id.settings)
     MyItemView settings;
+    boolean isLogin = false;
 
     @Nullable
     @Override
@@ -67,6 +74,27 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+        if (userAccounts.size() > 0) {
+            for (UserAccount userAccount : userAccounts) {
+                if (userAccount.getIsLogin()) {
+                    loginUser = userAccount;
+                    ConstantValue.currentUser = userAccount;
+                    isLogin = true;
+                    userName.setText(loginUser.getAccount());
+                    if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+                        Glide.with(this)
+                                .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .apply(AppConfig.getInstance().options)
+                                .into(userAvatar);
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     protected void setupFragmentComponent() {
@@ -88,6 +116,34 @@ public class MyFragment extends BaseFragment implements MyContract.View {
 
     }
 
+    UserAccount loginUser;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        isLogin = false;
+        List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+        if (userAccounts.size() > 0) {
+            for (UserAccount userAccount : userAccounts) {
+                if (userAccount.getIsLogin()) {
+                    loginUser = userAccount;
+                    ConstantValue.currentUser = userAccount;
+                    isLogin = true;
+                    userName.setText(loginUser.getAccount());
+                    if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+                        Glide.with(this)
+                                .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .apply(AppConfig.getInstance().options)
+                                .into(userAvatar);
+                    }
+                }
+            }
+        }
+        if (!isLogin) {
+            userName.setText("login / regisger");
+        }
+    }
+
     @Override
     public void showProgressDialog() {
         progressDialog.show();
@@ -107,10 +163,22 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user:
-                if (SpUtil.getBoolean(getActivity(), ConstantValue.isUserLogin, false)) {
-
+                isLogin = false;
+                List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+                if (userAccounts.size() > 0) {
+                    for (UserAccount userAccount : userAccounts) {
+                        if (userAccount.getIsLogin()) {
+                            loginUser = userAccount;
+                            isLogin = true;
+                            userName.setText(loginUser.getAccount());
+                            startActivity(new Intent(getActivity(), PersonActivity.class));
+                        }
+                    }
+                    if (!isLogin) {
+                        startActivityForResult(new Intent(getActivity(), LoginActivity.class), 0);
+                    }
                 } else {
-                    startActivity(new Intent(getActivity(), AccountActivity.class));
+                    startActivityForResult(new Intent(getActivity(), LoginActivity.class), 0);
                 }
                 break;
             case R.id.cryptoWallet:
@@ -122,10 +190,11 @@ public class MyFragment extends BaseFragment implements MyContract.View {
             case R.id.contactUs:
                 break;
             case R.id.settings:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
                 break;
             default:
                 break;
         }
     }
+
 }

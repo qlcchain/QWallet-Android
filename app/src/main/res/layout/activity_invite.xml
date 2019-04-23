@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:src="@mipmap/advertise_c"
+        android:scaleType="centerCrop"
+        android:layout_height="@dimen/x265">
+
+    </ImageView>
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:text="My Invitation Code"
+        android:paddingLeft="@dimen/x30"
+        android:textColor="@color/color_333"
+        android:textSize="14sp"
+        android:layout_height="@dimen/x69" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_marginBottom="@dimen/x30"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_height="@dimen/x77">
+        <TextView
+            android:id="@+id/tvIniviteCode"
+            android:layout_width="wrap_content"
+            android:textSize="23sp"
+            android:textColor="@color/mainColor"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:text="copy"
+            android:layout_marginLeft="@dimen/x40"
+            android:textColor="@color/mainColor"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x20"
+        android:background="@color/color_f2f2f2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:text="My Ranking"
+        android:gravity="center_vertical"
+        android:textColor="@color/color_333"
+        android:layout_height="@dimen/x69" />
+
+</LinearLayout>

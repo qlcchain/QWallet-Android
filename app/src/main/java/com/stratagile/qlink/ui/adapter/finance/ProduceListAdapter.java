@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.entity.newwinq.Product;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProduceListAdapter extends BaseQuickAdapter<Product.DataBean, BaseViewHolder> {
@@ -26,8 +27,21 @@ public class ProduceListAdapter extends BaseQuickAdapter<Product.DataBean, BaseV
     @Override
     protected void convert(BaseViewHolder helper, Product.DataBean item) {
         helper.setText(R.id.tvProductName, item.getName());
-        helper.setText(R.id.tvProfit, item.getAnnualIncomeRate() * 100 + "%");
+        helper.setText(R.id.tvProfit, BigDecimal.valueOf(item.getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
         helper.setText(R.id.tvQlcCount, "From " + item.getLeastAmount() + " QLC");
         helper.setText(R.id.tvDayTime, item.getTimeLimit() + "");
+        if (item.getStatus().equals("END")) {
+            helper.setTextColor(R.id.tvProductName, mContext.getResources().getColor(R.color.color_999));
+            helper.setVisible(R.id.soldOut, true);
+            helper.setTextColor(R.id.tvProfit, mContext.getResources().getColor(R.color.color_999));
+            helper.setTextColor(R.id.tvDayTime, mContext.getResources().getColor(R.color.color_999));
+            helper.setTextColor(R.id.tvDays, mContext.getResources().getColor(R.color.color_999));
+        } else {
+            helper.setVisible(R.id.soldOut, false);
+            helper.setTextColor(R.id.tvProductName, mContext.getResources().getColor(R.color.color_4b494d));
+            helper.setTextColor(R.id.tvProfit, mContext.getResources().getColor(R.color.color_01b5ab));
+            helper.setTextColor(R.id.tvDayTime, mContext.getResources().getColor(R.color.color_29282a));
+            helper.setTextColor(R.id.tvDays, mContext.getResources().getColor(R.color.color_29282a));
+        }
     }
 }

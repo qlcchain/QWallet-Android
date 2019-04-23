@@ -379,15 +379,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 resetToDefaultIcon();
                 switch (item.getItemId()) {
                     case R.id.item_sms:
-                        item.setIcon(R.mipmap.icon_vpn_h);
+                        item.setIcon(R.mipmap.finance_h);
                         setVpnPage();
                         break;
                     case R.id.item_all_wallet:
-                        item.setIcon(R.mipmap.icon_wallet_h);
+                        item.setIcon(R.mipmap.wallet_h);
                         setAllWalletPage();
                         break;
                     case R.id.item_settings:
-                        item.setIcon(R.mipmap.icon_settings_h);
+                        item.setIcon(R.mipmap.settings_h);
                         setSettingsPage();
                         break;
                     default:
@@ -460,10 +460,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private void resetToDefaultIcon() {
-        bottomNavigation.getMenu().findItem(R.id.item_all_wallet).setIcon(R.mipmap.icon_wallet_n);
+        bottomNavigation.getMenu().findItem(R.id.item_all_wallet).setIcon(R.mipmap.wallet_n);
 //        bottomNavigation.getMenu().findItem(R.id.item_market).setIcon(R.mipmap.icon_markets_n);
-        bottomNavigation.getMenu().findItem(R.id.item_sms).setIcon(R.mipmap.icon_vpn_n);
-        bottomNavigation.getMenu().findItem(R.id.item_settings).setIcon(R.mipmap.icon_settings_n);
+        bottomNavigation.getMenu().findItem(R.id.item_sms).setIcon(R.mipmap.finance_n);
+        bottomNavigation.getMenu().findItem(R.id.item_settings).setIcon(R.mipmap.settings_n);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

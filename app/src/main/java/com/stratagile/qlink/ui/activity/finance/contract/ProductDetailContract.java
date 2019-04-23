@@ -31,7 +31,7 @@ public interface ProductDetailContract {
 
         void getNeoTokensInfo(NeoWalletInfo baseBack);
 
-//        void buyQLCProductBack();
+        void buyQLCProductBack();
     }
 
     interface ProductDetailContractPresenter extends BasePresenter {

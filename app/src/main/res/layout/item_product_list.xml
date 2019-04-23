@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/x216"
+    android:background="@color/white"
     android:paddingLeft="@dimen/x30"
     android:paddingRight="@dimen/x30"
     android:orientation="vertical">
@@ -25,6 +26,12 @@
             android:textSize="14sp"
             android:textColor="#4d4d4d"
             android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/soldOut"
+            android:layout_width="@dimen/x110"
+            android:layout_marginLeft="@dimen/x6"
+            android:src="@mipmap/sold_out"
+            android:layout_height="@dimen/x30" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,11 +52,12 @@
                     android:id="@+id/tvProfit"
                     android:text="100%"
                     android:textSize="23sp"
-                    android:textColor="#01B5AB"
+                    android:textColor="@color/color_01b5ab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <TextView
+                android:id="@+id/tvRate"
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:textColor="#888"
@@ -80,6 +88,7 @@
                     android:textColor="@color/color_29282a"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/tvDays"
                     android:text="Days"
                     android:textSize="12sp"
                     android:textColor="@color/color_29282a"

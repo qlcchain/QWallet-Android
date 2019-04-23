@@ -57,7 +57,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
     @Override
     public void unsubscribe() {
         if (!mCompositeDisposable.isDisposed()) {
-             mCompositeDisposable.dispose();
+            mCompositeDisposable.dispose();
         }
     }
 
@@ -171,6 +171,10 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                     public void accept(BaseBack unspent) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
+                        mView.closeProgressDialog();
+                        if (unspent.getCode().equals("0")) {
+                            mView.buyQLCProductBack();
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override

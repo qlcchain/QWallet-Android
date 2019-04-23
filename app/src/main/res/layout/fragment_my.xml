@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/userAvatar"
             android:layout_width="@dimen/x115"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/icon_user_default"
             android:layout_marginLeft="@dimen/x30"
             android:layout_height="@dimen/x115" />
         <LinearLayout
@@ -31,6 +31,7 @@
             <TextView
                 android:id="@+id/userId"
                 android:text="ID: 123456"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/black"

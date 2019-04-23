@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WINQ</string>
+    <string name="app_name">WinCash</string>
     <string name="AvailableWiFi">WiFi</string>
     <string name="activity_splash_intro">The World\'s First Decentralized Mobile Network</string>
     <string name="powered">Powered by Blockchain</string>

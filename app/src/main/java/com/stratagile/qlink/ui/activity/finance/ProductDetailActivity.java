@@ -30,9 +30,11 @@ import com.stratagile.qlink.ui.activity.finance.presenter.ProductDetailPresenter
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SmoothCheckBox;
 import com.vondear.rxtools.view.RxQRCode;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,8 +66,6 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     TextView tvQlcCount;
     @BindView(R.id.llRule)
     LinearLayout llRule;
-    @BindView(R.id.switchPayWay)
-    TextView switchPayWay;
     @BindView(R.id.checkBox)
     SmoothCheckBox checkBox;
     @BindView(R.id.servicePrivacyPolicy)
@@ -74,12 +74,6 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     TextView tvConfirm;
     @BindView(R.id.llPayWay1)
     LinearLayout llPayWay1;
-    @BindView(R.id.tvPayAddress)
-    TextView tvPayAddress;
-    @BindView(R.id.ivPayAddress)
-    ImageView ivPayAddress;
-    @BindView(R.id.llPayWay2)
-    LinearLayout llPayWay2;
     ProductDetail mProductDetail;
 
     @Override
@@ -98,12 +92,6 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     @Override
     protected void initData() {
         getProductDetail();
-        Bitmap bitmap = RxQRCode.builder(ConstantValue.mainAddress).
-                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
-                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
-                codeSide(800).
-                into(ivPayAddress);
-        tvPayAddress.setText(ConstantValue.mainAddress);
     }
 
     private void getProductDetail() {
@@ -147,10 +135,12 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
         title.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.x20));
         title.setText(productDetail.getData().getName());
         mProductDetail = productDetail;
-        tvProfit.setText(productDetail.getData().getAnnualIncomeRate() *100 + "%");
+        tvProfit.setText(BigDecimal.valueOf(productDetail.getData().getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
         tvDayTime.setText(productDetail.getData().getTimeLimit() + "");
         tvQlcCount.setText("From " + productDetail.getData().getLeastAmount() + " QLC");
         etQlcCount.setHint("From " + productDetail.getData().getLeastAmount() + " QLC");
+
+
     }
 
     @Override
@@ -158,22 +148,17 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
 
     }
 
+    @Override
+    public void buyQLCProductBack() {
+        ToastUtil.displayShortToast("success");
+        finish();
+    }
+
     boolean isSelfPay = true;
 
-    @OnClick({R.id.switchPayWay, R.id.tvConfirm})
+    @OnClick({R.id.tvConfirm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.switchPayWay:
-                if (isSelfPay) {
-                    isSelfPay = !isSelfPay;
-                    llPayWay1.setVisibility(View.GONE);
-                    llPayWay2.setVisibility(View.VISIBLE);
-                } else {
-                    isSelfPay = !isSelfPay;
-                    llPayWay1.setVisibility(View.VISIBLE);
-                    llPayWay2.setVisibility(View.GONE);
-                }
-                break;
             case R.id.tvConfirm:
                 transferQLC(Account.INSTANCE.getWallet().getAddress());
                 break;

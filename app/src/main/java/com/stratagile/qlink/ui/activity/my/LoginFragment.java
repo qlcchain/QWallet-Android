@@ -44,7 +44,7 @@ import butterknife.OnClick;
  * @date 2019/04/09 11:45:22
  */
 
-public class LoginFragment extends BaseFragment implements LoginContract.View {
+public class LoginFragment extends BaseFragment {
 
     @Inject
     LoginPresenter mPresenter;
@@ -69,15 +69,15 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     protected void setupFragmentComponent() {
-        DaggerLoginComponent
-                .builder()
-                .appComponent(((AppConfig) getActivity().getApplication()).getApplicationComponent())
-                .loginModule(new LoginModule(this))
-                .build()
-                .inject(this);
+//        DaggerLoginComponent
+//                .builder()
+//                .appComponent(((AppConfig) getActivity().getApplication()).getApplicationComponent())
+//                .loginModule(new LoginModule(this))
+//                .build()
+//                .inject(this);
     }
 
-    @Override
+//    @Override
     public void setPresenter(LoginContract.LoginContractPresenter presenter) {
         mPresenter = (LoginPresenter) presenter;
     }
@@ -87,17 +87,17 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     }
 
-    @Override
+//    @Override
     public void showProgressDialog() {
         progressDialog.show();
     }
 
-    @Override
+//    @Override
     public void closeProgressDialog() {
         progressDialog.hide();
     }
 
-    @Override
+//    @Override
     public void loginSuccess(Register register) {
         closeProgressDialog();
         SpUtil.putBoolean(getActivity(), ConstantValue.isUserLogin, true);
@@ -163,6 +163,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
         KLog.i("解密后：" + RSAEncrypt.decrypt(token, "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIXhR13/p7fCOIuslAb/zU3B9SVItbKCcAuqiou0CYJGh7B8Nn79rcHWjjG/1AVbrUwgxrRKuY5SwtlexRYONZhXO6rUmij07g7Aol7pPP7mQTO5t6d2u22hy68ub+GuyoniIOAzftZvsmG41l9VZ422ToZaCPXxsAW7cVO2EsJzAgMBAAECgYA9rTsjotOxZFiIgEjxsIb0e5ZkRsruIglcVoTdN2PqEHQSaibw+g1Cb4WyhZ03mrSLjc384S/60UXSvkYtkv49M7AdyftUWwNitK6ascjmYY4R01GWC7D3ZAaQxtM5K8GKTOTitQPXBl0FEkDNJGiVmP3rcO5Wxac2PKcDrNqLAQJBANk4WJZipzFh07mUhUcmcM+igSrDUAMcLCuyeMnmQARc+vItgd4LJuMMFPO9gZhJKzDOqmZ36alNbqXqlJabjEkCQQCdyAXp5Dj+XFwydLCF+ZbRZJqrakpzbU4JLUAMDNHV4ri8ROgV57aEebRsl/1N9d8vL8d5ysanGLADgZapc8DbAkAtTH3U5r/dIXyIz/s3SkHuWwI6y75M17wyZKah3B1vi4BdrrXNe1/hq2xXJCb5fhC+vep1Mf6NavNvMEtKWSfZAkEAh8WW6SS9sowxvi1RtYgIMxmaSwVFGbymWRk6MuRZMO9PPpshB7CEC81a59OGYq7AJi+8PF60wRdqZyn9RsXX3wJAEkIC/p1foWi6EtT79pQo9cBBovD6ggWsP0dnMqZkPkNKy1nhtiz99hnQ2jB97WvDvnXoJDUy2dCx81z8SEBKaQ=="));
         map.put("token", token);
 
-        mPresenter.login(map);
+//        mPresenter.login(map);
     }
 }
