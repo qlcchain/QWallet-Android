@@ -1114,7 +1114,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="version">Version</string>
     <string name="log_out">Log Out</string>
     <string name="logout_success">logout success</string>
-    <string name="login_register">Login/Regisger</string>
+    <string name="login_register">Login/Register</string>
     <string name="profile_photo">Profile Photo</string>
     <string name="username">Username</string>
     <string name="mobile">Mobile</string>

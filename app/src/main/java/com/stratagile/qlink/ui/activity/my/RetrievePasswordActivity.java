@@ -18,6 +18,7 @@ import com.stratagile.qlink.ui.activity.my.component.DaggerRetrievePasswordCompo
 import com.stratagile.qlink.ui.activity.my.contract.RetrievePasswordContract;
 import com.stratagile.qlink.ui.activity.my.module.RetrievePasswordModule;
 import com.stratagile.qlink.ui.activity.my.presenter.RetrievePasswordPresenter;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -26,12 +27,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author hzp
@@ -161,6 +168,18 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
     }
 
     private void resetPassword() {
+        if ("".equals(etVCode.getText().toString().trim())) {
+            ToastUtil.displayShortToast(getString(R.string.wrong_code));
+            return;
+        }
+        if ("".equals(etPassword.getText().toString().trim()) || etPassword.getText().toString().trim().length() < 6) {
+            ToastUtil.displayShortToast(getString(R.string.wrong_password));
+            return;
+        }
+        if (!etPassword.getText().toString().trim().equals(etRepeatPassword.getText().toString().trim())) {
+            ToastUtil.displayShortToast(getString(R.string.not_match));
+            return;
+        }
         Map map = new HashMap<String, String>();
         map.put("account", etEmail.getText().toString().trim());
         map.put("password", MD5Util.getStringMD5(etPassword.getText().toString().trim()));
@@ -171,7 +190,10 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvVerificationCode:
-                getForgetPasswordVcode();
+                if (AccountUtil.isEmail(etEmail.getText().toString().trim())) {
+                    startVCodeCountDown();
+                    getForgetPasswordVcode();
+                }
                 break;
             case R.id.tvNext:
                 resetPassword();
@@ -179,6 +201,39 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
             default:
                 break;
         }
+    }
+
+    private Disposable mdDisposable;
+
+    private void startVCodeCountDown() {
+        tvVerificationCode.setEnabled(false);
+        tvVerificationCode.setBackground(getResources().getDrawable(R.drawable.vcode_count_down_bg));
+        mdDisposable = Flowable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        tvVerificationCode.setText("" + (60 - aLong) + "");
+                    }
+                })
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //倒计时完毕置为可点击状态
+                        tvVerificationCode.setEnabled(true);
+                        tvVerificationCode.setText(getString(R.string.get_the_code));
+                        tvVerificationCode.setBackgroundColor(getResources().getColor(R.color.white));
+                    }
+                })
+                .subscribe();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mdDisposable != null) {
+            mdDisposable.dispose();
+        }
+        super.onDestroy();
     }
 
 }

@@ -102,8 +102,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.VerifyWalletPasswordActivity"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.Translucent"
-            android:screenOrientation="portrait"/>
+            android:theme="@style/Theme.AppCompat.Translucent" />
         <!--android:windowSoftInputMode="stateVisible|adjustResize"-->
         <activity android:name=".ui.activity.wallet.ProfilePictureActivity"
             android:screenOrientation="portrait"/>

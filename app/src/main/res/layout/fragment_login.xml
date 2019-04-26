@@ -16,6 +16,7 @@
             android:id="@+id/etAccount"
             android:layout_width="0px"
             android:layout_weight="1"
+            android:inputType="textEmailAddress"
             android:background="@null"
             android:hint="@string/email"
             android:textSize="16sp"
@@ -46,6 +47,9 @@
             android:id="@+id/tvVerificationCode"
             android:layout_width="wrap_content"
             android:text="Get the Code"
+            android:gravity="center"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
             android:textColor="@color/mainColor"
             android:textSize="16sp"
             android:layout_height="wrap_content" />
@@ -67,6 +71,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
+            android:inputType="textPassword"
             android:hint="@string/password"
             android:textSize="16sp"
             android:layout_height="match_parent" />

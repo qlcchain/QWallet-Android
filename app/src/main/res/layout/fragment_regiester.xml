@@ -17,6 +17,7 @@
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
+            android:inputType="textEmailAddress"
             android:background="@null"
             android:hint="@string/email"
             android:textSize="16sp"
@@ -35,6 +36,7 @@
             android:id="@+id/etVCode"
             android:layout_width="0px"
             android:layout_weight="1"
+            android:inputType="number"
             android:background="@null"
             android:hint="@string/verification_code"
             android:textSize="16sp"
@@ -43,6 +45,9 @@
             android:id="@+id/tvVerificationCode"
             android:layout_width="wrap_content"
             android:text="@string/get_the_code"
+            android:gravity="center"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
             android:textColor="@color/mainColor"
             android:textSize="16sp"
             android:layout_height="wrap_content" />
@@ -59,6 +64,7 @@
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="0px"
+            android:inputType="textPassword"
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/password_at_least_6_chars"
@@ -78,6 +84,7 @@
             android:id="@+id/etRepeatPassword"
             android:layout_width="0px"
             android:layout_weight="1"
+            android:inputType="textPassword"
             android:background="@null"
             android:hint="@string/repeat_the_password"
             android:textSize="16sp"
@@ -97,6 +104,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
+            android:inputType="text"
             android:hint="@string/invitation_code_optional"
             android:textSize="16sp"
             android:layout_height="match_parent" />

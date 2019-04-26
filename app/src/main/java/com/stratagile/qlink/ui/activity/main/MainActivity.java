@@ -688,7 +688,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     protected void onDestroy() {
         KLog.i("mainactivity关闭");
-        BitUtil.closedWallet();
+//        BitUtil.closedWallet();
         Intent intent = new Intent();
         intent.setAction(BroadCastAction.disconnectVpn);
         sendBroadcast(intent);

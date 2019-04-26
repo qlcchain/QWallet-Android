@@ -33,12 +33,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author hzp
@@ -85,8 +91,8 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (AccountUtil.isEmail(s.toString())) {
-                    regexAccount(s.toString());
+                if (AccountUtil.isEmail(s.toString().trim())) {
+                    regexAccount(s.toString().trim());
                 } else {
                     llVcode.setVisibility(View.GONE);
                 }
@@ -187,11 +193,44 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 startActivity(new Intent(getActivity(), RetrievePasswordActivity.class));
                 break;
             case R.id.tvVerificationCode:
+                startVCodeCountDown();
                 getLoginVcode();
                 break;
             default:
                 break;
         }
+    }
+    private Disposable mdDisposable;
+
+    private void startVCodeCountDown() {
+        tvVerificationCode.setEnabled(false);
+        tvVerificationCode.setBackground(getResources().getDrawable(R.drawable.vcode_count_down_bg));
+        mdDisposable = Flowable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        tvVerificationCode.setText("" + (60 - aLong) + "");
+                    }
+                })
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //倒计时完毕置为可点击状态
+                        tvVerificationCode.setEnabled(true);
+                        tvVerificationCode.setText(getString(R.string.get_the_code));
+                        tvVerificationCode.setBackgroundColor(getResources().getColor(R.color.white));
+                    }
+                })
+                .subscribe();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mdDisposable != null) {
+            mdDisposable.dispose();
+        }
+        super.onDestroy();
     }
 
     /**
