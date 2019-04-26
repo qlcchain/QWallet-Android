@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.socks.library.KLog;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.my.contract.RegisgerContract;
 import com.stratagile.qlink.ui.activity.my.RegisgerActivity;
@@ -77,9 +78,9 @@ public class RegisgerPresenter implements RegisgerContract.RegisgerContractPrese
     @Override
     public void register(Map map) {
         Disposable disposable = httpAPIWrapper.userRegister(map)
-                .subscribe(new Consumer<Register>() {
+                .subscribe(new Consumer<VcodeLogin>() {
                     @Override
-                    public void accept(Register baseBack) throws Exception {
+                    public void accept(VcodeLogin baseBack) throws Exception {
                         //isSuccesse
                         mView.closeProgressDialog();
                         mView.registerSuccess(baseBack);

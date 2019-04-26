@@ -53,6 +53,16 @@ public class AccountActivity extends BaseActivity implements AccountContract.Vie
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
+    public ChangePage changePage;
+
+    public ChangePage getChangePage() {
+        return changePage;
+    }
+
+    public void setChangePage(ChangePage changePage) {
+        this.changePage = changePage;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         needFront = true;
@@ -71,15 +81,15 @@ public class AccountActivity extends BaseActivity implements AccountContract.Vie
     @Override
     protected void initData() {
         ArrayList<String> titles = new ArrayList<>();
-        titles.add("注册");
-        titles.add("登录");
+        titles.add(getString(R.string.login));
+        titles.add(getString(R.string.sign_up));
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
-                    return new RegiesterFragment();
+                    return new Login1Fragment();
                 } else {
-                    return new LoginFragment();
+                    return new RegiesterFragment();
                 }
             }
 
@@ -154,6 +164,10 @@ public class AccountActivity extends BaseActivity implements AccountContract.Vie
     @Override
     public void closeProgressDialog() {
         progressDialog.hide();
+    }
+
+    public interface ChangePage {
+        void change(int page);
     }
 
 }

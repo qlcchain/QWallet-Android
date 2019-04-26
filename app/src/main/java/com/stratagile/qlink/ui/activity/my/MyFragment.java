@@ -18,6 +18,9 @@ import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.db.UserAccount;
+import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
+import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
@@ -25,6 +28,10 @@ import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.view.MyItemView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -70,9 +77,32 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
         ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         Bundle mBundle = getArguments();
         return view;
     }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateImg(UpdateAvatar updateAvatar) {
+        if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+            Glide.with(this)
+                    .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                    .apply(AppConfig.getInstance().options)
+                    .into(userAvatar);
+        } else {
+            Glide.with(this)
+                    .load(R.mipmap.icon_user_default)
+                    .apply(AppConfig.getInstance().options)
+                    .into(userAvatar);
+        }
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -135,12 +165,17 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                                 .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
+                    } else {
+                        Glide.with(this)
+                                .load(R.mipmap.icon_user_default)
+                                .apply(AppConfig.getInstance().options)
+                                .into(userAvatar);
                     }
                 }
             }
         }
         if (!isLogin) {
-            userName.setText("login / regisger");
+            userName.setText(R.string.login_register);
         }
     }
 
@@ -175,17 +210,19 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                         }
                     }
                     if (!isLogin) {
-                        startActivityForResult(new Intent(getActivity(), LoginActivity.class), 0);
+                        startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
                     }
                 } else {
-                    startActivityForResult(new Intent(getActivity(), LoginActivity.class), 0);
+                    startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
                 }
                 break;
             case R.id.cryptoWallet:
+                EventBus.getDefault().post(new ChangeViewpager(1));
                 break;
             case R.id.shareFriend:
                 break;
             case R.id.joinCommunity:
+                startActivity(new Intent(getActivity(), JoinCommunityActivity.class));
                 break;
             case R.id.contactUs:
                 break;

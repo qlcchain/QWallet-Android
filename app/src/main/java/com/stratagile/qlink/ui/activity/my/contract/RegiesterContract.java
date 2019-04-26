@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my.contract;
 
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
@@ -24,7 +25,7 @@ public interface RegiesterContract {
          */
         void closeProgressDialog();
 
-        void registerSuccess(Register register);
+        void registerSuccess(VcodeLogin register);
     }
 
     interface RegiesterContractPresenter extends BasePresenter {

@@ -1,59 +1,51 @@
 package com.stratagile.qlink.ui.activity.finance;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
+import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.data.qualifier.Local;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerFinanceComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.FinanceContract;
 import com.stratagile.qlink.ui.activity.finance.module.FinanceModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.FinancePresenter;
-import com.stratagile.qlink.ui.activity.my.LoginFragment;
-import com.stratagile.qlink.ui.activity.my.RegiesterFragment;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.adapter.finance.ProduceListAdapter;
 import com.stratagile.qlink.view.ScaleCircleNavigator;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
-import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author hzp
@@ -80,6 +72,12 @@ public class FinanceFragment extends BaseFragment implements FinanceContract.Vie
     ViewPager viewPager;
     @BindView(R.id.indicator)
     MagicIndicator indicator;
+    @BindView(R.id.tvInComeRate)
+    TextView tvInComeRate;
+    @BindView(R.id.tvLeastAmount)
+    TextView tvLeastAmount;
+    @BindView(R.id.joinNow)
+    TextView joinNow;
 
     @Nullable
     @Override
@@ -99,6 +97,7 @@ public class FinanceFragment extends BaseFragment implements FinanceContract.Vie
         produceListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                KLog.i("点击。。。。。");
                 if (!produceListAdapter.getData().get(position).getStatus().equals("END")) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("productId", produceListAdapter.getData().get(position).getId()));
                 }
@@ -126,6 +125,11 @@ public class FinanceFragment extends BaseFragment implements FinanceContract.Vie
 
     List<View> viewList = new ArrayList<>();
 
+    @OnClick(R.id.joinNow)
+    public void onViewClicked() {
+        startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("productId", ririYing.getId()));
+    }
+
     class ViewAdapter extends PagerAdapter {
         @Override
         public int getCount() {
@@ -149,10 +153,14 @@ public class FinanceFragment extends BaseFragment implements FinanceContract.Vie
             viewList.get(position).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (ConstantValue.currentUser == null) {
+                        startActivity(new Intent(getActivity(), AccountActivity.class));
+                        return;
+                    }
                     if (position == 0) {
                         startActivity(new Intent(getActivity(), InviteActivity.class));
                     } else {
-
+                        startActivity(new Intent(getActivity(), EarnRankActivity.class));
                     }
                 }
             });
@@ -198,9 +206,19 @@ public class FinanceFragment extends BaseFragment implements FinanceContract.Vie
         progressDialog.hide();
     }
 
+    Product.DataBean ririYing;
+
     @Override
     public void getProductBack(Product product) {
         produceListAdapter.setNewData(product.getData());
+        ririYing = product.getData().get(0);
+        tvInComeRate.setText(BigDecimal.valueOf(ririYing.getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
+        if (getResources().getConfiguration().locale == Locale.CHINESE) {
+            qlcDaily.setText(ririYing.getName());
+        } else {
+            qlcDaily.setText(ririYing.getNameEn());
+        }
+        tvLeastAmount.setText(getString(R.string.from_)  + " " + ririYing.getLeastAmount() + " QLC");
     }
 
     @Override

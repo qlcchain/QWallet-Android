@@ -9,6 +9,7 @@ import com.stratagile.qlink.entity.newwinq.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 
 public class ProduceListAdapter extends BaseQuickAdapter<Product.DataBean, BaseViewHolder> {
     public ProduceListAdapter(@Nullable List<Product.DataBean> data) {
@@ -26,10 +27,14 @@ public class ProduceListAdapter extends BaseQuickAdapter<Product.DataBean, BaseV
 
     @Override
     protected void convert(BaseViewHolder helper, Product.DataBean item) {
-        helper.setText(R.id.tvProductName, item.getName());
         helper.setText(R.id.tvProfit, BigDecimal.valueOf(item.getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
-        helper.setText(R.id.tvQlcCount, "From " + item.getLeastAmount() + " QLC");
+        helper.setText(R.id.tvQlcCount, mContext.getResources().getString(R.string.from_) + " " + item.getLeastAmount() + " QLC");
         helper.setText(R.id.tvDayTime, item.getTimeLimit() + "");
+        if (mContext.getResources().getConfiguration().locale == Locale.ENGLISH) {
+            helper.setText(R.id.tvProductName, item.getNameEn());
+        } else {
+            helper.setText(R.id.tvProductName, item.getName());
+        }
         if (item.getStatus().equals("END")) {
             helper.setTextColor(R.id.tvProductName, mContext.getResources().getColor(R.color.color_999));
             helper.setVisible(R.id.soldOut, true);

@@ -24,7 +24,7 @@
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
-                android:text="用户名称"
+                android:text="@string/login_register"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:layout_height="wrap_content" />
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_crypto_wallet"
-        app:textmy="Crypto Wallet"
+        app:textmy="@string/crypto_wallet"
         android:layout_height="@dimen/x108">
 
     </com.stratagile.qlink.view.MyItemView>
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_share_friend"
-        app:textmy="Share with Friends"
+        app:textmy="@string/share_with_friends"
         android:layout_height="@dimen/x108">
 
     </com.stratagile.qlink.view.MyItemView>
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_join_community"
-        app:textmy="Join the Community"
+        app:textmy="@string/join_the_community"
         android:layout_height="@dimen/x108">
 
     </com.stratagile.qlink.view.MyItemView>
@@ -81,7 +81,7 @@
         android:layout_width="match_parent"
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_contact_us"
-        app:textmy="Contact Us"
+        app:textmy="@string/contact_us"
         android:layout_height="@dimen/x108">
 
     </com.stratagile.qlink.view.MyItemView>
@@ -90,7 +90,7 @@
         android:layout_width="match_parent"
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_settings"
-        app:textmy="Settings"
+        app:textmy="@string/settings"
         android:layout_height="@dimen/x108">
 
     </com.stratagile.qlink.view.MyItemView>

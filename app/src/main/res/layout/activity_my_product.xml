@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
-                android:text="My Portfolio"
+                android:text="@string/my_portfolio"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -44,7 +44,7 @@
         <TextView
             android:id="@+id/tv1"
             android:layout_width="wrap_content"
-            android:text="Total(QLC)"
+            android:text="@string/total_qlc"
             android:layout_below="@+id/rlTitle"
             android:layout_marginTop="@dimen/x4"
             android:textColor="@color/white"
@@ -54,7 +54,6 @@
         <TextView
             android:id="@+id/totolQlc"
             android:layout_width="wrap_content"
-            android:text="Total(QLC)"
             android:layout_below="@+id/tv1"
             android:textColor="@color/white"
             android:layout_marginLeft="@dimen/x30"
@@ -72,7 +71,7 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Yesterday Earnings"
+                    android:text="@string/yesterday_earnings"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:layout_height="wrap_content" />
@@ -91,7 +90,7 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Cumulative Earnings"
+                    android:text="@string/cumulative_earnings"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:layout_height="wrap_content" />
@@ -120,7 +119,7 @@
             android:layout_width="wrap_content"
             android:textColor="@color/color_29282a"
             android:textSize="16sp"
-            android:text="我的投资"
+            android:text="@string/details__"
             android:layout_marginLeft="@dimen/x13"
             android:layout_height="wrap_content" />
     </LinearLayout>

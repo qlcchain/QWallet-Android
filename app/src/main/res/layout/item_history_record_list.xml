@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x35"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="@dimen/x46"
+            android:layout_marginLeft="@dimen/x30"
+            android:src="@mipmap/qlc"
+            android:layout_height="@dimen/x46" />
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/x30"
+            android:textColor="@color/color_333"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0px"
+            android:layout_height="@dimen/x1"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tvQlcCount"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_333"
+            android:textSize="16sp"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/x106"
+            android:id="@+id/tvOpreate"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x30"
+            android:ellipsize="middle"
+            android:maxEms="6"
+            android:textColor="@color/color_108ee9"
+            android:singleLine="true"
+            android:id="@+id/tvWalletAddress"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/x15"
+        android:textColor="@color/color_969696"
+        android:textSize="12sp"
+        android:layout_marginLeft="@dimen/x106"
+        android:id="@+id/tvOpreateTime"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_height="@dimen/x1"
+        android:background="@color/color_f2f2f2"
+        android:layout_marginLeft="@dimen/x106"/>
+</LinearLayout>

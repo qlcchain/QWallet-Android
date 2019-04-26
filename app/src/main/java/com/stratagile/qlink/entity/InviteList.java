@@ -157,6 +157,16 @@ public class InviteList extends BaseBack {
          */
 
         private String imgPath;
+        private String imgPathEn;
+
+        public String getImgPathEn() {
+            return imgPathEn;
+        }
+
+        public void setImgPathEn(String imgPathEn) {
+            this.imgPathEn = imgPathEn;
+        }
+
         private String url;
 
         public String getImgPath() {

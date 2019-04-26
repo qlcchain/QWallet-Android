@@ -3,12 +3,14 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.ui.activity.wallet.contract.ProfilePictureContract;
 import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.SpUtil;
 
 import java.io.File;
@@ -61,7 +63,7 @@ public class ProfilePicturePresenter implements ProfilePictureContract.ProfilePi
         File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
         RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
         MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
-        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), p2pId))     //userId, nickName
+        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.getAccount()), RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken()))     //userId, nickName
                 .subscribe(new Consumer<UpLoadAvatar>() {
                     @Override
                     public void accept(UpLoadAvatar upLoadAvatar) throws Exception {
@@ -69,7 +71,6 @@ public class ProfilePicturePresenter implements ProfilePictureContract.ProfilePi
                         KLog.i("onSuccesse");
                         mView.closeProgressDialog();
                         mView.updateImgSuccess(upLoadAvatar);
-                        SpUtil.putString(AppConfig.getInstance(), ConstantValue.myAvatarPath, upLoadAvatar.getHead());
 
                     }
                 }, new Consumer<Throwable>() {
@@ -94,7 +95,7 @@ public class ProfilePicturePresenter implements ProfilePictureContract.ProfilePi
         File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
         RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
         MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
-        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), p2pIdPc))     //userId, nickName
+        Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.getAccount()), RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken()))     //userId, nickName
                 .subscribe(new Consumer<UpLoadAvatar>() {
                     @Override
                     public void accept(UpLoadAvatar upLoadAvatar) throws Exception {

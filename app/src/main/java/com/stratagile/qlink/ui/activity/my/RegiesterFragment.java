@@ -1,6 +1,5 @@
 package com.stratagile.qlink.ui.activity.my;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,21 +9,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.entity.BaseBack;
-import com.stratagile.qlink.entity.newwinq.Register;
+import com.stratagile.qlink.db.UserAccount;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.ui.activity.my.component.DaggerRegiesterComponent;
 import com.stratagile.qlink.ui.activity.my.contract.RegiesterContract;
 import com.stratagile.qlink.ui.activity.my.module.RegiesterModule;
 import com.stratagile.qlink.ui.activity.my.presenter.RegiesterPresenter;
-import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.view.SmoothCheckBox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +32,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author hzp
@@ -51,16 +46,10 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     RegiesterPresenter mPresenter;
     @BindView(R.id.llEmail)
     LinearLayout llEmail;
-    @BindView(R.id.llphone)
-    LinearLayout llphone;
     @BindView(R.id.tvVerificationCode)
     TextView tvVerificationCode;
-    @BindView(R.id.registMode)
-    TextView registMode;
     @BindView(R.id.tvRegister)
     TextView tvRegister;
-    @BindView(R.id.country)
-    TextView country;
     @BindView(R.id.etEmail)
     EditText etEmail;
     @BindView(R.id.etVCode)
@@ -71,10 +60,8 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     EditText etRepeatPassword;
     @BindView(R.id.etInviteCode)
     EditText etInviteCode;
-    @BindView(R.id.etPhone)
-    EditText etPhone;
-
-    private boolean isPhoneRegisterMode = true;
+    @BindView(R.id.checkBox)
+    SmoothCheckBox checkBox;
 
     @Nullable
     @Override
@@ -117,17 +104,28 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     }
 
     @Override
-    public void registerSuccess(Register register) {
+    public void registerSuccess(VcodeLogin register) {
         closeProgressDialog();
         if (register.getCode().equals("0")) {
-            SpUtil.putString(getActivity(), ConstantValue.userRsaPubKey, register.getData());
-            if (isPhoneRegisterMode) {
-                SpUtil.putString(getActivity(), ConstantValue.userPhone, etPhone.getText().toString().trim());
-            } else {
-                SpUtil.putString(getActivity(), ConstantValue.userEmail, etEmail.getText().toString().trim());
-            }
-            SpUtil.putString(getActivity(), ConstantValue.userPassword, MD5Util.getStringMD5(etPassword.getText().toString().trim()));
-            ToastUtil.displayShortToast("register success");
+            closeProgressDialog();
+            ToastUtil.displayShortToast(getString(R.string.register_success));
+            UserAccount userAccount = new UserAccount();
+            userAccount.setAccount(etEmail.getText().toString().trim());
+            userAccount.setEmail(register.getEmail());
+            userAccount.setPubKey(register.getData());
+            userAccount.setUserName(register.getNickname());
+            userAccount.setPhone(register.getPhone());
+            userAccount.setInviteCode(register.getId());
+            userAccount.setPassword(MD5Util.getStringMD5(password));
+            userAccount.setIsLogin(true);
+            AppConfig.getInstance().getDaoSession().getUserAccountDao().insert(userAccount);
+            ConstantValue.currentUser = userAccount;
+            etVCode.setText("");
+            etPassword.setText("");
+            etEmail.setText("");
+            etInviteCode.setText("");
+            etRepeatPassword.setText("");
+            getActivity().finish();
         }
     }
 
@@ -137,36 +135,14 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     }
 
     String password;
-    String phone;
-    String email;
 
-    @OnClick({R.id.tvVerificationCode, R.id.registMode, R.id.tvRegister, R.id.country})
+    @OnClick({R.id.tvVerificationCode, R.id.tvRegister})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.country:
-                startActivity(new Intent(getActivity(), SelectCountryActivity.class));
-                break;
             case R.id.tvVerificationCode:
                 Map map = new HashMap<String, String>();
-                if (isPhoneRegisterMode) {
-                    map.put("account", "18670819116");
-                } else {
-                    map.put("account", "18670819116");
-                }
+                map.put("account", etEmail.getText().toString().trim());
                 mPresenter.getSignUpVcode(map);
-                break;
-            case R.id.registMode:
-                if (isPhoneRegisterMode) {
-                    isPhoneRegisterMode = false;
-                    registMode.setText("手机注册");
-                    llEmail.setVisibility(View.VISIBLE);
-                    llphone.setVisibility(View.GONE);
-                } else {
-                    isPhoneRegisterMode = true;
-                    registMode.setText("邮箱注册");
-                    llEmail.setVisibility(View.GONE);
-                    llphone.setVisibility(View.VISIBLE);
-                }
                 break;
             case R.id.tvRegister:
                 password = etPassword.getText().toString().trim();
@@ -182,29 +158,30 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
      */
     private void register() {
         Map map = new HashMap<String, String>();
-        if (isPhoneRegisterMode) {
-            phone = etPhone.getText().toString().trim();
-            if ("".equals(phone) || !AccountUtil.isTelephone(phone)) {
-                ToastUtil.displayShortToast("account error");
-                return;
-            }
-            map.put("account", phone);
-        } else {
-            email = etEmail.getText().toString().trim();
-            if ("".equals(email) || !AccountUtil.isTelephone(email)) {
-                ToastUtil.displayShortToast("account error");
-                return;
-            }
-            map.put("account", email);
+        map.put("account", etEmail.getText().toString().trim());
+        if ("".equals(etVCode.getText().toString().trim())) {
+            ToastUtil.displayShortToast(getString(R.string.wrong_code));
+            return;
         }
         if ("".equals(password) || password.length() < 6) {
-            ToastUtil.displayShortToast("password error");
+            ToastUtil.displayShortToast(getString(R.string.wrong_password));
+            return;
+        }
+        if (!etPassword.getText().toString().trim().equals(etRepeatPassword.getText().toString().trim())) {
+            ToastUtil.displayShortToast(getString(R.string.not_match));
+            return;
+        }
+        if (!checkBox.isChecked()) {
+            ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
             return;
         }
         showProgressDialog();
         map.put("password", MD5Util.getStringMD5(password));
         map.put("p2pId", SpUtil.getString(getActivity(), ConstantValue.P2PID, ""));
         map.put("code", etVCode.getText().toString().trim());
+        if (!"".equals(etInviteCode.getText().toString().trim())) {
+            map.put("number", etInviteCode.getText().toString().trim());
+        }
         mPresenter.register(map);
     }
 

@@ -1,7 +1,12 @@
 package com.stratagile.qlink.ui.activity.my.contract;
 
+import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
+
+import java.util.Map;
+
 /**
  * @author hzp
  * @Package The contract for RetrievePasswordActivity
@@ -19,6 +24,8 @@ public interface RetrievePasswordContract {
          *
          */
         void closeProgressDialog();
+
+        void resetPasswordBack(VcodeLogin register);
     }
 
     interface RetrievePasswordContractPresenter extends BasePresenter {
@@ -26,5 +33,9 @@ public interface RetrievePasswordContract {
 //         *
 //         */
 //        void getBusinessInfo(Map map);
+
+        void getForgetPasswordVcode(Map map);
+
+        void resetPassword(Map map);
     }
 }

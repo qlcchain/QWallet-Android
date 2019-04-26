@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
@@ -29,7 +30,7 @@
         <TextView
             android:id="@+id/tvSignUp"
             android:layout_width="wrap_content"
-            android:text="Sign Up"
+            android:text="@string/sign_up"
             android:layout_centerVertical="true"
             android:textColor="@color/color_29282a"
             android:layout_alignParentRight="true"
@@ -64,7 +65,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="Email"
+            android:hint="@string/email"
             android:textSize="16sp"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -119,7 +120,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="Password"
+            android:hint="@string/password"
             android:textSize="16sp"
             android:layout_height="match_parent" />
     </LinearLayout>

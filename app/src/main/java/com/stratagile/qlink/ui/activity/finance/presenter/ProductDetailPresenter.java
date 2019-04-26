@@ -111,7 +111,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                                     });
                                 } else {
                                     mView.closeProgressDialog();
-                                    ToastUtil.displayShortToast("选中的钱包没有足够的qlc");
+                                    ToastUtil.displayShortToast("The selected wallet does not have enough QLC");
                                 }
                             }
                         }

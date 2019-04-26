@@ -58,7 +58,7 @@ public class CurrencyUnitActivity extends BaseActivity implements CurrencyUnitCo
 
     @Override
     protected void initData() {
-        setTitle("Currency Unit");
+        setTitle(getString(R.string.currency_unit));
         currencyUnitAdapter = new CurrencyUnitAdapter(getCurrencyBeans());
         recyclerView.setAdapter(currencyUnitAdapter);
         currencyUnitAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

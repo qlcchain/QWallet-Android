@@ -52,6 +52,9 @@ import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.finance.EarnRank;
+import com.stratagile.qlink.entity.finance.HistoryRecord;
+import com.stratagile.qlink.entity.finance.MyRanking;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
@@ -92,6 +95,7 @@ import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
 import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
+import static com.stratagile.qlink.data.api.API.url_finance_history_record;
 import static com.stratagile.qlink.data.api.API.url_financial_order_list;
 import static com.stratagile.qlink.data.api.API.url_financial_product_info;
 import static com.stratagile.qlink.data.api.API.url_financial_product_list;
@@ -111,10 +115,15 @@ import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
+import static com.stratagile.qlink.data.api.API.url_user_change_nickname;
+import static com.stratagile.qlink.data.api.API.url_user_change_password;
 import static com.stratagile.qlink.data.api.API.url_user_invite;
 import static com.stratagile.qlink.data.api.API.url_user_invite_ranking;
+import static com.stratagile.qlink.data.api.API.url_user_rich_list;
 import static com.stratagile.qlink.data.api.API.url_user_sign_in;
 import static com.stratagile.qlink.data.api.API.url_user_signin_code;
+import static com.stratagile.qlink.data.api.API.url_user_upload_headview;
+import static com.stratagile.qlink.data.api.API.url_vcode_change_password_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_sign_in_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.API.url_wallet_transaction_report;
@@ -212,9 +221,9 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ImportWalletResult> batchImportWallet(@Body RequestBody map);
 
-    @POST(user_update_avatar)
+    @POST(url_user_upload_headview)
     @Multipart
-    Observable<UpLoadAvatar> updateMyAvatar(@Part("p2pId") RequestBody p2pId, @Part MultipartBody.Part head);
+    Observable<UpLoadAvatar> updateMyAvatar(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part head);
 
     @GET(API.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);
@@ -406,9 +415,17 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> getSignInVcode(@Body RequestBody map);
 
+    @POST(url_vcode_change_password_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getForgetPasswordVcode(@Body RequestBody map);
+
+    @POST(url_user_change_password)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VcodeLogin> resetPassword(@Body RequestBody map);
+
     @POST(ulr_user_sign_up)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<Register> userRegister(@Body RequestBody map);
+    Observable<VcodeLogin> userRegister(@Body RequestBody map);
 
     @POST(url_user_sign_in)
     @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -440,11 +457,23 @@ public interface HttpApi {
 
     @POST(url_user_invite_ranking)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> getRankings(@Body RequestBody map);
+    Observable<MyRanking> getRankings(@Body RequestBody map);
+
+    @POST(url_user_rich_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EarnRank> getEarnRankings(@Body RequestBody map);
+
+    @POST(url_finance_history_record)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<HistoryRecord> getHistoryRecord(@Body RequestBody map);
 
     @POST(url_user_invite)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<InviteList> getInivteTop5(@Body RequestBody map);
+
+    @POST(url_user_change_nickname)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> changeNickName(@Body RequestBody map);
 
     /*************************************************/
 }

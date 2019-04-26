@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:textColor="#888"
-                android:text="Principal"
+                android:text="@string/principal"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/tvPrincipal"
@@ -63,7 +63,7 @@
             <TextView
                 android:id="@+id/tvQlcCount"
                 android:layout_width="wrap_content"
-                android:text="Cumulative Earnings"
+                android:text="@string/cumulative_earnings"
                 android:textSize="12sp"
                 android:textColor="@color/color_999"
                 android:layout_height="wrap_content" />
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:textColor="#888"
-                android:text="Maturity Date"
+                android:text="@string/maturity_date"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/tvMaturityDate"
@@ -114,7 +114,7 @@
                 android:paddingTop="@dimen/x4"
                 android:paddingBottom="@dimen/x4"
                 android:textColor="@color/color_108ee9"
-                android:text="Redeem"
+                android:text="@string/redeem"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
@@ -133,7 +133,7 @@
                 android:paddingTop="@dimen/x4"
                 android:paddingBottom="@dimen/x4"
                 android:textColor="@color/color_808080"
-                android:text="Not Received"
+                android:text="@string/not_received"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
@@ -152,7 +152,7 @@
                 android:paddingTop="@dimen/x4"
                 android:paddingBottom="@dimen/x4"
                 android:textColor="@color/color_808080"
-                android:text="Redeemed"
+                android:text="@string/redeemed"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>

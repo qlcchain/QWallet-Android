@@ -102,6 +102,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.VerifyWalletPasswordActivity"
             android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Translucent"
             android:screenOrientation="portrait"/>
         <!--android:windowSoftInputMode="stateVisible|adjustResize"-->
         <activity android:name=".ui.activity.wallet.ProfilePictureActivity"
@@ -195,6 +196,12 @@
         <activity android:name=".ui.activity.my.LoginActivity" />
         <activity android:name=".ui.activity.my.RegisgerActivity" />
         <activity android:name=".ui.activity.finance.InviteActivity" />
+        <activity android:name=".ui.activity.finance.MyRankingActivity" />
+        <activity android:name=".ui.activity.finance.EarnRankActivity" />
+        <activity android:name=".ui.activity.finance.HistoryRecordActivity" />
+        <activity android:name=".ui.activity.finance.JoinCommunityActivity" />
+        <activity android:name=".ui.activity.my.ForgetPasswordActivity" />
+        <activity android:name=".ui.activity.main.EditInputActivity" />
 
 
         <meta-data

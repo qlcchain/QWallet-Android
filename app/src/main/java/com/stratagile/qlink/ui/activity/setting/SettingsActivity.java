@@ -7,7 +7,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
@@ -24,6 +27,7 @@ import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.Set2Asset;
 import com.stratagile.qlink.guideview.Guide;
+import com.stratagile.qlink.ui.activity.my.RetrievePasswordActivity;
 import com.stratagile.qlink.ui.activity.setting.component.DaggerSettingsComponent;
 import com.stratagile.qlink.ui.activity.setting.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.setting.module.SettingsModule;
@@ -65,6 +69,14 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     SettingsAdapter settingsAdapter;
     @BindView(R.id.llLoginOut)
     LinearLayout llLoginOut;
+    @BindView(R.id.touchIdToUnlock)
+    Switch touchIdToUnlock;
+    @BindView(R.id.resetPassword)
+    LinearLayout resetPassword;
+    @BindView(R.id.selectUnit)
+    LinearLayout selectUnit;
+    @BindView(R.id.tvVersion)
+    TextView tvVersion;
     private Guide guide;
 
     @Override
@@ -78,6 +90,18 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        tvVersion.setText(VersionUtil.getAppVersionName(this));
+        touchIdToUnlock.setChecked(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, false));
+        touchIdToUnlock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtil.putBoolean(SettingsActivity.this, ConstantValue.fingerprintUnLock, isChecked);
+            }
+        });
+        if (ConstantValue.currentUser == null) {
+            llLoginOut.setVisibility(View.GONE);
+            resetPassword.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -359,7 +383,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         progressDialog.hide();
     }
 
-    @OnClick({R.id.llLoginOut})
+    @OnClick({R.id.llLoginOut, R.id.resetPassword, R.id.selectUnit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llLoginOut:
@@ -368,11 +392,20 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                     if (userAccount.getIsLogin()) {
                         userAccount.setIsLogin(false);
                         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(userAccount);
+                        ConstantValue.currentUser = null;
                         setResult(1);
                         finish();
-                        ToastUtil.displayShortToast("logout success");
+                        ToastUtil.displayShortToast(getString(R.string.logout_success));
                     }
                 }
+                break;
+            case R.id.resetPassword:
+                Intent intent = new Intent(this, RetrievePasswordActivity.class);
+                intent.putExtra("flag", "");
+                startActivity(intent);
+                break;
+            case R.id.selectUnit:
+                startActivity(new Intent(this, CurrencyUnitActivity.class));
                 break;
             default:
                 break;

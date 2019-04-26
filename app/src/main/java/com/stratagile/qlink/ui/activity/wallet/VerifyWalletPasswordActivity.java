@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.wallet;
 
 import android.annotation.TargetApi;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -101,22 +102,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
 
     @Override
     protected void initData() {
-        if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
-            Intent intent = new Intent(AppConfig.getInstance(), CreateWalletPasswordActivity.class);
-            startActivityForResult(intent, 2);
-        }
-//        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowUnLockGuide, false)) {
-//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(etPassword.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//            llUnlock.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    showGuideViewUnlock();
-//                }
-//            });
-//            return;
-//        }
-        setTitle("Enter Password");
+        relativeLayout_root.setVisibility(View.GONE);
         etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -168,32 +154,65 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 }
             }
         };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, false)) {
             // init fingerprint.
             try {
                 FingerprintManager fingerprintManager = (FingerprintManager) AppConfig.getInstance().getSystemService(Context.FINGERPRINT_SERVICE);
                 /*if(!SpUtil.getString(this, ConstantValue.fingerPassWord, "").equals(""))
                 {*/
                 if (fingerprintManager != null && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints()) {
-                    tvFingerPrinte.setVisibility(View.VISIBLE);
-                    if (SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true) && !SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
-                        tvFingerPrinte.performClick();
-                    }
-                } else {
-                    etPassword.requestFocus();
                     tvFingerPrinte.setVisibility(View.GONE);
-                    SpUtil.putString(this, ConstantValue.fingerPassWord, "");
+                    tvFingerPrinte.performClick();
+                } else {
+                    tvFingerPrinte.setVisibility(View.GONE);
+                    KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+                    if (!keyguardManager.isKeyguardSecure()) {
+                        KLog.i("没有设置安全密码");
+                        Intent intent = new Intent();
+                        try {
+                            intent.putExtra("position", getIntent().getStringExtra("position"));
+                        } catch (Exception e) {
+
+                        }
+                        setResult(RESULT_OK, intent);
+                        ConstantValue.isShouldShowVertifyPassword = false;
+                        SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
+                        SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                        finishActivity();
+                    } else {
+                        Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
+                        if (intent != null) {
+                            startActivityForResult(intent, 3);
+                        }
+                    }
                 }
                 /*}else{
                     etPassword.requestFocus();
                 }*/
             } catch (NoClassDefFoundError e) {
-                SpUtil.putString(this, ConstantValue.fingerPassWord, "");
             }
 
         } else {
-            etPassword.requestFocus();
-            SpUtil.putString(this, ConstantValue.fingerPassWord, "");
+            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+            if (!keyguardManager.isKeyguardSecure()) {
+                KLog.i("没有设置安全密码");
+                Intent intent = new Intent();
+                try {
+                    intent.putExtra("position", getIntent().getStringExtra("position"));
+                } catch (Exception e) {
+
+                }
+                setResult(RESULT_OK, intent);
+                ConstantValue.isShouldShowVertifyPassword = false;
+                SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
+                SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                finishActivity();
+            } else {
+                Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
+                if (intent != null) {
+                    startActivityForResult(intent, 3);
+                }
+            }
         }
 
     }
@@ -209,6 +228,23 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 finish();
             } else {
                 finish();
+            }
+        }
+        if (requestCode == 3) {
+            if (resultCode == RESULT_OK) {
+                Intent intent = new Intent();
+                try {
+                    intent.putExtra("position", getIntent().getStringExtra("position"));
+                } catch (Exception e) {
+
+                }
+                setResult(RESULT_OK, intent);
+                ConstantValue.isShouldShowVertifyPassword = false;
+                SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
+                SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                finishActivity();
+            } else {
+                finishActivity();
             }
         }
 
@@ -335,40 +371,31 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                         builderTips.show();
                     }
                 } catch (Exception e) {
-//                    try {
-//                        myAuthCallback = new MyAuthCallback(handler);
-//                        CryptoObjectHelper cryptoObjectHelper = new CryptoObjectHelper();
-//                        if (cancellationSignal == null) {
-//                            cancellationSignal = new CancellationSignal();
-//                        }
-//
-//                        fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), cancellationSignal, 0,
-//                                myAuthCallback, null);
-//                       /* fingerprintManager.authenticate(cryptoObjectHelper.buildCryptoObject(), 0,
-//                                cancellationSignal, myAuthCallback, null);*/
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                        View view = View.inflate(this, R.layout.finger_dialog_layout, null);
-//                        builder.setView(view);
-//                        builder.setCancelable(false);
-//                        TextView title = (TextView) view.findViewById(R.id.title);//设置标题
-//                        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
-//                        Button btn_cancel = (Button) view.findViewById(R.id.btn_left);//取消按钮
-//                        btn_cancel.setText(R.string.back_btn);
-//                        Button btn_comfirm = (Button) view.findViewById(R.id.btn_right);//确定按钮
-//                        btn_comfirm.setText(R.string.cancel_btn_dialog);
-//                        finger = (ImageView) view.findViewById(R.id.finger);
-//                        tvContent.setText(R.string.choose_finger_dialog_title);
-//                        title.setText(R.string.unlock_wallet);
-//                        Context currentContext = this;
-//                        builderTips = builder.create();
-//                        builderTips.show();
-//                    } catch (Exception er) {
+                    KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+                    if (!keyguardManager.isKeyguardSecure()) {
+                        KLog.i("没有设置安全密码");
+                        Intent intent = new Intent();
+                        try {
+                            intent.putExtra("position", getIntent().getStringExtra("position"));
+                        } catch (Exception e1) {
+
+                        }
+                        setResult(RESULT_OK, intent);
+                        ConstantValue.isShouldShowVertifyPassword = false;
+                        SpUtil.putString(this, ConstantValue.fingerPassWord, "888888");
+                        SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
+                        finishActivity();
+                    } else {
+                        Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
+                        if (intent != null) {
+                            startActivityForResult(intent, 3);
+                        }
+                    }
                     e.printStackTrace();
                     if (builderTips != null) {
                         builderTips.dismiss();
                     }
-                    Toast.makeText(VerifyWalletPasswordActivity.this, "Fingerprint init failed! Try again!", Toast.LENGTH_SHORT).show();
-//                    }
+                    Toast.makeText(VerifyWalletPasswordActivity.this, R.string.Fingerprint_init_failed, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.tvJoin:
@@ -504,8 +531,23 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
                 finishActivity();
             }
+        } else if (stringId == R.string.fingerprint_not_recognized){
+            Toast.makeText(VerifyWalletPasswordActivity.this, stringId, Toast.LENGTH_SHORT).show();
+        } else if (stringId == R.string.ErrorHwUnavailable_warning){
+            Toast.makeText(VerifyWalletPasswordActivity.this, stringId, Toast.LENGTH_SHORT).show();
+            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+            if (!keyguardManager.isKeyguardSecure()) {
+                KLog.i("没有设置安全密码");
+                finishActivity();
+            } else {
+                Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
+                if (intent != null) {
+                    startActivityForResult(intent, 3);
+                }
+            }
         } else {
             Toast.makeText(VerifyWalletPasswordActivity.this, stringId, Toast.LENGTH_SHORT).show();
+            finishActivity();
         }
     }
 

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/roboto_regular"
-            android:text="@string/my_wallet"
+            android:text="@string/wallet"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -65,6 +65,7 @@
                 android:layout_centerHorizontal="true"
                 android:visibility="invisible"
                 android:layout_width="@dimen/x50"
+                android:layout_marginRight="@dimen/x30"
                 android:layout_height="@dimen/x50"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/icon_free"
@@ -74,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:textSize="13sp"
-                android:text="My Portfolio"
+                android:text="@string/my_portfolio"
                 android:layout_marginRight="@dimen/x30"
                 android:textColor="@color/white"
                 android:layout_height="wrap_content" />

@@ -1,5 +1,9 @@
 package com.stratagile.qlink.ui.activity.my;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,11 +18,24 @@ import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
+import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.ui.activity.main.EditInputActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerPersonComponent;
 import com.stratagile.qlink.ui.activity.my.contract.PersonContract;
 import com.stratagile.qlink.ui.activity.my.module.PersonModule;
 import com.stratagile.qlink.ui.activity.my.presenter.PersonPresenter;
+import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -73,19 +90,36 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
 
     @Override
     protected void initData() {
-        setTitle("Personal Info");
-        if (!ConstantValue.currentUser.getEmail().equals("")) {
+        setTitle(getString(R.string.person_info));
+        EventBus.getDefault().register(this);
+        if (!"".equals(ConstantValue.currentUser.getEmail())) {
             tvEmail.setText(ConstantValue.currentUser.getEmail());
         } else {
-            tvEmail.setText("unverified");
+            tvEmail.setText(R.string.unverified);
         }
-        if (!ConstantValue.currentUser.getPhone().equals("")) {
+        if (!"".equals(ConstantValue.currentUser.getPhone())) {
             tvMobile.setText(ConstantValue.currentUser.getPhone());
         } else {
-            tvMobile.setText("unverified");
+            tvMobile.setText(R.string.unverified);
         }
         tvInviteCode.setText(ConstantValue.currentUser.getInviteCode());
         tvUserName.setText(ConstantValue.currentUser.getUserName());
+        if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+            Glide.with(this)
+                    .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                    .apply(AppConfig.getInstance().options)
+                    .into(ivAvatar);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateImg(UpdateAvatar updateAvatar) {
         if (!"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
                     .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
@@ -119,14 +153,38 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         progressDialog.hide();
     }
 
+    @Override
+    public void changeNickNameBack(BaseBack baseBack) {
+        closeProgressDialog();
+        ConstantValue.currentUser.setUserName(nickName);
+        tvUserName.setText(nickName);
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+        ToastUtil.displayShortToast(getString(R.string.success));
+    }
+
     @OnClick({R.id.profile, R.id.username, R.id.inviteCode, R.id.email, R.id.mobile})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.profile:
+                Intent intent1 = new Intent(this, ProfilePictureActivity.class);
+//                Intent intent1 = new Intent(this, SelectWalletTypeActivity.class);
+                startActivityForResult(intent1, 2);
                 break;
             case R.id.username:
+                Intent intent = new Intent(this, EditInputActivity.class);
+                intent.putExtra("title", getString(R.string.username));
+                intent.putExtra("hint", getString(R.string.username));
+                intent.putExtra("content", ConstantValue.currentUser.getUserName());
+                startActivityForResult(intent, 1);
                 break;
             case R.id.inviteCode:
+                //获取剪贴板管理器：
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 创建普通字符型ClipData
+                ClipData mClipData = ClipData.newPlainText("Label", ConstantValue.currentUser.getId() + "");
+                // 将ClipData内容放到系统剪贴板里。
+                cm.setPrimaryClip(mClipData);
+                ToastUtil.displayShortToast(getString(R.string.copy_success));
                 break;
             case R.id.email:
                 break;
@@ -135,5 +193,27 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == -1) {
+            changeNickNmae(data.getStringExtra("result"));
+        }
+        if (requestCode == 2 && resultCode == -1) {
+
+        }
+    }
+
+    String nickName = "";
+    private void changeNickNmae(String nickName) {
+        showProgressDialog();
+        this.nickName = nickName;
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("nickname", nickName);
+        mPresenter.changeNickName(infoMap);
     }
 }

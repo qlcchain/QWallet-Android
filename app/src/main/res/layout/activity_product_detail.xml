@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:textSize="12sp"
                     android:textColor="#888"
-                    android:text="Annual Percentage Rate"
+                    android:text="@string/annual_percentage_rate"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <View
@@ -67,7 +67,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
                     <TextView
-                        android:text="Days"
+                        android:text="@string/days"
                         android:textSize="12sp"
                         android:textColor="@color/color_29282a"
                         android:layout_marginLeft="@dimen/x8"
@@ -88,6 +88,7 @@
             android:background="@color/color_f2f2f2"
             android:layout_height="@dimen/x1" />
         <TextView
+            android:id="@+id/productPoint"
             android:layout_width="match_parent"
             android:paddingLeft="@dimen/x30"
             android:gravity="center"
@@ -111,7 +112,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Rules"
+                android:text="@string/rules_"
                 android:textSize="16sp"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
@@ -121,7 +122,7 @@
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Details"
+                android:text="@string/details_"
                 android:textSize="14sp"
                 android:textColor="@color/color_999"
                 android:layout_height="wrap_content" />
@@ -148,7 +149,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="@dimen/x200"
-                    android:text="Purchase Date"
+                    android:text="@string/purchase_date"
                     android:textColor="@color/color_29282a"
                     android:textSize="12sp"
                     android:layout_height="wrap_content" />
@@ -159,7 +160,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:textColor="@color/color_29282a"
-                    android:text="Value Date"
+                    android:text="@string/value_date"
                     android:textSize="12sp"
                     android:layout_height="wrap_content" />
                 <View
@@ -171,7 +172,7 @@
                     android:textColor="@color/color_29282a"
                     android:gravity="right"
                     android:textSize="12sp"
-                    android:text="Maturity Date"
+                    android:text="@string/maturity_date"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <com.stratagile.qlink.view.sidebar.ProductView
@@ -184,7 +185,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="@dimen/x200"
-                    android:text="Today"
+                    android:text="@string/today"
                     android:textColor="@color/color_29282a"
                     android:textSize="12sp"
                     android:layout_height="wrap_content" />
@@ -193,6 +194,7 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/tvValueDate"
                     android:layout_width="wrap_content"
                     android:textColor="@color/color_29282a"
                     android:text="03-19"
@@ -203,6 +205,7 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/tvMaturityDate"
                     android:layout_width="@dimen/x200"
                     android:gravity="right"
                     android:textColor="@color/color_29282a"
@@ -224,7 +227,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Amount"
+                android:text="@string/amount"
                 android:textSize="16sp"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
@@ -234,7 +237,7 @@
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:text="All"
+                android:text="@string/all_"
                 android:textSize="14sp"
                 android:textColor="@color/mainColor"
                 android:layout_height="wrap_content" />
@@ -254,6 +257,7 @@
                     android:id="@+id/etQlcCount"
                     android:layout_width="0px"
                     android:layout_weight="1"
+                    android:inputType="number"
                     android:hint="From 1000 QLC"
                     android:background="@null"
                     android:layout_height="match_parent" />
@@ -295,7 +299,7 @@
                     android:layout_height="@dimen/x40"/>
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Read and agree on Terms of "
+                    android:text="@string/read_and_agree_on_terms_of"
                     android:textSize="12sp"
                     android:layout_marginRight="@dimen/x8"
                     android:layout_height="wrap_content" />
@@ -303,7 +307,7 @@
                     android:id="@+id/servicePrivacyPolicy"
                     android:layout_width="wrap_content"
                     android:textSize="12sp"
-                    android:text="Service and Privacy Policy"
+                    android:text="@string/service_and_privacy_policy"
                     android:textColor="@color/mainColor"
                     android:layout_height="wrap_content" />
             </LinearLayout>

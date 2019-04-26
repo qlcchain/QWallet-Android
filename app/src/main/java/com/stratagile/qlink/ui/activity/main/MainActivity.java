@@ -81,6 +81,7 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.sms.SmsFragment;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
@@ -397,7 +398,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             }
         });
         bottomNavigation.setSelectedItemId(R.id.item_sms);
-        setVpnPage();
+//        setVpnPage();
         IntentFilter intent = new IntentFilter();
         intent.addAction(BroadCastAction.disconnectVpnSuccess);
         registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
@@ -532,82 +533,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private void setAllWalletPage() {
-        if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
-            return;
-        }
+//        if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
+//            return;
+//        }
         dangqianshijian = Calendar.getInstance().getTimeInMillis();
         KLog.i("进入钱包页面。。");
         ivWallet.setVisibility(View.VISIBLE);
         tvTitle.setVisibility(View.VISIBLE);
         tvFree.setVisibility(View.GONE);
-        //如果支持指纹，但是没有开启
-        if (isSupportFingerPrint() && !SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
-            if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
-                if (ConstantValue.isShouldShowVertifyPassword) {
-                    Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
-                    startActivityForResult(intent, 1);
-                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                    bottomNavigation.setSelectedItemId(R.id.item_sms);
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-                    }
-                    viewPager.setCurrentItem(1, false);
-                    bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
-                    ivQRCode.setVisibility(View.VISIBLE);
-                    statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
-                    rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
-                    tvTitle.setText(R.string.wallet);
-                    tvTitle.setTextColor(getResources().getColor(R.color.white));
-                    Glide.with(this)
-                            .load(R.mipmap.add_j)
-                            .into(ivWallet);
-                    ivAvater.setVisibility(View.VISIBLE);
-                    Glide.with(this)
-                            .load(R.mipmap.qr_code_n)
-                            .into(ivAvater);
-//                    showGuideViewEnterSetting();
-                }
-            } else {
-                Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
-                startActivityForResult(intent, 1);
-                overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
-            }
-            //如果不支持指纹，或者指纹开启
+
+        if (ConstantValue.isShouldShowVertifyPassword) {
+            Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+            startActivityForResult(intent, 1);
+            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+            bottomNavigation.setSelectedItemId(R.id.item_sms);
         } else {
-            if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("") || !SpUtil.getString(this, ConstantValue.fingerPassWord, "").equals("")) {
-                if (ConstantValue.isShouldShowVertifyPassword) {
-                    Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
-                    startActivityForResult(intent, 1);
-                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                    bottomNavigation.setSelectedItemId(R.id.item_sms);
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-                    }
-                    viewPager.setCurrentItem(1, false);
-                    ivQRCode.setVisibility(View.VISIBLE);
-                    bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
-                    statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
-                    rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
-                    tvTitle.setText(R.string.wallet);
-                    tvTitle.setTextColor(getResources().getColor(R.color.white));
-                    ivAvater.setVisibility(View.VISIBLE);
-                    Glide.with(this)
-                            .load(R.mipmap.qr_code_n)
-                            .into(ivAvater);
-                    Glide.with(this)
-                            .load(R.mipmap.add_j)
-                            .into(ivWallet);
-//                    showGuideViewEnterSetting();
-                }
-            } else {
-                Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
-                startActivityForResult(intent, 1);
-                overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
             }
+            viewPager.setCurrentItem(1, false);
+            ivQRCode.setVisibility(View.VISIBLE);
+            statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
+            rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
+            tvTitle.setText(R.string.wallet);
+            tvTitle.setTextColor(getResources().getColor(R.color.white));
+            Glide.with(this)
+                    .load(R.mipmap.add_j)
+                    .into(ivWallet);
+            ivAvater.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(R.mipmap.qr_code_n)
+                    .into(ivAvater);
+//                    showGuideViewEnterSetting();
         }
     }
 
@@ -659,12 +616,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            ConstantValue.isShouldShowVertifyPassword = false;
-            setAllWalletPage();
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                ConstantValue.isShouldShowVertifyPassword = false;
+                KLog.i("验证指纹回来，并且成功");
+                bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+            } else {
+                bottomNavigation.setSelectedItemId(R.id.item_sms);
+            }
 
-        } else if (requestCode == 1) {
-            bottomNavigation.setSelectedItemId(R.id.item_sms);
         }
         if (requestCode == START_SELECT_PICTURE && resultCode == RESULT_OK) {
 //            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
@@ -915,7 +875,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
                 break;
             case R.id.tv_free:
-                startActivity(new Intent(this, MyProductActivity.class));
+                if (ConstantValue.currentUser == null) {
+                    startActivity(new Intent(this, AccountActivity.class));
+                } else {
+                    startActivity(new Intent(this, MyProductActivity.class));
+                }
                 break;
             default:
                 break;

@@ -49,17 +49,25 @@ public class DateUtil {
         } else {
             date = new Date(var0 * 1000);
         }
-        String var1;
-        if (isSameYear(var0)) {
-            var1 = "dd MMM";
-            KLog.i("同一年");
-        } else {
-            var1 = "dd MMM yyyy";
-            KLog.i("不同年");
-        }
         if (Locale.getDefault().getLanguage().startsWith("zh")) {
+            String var1;
+            if (isSameYear(var0)) {
+                var1 = "MMM dd";
+                KLog.i("同一年");
+            } else {
+                var1 = "yyyy MMM dd";
+                KLog.i("不同年");
+            }
             return (new SimpleDateFormat(var1, Locale.CHINA)).format(date);
         } else {
+            String var1;
+            if (isSameYear(var0)) {
+                var1 = "dd MMM";
+                KLog.i("同一年");
+            } else {
+                var1 = "dd MMM yyyy";
+                KLog.i("不同年");
+            }
             return (new SimpleDateFormat(var1, Locale.ENGLISH)).format(date);
         }
     }

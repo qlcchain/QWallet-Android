@@ -12,6 +12,7 @@ import com.stratagile.qlink.utils.DateUtil;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderListAdapter extends BaseQuickAdapter<Order.OrderListBean, BaseViewHolder> {
     public OrderListAdapter(@Nullable List<Order.OrderListBean> data) {
@@ -28,12 +29,16 @@ public class OrderListAdapter extends BaseQuickAdapter<Order.OrderListBean, Base
 
     @Override
     protected void convert(BaseViewHolder helper, Order.OrderListBean item) {
-        helper.setText(R.id.tvProductName, item.getProductName());
         helper.setText(R.id.tvPrincipal, item.getAmount() + "");
         helper.setText(R.id.tvCumulativeEarning, item.getAddRevenue() + "");
         helper.setText(R.id.tvMaturityDate, DateUtil.getMaturityDate(item.getDueDays(), mContext));
         helper.setGone(R.id.llNotReceived, false);
         helper.setGone(R.id.llRedeemed, false);
+        if (mContext.getResources().getConfiguration().locale == Locale.ENGLISH) {
+            helper.setText(R.id.tvProductName, item.getProductNameEn());
+        } else {
+            helper.setText(R.id.tvProductName, item.getProductName());
+        }
         if (item.getMaturityTime().equals("")) {
             //日日盈
             if (item.getStatus().equals("PAY")) {

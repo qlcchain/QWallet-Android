@@ -25,6 +25,7 @@ import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.UpLoadAvatar;
+import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.socks.library.KLog;
@@ -39,6 +40,8 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.ProfilePicturePresenter
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.vondear.rxtools.RxFileTool;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -118,14 +121,14 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
         }
 
         tvTitle.setText(getString(R.string.PROFILE_PICTURE).toUpperCase());
-        if (!"".equals(SpUtil.getString(this, ConstantValue.myAvatarPath, ""))) {
+        if (!"".equals(ConstantValue.currentUser.getAvatar())) {
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
                 Glide.with(this)
-                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                        .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
                         .into(ivPicture);
             } else {
                 Glide.with(this)
-                        .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                        .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
                         .into(ivPicture);
             }
         } }
@@ -157,23 +160,9 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
 
     @Override
     public void updateImgSuccess(UpLoadAvatar upLoadAvatar) {
-        List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-        String oldP2pId = "";
-        for (VpnEntity vpnEntity : vpnEntityList) {
-            if (vpnEntity.getP2pId().equals(SpUtil.getString(ProfilePictureActivity.this, ConstantValue.P2PID, ""))) {
-                vpnEntity.setAvatar(upLoadAvatar.getHead());
-                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-            }
-            if (vpnEntity.getP2pIdPc() != null && vpnEntity.getP2pIdPc().equals(SpUtil.getString(ProfilePictureActivity.this, ConstantValue.P2PID, ""))) {
-                vpnEntity.setAvatar(upLoadAvatar.getHead());
-                AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-                if(!oldP2pId.contains(vpnEntity.getP2pIdPc()))
-                {
-                    mPresenter.upLoadImgPc(vpnEntity.getP2pId());
-                }
-                oldP2pId += vpnEntity.getP2pIdPc()+",";
-            }
-        }
+        ConstantValue.currentUser.setAvatar(upLoadAvatar.getHead());
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+        EventBus.getDefault().post(new UpdateAvatar());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

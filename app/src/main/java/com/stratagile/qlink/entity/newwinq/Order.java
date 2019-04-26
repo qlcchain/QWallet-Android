@@ -69,9 +69,18 @@ public class Order extends BaseBack {
         private String orderTime;
         private String id;
         private String productName;
+        private String productNameEn;
         private int dueDays;
         private String maturityTime;
         private String status;
+
+        public String getProductNameEn() {
+            return productNameEn;
+        }
+
+        public void setProductNameEn(String productNameEn) {
+            this.productNameEn = productNameEn;
+        }
 
         public double getAddRevenue() {
             return addRevenue;

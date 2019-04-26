@@ -117,23 +117,29 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                     //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(locale);
                     break;
+                case "中文"://土耳其语
+                    locale = new Locale("zh","");
+                    configuration.locale = locale;
+//                    configuration.setLayoutDirection(Locale.CHINESE);
+                    Locale.setDefault(locale);
+                    break;
                 default:
-                    configuration.locale = Locale.ENGLISH;
+                    configuration.locale = Locale.CHINESE;
                     //configuration.setLayoutDirection(Locale.CHINESE);
-                    Locale.setDefault(Locale.ENGLISH);
+                    Locale.setDefault(Locale.CHINESE);
                     break;
             }
         }else{
             switch (defaultLanguage)
             {
-                case "tr"://土耳其语
-                    configuration.locale = Locale.getDefault();
-                    Locale.setDefault(Locale.getDefault());
+                case "en"://土耳其语
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
                     break;
                 default:
-                    configuration.locale = Locale.ENGLISH;
+                    configuration.locale = Locale.CHINESE;
                     //configuration.setLayoutDirection(Locale.CHINESE);
-                    Locale.setDefault(Locale.ENGLISH);
+                    Locale.setDefault(Locale.CHINESE);
                     break;
             }
         }

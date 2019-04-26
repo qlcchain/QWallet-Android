@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/x30"
-        android:text="Earnings Ranking"
+        android:text="@string/earnings_ranking"
         android:textColor="@color/color_29282a"
         android:textSize="18sp" />
 
@@ -35,7 +35,7 @@
         android:drawableRight="@mipmap/enter_n"
         android:gravity="center"
         android:paddingLeft="@dimen/x20"
-        android:text="Join NOW"
+        android:text="@string/Join_NOW"
         android:textColor="@color/white"
         android:textSize="10sp" />
 

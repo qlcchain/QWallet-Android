@@ -56,6 +56,9 @@ import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.finance.EarnRank;
+import com.stratagile.qlink.entity.finance.HistoryRecord;
+import com.stratagile.qlink.entity.finance.MyRanking;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
@@ -295,11 +298,11 @@ public class HttpAPIWrapper {
 
     }
 
-    public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody p2pId) {     //String userId, String nickName   userId, nickName
+    public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.updateMyAvatar(p2pId, photo)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
         } else {
-            return wrapper(mHttpAPI.updateMyAvatar(p2pId, photo)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }
@@ -641,8 +644,23 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.getSignInVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
+    public Observable<BaseBack> getForgetPasswordVcode(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getForgetPasswordVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getForgetPasswordVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
 
-    public Observable<Register> userRegister(Map map) {
+    public Observable<VcodeLogin> resetPassword(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.resetPassword(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.resetPassword(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<VcodeLogin> userRegister(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
@@ -706,11 +724,27 @@ public class HttpAPIWrapper {
     }
 
     //更多的排名
-    public Observable<BaseBack> getRankings(Map map) {
+    public Observable<MyRanking> getRankings(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mHttpAPI.getRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    //富豪榜
+    public Observable<EarnRank> getEarnRankings(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getEarnRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEarnRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<HistoryRecord> getHistoryRecord(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getHistoryRecord(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getHistoryRecord(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 
@@ -719,6 +753,14 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.getInivteTop5(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getInivteTop5(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> changeNickName(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

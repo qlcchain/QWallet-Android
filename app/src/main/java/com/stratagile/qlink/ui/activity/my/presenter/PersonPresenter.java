@@ -1,8 +1,15 @@
 package com.stratagile.qlink.ui.activity.my.presenter;
 import android.support.annotation.NonNull;
+
+import com.socks.library.KLog;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.ui.activity.my.contract.PersonContract;
 import com.stratagile.qlink.ui.activity.my.PersonActivity;
+
+import java.util.Map;
+
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -41,34 +48,32 @@ public class PersonPresenter implements PersonContract.PersonContractPresenter{
         }
     }
 
-//    @Override
-//    public void getUser(HashMap map) {
-//        //mView.showProgressDialog();
-//        Disposable disposable = httpAPIWrapper.getUser(map)
-//                .subscribe(new Consumer<User>() {
-//                    @Override
-//                    public void accept(User user) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                        mView.setText(user);
-//                      //mView.closeProgressDialog();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                      //mView.closeProgressDialog();
-//                      //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
-//    }
+    @Override
+    public void changeNickName(Map map) {
+        Disposable disposable = httpAPIWrapper.changeNickName(map)
+                .subscribe(new Consumer<BaseBack>() {
+                    @Override
+                    public void accept(BaseBack user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.changeNickNameBack(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
 }

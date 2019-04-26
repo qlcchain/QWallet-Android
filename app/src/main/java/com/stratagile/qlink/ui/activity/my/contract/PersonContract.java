@@ -1,7 +1,11 @@
 package com.stratagile.qlink.ui.activity.my.contract;
 
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
+
+import java.util.Map;
+
 /**
  * @author hzp
  * @Package The contract for PersonActivity
@@ -19,6 +23,9 @@ public interface PersonContract {
          *
          */
         void closeProgressDialog();
+
+
+        void changeNickNameBack(BaseBack baseBack);
     }
 
     interface PersonContractPresenter extends BasePresenter {
@@ -26,5 +33,7 @@ public interface PersonContract {
 //         *
 //         */
 //        void getBusinessInfo(Map map);
+
+        void changeNickName(Map map);
     }
 }

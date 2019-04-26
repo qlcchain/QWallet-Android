@@ -29,6 +29,16 @@ public class Product extends BaseBack {
         private int timeLimit;
         private double annualIncomeRate;
         private String name;
+        private String nameEn;
+
+        public String getNameEn() {
+            return nameEn;
+        }
+
+        public void setNameEn(String nameEn) {
+            this.nameEn = nameEn;
+        }
+
         private String id;
         private int leastAmount;
         private String status;

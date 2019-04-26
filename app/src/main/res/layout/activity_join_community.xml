@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/twitter"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x30"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/x46"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/x42"
+                android:src="@mipmap/twitter"
+                android:layout_height="@dimen/x42" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Twitter @playblockz"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_999"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x12"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="Twitter @playblockz"
+                android:layout_marginLeft="@dimen/x46"
+                android:textColor="@color/color_29282a"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="@dimen/x18"
+                android:src="@mipmap/icon_enter1"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_height="@dimen/x33" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x8"
+            android:layout_marginLeft="@dimen/x46"
+            android:background="@color/color_f2f2f2"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/telegram"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x30"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/x46"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/x42"
+                android:src="@mipmap/telegram"
+                android:layout_height="@dimen/x42" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Telegram"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_999"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x12"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="t.me/winqdapp"
+                android:layout_marginLeft="@dimen/x46"
+                android:textColor="@color/color_29282a"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="@dimen/x18"
+                android:src="@mipmap/icon_enter1"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_height="@dimen/x33" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x8"
+            android:layout_marginLeft="@dimen/x46"
+            android:background="@color/color_f2f2f2"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/facebook"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x30"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/x46"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/x42"
+                android:src="@mipmap/facebook"
+                android:layout_height="@dimen/x42" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Feedback"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_999"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x12"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="t.me/playblockz"
+                android:layout_marginLeft="@dimen/x46"
+                android:textColor="@color/color_29282a"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="@dimen/x18"
+                android:src="@mipmap/icon_enter1"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_height="@dimen/x33" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x8"
+            android:layout_marginLeft="@dimen/x46"
+            android:background="@color/color_f2f2f2"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/winq"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x30"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/x46"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/x42"
+                android:src="@mipmap/ic_launcher"
+                android:layout_height="@dimen/x42" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="WINQ Website"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_999"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x12"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="www.winq.net"
+                android:layout_marginLeft="@dimen/x46"
+                android:textColor="@color/color_29282a"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="@dimen/x18"
+                android:src="@mipmap/icon_enter1"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_height="@dimen/x33" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x8"
+            android:layout_marginLeft="@dimen/x46"
+            android:background="@color/color_f2f2f2"/>
+    </LinearLayout>
+</LinearLayout>

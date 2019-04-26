@@ -174,7 +174,7 @@ public interface MainHttpApi {
 
     @POST(user_update_avatar)
     @Multipart
-    Observable<UpLoadAvatar> updateMyAvatar(@Part("p2pId") RequestBody p2pId, @Part MultipartBody.Part head);
+    Observable<UpLoadAvatar> updateMyAvatar(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part head);
 
     @GET(MainAPI.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);

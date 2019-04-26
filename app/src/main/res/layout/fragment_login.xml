@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:paddingLeft="@dimen/x46"
+    android:paddingLeft="@dimen/x30"
     android:orientation="vertical"
-    android:paddingRight="@dimen/x46"
+    android:paddingRight="@dimen/x30"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="手机号/邮箱"
+            android:hint="@string/email"
             android:textSize="16sp"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -24,6 +25,38 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/x2"
         android:background="@color/color_f2f2f2"/>
+
+    <LinearLayout
+        android:id="@+id/llVcode"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x94">
+        <EditText
+            android:id="@+id/etVcode"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:background="@null"
+            android:hint="@string/verification_code"
+            android:textSize="16sp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tvVerificationCode"
+            android:layout_width="wrap_content"
+            android:text="Get the Code"
+            android:textColor="@color/mainColor"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x2"
+        android:background="@color/color_f2f2f2"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -34,7 +67,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="密码"
+            android:hint="@string/password"
             android:textSize="16sp"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -48,13 +81,13 @@
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/x60"
         android:gravity="center"
-        android:text="登录"
+        android:text="@string/login"
         android:background="@drawable/main_color_bt_bg"
         android:layout_height="@dimen/x94" />
     <TextView
         android:id="@+id/tvForgetPassword"
         android:layout_width="wrap_content"
-        android:text="忘记密码"
+        android:text="@string/forget_pwd"
         android:layout_marginTop="@dimen/x60"
         android:textSize="16sp"
         android:textColor="@color/mainColor"

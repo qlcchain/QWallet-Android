@@ -11,6 +11,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.UserAccount;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.my.component.DaggerRegisgerComponent;
 import com.stratagile.qlink.ui.activity.my.contract.RegisgerContract;
@@ -72,7 +73,7 @@ public class RegisgerActivity extends BaseActivity implements RegisgerContract.V
 
     @Override
     protected void initData() {
-
+        setTitle(getString(R.string.sign_up));
     }
 
     @Override
@@ -101,7 +102,7 @@ public class RegisgerActivity extends BaseActivity implements RegisgerContract.V
     }
 
     @Override
-    public void registerSuccess(Register register) {
+    public void registerSuccess(VcodeLogin register) {
         closeProgressDialog();
         SpUtil.putBoolean(this, ConstantValue.isUserLogin, true);
         if (AccountUtil.isTelephone(etAccount.getText().toString().trim())) {

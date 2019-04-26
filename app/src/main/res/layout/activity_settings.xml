@@ -18,13 +18,14 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Touch/Face ID to Unlock"
+                android:text="@string/touch_face_id_to_unlock"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
                 android:layout_weight="1"
                 android:layout_height="match_parent"/>
             <Switch
+                android:id="@+id/touchIdToUnlock"
                 android:layout_width="@dimen/x98"
                 android:layout_height="@dimen/x60" />
         </LinearLayout>
@@ -35,13 +36,34 @@
             android:background="@color/color_f2f2f2"/>
 
         <LinearLayout
+            android:id="@+id/resetPassword"
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Reset Password"
+                android:text="@string/reset_password"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:id="@+id/selectUnit"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/currency_unit"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -60,31 +82,16 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Currency Unit"
+                android:text="@string/version"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
                 android:layout_weight="1"
                 android:layout_height="match_parent"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
-            android:background="@color/color_f2f2f2"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_height="@dimen/x92">
             <TextView
+                android:id="@+id/tvVersion"
                 android:layout_width="wrap_content"
-                android:text="Version "
                 android:layout_height="wrap_content" />
-            <View
-                android:layout_width="0px"
-                android:layout_weight="1"
-                android:layout_height="match_parent"/>
         </LinearLayout>
 
         <View
@@ -100,7 +107,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Log Out"
+                android:text="@string/log_out"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"

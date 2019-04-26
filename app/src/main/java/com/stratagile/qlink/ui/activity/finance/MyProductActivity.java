@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.finance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.stratagile.qlink.ui.activity.finance.contract.MyProductContract;
 import com.stratagile.qlink.ui.activity.finance.module.MyProductModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.MyProductPresenter;
 import com.stratagile.qlink.ui.adapter.finance.OrderListAdapter;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -108,10 +110,7 @@ public class MyProductActivity extends BaseActivity implements MyProductContract
         infoMap.put("address", Account.INSTANCE.getWallet().getAddress());
         infoMap.put("page", "1");
         infoMap.put("size", "40");
-        String orgin = Calendar.getInstance().getTimeInMillis() + "," + ConstantValue.currentUser.getPassword();
-        KLog.i("加密前的token为：" + orgin);
-        String token = RSAEncrypt.encrypt(orgin, ConstantValue.currentUser.getPubKey());
-        infoMap.put("token", token);
+        infoMap.put("token", AccountUtil.getUserToken());
         mPresenter.getOrderList(infoMap);
     }
 
@@ -223,10 +222,7 @@ public class MyProductActivity extends BaseActivity implements MyProductContract
         Map<String, String> buyMap = new HashMap<>();
         buyMap.put("account", ConstantValue.currentUser.getAccount());
         buyMap.put("orderId", currentOrder.getId());
-        String orgin = Calendar.getInstance().getTimeInMillis() + "," + ConstantValue.currentUser.getPassword();
-        KLog.i("加密前的token为：" + orgin);
-        String token = RSAEncrypt.encrypt(orgin, ConstantValue.currentUser.getPubKey());
-        buyMap.put("token", token);
+        buyMap.put("token", AccountUtil.getUserToken());
         mPresenter.redeemOrder(buyMap);
     }
 
@@ -237,6 +233,7 @@ public class MyProductActivity extends BaseActivity implements MyProductContract
                 finish();
                 break;
             case R.id.ivHsitory:
+                startActivity(new Intent(this, HistoryRecordActivity.class));
                 break;
             default:
                 break;

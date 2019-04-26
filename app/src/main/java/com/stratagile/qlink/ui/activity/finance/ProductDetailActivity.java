@@ -1,6 +1,6 @@
 package com.stratagile.qlink.ui.activity.finance;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -8,35 +8,39 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.login.Login;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.api.transaction.SendCallBack;
-import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerProductDetailComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.ProductDetailContract;
 import com.stratagile.qlink.ui.activity.finance.module.ProductDetailModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.ProductDetailPresenter;
+import com.stratagile.qlink.ui.activity.main.WebViewActivity;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
+import com.stratagile.qlink.ui.activity.my.LoginActivity;
+import com.stratagile.qlink.ui.activity.my.RegisgerActivity;
+import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
+import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.DateUtil;
 import com.stratagile.qlink.utils.MD5Util;
-import com.stratagile.qlink.utils.RSAEncrypt;
-import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SmoothCheckBox;
-import com.vondear.rxtools.view.RxQRCode;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -75,6 +79,12 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     @BindView(R.id.llPayWay1)
     LinearLayout llPayWay1;
     ProductDetail mProductDetail;
+    @BindView(R.id.productPoint)
+    TextView productPoint;
+    @BindView(R.id.tvValueDate)
+    TextView tvValueDate;
+    @BindView(R.id.tvMaturityDate)
+    TextView tvMaturityDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +101,23 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
 
     @Override
     protected void initData() {
+        if (ConstantValue.currentUser == null) {
+            startActivity(new Intent(this, AccountActivity.class));
+            finish();
+            return;
+        }
+        if (ConstantValue.isShouldShowVertifyPassword) {
+            Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+            startActivityForResult(intent, 1);
+            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+            finish();
+            return;
+        }
         getProductDetail();
     }
 
     private void getProductDetail() {
+        showProgressDialog();
         Map<String, String> map = new HashMap<>();
         map.put("id", getIntent().getStringExtra("productId"));
         mPresenter.getProductDetail(map);
@@ -127,6 +150,7 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
 
     @Override
     public void showProductDetail(ProductDetail productDetail) {
+        closeProgressDialog();
         title.setGravity(Gravity.CENTER);
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.qlc);
@@ -137,8 +161,11 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
         mProductDetail = productDetail;
         tvProfit.setText(BigDecimal.valueOf(productDetail.getData().getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
         tvDayTime.setText(productDetail.getData().getTimeLimit() + "");
-        tvQlcCount.setText("From " + productDetail.getData().getLeastAmount() + " QLC");
-        etQlcCount.setHint("From " + productDetail.getData().getLeastAmount() + " QLC");
+        tvQlcCount.setText(getString(R.string.from_) + " " + productDetail.getData().getLeastAmount() + " QLC");
+        etQlcCount.setHint(getString(R.string.from_) + " " + productDetail.getData().getLeastAmount() + " QLC");
+        productPoint.setText(productDetail.getData().getPoint());
+        tvValueDate.setText(DateUtil.getMaturityDate(1, this));
+        tvMaturityDate.setText(DateUtil.getMaturityDate(productDetail.getData().getTimeLimit(), this));
 
 
     }
@@ -150,17 +177,33 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
 
     @Override
     public void buyQLCProductBack() {
-        ToastUtil.displayShortToast("success");
+        ToastUtil.displayShortToast(getString(R.string.Succeeded));
         finish();
     }
 
-    boolean isSelfPay = true;
-
-    @OnClick({R.id.tvConfirm})
+    @OnClick({R.id.tvConfirm, R.id.servicePrivacyPolicy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvConfirm:
+                if ("".equals(etQlcCount.getText().toString())) {
+                    ToastUtil.displayShortToast(getString(R.string.leastamount) + mProductDetail.getData().getLeastAmount() + " QLC");
+                    return;
+                }
+                if (Integer.parseInt(etQlcCount.getText().toString()) < mProductDetail.getData().getLeastAmount()) {
+                    ToastUtil.displayShortToast(getString(R.string.leastamount) + mProductDetail.getData().getLeastAmount() + " QLC");
+                    return;
+                }
+                if (!checkBox.isChecked()) {
+                    ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
+                    return;
+                }
                 transferQLC(Account.INSTANCE.getWallet().getAddress());
+                break;
+            case R.id.servicePrivacyPolicy:
+                Intent intent = new Intent(this, WebViewActivity.class);
+                intent.putExtra("url", "https://winq.net/disclaimer.html");
+                intent.putExtra("title", "Service agreement");
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -181,17 +224,13 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
                     @Override
                     public void onSuccess(String txid) {
                         Map<String, String> buyMap = new HashMap<>();
-                        buyMap.put("account", SpUtil.getString(AppConfig.getInstance(), ConstantValue.userPhone, ""));
+                        buyMap.put("account", ConstantValue.currentUser.getAccount());
                         buyMap.put("productId", getIntent().getStringExtra("productId"));
                         buyMap.put("amount", amount);
                         buyMap.put("addressFrom", address);
                         buyMap.put("addressTo", ConstantValue.mainAddress);
                         buyMap.put("hex", txid);
-
-                        String orgin = Calendar.getInstance().getTimeInMillis() + "," + SpUtil.getString(AppConfig.getInstance(), ConstantValue.userPassword, "");
-                        KLog.i("加密前的token为：" + orgin);
-                        String token = RSAEncrypt.encrypt(orgin, SpUtil.getString(AppConfig.getInstance(), ConstantValue.userRsaPubKey, ""));
-                        buyMap.put("token", token);
+                        buyMap.put("token", AccountUtil.getUserToken());
                         mPresenter.buyQLCProduct(buyMap);
                     }
 

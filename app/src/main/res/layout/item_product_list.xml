@@ -26,11 +26,16 @@
             android:textSize="14sp"
             android:textColor="#4d4d4d"
             android:layout_height="wrap_content" />
-        <ImageView
+        <TextView
             android:id="@+id/soldOut"
             android:layout_width="@dimen/x110"
+            android:text="@string/sold_out"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:background="@drawable/sold_out_bg"
             android:layout_marginLeft="@dimen/x6"
-            android:src="@mipmap/sold_out"
             android:layout_height="@dimen/x30" />
     </LinearLayout>
 
@@ -61,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:textColor="#888"
-                android:text="Annual Percentage Rate"
+                android:text="@string/annual_percentage_rate"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <View
@@ -89,7 +94,7 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/tvDays"
-                    android:text="Days"
+                    android:text="@string/days"
                     android:textSize="12sp"
                     android:textColor="@color/color_29282a"
                     android:layout_marginLeft="@dimen/x8"

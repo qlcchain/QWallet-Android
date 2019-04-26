@@ -94,9 +94,6 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         needFront = true;
-//        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
         super.onCreate(savedInstanceState);
     }
 
@@ -134,6 +131,7 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
 
     @Override
     protected void initData() {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
         File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/neoWallet");
         if (!file.exists()) {
             String addressNames = FileUtil.getAllAddressNames();
@@ -148,7 +146,7 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
             }
         }
         SpUtil.putInt(this, ConstantValue.LOCALVERSIONCODE, VersionUtil.getAppVersionCode(this));
-    }
+}
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
