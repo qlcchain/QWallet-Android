@@ -108,46 +108,45 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             {
                 case "English":
                     configuration.locale = Locale.ENGLISH;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(Locale.ENGLISH);
                     break;
                 case "Turkish"://土耳其语
                     locale = new Locale("tr","TR");
                     configuration.locale = locale;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(locale);
                     break;
                 case "中文"://土耳其语
-                    locale = new Locale("zh","");
-                    configuration.locale = locale;
-//                    configuration.setLayoutDirection(Locale.CHINESE);
-                    Locale.setDefault(locale);
+//                    locale = new Locale("zh","");
+//                    configuration.locale = locale;
+//                    Locale.setDefault(locale);
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
                     break;
                 default:
-                    configuration.locale = Locale.CHINESE;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
-                    Locale.setDefault(Locale.CHINESE);
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
                     break;
             }
         }else{
             switch (defaultLanguage)
             {
-                case "en"://土耳其语
+                case "en":
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
+                    break;
+                case "zh"://土耳其语
+//                    locale = new Locale("zh","");
+//                    configuration.locale = locale;
                     configuration.locale = Locale.ENGLISH;
                     Locale.setDefault(Locale.ENGLISH);
                     break;
                 default:
-                    configuration.locale = Locale.CHINESE;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
-                    Locale.setDefault(Locale.CHINESE);
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
                     break;
             }
         }
 
-//        if (SpUtil.getInt(this, ConstantValue.Language, 0) == 0) {
-//        } else {
-//            configuration.locale = Locale.CHINA;
-//        }
         getResources().updateConfiguration(configuration, displayMetrics);
         if (isUpdate) {
             Intent intent = new Intent(this, MainActivity.class);

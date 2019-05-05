@@ -19,6 +19,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
+import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
@@ -89,8 +90,34 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginSuccess(LoginSuccess loginSuccess) {
+        List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+        if (userAccounts.size() > 0) {
+            for (UserAccount userAccount : userAccounts) {
+                if (userAccount.getIsLogin()) {
+                    loginUser = userAccount;
+                    ConstantValue.currentUser = userAccount;
+                    isLogin = true;
+                    userName.setText(loginUser.getAccount());
+                    if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
+                        Glide.with(this)
+                                .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .apply(AppConfig.getInstance().options)
+                                .into(userAvatar);
+                    } else {
+                        Glide.with(this)
+                                .load(R.mipmap.icon_user_default)
+                                .apply(AppConfig.getInstance().options)
+                                .into(userAvatar);
+                    }
+                }
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateImg(UpdateAvatar updateAvatar) {
-        if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+        if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
                     .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
                     .apply(AppConfig.getInstance().options)
@@ -115,9 +142,14 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     ConstantValue.currentUser = userAccount;
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
-                    if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+                    if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
                         Glide.with(this)
                                 .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .apply(AppConfig.getInstance().options)
+                                .into(userAvatar);
+                    } else {
+                        Glide.with(this)
+                                .load(R.mipmap.icon_user_default)
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
                     }
@@ -160,7 +192,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     ConstantValue.currentUser = userAccount;
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
-                    if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+                    if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
                         Glide.with(this)
                                 .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
                                 .apply(AppConfig.getInstance().options)

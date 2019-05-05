@@ -47,5 +47,7 @@ public interface ProductDetailContract {
         void getUtxo(String address, SendCallBack sendCallBack);
 
         void buyQLCProduct(Map map);
+
+        void getQLCCount(Map map);
     }
 }

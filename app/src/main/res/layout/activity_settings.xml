@@ -19,6 +19,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/touch_face_id_to_unlock"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -44,6 +46,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/reset_password"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -64,6 +68,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/currency_unit"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -83,6 +89,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/version"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -108,6 +116,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/log_out"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"

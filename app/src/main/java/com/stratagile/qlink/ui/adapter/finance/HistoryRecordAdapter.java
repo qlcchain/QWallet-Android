@@ -12,6 +12,7 @@ import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.finance.EarnRank;
 import com.stratagile.qlink.entity.finance.HistoryRecord;
+import com.stratagile.qlink.utils.LanguageUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class HistoryRecordAdapter extends BaseQuickAdapter<HistoryRecord.Transac
 
     @Override
     protected void convert(BaseViewHolder helper, HistoryRecord.TransactionListBean item) {
-        if (mContext.getResources().getConfiguration().locale == Locale.CHINESE) {
+        if (LanguageUtil.isCN(mContext)) {
             helper.setText(R.id.tvProductName, item.getProductName());
             switch (item.getType()) {
                 case "BUY":

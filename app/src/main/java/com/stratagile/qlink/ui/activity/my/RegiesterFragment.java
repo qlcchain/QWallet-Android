@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.eventbus.LoginSuccess;
+import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerRegiesterComponent;
 import com.stratagile.qlink.ui.activity.my.contract.RegiesterContract;
 import com.stratagile.qlink.ui.activity.my.module.RegiesterModule;
@@ -24,6 +27,8 @@ import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SmoothCheckBox;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -122,6 +127,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
             userAccount.setPubKey(register.getData());
             userAccount.setUserName(register.getNickname());
             userAccount.setPhone(register.getPhone());
+            userAccount.setAvatar(register.getHead());
             userAccount.setInviteCode(register.getId());
             userAccount.setPassword(MD5Util.getStringMD5(password));
             userAccount.setIsLogin(true);
@@ -132,6 +138,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
             etEmail.setText("");
             etInviteCode.setText("");
             etRepeatPassword.setText("");
+            EventBus.getDefault().post(new LoginSuccess());
             getActivity().finish();
         }
     }
@@ -143,20 +150,32 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
 
     String password;
 
-    @OnClick({R.id.tvVerificationCode, R.id.tvRegister})
+    @OnClick({R.id.tvVerificationCode, R.id.tvRegister, R.id.servicePrivacyPolicy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvVerificationCode:
+                if ("".equals(etEmail.getText().toString().trim())) {
+                    ToastUtil.displayShortToast(getString(R.string.wrong_account));
+                    return;
+                }
                 if (AccountUtil.isEmail(etEmail.getText().toString().trim())) {
                     startVCodeCountDown();
                     Map map = new HashMap<String, String>();
                     map.put("account", etEmail.getText().toString().trim());
                     mPresenter.getSignUpVcode(map);
+                } else {
+                    ToastUtil.displayShortToast(getString(R.string.wrong_account));
                 }
                 break;
             case R.id.tvRegister:
                 password = etPassword.getText().toString().trim();
                 register();
+                break;
+            case R.id.servicePrivacyPolicy:
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("url", "https://winq.net/disclaimer.html");
+                intent.putExtra("title", "Service agreement");
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -200,6 +219,10 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
      * 手机号码注册
      */
     private void register() {
+        if ("".equals(etEmail.getText().toString().trim())) {
+            ToastUtil.displayShortToast(getString(R.string.wrong_account));
+            return;
+        }
         Map map = new HashMap<String, String>();
         map.put("account", etEmail.getText().toString().trim());
         if ("".equals(etVCode.getText().toString().trim())) {

@@ -50,6 +50,7 @@
             android:id="@+id/llCopy"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x77"
+            android:background="@drawable/invite_invite_code_bg"
             android:layout_marginLeft="@dimen/x30"
             android:layout_marginTop="@dimen/x30"
             android:layout_marginRight="@dimen/x30"

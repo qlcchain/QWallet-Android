@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/x20"
-                    android:text="Flexible From - QLC"
+                    android:text="- QLC"
                     android:textColor="#4d4d4d" />
 
                 <TextView
@@ -63,7 +63,6 @@
             <TextView
                 android:id="@+id/qlcDaily"
                 android:layout_width="wrap_content"
-                android:text="@string/qlc_daily_gain_program"
                 android:textSize="13sp"
                 android:textColor="@color/mainColor"
                 android:layout_centerHorizontal="true"

@@ -94,7 +94,6 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                     @Override
                     public void accept(NeoWalletInfo baseBack) throws Exception {
                         //isSuccesse
-                        mView.getNeoTokensInfo(baseBack);
                         for (int i = 0; i < baseBack.getData().getBalance().size(); i++) {
                             if (baseBack.getData().getBalance().get(i).getAsset_symbol().toLowerCase().equals("qlc")) {
                                 if (baseBack.getData().getBalance().get(i).getAmount() >= Double.parseDouble(amount)) {
@@ -111,7 +110,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                                     });
                                 } else {
                                     mView.closeProgressDialog();
-                                    ToastUtil.displayShortToast("The selected wallet does not have enough QLC");
+                                    ToastUtil.displayShortToast(AppConfig.getInstance().getString(R.string.no_enough_qlc));
                                 }
                             }
                         }
@@ -182,6 +181,30 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                         //onError
                         KLog.i("onError");
                         throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getQLCCount(Map map) {
+        Disposable disposable = httpAPIWrapper.getNeoWalletInfo(map)
+                .subscribe(new Consumer<NeoWalletInfo>() {
+                    @Override
+                    public void accept(NeoWalletInfo baseBack) throws Exception {
+                        //isSuccesse
+                        mView.getNeoTokensInfo(baseBack);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
                     }
                 }, new Action() {
                     @Override

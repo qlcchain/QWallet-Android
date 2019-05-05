@@ -113,22 +113,22 @@ public class AppConfig extends MultiDexApplication {
     public RequestOptions options = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransform())
-            .placeholder(R.mipmap.img_connected_head_portrait)
-            .error(R.mipmap.img_connected_head_portrait)
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
     public RequestOptions optionsMainColor = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
-            .placeholder(R.mipmap.img_connected_head_portrait)
-            .error(R.mipmap.img_connected_head_portrait)
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
     public RequestOptions optionsAvater = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
-            .placeholder(R.mipmap.img_connected_head_portrait)
-            .error(R.mipmap.img_connected_head_portrait)
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
     public AppConfig() {

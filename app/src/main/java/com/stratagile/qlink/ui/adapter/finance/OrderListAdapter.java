@@ -8,6 +8,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.utils.DateUtil;
+import com.stratagile.qlink.utils.LanguageUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +35,7 @@ public class OrderListAdapter extends BaseQuickAdapter<Order.OrderListBean, Base
         helper.setText(R.id.tvMaturityDate, DateUtil.getMaturityDate(item.getDueDays(), mContext));
         helper.setGone(R.id.llNotReceived, false);
         helper.setGone(R.id.llRedeemed, false);
-        if (mContext.getResources().getConfiguration().locale == Locale.ENGLISH) {
+        if (!LanguageUtil.isCN(mContext)) {
             helper.setText(R.id.tvProductName, item.getProductNameEn());
         } else {
             helper.setText(R.id.tvProductName, item.getProductName());

@@ -19,6 +19,7 @@ import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.my.component.DaggerLogin1Component;
 import com.stratagile.qlink.ui.activity.my.contract.Login1Contract;
@@ -28,6 +29,8 @@ import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -91,13 +94,21 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (AccountUtil.isEmail(s.toString().trim())) {
+                if (AccountUtil.isEmail(s.toString().trim()) || AccountUtil.isTelephone(s.toString().trim())) {
                     regexAccount(s.toString().trim());
                 } else {
                     llVcode.setVisibility(View.GONE);
                 }
             }
         });
+        if (ConstantValue.lastLoginOut != null) {
+            if (ConstantValue.lastLoginOut.getEmail() == null || "".equals(ConstantValue.lastLoginOut.getEmail())) {
+                etAccount.setText(ConstantValue.lastLoginOut.getPhone());
+            } else {
+                etAccount.setText(ConstantValue.lastLoginOut.getEmail());
+            }
+            etAccount.setSelection(etAccount.getText().length());
+        }
         return view;
     }
 
@@ -108,7 +119,13 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         if (userAccounts.size() > 0) {
             for (UserAccount userAccount : userAccounts) {
-                if (userAccount.getAccount().equals(account) && userAccount.getPubKey() != null && !"".equals(userAccount.getPubKey())) {
+                if (userAccount.getEmail() == null) {
+                    userAccount.setEmail("");
+                }
+                if (userAccount.getPhone() == null) {
+                    userAccount.setPhone("");
+                }
+                if ((account.equals(userAccount.getEmail()) || account.equals(userAccount.getPhone())) && userAccount.getPubKey() != null && !"".equals(userAccount.getPubKey())) {
                     //账号密码登录
                     isVCodeLogin = false;
                     llVcode.setVisibility(View.GONE);
@@ -193,7 +210,6 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 startActivity(new Intent(getActivity(), RetrievePasswordActivity.class));
                 break;
             case R.id.tvVerificationCode:
-                startVCodeCountDown();
                 getLoginVcode();
                 break;
             default:
@@ -237,6 +253,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
      * 获取登录验证码
      */
     private void getLoginVcode() {
+        showProgressDialog();
         Map map = new HashMap<String, String>();
         map.put("account", etAccount.getText().toString().trim());
         mPresenter.getSignInVcode(map);
@@ -288,6 +305,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 }
             }
         }
+        EventBus.getDefault().post(new LoginSuccess());
         getActivity().finish();
     }
 
@@ -306,5 +324,10 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         ConstantValue.currentUser = userAccount;
         AppConfig.getInstance().getDaoSession().getUserAccountDao().insert(userAccount);
         login();
+    }
+
+    @Override
+    public void getLoginVCodeSuccess() {
+        startVCodeCountDown();
     }
 }

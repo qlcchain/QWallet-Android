@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
+import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -90,7 +91,8 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        tvVersion.setText(VersionUtil.getAppVersionName(this));
+//        tvVersion.setText(VersionUtil.getAppVersionName(this));
+        tvVersion.setText(getString(R.string.version) +" "+ BuildConfig.VERSION_NAME +" ("+getString(R.string.Build) + " " +BuildConfig.VERSION_CODE+")");
         touchIdToUnlock.setChecked(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, false));
         touchIdToUnlock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -387,6 +389,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llLoginOut:
+                ConstantValue.lastLoginOut = ConstantValue.currentUser;
                 List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
                 for (UserAccount userAccount : userAccounts) {
                     if (userAccount.getIsLogin()) {

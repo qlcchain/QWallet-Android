@@ -109,6 +109,7 @@ public class Login1Presenter implements Login1Contract.Login1ContractPresenter{
                     public void accept(BaseBack baseBack) throws Exception {
                         //isSuccesse
                         mView.closeProgressDialog();
+                        mView.getLoginVCodeSuccess();
                         ToastUtil.displayShortToast("success");
 
                     }

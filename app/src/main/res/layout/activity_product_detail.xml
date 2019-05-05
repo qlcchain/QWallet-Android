@@ -236,6 +236,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
             <TextView
+                android:id="@+id/allIn"
                 android:layout_width="wrap_content"
                 android:text="@string/all_"
                 android:textSize="14sp"

@@ -40,9 +40,9 @@ android {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 70
+        versionCode getSelfDefinedVersion("code")
         multiDexEnabled true
-        versionName "2.0.1 release"
+        versionName "2.0.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        externalNativeBuild {
@@ -302,3 +302,21 @@ dependencies {
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
+
+def getSelfDefinedVersion(type) {
+    int aa = 1
+    int bb = 0
+    Process process = "git rev-list --count HEAD".execute()
+    process.waitFor()
+    int cccc = process.getText().toInteger()
+
+    if ("code".equals(type)) {
+        cccc
+    } else if ("name".equals(type)) {
+        String today = new Date().format("yyMMdd")
+        process = "git describe --always".execute()
+        process.waitFor()
+        String sha1 = process.getText().trim()
+        "$aa.$bb.$cccc.$today.$sha1"
+    }
+}

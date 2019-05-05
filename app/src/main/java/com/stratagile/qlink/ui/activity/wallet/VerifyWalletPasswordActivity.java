@@ -545,6 +545,8 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                     startActivityForResult(intent, 3);
                 }
             }
+        } else if (stringId == R.string.AcquiredToSlow_warning){
+            Toast.makeText(VerifyWalletPasswordActivity.this, stringId, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(VerifyWalletPasswordActivity.this, stringId, Toast.LENGTH_SHORT).show();
             finishActivity();

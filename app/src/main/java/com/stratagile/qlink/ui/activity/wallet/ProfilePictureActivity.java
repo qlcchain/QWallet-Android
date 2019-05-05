@@ -120,7 +120,6 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
             outputFile = Uri.fromFile(tempFile);
         }
 
-        tvTitle.setText(getString(R.string.PROFILE_PICTURE).toUpperCase());
         if (!"".equals(ConstantValue.currentUser.getAvatar())) {
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
                 Glide.with(this)
@@ -227,6 +226,9 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
             Glide.with(this)
                     .load(bitmap)
                     .into(ivPicture);
+            if (bitmap != null) {
+                saveBitmap(bitmap);
+            }
         }
     }
 

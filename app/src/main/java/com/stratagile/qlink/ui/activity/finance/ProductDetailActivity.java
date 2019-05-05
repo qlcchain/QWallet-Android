@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.login.Login;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -20,7 +19,6 @@ import com.stratagile.qlink.api.transaction.SendCallBack;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerProductDetailComponent;
@@ -29,18 +27,14 @@ import com.stratagile.qlink.ui.activity.finance.module.ProductDetailModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.ProductDetailPresenter;
 import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
-import com.stratagile.qlink.ui.activity.my.LoginActivity;
-import com.stratagile.qlink.ui.activity.my.RegisgerActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.DateUtil;
-import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -85,6 +79,8 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     TextView tvValueDate;
     @BindView(R.id.tvMaturityDate)
     TextView tvMaturityDate;
+    @BindView(R.id.allIn)
+    TextView allIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +110,7 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
             return;
         }
         getProductDetail();
+        getQLCCount();
     }
 
     private void getProductDetail() {
@@ -152,7 +149,7 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     public void showProductDetail(ProductDetail productDetail) {
         closeProgressDialog();
         title.setGravity(Gravity.CENTER);
-        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
         Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.qlc);
         drawable.setBounds(0, 0, (int) getResources().getDimension(R.dimen.x46), (int) getResources().getDimension(R.dimen.x46));
         title.setCompoundDrawables(drawable, null, null, null);
@@ -170,10 +167,19 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
 
     }
 
+
+
     @Override
     public void getNeoTokensInfo(NeoWalletInfo baseBack) {
-
+        KLog.i("获取qlc余额返回");
+        for (int i = 0; i < baseBack.getData().getBalance().size(); i++) {
+            if (baseBack.getData().getBalance().get(i).getAsset_symbol().toLowerCase().equals("qlc")) {
+                qlcCount = BigDecimal.valueOf(baseBack.getData().getBalance().get(i).getAmount()).intValue();
+            }
+        }
     }
+
+    int qlcCount;
 
     @Override
     public void buyQLCProductBack() {
@@ -185,16 +191,16 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvConfirm:
+                if (!checkBox.isChecked()) {
+                    ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
+                    return;
+                }
                 if ("".equals(etQlcCount.getText().toString())) {
                     ToastUtil.displayShortToast(getString(R.string.leastamount) + mProductDetail.getData().getLeastAmount() + " QLC");
                     return;
                 }
                 if (Integer.parseInt(etQlcCount.getText().toString()) < mProductDetail.getData().getLeastAmount()) {
                     ToastUtil.displayShortToast(getString(R.string.leastamount) + mProductDetail.getData().getLeastAmount() + " QLC");
-                    return;
-                }
-                if (!checkBox.isChecked()) {
-                    ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
                     return;
                 }
                 transferQLC(Account.INSTANCE.getWallet().getAddress());
@@ -208,6 +214,12 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
             default:
                 break;
         }
+    }
+
+    private void getQLCCount() {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("address", Account.INSTANCE.getWallet().getAddress());
+        mPresenter.getQLCCount(infoMap);
     }
 
     private void transferQLC(String address) {
@@ -246,5 +258,11 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
 
             }
         });
+    }
+
+    @OnClick(R.id.allIn)
+    public void onViewClicked() {
+        etQlcCount.setText(qlcCount + "");
+        etQlcCount.setSelection(etQlcCount.getText().length());
     }
 }

@@ -193,6 +193,8 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
                 if (AccountUtil.isEmail(etEmail.getText().toString().trim())) {
                     startVCodeCountDown();
                     getForgetPasswordVcode();
+                } else {
+                    ToastUtil.displayShortToast(getString(R.string.wrong_account));
                 }
                 break;
             case R.id.tvNext:

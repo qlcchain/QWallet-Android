@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.entity.newwinq.Product;
+import com.stratagile.qlink.utils.LanguageUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ProduceListAdapter extends BaseQuickAdapter<Product.DataBean, BaseV
         helper.setText(R.id.tvProfit, BigDecimal.valueOf(item.getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
         helper.setText(R.id.tvQlcCount, mContext.getResources().getString(R.string.from_) + " " + item.getLeastAmount() + " QLC");
         helper.setText(R.id.tvDayTime, item.getTimeLimit() + "");
-        if (mContext.getResources().getConfiguration().locale == Locale.ENGLISH) {
+        if (!LanguageUtil.isCN(mContext)) {
             helper.setText(R.id.tvProductName, item.getNameEn());
         } else {
             helper.setText(R.id.tvProductName, item.getName());

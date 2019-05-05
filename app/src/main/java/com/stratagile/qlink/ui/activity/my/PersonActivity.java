@@ -104,9 +104,14 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         }
         tvInviteCode.setText(ConstantValue.currentUser.getInviteCode());
         tvUserName.setText(ConstantValue.currentUser.getUserName());
-        if (!"".equals(ConstantValue.currentUser.getAvatar())) {
+        if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
                     .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                    .apply(AppConfig.getInstance().options)
+                    .into(ivAvatar);
+        } else {
+            Glide.with(this)
+                    .load(R.mipmap.icon_user_default)
                     .apply(AppConfig.getInstance().options)
                     .into(ivAvatar);
         }

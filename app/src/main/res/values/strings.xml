@@ -1137,4 +1137,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="wrong_account">Wrong Account</string>
     <string name="Login_success">login Success</string>
     <string name="Fingerprint_init_failed">Fingerprint init failed! Try again!</string>
+    <string name="double_click_to_exit_app">Double click to exit app</string>
+    <string name="no_enough_qlc">The selected wallet does not have enough QLC</string>
+    <string name="ok">OK</string>
+    <string name="make_money_together">Make money together</string>
+    <string name="invitation_code_1">Invitation Code：</string>
+    <string name="Build">Build</string>
 </resources>

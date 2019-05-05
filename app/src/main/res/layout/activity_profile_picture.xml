@@ -15,7 +15,7 @@
             android:id="@+id/iv_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_avatar"
+            android:src="@mipmap/icon_user_default"
             android:layout_marginTop="@dimen/x60"
             />
         <TextView
@@ -80,6 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:textAllCaps="false"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dp_6"
                 android:text="@string/save_picture"
                 android:background="@drawable/comfirm_button_bg"

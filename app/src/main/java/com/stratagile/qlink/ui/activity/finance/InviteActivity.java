@@ -30,6 +30,7 @@ import com.stratagile.qlink.ui.activity.finance.module.InviteModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.InvitePresenter;
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.LanguageUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.ScaleCircleNavigator;
 
@@ -106,6 +107,12 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
                 ToastUtil.displayShortToast(getString(R.string.copy_success));
             }
         });
+        tvInivteNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InviteActivity.this, InviteNowActivity.class));
+            }
+        });
     }
 
     @Override
@@ -163,7 +170,7 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             ImageView imageView = new ImageView(InviteActivity.this);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            if (getResources().getConfiguration().locale == Locale.CHINESE) {
+            if (LanguageUtil.isCN(InviteActivity.this)) {
                 Glide.with(InviteActivity.this)
                         .load(API.BASE_URL + guanggaoListBeans.get(position).getImgPath())
                         .into(imageView);

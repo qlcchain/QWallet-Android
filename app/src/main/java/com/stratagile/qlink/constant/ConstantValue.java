@@ -48,6 +48,8 @@ public class ConstantValue {
 
     public static boolean canClickWallet = true;
 
+    public static UserAccount lastLoginOut;
+
     /**
      * eth的bnb契约地址
      */

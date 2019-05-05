@@ -29,6 +29,7 @@ import com.stratagile.qlink.ui.activity.finance.module.FinanceModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.FinancePresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.adapter.finance.ProduceListAdapter;
+import com.stratagile.qlink.utils.LanguageUtil;
 import com.stratagile.qlink.view.ScaleCircleNavigator;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -213,7 +214,7 @@ public class FinanceFragment extends BaseFragment implements FinanceContract.Vie
         produceListAdapter.setNewData(product.getData());
         ririYing = product.getData().get(0);
         tvInComeRate.setText(BigDecimal.valueOf(ririYing.getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
-        if (getResources().getConfiguration().locale == Locale.CHINESE) {
+        if (LanguageUtil.isCN(getActivity())) {
             qlcDaily.setText(ririYing.getName());
         } else {
             qlcDaily.setText(ririYing.getNameEn());

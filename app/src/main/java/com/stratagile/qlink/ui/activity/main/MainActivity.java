@@ -656,7 +656,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (DoubleClickHelper.isDoubleClick()) {
             finish();
         } else {
-            ToastUtil.displayShortToast("Double click to exit app");
+            ToastUtil.displayShortToast(getString(R.string.double_click_to_exit_app));
         }
     }
 

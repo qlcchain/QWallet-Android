@@ -104,7 +104,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:background="@null"
-            android:inputType="text"
+            android:inputType="number"
             android:hint="@string/invitation_code_optional"
             android:textSize="16sp"
             android:layout_height="match_parent" />
