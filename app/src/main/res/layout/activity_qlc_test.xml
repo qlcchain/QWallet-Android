@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <Button
+        android:id="@+id/rpcCreateAccount"
+        android:layout_width="wrap_content"
+        android:text="rpc创建qlc钱包"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/getAccountInfo"
+        android:layout_width="wrap_content"
+        android:text="获取账户信息"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/getWalletBalance"
+        android:layout_width="wrap_content"
+        android:text="获取钱包余额"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/clearAccount"
+        android:layout_width="wrap_content"
+        android:text="清除所有账户"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/getBlockCount"
+        android:layout_width="wrap_content"
+        android:text="获取区块总数"
+        android:layout_height="wrap_content" />
+</LinearLayout>

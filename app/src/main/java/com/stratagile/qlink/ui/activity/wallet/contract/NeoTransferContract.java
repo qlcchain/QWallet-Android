@@ -41,7 +41,7 @@ public interface NeoTransferContract {
 
         void getUtxo(String address, SendCallBack sendCallBack);
 
-        void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress);
+        void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress, String remark);
 
         void sendNeo(String amount, String toAddress, TokenInfo tokenInfo);
     }

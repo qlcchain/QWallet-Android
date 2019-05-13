@@ -1127,7 +1127,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="invitation_code_optional">Invitation Code (Optional)</string>
     <string name="please_agree_to_the_service_agreement">Please agree to the service agreement.</string>
     <string name="leastamount">LeastAmount</string>
-    <string name="Succeeded">Succeeded</string>
+    <string name="Succeeded">success</string>
     <string name="not_match">Not Match</string>
     <string name="wrong_password">Wrong Password</string>
     <string name="wrong_code">Wrong Code</string>

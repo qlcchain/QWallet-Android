@@ -30,6 +30,7 @@ import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.DateUtil;
+import com.stratagile.qlink.utils.LanguageUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.SmoothCheckBox;
 
@@ -110,7 +111,6 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
             return;
         }
         getProductDetail();
-        getQLCCount();
     }
 
     private void getProductDetail() {
@@ -154,16 +154,21 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
         drawable.setBounds(0, 0, (int) getResources().getDimension(R.dimen.x46), (int) getResources().getDimension(R.dimen.x46));
         title.setCompoundDrawables(drawable, null, null, null);
         title.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.x20));
-        title.setText(productDetail.getData().getName());
+        if (LanguageUtil.isCN(this)) {
+            title.setText(productDetail.getData().getName());
+            productPoint.setText(productDetail.getData().getPoint());
+        } else {
+            title.setText(productDetail.getData().getNameEn());
+            productPoint.setText(productDetail.getData().getPointEn());
+        }
         mProductDetail = productDetail;
         tvProfit.setText(BigDecimal.valueOf(productDetail.getData().getAnnualIncomeRate() * 100).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "%");
         tvDayTime.setText(productDetail.getData().getTimeLimit() + "");
         tvQlcCount.setText(getString(R.string.from_) + " " + productDetail.getData().getLeastAmount() + " QLC");
         etQlcCount.setHint(getString(R.string.from_) + " " + productDetail.getData().getLeastAmount() + " QLC");
-        productPoint.setText(productDetail.getData().getPoint());
         tvValueDate.setText(DateUtil.getMaturityDate(1, this));
         tvMaturityDate.setText(DateUtil.getMaturityDate(productDetail.getData().getTimeLimit(), this));
-
+        getQLCCount();
 
     }
 
@@ -191,6 +196,11 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvConfirm:
+                if (mProductDetail == null) {
+                    getProductDetail();
+                    ToastUtil.displayShortToast("please wait");
+                    return;
+                }
                 if (!checkBox.isChecked()) {
                     ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
                     return;
@@ -227,30 +237,31 @@ public class ProductDetailActivity extends BaseActivity implements ProductDetail
         showProgressDialog();
         KLog.i("自己的qlc钱包地址为：" + address);
         KLog.i("对方的qlc钱包地址为：" + ConstantValue.mainAddress);
-        mPresenter.getUtxo(address, new SendCallBack() {
+//        mPresenter.getUtxo(address, new SendCallBack() {
+//            @Override
+//            public void onSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//        });
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("address", address);
+        mPresenter.getNeoWalletDetail(address, infoMap, ConstantValue.mainAddress, amount, new SendBackWithTxId() {
             @Override
-            public void onSuccess() {
-                Map<String, String> infoMap = new HashMap<>();
-                infoMap.put("address", address);
-                mPresenter.getNeoWalletDetail(address, infoMap, ConstantValue.mainAddress, amount, new SendBackWithTxId() {
-                    @Override
-                    public void onSuccess(String txid) {
-                        Map<String, String> buyMap = new HashMap<>();
-                        buyMap.put("account", ConstantValue.currentUser.getAccount());
-                        buyMap.put("productId", getIntent().getStringExtra("productId"));
-                        buyMap.put("amount", amount);
-                        buyMap.put("addressFrom", address);
-                        buyMap.put("addressTo", ConstantValue.mainAddress);
-                        buyMap.put("hex", txid);
-                        buyMap.put("token", AccountUtil.getUserToken());
-                        mPresenter.buyQLCProduct(buyMap);
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-                });
+            public void onSuccess(String txid) {
+                Map<String, String> buyMap = new HashMap<>();
+                buyMap.put("account", ConstantValue.currentUser.getAccount());
+                buyMap.put("productId", getIntent().getStringExtra("productId"));
+                buyMap.put("amount", amount);
+                buyMap.put("addressFrom", address);
+                buyMap.put("addressTo", ConstantValue.mainAddress);
+                buyMap.put("hex", txid);
+                buyMap.put("token", AccountUtil.getUserToken());
+                mPresenter.buyQLCProduct(buyMap);
             }
 
             @Override

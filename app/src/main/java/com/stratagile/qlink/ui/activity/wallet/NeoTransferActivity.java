@@ -326,7 +326,8 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                         return;
                     }
                     showProgressDialog();
-                    mPresenter.sendNEP5Token(tokenInfo, etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString());
+                    String remark = etEthTokenSendMemo.getText().toString();
+                    mPresenter.sendNEP5Token(tokenInfo, etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), remark);
                 }
                 break;
             case R.id.tvNeoTokenName:

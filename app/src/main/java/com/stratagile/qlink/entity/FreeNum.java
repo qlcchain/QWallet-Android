@@ -1,20 +1,20 @@
 package com.stratagile.qlink.entity;
 
-public class FreeNum extends BaseBack {
+public class FreeNum extends BaseBack<FreeNum.DataBean> {
 
     /**
      * data : {"freeNum":3}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

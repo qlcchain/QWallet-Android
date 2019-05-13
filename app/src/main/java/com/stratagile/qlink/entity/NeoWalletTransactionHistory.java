@@ -2,17 +2,17 @@ package com.stratagile.qlink.entity;
 
 import java.util.List;
 
-public class NeoWalletTransactionHistory extends BaseBack {
+public class NeoWalletTransactionHistory extends BaseBack<List<NeoWalletTransactionHistory.DataBean>> {
 
-    private List<DataBean> data;
-
-    public List<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(List<DataBean> data) {
-        this.data = data;
-    }
+//    private List<DataBean> data;
+//
+//    public List<DataBean> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<DataBean> data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

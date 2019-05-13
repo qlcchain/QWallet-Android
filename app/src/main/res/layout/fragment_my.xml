@@ -94,4 +94,9 @@
         android:layout_height="@dimen/x108">
 
     </com.stratagile.qlink.view.MyItemView>
+
+    <View
+        android:id="@+id/testView"
+        android:layout_width="@dimen/x80"
+        android:layout_height="@dimen/x80"/>
 </LinearLayout>

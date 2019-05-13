@@ -22,12 +22,13 @@ import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
+import com.stratagile.qlink.ui.activity.main.TestActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
 import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
+import com.stratagile.qlink.ui.activity.qlc.QlcTestActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
-import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.view.MyItemView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,6 +73,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     @BindView(R.id.settings)
     MyItemView settings;
     boolean isLogin = false;
+    @BindView(R.id.testView)
+    View testView;
 
     @Nullable
     @Override
@@ -226,7 +229,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings})
+    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user:
@@ -260,6 +263,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 break;
             case R.id.settings:
                 startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
+                break;
+            case R.id.testView:
+                startActivityForResult(new Intent(getActivity(), QlcTestActivity.class), 0);
                 break;
             default:
                 break;

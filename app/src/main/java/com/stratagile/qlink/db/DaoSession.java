@@ -15,6 +15,7 @@ import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.BtcWallet;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.UserAccount;
 
@@ -25,6 +26,7 @@ import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.db.RecordSaveDao;
 import com.stratagile.qlink.db.BtcWalletDao;
 import com.stratagile.qlink.db.WalletDao;
+import com.stratagile.qlink.db.QLCAccountDao;
 import com.stratagile.qlink.db.TransactionRecordDao;
 import com.stratagile.qlink.db.UserAccountDao;
 
@@ -44,6 +46,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig recordSaveDaoConfig;
     private final DaoConfig btcWalletDaoConfig;
     private final DaoConfig walletDaoConfig;
+    private final DaoConfig qLCAccountDaoConfig;
     private final DaoConfig transactionRecordDaoConfig;
     private final DaoConfig userAccountDaoConfig;
 
@@ -54,6 +57,7 @@ public class DaoSession extends AbstractDaoSession {
     private final RecordSaveDao recordSaveDao;
     private final BtcWalletDao btcWalletDao;
     private final WalletDao walletDao;
+    private final QLCAccountDao qLCAccountDao;
     private final TransactionRecordDao transactionRecordDao;
     private final UserAccountDao userAccountDao;
 
@@ -82,6 +86,9 @@ public class DaoSession extends AbstractDaoSession {
         walletDaoConfig = daoConfigMap.get(WalletDao.class).clone();
         walletDaoConfig.initIdentityScope(type);
 
+        qLCAccountDaoConfig = daoConfigMap.get(QLCAccountDao.class).clone();
+        qLCAccountDaoConfig.initIdentityScope(type);
+
         transactionRecordDaoConfig = daoConfigMap.get(TransactionRecordDao.class).clone();
         transactionRecordDaoConfig.initIdentityScope(type);
 
@@ -95,6 +102,7 @@ public class DaoSession extends AbstractDaoSession {
         recordSaveDao = new RecordSaveDao(recordSaveDaoConfig, this);
         btcWalletDao = new BtcWalletDao(btcWalletDaoConfig, this);
         walletDao = new WalletDao(walletDaoConfig, this);
+        qLCAccountDao = new QLCAccountDao(qLCAccountDaoConfig, this);
         transactionRecordDao = new TransactionRecordDao(transactionRecordDaoConfig, this);
         userAccountDao = new UserAccountDao(userAccountDaoConfig, this);
 
@@ -105,6 +113,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(RecordSave.class, recordSaveDao);
         registerDao(BtcWallet.class, btcWalletDao);
         registerDao(Wallet.class, walletDao);
+        registerDao(QLCAccount.class, qLCAccountDao);
         registerDao(TransactionRecord.class, transactionRecordDao);
         registerDao(UserAccount.class, userAccountDao);
     }
@@ -117,6 +126,7 @@ public class DaoSession extends AbstractDaoSession {
         recordSaveDaoConfig.clearIdentityScope();
         btcWalletDaoConfig.clearIdentityScope();
         walletDaoConfig.clearIdentityScope();
+        qLCAccountDaoConfig.clearIdentityScope();
         transactionRecordDaoConfig.clearIdentityScope();
         userAccountDaoConfig.clearIdentityScope();
     }
@@ -147,6 +157,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public WalletDao getWalletDao() {
         return walletDao;
+    }
+
+    public QLCAccountDao getQLCAccountDao() {
+        return qLCAccountDao;
     }
 
     public TransactionRecordDao getTransactionRecordDao() {

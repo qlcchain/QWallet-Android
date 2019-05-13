@@ -9,6 +9,7 @@ import com.stratagile.qlink.api.transaction.SendCallBack;
 import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.Assets;
+import com.stratagile.qlink.data.UTXOS;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.BaseBack;
@@ -41,7 +42,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
     private CompositeDisposable mCompositeDisposable;
     private ProductDetailActivity mActivity;
 
-    private Assets assets;
+    private UTXOS assets;
     @Inject
     public ProductDetailPresenter(@NonNull HttpAPIWrapper httpAPIWrapper, @NonNull ProductDetailContract.View view, ProductDetailActivity activity) {
         mView = view;
@@ -105,7 +106,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
 
                                         @Override
                                         public void onFailure() {
-
+                                            ToastUtil.displayShortToast("error");
                                         }
                                     });
                                 } else {
@@ -118,12 +119,15 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        mView.closeProgressDialog();
+                        ToastUtil.displayShortToast("error");
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
                         //onComplete
+                        mView.closeProgressDialog();
+                        ToastUtil.displayShortToast("error");
                         KLog.i("onComplete");
                     }
                 });
@@ -140,7 +144,8 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                     public void accept(AssetsWarpper unspent) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
-                        assets = unspent.getData();
+//                        assets = unspent.getData();
+                        assets = new UTXOS(unspent.getData());
                         if (sendCallBack != null) {
                             sendCallBack.onSuccess();
                         }
@@ -180,12 +185,14 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                     public void accept(Throwable throwable) throws Exception {
                         //onError
                         KLog.i("onError");
+                        mView.closeProgressDialog();
                         throwable.printStackTrace();
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
                         //onComplete
+                        mView.closeProgressDialog();
                         KLog.i("onComplete");
                     }
                 });
@@ -222,7 +229,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
         map.put("addressTo", toAddress);
         map.put("symbol", balanceBean.getAsset_symbol());
         map.put("amount", amount);
-        TransactionApi.getInstance().buyQLCProduct(assets, map, Account.INSTANCE.getWallet(), balanceBean.getAsset_hash(), fromAddress, toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
+        TransactionApi.getInstance().buyQLCProduct(null, map, Account.INSTANCE.getWallet(), balanceBean.getAsset_hash(), fromAddress, toAddress, Double.parseDouble(amount), "", new SendBackWithTxId() {
 
             @Override
             public void onSuccess(String txid) {
@@ -232,6 +239,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
 
             @Override
             public void onFailure() {
+                sendBackWithTxId.onFailure();
                 mView.closeProgressDialog();
             }
         });

@@ -13,6 +13,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.Assets;
 import com.stratagile.qlink.data.NeoNodeRPC;
+import com.stratagile.qlink.data.UTXOS;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.BaseBack;
@@ -50,7 +51,7 @@ public class UseHistoryListPresenter implements UseHistoryListContract.UseHistor
     private final UseHistoryListContract.View mView;
     private CompositeDisposable mCompositeDisposable;
     private UseHistoryListFragment mFragment;
-    Assets assets;
+    UTXOS assets;
 
     @Inject
     public UseHistoryListPresenter(@NonNull HttpAPIWrapper httpAPIWrapper, @NonNull UseHistoryListContract.View view, UseHistoryListFragment fragment) {
@@ -158,7 +159,9 @@ public class UseHistoryListPresenter implements UseHistoryListContract.UseHistor
                     public void accept(AssetsWarpper unspent) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
-                        assets = unspent.getData();
+//                        assets = unspent.getData();
+                        assets = new UTXOS(null);
+                        assets.copy(unspent.getData());
                         sendCallBack.onSuccess();
                     }
                 }, new Consumer<Throwable>() {
@@ -213,7 +216,7 @@ public class UseHistoryListPresenter implements UseHistoryListContract.UseHistor
     @Override
     public void sendNEP5Token(Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendCallBack sendCallBack) {
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, wallet.getAddress(), toAddress, amount, isSuccess -> {
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, wallet.getAddress(), toAddress, amount, "", isSuccess -> {
             KLog.i("开始调用sendRow");
             KLog.i(isSuccess);
             Map<String, String> infoMap = new HashMap<>();

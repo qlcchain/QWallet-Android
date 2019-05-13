@@ -1,6 +1,6 @@
 package com.stratagile.qlink.entity;
 
-public class VcodeLogin extends BaseBack {
+public class VcodeLogin extends BaseBack<String> {
 
     /**
      * head : /data/dapp/head/1b2375c0388d45a5997631da94f20103.jpg
@@ -13,7 +13,7 @@ public class VcodeLogin extends BaseBack {
      */
 
     private String head;
-    private String data;
+//    private String data;
     private String phone;
     private String nickname;
     private String id;
@@ -28,13 +28,13 @@ public class VcodeLogin extends BaseBack {
         this.head = head;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
+//    public String getData() {
+//        return data;
+//    }
+//
+//    public void setData(String data) {
+//        this.data = data;
+//    }
 
     public String getPhone() {
         return phone;

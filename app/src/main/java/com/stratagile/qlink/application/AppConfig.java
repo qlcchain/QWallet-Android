@@ -224,7 +224,7 @@ public class AppConfig extends MultiDexApplication {
 
             @Override
             public void log(String content, Throwable t) {
-                KLog.i(content, t);
+                KLog.i(content + t);
             }
 
             @Override

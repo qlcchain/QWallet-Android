@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.socks.library.KLog;
+import com.stratagile.qlc.QLCAPI;
+import com.stratagile.qlc.QLCDataModels.AccountCreate;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -50,6 +52,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Pair;
 
 /**
  * @author hzp
@@ -365,6 +368,5 @@ public class TestActivity extends BaseActivity implements TestContract.View {
             e.printStackTrace();
         }
     }
-
 
 }

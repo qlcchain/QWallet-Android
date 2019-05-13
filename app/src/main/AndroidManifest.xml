@@ -202,6 +202,7 @@
         <activity android:name=".ui.activity.my.ForgetPasswordActivity" />
         <activity android:name=".ui.activity.main.EditInputActivity" />
         <activity android:name=".ui.activity.finance.InviteNowActivity" />
+        <activity android:name=".ui.activity.qlc.QlcTestActivity" />
 
 
         <meta-data

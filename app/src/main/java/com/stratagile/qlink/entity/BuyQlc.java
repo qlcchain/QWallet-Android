@@ -4,21 +4,21 @@ package com.stratagile.qlink.entity;
  * Created by huzhipeng on 2018/1/26.
  */
 
-public class BuyQlc extends BaseBack {
+public class BuyQlc extends BaseBack<BuyQlc.DataBean> {
 
     /**
      * data : {"result":true,"txid":"78897871dd6e8f79c557bf2a2f65c0b36938df0d4efb8e0ee49ac2c7a3f186f0"}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

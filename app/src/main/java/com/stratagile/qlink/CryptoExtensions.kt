@@ -4,6 +4,7 @@ package com.stratagile.qlink
  * Created by drei on 11/22/17.
  */
 import com.stratagile.qlink.core.Base58
+import java.math.BigDecimal
 import java.security.MessageDigest
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -82,6 +83,18 @@ fun toMinimumByteArray(value: Int): ByteArray {
         minBytes += byteArrayOf(byte)
     }
     return minBytes
+}
+
+fun String.toSafeDecimal(): BigDecimal {
+    return BigDecimal(this)
+}
+
+fun Double.toSafeDecimal(): BigDecimal {
+    return BigDecimal(this)
+}
+
+fun BigDecimal.toSafeMemory(decimals: Int): Long {
+    return this.multiply(BigDecimal(Math.pow(10.0, decimals.toDouble()))).toLong()
 }
 
 fun Byte.toPositiveInt() = toInt() and 0xFF

@@ -4,21 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class EosTokens extends BaseBack {
+public class EosTokens extends BaseBack<EosTokens.DataBeanX> {
 
     /**
      * data : {"errno":0,"data":{"symbol_list":[{"symbol":"EOS","code":"eosio.token","balance":"0.5222"},{"symbol":"ZKS","code":"zkstokensr4u","balance":"31"},{"symbol":"HVT","code":"hirevibeshvt","balance":"0.4785"}]},"errmsg":"Success"}
      */
 
-    private DataBeanX data;
-
-    public DataBeanX getData() {
-        return data;
-    }
-
-    public void setData(DataBeanX data) {
-        this.data = data;
-    }
+//    private DataBeanX data;
+//
+//    public DataBeanX getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBeanX data) {
+//        this.data = data;
+//    }
 
     public static class DataBeanX {
         /**

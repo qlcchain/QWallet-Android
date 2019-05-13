@@ -4,21 +4,21 @@ package com.stratagile.qlink.entity;
  * Created by huzhipeng on 2018/2/11.
  */
 
-public class RecordVpn extends BaseBack {
+public class RecordVpn extends BaseBack<RecordVpn.DataBean> {
 
     /**
      * data : {"result":true,"recordId":"a8c06e0f28ce4756a8727225d3250ae5"}
      */
-
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

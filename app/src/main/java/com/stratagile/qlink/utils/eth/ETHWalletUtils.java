@@ -254,7 +254,7 @@ public class ETHWalletUtils {
 
         BigInteger publicKey = ecKeyPair.getPublicKey();
         String s = publicKey.toString();
-        KLog.i("ETHWalletUtils", "publicKey = " + s);
+        KLog.i("publicKey = " + s);
         File destination = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletFile.getAddress() + ".json");
 
         //目录不存在则创建目录，创建不了则报错
@@ -294,9 +294,9 @@ public class ETHWalletUtils {
             credentials = Credentials.create(Wallet.decrypt(pwd, walletFile));
         } catch (IOException e) {
             e.printStackTrace();
-            KLog.e("ETHWalletUtils", e.toString());
+            KLog.e( e.toString());
         } catch (CipherException e) {
-            KLog.e("ETHWalletUtils", e.toString());
+            KLog.e( e.toString());
 //            ToastUtils.showToast(R.string.load_wallet_by_official_wallet_keystore_input_tip);
             e.printStackTrace();
         }

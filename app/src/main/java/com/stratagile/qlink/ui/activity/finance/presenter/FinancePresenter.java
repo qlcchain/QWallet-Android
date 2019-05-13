@@ -5,10 +5,15 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.newwinq.Product;
-import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.finance.contract.FinanceContract;
 import com.stratagile.qlink.ui.activity.finance.FinanceFragment;
+import com.stratagile.qlink.utils.DigestUtils;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;

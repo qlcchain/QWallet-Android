@@ -44,6 +44,7 @@ import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.web3j.protocol.core.JsonRpc2_0Web3j;
 
 import java.util.ArrayList;
 import java.util.List;

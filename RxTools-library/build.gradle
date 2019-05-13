@@ -54,10 +54,6 @@ dependencies {
     compileOnly 'com.google.code.gson:gson:2.8.2'
     //Log日志格式美化包
     compileOnly 'com.orhanobut:logger:2.1.1'
-    //微信登录，支付，分享包
-    compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.4.0'
-    //支付宝 支付包
-    compileOnly files('libs/alipaySdk-20170309.jar')
     //压缩与加密
     compileOnly files('libs/zip4j_1.3.2.jar')
     //Zxing核心包

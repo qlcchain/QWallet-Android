@@ -25,6 +25,7 @@ import com.stratagile.qlink.ui.activity.finance.module.MyProductModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.MyProductPresenter;
 import com.stratagile.qlink.ui.adapter.finance.OrderListAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.LanguageUtil;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -167,8 +168,11 @@ public class MyProductActivity extends BaseActivity implements MyProductContract
         TextView tvCumulativeEarning = view.findViewById(R.id.tvCumulativeEarning);
         TextView tvWalletAddress = view.findViewById(R.id.tvWalletAddress);
         TextView tvProductName = view.findViewById(R.id.tvProductName);
-
-        tvProductName.setText(currentOrder.getProductName());
+        if (LanguageUtil.isCN(this)) {
+            tvProductName.setText(currentOrder.getProductName());
+        } else {
+            tvProductName.setText(currentOrder.getProductNameEn());
+        }
         tvPrincipal.setText(currentOrder.getAmount() + " QLC");
         tvCumulativeEarning.setText(currentOrder.getAddRevenue() + " QLC");
         if (Account.INSTANCE.getWallet() == null) {

@@ -7,17 +7,17 @@ import java.util.List;
  * Created by zl on 2018/04/16.
  */
 
-public class ImportWalletResult extends BaseBack {
+public class ImportWalletResult extends BaseBack<List<ImportWalletResult.DataBean>> {
 
-    private List<DataBean> data;
-
-    public List<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(List<DataBean> data) {
-        this.data = data;
-    }
+//    private List<DataBean> data;
+//
+//    public List<DataBean> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<DataBean> data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

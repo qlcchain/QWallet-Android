@@ -7,6 +7,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.Assets;
 import com.stratagile.qlink.data.NeoNodeRPC;
+import com.stratagile.qlink.data.UTXOS;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.AssetsWarpper;
@@ -47,7 +48,7 @@ import neoutils.Wallet;
 public class TransactionApi {
     private static TransactionApi instance;
     private CompositeDisposable mCompositeDisposable;
-    private Assets assets;
+    private UTXOS assets;
 
     /**
      * 获取单例
@@ -161,7 +162,7 @@ public class TransactionApi {
         });
     }
 
-    public void sendNeo(Assets assets, Wallet wallet, NeoNodeRPC.Asset tokenContractHash, String fromAddress, String toAddress, double amount, SendBackWithTxId sendCallBack) {
+    public void sendNeo(UTXOS assets, Wallet wallet, NeoNodeRPC.Asset tokenContractHash, String fromAddress, String toAddress, double amount, SendBackWithTxId sendCallBack) {
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
         neoNodeRPC.sendNativeAssetTransaction(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
             sendCallBack.onSuccess(isSuccess);
@@ -223,7 +224,7 @@ public class TransactionApi {
             return;
         }
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, "", isSuccess -> {
             KLog.i("开始调用sendRow");
             KLog.i(isSuccess);
             Transaction tx = getTxid(isSuccess);
@@ -271,10 +272,10 @@ public class TransactionApi {
      * 向另外的钱包地址发送代币
      * 新版本开发
      */
-    public void sendNEP5Token(Assets assets, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
+    public void sendNEP5Token(UTXOS assets, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, String remark, SendBackWithTxId sendCallBack) {
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
         KLog.i("neo钱包为：" + wallet.toString());
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, remark, isSuccess -> {
             KLog.i("开始调用sendRow");
             KLog.i(isSuccess);
             Transaction tx = getTxid(isSuccess);
@@ -319,10 +320,10 @@ public class TransactionApi {
         });
     }
 
-    public void buyQLCProduct(Assets assets, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
+    public void buyQLCProduct(UTXOS assets, Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, String remark, SendBackWithTxId sendCallBack) {
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
         KLog.i("neo钱包为：" + wallet.toString());
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, remark, isSuccess -> {
             KLog.i("开始调用sendRow");
             KLog.i(isSuccess);
             Transaction tx = getTxid(isSuccess);
@@ -338,7 +339,7 @@ public class TransactionApi {
         getUtxo(address, fromAddress, new SendCallBack() {
             @Override
             public void onSuccess() {
-                regsiterWiFiReal(map, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), new SendBackWithTxId() {
+                regsiterWiFiReal(map, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.QLC.assetID(), fromAddress, address, Double.parseDouble(qlc), "", new SendBackWithTxId() {
                     @Override
                     public void onSuccess(String txid) {
                         sendCallBack.onSuccess(txid);
@@ -358,14 +359,14 @@ public class TransactionApi {
         });
     }
 
-    private void regsiterWiFiReal(Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, SendBackWithTxId sendCallBack) {
+    private void regsiterWiFiReal(Map map, Wallet wallet, String tokenContractHash, String fromAddress, String toAddress, Double amount, String remark, SendBackWithTxId sendCallBack) {
         if (assets == null) {
             sendCallBack.onFailure();
             ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.send_failure));
             return;
         }
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, remark, isSuccess -> {
             KLog.i("开始调用sendRow");
             KLog.i(isSuccess);
             Transaction tx = getTxid(isSuccess);
@@ -432,7 +433,7 @@ public class TransactionApi {
             return;
         }
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, isSuccess -> {
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, "", isSuccess -> {
             KLog.i("开始调用sendRow");
             KLog.i(isSuccess);
             Transaction tx = getTxid(isSuccess);
@@ -551,7 +552,8 @@ public class TransactionApi {
                     @Override
                     public void onNext(AssetsWarpper assetsWarpper) {
                         KLog.i("获取unspent成功");
-                        assets = assetsWarpper.getData();
+//                        assets = assetsWarpper.getData();
+                        assets = new UTXOS(assetsWarpper.getData());
                         sendCallBack.onSuccess();
                         disposable.dispose();
                     }
@@ -594,7 +596,7 @@ public class TransactionApi {
                     @Override
                     public void onNext(AssetsWarpper assetsWarpper) {
                         KLog.i("获取unspent成功");
-                        assets = assetsWarpper.getData();
+//                        assets = assetsWarpper.getData();
                         sendCallBack.onSuccess();
                         disposable.dispose();
                     }

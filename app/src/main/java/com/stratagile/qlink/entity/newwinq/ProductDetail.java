@@ -2,21 +2,21 @@ package com.stratagile.qlink.entity.newwinq;
 
 import com.stratagile.qlink.entity.BaseBack;
 
-public class ProductDetail extends BaseBack {
+public class ProductDetail extends BaseBack<ProductDetail.DataBean> {
 
     /**
      * data : {"timeLimit":30,"annualIncomeRate":0.5,"name":"超级回馈","leastAmount":5000,"point":"高收益","status":"ON_SALE"}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**
@@ -34,6 +34,24 @@ public class ProductDetail extends BaseBack {
         private int leastAmount;
         private String point;
         private String status;
+        private String nameEn;
+        private String pointEn;
+
+        public String getNameEn() {
+            return nameEn;
+        }
+
+        public void setNameEn(String nameEn) {
+            this.nameEn = nameEn;
+        }
+
+        public String getPointEn() {
+            return pointEn;
+        }
+
+        public void setPointEn(String pointEn) {
+            this.pointEn = pointEn;
+        }
 
         public int getTimeLimit() {
             return timeLimit;

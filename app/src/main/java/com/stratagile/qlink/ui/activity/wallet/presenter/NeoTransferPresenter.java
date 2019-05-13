@@ -10,7 +10,10 @@ import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.Assets;
+import com.stratagile.qlink.data.GAS;
 import com.stratagile.qlink.data.NeoNodeRPC;
+import com.stratagile.qlink.data.UTXO;
+import com.stratagile.qlink.data.UTXOS;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -23,6 +26,7 @@ import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.ui.activity.wallet.contract.NeoTransferContract;
 import com.stratagile.qlink.ui.activity.wallet.NeoTransferActivity;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +52,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
     private CompositeDisposable mCompositeDisposable;
     private NeoTransferActivity mActivity;
 
-    private Assets assets;
+    private UTXOS assets;
 
     @Inject
     public NeoTransferPresenter(@NonNull HttpAPIWrapper httpAPIWrapper, @NonNull NeoTransferContract.View view, NeoTransferActivity activity) {
@@ -168,7 +172,9 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
                     public void accept(AssetsWarpper unspent) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
-                        assets = unspent.getData();
+                        UTXO[] utxos = new UTXO[unspent.getData().length];
+                        assets = new UTXOS(unspent.getData());
+//                        assets.copy(unspent.getData());
                         if (sendCallBack != null) {
                             sendCallBack.onSuccess();
                         }
@@ -191,14 +197,50 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
     }
 
     @Override
-    public void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress) {
+    public void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress, String remark) {
+        if (assets == null) {
+            ToastUtil.displayShortToast("please wait");
+            mView.showProgressDialog();
+            getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
+                @Override
+                public void onSuccess() {
+                    mView.closeProgressDialog();
+                    mView.showProgressDialog();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("addressFrom", tokenInfo.getWalletAddress());
+                    map.put("addressTo", toAddress);
+                    map.put("symbol", tokenInfo.getTokenSymol());
+                    map.put("amount", amount);
+                    TransactionApi.getInstance().sendNEP5Token(assets, map, Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
+
+                        @Override
+                        public void onSuccess(String txid) {
+                            KLog.i(txid);
+                            mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
+                            mView.closeProgressDialog();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            mView.closeProgressDialog();
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+            });
+            return;
+        }
         mView.showProgressDialog();
         Map<String, Object> map = new HashMap<>();
         map.put("addressFrom", tokenInfo.getWalletAddress());
         map.put("addressTo", toAddress);
         map.put("symbol", tokenInfo.getTokenSymol());
         map.put("amount", amount);
-        TransactionApi.getInstance().sendNEP5Token(assets, map, Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
+        TransactionApi.getInstance().sendNEP5Token(assets, map, Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
 
             @Override
             public void onSuccess(String txid) {
@@ -216,8 +258,22 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
 
     @Override
     public void sendNeo(String amount, String toAddress, TokenInfo tokenInfo) {
-        //Wallet wallet, NeoNodeRPC.Asset tokenContractHash, String fromAddress, String toAddress, int amount, SendCallBack sendCallBack
         mView.showProgressDialog();
+        if (assets == null) {
+            getUtxo(Account.INSTANCE.getWallet().getAddress(), new SendCallBack() {
+                @Override
+                public void onSuccess() {
+                    mView.closeProgressDialog();
+                }
+
+                @Override
+                public void onFailure() {
+                    mView.closeProgressDialog();
+                }
+            });
+            ToastUtil.displayShortToast("please wait");
+            return;
+        }
         if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
             TransactionApi.getInstance().sendNeo(assets, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.NEO, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
                 @Override

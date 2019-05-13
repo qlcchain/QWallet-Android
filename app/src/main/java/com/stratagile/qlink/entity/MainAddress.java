@@ -1,20 +1,20 @@
 package com.stratagile.qlink.entity;
 
-public class MainAddress extends BaseBack {
+public class MainAddress extends BaseBack<MainAddress.DataBean> {
 
     /**
      * data : {"NEO":{"address":"AQC7Bod2LxaRxmLewRrwCA1Nt6AQMWSm28"},"ETH":{"address":"0xfdae196edc10a085d95cf157c658d526fb94e4ae"}}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

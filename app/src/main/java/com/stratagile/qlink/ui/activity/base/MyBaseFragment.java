@@ -34,7 +34,7 @@ public abstract class MyBaseFragment extends BaseFragment {
         this.isVisibleToUser = isVisibleToUser;
         prepareFetchData();
 //        KLog.i("Second","MyBaseActivityCreated");
-        KLog.i("Second","MyBaseActivityCreated is Visible "+ isVisibleToUser);
+        KLog.i("MyBaseActivityCreated is Visible "+ isVisibleToUser);
     }
 
     public abstract void fetchData();

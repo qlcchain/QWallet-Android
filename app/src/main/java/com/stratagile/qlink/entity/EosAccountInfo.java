@@ -2,21 +2,21 @@ package com.stratagile.qlink.entity;
 
 import java.util.List;
 
-public class EosAccountInfo extends BaseBack {
+public class EosAccountInfo extends BaseBack<EosAccountInfo.DataBeanX> {
 
     /**
      * data : {"errno":0,"data":{"creator":"yfhuangeos2g","create_timestamp":"2018-10-30T14:12:38.000","permissions":[{"parent":"owner","required_auth":{"waits":[],"keys":[{"weight":1,"key":"EOS5h4gKMhwHKjZ7f4XuZVdRVvAfYYqqbiLaav2zpLcJsqS2wzyGw"}],"threshold":1,"accounts":[]},"perm_name":"active"},{"parent":"","required_auth":{"waits":[],"keys":[{"weight":1,"key":"EOS5h4gKMhwHKjZ7f4XuZVdRVvAfYYqqbiLaav2zpLcJsqS2wzyGw"}],"threshold":1,"accounts":[]},"perm_name":"owner"}]},"errmsg":"Success"}
      */
 
-    private DataBeanX data;
-
-    public DataBeanX getData() {
-        return data;
-    }
-
-    public void setData(DataBeanX data) {
-        this.data = data;
-    }
+//    private DataBeanX data;
+//
+//    public DataBeanX getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBeanX data) {
+//        this.data = data;
+//    }
 
     public static class DataBeanX {
         /**

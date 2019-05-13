@@ -464,8 +464,8 @@ public class BitUtil {
         deterministicKey = HDKeyDerivation.createMasterPubKeyFromBytes(deterministicKey.getPubKey(), deterministicKey.getChainCode());
         String xPublicKey = deterministicKey.serializePubB58(getParams());
         String  privateKey= AppConfig.getInstance().walletAppKit.wallet().getKeyByPath(DeterministicKeyChain.ACCOUNT_ZERO_PATH).getPrivateKeyAsWiF(getParams());
-        KLog.e("key", xPublicKey.toString());
-        KLog.e("privatekey", privateKey.toString());
+        KLog.e( xPublicKey.toString());
+        KLog.e( privateKey.toString());
         if (getParams() == RegTestParams.get()) {
             AppConfig.getInstance().walletAppKit.connectToLocalHost();
         }
@@ -486,7 +486,7 @@ public class BitUtil {
             // NetworkParameters main = MainNetParams.get();
             String check = key.getPrivateKeyAsWiF(getParams());
             System.out.println(wif.equals(check));  // true
-            KLog.e("wif check", String.valueOf(wif.equals(check)));
+            KLog.e( String.valueOf(wif.equals(check)));
             // creating Sha object from string
             Sha256Hash hash = Sha256Hash.wrap(msg);
             // creating signature
@@ -497,10 +497,10 @@ public class BitUtil {
             //String hex = DatatypeConverter.printHexBinary(res);
             // String hex = new String(res);
             String hex = android.util.Base64.encodeToString(res, 16);
-            KLog.e("sigendTransiction", hex.toString());
-            KLog.e("decrypttx",""+ HexUtils.toHex(sig.encodeToDER()));
+            KLog.e( hex.toString());
+            KLog.e(""+ HexUtils.toHex(sig.encodeToDER()));
         } catch (Exception e) {   //signingkey = ecdsa.from_string(privateKey.decode('hex'), curve=ecdsa.SECP256k1)
-            KLog.e("signing exception", e.getMessage().toString());
+            KLog.e( e.getMessage().toString());
         }
     }
 

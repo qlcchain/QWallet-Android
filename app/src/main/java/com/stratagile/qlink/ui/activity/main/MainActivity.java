@@ -109,6 +109,7 @@ import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.NoScrollViewPager;
 import com.stratagile.qlink.view.SweetAlertDialog;
+import com.vondear.rxtools.RxTool;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

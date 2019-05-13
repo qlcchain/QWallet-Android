@@ -56,7 +56,7 @@
             android:layout_width="@dimen/x40"
             android:layout_height="@dimen/x40"
             android:layout_marginRight="@dimen/x35"
-            android:src="@mipmap/ic_done" />
+            android:src="@mipmap/selected" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"

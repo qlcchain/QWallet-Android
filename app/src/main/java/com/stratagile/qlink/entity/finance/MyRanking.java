@@ -4,17 +4,17 @@ import com.stratagile.qlink.entity.BaseBack;
 
 import java.util.List;
 
-public class MyRanking extends BaseBack {
+public class MyRanking extends BaseBack<List<MyRanking.DataBean>> {
 
-    private List<DataBean> data;
-
-    public List<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(List<DataBean> data) {
-        this.data = data;
-    }
+//    private List<DataBean> data;
+//
+//    public List<DataBean> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<DataBean> data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**
