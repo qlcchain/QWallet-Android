@@ -94,7 +94,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        tvVersion.setText(VersionUtil.getAppVersionName(this));
         tvVersion.setText(getString(R.string.version) +" "+ BuildConfig.VERSION_NAME +" ("+getString(R.string.Build) + " " +BuildConfig.VERSION_CODE+")");
-        touchIdToUnlock.setChecked(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, false));
+        touchIdToUnlock.setChecked(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true));
         touchIdToUnlock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

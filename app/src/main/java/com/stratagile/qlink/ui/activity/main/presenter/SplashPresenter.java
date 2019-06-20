@@ -170,7 +170,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
         if (SpUtil.getInt(AppConfig.getInstance(), ConstantValue.LOCALVERSIONCODE, 0) < 62) {
             String password = SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "");
             if (!"".equals(password)) {
-                String encode = ETHWalletUtils.enCodePassword(password);
+                String encode = ETHWalletUtils.encryption(password);
                 SpUtil.putString(AppConfig.getInstance(), ConstantValue.walletPassWord, encode);
             }
         }

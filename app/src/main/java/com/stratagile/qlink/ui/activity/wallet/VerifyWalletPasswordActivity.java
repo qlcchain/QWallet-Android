@@ -1,6 +1,5 @@
 package com.stratagile.qlink.ui.activity.wallet;
 
-import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,13 +13,11 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +33,6 @@ import com.stratagile.qlink.guideview.GuideBuilder;
 import com.stratagile.qlink.guideview.GuideConstantValue;
 import com.stratagile.qlink.guideview.GuideSpUtil;
 import com.stratagile.qlink.guideview.compnonet.UnLockComponent;
-import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerVerifyWalletPasswordComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.VerifyWalletPasswordContract;
@@ -154,7 +150,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 }
             }
         };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, false)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
             // init fingerprint.
             try {
                 FingerprintManager fingerprintManager = (FingerprintManager) AppConfig.getInstance().getSystemService(Context.FINGERPRINT_SERVICE);
@@ -180,6 +176,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                         SpUtil.putLong(this, ConstantValue.unlockTime, Calendar.getInstance().getTimeInMillis());
                         finishActivity();
                     } else {
+                        KLog.i("设置了安全密码。。");
                         Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
                         if (intent != null) {
                             startActivityForResult(intent, 3);
@@ -402,7 +399,7 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                 if ("".equals(etPassword.getText().toString().trim())) {
                     return;
                 }
-                String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
+                String password = ETHWalletUtils.encryption(etPassword.getText().toString().trim());
                 if (password.equals(SpUtil.getString(this, ConstantValue.walletPassWord, ""))) {
                     ConstantValue.isShouldShowVertifyPassword = false;
                     if (getIntent().hasExtra("flag") && !getIntent().getStringExtra("flag").equals("")) {

@@ -18,6 +18,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.EthWalletDao;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerImportEthWalletComponent;
@@ -108,6 +109,16 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
                         if (wallets2.get(i).getIsCurrent()) {
                             wallets2.get(i).setIsCurrent(false);
                             AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallets2.get(i));
+                            break;
+                        }
+                    }
+                }
+                List<QLCAccount> wallets3 = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+                if (wallets3 != null && wallets3.size() != 0) {
+                    for (int i = 0; i < wallets3.size(); i++) {
+                        if (wallets3.get(i).getIsCurrent()) {
+                            wallets3.get(i).setIsCurrent(false);
+                            AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(wallets3.get(i));
                             break;
                         }
                     }

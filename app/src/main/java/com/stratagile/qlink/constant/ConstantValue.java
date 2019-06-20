@@ -35,6 +35,8 @@ public class ConstantValue {
     public static String unlockTime = "unlocktime";
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
+    public static String qlcNode = "https://rpc.qlcchain.online";
+//    public static String qlcNode = "http://192.168.1.122:19735";
 
     public static UserAccount currentUser;
     /**

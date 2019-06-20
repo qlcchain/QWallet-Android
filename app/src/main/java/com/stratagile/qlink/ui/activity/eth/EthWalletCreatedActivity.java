@@ -49,6 +49,7 @@ public class EthWalletCreatedActivity extends BaseActivity implements EthWalletC
         setContentView(R.layout.activity_eth_wallet_created);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.create_wallet));
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.stratagile.qlink.ui.activity.wallet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -20,20 +18,14 @@ import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.CreateWallet;
-import com.stratagile.qlink.entity.eventbus.ChangeWallet;
-import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.ui.activity.neo.WalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerImportWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.ImportWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.ImportWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.ImportWalletPresenter;
-import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 

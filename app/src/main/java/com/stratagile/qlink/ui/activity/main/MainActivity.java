@@ -32,7 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.facebook.appevents.AppEventsLogger;
+//import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
@@ -213,8 +213,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         .into(ivAvater);
             }
         }
-        AppEventsLogger logger = AppEventsLogger.newLogger(this);
-        logger.logEvent("MainActivity");
+        //AppEventsLogger logger = AppEventsLogger.newLogger(this);
+        //logger.logEvent("MainActivity");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -876,11 +876,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
                 break;
             case R.id.tv_free:
-                if (ConstantValue.currentUser == null) {
-                    startActivity(new Intent(this, AccountActivity.class));
-                } else {
-                    startActivity(new Intent(this, MyProductActivity.class));
-                }
+                startActivity(new Intent(this, MyProductActivity.class));
                 break;
             default:
                 break;

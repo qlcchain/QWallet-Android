@@ -36,6 +36,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         tools:ignore="UnusedAttribute"
+        tools:replace="android:allowBackup"
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme.Base"
         android:banner="@mipmap/ic_launcher">
@@ -92,7 +93,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.NoWalletActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.WalletCreatedActivity"
+        <activity android:name=".ui.activity.neo.WalletCreatedActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.wallet.FreeConnectActivity"
             android:screenOrientation="portrait"/>
@@ -163,19 +164,19 @@
         <activity android:name=".ui.activity.eth.EthMnemonicbackupActivity" />
         <activity android:name=".ui.activity.eth.EthMnemonicShowActivity" />
         <activity android:name=".ui.activity.wallet.AllWalletTokenActivity" />
-        <activity android:name=".ui.activity.eth.EthWalletDetailActivity" />
+        <activity android:name=".ui.activity.eth.WalletDetailActivity" />
         <activity android:name=".ui.activity.setting.CurrencyUnitActivity" />
         <activity android:name=".ui.activity.wallet.EthTransactionRecordActivity" />
         <activity android:name=".ui.activity.wallet.WalletQRCodeActivity" />
-        <activity android:name=".ui.activity.wallet.EthTransferActivity" />
-        <activity android:name=".ui.activity.wallet.NeoWalletInfoActivity" />
+        <activity android:name=".ui.activity.eth.EthTransferActivity" />
+        <activity android:name=".ui.activity.neo.NeoWalletInfoActivity" />
         <activity android:name=".ui.activity.wallet.ChooseWalletActivity" />
         <activity android:name=".ui.activity.wallet.ExportEthKeyStoreActivity" />
-        <activity android:name=".ui.activity.wallet.NeoTransferActivity" />
+        <activity android:name=".ui.activity.neo.NeoTransferActivity" />
         <activity android:name=".ui.activity.wallet.ChangePasswordActivity" />
         <activity android:name=".ui.activity.eos.EosImportActivity" />
         <activity android:name=".ui.activity.eos.EosTransferActivity" />
-        <activity android:name=".ui.activity.market.AddTokenActivity" />
+        <activity android:name=".ui.activity.otc.AddTokenActivity" />
         <activity android:name=".ui.activity.eos.EosResourceManagementActivity" />
 
         <activity android:name=".ui.activity.eos.EosBuyCpuAndNetActivity"
@@ -203,6 +204,13 @@
         <activity android:name=".ui.activity.main.EditInputActivity" />
         <activity android:name=".ui.activity.finance.InviteNowActivity" />
         <activity android:name=".ui.activity.qlc.QlcTestActivity" />
+        <activity android:name=".ui.activity.qlc.QlcWalletCreatedActivity" />
+        <activity android:name=".ui.activity.qlc.BackupQlcWalletActivity" />
+        <activity android:name=".ui.activity.qlc.QlcTransferActivity" />
+        <activity android:name=".ui.activity.qlc.ImportQlcActivity" />
+        <activity android:name=".ui.activity.qlc.QlcMnemonicShowActivity" />
+        <activity android:name=".ui.activity.qlc.QlcMnemonicbackupActivity" />
+        <activity android:name=".ui.activity.my.VerificationActivity" />
 
 
         <meta-data

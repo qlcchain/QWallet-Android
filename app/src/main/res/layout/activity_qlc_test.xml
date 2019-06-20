@@ -5,9 +5,9 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
     <Button
-        android:id="@+id/rpcCreateAccount"
+        android:id="@+id/connectWebsockt"
         android:layout_width="wrap_content"
-        android:text="rpc创建qlc钱包"
+        android:text="websockt连接"
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/getAccountInfo"
@@ -15,9 +15,9 @@
         android:text="获取账户信息"
         android:layout_height="wrap_content" />
     <Button
-        android:id="@+id/getWalletBalance"
+        android:id="@+id/disconnectWebsockt"
         android:layout_width="wrap_content"
-        android:text="获取钱包余额"
+        android:text="websockt断开"
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/clearAccount"

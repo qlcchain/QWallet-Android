@@ -4,8 +4,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,7 +23,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -36,6 +35,9 @@ import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
+import com.stratagile.qlink.ui.activity.eth.EthTransferActivity;
+import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
+import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerEthTransactionRecordComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransactionRecordContract;
 import com.stratagile.qlink.ui.activity.wallet.module.EthTransactionRecordModule;
@@ -46,7 +48,6 @@ import com.stratagile.qlink.utils.ToastUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -210,7 +211,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             }
             String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
             tvTokenValue.setText(value);
-        } else if (tokenInfo.getWalletType() == AllWallet.WalletType.NeoWallet){
+        } else if (tokenInfo.getWalletType() == AllWallet.WalletType.NeoWallet) {
             infoMap.put("address", tokenInfo.getWalletAddress());
             infoMap.put("page", 1);
             mPresenter.getNeoWalletTransaction(infoMap);
@@ -220,6 +221,16 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             infoMap.put("symbol", tokenInfo.getTokenSymol());
             mPresenter.getEosAccountTransaction(tokenInfo.getWalletAddress(), infoMap);
             tvTokenValue.setText(tokenInfo.getEosTokenValue());
+        } else if (tokenInfo.getWalletType() == AllWallet.WalletType.QlcWallet) {
+            infoMap.put("account", tokenInfo.getWalletAddress());
+            infoMap.put("symbol", tokenInfo.getTokenSymol());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mPresenter.getQlcAccountHistoryTopn(tokenInfo.getWalletAddress(), 20, 0);
+                }
+            }).start();
+            tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()).divide(BigDecimal.TEN.pow(tokenInfo.getTokenDecimals()), tokenInfo.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros().toPlainString() + "");
         }
         setTitle(tokenInfo.getTokenSymol());
         BigDecimal b = new BigDecimal(new Double((Double.parseDouble(tvTokenValue.getText().toString()) * tokenInfo.getTokenPrice())).toString());
@@ -271,7 +282,12 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
 
     @Override
     public void setEthTransactionHistory(ArrayList<TransactionInfo> transactionInfos) {
-        transacationHistoryAdapter.setNewData(transactionInfos);
+        llSend.post(new Runnable() {
+            @Override
+            public void run() {
+                transacationHistoryAdapter.setNewData(transactionInfos);
+            }
+        });
     }
 
     @OnClick({R.id.llSend, R.id.llRecive})
@@ -300,16 +316,45 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                     intent1.putExtra("tokenInfo", tokenInfo);
                     intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
                     startActivity(intent1);
+                } else if (tokenInfo.getWalletType() == AllWallet.WalletType.QlcWallet) {
+                    Intent intent1 = new Intent(this, QlcTransferActivity.class);
+                    intent1.putExtra("tokenInfo", tokenInfo);
+                    intent1.putParcelableArrayListExtra("tokens", getIntent().getParcelableArrayListExtra("tokens"));
+                    startActivityForResult(intent1, 0);
                 }
                 break;
             case R.id.llRecive:
-                QrEntity qrEntity = new QrEntity(tokenInfo.getWalletAddress(), tokenInfo.getTokenName() + " Address", tokenInfo.getTokenImgName());
+                String img = "";
+                switch (tokenInfo.getWalletType()) {
+                    case EosWallet:
+                        img = "icons_eos_wallet";
+                        break;
+                    case EthWallet:
+                        img = "icons_eth_wallet";
+                        break;
+                    case QlcWallet:
+                        img = "icons_qlc_wallet";
+                        break;
+                    case NeoWallet:
+                        img = "icons_neo_wallet";
+                        break;
+                    default:
+                        break;
+                }
+                QrEntity qrEntity = new QrEntity(tokenInfo.getWalletAddress(), tokenInfo.getTokenName() + " Address", img);
                 Intent intent = new Intent(this, WalletQRCodeActivity.class);
                 intent.putExtra("qrentity", qrEntity);
                 startActivity(intent);
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            finish();
         }
     }
 }

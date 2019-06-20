@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/color_f8f9fb"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x440"
+        android:background="@color/mainColor" />
+
+    <TextView
+        android:id="@+id/tvChoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x12"
+        android:text="WALLET CREATED SUCCESSFULLY"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvChoose"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/x54"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/x38"
+        android:layout_marginRight="@dimen/x38"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/llEth"
+            android:layout_width="0px"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivEth"
+                android:layout_width="@dimen/x184"
+                android:src="@mipmap/qlc_wallet_select"
+                android:layout_height="@dimen/x184" />
+            <TextView
+                android:id="@+id/tvEth"
+                android:layout_width="wrap_content"
+                android:text="@string/qlc"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/x19"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        android:layout_marginLeft="@dimen/x65"
+        android:layout_marginRight="@dimen/x65"
+        android:layout_marginTop="@dimen/x25"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/color_1F314A"
+        android:text="Caution! Whoever has the wallet seed can completely control all assets in the wallet."
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv1"
+        android:layout_marginLeft="@dimen/x65"
+        android:layout_marginRight="@dimen/x65"
+        android:layout_marginTop="@dimen/x25"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/color_9b9b9bb"
+        android:text="Please backup carefully and keep it safe."
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btBackup"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_43"
+        android:layout_marginLeft="@dimen/x44"
+        android:layout_marginRight="@dimen/x44"
+        android:layout_marginTop="@dimen/x70"
+        android:background="@drawable/change_wallet"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Backup wallet Mnemonic"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv3" />
+
+</android.support.constraint.ConstraintLayout>

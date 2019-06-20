@@ -7,11 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.socks.library.KLog;
-import com.stratagile.qlc.QLCAPI;
-import com.stratagile.qlc.QLCDataModels.AccountCreate;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;

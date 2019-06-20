@@ -59,6 +59,7 @@ import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
+import com.stratagile.qlink.entity.otc.Passport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,6 +116,7 @@ import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
+import static com.stratagile.qlink.data.api.API.url_uploadIdCard;
 import static com.stratagile.qlink.data.api.API.url_user_change_nickname;
 import static com.stratagile.qlink.data.api.API.url_user_change_password;
 import static com.stratagile.qlink.data.api.API.url_user_invite;
@@ -224,6 +226,10 @@ public interface HttpApi {
     @POST(url_user_upload_headview)
     @Multipart
     Observable<UpLoadAvatar> updateMyAvatar(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part head);
+
+    @POST(url_uploadIdCard)
+    @Multipart
+    Observable<Passport> updateIdCard(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part faceOhoto, @Part MultipartBody.Part holdingPhoto);
 
     @GET(API.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);

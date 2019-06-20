@@ -63,6 +63,7 @@ import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
+import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -303,6 +304,15 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
+        }
+
+    }
+
+    public Observable<Passport> updateIdCard(MultipartBody.Part photo, MultipartBody.Part holdphoto, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }

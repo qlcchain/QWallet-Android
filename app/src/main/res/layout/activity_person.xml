@@ -177,4 +177,41 @@
         android:layout_height="@dimen/x1"
         android:background="@color/color_f2f2f2"
         android:layout_marginLeft="@dimen/x30"/>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/verification"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x92">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Verification"
+            android:textSize="16sp"
+            android:textColor="@color/color_29282a"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tvVerification"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_999"
+            android:text=""
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:src="@mipmap/icon_enter1"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_height="@dimen/x30" />
+    </LinearLayout>
+    <View
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/color_f2f2f2"
+        android:layout_marginLeft="@dimen/x30"/>
 </LinearLayout>

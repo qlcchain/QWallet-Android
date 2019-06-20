@@ -8,12 +8,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
+import com.stratagile.qlc.QLCAPI;
+import com.stratagile.qlc.utils.QlcUtil;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
@@ -22,6 +28,9 @@ import com.stratagile.qlink.ui.activity.eos.EosImportActivity;
 import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.ImportEthWalletActivity;
 import com.stratagile.qlink.ui.activity.main.WebViewActivity;
+import com.stratagile.qlink.ui.activity.neo.WalletCreatedActivity;
+import com.stratagile.qlink.ui.activity.qlc.ImportQlcActivity;
+import com.stratagile.qlink.ui.activity.qlc.QlcWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerSelectWalletTypeComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.SelectWalletTypeModule;
@@ -33,11 +42,17 @@ import com.stratagile.qlink.view.SmoothCheckBox;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import qlc.mng.AccountMng;
+import qlc.network.QlcException;
+import qlc.rpc.AccountRpc;
+import qlc.utils.Helper;
 
 /**
  * @author hzp
@@ -78,6 +93,14 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     SmoothCheckBox checkBox;
     @BindView(R.id.servicePrivacyPolicy)
     TextView servicePrivacyPolicy;
+    @BindView(R.id.view2)
+    View view2;
+    @BindView(R.id.ivQlc)
+    ImageView ivQlc;
+    @BindView(R.id.tvQlc)
+    TextView tvQlc;
+    @BindView(R.id.llQlc)
+    LinearLayout llQlc;
 
     private AllWallet.WalletType walletType;
 
@@ -101,7 +124,9 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_select));
         ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
         ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
+        ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_unselected));
         tvEth.setSelected(true);
+        tvQlc.setSelected(false);
         tvNeo.setSelected(false);
         tvEos.setSelected(false);
     }
@@ -148,9 +173,91 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         mPresenter.reportWalletCreated(wallet.getAddress(), "NEO", wallet.getPublicKey(), "");
     }
 
+    private void createQlcWallet() {
+        showProgressDialog();
+        List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
+        for (EthWallet wallet : ethWallets) {
+            if (wallet.getIsCurrent()) {
+                wallet.setIsCurrent(false);
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().update(wallet);
+                break;
+            }
+        }
+        List<Wallet> wallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+        for (Wallet wallet : wallets) {
+            if (wallet.getIsCurrent()) {
+                wallet.setIsCurrent(false);
+                AppConfig.getInstance().getDaoSession().getWalletDao().update(wallet);
+                break;
+            }
+        }
+        List<EosAccount> eosAccounts = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
+        for (EosAccount wallet : eosAccounts) {
+            if (wallet.getIsCurrent()) {
+                wallet.setIsCurrent(false);
+                AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallet);
+                break;
+            }
+        }
+        List<QLCAccount> qlcAccounts = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+        for (QLCAccount wallet : qlcAccounts) {
+            if (wallet.getIsCurrent()) {
+                wallet.setIsCurrent(false);
+                AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(wallet);
+                break;
+            }
+        }
+        String seed = QlcUtil.generateSeed().toLowerCase();
+//        int index = -1;
+//        List<QLCAccount> mainQlcAccount = AppConfig.getInstance().getDaoSession().getQLCAccountDao().queryBuilder().where(QLCAccountDao.Properties.IsAccountSeed.eq(true)).list();
+//        if (mainQlcAccount.size() > 0) {
+//            for (int i = 0; i < mainQlcAccount.size(); i++) {
+//                if (mainQlcAccount.get(i).getSeed() != null && !mainQlcAccount.get(i).getSeed().equals("") && mainQlcAccount.get(i).getIsAccountSeed()) {
+//                    seed = mainQlcAccount.get(i).getSeed();
+//                    index = i;
+//                }
+//            }
+//        }
+
+        try {
+            JSONObject jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0);
+            String priKey = jsonObject.getString("privKey");
+            String pubKey = jsonObject.getString("pubKey");
+            KLog.i(jsonObject.toJSONString());
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(seed);
+            String mnemonics = AccountRpc.seedToMnemonics(jsonArray);
+            KLog.i(mnemonics);
+            String address =  QlcUtil.publicToAddress(pubKey).toLowerCase();
+            QLCAccount qlcAccount = new QLCAccount();
+            qlcAccount.setPrivKey(priKey.toLowerCase());
+            qlcAccount.setPubKey(pubKey);
+            qlcAccount.setAddress(address);
+            qlcAccount.setMnemonic(mnemonics);
+            qlcAccount.setIsCurrent(true);
+            qlcAccount.setAccountName(QLCAPI.Companion.getQlcWalletName());
+            qlcAccount.setSeed(seed);
+            qlcAccount.setIsAccountSeed(true);
+            qlcAccount.setWalletIndex(0);
+            AppConfig.instance.getDaoSession().getQLCAccountDao().insert(qlcAccount);
+            closeProgressDialog();
+            startActivityForResult(new Intent(this, QlcWalletCreatedActivity.class).putExtra("wallet", qlcAccount), 0);
+        } catch (QlcException e) {
+            closeProgressDialog();
+            e.printStackTrace();
+        }
+
+//        String seed = "68740dc90101252e60d70dad82f356a03e4b54816789f9c5bd6f031a34da5812";
+    }
+
     @Override
     public void reportCreatedWalletSuccess() {
         finish();
+    }
+
+    @Override
+    public void createQlcWalletSuccess() {
+
     }
 
     @Override
@@ -165,7 +272,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         }
     }
 
-    @OnClick({R.id.llEth, R.id.llEos, R.id.llNeo, R.id.btCreate, R.id.btImport, R.id.servicePrivacyPolicy})
+    @OnClick({R.id.llEth, R.id.llEos, R.id.llNeo, R.id.llQlc, R.id.btCreate, R.id.btImport, R.id.servicePrivacyPolicy})
     public void onViewClicked(View view) {
         KLog.i(view.getId() + "");
         switch (view.getId()) {
@@ -174,6 +281,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_select));
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
+                ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_unselected));
+                tvQlc.setSelected(false);
                 tvEth.setSelected(true);
                 tvNeo.setSelected(false);
                 tvEos.setSelected(false);
@@ -183,6 +292,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_unselected));
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_select));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
+                ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_unselected));
+                tvQlc.setSelected(false);
                 tvEth.setSelected(false);
                 tvNeo.setSelected(false);
                 tvEos.setSelected(true);
@@ -192,8 +303,21 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_unselected));
                 ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
                 ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_select));
+                ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_unselected));
+                tvQlc.setSelected(false);
                 tvEth.setSelected(false);
                 tvNeo.setSelected(true);
+                tvEos.setSelected(false);
+                break;
+            case R.id.llQlc:
+                walletType = AllWallet.WalletType.QlcWallet;
+                ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_unselected));
+                ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
+                ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
+                ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_select));
+                tvQlc.setSelected(true);
+                tvEth.setSelected(false);
+                tvNeo.setSelected(false);
                 tvEos.setSelected(false);
                 break;
             case R.id.btCreate:
@@ -205,9 +329,11 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                     mPresenter.createEthWallet();
                 } else if (walletType == AllWallet.WalletType.NeoWallet) {
                     mPresenter.createNeoWallet();
-                } else {
+                } else if (walletType == AllWallet.WalletType.EosWallet) {
                     Intent intent = new Intent(this, EosCreateActivity.class);
                     startActivityForResult(intent, 2);
+                } else if (walletType == AllWallet.WalletType.QlcWallet) {
+                    createQlcWallet();
                 }
                 break;
             case R.id.btImport:
@@ -220,9 +346,12 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 } else if (walletType == AllWallet.WalletType.NeoWallet) {
                     Intent intent = new Intent(this, ImportWalletActivity.class);
                     startActivityForResult(intent, 1);
-                } else {
+                } else if (walletType == AllWallet.WalletType.EosWallet) {
                     Intent intent = new Intent(this, EosImportActivity.class);
                     startActivityForResult(intent, 2);
+                } else if (walletType == AllWallet.WalletType.QlcWallet) {
+                    Intent intent = new Intent(this, ImportQlcActivity.class);
+                    startActivityForResult(intent, 3);
                 }
                 break;
             case R.id.servicePrivacyPolicy:

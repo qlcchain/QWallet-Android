@@ -153,11 +153,11 @@ public class EthMnemonicbackupActivity extends BaseActivity implements EthMnemon
         }
         ethWallet.setIsBackup(true);
         AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallet);
-        showTestDialog();
+        showSuccessDialog();
 
     }
 
-    private void showTestDialog() {
+    private void showSuccessDialog() {
         View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);

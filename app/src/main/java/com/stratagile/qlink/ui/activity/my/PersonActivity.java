@@ -11,13 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.protobuf.Api;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
-import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.ui.activity.main.EditInputActivity;
@@ -27,7 +25,6 @@ import com.stratagile.qlink.ui.activity.my.module.PersonModule;
 import com.stratagile.qlink.ui.activity.my.presenter.PersonPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
 import com.stratagile.qlink.utils.AccountUtil;
-import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -74,6 +71,10 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
     TextView tvEmail;
     @BindView(R.id.tvMobile)
     TextView tvMobile;
+    @BindView(R.id.tvVerification)
+    TextView tvVerification;
+    @BindView(R.id.verification)
+    LinearLayout verification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         ToastUtil.displayShortToast(getString(R.string.success));
     }
 
-    @OnClick({R.id.profile, R.id.username, R.id.inviteCode, R.id.email, R.id.mobile})
+    @OnClick({R.id.profile, R.id.username, R.id.inviteCode, R.id.email, R.id.mobile, R.id.verification})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.profile:
@@ -195,6 +196,9 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
                 break;
             case R.id.mobile:
                 break;
+            case R.id.verification:
+                startActivity(new Intent(this, VerificationActivity.class));
+                break;
             default:
                 break;
         }
@@ -212,6 +216,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
     }
 
     String nickName = "";
+
     private void changeNickNmae(String nickName) {
         showProgressDialog();
         this.nickName = nickName;

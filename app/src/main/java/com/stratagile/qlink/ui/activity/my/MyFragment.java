@@ -211,6 +211,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         }
         if (!isLogin) {
             userName.setText(R.string.login_register);
+            Glide.with(this)
+                    .load(R.mipmap.icon_user_default)
+                    .apply(AppConfig.getInstance().options)
+                    .into(userAvatar);
         }
     }
 

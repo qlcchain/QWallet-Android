@@ -8,22 +8,42 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
-import com.stratagile.qlink.entity.MyAsset;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LocalWalletUtil {
+    public static void updateLocalQlcWallet() {
+        List<QLCAccount> walletList = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+        Gson gson = new Gson();
+        String saveData = gson.toJson(walletList);
+        saveData = ETHWalletUtils.encryption(saveData);
+        FileUtil.savaData("/Qlink/qlcWallet", saveData);
+    }
+
+    public static ArrayList<QLCAccount> getLocalQlcWallet() {
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/qlcWallet");
+        if (file.exists()) {
+            String qlcWalletStr = FileUtil.getStrDataFromFile(file);
+            qlcWalletStr = ETHWalletUtils.decrypt(qlcWalletStr);
+            KLog.i(qlcWalletStr);
+            Gson gson = new Gson();
+            ArrayList<QLCAccount> wallets = gson.fromJson(qlcWalletStr, new TypeToken<ArrayList<QLCAccount>>() {
+            }.getType());
+            return wallets;
+        } else {
+            return null;
+        }
+    }
     public static void updateLocalNeoWallet() {
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.enCodePassword(saveData);
+        saveData = ETHWalletUtils.encryption(saveData);
         FileUtil.savaData("/Qlink/neoWallet", saveData);
     }
 
@@ -31,7 +51,7 @@ public class LocalWalletUtil {
         File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/neoWallet");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
-            neoWalletStr = ETHWalletUtils.getPassword(neoWalletStr);
+            neoWalletStr = ETHWalletUtils.decrypt(neoWalletStr);
             KLog.i(neoWalletStr);
             Gson gson = new Gson();
             ArrayList<Wallet> wallets = gson.fromJson(neoWalletStr, new TypeToken<ArrayList<Wallet>>() {
@@ -46,7 +66,7 @@ public class LocalWalletUtil {
         List<EthWallet> walletList = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.enCodePassword(saveData);
+        saveData = ETHWalletUtils.encryption(saveData);
         FileUtil.savaData("/Qlink/ethWallet", saveData);
     }
 
@@ -54,7 +74,7 @@ public class LocalWalletUtil {
         List<EosAccount> walletList = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.enCodePassword(saveData);
+        saveData = ETHWalletUtils.encryption(saveData);
         FileUtil.savaData("/Qlink/eosWallet", saveData);
     }
 
@@ -74,13 +94,18 @@ public class LocalWalletUtil {
                 AppConfig.getInstance().getDaoSession().getEosAccountDao().insertInTx(getLocalEosWallet());
             }
         }
+        if (AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll().size() == 0) {
+            if (getLocalQlcWallet() != null && getLocalQlcWallet().size() != 0) {
+                AppConfig.getInstance().getDaoSession().getQLCAccountDao().insertInTx(getLocalQlcWallet());
+            }
+        }
     }
 
     public static ArrayList<EthWallet> getLocalEthWallet() {
         File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/ethWallet");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
-            neoWalletStr = ETHWalletUtils.getPassword(neoWalletStr);
+            neoWalletStr = ETHWalletUtils.decrypt(neoWalletStr);
             KLog.i(neoWalletStr);
             Gson gson = new Gson();
             ArrayList<EthWallet> wallets = gson.fromJson(neoWalletStr, new TypeToken<ArrayList<EthWallet>>() {
@@ -94,7 +119,7 @@ public class LocalWalletUtil {
         File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/eosWallet");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
-            neoWalletStr = ETHWalletUtils.getPassword(neoWalletStr);
+            neoWalletStr = ETHWalletUtils.decrypt(neoWalletStr);
             Gson gson = new Gson();
             ArrayList<EosAccount> wallets = gson.fromJson(neoWalletStr, new TypeToken<ArrayList<EosAccount>>() {
             }.getType());

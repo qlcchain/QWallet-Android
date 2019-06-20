@@ -29,34 +29,34 @@ import java.util.Calendar;
 
 public class FileUtil {
     public static void removeAllImageAvater(Context context) {
-        File vpn = new File(Environment.getExternalStorageDirectory() + "/Qlink/vpn");
-        String[] vpnchildren = vpn.list();
-        if (vpnchildren != null && vpnchildren.length != 0) {
-            for (int i=0; i<vpnchildren.length; i++) {
-                File chilrenFile = new File(vpn, vpnchildren[i]);
-                chilrenFile.delete();
-            }
-        }
-        if (Calendar.getInstance().getTimeInMillis() - SpUtil.getLong(context, ConstantValue.lastRemoveImageAvaterTime, 0) > 1000 * 60 * 60 * 24 * 7) {
-            String jsonPath =Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
-            File jsonFile = new File(jsonPath);
-            if (jsonFile.exists()) {
-                jsonFile.delete();
-            }
-
-            SpUtil.putLong(context, ConstantValue.lastRemoveImageAvaterTime, Calendar.getInstance().getTimeInMillis());
-            File dir = new File(Environment.getExternalStorageDirectory() + "/Qlink/image");
-            String[] children = dir.list();
-            if (children != null && children.length != 0) {
-                for (int i=0; i<children.length; i++) {
-                    File chilrenFile = new File(dir, children[i]);
-                    if (chilrenFile.getName().substring(0, chilrenFile.getName().lastIndexOf(".")).equals(SpUtil.getString(context, ConstantValue.myAvaterUpdateTime, ""))) {
-                        continue;
-                    }
-                    chilrenFile.delete();
-                }
-            }
-        }
+//        File vpn = new File(Environment.getExternalStorageDirectory() + "/Qlink/vpn");
+//        String[] vpnchildren = vpn.list();
+//        if (vpnchildren != null && vpnchildren.length != 0) {
+//            for (int i=0; i<vpnchildren.length; i++) {
+//                File chilrenFile = new File(vpn, vpnchildren[i]);
+//                chilrenFile.delete();
+//            }
+//        }
+//        if (Calendar.getInstance().getTimeInMillis() - SpUtil.getLong(context, ConstantValue.lastRemoveImageAvaterTime, 0) > 1000 * 60 * 60 * 24 * 7) {
+//            String jsonPath =Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
+//            File jsonFile = new File(jsonPath);
+//            if (jsonFile.exists()) {
+//                jsonFile.delete();
+//            }
+//
+//            SpUtil.putLong(context, ConstantValue.lastRemoveImageAvaterTime, Calendar.getInstance().getTimeInMillis());
+//            File dir = new File(Environment.getExternalStorageDirectory() + "/Qlink/image");
+//            String[] children = dir.list();
+//            if (children != null && children.length != 0) {
+//                for (int i=0; i<children.length; i++) {
+//                    File chilrenFile = new File(dir, children[i]);
+//                    if (chilrenFile.getName().substring(0, chilrenFile.getName().lastIndexOf(".")).equals(SpUtil.getString(context, ConstantValue.myAvaterUpdateTime, ""))) {
+//                        continue;
+//                    }
+//                    chilrenFile.delete();
+//                }
+//            }
+//        }
     }
 
     /**
@@ -527,39 +527,4 @@ public class FileUtil {
         return "";
     }
 
-    /**
-     *  保持vpn server数据到sd卡
-     * @param name 文件名称
-     * @param jsonStr 数据内容
-     */
-    public static void saveVpnServerData(String name,String jsonStr) {
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn/"+name;
-        File jsonFile = new File(jsonPath);
-
-        FileWriter fw = null;
-        BufferedWriter out = null;
-        try {
-            if (!jsonFile.exists()) {
-                jsonFile.createNewFile();
-            }
-            fw = new FileWriter(jsonFile);
-            out = new BufferedWriter(fw);
-            out.write(jsonStr, 0, jsonStr.length());
-            out.close();
-        } catch (Exception e)
-        {
-            System.out.println("保持vpn sever数据异常" + e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
 }

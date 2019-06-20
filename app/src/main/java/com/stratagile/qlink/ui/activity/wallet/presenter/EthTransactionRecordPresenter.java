@@ -3,16 +3,12 @@ package com.stratagile.qlink.ui.activity.wallet.presenter;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.socks.library.KLog;
-import com.stratagile.qlink.R;
-import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlc.entity.AccountHistory;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.BaseBack;
@@ -26,6 +22,7 @@ import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransactionRecordContract;
 import com.stratagile.qlink.ui.activity.wallet.EthTransactionRecordActivity;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +37,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import qlc.network.QlcClient;
+import qlc.network.QlcException;
+import qlc.rpc.impl.LedgerRpc;
 
 /**
  * @author hzp
@@ -108,7 +108,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     @Override
                     public void accept(OnlyEthTransactionHistory baseBack) throws Exception {
                         //isSuccesse
-                        String data = "{\"operations\":"  + baseBack.getData() + "}";
+                        String data = "{\"operations\":" + baseBack.getData() + "}";
                         KLog.i(data);
                         OnlyEthTransactionHistory.EthTransactionBean ethTransactionBean = new Gson().fromJson(data, OnlyEthTransactionHistory.EthTransactionBean.class);
                         getOnlyEthTransactionHistory(ethTransactionBean.getOperations(), walletAddress);
@@ -139,7 +139,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
             transactionInfo.setTransationHash(dataBean.get(i).getHash());
             transactionInfo.setFrom(dataBean.get(i).getFrom());
             transactionInfo.setTo(dataBean.get(i).getTo());
-            transactionInfo.setTransactionState(dataBean.get(i).isSuccess()? "success" : "failed");
+            transactionInfo.setTransactionState(dataBean.get(i).isSuccess() ? "success" : "failed");
             transactionInfo.setOwner(walletAddress);
             transactionInfo.setTimestamp(dataBean.get(i).getTimestamp());
             transactionInfo.setTokenDecimals(0);
@@ -299,6 +299,45 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     }
                 });
         mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getQlcAccountHistoryTopn(String account, int count, int offset) {
+        JSONArray params = new JSONArray();
+        params.add(account);
+        params.add(count);
+        params.add(offset);
+        try {
+            ArrayList<TransactionInfo> transactionInfos = new ArrayList<>();
+            QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
+            LedgerRpc rpc = new LedgerRpc(qlcClient);
+            JSONObject jsonObject = rpc.accountHistoryTopn(params);
+            AccountHistory accountHistory = new Gson().fromJson(jsonObject.toJSONString(), AccountHistory.class);
+            for (int i = 0; i < accountHistory.getResult().size(); i++) {
+                TransactionInfo transactionInfo = new TransactionInfo();
+                transactionInfo.setTransactionType(AllWallet.WalletType.QlcWallet);
+                transactionInfo.setTransactionToken(accountHistory.getResult().get(i).getTokenName());
+                transactionInfo.setTransactionValue(accountHistory.getResult().get(i).getAmount());
+                transactionInfo.setTransationHash(accountHistory.getResult().get(i).getHash());
+                if ("Receive".equals(accountHistory.getResult().get(i).getType()) || "Open".equals(accountHistory.getResult().get(i).getType())) {
+                    transactionInfo.setFrom("");
+                    transactionInfo.setTo(accountHistory.getResult().get(i).getAddress());
+                } else {
+                    transactionInfo.setFrom(accountHistory.getResult().get(i).getAddress());
+                    transactionInfo.setTo("");
+                }
+                transactionInfo.setOwner(account);
+                transactionInfo.setTokenDecimals(8);
+                transactionInfo.setTimestamp(accountHistory.getResult().get(i).getTimestamp());
+                transactionInfos.add(transactionInfo);
+            }
+            mView.setEthTransactionHistory(transactionInfos);
+            KLog.i(jsonObject);
+        } catch (QlcException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private long parseEosTransactionTimestamp(String time) {

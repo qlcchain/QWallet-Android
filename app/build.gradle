@@ -35,14 +35,14 @@ checkstyle {
 //}
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.stratagile.winq.dapp"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode getSelfDefinedVersion("code")
         multiDexEnabled true
-        versionName "2.0.2"
+        versionName "2.1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        externalNativeBuild {
@@ -116,7 +116,7 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
     greendao {
-        schemaVersion 63//数据库版本号
+        schemaVersion 65//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -178,7 +178,7 @@ dependencies {
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:support-dynamic-animation:$supportVersion"
+    implementation "com.android.support:support-dynamic-animation:28.0.0"
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -209,7 +209,8 @@ dependencies {
 
     // Bus
     implementation 'org.greenrobot:eventbus:3.1.1'
-//    implementation 'com.github.zhaokaiqiang.klog:library:1.6.0'
+
+    //    implementation 'com.github.zhaokaiqiang.klog:library:1.6.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
 
     //图片加载框架
@@ -217,12 +218,13 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
     //butterknife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+    kapt 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
     implementation 'com.yanzhenjie:permission:1.1.2'
-    implementation files('libs/org.apache.http.legacy.jar')
-//    implementation files('libs/commons-codec-1.9.jar')
-    implementation files('libs/json-lib-2.4-jdk15.jar')
+//    implementation files('libs/org.apache.http.legacy.jar')
+
+    //    implementation files('libs/commons-codec-1.9.jar')
+//    implementation files('libs/json-lib-2.4-jdk15.jar')
     implementation files('libs/wowoviewpager.aar')
     implementation 'com.alibaba:fastjson:1.2.37'
     implementation 'org.greenrobot:greendao:3.2.2'
@@ -245,6 +247,8 @@ dependencies {
         exclude group: 'com.google.code.findbugs'
     }
     implementation project(':neoutils')
+
+    //    implementation project(':libsodium-jni-release')
     implementation 'com.github.kotlin-graphics:kotlin-unsigned:v2.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.2'
@@ -256,10 +260,14 @@ dependencies {
         exclude group: 'com.android.support'
     }
     implementation 'org.web3j:core:3.3.1-android'
-    implementation('com.facebook.android:facebook-android-sdk:[4,5)') {
-        exclude group: 'com.google.zxing'
-        exclude group: 'com.android.support'
-    }
+
+    //    implementation('com.facebook.android:facebook-android-sdk:[4,5)') {
+
+    //        exclude group: 'com.google.zxing'
+
+    //        exclude group: 'com.android.support'
+
+    //    }
     implementation "android.arch.lifecycle:runtime:$arch_version"
     implementation "android.arch.lifecycle:common-java8:$arch_version"
     kapt "android.arch.lifecycle:compiler:$arch_version"
@@ -285,7 +293,13 @@ dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.14.3'
     implementation 'com.google.android:flexbox:0.3.2'
     implementation files('libs/commons-collections-3.2.2.jar')
-
+//    implementation files('libs/blake2b-1.0.0.jar')
+//    implementation files('libs/commons-httpclient-3.0.1.jar')
+//    implementation files('libs/eddsa-0.3.0.jar')
+//    implementation files('libs/qlc-java-sdk-1.0.0.jar')
+    implementation files('libs/libsodium-jni-release.aar')
+    implementation 'com.github.kittinunf.fuel:fuel:1.13.0'
+    implementation 'com.github.consenlabs:token-core-android:v0.1'
     //    implementation project(':MPChartLib')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     implementation files('libs/BASE64Encoder.jar')
@@ -296,14 +310,17 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
 
+    implementation 'com.github.qlcchain:qlc-java-sdk:1.4'
+
     //    implementation 'com.qmuiteam:qmui:1.2.0'
 
     //    implementation 'com.qmuiteam:arch:0.3.1'
 
-
-    //rpc需要的
-    implementation 'com.github.kittinunf.fuel:fuel:1.13.0'
     implementation files('libs/klogLibrary-release.aar')
+
+    implementation 'info.hoang8f:android-segmented:1.0.6'
+
+    //    compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:2.0.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

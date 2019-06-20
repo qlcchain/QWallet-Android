@@ -49,6 +49,9 @@ public class SelectWalletAdapter extends BaseQuickAdapter<AllWallet, BaseViewHol
         } else if (item.getWalletType() == AllWallet.WalletType.EosWallet) {
             helper.setVisible(R.id.ivCheck, item.getEosAccount().getIsCurrent());
             helper.setImageDrawable(R.id.iv_country, mContext.getResources().getDrawable(R.mipmap.icons_eos_wallet));
+        } else if (item.getWalletType() == AllWallet.WalletType.QlcWallet) {
+            helper.setVisible(R.id.ivCheck, item.getQlcAccount().getIsCurrent());
+            helper.setImageDrawable(R.id.iv_country, mContext.getResources().getDrawable(R.mipmap.icons_qlc_wallet));
         }
     }
 }

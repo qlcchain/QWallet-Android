@@ -23,6 +23,8 @@ import com.stratagile.qlink.ui.activity.finance.component.DaggerMyProductCompone
 import com.stratagile.qlink.ui.activity.finance.contract.MyProductContract;
 import com.stratagile.qlink.ui.activity.finance.module.MyProductModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.MyProductPresenter;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
+import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.adapter.finance.OrderListAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.LanguageUtil;
@@ -93,6 +95,18 @@ public class MyProductActivity extends BaseActivity implements MyProductContract
 
     @Override
     protected void initData() {
+        if (ConstantValue.currentUser == null) {
+            startActivity(new Intent(this, AccountActivity.class));
+            finish();
+            return;
+        }
+        if (ConstantValue.isShouldShowVertifyPassword) {
+            Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
+            startActivityForResult(intent, 1);
+            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+            finish();
+            return;
+        }
         getOrderList();
         orderListAdapter = new OrderListAdapter(new ArrayList<>());
         recyclerView.setAdapter(orderListAdapter);

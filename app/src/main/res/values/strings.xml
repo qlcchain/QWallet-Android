@@ -1143,4 +1143,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="make_money_together">Make money together</string>
     <string name="invitation_code_1">Invitation Code：</string>
     <string name="Build">Build</string>
+    <string name="create_wallet">Create Wallet</string>
 </resources>

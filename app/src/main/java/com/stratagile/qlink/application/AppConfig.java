@@ -30,7 +30,7 @@ import android.util.DisplayMetrics;
 
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
-import com.facebook.FacebookSdk;
+//import com.facebook.FacebookSdk;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
@@ -67,7 +67,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.facebook.appevents.AppEventsLogger;
+//import com.facebook.appevents.AppEventsLogger;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -139,8 +139,7 @@ public class AppConfig extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         FileUtil.removeAllImageAvater(this);
-        FacebookSdk.sdkInitialize(this);
-        AppEventsLogger.activateApp(this);
+//        AppEventsLogger.activateApp(this);
         instance = this;
         KLog.init(BuildConfig.LOG_DEBUG);
         CrashReport.initCrashReport(this, "2d19fdd0a6", BuildConfig.LOG_DEBUG);
