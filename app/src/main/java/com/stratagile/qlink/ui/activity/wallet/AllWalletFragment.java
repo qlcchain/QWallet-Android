@@ -313,8 +313,11 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     @Override
     public void getTokenPriceBack(ArrayList<TokenInfo> tokenInfos) {
         if (tokenInfos.size() == 0) {
+            tokensAdapter.setNewData(null);
+            tokensAdapter.getEmptyView().setVisibility(View.GONE);
             return;
         }
+        tokensAdapter.getEmptyView().setVisibility(View.VISIBLE);
         walletAsset = 0;
         viewModel.walletTypeMutableLiveData.postValue(tokenInfos.get(0).getWalletType());
         ArrayList<String> symbols = new ArrayList<>();
@@ -426,7 +429,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         tvWalletGas.setText("- -");
         llGetGas.setVisibility(View.GONE);
         llResouces.setVisibility(View.GONE);
-        isPending = false;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -588,6 +590,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             JSONObject result = rpc.process (aaaa);
                             if (result.getString("result") != null && !"".equals(result.getString("result"))) {
                                 KLog.i(result);
+                                isPending = false;
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -596,14 +599,17 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                                 });
                             }
                         } catch (QlcException q) {
+                            isPending = false;
                             q.printStackTrace();
                         }
                     } else {
                         isPending = false;
                     }
                 } catch (QlcException e) {
+                    isPending = false;
                     e.printStackTrace();
                 } catch (IOException e) {
+                    isPending = false;
                     e.printStackTrace();
                 }
             }

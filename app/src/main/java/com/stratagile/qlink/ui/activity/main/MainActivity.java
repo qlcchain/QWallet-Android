@@ -120,12 +120,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import qlc.utils.Helper;
 
 /**
  * @author hzp
@@ -190,6 +192,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         needFront = true;
         super.onCreate(savedInstanceState);
         mainActivity = this;
+        getP2pId();
     }
 
     @Override
@@ -221,6 +224,27 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public void showVpnGuide(ShowGuide showGuide) {
         if (showGuide.getNumber() == 3) {
 //            showGuideViewVpnFragment();
+        }
+    }
+
+    private void getP2pId() {
+        String p2pId = SpUtil.getString(this, ConstantValue.P2PID, "");
+        if ("".equals(p2pId)) {
+            p2pId = FileUtil.getLocalP2pId();
+            if ("".equals(p2pId)) {
+                UUID uuid = UUID.randomUUID();
+                String uniqueId = uuid.toString();
+                String hex = Helper.byteToHexString(uniqueId.getBytes());
+                KLog.i(hex + uniqueId.substring(0, 4));
+                p2pId = hex + uniqueId.substring(0, 4);
+                SpUtil.putString(this, ConstantValue.P2PID, p2pId);
+                FileUtil.saveP2pId2Local(p2pId);
+            } else {
+                KLog.i(p2pId);
+                SpUtil.putString(this, ConstantValue.P2PID, p2pId);
+            }
+        } else {
+            KLog.i(p2pId);
         }
     }
 

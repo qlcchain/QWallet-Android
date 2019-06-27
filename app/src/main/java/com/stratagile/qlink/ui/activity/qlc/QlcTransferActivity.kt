@@ -288,7 +288,7 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                             tvQlcTokenName!!.text = tokenInfo!!.tokenSymol
                             etQlcTokenSendValue.filters = arrayOf(DecimalDigitsInputFilter(tokenInfo!!.tokenDecimals))
                             etQlcTokenSendValue!!.setText("")
-                            tvQlcTokenValue!!.text = "Balance: " + BigDecimal.valueOf(tokenInfo!!.tokenValue)
+                            tvQlcTokenValue!!.text = "Balance: " + BigDecimal.valueOf(tokenInfo!!.tokenValue).divide(BigDecimal.TEN.pow(tokenInfo!!.getTokenDecimals()), tokenInfo!!.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros().toPlainString() + ""
                             val layoutParams = LinearLayout.LayoutParams(tvQlcTokenName!!.width, resources.getDimension(R.dimen.x1).toInt())
                             viewLine!!.layoutParams = layoutParams
                         }

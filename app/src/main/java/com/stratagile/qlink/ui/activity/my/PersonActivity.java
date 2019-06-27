@@ -187,7 +187,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
                 //获取剪贴板管理器：
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 创建普通字符型ClipData
-                ClipData mClipData = ClipData.newPlainText("Label", ConstantValue.currentUser.getId() + "");
+                ClipData mClipData = ClipData.newPlainText("Label", ConstantValue.currentUser.getInviteCode() + "");
                 // 将ClipData内容放到系统剪贴板里。
                 cm.setPrimaryClip(mClipData);
                 ToastUtil.displayShortToast(getString(R.string.copy_success));

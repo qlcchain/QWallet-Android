@@ -120,13 +120,13 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
 
     @Override
     protected void initData() {
-        walletType = AllWallet.WalletType.EthWallet;
-        ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_select));
+        walletType = AllWallet.WalletType.QlcWallet;
+        ivEth.setImageDrawable(getResources().getDrawable(R.mipmap.eth_wallet_unselected));
         ivEos.setImageDrawable(getResources().getDrawable(R.mipmap.eos_wallet_unselected));
         ivNeo.setImageDrawable(getResources().getDrawable(R.mipmap.neo_wallet_unselected));
-        ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_unselected));
-        tvEth.setSelected(true);
-        tvQlc.setSelected(false);
+        ivQlc.setImageDrawable(getResources().getDrawable(R.mipmap.qlc_wallet_select));
+        tvEth.setSelected(false);
+        tvQlc.setSelected(true);
         tvNeo.setSelected(false);
         tvEos.setSelected(false);
     }

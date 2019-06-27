@@ -444,17 +444,17 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
     public void getQlcTokensInfo(ArrayList<QlcTokenbalance> qlcWalletInfo, String address) {
         ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
         if (qlcWalletInfo == null || qlcWalletInfo.size() == 0) {
-            TokenInfo tokenInfo = new TokenInfo();
-            tokenInfo.setTokenName("QLC");
-            tokenInfo.setTokenSymol("QLC");
-            tokenInfo.setTokenValue(0);
-            tokenInfo.setTokenDecimals(8);
-            tokenInfo.setTokenAddress("");
-            tokenInfo.setTokenImgName("qlc_qlc");
-            tokenInfo.setWalletAddress(address);
-            tokenInfo.setMainNetToken(true);
-            tokenInfo.setWalletType(AllWallet.WalletType.QlcWallet);
-            tokenInfos.add(tokenInfo);
+//            TokenInfo tokenInfo = new TokenInfo();
+//            tokenInfo.setTokenName("QLC");
+//            tokenInfo.setTokenSymol("QLC");
+//            tokenInfo.setTokenValue(0);
+//            tokenInfo.setTokenDecimals(8);
+//            tokenInfo.setTokenAddress("");
+//            tokenInfo.setTokenImgName("qlc_qlc");
+//            tokenInfo.setWalletAddress(address);
+//            tokenInfo.setMainNetToken(true);
+//            tokenInfo.setWalletType(AllWallet.WalletType.QlcWallet);
+//            tokenInfos.add(tokenInfo);
             getQlcTokensDecimals(tokenInfos);
             return;
         }
@@ -474,6 +474,10 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
     }
 
     private void getQlcTokensDecimals(ArrayList<TokenInfo> tokenInfos) {
+        if (tokenInfos.size() == 0) {
+            mView.getTokenPriceBack(tokenInfos);
+            return;
+        }
         try {
             QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
             LedgerRpc rpc = new LedgerRpc(qlcClient);

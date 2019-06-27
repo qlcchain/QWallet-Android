@@ -33,26 +33,6 @@
         android:layout_marginRight="@dimen/x38"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/llEth"
-            android:layout_width="0px"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivEth"
-                android:layout_width="@dimen/x138"
-                android:src="@mipmap/eth_wallet_unselected"
-                android:layout_height="@dimen/x138" />
-            <TextView
-                android:id="@+id/tvEth"
-                android:layout_width="wrap_content"
-                android:text="Ethereum"
-                android:textColor="@color/select_wallet_type_clolor"
-                android:layout_marginTop="@dimen/x19"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
             android:id="@+id/llQlc"
             android:layout_width="0px"
             android:orientation="vertical"
@@ -68,6 +48,27 @@
                 android:id="@+id/tvQlc"
                 android:layout_width="wrap_content"
                 android:text="QLC Chain"
+                android:textColor="@color/select_wallet_type_clolor"
+                android:layout_marginTop="@dimen/x19"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llEth"
+            android:layout_width="0px"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivEth"
+                android:layout_width="@dimen/x138"
+                android:src="@mipmap/eth_wallet_unselected"
+                android:layout_height="@dimen/x138" />
+            <TextView
+                android:id="@+id/tvEth"
+                android:layout_width="wrap_content"
+                android:text="Ethereum"
                 android:textColor="@color/select_wallet_type_clolor"
                 android:layout_marginTop="@dimen/x19"
                 android:layout_height="wrap_content" />
