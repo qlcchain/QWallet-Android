@@ -21,7 +21,7 @@
                 android:layout_height="@dimen/x42" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Twitter @playblockz"
+                android:text="Twitter"
                 android:layout_marginLeft="@dimen/x12"
                 android:textColor="@color/color_999"
                 android:textSize="14sp"
@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:text="Twitter @playblockz"
+                android:text="twitter.com/QLCchain"
                 android:layout_marginLeft="@dimen/x46"
                 android:textColor="@color/color_29282a"
                 android:textSize="14sp"
@@ -86,7 +86,7 @@
             <TextView
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:text="t.me/winqdapp"
+                android:text="t.me/qlinkmobile"
                 android:layout_marginLeft="@dimen/x46"
                 android:textColor="@color/color_29282a"
                 android:textSize="14sp"
@@ -136,7 +136,7 @@
             <TextView
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:text="t.me/playblockz"
+                android:text="www.facebook.com/QLCchain"
                 android:layout_marginLeft="@dimen/x46"
                 android:textColor="@color/color_29282a"
                 android:textSize="14sp"
@@ -167,11 +167,11 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="@dimen/x42"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/qlcchain"
                 android:layout_height="@dimen/x42" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="WINQ Website"
+                android:text="QLC Chain"
                 android:layout_marginLeft="@dimen/x12"
                 android:textColor="@color/color_999"
                 android:textSize="14sp"
@@ -186,7 +186,7 @@
             <TextView
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:text="www.winq.net"
+                android:text="qlcchain.org"
                 android:layout_marginLeft="@dimen/x46"
                 android:textColor="@color/color_29282a"
                 android:textSize="14sp"
@@ -204,4 +204,5 @@
             android:layout_marginLeft="@dimen/x46"
             android:background="@color/color_f2f2f2"/>
     </LinearLayout>
+
 </LinearLayout>

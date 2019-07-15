@@ -1,6 +1,10 @@
 package com.stratagile.qlink.ui.activity.otc;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -8,13 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
+import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.UserAccount;
+import com.stratagile.qlink.entity.EntrustOrderList;
+import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.otc.component.DaggerMarketComponent;
 import com.stratagile.qlink.ui.activity.otc.contract.MarketContract;
 import com.stratagile.qlink.ui.activity.otc.module.MarketModule;
 import com.stratagile.qlink.ui.activity.otc.presenter.MarketPresenter;
+import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,6 +50,11 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     RecyclerView recyclerView;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
+    private MainViewModel viewModel;
+    private EntrustOrderListAdapter entrustOrderListAdapter;
+
+    public static String currentOrderType = ConstantValue.orderTypeBuy;
+    public int currentPage = 0;
 
     @Nullable
     @Override
@@ -43,9 +62,67 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         View view = inflater.inflate(R.layout.fragment_market1, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
+        currentOrderType = ConstantValue.orderTypeBuy;
+        entrustOrderListAdapter = new EntrustOrderListAdapter(new ArrayList<>());
+        recyclerView.setAdapter(entrustOrderListAdapter);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        viewModel.currentEntrustOrderType.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                currentPage = 0;
+                currentOrderType = s;
+                refreshLayout.setRefreshing(true);
+                entrustOrderListAdapter.setNewData(new ArrayList<>());
+                getOrderList();
+            }
+        });
+
+        viewModel.currentUserAccount.observe(this, new Observer<UserAccount>() {
+            @Override
+            public void onChanged(@Nullable UserAccount userAccount) {
+                currentPage = 0;
+                getOrderList();
+            }
+        });
+
+        entrustOrderListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (entrustOrderListAdapter.getData().get(position).getType().equals(ConstantValue.orderTypeBuy)) {
+                    startActivity(new Intent(getActivity(), BuyQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
+                } else {
+                    startActivity(new Intent(getActivity(), SellQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
+                }
+            }
+        });
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                currentPage = 0;
+                getOrderList();
+            }
+        });
+    }
+
+    public void getOrderList() {
+        if (ConstantValue.currentUser == null) {
+            return;
+        }
+        currentPage++;
+        refreshLayout.setRefreshing(false);
+        Map map = new HashMap<String, String>();
+        map.put("userId", ConstantValue.currentUser.getInviteCode() + "");
+        map.put("type", currentOrderType);
+        map.put("page", currentPage + "");
+        map.put("size", "5");
+        mPresenter.getOrderList(map);
+    }
 
     @Override
     protected void setupFragmentComponent() {
@@ -75,6 +152,11 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     @Override
     public void closeProgressDialog() {
         progressDialog.hide();
+    }
+
+    @Override
+    public void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list) {
+        entrustOrderListAdapter.addData(list);
     }
 
     @Override

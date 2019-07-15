@@ -8,18 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.blockchain.cypto.ec.EosPrivateKey;
-import com.stratagile.qlink.blockchain.util.PublicAndPrivateKeyUtils;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosKeyAccount;
@@ -30,10 +28,8 @@ import com.stratagile.qlink.ui.activity.eos.presenter.EosImportPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +57,12 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
     EditText accountActiveKey;
     @BindView(R.id.btImport)
     Button btImport;
+    @BindView(R.id.etEosAccountName)
+    EditText etEosAccountName;
+    @BindView(R.id.tvWhatsMnemonic)
+    TextView tvWhatsMnemonic;
+    @BindView(R.id.tvWhatsMnemonic1)
+    TextView tvWhatsMnemonic1;
 
     private EosPrivateKey mOwnerKey;
     private EosPrivateKey mActiveKey;
@@ -131,7 +133,7 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
             }
         }
         List<Wallet> wallets1 = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        if (wallets1 != null && wallets1.size() != 0 ) {
+        if (wallets1 != null && wallets1.size() != 0) {
             for (int i = 0; i < wallets1.size(); i++) {
                 if (wallets1.get(i).getIsCurrent()) {
                     wallets1.get(i).setIsCurrent(false);
@@ -157,6 +159,16 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
                 if (wallets2.get(i).getIsCurrent()) {
                     wallets2.get(i).setIsCurrent(false);
                     AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallets2.get(i));
+                    break;
+                }
+            }
+        }
+        List<QLCAccount> qlcWallets = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+        if (qlcWallets != null && qlcWallets.size() != 0) {
+            for (int i = 0; i < qlcWallets.size(); i++) {
+                if (qlcWallets.get(i).getIsCurrent()) {
+                    qlcWallets.get(i).setIsCurrent(false);
+                    AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(qlcWallets.get(i));
                     break;
                 }
             }
@@ -220,20 +232,31 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
             }
         }
         showProgressDialog();
-        Map<String, String> infoMap = new HashMap<>();
-        if (eosAccount.getOwnerPublicKey() != null) {
-            infoMap.put("public_key", eosAccount.getOwnerPublicKey());
+        if (!"".equals(etEosAccountName.getText().toString().trim())) {
+            ToastUtil.displayShortToast("eos account length error");
+            if (etEosAccountName.getText().toString().length() != 12) {
+                return;
+            }
+            Map<String, Object> infoMap = new HashMap<>();
+            infoMap.put("account", etEosAccountName.getText().toString().trim());
+            eosAccount.setAccountName(etEosAccountName.getText().toString().trim());
+            mPresenter.getEosAccountInfo(infoMap);
         } else {
-            infoMap.put("public_key", eosAccount.getActivePublicKey());
+            Map<String, String> infoMap = new HashMap<>();
+            if (eosAccount.getOwnerPublicKey() != null) {
+                infoMap.put("public_key", eosAccount.getOwnerPublicKey());
+            } else {
+                infoMap.put("public_key", eosAccount.getActivePublicKey());
+            }
+            mPresenter.getEosKeyAccount(infoMap);
         }
-        mPresenter.getEosKeyAccount(infoMap);
     }
 
     @Override
-    public void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts) {
+    public void getEosKeyAccountBack(EosKeyAccount eosKeyAccounts) {
         closeProgressDialog();
-        if (eosKeyAccounts.size() != 0) {
-            showAccountNName(eosKeyAccounts.get(0).getAccount());
+        if (eosKeyAccounts.getAccount_names().size() != 0) {
+            showAccountNName(eosKeyAccounts.getAccount_names().get(0));
         }
     }
 

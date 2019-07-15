@@ -22,11 +22,11 @@ public class LocalWalletUtil {
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
         saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qlink/qlcWallet", saveData);
+        FileUtil.savaData("/Qwallet/qlcWallet", saveData);
     }
 
     public static ArrayList<QLCAccount> getLocalQlcWallet() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/qlcWallet");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/qlcWallet");
         if (file.exists()) {
             String qlcWalletStr = FileUtil.getStrDataFromFile(file);
             qlcWalletStr = ETHWalletUtils.decrypt(qlcWalletStr);
@@ -44,11 +44,11 @@ public class LocalWalletUtil {
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
         saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qlink/neoWallet", saveData);
+        FileUtil.savaData("/Qwallet/neoWallet", saveData);
     }
 
     public static ArrayList<Wallet> getLocalNeoWallet() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/neoWallet");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/neoWallet");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
             neoWalletStr = ETHWalletUtils.decrypt(neoWalletStr);
@@ -67,7 +67,7 @@ public class LocalWalletUtil {
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
         saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qlink/ethWallet", saveData);
+        FileUtil.savaData("/Qwallet/ethWallet", saveData);
     }
 
     public static void updateLocalEosWallet() {
@@ -75,7 +75,7 @@ public class LocalWalletUtil {
         Gson gson = new Gson();
         String saveData = gson.toJson(walletList);
         saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qlink/eosWallet", saveData);
+        FileUtil.savaData("/Qwallet/eosWallet", saveData);
     }
 
     public static void initGreenDaoFromLocal() {
@@ -102,7 +102,7 @@ public class LocalWalletUtil {
     }
 
     public static ArrayList<EthWallet> getLocalEthWallet() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/ethWallet");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/ethWallet");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
             neoWalletStr = ETHWalletUtils.decrypt(neoWalletStr);
@@ -116,7 +116,7 @@ public class LocalWalletUtil {
         }
     }
     public static ArrayList<EosAccount> getLocalEosWallet() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/eosWallet");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/eosWallet");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
             neoWalletStr = ETHWalletUtils.decrypt(neoWalletStr);
@@ -130,7 +130,7 @@ public class LocalWalletUtil {
     }
 
     public static ArrayList<String> getLocalTokens() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/tokens");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/tokens");
         if (file.exists()) {
             String neoWalletStr = FileUtil.getStrDataFromFile(file);
             Gson gson = new Gson();
@@ -144,7 +144,7 @@ public class LocalWalletUtil {
     public static void updateLocalTokens(ArrayList<String> list) {
         Gson gson = new Gson();
         String saveData = gson.toJson(list);
-        FileUtil.savaData("/Qlink/tokens", saveData);
+        FileUtil.savaData("/Qwallet/tokens", saveData);
     }
 
 }

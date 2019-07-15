@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Unit Price (USDT)"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="0.02"
+        android:layout_width="wrap_content"
+        android:textColor="@color/color_ff3669"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="23sp"
+        android:layout_height="wrap_content" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x40"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="0px"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Total Amount (QGAS)"
+                android:textColor="@color/color_808080"
+                android:textSize="12sp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="1228812334"
+                android:textSize="13sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="@dimen/x2"
+            android:layout_height="@dimen/x63"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Volume Settings (QGAS)"
+                android:textColor="@color/color_808080"
+                android:textSize="12sp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="100-1000"
+                android:textSize="13sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Account Receivable"
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/color_29282a"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/x21"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/x92">
+        <EditText
+            android:id="@+id/etUsdt"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:hint="Max 200"
+            android:background="@null"
+            android:layout_marginTop="@dimen/x10"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_marginBottom="@dimen/x4"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="USDT"
+            android:layout_marginRight="@dimen/x31"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/x92">
+        <EditText
+            android:id="@+id/etQgas"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:hint="Max 10000"
+            android:background="@null"
+            android:layout_marginTop="@dimen/x10"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_marginBottom="@dimen/x4"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="QGAS"
+            android:layout_marginRight="@dimen/x31"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="ERC20 Address to receive USDT"
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/color_29282a"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/x21"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/etReceiveAddress"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:background="@null"
+        android:hint="ERC-20 Wallet Address"
+        android:layout_height="@dimen/x77" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+
+    <TextView
+        android:id="@+id/tvNext"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x60"
+        android:background="@drawable/main_color_bt_bg"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="Submit"
+        android:textSize="16sp"
+        android:layout_height="@dimen/x94" />
+</LinearLayout>

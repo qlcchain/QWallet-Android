@@ -16,6 +16,7 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
 import com.stratagile.qlink.entity.EosKeyAccount;
@@ -636,8 +637,8 @@ public class HttpAPIWrapper {
     }
 
 
-    public Observable<ArrayList<EosKeyAccount>> getKeyAccount(Map map) {
-        return wrapperArrayList(mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
+    public Observable<EosKeyAccount> getKeyAccount(Map map) {
+        return (mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
     }
 
     public Observable<BaseBack> getSignUpVcode(Map map) {
@@ -771,6 +772,22 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> generateBuyQgasOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.generateBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.generateBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<EntrustOrderList> getEntrustOrderList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getEntrustOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEntrustOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

@@ -132,6 +132,8 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
                     }
                 }
             }
+            setResult(-1);
+            finish();
         } else {
             ToastUtil.displayShortToast(getString(R.string.Password_retrieved_successfully_please_login_with_new_password));
             List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();

@@ -35,9 +35,10 @@ public class ConstantValue {
     public static String unlockTime = "unlocktime";
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
+    //正式 http://wrpc.qlcchain.org:9735
+    //测试 https://rpc.qlcchain.online
     public static String qlcNode = "http://wrpc.qlcchain.org:9735";
 //    public static String qlcNode = "https://rpc.qlcchain.online";
-//    public static String qlcNode = "http://192.168.1.122:19735";
 
     public static UserAccount currentUser;
     /**
@@ -247,4 +248,7 @@ public class ConstantValue {
     public static final String userEmail = "userEmail";
     public static final String userRsaPubKey = "userRsaPubKey";
     public static final String isUserLogin = "isUserLogin";
+
+    public static final String orderTypeBuy = "BUY";
+    public static final String orderTypeSell = "SELL";
 }

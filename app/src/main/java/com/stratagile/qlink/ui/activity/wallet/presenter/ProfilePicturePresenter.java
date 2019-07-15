@@ -60,7 +60,7 @@ public class ProfilePicturePresenter implements ProfilePictureContract.ProfilePi
     public void upLoadImg() {
         mView.showProgressDialog();
         String p2pId = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "");
-        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
+        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
         RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
         MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
         Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.getAccount()), RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken()))     //userId, nickName
@@ -92,7 +92,7 @@ public class ProfilePicturePresenter implements ProfilePictureContract.ProfilePi
     }
     @Override
     public void upLoadImgPc(String p2pIdPc) {
-        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
+        File upLoadFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/" + SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg");
         RequestBody image = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile);
         MultipartBody.Part photo = MultipartBody.Part.createFormData("head", SpUtil.getString(mActivity, ConstantValue.myAvaterUpdateTime, "") + ".jpg", image);
         Disposable disposable = httpAPIWrapper.updateMyAvatar(photo, RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.getAccount()), RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken()))     //userId, nickName

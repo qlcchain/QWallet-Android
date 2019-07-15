@@ -241,10 +241,10 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
     }
 
     @Override
-    public void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts) {
+    public void getEosKeyAccountBack(EosKeyAccount eosKeyAccounts) {
         closeProgressDialog();
-        if (eosKeyAccounts.size() != 0) {
-            eosAccount.setAccountName(eosKeyAccounts.get(0).getAccount());
+        if (eosKeyAccounts.getAccount_names().size() != 0) {
+            eosAccount.setAccountName(eosKeyAccounts.getAccount_names().get(0));
             eosAccount.setIsCreating(false);
             AppConfig.getInstance().getDaoSession().getEosAccountDao().update(eosAccount);
             mPresenter.reportWalletCreated(eosAccount.getAccountName(), eosAccount.getOwnerPublicKey(), eosAccount.getOwnerPrivateKey());
@@ -420,7 +420,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
      */
     private Uri saveBitmap(Bitmap bm, String picName) {
         try {
-            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qlink/image/" + picName + ".jpg";
+            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qwallet/image/" + picName + ".jpg";
             File f = new File(dir);
             if (!f.exists()) {
                 f.getParentFile().mkdirs();

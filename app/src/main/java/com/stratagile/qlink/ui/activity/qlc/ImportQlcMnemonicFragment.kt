@@ -67,11 +67,11 @@ class ImportQlcMnemonicFragment : BaseFragment(), ImportQlcMnemonicContract.View
             }
 
             showProgressDialog()
-            var jsonArray = JSONArray()
-            jsonArray.add(etMnemonic.text.toString().trim())
-            var seed = AccountRpc.mnemonicsToSeed(jsonArray)
-            var jsonObject: JSONObject? = null
             try {
+                var jsonArray = JSONArray()
+                jsonArray.add(etMnemonic.text.toString().trim())
+                var seed = AccountRpc.mnemonicsToSeed(jsonArray)
+                var jsonObject: JSONObject? = null
                 jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0)
                 val priKey = jsonObject!!.getString("privKey")
                 val pubKey = jsonObject.getString("pubKey")
@@ -101,7 +101,8 @@ class ImportQlcMnemonicFragment : BaseFragment(), ImportQlcMnemonicContract.View
                 AppConfig.instance.daoSession.qlcAccountDao.insert(qlcAccount)
                 closeProgressDialog()
                 viewModel!!.walletAddress.postValue(qlcAccount.address)
-            } catch (e: QlcException) {
+            } catch (e: Exception) {
+                ToastUtil.displayShortToast(e.message)
                 e.printStackTrace()
                 closeProgressDialog()
             }

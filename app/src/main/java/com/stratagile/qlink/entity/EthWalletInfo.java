@@ -145,7 +145,7 @@ public class EthWalletInfo extends BaseBack<EthWalletInfo.DataBean> {
                 private String symbol;
                 private String totalSupply;
                 private String owner;
-                private int lastUpdated;
+                private long lastUpdated;
                 private int issuancesCount;
                 private int holdersCount;
                 private Object price;
@@ -206,11 +206,11 @@ public class EthWalletInfo extends BaseBack<EthWalletInfo.DataBean> {
                     this.owner = owner;
                 }
 
-                public int getLastUpdated() {
+                public long getLastUpdated() {
                     return lastUpdated;
                 }
 
-                public void setLastUpdated(int lastUpdated) {
+                public void setLastUpdated(long lastUpdated) {
                     this.lastUpdated = lastUpdated;
                 }
 

@@ -254,7 +254,7 @@ public class ETHWalletUtils {
         BigInteger publicKey = ecKeyPair.getPublicKey();
         String s = publicKey.toString();
         KLog.i("publicKey = " + s);
-        File destination = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletFile.getAddress() + ".json");
+        File destination = new File(Environment.getExternalStorageDirectory() + "/Qwallet/KeyStore", "keystore_" + walletFile.getAddress() + ".json");
 
         //目录不存在则创建目录，创建不了则报错
         if (!createParentDir(destination)) {
@@ -386,7 +386,7 @@ public class ETHWalletUtils {
         try {
             credentials = WalletUtils.loadCredentials(oldPassword, ethWallet.getKeystorePath());
             keypair = credentials.getEcKeyPair();
-            File destinationDirectory = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletName + ".json");
+            File destinationDirectory = new File(Environment.getExternalStorageDirectory() + "/Qwallet/KeyStore", "keystore_" + walletName + ".json");
             WalletUtils.generateWalletFile(newPassword, keypair, destinationDirectory, true);
             ethWallet.setPassword(newPassword);
             AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallet);

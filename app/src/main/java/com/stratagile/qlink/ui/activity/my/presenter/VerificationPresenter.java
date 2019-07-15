@@ -11,6 +11,7 @@ import com.stratagile.qlink.ui.activity.my.contract.VerificationContract;
 import com.stratagile.qlink.ui.activity.my.VerificationActivity;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.io.File;
 import java.util.Map;
@@ -72,6 +73,7 @@ public class VerificationPresenter implements VerificationContract.VerificationC
                     public void accept(Passport upLoadAvatar) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
+                        mView.uploadImgSuccess();
                         mView.closeProgressDialog();
                     }
                 }, new Consumer<Throwable>() {

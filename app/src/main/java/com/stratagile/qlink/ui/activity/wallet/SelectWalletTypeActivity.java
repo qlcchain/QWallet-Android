@@ -35,6 +35,7 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerSelectWalletTypeC
 import com.stratagile.qlink.ui.activity.wallet.contract.SelectWalletTypeContract;
 import com.stratagile.qlink.ui.activity.wallet.module.SelectWalletTypeModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.SelectWalletTypePresenter;
+import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
@@ -261,6 +262,15 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
     }
 
     @Override
+    protected void onDestroy() {
+        LocalWalletUtil.updateLocalNeoWallet();
+        LocalWalletUtil.updateLocalEthWallet();
+        LocalWalletUtil.updateLocalEosWallet();
+        LocalWalletUtil.updateLocalQlcWallet();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
@@ -356,7 +366,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 break;
             case R.id.servicePrivacyPolicy:
                 Intent intent = new Intent(this, WebViewActivity.class);
-                intent.putExtra("url", "https://winq.net/disclaimer.html");
+                intent.putExtra("url", "https://docs.google.com/document/d/1yTr1EDXmOclDuSt4o0RRUc0fVjJU3zPREK97C1RmYdI/edit?usp=sharing");
                 intent.putExtra("title", "Service agreement");
                 startActivity(intent);
                 break;

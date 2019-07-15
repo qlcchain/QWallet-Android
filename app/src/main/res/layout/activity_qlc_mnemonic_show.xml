@@ -1,60 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
-        android:id="@+id/tvChoose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x12"
-        android:text="WALLET CREATED SUCCESSFULLY"
-        android:textColor="@color/color_1F314A"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv3"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChoose"
-        android:layout_marginLeft="@dimen/x45"
-        android:layout_marginRight="@dimen/x45"
-        android:layout_marginTop="@dimen/x25"
-        android:fontFamily="@font/roboto_regular"
-        android:textColor="@color/color_9b9b9bb"
-        android:text="Mnemonic is used to restore your wallet. Anyone who has your mnemonic can control your wallet, SO keepit in a safe place to prevent the loss of your assets. Kcash does not store user 'S mnemonics and can not help you to retrieve them. "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x54"
+        android:layout_marginTop="@dimen/x65"
+        android:text="@string/Public_Address" />
+
+    <TextView
+        android:id="@+id/tvPublicAddress"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_marginLeft="@dimen/x54"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_marginLeft="@dimen/x54"
+        android:background="@color/content_background" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x54"
+        android:layout_marginTop="@dimen/x65"
+        android:text="Wallet Mnemonic Phrase" />
 
     <TextView
         android:id="@+id/tvMnemonic"
+        android:layout_marginLeft="@dimen/x54"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x15"
+        android:drawablePadding="@dimen/x10"
+        android:drawableRight="@mipmap/icon_qr_code"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv3"
-        android:background="#eae5f0"
-        android:textColor="@color/mainColor"
-        android:layout_marginTop="@dimen/x35"
-        android:textSize="19sp"
-        android:paddingTop="@dimen/x35"
-        android:paddingBottom="@dimen/x35"
-        android:paddingLeft="@dimen/x45"
-        android:paddingRight="@dimen/x45"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btBackup"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_43"
-        android:layout_marginLeft="@dimen/x44"
-        android:layout_marginRight="@dimen/x44"
-        android:layout_marginTop="@dimen/x220"
-        android:background="@drawable/change_wallet"
-        android:fontFamily="@font/roboto_regular"
-        android:text="@string/next"
-        android:textAllCaps="false"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_marginLeft="@dimen/x54"
+        android:background="@color/content_background" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x54"
+        android:layout_marginTop="@dimen/x65"
+        android:text="Wallet Seed" />
+
+    <TextView
+        android:id="@+id/tvSeed"
+        android:layout_marginLeft="@dimen/x54"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x15"
+        android:drawablePadding="@dimen/x10"
+        android:drawableRight="@mipmap/icon_qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_marginLeft="@dimen/x54"
+        android:background="@color/content_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/x45"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_height="wrap_content">
+        <com.stratagile.qlink.view.SmoothCheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="@dimen/x31"
+            android:layout_marginRight="@dimen/x12"
+            app:color_unchecked_stroke="@color/gray"
+            app:color_unchecked="@color/white"
+            app:color_checked="@color/mainColor"
+            app:stroke_width="@dimen/x2"
+            android:layout_height="@dimen/x31"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            android:text="I have backuped the Priate key"
+            android:textColor="@color/color_29282a"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvConfirm"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/llOpen"
+        android:layout_marginTop="@dimen/x92"
+        android:layout_marginLeft="@dimen/x45"
+        android:text="@string/confirm"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMnemonic" />
-</android.support.constraint.ConstraintLayout>
+        android:gravity="center"
+        android:layout_marginRight="@dimen/x45"
+        android:background="@drawable/main_color_bt_bg"
+        android:layout_height="@dimen/x94" />
+</LinearLayout>

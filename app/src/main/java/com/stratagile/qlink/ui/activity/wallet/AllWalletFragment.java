@@ -63,6 +63,8 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.AllWalletPresenter;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
 import com.stratagile.qlink.utils.EosUtil;
+import com.stratagile.qlink.utils.QlcReceiveUtilsKt;
+import com.stratagile.qlink.utils.ReceiveBack;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
@@ -221,7 +223,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     } else {
                         ToastUtil.displayShortToast("Please scan the EOS wallet address and make a transfer.");
                     }
-                }  else if (AccountMng.isValidAddress(s)) {
+                } else if (AccountMng.isValidAddress(s)) {
                     if (currentSelectWallet.getWalletType() == AllWallet.WalletType.QlcWallet) {
                         ArrayList<TokenInfo> arrayList = new ArrayList<>();
                         arrayList.addAll(tokensAdapter.getData());
@@ -312,46 +314,45 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     @Override
     public void getTokenPriceBack(ArrayList<TokenInfo> tokenInfos) {
-        if (tokenInfos.size() == 0) {
-            tokensAdapter.setNewData(null);
-            tokensAdapter.getEmptyView().setVisibility(View.GONE);
-            return;
-        }
-        tokensAdapter.getEmptyView().setVisibility(View.VISIBLE);
-        walletAsset = 0;
-        viewModel.walletTypeMutableLiveData.postValue(tokenInfos.get(0).getWalletType());
-        ArrayList<String> symbols = new ArrayList<>();
-        viewModel.tokenInfoMutableLiveData.postValue(tokenInfos);
-        tokensAdapter.setNewData(tokenInfos);
-        for (int i = 0; i < tokenInfos.size(); i++) {
-            symbols.add(tokenInfos.get(i).getTokenSymol());
-            String value = tokenInfos.get(i).getTokenValue() / (Math.pow(10.0, tokenInfos.get(i).getTokenDecimals())) + "";
-            walletAsset += Double.parseDouble(value) * tokenInfos.get(i).getTokenPrice();
-            if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EthWallet) {
-                ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eth_wallet));
-            } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.NeoWallet) {
-                ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_neo_wallet));
-            } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EosWallet) {
-                ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
-            } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.QlcWallet) {
-                ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
+        tvWalletAsset.post(new Runnable() {
+            @Override
+            public void run() {
+                KLog.i("刷新adapter");
+                if (tokenInfos.size() == 0) {
+                    tokensAdapter.setNewData(null);
+                    tokensAdapter.getEmptyView().setVisibility(View.GONE);
+                    return;
+                }
+                tokensAdapter.getEmptyView().setVisibility(View.VISIBLE);
+                walletAsset = 0;
+                viewModel.walletTypeMutableLiveData.postValue(tokenInfos.get(0).getWalletType());
+                ArrayList<String> symbols = new ArrayList<>();
+                viewModel.tokenInfoMutableLiveData.postValue(tokenInfos);
+                tokensAdapter.setNewData(tokenInfos);
+                for (int i = 0; i < tokenInfos.size(); i++) {
+                    symbols.add(tokenInfos.get(i).getTokenSymol());
+                    String value = tokenInfos.get(i).getTokenValue() / (Math.pow(10.0, tokenInfos.get(i).getTokenDecimals())) + "";
+                    walletAsset += Double.parseDouble(value) * tokenInfos.get(i).getTokenPrice();
+                    if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EthWallet) {
+                        ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eth_wallet));
+                    } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.NeoWallet) {
+                        ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_neo_wallet));
+                    } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EosWallet) {
+                        ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
+                    } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.QlcWallet) {
+                        ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
+                    }
+                }
+                viewModel.tokens.postValue(symbols);
+                BigDecimal b = new BigDecimal(new Double((walletAsset)).toString());
+                walletAsset = b.setScale(2, ROUND_HALF_UP).doubleValue();
+                if (walletAsset != 0) {
+                    tvWalletAsset.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + walletAsset);
+                } else {
+                    tvWalletAsset.setText("- -");
+                }
             }
-        }
-        viewModel.tokens.postValue(symbols);
-        BigDecimal b = new BigDecimal(new Double((walletAsset)).toString());
-        walletAsset = b.setScale(2, ROUND_HALF_UP).doubleValue();
-        if (walletAsset != 0) {
-            tvWalletAsset.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + walletAsset);
-        } else {
-            tvWalletAsset.setText("- -");
-        }
-        for (AllWallet allWallet : allWalletMoney.keySet()) {
-            if (allWallet.getWalletAddress().toLowerCase().equals(tokenInfos.get(0).getWalletAddress().toLowerCase())) {
-                allWalletMoney.put(allWallet, walletAsset);
-                break;
-            }
-        }
-        setAllWalletMoney();
+        });
     }
 
     @Override
@@ -582,39 +583,62 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     Pending pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
                     if (pending.getInfoList().size() != 0) {
                         isPending = true;
-                        StateBlock sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()));
-                        JSONObject receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()));
-                        JSONArray aaaa = new JSONArray();
-                        aaaa.add(receiveBlockJson);
-                        try {
-                            JSONObject result = rpc.process (aaaa);
-                            if (result.getString("result") != null && !"".equals(result.getString("result"))) {
-                                KLog.i(result);
-                                isPending = false;
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        initData();
-                                    }
-                                });
+                        QlcReceiveUtilsKt.recevive(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()), qlcAccount, rpc, new ReceiveBack() {
+                            @Override
+                            public void recevie(boolean suceess) {
+                                if (suceess) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            isPending = false;
+                                            initData();
+                                        }
+                                    });
+                                }
                             }
-                        } catch (QlcException q) {
-                            isPending = false;
-                            q.printStackTrace();
-                        }
-                    } else {
-                        isPending = false;
-                    }
-                } catch (QlcException e) {
+                        });
+//                        StateBlock sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()));
+//                        JSONObject receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()));
+//                        JSONArray aaaa = new JSONArray();
+//                        aaaa.add(receiveBlockJson);
+//                        try {
+//                            JSONObject result = rpc.process (aaaa);
+//                            if (result.getString("result") != null && !"".equals(result.getString("result"))) {
+//                                KLog.i(result);
+//                                isPending = false;
+//                                getActivity().runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        initData();
+//                                    }
+//                                });
+//                            }
+//                        } catch (QlcException q) {
+//                            isPending = false;
+//                            q.printStackTrace();
+//                        }
+                } else{
                     isPending = false;
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    isPending = false;
-                    e.printStackTrace();
                 }
+            } catch(
+            QlcException e)
+
+            {
+                isPending = false;
+                e.printStackTrace();
+            } catch(
+            IOException e)
+
+            {
+                isPending = false;
+                e.printStackTrace();
             }
-        }).start();
-    }
+        }
+    }).
+
+    start();
+
+}
 
     private void getEosToken(EosAccount eosAccount) {
         Map<String, Object> infoMap = new HashMap<>();

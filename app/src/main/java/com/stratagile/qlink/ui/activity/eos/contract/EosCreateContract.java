@@ -38,7 +38,7 @@ public interface EosCreateContract {
 
         void setEosNeedInfo(EosNeedInfo eosNeedInfo);
 
-        void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts);
+        void getEosKeyAccountBack(EosKeyAccount eosKeyAccounts);
     }
 
     interface EosCreateContractPresenter extends BasePresenter {

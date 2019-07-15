@@ -22,6 +22,7 @@ public interface VerificationContract {
          *
          */
         void closeProgressDialog();
+        void uploadImgSuccess();
     }
 
     interface VerificationContractPresenter extends BasePresenter {

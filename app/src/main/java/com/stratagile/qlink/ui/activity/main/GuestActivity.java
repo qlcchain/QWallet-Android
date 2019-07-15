@@ -132,7 +132,7 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
     @Override
     protected void initData() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/neoWallet");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/neoWallet");
         if (!file.exists()) {
             String addressNames = FileUtil.getAllAddressNames();
             Map<String, String> map = new HashMap<>();

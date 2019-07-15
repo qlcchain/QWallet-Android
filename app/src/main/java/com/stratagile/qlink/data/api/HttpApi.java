@@ -12,6 +12,7 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
 import com.stratagile.qlink.entity.EosKeyAccount;
@@ -75,6 +76,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 import static com.stratagile.qlink.data.api.API.act_asset;
@@ -90,6 +92,8 @@ import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.API.url_create_eos_account;
 import static com.stratagile.qlink.data.api.API.url_create_eos_need_info;
+import static com.stratagile.qlink.data.api.API.url_entrust_order;
+import static com.stratagile.qlink.data.api.API.url_entrust_order_list;
 import static com.stratagile.qlink.data.api.API.url_eos_account_info;
 import static com.stratagile.qlink.data.api.API.url_eos_account_transaction_info;
 import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
@@ -409,7 +413,7 @@ public interface HttpApi {
 
 
     @GET(url_key_account)
-    Observable<ArrayList<EosKeyAccount>> getKeyAccount(@Path("public_key") String address);
+    Observable<EosKeyAccount> getKeyAccount(@Query("public_key") String address);
 
 
     @POST(url_vcode_signup_code)
@@ -480,6 +484,14 @@ public interface HttpApi {
     @POST(url_user_change_nickname)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> changeNickName(@Body RequestBody map);
+
+    @POST(url_entrust_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> generateBuyQgasOrder(@Body RequestBody map);
+
+    @POST(url_entrust_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EntrustOrderList> getEntrustOrderList(@Body RequestBody map);
 
     /*************************************************/
 }

@@ -12,10 +12,18 @@ public class QrEntity implements Parcelable {
         this.icon = icon;
     }
 
+    public QrEntity(String content, String title, String icon, int chain) {
+        this.content = content;
+        this.title = title;
+        this.icon = icon;
+        this.chain = chain;
+    }
+
     protected QrEntity(Parcel in) {
         content = in.readString();
         title = in.readString();
         icon = in.readString();
+        chain = in.readInt();
     }
 
     public static final Creator<QrEntity> CREATOR = new Creator<QrEntity>() {
@@ -57,6 +65,16 @@ public class QrEntity implements Parcelable {
 
     private String title;
     private String icon;
+    //链 1 neo， 2 eth， 3 eos， 4qlc
+    private int chain;
+
+    public int getChain() {
+        return chain;
+    }
+
+    public void setChain(int chain) {
+        this.chain = chain;
+    }
 
     @Override
     public int describeContents() {
@@ -64,9 +82,10 @@ public class QrEntity implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(content);
-        dest.writeString(title);
-        dest.writeString(icon);
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(content);
+        parcel.writeString(title);
+        parcel.writeString(icon);
+        parcel.writeInt(chain);
     }
 }

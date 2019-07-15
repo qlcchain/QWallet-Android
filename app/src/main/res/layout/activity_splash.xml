@@ -8,7 +8,7 @@
         android:id="@+id/activity_splash_ImageViewLogo"
         android:layout_width="@dimen/x275"
         android:layout_height="@dimen/x365"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/start_logo"
         android:layout_centerInParent="true" />
 
 </RelativeLayout>

@@ -23,6 +23,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -57,6 +58,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import qlc.mng.AccountMng;
+import qlc.utils.Helper;
 
 /**
  * @author hzp
@@ -161,6 +164,15 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
 
     @Override
     public void setChartData(KLine data) {
+        if (data.getData() == null || data.getData().size() == 0) {
+            chart.post(new Runnable() {
+                @Override
+                public void run() {
+                    chart.setVisibility(View.GONE);
+                }
+            });
+            return;
+        }
         ArrayList<Entry> values = new ArrayList<>();
         for (int i = 0; i < data.getData().size(); i++) {
             long now = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(data.getData().get(i).get(0)));
@@ -285,6 +297,12 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
         llSend.post(new Runnable() {
             @Override
             public void run() {
+//                if (transactionInfos.size() == 0) {
+//                    chart.setVisibility(View.GONE);
+//                    return;
+//                } else {
+//                    chart.setVisibility(View.VISIBLE);
+//                }
                 transacationHistoryAdapter.setNewData(transactionInfos);
             }
         });
@@ -324,24 +342,24 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                 }
                 break;
             case R.id.llRecive:
-                String img = "";
+                int type = 0;
                 switch (tokenInfo.getWalletType()) {
                     case EosWallet:
-                        img = "icons_eos_wallet";
+                        type = 3;
                         break;
                     case EthWallet:
-                        img = "icons_eth_wallet";
+                        type = 2;
                         break;
                     case QlcWallet:
-                        img = "icons_qlc_wallet";
+                        type = 4;
                         break;
                     case NeoWallet:
-                        img = "icons_neo_wallet";
+                        type = 1;
                         break;
                     default:
                         break;
                 }
-                QrEntity qrEntity = new QrEntity(tokenInfo.getWalletAddress(), tokenInfo.getTokenName() + " Address", img);
+                QrEntity qrEntity = new QrEntity(tokenInfo.getWalletAddress(), tokenInfo.getTokenName() + " Receivable Address", tokenInfo.getTokenSymol(), type);
                 Intent intent = new Intent(this, WalletQRCodeActivity.class);
                 intent.putExtra("qrentity", qrEntity);
                 startActivity(intent);

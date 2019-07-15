@@ -176,7 +176,7 @@ public class BitUtil {
 
 
     public static File getBLockFile(){
-        File file = new File(Environment.getExternalStorageDirectory() + "/Qlink/btc/tmp/bitcoin-blocks");
+        File file = new File(Environment.getExternalStorageDirectory() + "/Qwallet/btc/tmp/bitcoin-blocks");
         if(!file.exists()){
             try {
                 boolean newFile = file.createNewFile();
@@ -338,7 +338,7 @@ public class BitUtil {
             return AppConfig.getInstance().walletAppKit;
         }
         try {
-            WalletAppKit walletAppKit = new WalletAppKit(getParams(), new File(Environment.getExternalStorageDirectory() + "/Qlink/btc"), "btcz") {
+            WalletAppKit walletAppKit = new WalletAppKit(getParams(), new File(Environment.getExternalStorageDirectory() + "/Qwallet/btc"), "btcz") {
                 @Override
                 protected void onSetupCompleted() {
 //                if (wallet().getImportedKeys().size() < 1) wallet().importKey(new ECKey());

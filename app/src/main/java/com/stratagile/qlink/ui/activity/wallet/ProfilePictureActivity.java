@@ -115,7 +115,7 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
         List<PackageInfo> packages = this.getPackageManager()
                 .getInstalledPackages(0);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File tempFile = new File(Environment.getExternalStorageDirectory()+"/Qlink/image/temp.jpg");
+            File tempFile = new File(Environment.getExternalStorageDirectory()+"/Qwallet/image/temp.jpg");
             inputUri = RxFileTool.getUriForFile(this, tempFile);
             outputFile = Uri.fromFile(tempFile);
         }
@@ -256,11 +256,11 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
             @Override
             public void run() {
                 try {
-                    File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(ProfilePictureActivity.this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
+                    File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/" + SpUtil.getString(ProfilePictureActivity.this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
                     if (lastFile.exists()) {
                         lastFile.delete();
                     }
-                    File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image", "");
+                    File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image", "");
                     if (!dataFile.exists()) {
                         dataFile.mkdir();
                     }

@@ -3,7 +3,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-    <string name="app_name">WinCash</string>
+    <string name="app_name">Q-Wallet</string>
     <string name="app">QlinkVPN</string>
     <string name="address">服务器地址：</string>
     <string name="port">服务器端口：</string>

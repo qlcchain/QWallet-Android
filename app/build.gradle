@@ -37,10 +37,10 @@ checkstyle {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.stratagile.winq.dapp"
+        applicationId "com.stratagile.qwallet"
         minSdkVersion 21
-        targetSdkVersion 27
-        versionCode getSelfDefinedVersion("code")
+        targetSdkVersion 28
+        versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
         versionName "2.1.0"
         vectorDrawables.useSupportLibrary = true
@@ -310,7 +310,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
 
-    implementation 'com.github.qlcchain:qlc-java-sdk:1.4'
+    implementation 'com.github.qlcchain:qlc-java-sdk:1.5'
 
     //    implementation 'com.qmuiteam:qmui:1.2.0'
 
@@ -319,6 +319,9 @@ dependencies {
     implementation files('libs/klogLibrary-release.aar')
 
     implementation 'info.hoang8f:android-segmented:1.0.6'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
 
     //    compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:2.0.1'
 }

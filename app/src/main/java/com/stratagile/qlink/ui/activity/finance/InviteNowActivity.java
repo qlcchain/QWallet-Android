@@ -123,7 +123,7 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
      */
     private Uri saveBitmap(Bitmap bm, String picName) {
         try {
-            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qlink/image/" + picName + ".jpg";
+            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qwallet/image/" + picName + ".jpg";
             File f = new File(dir);
             if (!f.exists()) {
                 f.getParentFile().mkdirs();

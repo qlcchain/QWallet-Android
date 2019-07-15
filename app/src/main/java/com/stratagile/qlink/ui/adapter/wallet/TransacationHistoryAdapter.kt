@@ -9,7 +9,7 @@ import java.math.BigDecimal
 
 class TransacationHistoryAdapter(arrayList: ArrayList<TransactionInfo>) : BaseQuickAdapter<TransactionInfo, BaseViewHolder>(R.layout.item_transaction_history, arrayList) {
     override fun convert(helper: BaseViewHolder, item: TransactionInfo) {
-        helper.setText(R.id.tvTransactionHash, item.transationHash)
+        helper.setText(R.id.tvTransactionHash, item.showAddress)
         helper.setText(R.id.tvTransactionStatus, item.transactionState)
         helper.setText(R.id.tvTransactionTime, TimeUtil.getTransactionTime(item.timestamp))
         var tokenValue = item.transactionValue.toDouble() / (Math.pow(10.0, item.tokenDecimals.toDouble()))

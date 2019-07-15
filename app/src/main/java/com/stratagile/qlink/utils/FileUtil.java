@@ -29,7 +29,7 @@ import java.util.Calendar;
 
 public class FileUtil {
     public static void removeAllImageAvater(Context context) {
-//        File vpn = new File(Environment.getExternalStorageDirectory() + "/Qlink/vpn");
+//        File vpn = new File(Environment.getExternalStorageDirectory() + "/QWallet/vpn");
 //        String[] vpnchildren = vpn.list();
 //        if (vpnchildren != null && vpnchildren.length != 0) {
 //            for (int i=0; i<vpnchildren.length; i++) {
@@ -38,14 +38,14 @@ public class FileUtil {
 //            }
 //        }
 //        if (Calendar.getInstance().getTimeInMillis() - SpUtil.getLong(context, ConstantValue.lastRemoveImageAvaterTime, 0) > 1000 * 60 * 60 * 24 * 7) {
-//            String jsonPath =Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
+//            String jsonPath =Environment.getExternalStorageDirectory() + "/QWallet/Profile/jsonFile.json";
 //            File jsonFile = new File(jsonPath);
 //            if (jsonFile.exists()) {
 //                jsonFile.delete();
 //            }
 //
 //            SpUtil.putLong(context, ConstantValue.lastRemoveImageAvaterTime, Calendar.getInstance().getTimeInMillis());
-//            File dir = new File(Environment.getExternalStorageDirectory() + "/Qlink/image");
+//            File dir = new File(Environment.getExternalStorageDirectory() + "/QWallet/image");
 //            String[] children = dir.list();
 //            if (children != null && children.length != 0) {
 //                for (int i=0; i<children.length; i++) {
@@ -66,7 +66,7 @@ public class FileUtil {
         String lastP2pId = getLocalP2pId();
         if ("".equals(lastP2pId)) {
             copyDataFile();
-            String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/backup/p2p.json";
+            String jsonPath = Environment.getExternalStorageDirectory() + "/QWallet/backup/p2p.json";
             File jsonFile = new File(jsonPath);
 
             FileWriter fw = null;
@@ -112,7 +112,7 @@ public class FileUtil {
         ObjectInputStream ois = null;
         String p2pIdJson = "";
         try {
-            File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/backup/p2p.json");
+            File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/backup/p2p.json");
             if(!file.exists())
             {
                 return p2pIdJson;
@@ -140,7 +140,7 @@ public class FileUtil {
      * 复制data文件到backup文件夹
      */
     public static void copyDataFile() {
-        copyFile(Environment.getExternalStorageDirectory() + "/Qlink/data", Environment.getExternalStorageDirectory() + "/Qlink/backup/data");
+        copyFile(Environment.getExternalStorageDirectory() + "/QWallet/data", Environment.getExternalStorageDirectory() + "/QWallet/backup/data");
     }
 
     /**
@@ -199,7 +199,7 @@ public class FileUtil {
      * @param jsonStr 数据
      */
     public static void saveAssetsData(String walletAdress,String jsonStr) {
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/Assets/"+walletAdress+".json";
+        String jsonPath = Environment.getExternalStorageDirectory() + "/QWallet/Assets/"+walletAdress+".json";
         File jsonFile = new File(jsonPath);
 
         FileWriter fw = null;
@@ -239,7 +239,7 @@ public class FileUtil {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/Assets/"+walletAdress+".json");
+                File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/Assets/"+walletAdress+".json");
                 if(!file.exists())
                 {
                     return  "";
@@ -273,7 +273,7 @@ public class FileUtil {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/Assets/");
+                File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/Assets/");
                 if(!file.exists())
                 {
                     return  "";
@@ -315,7 +315,7 @@ public class FileUtil {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/Address/");
+                File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/Address/");
                 if(!file.exists())
                 {
                     return  "";
@@ -457,7 +457,7 @@ public class FileUtil {
      */
     public static void savaData(String path,String data)
     {
-        File walletFile = new File(Environment.getExternalStorageDirectory() + path, "");//"/Qlink/Address/index.txt"
+        File walletFile = new File(Environment.getExternalStorageDirectory() + path, "");//"/QWallet/Address/index.txt"
         if (!walletFile.exists()) {
             try {
                 walletFile.createNewFile();

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation" >>
-    <string name="app_name">WinCash</string>
+    <string name="app_name">Q-Wallet</string>
     <string name="AvailableWiFi">WiFi</string>
     <string name="activity_splash_intro">The World\'s First Decentralized Mobile Network</string>
     <string name="powered">Powered by Blockchain</string>
@@ -504,7 +504,7 @@
     <string name="seize_tip">THE %s NAME HAS BEEN REGISTERED</string>
     <string name="seize_explain">This %s name has been registered.\nProceed to purchase the name by\npaying the current owner equal \namount of QLC he/she has earned\ncollectively.</string>
     <string name="fingerprint_description">Confirm your fingerprint.</string>
-    <string name="unlock_wallet">UnLock</string>
+    <string name="unlock_wallet">Unlock</string>
 
     <!-- Button text -->
     <string name="back_btn">BACK</string>
@@ -1144,4 +1144,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="invitation_code_1">Invitation Code：</string>
     <string name="Build">Build</string>
     <string name="create_wallet">Create Wallet</string>
+    <string name="new_order">New Order</string>
+    <string name="sell">sell</string>
 </resources>

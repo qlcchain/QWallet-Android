@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,12 +22,15 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
+import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.main.TestActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
 import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
+import com.stratagile.qlink.ui.activity.otc.OrderDetailActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTestActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.view.MyItemView;
@@ -75,6 +79,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     boolean isLogin = false;
     @BindView(R.id.testView)
     View testView;
+    private MainViewModel viewModel;
 
     @Nullable
     @Override
@@ -83,6 +88,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         Bundle mBundle = getArguments();
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         return view;
     }
 
@@ -100,6 +106,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 if (userAccount.getIsLogin()) {
                     loginUser = userAccount;
                     ConstantValue.currentUser = userAccount;
+                    viewModel.currentUserAccount.postValue(userAccount);
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
@@ -143,6 +150,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 if (userAccount.getIsLogin()) {
                     loginUser = userAccount;
                     ConstantValue.currentUser = userAccount;
+                    viewModel.currentUserAccount.postValue(userAccount);
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
@@ -259,6 +267,11 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 EventBus.getDefault().post(new ChangeViewpager(1));
                 break;
             case R.id.shareFriend:
+                if (isLogin) {
+                    startActivity(new Intent(getActivity(), InviteActivity.class));
+                } else {
+                    startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
+                }
                 break;
             case R.id.joinCommunity:
                 startActivity(new Intent(getActivity(), JoinCommunityActivity.class));
@@ -269,7 +282,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
                 break;
             case R.id.testView:
-                startActivityForResult(new Intent(getActivity(), QlcTestActivity.class), 0);
+                startActivityForResult(new Intent(getActivity(), OrderDetailActivity.class), 0);
                 break;
             default:
                 break;

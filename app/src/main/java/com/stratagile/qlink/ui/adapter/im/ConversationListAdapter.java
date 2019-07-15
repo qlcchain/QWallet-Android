@@ -87,7 +87,7 @@ public class ConversationListAdapter extends BaseQuickAdapter<Message, BaseViewH
             ivRight.setVisibility(View.INVISIBLE);
             ivLeft.setVisibility(View.VISIBLE);
             if (item.getAvatar() == null || item.getAvatar().equals("")) {
-                File dataFile1 = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + item.getAvatarUpdateTime() + ".jpg", "");
+                File dataFile1 = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/" + item.getAvatarUpdateTime() + ".jpg", "");
                 if (dataFile1.exists()) {
                     Glide.with(mContext)
                             .load(dataFile1)

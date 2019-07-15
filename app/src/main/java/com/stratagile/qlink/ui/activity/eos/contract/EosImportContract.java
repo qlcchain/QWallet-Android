@@ -28,7 +28,7 @@ public interface EosImportContract {
 
         void accountInfoBack(EosAccountInfo eosAccountInfo);
 
-        void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts);
+        void getEosKeyAccountBack(EosKeyAccount eosKeyAccounts);
 
         void reportCreatedWalletSuccess();
     }

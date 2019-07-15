@@ -222,9 +222,9 @@ public class EosCreatePresenter implements EosCreateContract.EosCreateContractPr
     @Override
     public void getEosKeyAccount(Map map) {
         Disposable disposable = httpAPIWrapper.getKeyAccount(map)
-                .subscribe(new Consumer<ArrayList<EosKeyAccount>>() {
+                .subscribe(new Consumer<EosKeyAccount>() {
                     @Override
-                    public void accept(ArrayList<EosKeyAccount> baseBack) throws Exception {
+                    public void accept(EosKeyAccount baseBack) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
                         mView.getEosKeyAccountBack(baseBack);

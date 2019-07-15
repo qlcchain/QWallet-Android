@@ -98,7 +98,7 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
         List<PackageInfo> packages = this.getPackageManager()
                 .getInstalledPackages(0);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File tempFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/temp.jpg");
+            File tempFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/temp.jpg");
             inputUri = RxFileTool.getUriForFile(this, tempFile);
             outputFile = Uri.fromFile(tempFile);
         }
@@ -127,6 +127,13 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
     @Override
     public void closeProgressDialog() {
         progressDialog.hide();
+    }
+
+    @Override
+    public void uploadImgSuccess() {
+        ToastUtil.displayShortToast("upload success");
+        closeProgressDialog();
+        finish();
     }
 
     @Override
@@ -219,11 +226,11 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
             @Override
             public void run() {
                 try {
-                    File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/passport" + requestCode + ".jpg", "");
+                    File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport" + requestCode + ".jpg", "");
                     if (lastFile.exists()) {
                         lastFile.delete();
                     }
-                    File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image", "");
+                    File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image", "");
                     if (!dataFile.exists()) {
                         dataFile.mkdir();
                     }
@@ -344,6 +351,7 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
                 }
                 break;
             case R.id.submit:
+                showProgressDialog();
                 mPresenter.uploadImg(new HashMap<String, String>());
                 break;
             default:

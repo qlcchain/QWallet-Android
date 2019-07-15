@@ -28,7 +28,7 @@
             android:transitionName="avater"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x23"
-            android:src="@mipmap/img_connected_head_portrait"
+            android:src="@mipmap/icon_protfolio_more"
             android:layout_height="@dimen/x50" />
 
         <TextView
@@ -81,6 +81,31 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
 
+        <info.hoang8f.android.segmented.SegmentedGroup
+            android:id="@+id/segmentControlView"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            app:sc_border_width="@dimen/x2"
+            app:sc_checked_text_color="@color/mainColor"
+            app:sc_tint_color="@color/white"
+            app:sc_corner_radius="@dimen/x10"
+            android:layout_centerInParent="true"
+            android:layout_height="@dimen/x60">
+            <RadioButton
+                android:id="@+id/button21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buy"
+                style="@style/RadioButton" />
+
+            <RadioButton
+                android:id="@+id/button22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SELL"
+                style="@style/RadioButton" />
+        </info.hoang8f.android.segmented.SegmentedGroup>
+
 
     </RelativeLayout>
 
@@ -93,7 +118,16 @@
 
     </com.stratagile.qlink.view.NoScrollViewPager>
 
+    <ImageView
+        android:id="@+id/financeCome"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/xxx"
+        android:scaleType="fitXY"
+        android:src="@mipmap/finance_soon"
+        android:layout_height="match_parent" />
     <View
+        android:id="@+id/xxx"
         android:layout_width="match_parent"
         android:layout_above="@+id/rl2"
         android:layout_height="@dimen/x1"
