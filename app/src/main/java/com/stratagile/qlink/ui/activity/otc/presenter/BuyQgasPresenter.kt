@@ -17,6 +17,25 @@ import io.reactivex.functions.Consumer
  */
 class BuyQgasPresenter @Inject
 constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: BuyQgasContract.View) : BuyQgasContract.BuyQgasContractPresenter {
+    override fun generateTradeBuyQgasOrder(map: MutableMap<String, String>) {
+        httpAPIWrapper.generateTradeBuyQgasOrder(map).subscribe({
+            mView.generateTradeBuyQgasOrderSuccess()
+        }, {
+            it.printStackTrace()
+        }, {
+
+        })
+    }
+
+    fun getEntrustOrderDetail(map: MutableMap<String, String>) {
+        httpAPIWrapper.getEntrustOrderInfo(map).subscribe({
+            mView.setEntrustOrder(it)
+        }, {
+
+        }, {
+
+        })
+    }
 
     private val mCompositeDisposable: CompositeDisposable
 

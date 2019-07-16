@@ -25,11 +25,13 @@ public class UserAccount {
     //手机号码
     private String phone;
 
+    private String userId;
+
     private String email;
-    @Generated(hash = 351281387)
+    @Generated(hash = 519067791)
     public UserAccount(Long id, String account, String password, String pubKey,
             boolean isLogin, String inviteCode, String userName, String avatar,
-            String phone, String email) {
+            String phone, String userId, String email) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -39,6 +41,7 @@ public class UserAccount {
         this.userName = userName;
         this.avatar = avatar;
         this.phone = phone;
+        this.userId = userId;
         this.email = email;
     }
     @Generated(hash = 1029142458)
@@ -103,5 +106,11 @@ public class UserAccount {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getUserId() {
+        return this.userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

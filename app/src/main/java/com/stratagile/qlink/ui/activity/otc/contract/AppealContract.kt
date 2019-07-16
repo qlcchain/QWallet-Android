@@ -4,12 +4,12 @@ import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
  * @author hzp
- * @Package The contract for OrderSellFragment
+ * @Package The contract for AppealFragment
  * @Description: $description
- * @date 2019/07/08 17:24:46
+ * @date 2019/07/16 17:53:24
  */
-interface OrderSellContract {
-    interface View : BaseView<OrderSellContractPresenter> {
+interface AppealContract {
+    interface View : BaseView<AppealContractPresenter> {
         /**
          *
          */
@@ -19,16 +19,12 @@ interface OrderSellContract {
          *
          */
         fun closeProgressDialog()
-
-        fun generateSellQgasOrderSuccess()
     }
 
-    interface OrderSellContractPresenter : BasePresenter {
+    interface AppealContractPresenter : BasePresenter {
 //        /**
 //         *
 //         */
 //        fun getBusinessInfo(map : Map)
-
-        fun sendQgas(amount : String, receiveAddress : String, map: MutableMap<String, String>)
     }
 }

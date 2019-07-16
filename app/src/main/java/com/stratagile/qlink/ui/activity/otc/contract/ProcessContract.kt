@@ -1,15 +1,16 @@
 package com.stratagile.qlink.ui.activity.otc.contract
 
+import com.stratagile.qlink.entity.otc.TradeOrderList
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
  * @author hzp
- * @Package The contract for OrderSellFragment
+ * @Package The contract for ProcessFragment
  * @Description: $description
- * @date 2019/07/08 17:24:46
+ * @date 2019/07/16 17:52:45
  */
-interface OrderSellContract {
-    interface View : BaseView<OrderSellContractPresenter> {
+interface ProcessContract {
+    interface View : BaseView<ProcessContractPresenter> {
         /**
          *
          */
@@ -20,15 +21,13 @@ interface OrderSellContract {
          */
         fun closeProgressDialog()
 
-        fun generateSellQgasOrderSuccess()
+        fun setTradeOrderList(tradeOrderList: TradeOrderList)
     }
 
-    interface OrderSellContractPresenter : BasePresenter {
+    interface ProcessContractPresenter : BasePresenter {
 //        /**
 //         *
 //         */
 //        fun getBusinessInfo(map : Map)
-
-        fun sendQgas(amount : String, receiveAddress : String, map: MutableMap<String, String>)
     }
 }

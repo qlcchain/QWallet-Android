@@ -1,15 +1,18 @@
 package com.stratagile.qlink.ui.activity.otc.contract
 
+import com.stratagile.qlink.entity.EntrustOrderList
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
+import java.util.ArrayList
+
 /**
  * @author hzp
- * @Package The contract for OrderSellFragment
+ * @Package The contract for PostedFragment
  * @Description: $description
- * @date 2019/07/08 17:24:46
+ * @date 2019/07/16 17:52:28
  */
-interface OrderSellContract {
-    interface View : BaseView<OrderSellContractPresenter> {
+interface PostedContract {
+    interface View : BaseView<PostedContractPresenter> {
         /**
          *
          */
@@ -20,15 +23,13 @@ interface OrderSellContract {
          */
         fun closeProgressDialog()
 
-        fun generateSellQgasOrderSuccess()
+        fun setEntrustOrderList(list: ArrayList<EntrustOrderList.OrderListBean>)
     }
 
-    interface OrderSellContractPresenter : BasePresenter {
+    interface PostedContractPresenter : BasePresenter {
 //        /**
 //         *
 //         */
 //        fun getBusinessInfo(map : Map)
-
-        fun sendQgas(amount : String, receiveAddress : String, map: MutableMap<String, String>)
     }
 }

@@ -16,7 +16,18 @@ import com.stratagile.qlink.ui.activity.otc.presenter.OrderSellPresenter
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
+import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.utils.UserUtils
+import kotlinx.android.synthetic.main.fragment_order_buy.*
+import kotlinx.android.synthetic.main.fragment_order_sell.*
+import kotlinx.android.synthetic.main.fragment_order_sell.etAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etMaxAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etMinAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etReceiveAddress
+import kotlinx.android.synthetic.main.fragment_order_sell.etUnitPrice
+import kotlinx.android.synthetic.main.fragment_order_sell.tvNext
 
 /**
  * @author hzp
@@ -26,6 +37,11 @@ import com.stratagile.qlink.R
  */
 
 class OrderSellFragment : BaseFragment(), OrderSellContract.View {
+    override fun generateSellQgasOrderSuccess() {
+        toast("success")
+        closeProgressDialog()
+        activity?.finish()
+    }
 
     @Inject
     lateinit internal var mPresenter: OrderSellPresenter
@@ -35,6 +51,28 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
         ButterKnife.bind(this, view)
         val mBundle = arguments
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        tvNext.setOnClickListener {
+            if (ConstantValue.mainAddressData == null) {
+                toast("main address is null")
+                return@setOnClickListener
+            }
+            showProgressDialog()
+            var map = mutableMapOf<String, String>()
+            map.put("account", ConstantValue.currentUser.account)
+            map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
+            map.put("type", ConstantValue.orderTypeSell)
+            map.put("unitPrice", etUnitPrice.text.toString())
+            map.put("totalAmount", etAmount.text.toString())
+            map.put("minAmount", etMinAmount.text.toString())
+            map.put("maxAmount", etMaxAmount.text.toString())
+            map.put("qgasAddress","")
+            map.put("usdtAddress", etReceiveAddress.text.toString())
+            mPresenter.sendQgas(etAmount.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+        }
     }
 
     override fun setupFragmentComponent() {
@@ -51,6 +89,10 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
     }
 
     override fun initDataFromLocal() {
+
+    }
+
+    fun generateEntrustSellOrder() {
 
     }
 

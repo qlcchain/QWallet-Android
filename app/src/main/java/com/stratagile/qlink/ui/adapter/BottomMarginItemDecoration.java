@@ -8,7 +8,7 @@ import android.view.View;
  * Created by huzhipeng on 2018/1/11.
  */
 
-public class VpnSpaceItemDecoration extends RecyclerView.ItemDecoration {
+public class BottomMarginItemDecoration extends RecyclerView.ItemDecoration {
     int mSpace;
 
     /**
@@ -34,15 +34,13 @@ public class VpnSpaceItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        outRect.bottom = mSpace;
-        outRect.bottom = 0;
-//        if (parent.getChildAdapterPosition(view) == 0) {
-//            outRect.top = mSpace;
-//        }
+        if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1) {
+            outRect.bottom = mSpace;
+        }
 
     }
 
-    public VpnSpaceItemDecoration(int space) {
+    public BottomMarginItemDecoration(int space) {
         this.mSpace = space;
     }
 }

@@ -31,7 +31,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         public final static Property UserName = new Property(6, String.class, "userName", false, "USER_NAME");
         public final static Property Avatar = new Property(7, String.class, "avatar", false, "AVATAR");
         public final static Property Phone = new Property(8, String.class, "phone", false, "PHONE");
-        public final static Property Email = new Property(9, String.class, "email", false, "EMAIL");
+        public final static Property UserId = new Property(9, String.class, "userId", false, "USER_ID");
+        public final static Property Email = new Property(10, String.class, "email", false, "EMAIL");
     }
 
 
@@ -56,7 +57,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
                 "\"USER_NAME\" TEXT," + // 6: userName
                 "\"AVATAR\" TEXT," + // 7: avatar
                 "\"PHONE\" TEXT," + // 8: phone
-                "\"EMAIL\" TEXT);"); // 9: email
+                "\"USER_ID\" TEXT," + // 9: userId
+                "\"EMAIL\" TEXT);"); // 10: email
     }
 
     /** Drops the underlying database table. */
@@ -110,9 +112,14 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             stmt.bindString(9, phone);
         }
  
+        String userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindString(10, userId);
+        }
+ 
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(10, email);
+            stmt.bindString(11, email);
         }
     }
 
@@ -161,9 +168,14 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             stmt.bindString(9, phone);
         }
  
+        String userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindString(10, userId);
+        }
+ 
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(10, email);
+            stmt.bindString(11, email);
         }
     }
 
@@ -184,7 +196,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // userName
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // avatar
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // phone
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // email
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // userId
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // email
         );
         return entity;
     }
@@ -200,7 +213,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         entity.setUserName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setAvatar(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setPhone(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setEmail(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setUserId(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setEmail(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
      }
     
     @Override

@@ -79,6 +79,7 @@ import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
+import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
@@ -360,9 +361,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.button21) {
-                    viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
-                } else {
                     viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
+                } else {
+                    viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
                 }
             }
         });
@@ -880,9 +881,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         switch (view.getId()) {
             case R.id.iv_avater:
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-                    Intent intent1 = new Intent(this, ProfilePictureActivity.class);
-//                Intent intent1 = new Intent(this, SelectWalletTypeActivity.class);
-                    startActivityForResult(intent1, START_SELECT_PICTURE);
+                    Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
+                    startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
                     if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
                         QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), "ETH Receivable Address", "eth", 2);

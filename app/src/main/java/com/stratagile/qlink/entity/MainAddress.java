@@ -1,39 +1,25 @@
 package com.stratagile.qlink.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 public class MainAddress extends BaseBack<MainAddress.DataBean> {
 
     /**
-     * data : {"NEO":{"address":"AQC7Bod2LxaRxmLewRrwCA1Nt6AQMWSm28"},"ETH":{"address":"0xfdae196edc10a085d95cf157c658d526fb94e4ae"}}
+     * data : {"NEO":{"address":"AMGFAXHkrDhdWDSsVzcfcnCdUQE3rKDjo7"},"ETH":{"address":"0xfdae196edc10a085d95cf157c658d526fb94e4ae"},"QLC-CHIAN":{"address":"qlc_3wpp343n1kfsd4r6zyhz3byx4x74hi98r6f1es4dw5xkyq8qdxcxodia4zbb"},"net":"MainNet"}
      */
-
-//    private DataBean data;
-//
-//    public DataBean getData() {
-//        return data;
-//    }
-//
-//    public void setData(DataBean data) {
-//        this.data = data;
-//    }
 
     public static class DataBean {
         /**
-         * NEO : {"address":"AQC7Bod2LxaRxmLewRrwCA1Nt6AQMWSm28"}
+         * NEO : {"address":"AMGFAXHkrDhdWDSsVzcfcnCdUQE3rKDjo7"}
          * ETH : {"address":"0xfdae196edc10a085d95cf157c658d526fb94e4ae"}
+         * QLC-CHIAN : {"address":"qlc_3wpp343n1kfsd4r6zyhz3byx4x74hi98r6f1es4dw5xkyq8qdxcxodia4zbb"}
+         * net : MainNet
          */
 
         private NEOBean NEO;
         private ETHBean ETH;
-
+        private QLCCHIANBean QLCCHIAN;
         private String net;
-
-        public String getNet() {
-            return net;
-        }
-
-        public void setNet(String net) {
-            this.net = net;
-        }
 
         public NEOBean getNEO() {
             return NEO;
@@ -51,9 +37,25 @@ public class MainAddress extends BaseBack<MainAddress.DataBean> {
             this.ETH = ETH;
         }
 
+        public QLCCHIANBean getQLCCHIAN() {
+            return QLCCHIAN;
+        }
+
+        public void setQLCCHIAN(QLCCHIANBean QLCCHIAN) {
+            this.QLCCHIAN = QLCCHIAN;
+        }
+
+        public String getNet() {
+            return net;
+        }
+
+        public void setNet(String net) {
+            this.net = net;
+        }
+
         public static class NEOBean {
             /**
-             * address : AQC7Bod2LxaRxmLewRrwCA1Nt6AQMWSm28
+             * address : AMGFAXHkrDhdWDSsVzcfcnCdUQE3rKDjo7
              */
 
             private String address;
@@ -70,6 +72,22 @@ public class MainAddress extends BaseBack<MainAddress.DataBean> {
         public static class ETHBean {
             /**
              * address : 0xfdae196edc10a085d95cf157c658d526fb94e4ae
+             */
+
+            private String address;
+
+            public String getAddress() {
+                return address;
+            }
+
+            public void setAddress(String address) {
+                this.address = address;
+            }
+        }
+
+        public static class QLCCHIANBean {
+            /**
+             * address : qlc_3wpp343n1kfsd4r6zyhz3byx4x74hi98r6f1es4dw5xkyq8qdxcxodia4zbb
              */
 
             private String address;

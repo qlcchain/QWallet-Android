@@ -9,9 +9,11 @@ import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlc.utils.QlcUtil
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.TokenInfo
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
+import kotlinx.android.synthetic.main.activity_qlc_transfer.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,6 +28,7 @@ import qlc.network.QlcException
 import qlc.rpc.impl.LedgerRpc
 import qlc.utils.Helper
 import qlc.utils.WorkUtil
+import java.math.BigDecimal
 
 fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount, rpc : LedgerRpc, receiveBack: ReceiveBack){
     KLog.i("开始接收")
@@ -106,6 +109,86 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
     return
 }
 
+object QlcReceiveUtils {
+    fun sendQGas(qlcAccount: QLCAccount, receiveAddress : String, amount : String, sendBack: SendBack) {
+        val qlcClient = QlcClient(ConstantValue.qlcNode)
+        val rpc = LedgerRpc(qlcClient)
+        var bendi = true
+        var jsonObject = TransactionMng.sendBlock(qlcClient, qlcAccount.address, "QGAS", receiveAddress, amount.toBigDecimal().multiply(BigDecimal.TEN.pow(8)).toBigInteger(), null, null, null, null)
+        var aaaa = JSONArray()
+        var stateBlock = Gson().fromJson<StateBlock>(jsonObject.toJSONString(), StateBlock::class.java)
+        var root = BlockMng.getRoot(stateBlock)
+        var params = mutableListOf<Pair<String, String>>()
+        params.add(Pair("root", root))
+        var standaloneCoroutine = launch {
+            KLog.i("协程启动")
+            delay(30000)
+            bendi = false
+            KLog.i("走远程work逻辑, root为：" + root)
+            var request = "http://pow1.qlcchain.org/work".httpGet(params)
+            request.responseString { _, _, result ->
+                KLog.i("远程work返回、、")
+                val (data, error) = result
+                try {
+                    if (error == null) {
+                        stateBlock.work = data
+                        var hash = BlockMng.getHash(stateBlock)
+                        var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(qlcAccount.address).substring(0, 64)))
+                        val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(qlcAccount.address)))
+                        if (!signCheck) {
+                            KLog.i("签名验证失败")
+                            sendBack.send("")
+                            return@responseString
+                        }
+                        stateBlock.setSignature(Helper.byteToHexString(signature))
+                        aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
+
+                    } else {
+
+                    }
+                    var result = rpc.process(aaaa)
+                    KLog.i(result.toJSONString())
+                    if (result.getString("result") != null && !"".equals(result.getString("result"))) {
+                        sendBack.send(result.getString("result"))
+                        return@responseString
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            KLog.i(aaaa)
+            return@launch
+        }
+        var work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(stateBlock)))
+        standaloneCoroutine.cancel()
+        try {
+            if (!bendi) {
+                return
+            }
+            KLog.i("走本地work逻辑")
+            stateBlock.work = work
+            var hash = BlockMng.getHash(stateBlock)
+            var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(qlcAccount.address).substring(0, 64)))
+            val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(qlcAccount.address)))
+            if (!signCheck) {
+                KLog.i("签名验证失败")
+                sendBack.send("")
+                return
+            }
+            stateBlock.setSignature(Helper.byteToHexString(signature))
+            aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
+            var result = rpc.process(aaaa)
+            KLog.i(result.toJSONString())
+            if (result.getString("result") != null && !"".equals(result.getString("result"))) {
+                sendBack.send(result.getString("result"))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
+
+
 private fun drivePrivateKey(address: String): String {
     val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
     qlcAccounts.forEach {
@@ -128,4 +211,8 @@ private fun drivePublicKey(address: String): String {
 
 interface ReceiveBack {
     fun recevie(suceess : Boolean)
+}
+
+interface SendBack {
+    fun send(suceess : String)
 }

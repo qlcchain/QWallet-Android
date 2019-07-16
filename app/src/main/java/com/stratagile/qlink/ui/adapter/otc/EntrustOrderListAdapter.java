@@ -24,11 +24,14 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
     @Override
     protected void convert(BaseViewHolder helper, EntrustOrderList.OrderListBean item) {
         helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString());
-        if (item.getType().equals(ConstantValue.orderTypeBuy)) {
-            helper.setTextColor(R.id.tvUnitPrice, mContext.getResources().getColor(R.color.color_108ee9));
+        if (item.getType().equals(ConstantValue.orderTypeSell)) {
+            helper.setText(R.id.tvOpreate, "购买");
+            helper.setBackgroundColor(R.id.tvOpreate, mContext.getResources().getColor(R.color.mainColor));
         } else {
-            helper.setTextColor(R.id.tvUnitPrice, mContext.getResources().getColor(R.color.color_ff3669));
+            helper.setText(R.id.tvOpreate, "出售");
+            helper.setBackgroundColor(R.id.tvOpreate, mContext.getResources().getColor(R.color.color_ff3669));
         }
+        helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
         helper.setText(R.id.tvNickName, item.getNickname());
         helper.setText(R.id.tvAmount, BigDecimal.valueOf(item.getTotalAmount()).stripTrailingZeros().toPlainString() + "");
         helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());

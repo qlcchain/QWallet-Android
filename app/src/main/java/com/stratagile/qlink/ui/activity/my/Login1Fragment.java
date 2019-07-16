@@ -313,10 +313,11 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     public void vCodeLoginSuccess(VcodeLogin register) {
         UserAccount userAccount = new UserAccount();
         userAccount.setAccount(account);
+        userAccount.setUserId(register.getId());
         userAccount.setPubKey(register.getData());
         userAccount.setAccount(register.getAccount());
         userAccount.setAvatar(register.getHead());
-        userAccount.setInviteCode(register.getId());
+        userAccount.setInviteCode(register.getNumber());
         userAccount.setEmail(register.getEmail());
         userAccount.setPhone(register.getPhone());
         userAccount.setUserName(register.getNickname());

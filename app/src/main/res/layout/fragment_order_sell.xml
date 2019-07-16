@@ -23,6 +23,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvUnitPrice"
             android:layout_width="match_parent"
             android:hint="Unit Price"
+            android:inputType="numberDecimal"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/x10"
@@ -70,7 +71,7 @@
             android:layout_width="match_parent"
             android:hint="Total Amount"
             android:background="@null"
-
+            android:inputType="number"
             android:layout_marginTop="@dimen/x10"
             android:textColor="@color/color_29282a"
             android:textSize="16sp"
@@ -116,6 +117,7 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:hint="Min Amount"
+            android:inputType="number"
             android:textSize="16sp"
             android:background="@null"
             android:layout_height="match_parent" />
@@ -130,6 +132,7 @@
             android:layout_width="0px"
             android:background="@null"
             android:hint="Max Amount"
+            android:inputType="number"
             android:textSize="16sp"
             android:layout_weight="1"
             android:layout_height="match_parent" />
@@ -172,7 +175,8 @@
         android:layout_marginRight="@dimen/x30"
         android:background="@null"
         android:hint="ETH Wallet Address"
-        android:layout_height="@dimen/x77" />
+        android:minHeight="@dimen/x77"
+        android:layout_height="wrap_content" />
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x1"

@@ -27,6 +27,15 @@ public class VcodeLogin extends BaseBack<String> {
     private String account;
     private String email;
     private String holdingPhoto;
+    private String number;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public String getHead() {
         return head;

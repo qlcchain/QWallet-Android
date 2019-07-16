@@ -60,7 +60,9 @@ import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
+import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
 import com.stratagile.qlink.entity.otc.Passport;
+import com.stratagile.qlink.entity.otc.TradeOrderList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,7 +94,9 @@ import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.API.url_create_eos_account;
 import static com.stratagile.qlink.data.api.API.url_create_eos_need_info;
+import static com.stratagile.qlink.data.api.API.url_entrust_cancel_order;
 import static com.stratagile.qlink.data.api.API.url_entrust_order;
+import static com.stratagile.qlink.data.api.API.url_entrust_order_info;
 import static com.stratagile.qlink.data.api.API.url_entrust_order_list;
 import static com.stratagile.qlink.data.api.API.url_eos_account_info;
 import static com.stratagile.qlink.data.api.API.url_eos_account_transaction_info;
@@ -119,6 +123,12 @@ import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
+import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
+import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
+import static com.stratagile.qlink.data.api.API.url_trade_order_info;
+import static com.stratagile.qlink.data.api.API.url_trade_order_list;
+import static com.stratagile.qlink.data.api.API.url_trade_sell_order;
+import static com.stratagile.qlink.data.api.API.url_trade_seller_confirm;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
 import static com.stratagile.qlink.data.api.API.url_uploadIdCard;
 import static com.stratagile.qlink.data.api.API.url_user_change_nickname;
@@ -487,11 +497,43 @@ public interface HttpApi {
 
     @POST(url_entrust_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> generateBuyQgasOrder(@Body RequestBody map);
+    Observable<BaseBack> generateEntrustBuyQgasOrder(@Body RequestBody map);
 
     @POST(url_entrust_order_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<EntrustOrderList> getEntrustOrderList(@Body RequestBody map);
+
+    @POST(url_entrust_order_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EntrustOrderInfo> getEntrustOrderInfo(@Body RequestBody map);
+
+    @POST(url_entrust_cancel_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> cancelEntrustOrder(@Body RequestBody map);
+
+    @POST(url_trade_buy_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> generateTradeBuyQgasOrder(@Body RequestBody map);
+
+    @POST(url_trade_buyer_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> tradeBuyerConfirm(@Body RequestBody map);
+
+    @POST(url_trade_sell_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> generateTradeSellOrder(@Body RequestBody map);
+
+    @POST(url_trade_seller_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> tradeSellerConfirm(@Body RequestBody map);
+
+    @POST(url_trade_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradeOrderList> tradeOrderList(@Body RequestBody map);
+
+    @POST(url_trade_order_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> tradeOrderInfo(@Body RequestBody map);
 
     /*************************************************/
 }

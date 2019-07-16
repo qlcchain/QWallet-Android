@@ -24,12 +24,12 @@
         android:layout_height="@dimen/x84">
         <ImageView
             android:id="@+id/iv_avater"
-            android:layout_width="@dimen/x50"
+            android:layout_width="@dimen/x42"
             android:transitionName="avater"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x23"
             android:src="@mipmap/icon_protfolio_more"
-            android:layout_height="@dimen/x50" />
+            android:layout_height="@dimen/x42" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -48,8 +48,8 @@
             android:layout_toLeftOf="@+id/rlWallet"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
-            android:layout_width="@dimen/x50"
-            android:layout_height="@dimen/x50"
+            android:layout_width="@dimen/x46"
+            android:layout_height="@dimen/x46"
             android:scaleType="fitCenter"
             android:src="@mipmap/icons_scan_qrcode_n"
             />
@@ -64,9 +64,9 @@
                 android:id="@+id/iv_wallet"
                 android:layout_centerHorizontal="true"
                 android:visibility="invisible"
-                android:layout_width="@dimen/x50"
+                android:layout_width="@dimen/x46"
                 android:layout_marginRight="@dimen/x30"
-                android:layout_height="@dimen/x50"
+                android:layout_height="@dimen/x46"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/icon_free"
                 />
@@ -90,20 +90,24 @@
             app:sc_tint_color="@color/white"
             app:sc_corner_radius="@dimen/x10"
             android:layout_centerInParent="true"
-            android:layout_height="@dimen/x60">
+            android:layout_height="@dimen/x54">
             <RadioButton
                 android:id="@+id/button21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buy"
-                style="@style/RadioButton" />
+                style="@style/RadioButton"
+                android:textSize="13sp"
+                />
 
             <RadioButton
                 android:id="@+id/button22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SELL"
-                style="@style/RadioButton" />
+                style="@style/RadioButton"
+                android:textSize="13sp"
+                />
         </info.hoang8f.android.segmented.SegmentedGroup>
 
 

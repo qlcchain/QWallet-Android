@@ -24,6 +24,7 @@ import com.stratagile.qlink.ui.activity.otc.component.DaggerMarketComponent;
 import com.stratagile.qlink.ui.activity.otc.contract.MarketContract;
 import com.stratagile.qlink.ui.activity.otc.module.MarketModule;
 import com.stratagile.qlink.ui.activity.otc.presenter.MarketPresenter;
+import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration;
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     private MainViewModel viewModel;
     private EntrustOrderListAdapter entrustOrderListAdapter;
 
-    public static String currentOrderType = ConstantValue.orderTypeBuy;
+    public static String currentOrderType = ConstantValue.orderTypeSell;
     public int currentPage = 0;
 
     @Nullable
@@ -62,8 +63,10 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         View view = inflater.inflate(R.layout.fragment_market1, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
-        currentOrderType = ConstantValue.orderTypeBuy;
+        currentOrderType = ConstantValue.orderTypeSell;
         entrustOrderListAdapter = new EntrustOrderListAdapter(new ArrayList<>());
+        entrustOrderListAdapter.setEnableLoadMore(true);
+        recyclerView.addItemDecoration(new BottomMarginItemDecoration((int) getActivity().getResources().getDimension(R.dimen.x20)));
         recyclerView.setAdapter(entrustOrderListAdapter);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         viewModel.currentEntrustOrderType.observe(this, new Observer<String>() {
@@ -77,18 +80,25 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             }
         });
 
-        viewModel.currentUserAccount.observe(this, new Observer<UserAccount>() {
+        entrustOrderListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
-            public void onChanged(@Nullable UserAccount userAccount) {
-                currentPage = 0;
+            public void onLoadMoreRequested() {
                 getOrderList();
             }
-        });
+        }, recyclerView);
+
+//        viewModel.currentUserAccount.observe(this, new Observer<UserAccount>() {
+//            @Override
+//            public void onChanged(@Nullable UserAccount userAccount) {
+//                currentPage = 0;
+//                getOrderList();
+//            }
+//        });
 
         entrustOrderListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (entrustOrderListAdapter.getData().get(position).getType().equals(ConstantValue.orderTypeBuy)) {
+                if (entrustOrderListAdapter.getData().get(position).getType().equals(ConstantValue.orderTypeSell)) {
                     startActivity(new Intent(getActivity(), BuyQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
                 } else {
                     startActivity(new Intent(getActivity(), SellQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
@@ -105,19 +115,17 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             @Override
             public void onRefresh() {
                 currentPage = 0;
+                entrustOrderListAdapter.setNewData(new ArrayList<>());
                 getOrderList();
             }
         });
     }
 
     public void getOrderList() {
-        if (ConstantValue.currentUser == null) {
-            return;
-        }
         currentPage++;
         refreshLayout.setRefreshing(false);
         Map map = new HashMap<String, String>();
-        map.put("userId", ConstantValue.currentUser.getInviteCode() + "");
+        map.put("userId", "");
         map.put("type", currentOrderType);
         map.put("page", currentPage + "");
         map.put("size", "5");
@@ -157,6 +165,12 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     @Override
     public void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list) {
         entrustOrderListAdapter.addData(list);
+        if (currentPage != 1) {
+            entrustOrderListAdapter.loadMoreComplete();
+        }
+        if (list.size() == 0) {
+            entrustOrderListAdapter.loadMoreEnd(true);
+        }
     }
 
     @Override

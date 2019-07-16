@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_order_buy.*
 class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
     override fun generateBuyQgasOrderSuccess() {
         toast("success")
+        closeProgressDialog()
         activity?.finish()
     }
 
