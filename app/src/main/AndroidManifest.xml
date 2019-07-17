@@ -216,6 +216,8 @@
         <activity android:name=".ui.activity.otc.SellQgasActivity" />
         <activity android:name=".ui.activity.otc.OrderDetailActivity" />
         <activity android:name=".ui.activity.otc.OtcOrderRecordActivity" />
+        <activity android:name=".ui.activity.otc.TradeOrderDetailActivity" />
+        <activity android:name=".ui.activity.otc.UsdtReceiveAddressActivity" />
 
 
         <meta-data

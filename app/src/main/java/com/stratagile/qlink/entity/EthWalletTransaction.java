@@ -130,7 +130,7 @@ public class EthWalletTransaction extends BaseBack<String> {
                 private String owner;
                 private int txsCount;
                 private int transfersCount;
-                private int lastUpdated;
+                private long lastUpdated;
                 private int issuancesCount;
                 private int holdersCount;
                 private int ethTransfersCount;
@@ -200,11 +200,11 @@ public class EthWalletTransaction extends BaseBack<String> {
                     this.transfersCount = transfersCount;
                 }
 
-                public int getLastUpdated() {
+                public long getLastUpdated() {
                     return lastUpdated;
                 }
 
-                public void setLastUpdated(int lastUpdated) {
+                public void setLastUpdated(long lastUpdated) {
                     this.lastUpdated = lastUpdated;
                 }
 

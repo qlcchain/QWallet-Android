@@ -54,6 +54,7 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
         titles.add("Posted")
         titles.add("Processing")
         titles.add("Completed")
+        titles.add("Closed")
         titles.add("Appealed")
         viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -68,6 +69,9 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
                         return CompleteFragment()
                     }
                     3 -> {
+                        return CloasedOrderFragment()
+                    }
+                    4 -> {
                         return AppealFragment()
                     }
                 }
@@ -78,7 +82,7 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
                 return titles.size
             }
         }
-        viewPager.offscreenPageLimit = 4
+        viewPager.offscreenPageLimit = 5
         val commonNavigator = CommonNavigator(this)
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
             override fun getCount(): Int {
@@ -89,7 +93,7 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
                 val simplePagerTitleView = SimplePagerTitleView(context)
                 simplePagerTitleView.text = titles[i]
                 simplePagerTitleView.normalColor = resources.getColor(R.color.color_b3b3b3)
-                simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+                simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                 simplePagerTitleView.selectedColor = resources.getColor(R.color.mainColor)
                 simplePagerTitleView.setOnClickListener { viewPager.setCurrentItem(i) }
                 return simplePagerTitleView
@@ -107,7 +111,7 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
         commonNavigator.titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
         commonNavigator.titleContainer.dividerDrawable = object : ColorDrawable() {
             override fun getIntrinsicWidth(): Int {
-                return resources.getDimension(R.dimen.x24).toInt()
+                return resources.getDimension(R.dimen.x8).toInt()
             }
         }
         ViewPagerHelper.bind(indicator, viewPager)

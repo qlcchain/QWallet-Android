@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.otc
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
 import android.view.LayoutInflater
@@ -58,6 +59,9 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
         super.onViewCreated(view, savedInstanceState)
         tradeOrderListAdapter = TradeOrderListAdapter(arrayListOf())
         recyclerView.adapter = tradeOrderListAdapter
+        tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
+            startActivity(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
+        }
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         getTradeOrderList()
         refreshLayout.setOnRefreshListener {

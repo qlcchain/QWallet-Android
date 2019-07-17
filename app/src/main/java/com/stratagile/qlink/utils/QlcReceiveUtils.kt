@@ -192,7 +192,8 @@ object QlcReceiveUtils {
 private fun drivePrivateKey(address: String): String {
     val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
     qlcAccounts.forEach {
-        if (it.address.toLowerCase() == address) {
+        if (it.address.toLowerCase().equals(address)) {
+//            KLog.i(it.privKey)
             return it.privKey
         }
     }

@@ -64,6 +64,7 @@ import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
 import com.stratagile.qlink.entity.otc.Passport;
+import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
@@ -842,7 +843,7 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.tradeOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
-    public Observable<BaseBack> tradeOrderInfo(Map map) {
+    public Observable<TradeOrderDetail> tradeOrderInfo(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {

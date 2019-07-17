@@ -62,6 +62,7 @@ import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
 import com.stratagile.qlink.entity.otc.Passport;
+import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 
 import java.util.ArrayList;
@@ -533,7 +534,7 @@ public interface HttpApi {
 
     @POST(url_trade_order_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> tradeOrderInfo(@Body RequestBody map);
+    Observable<TradeOrderDetail> tradeOrderInfo(@Body RequestBody map);
 
     /*************************************************/
 }

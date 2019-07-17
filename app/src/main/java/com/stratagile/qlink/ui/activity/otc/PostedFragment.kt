@@ -22,6 +22,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.EntrustOrderList
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter
+import com.stratagile.qlink.ui.adapter.otc.EntrustPostedOrderListAdapter
 import kotlinx.android.synthetic.main.fragment_posted.*
 import java.util.ArrayList
 import java.util.HashMap
@@ -37,7 +38,7 @@ class PostedFragment : BaseFragment(), PostedContract.View {
 
     @Inject
     lateinit internal var mPresenter: PostedPresenter
-    lateinit var entrustOrderListAdapter: EntrustOrderListAdapter
+    lateinit var entrustOrderListAdapter: EntrustPostedOrderListAdapter
     var currentPage = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,7 +53,7 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         if (ConstantValue.currentUser == null) {
             return
         }
-        entrustOrderListAdapter = EntrustOrderListAdapter(ArrayList())
+        entrustOrderListAdapter = EntrustPostedOrderListAdapter(ArrayList())
         entrustOrderListAdapter.setEnableLoadMore(true)
         recyclerView.adapter = entrustOrderListAdapter
         recyclerView.addItemDecoration(BottomMarginItemDecoration(activity!!.resources.getDimension(R.dimen.x20).toInt()))
