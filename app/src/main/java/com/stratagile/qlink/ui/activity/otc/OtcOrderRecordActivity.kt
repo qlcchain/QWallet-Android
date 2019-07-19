@@ -15,7 +15,6 @@ import com.stratagile.qlink.ui.activity.otc.component.DaggerOtcOrderRecordCompon
 import com.stratagile.qlink.ui.activity.otc.contract.OtcOrderRecordContract
 import com.stratagile.qlink.ui.activity.otc.module.OtcOrderRecordModule
 import com.stratagile.qlink.ui.activity.otc.presenter.OtcOrderRecordPresenter
-import com.yanzhenjie.permission.target.AppFragmentTarget
 import kotlinx.android.synthetic.main.activity_otc_order_record.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -69,10 +68,10 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
                         return CompleteFragment()
                     }
                     3 -> {
-                        return CloasedOrderFragment()
+                        return ClosedOrderFragment()
                     }
                     4 -> {
-                        return AppealFragment()
+                        return AppealsFragment()
                     }
                 }
                 return Fragment()

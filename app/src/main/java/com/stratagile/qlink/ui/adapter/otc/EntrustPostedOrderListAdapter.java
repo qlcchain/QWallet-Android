@@ -11,6 +11,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.entity.EntrustOrderList;
+import com.stratagile.qlink.utils.TimeUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,14 +25,31 @@ public class EntrustPostedOrderListAdapter extends BaseQuickAdapter<EntrustOrder
     @Override
     protected void convert(BaseViewHolder helper, EntrustOrderList.OrderListBean item) {
         helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString());
-        if (item.getType().equals(ConstantValue.orderTypeSell)) {
-            helper.setText(R.id.tvOpreate, "购买");
-            helper.setBackgroundColor(R.id.tvOpreate, mContext.getResources().getColor(R.color.mainColor));
+        if (item.getType().equals(ConstantValue.orderTypeBuy)) {
+            helper.setText(R.id.tvOrderType, "委托BUY QGAS");
+            helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.mainColor));
         } else {
-            helper.setText(R.id.tvOpreate, "出售");
-            helper.setBackgroundColor(R.id.tvOpreate, mContext.getResources().getColor(R.color.color_ff3669));
+            helper.setText(R.id.tvOrderType, "委托SELL QGAS");
+            helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.color_ff3669));
         }
-        helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
+        switch (item.getStatus()) {
+            case "NORMAL":
+                helper.setText(R.id.tvOrderState, "正常");
+                helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
+                break;
+            case "END":
+                helper.setText(R.id.tvOrderState, "挂单完成");
+                helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_21beb5));
+                break;
+            case "CANCEL":
+                helper.setText(R.id.tvOrderState, "已撤单");
+                helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_29282a));
+                break;
+            default:
+                break;
+        }
+        helper.setText(R.id.tvUnitPrice, item.getUnitPrice() + "");
+        helper.setText(R.id.tvDeals, TimeUtil.getOrderTime(TimeUtil.timeStamp(item.getOrderTime())));
         helper.setText(R.id.tvNickName, item.getNickname());
         helper.setText(R.id.tvAmount, BigDecimal.valueOf(item.getTotalAmount()).stripTrailingZeros().toPlainString() + "");
         helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());

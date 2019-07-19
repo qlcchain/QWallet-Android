@@ -8,7 +8,7 @@ import com.stratagile.qlink.entity.BaseBack;
 public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
 
     /**
-     * order : {"unitPrice":0.001,"minAmount":10,"qgasAddress":"","lockingAmount":50,"type":"SELL","completeAmount":0,"head":"/data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg","totalAmount":50,"usdtAddress":"0x980e7917C610E2c2D4e669c920980cB1b915bBc7","orderTime":"2019-07-16 13:38:21","nickname":"18670819116","id":"4050d1db715e4c79aa0d261ec874030d","maxAmount":50,"otcTimes":0,"status":"NORMAL"}
+     * order : {"unitPrice":0.001,"minAmount":1,"qgasAddress":"","lockingAmount":100,"type":"SELL","completeAmount":0,"head":"/data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg","number":"20190718162107137907","totalAmount":200,"usdtAddress":"0x255eEcd17E11C5d2FFD5818da31d04B5c1721D7C","orderTime":"2019-07-18 16:21:08","nickname":"hzp","id":"dff779e206a04e07bbcc4cc96faed827","maxAmount":200,"otcTimes":2,"status":"NORMAL"}
      */
 
     private OrderBean order;
@@ -24,19 +24,20 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
     public static class OrderBean implements Parcelable {
         /**
          * unitPrice : 0.001
-         * minAmount : 10.0
+         * minAmount : 1.0
          * qgasAddress :
-         * lockingAmount : 50.0
+         * lockingAmount : 100.0
          * type : SELL
          * completeAmount : 0.0
          * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
-         * totalAmount : 50.0
-         * usdtAddress : 0x980e7917C610E2c2D4e669c920980cB1b915bBc7
-         * orderTime : 2019-07-16 13:38:21
-         * nickname : 18670819116
-         * id : 4050d1db715e4c79aa0d261ec874030d
-         * maxAmount : 50.0
-         * otcTimes : 0
+         * number : 20190718162107137907
+         * totalAmount : 200.0
+         * usdtAddress : 0x255eEcd17E11C5d2FFD5818da31d04B5c1721D7C
+         * orderTime : 2019-07-18 16:21:08
+         * nickname : hzp
+         * id : dff779e206a04e07bbcc4cc96faed827
+         * maxAmount : 200.0
+         * otcTimes : 2
          * status : NORMAL
          */
 
@@ -47,6 +48,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
         private String type;
         private double completeAmount;
         private String head;
+        private String number;
         private double totalAmount;
         private String usdtAddress;
         private String orderTime;
@@ -64,6 +66,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             type = in.readString();
             completeAmount = in.readDouble();
             head = in.readString();
+            number = in.readString();
             totalAmount = in.readDouble();
             usdtAddress = in.readString();
             orderTime = in.readString();
@@ -140,6 +143,14 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
 
         public void setHead(String head) {
             this.head = head;
+        }
+
+        public String getNumber() {
+            return number;
+        }
+
+        public void setNumber(String number) {
+            this.number = number;
         }
 
         public double getTotalAmount() {
@@ -220,6 +231,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             parcel.writeString(type);
             parcel.writeDouble(completeAmount);
             parcel.writeString(head);
+            parcel.writeString(number);
             parcel.writeDouble(totalAmount);
             parcel.writeString(usdtAddress);
             parcel.writeString(orderTime);

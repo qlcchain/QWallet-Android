@@ -1,13 +1,8 @@
 package com.stratagile.qlink.ui.activity.otc.presenter
-import android.support.annotation.NonNull
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.ui.activity.otc.contract.CloasedOrderContract
-import com.stratagile.qlink.ui.activity.otc.CloasedOrderFragment
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
 
 /**
  * @author hzp
@@ -33,5 +28,15 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Cloa
         if (!mCompositeDisposable.isDisposed) {
             mCompositeDisposable.dispose()
         }
+    }
+
+    fun getTradeOrderList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.tradeOrderList(map).subscribe({
+            mView.setTradeOrderList(it)
+        }, {
+
+        }, {
+
+        }))
     }
 }

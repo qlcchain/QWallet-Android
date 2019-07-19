@@ -1,4 +1,5 @@
 package com.stratagile.qlink.ui.activity.otc.presenter
+
 import android.support.annotation.NonNull
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.ui.activity.otc.contract.TradeOrderDetailContract
@@ -35,22 +36,32 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
     }
 
     fun getTradeOrderDetail(map: Map<String, String>) {
-        httpAPIWrapper.tradeOrderInfo(map).subscribe({
+        mCompositeDisposable.add(httpAPIWrapper.tradeOrderInfo(map).subscribe({
             mView.setTradeOrderDetail(it)
         }, {
 
         }, {
 
-        })
+        }))
     }
 
     fun markAsPaid(map: Map<String, String>) {
-        httpAPIWrapper.tradeBuyerConfirm(map).subscribe({
-
+        mCompositeDisposable.add(httpAPIWrapper.tradeBuyerConfirm(map).subscribe({
+            mView.markAsPaidSuccess()
         }, {
 
         }, {
 
-        })
+        }))
+    }
+
+    fun confirmCheck(map: Map<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.tradeSellerConfirm(map).subscribe({
+            mView.confirmCheckSuccess()
+        }, {
+
+        }, {
+
+        }))
     }
 }

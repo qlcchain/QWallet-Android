@@ -35,13 +35,6 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
         private double unitPrice;
         private String head;
         private double totalAmount;
-        private double minAmount;
-        private String nickname;
-        private String id;
-        private String type;
-        private double maxAmount;
-        private int otcTimes;
-        private String status;
 
         protected OrderListBean(Parcel in) {
             unitPrice = in.readDouble();
@@ -54,6 +47,7 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             maxAmount = in.readDouble();
             otcTimes = in.readInt();
             status = in.readString();
+            orderTime = in.readString();
         }
 
         public static final Creator<OrderListBean> CREATOR = new Creator<OrderListBean>() {
@@ -67,6 +61,24 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
                 return new OrderListBean[size];
             }
         };
+
+        public String getOrderTime() {
+            return orderTime;
+        }
+
+        public void setOrderTime(String orderTime) {
+            this.orderTime = orderTime;
+        }
+
+        private double minAmount;
+        private String nickname;
+        private String id;
+        private String type;
+        private double maxAmount;
+        private int otcTimes;
+        private String status;
+        private String orderTime;
+
 
         public double getUnitPrice() {
             return unitPrice;
@@ -165,6 +177,7 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             parcel.writeDouble(maxAmount);
             parcel.writeInt(otcTimes);
             parcel.writeString(status);
+            parcel.writeString(orderTime);
         }
     }
 }

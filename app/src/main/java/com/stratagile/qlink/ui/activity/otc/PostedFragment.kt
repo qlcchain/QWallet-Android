@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.otc
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.widget.SwipeRefreshLayout
@@ -48,6 +49,10 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         return view
     }
 
+    override fun initDataFromNet() {
+        super.initDataFromNet()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (ConstantValue.currentUser == null) {
@@ -57,21 +62,26 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         entrustOrderListAdapter.setEnableLoadMore(true)
         recyclerView.adapter = entrustOrderListAdapter
         recyclerView.addItemDecoration(BottomMarginItemDecoration(activity!!.resources.getDimension(R.dimen.x20).toInt()))
-        currentPage++
-        refreshLayout.setRefreshing(false)
+        entrustOrderListAdapter.setOnItemClickListener { adapter, view, position ->
+            startActivity(Intent(activity, OrderDetailActivity::class.java).putExtra("order", entrustOrderListAdapter.data[position]))
+        }
         currentPage = 0
         getOrderList()
+        refreshLayout.setRefreshing(false)
         refreshLayout.setOnRefreshListener {
             currentPage = 0
             entrustOrderListAdapter.setNewData(ArrayList())
+            refreshLayout.isRefreshing = false
             getOrderList()
         }
     }
 
     fun getOrderList() {
         currentPage++
-        refreshLayout.isRefreshing = false
         val map = HashMap<String, String>()
+        if (ConstantValue.currentUser == null) {
+            return
+        }
         map["userId"] = ConstantValue.currentUser.userId
         map["type"] = ""
         map["page"] = currentPage.toString() + ""

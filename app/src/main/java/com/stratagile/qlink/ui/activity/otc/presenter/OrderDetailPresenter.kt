@@ -33,4 +33,24 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mCompositeDisposable.dispose()
         }
     }
+
+    fun getEntrustOrderDetail(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getEntrustOrderInfo(map).subscribe({
+            mView.setEntrustOrder(it)
+        }, {
+
+        }, {
+
+        }))
+    }
+
+    fun getTradeOrderList(map : MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.tradeOrderList(map).subscribe({
+            mView.setTradeOrderList(it)
+        }, {
+
+        }, {
+
+        }))
+    }
 }

@@ -36,12 +36,12 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Proc
     }
 
     fun getTradeOrderList(map: MutableMap<String, String>) {
-        httpAPIWrapper.tradeOrderList(map).subscribe({
+        mCompositeDisposable.add(httpAPIWrapper.tradeOrderList(map).subscribe({
             mView.setTradeOrderList(it)
         }, {
 
         }, {
 
-        })
+        }))
     }
 }

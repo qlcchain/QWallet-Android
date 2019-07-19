@@ -81,7 +81,7 @@ public abstract class BaseFragment extends Fragment {
 	 * @return
 	 */
 	protected void initDataFromNet() {
-		progressDialog.show();
+
 	}
 
 	/**
@@ -91,70 +91,6 @@ public abstract class BaseFragment extends Fragment {
 	 */
 	protected abstract void initDataFromLocal();
 
-	/**
-	 * 启动Activity
-	 * 
-	 * @param <T>
-	 * @param clazz
-	 */
-	protected <T> void startActivity(Class<T> clazz) {
-		Intent intent = new Intent(getActivity(), clazz);
-		try {
-			startActivity(intent);
-		} catch (Exception e) {
-			Toast.makeText(getActivity(), "敬请期待！"+ clazz.getSimpleName()
-					+ "未注册！", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	/**
-	 * 启动Activity
-	 * 
-	 * @param clazz
-	 */
-	protected <T> void startActivity(Class<T> clazz, Bundle bundle) {
-		Intent intent = new Intent(getActivity(), clazz);
-		intent.putExtras(bundle);
-		try {
-			startActivity(intent);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Toast.makeText(getActivity(), "敬请期待！"+ clazz.getSimpleName()
-					+ "未注册！", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	/**
-	 * 启动Activity
-	 * 
-	 * @param clazz
-	 */
-	protected <T> void startActivity4Result(Class<T> clazz, Bundle bundle,
-                                            int requestCode) {
-		Intent intent = new Intent(getActivity(), clazz);
-		intent.putExtras(bundle);
-		try {
-			getActivity().startActivityForResult(intent, requestCode);
-		} catch (Exception e) {
-			Toast.makeText(getActivity(), "敬请期待！"+ clazz.getSimpleName()
-					+ "未注册！", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	/**
-	 * 启动Activity
-	 * 
-	 * @param clazz
-	 */
-	protected <T> void startActivity4Result(Class<T> clazz, int requestCode) {
-		Intent intent = new Intent(getActivity(), clazz);
-		try {
-			getActivity().startActivityForResult(intent, requestCode);
-		} catch (Exception e) {
-			Toast.makeText(getActivity(), "敬请期待！"+ clazz.getSimpleName()
-					+ "未注册！", Toast.LENGTH_SHORT).show();
-		}
-	}
 
 	@Override
 	public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
@@ -176,6 +112,8 @@ public abstract class BaseFragment extends Fragment {
 			super.setUserVisibleHint(isVisibleToUser);
 			if (isVisibleToUser) {
 				if(!isLoaded){
+					initDataFromNet();
+					isLoaded = true;
 				}
 			}
 		}

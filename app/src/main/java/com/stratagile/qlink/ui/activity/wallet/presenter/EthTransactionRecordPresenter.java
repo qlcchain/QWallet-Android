@@ -171,9 +171,9 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                 transactionInfo.setTransactionState(operationsBeans.get(i).getType());
                 transactionInfo.setOwner(address);
                 if (address.equals(operationsBeans.get(i).getFrom())) {
-                    transactionInfo.setShowAddress(operationsBeans.get(i).getTo());
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
                 } else {
-                    transactionInfo.setShowAddress(operationsBeans.get(i).getFrom());
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
                 }
                 transactionInfo.setTimestamp(operationsBeans.get(i).getTimestamp());
                 transactionInfo.setTokenDecimals(Integer.parseInt(operationsBeans.get(i).getTokenInfo().getDecimals()));
@@ -186,7 +186,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                 transactionInfo1.setTransationHash(operationsBeans.get(i).getTransactionHash());
                 transactionInfo1.setFrom(operationsBeans.get(i).getFrom());
                 transactionInfo1.setTo("");
-                transactionInfo1.setShowAddress(operationsBeans.get(i).getFrom());
+                transactionInfo1.setShowAddress(operationsBeans.get(i).getTransactionHash());
                 transactionInfo1.setTransactionState(operationsBeans.get(i).getType());
                 transactionInfo1.setOwner(address);
                 transactionInfo1.setTimestamp(operationsBeans.get(i).getTimestamp());
@@ -203,9 +203,9 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                 transactionInfo.setTransactionState(operationsBeans.get(i).getType());
                 transactionInfo.setOwner(address);
                 if (address.equals(operationsBeans.get(i).getFrom())) {
-                    transactionInfo.setShowAddress(operationsBeans.get(i).getTo());
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
                 } else {
-                    transactionInfo.setShowAddress(operationsBeans.get(i).getFrom());
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
                 }
                 transactionInfo.setTimestamp(operationsBeans.get(i).getTimestamp());
                 transactionInfo.setTokenDecimals(Integer.parseInt(operationsBeans.get(i).getTokenInfo().getDecimals()));

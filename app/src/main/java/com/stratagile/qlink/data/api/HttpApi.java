@@ -124,6 +124,7 @@ import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
+import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
 import static com.stratagile.qlink.data.api.API.url_trade_order_info;
@@ -535,6 +536,11 @@ public interface HttpApi {
     @POST(url_trade_order_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TradeOrderDetail> tradeOrderInfo(@Body RequestBody map);
+
+    @POST(url_trade_appeal)
+    @Multipart
+    Observable<TradeOrderDetail> generateAppeal(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part("tradeOrderId") RequestBody tradeOrderId, @Part("reason") RequestBody reason, @Part MultipartBody.Part photo1, @Part MultipartBody.Part photo2, @Part MultipartBody.Part photo3, @Part MultipartBody.Part photo4);
+//    Observable<TradeOrderDetail> generateAppeal(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part photo1);
 
     /*************************************************/
 }

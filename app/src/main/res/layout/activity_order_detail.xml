@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/color_f2f2f2"
     android:layout_height="match_parent">
@@ -70,6 +71,7 @@
                 android:layout_marginTop="@dimen/x20"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/tvOrderType"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/x27"
@@ -90,6 +92,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
                     <TextView
+                        android:id="@+id/tvQgasAmount"
                         android:layout_width="wrap_content"
                         android:text="100000 QGAS"
                         android:layout_alignParentRight="true"
@@ -110,6 +113,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
                     <TextView
+                        android:id="@+id/tvUnitPrice"
                         android:layout_width="wrap_content"
                         android:text="0.02 USDT "
                         android:layout_alignParentRight="true"
@@ -121,15 +125,17 @@
                     android:layout_width="match_parent"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginRight="@dimen/x30"
+                    android:layout_marginBottom="@dimen/x20"
                     android:gravity="center_vertical"
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Total"
+                        android:text="Volume Settings"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
                     <TextView
+                        android:id="@+id/tvQgasVolume"
                         android:layout_width="wrap_content"
                         android:text="20.123 USDT"
                         android:layout_alignParentRight="true"
@@ -140,101 +146,51 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/x20"
-                android:orientation="vertical"
                 android:background="@color/white"
-                android:layout_height="wrap_content">
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/x1"
+                android:layout_height="@dimen/x92">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/x30"
-                    android:text="订单信息"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:text="已成交"
+                    android:layout_marginLeft="@dimen/x30"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
-                    android:layout_height="@dimen/x92" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:background="@color/color_f2f2f2"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="Order ID"
-                    android:layout_marginTop="@dimen/x12"
-                    android:textColor="@color/color_808080"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/x30"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_29282a"
+                    android:id="@+id/tvDealQgasAmounnt"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="20190617143539492609"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="下单时间"
-                    android:layout_marginTop="@dimen/x12"
-                    android:textColor="@color/color_808080"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_29282a"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="12:22:23 2019-08-01"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="关闭时间"
-                    android:layout_marginTop="@dimen/x12"
-                    android:textColor="@color/color_808080"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_29282a"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="12:22:23 2019-08-01"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="交易状态"
-                    android:layout_marginTop="@dimen/x12"
-                    android:textColor="@color/color_808080"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_29282a"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="等待对方确认"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="我付款的地址"
-                    android:layout_marginTop="@dimen/x12"
-                    android:textColor="@color/color_808080"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_29282a"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
+                    android:text="已成交"
                     android:layout_marginRight="@dimen/x30"
-                    android:drawablePadding="@dimen/x40"
-                    android:drawableRight="@drawable/ic_menu_copy_holo_light"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:textSize="16sp"
+                    android:textColor="@color/mainColor"
                     android:layout_height="wrap_content" />
+
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/x20"
+                android:paddingLeft="@dimen/x30"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
+                android:text="订单记录"
+                android:layout_height="@dimen/x92" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_marginTop="@dimen/x1"
+                android:background="@color/white"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
@@ -244,14 +200,16 @@
         android:background="@color/color_f2f2f2"/>
     
     <LinearLayout
+        android:id="@+id/llOpreate"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="@dimen/x113">
         <TextView
+            android:id="@+id/tvOpreate"
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/x30"
             android:layout_marginRight="@dimen/x30"
-            android:text="I’ve transferred USDT"
+            android:text="取消挂单"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="16sp"

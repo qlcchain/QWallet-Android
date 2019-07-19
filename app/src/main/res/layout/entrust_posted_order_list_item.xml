@@ -3,7 +3,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="@dimen/x20"
+    android:layout_marginBottom="@dimen/x20"
     android:layout_marginLeft="@dimen/x20"
     app:cardCornerRadius="@dimen/x10"
     app:cardElevation="@dimen/x10"
@@ -55,6 +55,33 @@
                 android:layout_weight="1"
                 android:textSize="14sp"
                 android:textColor="@color/color_808080"
+                android:text="Unit Price"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvUnitPrice"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text="467723839"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text=" QGAS/USDT"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
                 android:text="Total Amount"
                 android:layout_height="wrap_content" />
             <TextView
@@ -68,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/color_808080"
-                android:text=" (QGAS)"
+                android:text=" QGAS"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
@@ -95,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/color_808080"
-                android:text=" (QGAS)"
+                android:text=" QGAS"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
@@ -106,35 +133,24 @@
             android:layout_marginTop="@dimen/x20"
             android:layout_marginRight="@dimen/x20"
             android:layout_marginBottom="@dimen/x17"
-            android:layout_height="@dimen/x70">
+            android:layout_height="@dimen/x50">
             <TextView
-                android:id="@+id/tvUnitPrice"
+                android:id="@+id/tvOrderType"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:textColor="@color/color_29282a"
-                android:textSize="24sp"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_toRightOf="@+id/tvUnitPrice"
-                android:text="QGAS/USDT"
-                android:layout_marginBottom="@dimen/x8"
-                android:layout_alignBottom="@+id/tvUnitPrice"
-                android:layout_marginLeft="@dimen/x12"
-                android:textSize="12sp"
-                android:textColor="@color/color_999"
+                android:textSize="18sp"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/tvOpreate"
-                android:layout_width="@dimen/x124"
+                android:id="@+id/tvOrderState"
+                android:layout_width="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@color/mainColor"
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:textSize="14sp"
-                android:layout_height="@dimen/x50" />
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
     </LinearLayout>

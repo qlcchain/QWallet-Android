@@ -218,6 +218,7 @@
         <activity android:name=".ui.activity.otc.OtcOrderRecordActivity" />
         <activity android:name=".ui.activity.otc.TradeOrderDetailActivity" />
         <activity android:name=".ui.activity.otc.UsdtReceiveAddressActivity" />
+        <activity android:name=".ui.activity.otc.AppealActivity" />
 
 
         <meta-data

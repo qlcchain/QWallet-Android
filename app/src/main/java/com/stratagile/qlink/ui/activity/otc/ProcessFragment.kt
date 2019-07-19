@@ -44,6 +44,12 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
         }
     }
 
+    override fun initDataFromNet() {
+        currentPage = 0
+        super.initDataFromNet()
+        getTradeOrderList()
+    }
+
     @Inject
     lateinit internal var mPresenter: ProcessPresenter
     lateinit var tradeOrderListAdapter: TradeOrderListAdapter
@@ -63,9 +69,9 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
             startActivity(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
         }
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
-        getTradeOrderList()
         refreshLayout.setOnRefreshListener {
             currentPage = 0
+            refreshLayout.isRefreshing = false
             tradeOrderListAdapter.setNewData(arrayListOf())
             getTradeOrderList()
         }
@@ -73,11 +79,14 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
 
     fun getTradeOrderList() {
         currentPage++
-        refreshLayout.isRefreshing = false
         val map = HashMap<String, String>()
+        if (ConstantValue.currentUser == null) {
+            return
+        }
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["page"] = currentPage.toString() + ""
+        map["status"] = "processing"
         map["size"] = "5"
         map["entrustOrderId"] = ""
         mPresenter.getTradeOrderList(map)

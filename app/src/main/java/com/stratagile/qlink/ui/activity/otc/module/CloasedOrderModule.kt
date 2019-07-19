@@ -2,7 +2,7 @@ package com.stratagile.qlink.ui.activity.otc.module
 
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.ui.activity.base.ActivityScope
-import com.stratagile.qlink.ui.activity.otc.CloasedOrderFragment
+import com.stratagile.qlink.ui.activity.otc.ClosedOrderFragment
 import com.stratagile.qlink.ui.activity.otc.contract.CloasedOrderContract
 import com.stratagile.qlink.ui.activity.otc.presenter.CloasedOrderPresenter
 
@@ -26,7 +26,7 @@ class CloasedOrderModule (private val mView: CloasedOrderContract.View) {
 
     @Provides
     @ActivityScope
-    fun provideCloasedOrderFragment() : CloasedOrderFragment {
-        return mView as CloasedOrderFragment
+    fun provideCloasedOrderFragment() : ClosedOrderFragment {
+        return mView as ClosedOrderFragment
     }
 }

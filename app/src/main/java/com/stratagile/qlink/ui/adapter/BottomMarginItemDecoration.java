@@ -34,8 +34,8 @@ public class BottomMarginItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1) {
-            outRect.bottom = mSpace;
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect.top = mSpace;
         }
 
     }

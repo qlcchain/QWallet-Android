@@ -2,7 +2,7 @@ package com.stratagile.qlink.ui.activity.otc.component
 
 import com.stratagile.qlink.application.AppComponent
 import com.stratagile.qlink.ui.activity.base.ActivityScope
-import com.stratagile.qlink.ui.activity.otc.CloasedOrderFragment
+import com.stratagile.qlink.ui.activity.otc.ClosedOrderFragment
 import com.stratagile.qlink.ui.activity.otc.module.CloasedOrderModule
 
 import dagger.Component
@@ -16,5 +16,5 @@ import dagger.Component
 @ActivityScope
 @Component(dependencies = arrayOf(AppComponent::class), modules = arrayOf(CloasedOrderModule::class))
 interface CloasedOrderComponent {
-    fun inject(CloasedOrderFragment: CloasedOrderFragment): CloasedOrderFragment
+    fun inject(CloasedOrderFragment: ClosedOrderFragment): ClosedOrderFragment
 }

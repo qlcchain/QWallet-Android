@@ -23,6 +23,10 @@ interface TradeOrderDetailContract {
 
         fun setTradeOrderDetail(tradeOrderDetail: TradeOrderDetail)
 
+        fun markAsPaidSuccess()
+
+        fun confirmCheckSuccess()
+
     }
 
     interface TradeOrderDetailContractPresenter : BasePresenter {

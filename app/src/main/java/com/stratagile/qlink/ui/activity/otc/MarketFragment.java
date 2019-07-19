@@ -129,6 +129,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         map.put("type", currentOrderType);
         map.put("page", currentPage + "");
         map.put("size", "5");
+        map.put("status", "NORMAL");
         mPresenter.getOrderList(map);
     }
 

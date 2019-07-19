@@ -188,7 +188,7 @@ public class UseHistoryListFragment extends MyBaseFragment implements UseHistory
         return view;
     }
     private void setToViewHistory() {
-        startActivity(TransactionRecordActivity.class);
+        startActivity(new Intent(getActivity(), TransactionRecordActivity.class));
         rlContent.setVisibility(View.GONE);
     }
     private void setToReceiveFund() {

@@ -178,7 +178,6 @@
         android:background="@color/color_f2f2f2"
         android:layout_marginLeft="@dimen/x30"/>
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/verification"
         android:layout_width="match_parent"
         android:gravity="center_vertical"
@@ -209,7 +208,6 @@
             android:layout_height="@dimen/x30" />
     </LinearLayout>
     <View
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x1"
         android:background="@color/color_f2f2f2"

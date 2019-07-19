@@ -119,7 +119,7 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
         tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(WalletDetailActivity.class);
+                startActivity(new Intent(getActivity(), WalletDetailActivity.class));
                 return true;
             }
         });

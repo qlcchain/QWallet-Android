@@ -42,6 +42,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, "已超时");
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
+                case "QGAS_PAID":
+                    helper.setText(R.id.tvOrderState, "已完成");
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
+                    break;
                 default:
                     break;
             }
@@ -60,6 +64,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                 case "OVERTIME":
                     helper.setText(R.id.tvOrderState, "已超时");
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
+                case "QGAS_PAID":
+                    helper.setText(R.id.tvOrderState, "已完成");
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
                     break;
                 default:
                     break;

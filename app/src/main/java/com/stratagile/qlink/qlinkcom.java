@@ -92,6 +92,10 @@ public class qlinkcom {
                 if (!backupFile.exists()) {
                     backupFile.mkdir();
                 }
+                File otcFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/otc", "");
+                if (!otcFile.exists()) {
+                    otcFile.mkdir();
+                }
                 File btcFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/btc", "");
                 if (!btcFile.exists()) {
                     btcFile.mkdir();

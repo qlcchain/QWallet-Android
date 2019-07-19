@@ -29,6 +29,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 //import com.facebook.FacebookSdk;
 import com.socks.library.KLog;
@@ -129,6 +130,11 @@ public class AppConfig extends MultiDexApplication {
             .transform(new GlideCircleTransformMainColor(this))
             .placeholder(R.mipmap.icon_user_default)
             .error(R.mipmap.icon_user_default)
+            .priority(Priority.HIGH);
+    public RequestOptions optionsAppeal = new RequestOptions()
+            .centerCrop()
+            .skipMemoryCache(true)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .priority(Priority.HIGH);
 
     public AppConfig() {

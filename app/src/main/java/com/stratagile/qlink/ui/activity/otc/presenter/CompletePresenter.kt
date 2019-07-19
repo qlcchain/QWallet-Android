@@ -29,6 +29,16 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Comp
 
     }
 
+    fun getTradeOrderList(map : MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.tradeOrderList(map).subscribe({
+            mView.setTradeOrderList(it)
+        }, {
+
+        }, {
+
+        }))
+    }
+
     override fun unsubscribe() {
         if (!mCompositeDisposable.isDisposed) {
             mCompositeDisposable.dispose()

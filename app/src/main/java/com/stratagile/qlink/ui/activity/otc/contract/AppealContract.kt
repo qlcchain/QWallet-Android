@@ -4,9 +4,9 @@ import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
  * @author hzp
- * @Package The contract for AppealFragment
+ * @Package The contract for AppealActivity
  * @Description: $description
- * @date 2019/07/16 17:53:24
+ * @date 2019/07/19 11:44:36
  */
 interface AppealContract {
     interface View : BaseView<AppealContractPresenter> {
@@ -19,6 +19,8 @@ interface AppealContract {
          *
          */
         fun closeProgressDialog()
+
+        fun generateAppealSuccess()
     }
 
     interface AppealContractPresenter : BasePresenter {
