@@ -22,6 +22,15 @@ import java.util.List;
 public class AppealImgAdapter extends BaseQuickAdapter<ImageEntity, BaseViewHolder> {
 
     private int setCount = 0;
+    private boolean isSee = false;
+
+    public boolean isSee() {
+        return isSee;
+    }
+
+    public void setSee(boolean see) {
+        isSee = see;
+    }
 
     public int getSetCount() {
         return setCount;
@@ -39,11 +48,19 @@ public class AppealImgAdapter extends BaseQuickAdapter<ImageEntity, BaseViewHold
     protected void convert(BaseViewHolder helper, ImageEntity item) {
         helper.addOnClickListener(R.id.ivDelete);
         if (item.isSet()) {
-            Glide.with(mContext)
-                    .load(Environment.getExternalStorageDirectory() + "/QWallet/otc/" + item.getName())
-                    .apply(AppConfig.getInstance().optionsAppeal)
-                    .into((ImageView) helper.getView(R.id.imageView));
-            helper.setVisible(R.id.ivDelete, true);
+            if (isSee) {
+                helper.setVisible(R.id.ivDelete, false);
+                Glide.with(mContext)
+                        .load(API.BASE_URL + item.getName())
+                        .apply(AppConfig.getInstance().optionsAppeal)
+                        .into((ImageView) helper.getView(R.id.imageView));
+            } else {
+                helper.setVisible(R.id.ivDelete, true);
+                Glide.with(mContext)
+                        .load(Environment.getExternalStorageDirectory() + "/QWallet/otc/" + item.getName())
+                        .apply(AppConfig.getInstance().optionsAppeal)
+                        .into((ImageView) helper.getView(R.id.imageView));
+            }
             helper.setVisible(R.id.imageView, true);
         } else {
             helper.setGone(R.id.ivDelete, false);

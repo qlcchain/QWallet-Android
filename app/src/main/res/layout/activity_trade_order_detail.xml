@@ -56,7 +56,7 @@
                     android:layout_marginLeft="@dimen/x30"
                     android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
                     android:layout_marginTop="@dimen/x12"
-                    android:drawableRight="@mipmap/icon_copy_h"
+                    android:drawableRight="@mipmap/copy_h"
                     android:layout_marginRight="@dimen/x30"
                     android:drawablePadding="@dimen/x40"
                     android:textColor="@color/color_29282a"
@@ -184,7 +184,7 @@
                     android:layout_height="wrap_content" />
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:src="@mipmap/icon_copy_h"
+                    android:src="@mipmap/copy_h"
                     android:layout_marginTop="@dimen/x2"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -349,7 +349,7 @@
                         android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
                         android:layout_marginRight="@dimen/x30"
                         android:drawablePadding="@dimen/x40"
-                        android:drawableRight="@drawable/ic_menu_copy_holo_light"
+                        android:drawableRight="@mipmap/copy_h"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
@@ -375,7 +375,7 @@
                         android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
                         android:layout_marginRight="@dimen/x30"
                         android:drawablePadding="@dimen/x40"
-                        android:drawableRight="@drawable/ic_menu_copy_holo_light"
+                        android:drawableRight="@mipmap/copy_h"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>

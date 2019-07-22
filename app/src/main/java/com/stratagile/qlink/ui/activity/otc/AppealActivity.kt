@@ -97,6 +97,7 @@ class AppealActivity : BaseActivity(), AppealContract.View {
         var list = arrayListOf<ImageEntity>()
         list.add(ImageEntity(0))
         appealImgAdapter = AppealImgAdapter(list)
+        appealImgAdapter.isSee = false
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.addItemDecoration(AppealUploadImgItemDecoration(resources.getDimension(R.dimen.x6).toInt()))
         recyclerView.adapter = appealImgAdapter

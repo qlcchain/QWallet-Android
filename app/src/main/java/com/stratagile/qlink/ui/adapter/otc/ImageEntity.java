@@ -11,6 +11,12 @@ public class ImageEntity {
         return position;
     }
 
+    public ImageEntity(int position, String name, boolean isSet) {
+        this.position = position;
+        this.name = name;
+        this.isSet = isSet;
+    }
+
     public void setPosition(int position) {
         this.position = position;
     }

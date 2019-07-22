@@ -68,10 +68,22 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
         tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " QGAS/USDT"
         tvOrderId.text = tradeOrderDetail.order.id
+        tvReceiveAddress.setOnClickListener {
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+            cm.primaryClip = mClipData
+            ToastUtil.displayShortToast(getString(R.string.copy_success))
+        }
+        tvAmountUsdt.setOnClickListener {
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val mClipData = ClipData.newPlainText("Label", tvAmountUsdt.text.toString())
+            cm.primaryClip = mClipData
+            ToastUtil.displayShortToast(getString(R.string.copy_success))
+        }
         tvOrderTime.text = tradeOrderDetail.order.orderTime
         if (mTradeOrderDetail.order.buyerId.equals(ConstantValue.currentUser.userId)) {
             //我买
-            tvOtherUser.text = "卖家"
+            tvOtherUser.text = "Seller"
             tvOrderType.text = ConstantValue.orderTypeBuy
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
             receiveAddressTip.text = "GO-QLC Address to receive QGAS"
@@ -132,6 +144,12 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     viewLine.visibility = View.GONE
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
+                    tvTxId.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
                     tvOpreate3.text = "我要申诉"
                     var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
                     remainTime = tradeOrderExistTime - remainTime
@@ -156,11 +174,20 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                                 }
                                 .subscribe();
                     } else {
-                        tvOrderStateTip.text = "等待对方确认收款，可申请申诉"
-                        tvOpreate3.isEnabled = true
-                    }
-                    tvOpreate3.setOnClickListener {
-                        startActivityForResult(Intent(this, AppealActivity::class.java).putExtra("tradeOrder", mTradeOrderDetail.order), 0)
+                        if (tradeOrderDetail.order.appealDate.equals("")) {
+                            tvOrderStateTip.text = "等待对方确认收款，可申请申诉"
+                            tvOpreate3.isEnabled = true
+                            tvOpreate3.setOnClickListener {
+                                startActivityForResult(Intent(this, AppealActivity::class.java).putExtra("tradeOrder", mTradeOrderDetail.order), 0)
+                            }
+                        } else {
+                            tvOrderStateTip.text = "等待对方确认收款，已经进行申诉"
+                            tvOpreate3.isEnabled = true
+                            tvOpreate3.text = "查看申诉详情"
+                            tvOpreate3.setOnClickListener {
+                                startActivityForResult(Intent(this, AppealDetailActivity::class.java).putExtra("tradeOrderId", mTradeOrderDetail.order.id), 0)
+                            }
+                        }
                     }
                 }
                 "OVERTIME" -> {
@@ -201,7 +228,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             }
         } else {
             //我卖
-            tvOtherUser.text = "买家"
+            tvOtherUser.text = "Buyer"
             tvOrderType.text = ConstantValue.orderTypeSell
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
             receiveAddressTip.text = "ERC20 Address to receive USDT"
@@ -209,9 +236,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             when(tradeOrderDetail.order.status) {
                 "QGAS_TO_PLATFORM"-> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
-                    tvOrderState.text = "等待买家确认付款"
-                    tvOrderState1.text = "等待买家确认付款"
-                    tvOrderStateTip.text = "还剩30分钟，关闭订单"
+                    tvOrderState.text = "Waiting for Buyer's payment"
+                    tvOrderState1.text = "Waiting for Buyer's payment"
+                    tvOrderStateTip.text = "The order will be closed automatically, if no further confirmation within 30 minutes."
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
                     tvOpreate3.visibility = View.GONE
@@ -236,8 +263,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                 }
                 "USDT_PAID"-> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
-                    tvOrderState.text = "买家已确认付款"
-                    tvOrderState1.text = "买家已确认付款"
+                    tvOrderState.text = "Buyer has confirmed the payment"
+                    tvOrderState1.text = "Buyer has confirmed the payment"
                     tvOrderStateTip.text = "等待查收USDT，30分钟后可申请申诉"
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.VISIBLE
@@ -248,15 +275,21 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     llPayAddress.visibility = View.VISIBLE
                     tvPayAddressTip.text = "Buyer's ERC-20 address"
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
+                    tvPayAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
 
                     llOrderPayTime.visibility = View.VISIBLE
                     tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
 
-                    tvPayAddress.setOnClickListener {
+                    tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
+                        val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
                         cm.primaryClip = mClipData
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
@@ -287,14 +320,23 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                                 }
                                 .subscribe();
                     } else {
-                        tvOrderStateTip.text = "等待查收USDT，可申请申诉"
-                        tvOpreate2.isEnabled = true
-                        tvOpreate2.background = resources.getDrawable(R.drawable.maincolor_stroke_bg)
+                        if (tradeOrderDetail.order.appealDate.equals("")) {
+                            tvOrderStateTip.text = "等待查收USDT，可申请申诉"
+                            tvOpreate2.isEnabled = true
+                            tvOpreate2.background = resources.getDrawable(R.drawable.maincolor_stroke_bg)
+                            tvOpreate2.setOnClickListener {
+                                startActivityForResult(Intent(this, AppealActivity::class.java).putExtra("tradeOrder", mTradeOrderDetail.order), 0)
+                            }
+                        } else {
+                            tvOrderStateTip.text = "等待查收USDT，已经进行申诉"
+                            tvOpreate2.text = "查看申诉详情"
+                            tvOpreate2.isEnabled = true
+                            tvOpreate2.background = resources.getDrawable(R.drawable.maincolor_stroke_bg)
+                            tvOpreate2.setOnClickListener {
+                                startActivityForResult(Intent(this, AppealDetailActivity::class.java).putExtra("tradeOrderId", mTradeOrderDetail.order.id), 0)
+                            }
+                        }
                     }
-                    tvOpreate2.setOnClickListener {
-                        startActivityForResult(Intent(this, AppealActivity::class.java).putExtra("tradeOrder", mTradeOrderDetail.order), 0)
-                    }
-
                 }
                 "OVERTIME" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_999))
@@ -417,7 +459,6 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     }
 
     fun getTradeOrderDetail() {
-        mdDisposable?.dispose()
         var map = mutableMapOf<String, String>()
         if (ConstantValue.currentUser == null) {
             return

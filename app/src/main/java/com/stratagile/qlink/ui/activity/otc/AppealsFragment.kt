@@ -68,7 +68,7 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
         tradeOrderListAdapter = TradeOrderListAdapter(arrayListOf())
         recyclerView.adapter = tradeOrderListAdapter
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
-            startActivity(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
+            startActivity(Intent(activity, AppealDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
         }
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setOnRefreshListener {
