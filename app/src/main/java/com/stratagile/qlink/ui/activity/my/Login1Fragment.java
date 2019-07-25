@@ -314,6 +314,9 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         UserAccount userAccount = new UserAccount();
         userAccount.setAccount(account);
         userAccount.setUserId(register.getId());
+        userAccount.setVstatus(register.getVstatus());
+        userAccount.setFacePhoto(register.getFacePhoto());
+        userAccount.setHoldingPhoto(register.getHoldingPhoto());
         userAccount.setPubKey(register.getData());
         userAccount.setAccount(register.getAccount());
         userAccount.setAvatar(register.getHead());

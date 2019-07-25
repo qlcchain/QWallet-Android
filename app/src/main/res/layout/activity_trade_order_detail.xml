@@ -23,7 +23,7 @@
                     android:id="@+id/tvOrderState"
                     android:layout_width="wrap_content"
                     android:textColor="@color/white"
-                    android:text="订单关闭"
+                    android:text="--"
                     android:textSize="18sp"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_height="wrap_content" />
@@ -31,7 +31,7 @@
                     android:id="@+id/tvOrderStateTip"
                     android:layout_width="wrap_content"
                     android:textColor="@color/white"
-                    android:text="订单被平台关闭"
+                    android:text="--"
                     android:textSize="14sp"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_height="wrap_content" />
@@ -54,7 +54,7 @@
                     android:id="@+id/tvReceiveAddress"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
+                    android:text="-/-"
                     android:layout_marginTop="@dimen/x12"
                     android:drawableRight="@mipmap/copy_h"
                     android:layout_marginRight="@dimen/x30"
@@ -104,14 +104,14 @@
                     <TextView
                         android:id="@+id/tvOtherUser"
                         android:layout_width="wrap_content"
-                        android:text="卖家"
+                        android:text="@string/seller"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:id="@+id/tvNickName"
                         android:layout_width="wrap_content"
-                        android:text="xxx"
+                        android:text="-/-"
                         android:layout_alignParentRight="true"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
@@ -132,7 +132,7 @@
                     <TextView
                         android:id="@+id/tvQgasAmount"
                         android:layout_width="wrap_content"
-                        android:text="100000 QGAS"
+                        android:text="-/-"
                         android:layout_alignParentRight="true"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
@@ -153,7 +153,7 @@
                     <TextView
                         android:id="@+id/tvUnitPrice"
                         android:layout_width="wrap_content"
-                        android:text="0.02 USDT "
+                        android:text="-/-"
                         android:layout_alignParentRight="true"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
@@ -172,7 +172,7 @@
                 <TextView
                     android:layout_width="0px"
                     android:layout_weight="1"
-                    android:text="付款金额"
+                    android:text="Amount"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
                     android:layout_height="wrap_content" />
@@ -180,11 +180,12 @@
                     android:id="@+id/tvAmountUsdt"
                     android:layout_width="wrap_content"
                     android:textSize="16sp"
-                    android:text="20.123 USDT"
+                    android:text="-/-"
                     android:layout_height="wrap_content" />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:src="@mipmap/copy_h"
+                    android:layout_marginLeft="@dimen/x8"
                     android:layout_marginTop="@dimen/x2"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -223,7 +224,7 @@
                     android:textColor="@color/color_29282a"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="20190617143539492609"
+                    android:text="-/-"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -239,7 +240,7 @@
                     android:textColor="@color/color_29282a"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="12:22:23 2019-08-01"
+                    android:text="-/-"
                     android:layout_height="wrap_content" />
                 <LinearLayout
                     android:id="@+id/llOrderPayTime"
@@ -249,7 +250,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="确认付款时间"
+                        android:text="Payment Confirmation Time"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -261,7 +262,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="@dimen/x30"
-                        android:text="12:22:23 2019-08-01"
+                        android:text="-/-"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
@@ -272,7 +273,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="交易成功时间"
+                        android:text="Successful Deal Time"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -284,7 +285,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="@dimen/x30"
-                        android:text="12:22:23 2019-08-01"
+                        android:text="-/-"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
@@ -295,7 +296,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="关闭时间"
+                        android:text="Cloesed Time"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -306,7 +307,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="@dimen/x30"
-                        android:text="12:22:23 2019-08-01"
+                        android:text="-/-"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <TextView
@@ -323,7 +324,7 @@
                     android:textColor="@color/color_29282a"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="等待对方确认"
+                    android:text="-/-"
                     android:layout_height="wrap_content" />
                 <LinearLayout
                     android:id="@+id/llPayAddress"
@@ -334,7 +335,7 @@
                     <TextView
                         android:id="@+id/tvPayAddressTip"
                         android:layout_width="wrap_content"
-                        android:text="我付款的地址"
+                        android:text="-/-"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -346,7 +347,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="@dimen/x30"
-                        android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
+                        android:text="--"
                         android:layout_marginRight="@dimen/x30"
                         android:drawablePadding="@dimen/x40"
                         android:drawableRight="@mipmap/copy_h"
@@ -360,7 +361,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="交易ID"
+                        android:text="Transaction ID"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -372,7 +373,7 @@
                         android:textColor="@color/color_29282a"
                         android:layout_width="wrap_content"
                         android:layout_marginLeft="@dimen/x30"
-                        android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
+                        android:text="-/-"
                         android:layout_marginRight="@dimen/x30"
                         android:drawablePadding="@dimen/x40"
                         android:drawableRight="@mipmap/copy_h"
@@ -402,32 +403,32 @@
             android:layout_width="0px"
             android:layout_weight="1"
             android:textColor="@color/mainColor"
-            android:text="取消订单"
+            android:text="@string/revoke"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:background="@drawable/maincolor_stroke_bg"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_marginRight="@dimen/x20"
             android:layout_height="@dimen/x77" />
         <TextView
             android:id="@+id/tvOpreate2"
             android:layout_width="0px"
             android:layout_weight="1"
             android:textColor="@color/mainColor"
-            android:text="我已付款"
+            android:text="@string/i_ve_transfered"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:background="@drawable/maincolor_stroke_bg"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_marginRight="@dimen/x20"
             android:layout_height="@dimen/x77" />
         <TextView
             android:id="@+id/tvOpreate3"
             android:layout_width="0px"
             android:layout_weight="1"
-            android:layout_marginRight="@dimen/x30"
-            android:text="付款"
+            android:layout_marginRight="@dimen/x20"
+            android:text="@string/transfer"
             android:textColor="@color/white"
             android:gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:background="@color/mainColor"
             android:layout_height="@dimen/x77" />
     </LinearLayout>

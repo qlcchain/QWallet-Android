@@ -20,12 +20,19 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
+import com.stratagile.qlink.ui.activity.my.LoginActivity;
+import com.stratagile.qlink.ui.activity.my.RegisgerActivity;
+import com.stratagile.qlink.ui.activity.my.VerificationActivity;
 import com.stratagile.qlink.ui.activity.otc.component.DaggerMarketComponent;
 import com.stratagile.qlink.ui.activity.otc.contract.MarketContract;
 import com.stratagile.qlink.ui.activity.otc.module.MarketModule;
 import com.stratagile.qlink.ui.activity.otc.presenter.MarketPresenter;
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration;
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter;
+import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
+import com.stratagile.qlink.utils.LocalWalletUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +87,16 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             }
         });
 
+        viewModel.timeStampLiveData.observe(this, new Observer<Long>() {
+            @Override
+            public void onChanged(@Nullable Long tokenInfos) {
+                currentPage = 0;
+                refreshLayout.setRefreshing(true);
+                entrustOrderListAdapter.setNewData(new ArrayList<>());
+                getOrderList();
+            }
+        });
+
         entrustOrderListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -98,6 +115,17 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         entrustOrderListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ConstantValue.currentUser == null) {
+                    startActivity(new Intent(getActivity(), AccountActivity.class));
+                    return;
+                }
+                if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+                    KotlinConvertJavaUtils.INSTANCE.needVerify(getActivity());
+                    return;
+                } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
+                    ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
+                    return;
+                }
                 if (entrustOrderListAdapter.getData().get(position).getType().equals(ConstantValue.orderTypeSell)) {
                     startActivity(new Intent(getActivity(), BuyQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
                 } else {

@@ -31,7 +31,7 @@
             android:layout_height="match_parent">
             <EditText
                 android:id="@+id/etContent"
-                android:hint="填写原因，例如未到账、已转账、金额不对。"
+                android:hint="For example, incorrect amount, no payment received, etc."
                 android:layout_width="match_parent"
                 android:gravity="top"
                 android:textSize="14sp"

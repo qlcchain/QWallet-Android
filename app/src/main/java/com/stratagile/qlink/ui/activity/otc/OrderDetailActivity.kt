@@ -1,7 +1,10 @@
 package com.stratagile.qlink.ui.activity.otc
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -31,6 +34,12 @@ import javax.inject.Inject;
  */
 
 class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
+    override fun revokeOrderSuccess() {
+        toast(getString(R.string.success))
+        closeProgressDialog()
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
 
     override fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo) {
         this.entrustOrderInfo = entrustOrderInfo
@@ -38,73 +47,76 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
         tvUnitPrice.text = entrustOrderInfo.order.unitPrice.toString() + " QGAS/USDT"
         tvQgasVolume.text = BigDecimal.valueOf(entrustOrderInfo.order.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(entrustOrderInfo.order.getMaxAmount()).stripTrailingZeros().toPlainString() + " QGAS"
         if (entrustOrderInfo.order.type.equals(ConstantValue.orderTypeBuy)) {
-            tvOrderType.text = "委托BUY QGAS"
+            tvOrderType.text = getString(R.string.buy_qgas)
             tvDealQgasAmounnt.text = "+" + entrustOrderInfo.order.completeAmount.toString() + " QGAS"
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.mainColor))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
             when (entrustOrderInfo.order.status) {
                 "NORMAL" -> {
-                    if (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount < entrustOrderInfo.order.minAmount) {
-                        //交易量不足
-                        tvOrderState.text = "交易量不足"
-                        tvOrderStateTip.text = "订单会按照剩余量全部交易"
-                        llOrderState.setBackgroundColor(resources.getColor(R.color.color_d0021b))
-                    } else {
-                        tvOrderState.text = "挂单正常"
-                        tvOrderStateTip.text = "正常"
-                        llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
-                    }
+                    tvOrderState.text = getString(R.string.active)
+                    tvOrderStateTip.text = ""
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                 }
                 "END" -> {
-                    tvOrderState.text = "委托完成"
-                    tvOrderStateTip.text = "委托完成"
+                    tvOrderState.text = getString(R.string.completed)
+                    tvOrderStateTip.text = ""
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_01b5ab))
                     llOpreate.visibility = View.GONE
                     tvOpreate.visibility = View.GONE
                 }
                 "CANCEL" -> {
-                    tvOrderState.text = "已撤单"
-                    tvOrderStateTip.text = "撤销剩余的委托"
+                    tvOrderState.text = getString(R.string.revoked)
+                    tvOrderStateTip.text = getString(R.string.revoke)
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_808080))
                 }
                 else -> {
                 }
             }
         } else {
-            tvOrderType.text = "委托SELL QGAS"
+            tvOrderType.text = getString(R.string.sell_qgas)
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
             tvDealQgasAmounnt.text = "-" + entrustOrderInfo.order.completeAmount.toString() + " QGAS"
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.color_ff3669))
             when (entrustOrderInfo.order.status) {
                 "NORMAL" -> {
-                    if (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount < entrustOrderInfo.order.minAmount) {
-                        //交易量不足
-                        tvOrderState.text = "交易量不足"
-                        tvOrderStateTip.text = "订单会按照剩余量全部交易"
-                        llOrderState.setBackgroundColor(resources.getColor(R.color.color_d0021b))
-                    } else {
-                        tvOrderState.text = "挂单正常"
-                        tvOrderStateTip.text = "正常"
-                        llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
-                    }
+                    tvOrderState.text = getString(R.string.active)
+                    tvOrderStateTip.text = ""
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                 }
                 "END" -> {
-                    tvOrderState.text = "委托完成"
-                    tvOrderStateTip.text = "委托完成"
+                    tvOrderState.text = getString(R.string.completed)
+                    tvOrderStateTip.text = ""
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_01b5ab))
                     llOpreate.visibility = View.GONE
                     tvOpreate.visibility = View.GONE
                 }
                 "CANCEL" -> {
-                    tvOrderState.text = "已撤单"
-                    tvOrderStateTip.text = "撤销剩余的委托"
+                    tvOrderState.text = getString(R.string.revoked)
+                    tvOrderStateTip.text = getString(R.string.revoke)
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_808080))
+                    llOpreate.visibility = View.GONE
+                    tvOpreate.visibility = View.GONE
                 }
                 else -> {
                 }
             }
         }
         getTradeOrderList()
+        tvOpreate.setOnClickListener {
+            revokeOrder()
+        }
+    }
+
+    /**
+     * 撤销挂单
+     */
+    fun revokeOrder() {
+        showProgressDialog()
+        val map = HashMap<String, String>()
+        map["account"] = ConstantValue.currentUser.account
+        map["token"] = AccountUtil.getUserToken()
+        map["entrustOrderId"] = entrustOrderInfo.order.id
+        mPresenter.revokeOrder(map)
     }
 
     fun getTradeOrderList() {

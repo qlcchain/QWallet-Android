@@ -47,6 +47,7 @@ import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
+import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
@@ -141,6 +142,7 @@ import static com.stratagile.qlink.data.api.API.url_user_rich_list;
 import static com.stratagile.qlink.data.api.API.url_user_sign_in;
 import static com.stratagile.qlink.data.api.API.url_user_signin_code;
 import static com.stratagile.qlink.data.api.API.url_user_upload_headview;
+import static com.stratagile.qlink.data.api.API.url_user_userinfo;
 import static com.stratagile.qlink.data.api.API.url_vcode_change_password_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_sign_in_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
@@ -536,6 +538,10 @@ public interface HttpApi {
     @POST(url_trade_order_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TradeOrderDetail> tradeOrderInfo(@Body RequestBody map);
+
+    @POST(url_user_userinfo)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<UserInfo> getUserInfo(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart

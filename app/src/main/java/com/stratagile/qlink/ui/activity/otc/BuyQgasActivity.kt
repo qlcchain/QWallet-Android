@@ -16,6 +16,7 @@ import com.stratagile.qlink.ui.activity.otc.component.DaggerBuyQgasComponent
 import com.stratagile.qlink.ui.activity.otc.contract.BuyQgasContract
 import com.stratagile.qlink.ui.activity.otc.module.BuyQgasModule
 import com.stratagile.qlink.ui.activity.otc.presenter.BuyQgasPresenter
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import kotlinx.android.synthetic.main.activity_buy_qgas.*
@@ -70,6 +71,9 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
     }
 
     override fun initData() {
+        tvCreateWallet.setOnClickListener {
+            startActivity(Intent(this, SelectWalletTypeActivity::class.java))
+        }
         title.text = "BUY QGAS"
         orderList = intent.getParcelableExtra("order")
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
@@ -100,6 +104,18 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             }
             if (!AccountMng.isValidAddress(etReceiveAddress.text.toString())) {
                 return@setOnClickListener
+            }
+
+            if (maxQgas < entrustOrderInfo.order.minAmount) {
+                //交易量不足的情况，输入剩余的数量
+                if (etQgas.text.toString().toInt() < maxQgas) {
+                    return@setOnClickListener
+                }
+            } else {
+                // 最小的数量要大于等于minAmount
+                if (etQgas.text.toString().toInt() < entrustOrderInfo.order.minAmount) {
+                    return@setOnClickListener
+                }
             }
             var map = hashMapOf<String, String>()
             map.put("account", ConstantValue.currentUser.account)

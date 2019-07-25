@@ -21,8 +21,18 @@ import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.ui.activity.my.AccountActivity
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.UserUtils
+import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import kotlinx.android.synthetic.main.fragment_order_buy.*
+import kotlinx.android.synthetic.main.fragment_order_buy.etAmount
+import kotlinx.android.synthetic.main.fragment_order_buy.etMaxAmount
+import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
+import kotlinx.android.synthetic.main.fragment_order_buy.etReceiveAddress
+import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
+import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
+import kotlinx.android.synthetic.main.fragment_order_sell.*
+import qlc.mng.AccountMng
 
 /**
  * @author hzp
@@ -50,9 +60,24 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tvCreateWallet.setOnClickListener {
+            startActivity(Intent(activity, SelectWalletTypeActivity::class.java))
+        }
         tvNext.setOnClickListener {
-            if (ConstantValue.currentUser == null) {
-                startActivity(Intent(activity, AccountActivity::class.java))
+            if ("".equals(etMinAmount.text.toString()) || "".equals(etMaxAmount.text.toString()) || "".equals(etAmount.text.toString()) || "".equals(etUnitPrice.text.toString())) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
+            if (etMinAmount.text.toString().trim().toInt() > etMaxAmount.text.toString().trim().toInt()) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
+            if (etMaxAmount.text.toString().trim().toInt() > etAmount.text.toString().trim().toInt()) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
+            if (!AccountMng.isValidAddress(etReceiveAddress.text.toString())) {
+                toast("Illegal Receipt Address")
                 return@setOnClickListener
             }
             var map = mutableMapOf<String, String>()

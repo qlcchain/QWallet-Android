@@ -26,46 +26,46 @@ public class EntrustOrderTradeOrderListAdapter extends BaseQuickAdapter<TradeOrd
     protected void convert(BaseViewHolder helper, TradeOrderList.OrderListBean item) {
         if (item.getBuyerId().equals(ConstantValue.currentUser.getUserId())) {
             //我买单
-            helper.setText(R.id.tvOrderType, "卖家");
+            helper.setText(R.id.tvOrderType, R.string.seller);
             helper.setText(R.id.tvQgasAmount, "+" + item.getQgasAmount() + "");
             switch (item.getStatus()) {
                 case "QGAS_TO_PLATFORM":
-                    helper.setText(R.id.tvOrderState, "待付款");
+                    helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "USDT_PAID":
-                    helper.setText(R.id.tvOrderState, "等待对方确认收款");
+                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;
                 case "OVERTIME":
-                    helper.setText(R.id.tvOrderState, "已超时");
+                    helper.setText(R.id.tvOrderState, R.string.overtime);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "QGAS_PAID":
-                    helper.setText(R.id.tvOrderState, "已完成");
+                    helper.setText(R.id.tvOrderState, R.string.completed);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
                     break;
                 default:
                     break;
             }
         } else {
-            helper.setText(R.id.tvOrderType, "买家");
+            helper.setText(R.id.tvOrderType, R.string.buyer);
             helper.setText(R.id.tvQgasAmount, "-" + item.getQgasAmount() + "");
             switch (item.getStatus()) {
                 case "QGAS_TO_PLATFORM":
-                    helper.setText(R.id.tvOrderState, "等待对方付款");
+                    helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;
                 case "USDT_PAID":
-                    helper.setText(R.id.tvOrderState, "等待确认查收");
+                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "OVERTIME":
-                    helper.setText(R.id.tvOrderState, "已超时");
+                    helper.setText(R.id.tvOrderState, R.string.overtime);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "QGAS_PAID":
-                    helper.setText(R.id.tvOrderState, "已完成");
+                    helper.setText(R.id.tvOrderState, R.string.completed);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
                     break;
                 default:

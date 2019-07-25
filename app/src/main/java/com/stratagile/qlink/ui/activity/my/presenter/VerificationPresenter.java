@@ -59,8 +59,8 @@ public class VerificationPresenter implements VerificationContract.VerificationC
 
     @Override
     public void uploadImg(Map map) {
-        File upLoadFile1 = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/passport1.jpg");
-        File upLoadFile2 = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/passport2.jpg");
+        File upLoadFile1 = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport1.jpg");
+        File upLoadFile2 = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport2.jpg");
         RequestBody passport1 = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile1);
         MultipartBody.Part photo1 = MultipartBody.Part.createFormData("facePhoto", "passport1.jpg", passport1);
 
@@ -73,7 +73,7 @@ public class VerificationPresenter implements VerificationContract.VerificationC
                     public void accept(Passport upLoadAvatar) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
-                        mView.uploadImgSuccess();
+                        mView.uploadImgSuccess(upLoadAvatar);
                         mView.closeProgressDialog();
                     }
                 }, new Consumer<Throwable>() {

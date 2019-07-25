@@ -18,29 +18,34 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
     }
 
     public static class OrderListBean {
+
         /**
          * unitPrice : 0.001
-         * usdtAmount : 0.1
-         * head :
-         * qgasAmount : 100.0
-         * sellerId : 61be9c09c0784827af303005f983c705
-         * nickname : ios_test
-         * entrustOrderId : f71e12acd7ef4765ae1399213719f982
-         * id : fa1db0d9493240b78c9305236ee864f7
+         * appealStatus : FAIL
          * buyerId : 7060628a65e4450690976bf56c127787
-         * status : OVERTIME
-         * createDate : 2019-07-16 18:47:09
+         * usdtAmount : 0.05
+         * head : /data/dapp/head/f597e8eccf8e4624bcd92ef04d6881cb.jpg
+         * number : 20190719111929654715
+         * qgasAmount : 50.0
+         * sellerId : bafe415310bd41fdb055fb0fe6cd1080
+         * nickname : hzpa
+         * entrustOrderId : 36c6bb2e05df4ad9ad6cd8f4d5fe9be4
+         * id : ec841bb576564b6cb9158eed0ca8529f
+         * status : USDT_PAID
+         * createDate : 2019-07-19 11:19:30
          */
 
         private double unitPrice;
+        private String appealStatus;
+        private String buyerId;
         private double usdtAmount;
         private String head;
+        private String number;
         private double qgasAmount;
         private String sellerId;
         private String nickname;
         private String entrustOrderId;
         private String id;
-        private String buyerId;
         private String status;
         private String createDate;
 
@@ -50,6 +55,22 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
 
         public void setUnitPrice(double unitPrice) {
             this.unitPrice = unitPrice;
+        }
+
+        public String getAppealStatus() {
+            return appealStatus;
+        }
+
+        public void setAppealStatus(String appealStatus) {
+            this.appealStatus = appealStatus;
+        }
+
+        public String getBuyerId() {
+            return buyerId;
+        }
+
+        public void setBuyerId(String buyerId) {
+            this.buyerId = buyerId;
         }
 
         public double getUsdtAmount() {
@@ -66,6 +87,14 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
 
         public void setHead(String head) {
             this.head = head;
+        }
+
+        public String getNumber() {
+            return number;
+        }
+
+        public void setNumber(String number) {
+            this.number = number;
         }
 
         public double getQgasAmount() {
@@ -106,14 +135,6 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
 
         public void setId(String id) {
             this.id = id;
-        }
-
-        public String getBuyerId() {
-            return buyerId;
-        }
-
-        public void setBuyerId(String buyerId) {
-            this.buyerId = buyerId;
         }
 
         public String getStatus() {

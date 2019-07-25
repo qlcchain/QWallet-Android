@@ -25,11 +25,11 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
     protected void convert(BaseViewHolder helper, EntrustOrderList.OrderListBean item) {
         helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString());
         if (item.getType().equals(ConstantValue.orderTypeSell)) {
-            helper.setText(R.id.tvOpreate, "购买");
-            helper.setBackgroundColor(R.id.tvOpreate, mContext.getResources().getColor(R.color.mainColor));
+            helper.setText(R.id.tvOpreate, mContext.getResources().getString(R.string.buy).toUpperCase());
+            helper.setBackgroundRes(R.id.tvOpreate, R.drawable.buy_bg);
         } else {
-            helper.setText(R.id.tvOpreate, "出售");
-            helper.setBackgroundColor(R.id.tvOpreate, mContext.getResources().getColor(R.color.color_ff3669));
+            helper.setText(R.id.tvOpreate, mContext.getResources().getString(R.string.sell).toUpperCase());
+            helper.setBackgroundRes(R.id.tvOpreate, R.drawable.sell_bg);
         }
         helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
         helper.setText(R.id.tvNickName, item.getNickname());

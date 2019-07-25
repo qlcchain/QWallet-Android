@@ -26,23 +26,23 @@ public class EntrustPostedOrderListAdapter extends BaseQuickAdapter<EntrustOrder
     protected void convert(BaseViewHolder helper, EntrustOrderList.OrderListBean item) {
         helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString());
         if (item.getType().equals(ConstantValue.orderTypeBuy)) {
-            helper.setText(R.id.tvOrderType, "委托BUY QGAS");
+            helper.setText(R.id.tvOrderType, R.string.buy_qgas);
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.mainColor));
         } else {
-            helper.setText(R.id.tvOrderType, "委托SELL QGAS");
+            helper.setText(R.id.tvOrderType, R.string.sell_qgas);
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.color_ff3669));
         }
         switch (item.getStatus()) {
             case "NORMAL":
-                helper.setText(R.id.tvOrderState, "正常");
+                helper.setText(R.id.tvOrderState, R.string.active);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                 break;
             case "END":
-                helper.setText(R.id.tvOrderState, "挂单完成");
+                helper.setText(R.id.tvOrderState, R.string.completed);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_21beb5));
                 break;
             case "CANCEL":
-                helper.setText(R.id.tvOrderState, "已撤单");
+                helper.setText(R.id.tvOrderState, R.string.revoked);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_29282a));
                 break;
             default:

@@ -60,13 +60,12 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
         val mBundle = arguments
         return view
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tradeOrderListAdapter = TradeOrderListAdapter(arrayListOf())
         recyclerView.adapter = tradeOrderListAdapter
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
-            startActivity(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
+            startActivityForResult(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id), 0)
         }
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setOnRefreshListener {
@@ -75,6 +74,14 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
             tradeOrderListAdapter.setNewData(arrayListOf())
             getTradeOrderList()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        currentPage = 0
+        refreshLayout.isRefreshing = false
+        tradeOrderListAdapter.setNewData(arrayListOf())
+        getTradeOrderList()
     }
 
     fun getTradeOrderList() {

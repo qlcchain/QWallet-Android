@@ -76,7 +76,9 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
+import com.stratagile.qlink.ui.activity.my.VerificationActivity;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
@@ -91,6 +93,7 @@ import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.QlinkUtil;
@@ -184,6 +187,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public static final int START_QRCODE = 5;
     public static final int START_ADD_TOKEN = 6;
     public static final int START_CHOOSE_WALLET = 7;
+    public static final int NEW_ORDER = 8;
 
     public static MainActivity mainActivity;
 
@@ -702,6 +706,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (requestCode == START_ADD_TOKEN) {
             viewModel.timeStampLiveData.postValue(Calendar.getInstance().getTimeInMillis());
         }
+        if (requestCode == NEW_ORDER) {
+            viewModel.timeStampLiveData.postValue(System.currentTimeMillis());
+        }
     }
 
     @Override
@@ -881,6 +888,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         switch (view.getId()) {
             case R.id.iv_avater:
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
+                    if (ConstantValue.currentUser == null) {
+                        startActivity(new Intent(this, AccountActivity.class));
+                        return;
+                    }
+//                    if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+//                        startActivity(new Intent(this, VerificationActivity.class));
+//                        return;
+//                    } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
+//                        ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
+//                        return;
+//                    }
                     Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
                     startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
@@ -905,10 +923,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //                    return;
 //                }
                 if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-                    startActivity(new Intent(this, NewOrderActivity.class));
-//                    ActiveTogglePopWindow morePopWindow = new ActiveTogglePopWindow(this);
-//                    morePopWindow.setOnItemClickListener(MainActivity.this);
-//                    morePopWindow.showPopupWindow(ivWallet);
+                    if (ConstantValue.currentUser == null) {
+                        startActivity(new Intent(this, AccountActivity.class));
+                        return;
+                    }
+                    if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
+                        return;
+                    } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
+                        ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
+                        return;
+                    }
+                    startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
                     return;
                 }
                 if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {

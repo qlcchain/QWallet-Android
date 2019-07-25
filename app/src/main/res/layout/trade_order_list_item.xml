@@ -74,7 +74,7 @@
             android:layout_marginTop="@dimen/x20"
             android:layout_marginBottom="@dimen/x17"
             android:layout_marginRight="@dimen/x20"
-            android:layout_height="@dimen/x70">
+            android:layout_height="@dimen/x74">
             <TextView
                 android:id="@+id/tvAmountUsdt"
                 android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/white"
-                android:gravity="center"
+                android:gravity="right"
                 android:textSize="14sp"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

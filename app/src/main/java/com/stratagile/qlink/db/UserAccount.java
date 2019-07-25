@@ -28,10 +28,20 @@ public class UserAccount {
     private String userId;
 
     private String email;
-    @Generated(hash = 519067791)
+
+    //kyc状态
+    private String vstatus;
+
+    //正面照
+    private String facePhoto;
+
+    //手持身份证照
+    private String holdingPhoto;
+    @Generated(hash = 2091771549)
     public UserAccount(Long id, String account, String password, String pubKey,
             boolean isLogin, String inviteCode, String userName, String avatar,
-            String phone, String userId, String email) {
+            String phone, String userId, String email, String vstatus,
+            String facePhoto, String holdingPhoto) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -43,6 +53,9 @@ public class UserAccount {
         this.phone = phone;
         this.userId = userId;
         this.email = email;
+        this.vstatus = vstatus;
+        this.facePhoto = facePhoto;
+        this.holdingPhoto = holdingPhoto;
     }
     @Generated(hash = 1029142458)
     public UserAccount() {
@@ -112,5 +125,23 @@ public class UserAccount {
     }
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+    public String getVstatus() {
+        return this.vstatus;
+    }
+    public void setVstatus(String vstatus) {
+        this.vstatus = vstatus;
+    }
+    public String getFacePhoto() {
+        return this.facePhoto;
+    }
+    public void setFacePhoto(String facePhoto) {
+        this.facePhoto = facePhoto;
+    }
+    public String getHoldingPhoto() {
+        return this.holdingPhoto;
+    }
+    public void setHoldingPhoto(String holdingPhoto) {
+        this.holdingPhoto = holdingPhoto;
     }
 }

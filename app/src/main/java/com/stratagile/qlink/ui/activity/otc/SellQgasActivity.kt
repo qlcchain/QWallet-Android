@@ -17,12 +17,15 @@ import com.stratagile.qlink.ui.activity.otc.component.DaggerSellQgasComponent
 import com.stratagile.qlink.ui.activity.otc.contract.SellQgasContract
 import com.stratagile.qlink.ui.activity.otc.module.SellQgasModule
 import com.stratagile.qlink.ui.activity.otc.presenter.SellQgasPresenter
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
-import kotlinx.android.synthetic.main.activity_sell_qgas.*
+import kotlinx.android.synthetic.main.activity_sell_qgas.etQgas
 import kotlinx.android.synthetic.main.activity_sell_qgas.etReceiveAddress
+import kotlinx.android.synthetic.main.activity_sell_qgas.etUsdt
 import kotlinx.android.synthetic.main.activity_sell_qgas.tvAmount
 import kotlinx.android.synthetic.main.activity_sell_qgas.tvNext
+import kotlinx.android.synthetic.main.activity_sell_qgas.tvQgasVolume
 import kotlinx.android.synthetic.main.activity_sell_qgas.tvUnitPrice
 import qlc.mng.AccountMng
 import java.math.BigDecimal
@@ -108,6 +111,18 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             }
             if (!ETHWalletUtils.isETHValidAddress(etReceiveAddress.text.toString())) {
                 return@setOnClickListener
+            }
+
+            if (maxQgas < entrustOrderInfo.order.minAmount) {
+                //交易量不足的情况，输入剩余的数量
+                if (etQgas.text.toString().toInt() < maxQgas) {
+                    return@setOnClickListener
+                }
+            } else {
+                // 最小的数量要大于等于minAmount
+                if (etQgas.text.toString().toInt() < entrustOrderInfo.order.minAmount) {
+                    return@setOnClickListener
+                }
             }
             showProgressDialog()
             var map = hashMapOf<String, String>()

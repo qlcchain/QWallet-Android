@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my.contract;
 
+import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
@@ -22,7 +23,7 @@ public interface VerificationContract {
          *
          */
         void closeProgressDialog();
-        void uploadImgSuccess();
+        void uploadImgSuccess(Passport upLoadAvatar);
     }
 
     interface VerificationContractPresenter extends BasePresenter {

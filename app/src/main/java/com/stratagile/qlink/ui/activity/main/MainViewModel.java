@@ -29,6 +29,7 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<Long> timeStampLiveData = new MutableLiveData<>();
 
     public MutableLiveData<String> currentEntrustOrderType = new MutableLiveData<>();
+    public MutableLiveData<String> refreshShowOrder = new MutableLiveData<>();
 
     public MutableLiveData<UserAccount> currentUserAccount = new MutableLiveData<>();
 }

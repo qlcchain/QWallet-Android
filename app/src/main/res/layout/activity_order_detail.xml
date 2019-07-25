@@ -153,7 +153,7 @@
                 <TextView
                     android:layout_width="0px"
                     android:layout_weight="1"
-                    android:text="已成交"
+                    android:text="Remaining Volume"
                     android:layout_marginLeft="@dimen/x30"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
@@ -161,7 +161,6 @@
                 <TextView
                     android:id="@+id/tvDealQgasAmounnt"
                     android:layout_width="wrap_content"
-                    android:text="已成交"
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginLeft="@dimen/x30"
                     android:textSize="16sp"
@@ -178,7 +177,7 @@
                 android:paddingLeft="@dimen/x30"
                 android:textColor="@color/color_29282a"
                 android:textSize="16sp"
-                android:text="订单记录"
+                android:text="Record"
                 android:layout_height="@dimen/x92" />
 
             <android.support.v7.widget.RecyclerView
@@ -209,7 +208,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/x30"
             android:layout_marginRight="@dimen/x30"
-            android:text="取消挂单"
+            android:text="@string/revoke"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="16sp"

@@ -179,6 +179,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isPending = false;
                 refreshLayout.setRefreshing(false);
                 initData();
             }
@@ -576,7 +577,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     JSONObject jsonObject = rpc.accountsPending(jsonArray);
 //                    KLog.i(jsonObject.toJSONString());
                     JSONObject jsonObject1 = JSONObject.parseObject(jsonObject.get("result").toString());
-//                    KLog.i(jsonObject1.toJSONString());
+                    KLog.i(jsonObject1.toJSONString());
                     if (jsonObject1.get(qlcAccount.getAddress()) == null) {
                         return;
                     }

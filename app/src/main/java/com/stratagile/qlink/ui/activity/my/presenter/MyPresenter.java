@@ -1,8 +1,13 @@
 package com.stratagile.qlink.ui.activity.my.presenter;
 import android.support.annotation.NonNull;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
+
+import java.util.Map;
+
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -39,6 +44,28 @@ public class MyPresenter implements MyContract.MyContractPresenter{
         if (!mCompositeDisposable.isDisposed()) {
              mCompositeDisposable.dispose();
         }
+    }
+
+    public void getUserInfo(Map map) {
+        mCompositeDisposable.add(httpAPIWrapper.getUserInfo(map).subscribe(new Consumer<UserInfo>() {
+            @Override
+            public void accept(UserInfo user) throws Exception {
+                //isSuccesse
+                mView.setUsrInfo(user);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
     }
 
 //    @Override

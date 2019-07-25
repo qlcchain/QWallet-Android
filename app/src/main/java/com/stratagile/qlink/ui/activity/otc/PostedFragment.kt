@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.otc
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
@@ -63,7 +64,7 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         recyclerView.adapter = entrustOrderListAdapter
         recyclerView.addItemDecoration(BottomMarginItemDecoration(activity!!.resources.getDimension(R.dimen.x20).toInt()))
         entrustOrderListAdapter.setOnItemClickListener { adapter, view, position ->
-            startActivity(Intent(activity, OrderDetailActivity::class.java).putExtra("order", entrustOrderListAdapter.data[position]))
+            startActivityForResult(Intent(activity, OrderDetailActivity::class.java).putExtra("order", entrustOrderListAdapter.data[position]).putExtra("position", position), 0)
         }
         currentPage = 0
         getOrderList()
@@ -73,6 +74,14 @@ class PostedFragment : BaseFragment(), PostedContract.View {
             entrustOrderListAdapter.setNewData(ArrayList())
             refreshLayout.isRefreshing = false
             getOrderList()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            entrustOrderListAdapter.data[data!!.getIntExtra("position", 0)].status = "CANCEL"
+            entrustOrderListAdapter.notifyItemChanged(data!!.getIntExtra("position", 0))
         }
     }
 

@@ -25,7 +25,7 @@
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
-                    android:text="交易ID"
+                    android:text="@string/transaction_id"
                     android:textColor="@color/color_29282a"
                     android:layout_marginTop="@dimen/x60"
                     android:textSize="16sp"
@@ -39,7 +39,7 @@
                     android:layout_marginBottom="@dimen/x10"
                     android:padding="@dimen/x10"
                     android:gravity="top"
-                    android:hint="填写交易ID"
+                    android:hint="@string/transaction_id"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginTop="@dimen/x20"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/x10"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="请填写该订单交易ID，我们会自动核对交易信息是否正确。"
+                    android:text="The system will verify the Transction ID you filled. "
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginTop="@dimen/x20"
                     android:textColor="@color/color_d0021b" />

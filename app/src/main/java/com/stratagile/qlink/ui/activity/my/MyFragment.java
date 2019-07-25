@@ -13,12 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.db.UserAccount;
+import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
@@ -33,13 +36,16 @@ import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
 import com.stratagile.qlink.ui.activity.otc.OrderDetailActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTestActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.view.MyItemView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -164,6 +170,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
                     }
+                    Map map = new HashMap<String, String>();
+                    map.put("account", userAccount.getAccount());
+                    map.put("token", AccountUtil.getUserToken());
+                    mPresenter.getUserInfo(map);
                 }
             }
         }
@@ -214,6 +224,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
                     }
+                    Map map = new HashMap<String, String>();
+                    map.put("account", userAccount.getAccount());
+                    map.put("token", AccountUtil.getUserToken());
+                    mPresenter.getUserInfo(map);
                 }
             }
         }
@@ -234,6 +248,18 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     @Override
     public void closeProgressDialog() {
         progressDialog.hide();
+    }
+
+    @Override
+    public void setUsrInfo(UserInfo vcodeLogin) {
+        KLog.i("更新呢用户信息");
+        ConstantValue.currentUser.setHoldingPhoto(vcodeLogin.getData().getHoldingPhoto());
+        ConstantValue.currentUser.setFacePhoto(vcodeLogin.getData().getFacePhoto());
+        ConstantValue.currentUser.setVstatus(vcodeLogin.getData().getVStatus());
+        ConstantValue.currentUser.setAvatar(vcodeLogin.getData().getHead());
+        ConstantValue.currentUser.setUserName(vcodeLogin.getData().getNickname());
+        ConstantValue.currentUser.setUserId(vcodeLogin.getData().getId());
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
     }
 
     @Override

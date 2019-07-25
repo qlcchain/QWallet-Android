@@ -21,11 +21,14 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.ui.activity.my.component.DaggerVerificationComponent;
 import com.stratagile.qlink.ui.activity.my.contract.VerificationContract;
 import com.stratagile.qlink.ui.activity.my.module.VerificationModule;
 import com.stratagile.qlink.ui.activity.my.presenter.VerificationPresenter;
 import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
+import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
@@ -90,6 +93,17 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
 
     @Override
     protected void initData() {
+        if (ConstantValue.currentUser.getVstatus().equals("KYC_FAIL")) {
+            KotlinConvertJavaUtils.INSTANCE.showNotApprovedDialog(this);
+        }
+        File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport1.jpg", "");
+        if (lastFile.exists()) {
+            lastFile.delete();
+        }
+        File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport2.jpg", "");
+        if (dataFile.exists()) {
+            dataFile.delete();
+        }
         galleryPackName = SystemUtil.getSystemPackagesName(this, "gallery");
         if ("".equals(galleryPackName)) {
             galleryPackName = SystemUtil.getSystemPackagesName(this, "gallery3d");
@@ -101,6 +115,20 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
             File tempFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/temp.jpg");
             inputUri = RxFileTool.getUriForFile(this, tempFile);
             outputFile = Uri.fromFile(tempFile);
+        }
+        //验证状态[NOT_UPLOAD/未上传,UPLOADED/已上传,KYC_SUCCESS/KYC成功,KYC_FAIL/KYC失败]
+        if (!ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+            submit.setVisibility(View.GONE);
+            Glide.with(this)
+                    .load(API.BASE_URL + ConstantValue.currentUser.getFacePhoto())
+                    .apply(AppConfig.getInstance().optionsAppeal)
+                    .into((ImageView) passport1);
+            Glide.with(this)
+                    .load(API.BASE_URL + ConstantValue.currentUser.getHoldingPhoto())
+                    .apply(AppConfig.getInstance().optionsAppeal)
+                    .into((ImageView) passport2);
+            passport1.setEnabled(false);
+            passport2.setEnabled(false);
         }
     }
 
@@ -130,10 +158,14 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
     }
 
     @Override
-    public void uploadImgSuccess() {
+    public void uploadImgSuccess(Passport upLoadAvatar) {
+        ConstantValue.currentUser.setVstatus("UPLOADED");
+        ConstantValue.currentUser.setFacePhoto(upLoadAvatar.getFacePhoto());
+        ConstantValue.currentUser.setHoldingPhoto(upLoadAvatar.getHoldingPhoto());
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
         ToastUtil.displayShortToast("upload success");
         closeProgressDialog();
-        finish();
+        KotlinConvertJavaUtils.INSTANCE.showUploadedDialog(this);
     }
 
     @Override
@@ -351,6 +383,16 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
                 }
                 break;
             case R.id.submit:
+                File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport1.jpg", "");
+                if (!lastFile.exists()) {
+                    ToastUtil.displayShortToast("please select facephoto");
+                    return;
+                }
+                File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport2.jpg", "");
+                if (!dataFile.exists()) {
+                    ToastUtil.displayShortToast("please select holdphoto");
+                    return;
+                }
                 showProgressDialog();
                 mPresenter.uploadImg(new HashMap<String, String>());
                 break;

@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.otc
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
 import android.view.LayoutInflater
@@ -19,9 +20,9 @@ import butterknife.ButterKnife;
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.UserUtils
-import kotlinx.android.synthetic.main.fragment_order_buy.*
-import kotlinx.android.synthetic.main.fragment_order_sell.*
+import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import kotlinx.android.synthetic.main.fragment_order_sell.etAmount
 import kotlinx.android.synthetic.main.fragment_order_sell.etMaxAmount
 import kotlinx.android.synthetic.main.fragment_order_sell.etMinAmount
@@ -56,8 +57,20 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tvNext.setOnClickListener {
-            if (ConstantValue.mainAddressData == null) {
-                toast("main address is null")
+            if ("".equals(etMinAmount.text.toString()) || "".equals(etMaxAmount.text.toString()) || "".equals(etAmount.text.toString()) || "".equals(etUnitPrice.text.toString())) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
+            if (etMinAmount.text.toString().trim().toInt() > etMaxAmount.text.toString().trim().toInt()) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
+            if (etMaxAmount.text.toString().trim().toInt() > etAmount.text.toString().trim().toInt()) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
+            if (!ETHWalletUtils.isETHValidAddress(etReceiveAddress.text.toString())) {
+                toast("Illegal Receipt Address")
                 return@setOnClickListener
             }
             showProgressDialog()

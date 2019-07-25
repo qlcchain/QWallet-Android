@@ -25,6 +25,8 @@ interface OrderDetailContract {
         fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo)
 
         fun setTradeOrderList(tradeOrderList: TradeOrderList)
+
+        fun revokeOrderSuccess()
     }
 
     interface OrderDetailContractPresenter : BasePresenter {

@@ -21,6 +21,7 @@
         android:layout_height="@dimen/x300">
         <ImageView
             android:id="@+id/passport1"
+            android:src="@mipmap/passport"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v7.widget.CardView>
@@ -36,6 +37,7 @@
         android:layout_height="@dimen/x300">
         <ImageView
             android:id="@+id/passport2"
+            android:src="@mipmap/hand_passport"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v7.widget.CardView>

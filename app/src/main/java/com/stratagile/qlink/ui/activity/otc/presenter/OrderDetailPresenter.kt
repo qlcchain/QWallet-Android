@@ -53,4 +53,13 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
 
         }))
     }
+    fun revokeOrder(map : MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.cancelEntrustOrder(map).subscribe({
+            mView.revokeOrderSuccess()
+        }, {
+
+        }, {
+
+        }))
+    }
 }

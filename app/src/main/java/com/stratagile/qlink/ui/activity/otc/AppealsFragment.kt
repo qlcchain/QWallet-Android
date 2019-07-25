@@ -21,6 +21,7 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.otc.TradeOrderList
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
+import com.stratagile.qlink.ui.adapter.otc.TradeOrderAppealListAdapter
 import com.stratagile.qlink.ui.adapter.otc.TradeOrderListAdapter
 import com.stratagile.qlink.utils.AccountUtil
 import kotlinx.android.synthetic.main.fragment_process.*
@@ -53,7 +54,7 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
 
     @Inject
     lateinit internal var mPresenter: AppealsPresenter
-    lateinit var tradeOrderListAdapter: TradeOrderListAdapter
+    lateinit var tradeOrderListAdapter: TradeOrderAppealListAdapter
     var currentPage = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,7 +66,7 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tradeOrderListAdapter = TradeOrderListAdapter(arrayListOf())
+        tradeOrderListAdapter = TradeOrderAppealListAdapter(arrayListOf())
         recyclerView.adapter = tradeOrderListAdapter
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivity(Intent(activity, AppealDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))

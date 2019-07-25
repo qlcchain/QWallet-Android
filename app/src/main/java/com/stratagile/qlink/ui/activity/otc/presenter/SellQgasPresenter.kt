@@ -10,6 +10,7 @@ import com.stratagile.qlink.ui.activity.otc.contract.SellQgasContract
 import com.stratagile.qlink.ui.activity.otc.SellQgasActivity
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
+import com.stratagile.qlink.utils.ToastUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import javax.inject.Inject
@@ -72,7 +73,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         if (qlcAccounts.filter { it.isCurrent() }.size == 1) {
             qlcAccount = qlcAccounts.filter { it.isCurrent() }.get(0)
         } else {
-            qlcAccount = qlcAccounts.get(0)
+            ToastUtil.displayShortToast("Please Switch to QLC Chain Wallet")
+            mView.closeProgressDialog()
+            return
         }
         var disposable = Observable.create(ObservableOnSubscribe<QLCAccount> {
             KLog.i("发射1")

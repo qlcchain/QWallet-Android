@@ -33,6 +33,9 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         public final static Property Phone = new Property(8, String.class, "phone", false, "PHONE");
         public final static Property UserId = new Property(9, String.class, "userId", false, "USER_ID");
         public final static Property Email = new Property(10, String.class, "email", false, "EMAIL");
+        public final static Property Vstatus = new Property(11, String.class, "vstatus", false, "VSTATUS");
+        public final static Property FacePhoto = new Property(12, String.class, "facePhoto", false, "FACE_PHOTO");
+        public final static Property HoldingPhoto = new Property(13, String.class, "holdingPhoto", false, "HOLDING_PHOTO");
     }
 
 
@@ -58,7 +61,10 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
                 "\"AVATAR\" TEXT," + // 7: avatar
                 "\"PHONE\" TEXT," + // 8: phone
                 "\"USER_ID\" TEXT," + // 9: userId
-                "\"EMAIL\" TEXT);"); // 10: email
+                "\"EMAIL\" TEXT," + // 10: email
+                "\"VSTATUS\" TEXT," + // 11: vstatus
+                "\"FACE_PHOTO\" TEXT," + // 12: facePhoto
+                "\"HOLDING_PHOTO\" TEXT);"); // 13: holdingPhoto
     }
 
     /** Drops the underlying database table. */
@@ -121,6 +127,21 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         if (email != null) {
             stmt.bindString(11, email);
         }
+ 
+        String vstatus = entity.getVstatus();
+        if (vstatus != null) {
+            stmt.bindString(12, vstatus);
+        }
+ 
+        String facePhoto = entity.getFacePhoto();
+        if (facePhoto != null) {
+            stmt.bindString(13, facePhoto);
+        }
+ 
+        String holdingPhoto = entity.getHoldingPhoto();
+        if (holdingPhoto != null) {
+            stmt.bindString(14, holdingPhoto);
+        }
     }
 
     @Override
@@ -177,6 +198,21 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         if (email != null) {
             stmt.bindString(11, email);
         }
+ 
+        String vstatus = entity.getVstatus();
+        if (vstatus != null) {
+            stmt.bindString(12, vstatus);
+        }
+ 
+        String facePhoto = entity.getFacePhoto();
+        if (facePhoto != null) {
+            stmt.bindString(13, facePhoto);
+        }
+ 
+        String holdingPhoto = entity.getHoldingPhoto();
+        if (holdingPhoto != null) {
+            stmt.bindString(14, holdingPhoto);
+        }
     }
 
     @Override
@@ -197,7 +233,10 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // avatar
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // phone
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // userId
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // email
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // email
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // vstatus
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // facePhoto
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // holdingPhoto
         );
         return entity;
     }
@@ -215,6 +254,9 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         entity.setPhone(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setUserId(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setEmail(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setVstatus(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setFacePhoto(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setHoldingPhoto(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     @Override

@@ -116,6 +116,13 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
                     .apply(AppConfig.getInstance().options)
                     .into(ivAvatar);
         }
+//        switch (ConstantValue.currentUser.getVstatus()) {
+//            case "":
+//                break;
+//            default:
+//                break;
+//        }
+        tvVerification.setText(ConstantValue.currentUser.getVstatus());
     }
 
     @Override
@@ -197,7 +204,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
             case R.id.mobile:
                 break;
             case R.id.verification:
-                startActivity(new Intent(this, VerificationActivity.class));
+                startActivityForResult(new Intent(this, VerificationActivity.class), 0);
                 break;
             default:
                 break;
@@ -207,6 +214,9 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+            tvVerification.setText(ConstantValue.currentUser.getVstatus());
+        }
         if (requestCode == 1 && resultCode == -1) {
             changeNickNmae(data.getStringExtra("result"));
         }
