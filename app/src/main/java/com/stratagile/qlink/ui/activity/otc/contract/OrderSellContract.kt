@@ -21,6 +21,8 @@ interface OrderSellContract {
         fun closeProgressDialog()
 
         fun generateSellQgasOrderSuccess()
+
+        fun generateSellQgasOrderFailed(content : String)
     }
 
     interface OrderSellContractPresenter : BasePresenter {

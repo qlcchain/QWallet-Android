@@ -37,6 +37,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;
+                case "USDT_PENDING":
+                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
+                    break;
                 case "OVERTIME":
                     helper.setText(R.id.tvOrderState, R.string.overtime);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
@@ -57,6 +61,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;
                 case "USDT_PAID":
+                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
+                case "USDT_PENDING":
                     helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;

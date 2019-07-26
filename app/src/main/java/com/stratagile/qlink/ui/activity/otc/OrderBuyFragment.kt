@@ -22,16 +22,10 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
+import com.stratagile.qlink.utils.PopWindowUtil
+import com.stratagile.qlink.utils.SpringAnimationUtil
 import com.stratagile.qlink.utils.UserUtils
-import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import kotlinx.android.synthetic.main.fragment_order_buy.*
-import kotlinx.android.synthetic.main.fragment_order_buy.etAmount
-import kotlinx.android.synthetic.main.fragment_order_buy.etMaxAmount
-import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
-import kotlinx.android.synthetic.main.fragment_order_buy.etReceiveAddress
-import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
-import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
-import kotlinx.android.synthetic.main.fragment_order_sell.*
 import qlc.mng.AccountMng
 
 /**
@@ -93,6 +87,24 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             map.put("fromAddress", "")
             map.put("txid", "")
             mPresenter.generateBuyQgasOrder(map)
+        }
+        walletMore.setOnClickListener {
+            showSpinnerPopWindow()
+        }
+    }
+
+    private fun showSpinnerPopWindow() {
+        var ethWalletList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+        if (ethWalletList.size > 0) {
+            PopWindowUtil.showSharePopWindow(activity!!, walletMore, ethWalletList.map { it.address }, object : PopWindowUtil.OnItemSelectListener {
+                override fun onSelect(content: String) {
+                    if ("" != content) {
+                        etReceiveAddress.setText(content)
+                    }
+                    SpringAnimationUtil.endRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
+                }
+            })
+            SpringAnimationUtil.startRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
         }
     }
 

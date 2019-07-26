@@ -64,6 +64,8 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.loadUrl(getIntent().getStringExtra("url"));
+//        webView.loadUrl("https://www.baidu.com");
+        KLog.i(getIntent().getStringExtra("url"));
     }
 
     @Override

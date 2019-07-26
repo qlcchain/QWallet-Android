@@ -48,7 +48,7 @@ public class EntrustPostedOrderListAdapter extends BaseQuickAdapter<EntrustOrder
             default:
                 break;
         }
-        helper.setText(R.id.tvUnitPrice, item.getUnitPrice() + "");
+        helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString() + "");
         helper.setText(R.id.tvDeals, TimeUtil.getOrderTime(TimeUtil.timeStamp(item.getOrderTime())));
         helper.setText(R.id.tvNickName, item.getNickname());
         helper.setText(R.id.tvAmount, BigDecimal.valueOf(item.getTotalAmount()).stripTrailingZeros().toPlainString() + "");

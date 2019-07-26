@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
@@ -19,35 +18,54 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
     }
 
     public static class OrderListBean implements Parcelable {
+
         /**
          * unitPrice : 0.001
-         * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
-         * totalAmount : 1000.0
-         * minAmount : 100.0
-         * nickname : 18670819116
-         * id : f71e12acd7ef4765ae1399213719f982
+         * minAmount : 1.0
+         * lockingAmount : 3.0
          * type : BUY
-         * maxAmount : 1000.0
-         * otcTimes : 0
+         * completeAmount : 0.0
+         * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
+         * number : 20190726124722241514
+         * totalAmount : 100.0
+         * orderTime : 2019-07-26 12:47:23
+         * nickname : hzp
+         * id : df164590b0d64b849c0f1dc5d8a62e49
+         * maxAmount : 10.0
+         * otcTimes : 8
          * status : NORMAL
          */
 
         private double unitPrice;
+        private double minAmount;
+        private double lockingAmount;
+        private String type;
+        private double completeAmount;
         private String head;
+        private String number;
         private double totalAmount;
+        private String orderTime;
+        private String nickname;
+        private String id;
+        private double maxAmount;
+        private int otcTimes;
+        private String status;
 
         protected OrderListBean(Parcel in) {
             unitPrice = in.readDouble();
-            head = in.readString();
-            totalAmount = in.readDouble();
             minAmount = in.readDouble();
+            lockingAmount = in.readDouble();
+            type = in.readString();
+            completeAmount = in.readDouble();
+            head = in.readString();
+            number = in.readString();
+            totalAmount = in.readDouble();
+            orderTime = in.readString();
             nickname = in.readString();
             id = in.readString();
-            type = in.readString();
             maxAmount = in.readDouble();
             otcTimes = in.readInt();
             status = in.readString();
-            orderTime = in.readString();
         }
 
         public static final Creator<OrderListBean> CREATOR = new Creator<OrderListBean>() {
@@ -62,30 +80,44 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             }
         };
 
-        public String getOrderTime() {
-            return orderTime;
-        }
-
-        public void setOrderTime(String orderTime) {
-            this.orderTime = orderTime;
-        }
-
-        private double minAmount;
-        private String nickname;
-        private String id;
-        private String type;
-        private double maxAmount;
-        private int otcTimes;
-        private String status;
-        private String orderTime;
-
-
         public double getUnitPrice() {
             return unitPrice;
         }
 
         public void setUnitPrice(double unitPrice) {
             this.unitPrice = unitPrice;
+        }
+
+        public double getMinAmount() {
+            return minAmount;
+        }
+
+        public void setMinAmount(double minAmount) {
+            this.minAmount = minAmount;
+        }
+
+        public double getLockingAmount() {
+            return lockingAmount;
+        }
+
+        public void setLockingAmount(double lockingAmount) {
+            this.lockingAmount = lockingAmount;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public double getCompleteAmount() {
+            return completeAmount;
+        }
+
+        public void setCompleteAmount(double completeAmount) {
+            this.completeAmount = completeAmount;
         }
 
         public String getHead() {
@@ -96,6 +128,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.head = head;
         }
 
+        public String getNumber() {
+            return number;
+        }
+
+        public void setNumber(String number) {
+            this.number = number;
+        }
+
         public double getTotalAmount() {
             return totalAmount;
         }
@@ -104,12 +144,12 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.totalAmount = totalAmount;
         }
 
-        public double getMinAmount() {
-            return minAmount;
+        public String getOrderTime() {
+            return orderTime;
         }
 
-        public void setMinAmount(double minAmount) {
-            this.minAmount = minAmount;
+        public void setOrderTime(String orderTime) {
+            this.orderTime = orderTime;
         }
 
         public String getNickname() {
@@ -126,14 +166,6 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
         public void setId(String id) {
             this.id = id;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
         }
 
         public double getMaxAmount() {
@@ -168,16 +200,19 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
         @Override
         public void writeToParcel(Parcel parcel, int i) {
             parcel.writeDouble(unitPrice);
-            parcel.writeString(head);
-            parcel.writeDouble(totalAmount);
             parcel.writeDouble(minAmount);
+            parcel.writeDouble(lockingAmount);
+            parcel.writeString(type);
+            parcel.writeDouble(completeAmount);
+            parcel.writeString(head);
+            parcel.writeString(number);
+            parcel.writeDouble(totalAmount);
+            parcel.writeString(orderTime);
             parcel.writeString(nickname);
             parcel.writeString(id);
-            parcel.writeString(type);
             parcel.writeDouble(maxAmount);
             parcel.writeInt(otcTimes);
             parcel.writeString(status);
-            parcel.writeString(orderTime);
         }
     }
 }

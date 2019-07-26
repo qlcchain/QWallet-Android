@@ -119,21 +119,26 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                     startActivity(new Intent(getActivity(), AccountActivity.class));
                     return;
                 }
-                if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+                if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
                     KotlinConvertJavaUtils.INSTANCE.needVerify(getActivity());
-                    return;
-                } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
-                    ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
                     return;
                 }
                 if (entrustOrderListAdapter.getData().get(position).getType().equals(ConstantValue.orderTypeSell)) {
-                    startActivity(new Intent(getActivity(), BuyQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
+                    startActivityForResult(new Intent(getActivity(), BuyQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)), 0);
                 } else {
-                    startActivity(new Intent(getActivity(), SellQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)));
+                    startActivityForResult(new Intent(getActivity(), SellQgasActivity.class).putExtra("order", entrustOrderListAdapter.getData().get(position)), 0);
                 }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        currentPage = 0;
+        entrustOrderListAdapter.setNewData(new ArrayList<>());
+        getOrderList();
     }
 
     @Override
@@ -142,6 +147,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                refreshLayout.setRefreshing(true);
                 currentPage = 0;
                 entrustOrderListAdapter.setNewData(new ArrayList<>());
                 getOrderList();

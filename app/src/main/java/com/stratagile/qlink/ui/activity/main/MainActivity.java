@@ -149,8 +149,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     ImageView ivAvater;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_free)
-    TextView tvFree;
+//    @BindView(R.id.tv_free)
+//    TextView tvFree;
     @BindView(R.id.iv_wallet)
     ImageView ivWallet;
     @BindView(R.id.view_vpn)
@@ -569,7 +569,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         viewPager.setCurrentItem(0, false);
         tvTitle.setVisibility(View.GONE);
         segmentControlView.setVisibility(View.VISIBLE);
-        tvFree.setVisibility(View.GONE);
         ivWallet.setVisibility(View.VISIBLE);
         tvTitle.setText(R.string.finance);
         ivQRCode.setVisibility(View.GONE);
@@ -594,7 +593,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         KLog.i("进入钱包页面。。");
         ivWallet.setVisibility(View.VISIBLE);
         tvTitle.setVisibility(View.VISIBLE);
-        tvFree.setVisibility(View.GONE);
         segmentControlView.setVisibility(View.GONE);
 
         if (ConstantValue.isShouldShowVertifyPassword) {
@@ -635,8 +633,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
         }
         ivWallet.setVisibility(View.GONE);
-        ivWallet.setClickable(true);
-        tvFree.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
         ivQRCode.setVisibility(View.GONE);
@@ -883,7 +879,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     @SuppressLint("RestrictedApi")
-    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode, R.id.tv_free})
+    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
@@ -927,11 +923,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-                    if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+                    if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
                         KotlinConvertJavaUtils.INSTANCE.needVerify(this);
-                        return;
-                    } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
-                        ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
                         return;
                     }
                     startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
@@ -955,9 +948,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 break;
             case R.id.ivQRCode:
                 startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
-                break;
-            case R.id.tv_free:
-                startActivity(new Intent(this, MyProductActivity.class));
                 break;
             default:
                 break;

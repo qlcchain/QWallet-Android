@@ -82,7 +82,7 @@ object PopWindowUtil {
      * @param activity 上下文
      * @param showView 从activity中传进来的view,用于让popWindow附着的
      */
-    fun showSharePopWindow(activity: Activity, showView: View, arrayList: ArrayList<String>, onItemSelectListener: OnItemSelectListener) {
+    fun showSharePopWindow(activity: Activity, showView: View, arrayList: List<String>, onItemSelectListener: OnItemSelectListener) {
         val maskView = LayoutInflater.from(activity).inflate(R.layout.share_pop_layout, null)
         val contentView = maskView.findViewById<View>(R.id.ll_popup)
         maskView.animation = AnimationUtils.loadAnimation(activity, R.anim.open_fade)

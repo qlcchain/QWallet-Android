@@ -44,7 +44,7 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
     override fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo) {
         this.entrustOrderInfo = entrustOrderInfo
         tvQgasAmount.text = entrustOrderInfo.order.totalAmount.toString() + " QGAS"
-        tvUnitPrice.text = entrustOrderInfo.order.unitPrice.toString() + " QGAS/USDT"
+        tvUnitPrice.text = BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).stripTrailingZeros().toPlainString() + " QGAS/USDT"
         tvQgasVolume.text = BigDecimal.valueOf(entrustOrderInfo.order.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(entrustOrderInfo.order.getMaxAmount()).stripTrailingZeros().toPlainString() + " QGAS"
         if (entrustOrderInfo.order.type.equals(ConstantValue.orderTypeBuy)) {
             tvOrderType.text = getString(R.string.buy_qgas)

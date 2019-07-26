@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,7 @@ import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
 import com.stratagile.qlink.ui.activity.eth.EthTransferActivity;
+import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerEthTransactionRecordComponent;
@@ -259,12 +261,37 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                 ToastUtil.displayShortToast(getResources().getString(R.string.copy_success));
             }
         });
+        transacationHistoryAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent1 = new Intent();
+                intent1.setAction("android.intent.action.VIEW");
+                intent1.setData(Uri.parse(getChainLink() + transacationHistoryAdapter.getData().get(position).getTransationHash()));
+                startActivity(intent1);
+//                startActivity(new Intent(EthTransactionRecordActivity.this, WebViewActivity.class).putExtra("url", getChainLink() + transacationHistoryAdapter.getData().get(position).getTransationHash()).putExtra("title", "Blockchain Browser"));
+            }
+        });
 
         Map<String, Object> infoMap1 = new HashMap<>();
         infoMap1.put("symbol", tokenInfo.getTokenSymol());
         infoMap1.put("interval", "1m");
         infoMap1.put("size", 500);
         mPresenter.getTokenKline(infoMap1, tokenInfo.getTokenPrice());
+    }
+
+    private String getChainLink() {
+        switch (tokenInfo.getWalletType()) {
+            case EosWallet:
+                return "https://eosflare.io/tx/";
+            case EthWallet:
+                return "https://etherscan.io/tx/";
+            case NeoWallet:
+                return "https://neoscan.io/transaction/";
+            case QlcWallet:
+                return "https://explorer.qlcchain.org/transaction/";
+            default:
+                return "";
+        }
     }
 
     @Override
@@ -278,7 +305,8 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
     }
 
     @Override
-    public void setPresenter(EthTransactionRecordContract.EthTransactionRecordContractPresenter presenter) {
+    public void setPresenter(EthTransactionRecordContract.EthTransactionRecordContractPresenter
+                                     presenter) {
         mPresenter = (EthTransactionRecordPresenter) presenter;
     }
 

@@ -27,10 +27,8 @@ import com.stratagile.qlink.ui.activity.my.component.DaggerVerificationComponent
 import com.stratagile.qlink.ui.activity.my.contract.VerificationContract;
 import com.stratagile.qlink.ui.activity.my.module.VerificationModule;
 import com.stratagile.qlink.ui.activity.my.presenter.VerificationPresenter;
-import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.LogUtil;
-import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.vondear.rxtools.RxFileTool;
@@ -42,7 +40,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -74,6 +71,8 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
     ImageView passport2;
     @BindView(R.id.submit)
     TextView submit;
+    @BindView(R.id.tvTip)
+    TextView tvTip;
 
     private Bitmap bitmap;
 
@@ -96,6 +95,22 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
         if (ConstantValue.currentUser.getVstatus().equals("KYC_FAIL")) {
             KotlinConvertJavaUtils.INSTANCE.showNotApprovedDialog(this);
         }
+        switch (ConstantValue.currentUser.getVstatus()) {
+            case "NOT_UPLOAD":
+                tvTip.setText("Please upload the required information of your PASSPORT.");
+                break;
+            case "UPLOADED":
+                tvTip.setText("Under review");
+                break;
+            case "KYC_SUCCESS":
+                tvTip.setText("Verified");
+                break;
+            case "KYC_FAIL":
+                tvTip.setText("Not approved");
+                break;
+            default:
+                break;
+        }
         File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport1.jpg", "");
         if (lastFile.exists()) {
             lastFile.delete();
@@ -117,7 +132,7 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
             outputFile = Uri.fromFile(tempFile);
         }
         //验证状态[NOT_UPLOAD/未上传,UPLOADED/已上传,KYC_SUCCESS/KYC成功,KYC_FAIL/KYC失败]
-        if (!ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
+        if (!ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD") && !ConstantValue.currentUser.getVstatus().equals("KYC_FAIL")) {
             submit.setVisibility(View.GONE);
             Glide.with(this)
                     .load(API.BASE_URL + ConstantValue.currentUser.getFacePhoto())
@@ -163,7 +178,6 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
         ConstantValue.currentUser.setFacePhoto(upLoadAvatar.getFacePhoto());
         ConstantValue.currentUser.setHoldingPhoto(upLoadAvatar.getHoldingPhoto());
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
-        ToastUtil.displayShortToast("upload success");
         closeProgressDialog();
         KotlinConvertJavaUtils.INSTANCE.showUploadedDialog(this);
     }

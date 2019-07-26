@@ -5,188 +5,210 @@
     android:orientation="vertical"
     android:background="@color/color_f2f2f2"
     android:layout_height="match_parent">
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:background="@color/color_f2f2f2"
         android:layout_height="0px"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/color_f2f2f2">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/llOrderState"
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/x180"
                 android:background="@color/color_999"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:layout_height="@dimen/x180">
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tvOrderState"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="订单关闭"
-                    android:textSize="18sp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:layout_height="wrap_content" />
+                    android:text="订单关闭"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/tvOrderStateTip"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="订单被平台关闭"
-                    android:textSize="14sp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:layout_height="wrap_content" />
+                    android:text="订单被平台关闭"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="GO-QLC Address to receive QGAS"
                     android:layout_marginTop="@dimen/x17"
+                    android:text="QLC Chain Address to receive QGAS"
                     android:textColor="@color/color_29282a"
-                    android:textSize="16sp"
-                    android:layout_height="wrap_content" />
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/tvReceiveAddress"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
                     android:layout_marginTop="@dimen/x12"
-                    android:drawableRight="@mipmap/copy_h"
                     android:layout_marginRight="@dimen/x30"
+                    android:drawableRight="@mipmap/copy_h"
                     android:drawablePadding="@dimen/x40"
+                    android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
                     android:textColor="@color/color_29282a"
-                    android:textSize="16sp"
-                    android:layout_height="wrap_content" />
+                    android:textSize="16sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:background="@color/white"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x20"
-                android:layout_height="wrap_content">
+                android:background="@color/white"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tvOrderType"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/x27"
-                    android:textSize="18sp"
-                    android:textColor="@color/color_29282a"
                     android:text="BUY QGAS"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/color_29282a"
+                    android:textSize="18sp" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginRight="@dimen/x30"
-                    android:gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Amount"
-                        android:textSize="14sp"
                         android:textColor="@color/color_29282a"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tvQgasAmount"
                         android:layout_width="wrap_content"
-                        android:text="100000 QGAS"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textSize="14sp"
+                        android:text="100000 QGAS"
                         android:textColor="@color/color_29282a"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginRight="@dimen/x30"
-                    android:gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Unit Price"
-                        android:textSize="14sp"
                         android:textColor="@color/color_29282a"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tvUnitPrice"
                         android:layout_width="wrap_content"
-                        android:text="0.02 USDT "
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textSize="14sp"
+                        android:text="0.02 USDT "
                         android:textColor="@color/color_29282a"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginBottom="@dimen/x20"
-                    android:gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Volume Settings"
-                        android:textSize="14sp"
                         android:textColor="@color/color_29282a"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tvQgasVolume"
                         android:layout_width="wrap_content"
-                        android:text="20.123 USDT"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textSize="14sp"
+                        android:text="20.123 USDT"
                         android:textColor="@color/color_29282a"
-                        android:layout_height="wrap_content" />
+                        android:textSize="14sp" />
                 </RelativeLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:background="@color/white"
-                android:gravity="center_vertical"
+                android:layout_height="@dimen/x92"
                 android:layout_marginTop="@dimen/x1"
-                android:layout_height="@dimen/x92">
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
                 <TextView
                     android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x30"
                     android:layout_weight="1"
                     android:text="Remaining Volume"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:textSize="16sp"
                     android:textColor="@color/color_29282a"
-                    android:layout_height="wrap_content" />
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/tvDealQgasAmounnt"
                     android:layout_width="wrap_content"
-                    android:layout_marginRight="@dimen/x30"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:textSize="16sp"
+                    android:layout_marginRight="@dimen/x30"
                     android:textColor="@color/mainColor"
-                    android:layout_height="wrap_content" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/x92"
+                android:layout_marginTop="@dimen/x20"
                 android:background="@color/white"
                 android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/x20"
                 android:paddingLeft="@dimen/x30"
-                android:textColor="@color/color_29282a"
-                android:textSize="16sp"
                 android:text="Record"
-                android:layout_height="@dimen/x92" />
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x1"
                 android:background="@color/white"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager">
 
             </android.support.v7.widget.RecyclerView>
 

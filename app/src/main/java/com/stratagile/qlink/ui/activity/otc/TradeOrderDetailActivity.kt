@@ -62,7 +62,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
         tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
         tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " QGAS/USDT"
-        tvOrderId.text = tradeOrderDetail.order.id
+        tvOrderId.text = tradeOrderDetail.order.number
         tvReceiveAddress.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
@@ -82,7 +82,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             tvOrderType.text = ConstantValue.orderTypeBuy
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_ff3669))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
-            receiveAddressTip.text = "GO-QLC Address to receive QGAS"
+            receiveAddressTip.text = "QLC Chain Address to receive QGAS"
             tvReceiveAddress.text = tradeOrderDetail.order.qgasToAddress
             when(tradeOrderDetail.order.status) {
                 "QGAS_TO_PLATFORM"-> {
@@ -128,6 +128,50 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                             .subscribe();
                 }
                 "USDT_PAID" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                    tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
+                    tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
+                    tvOrderStateTip.text = ""
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.VISIBLE
+                    llOrderPayTime.visibility = View.VISIBLE
+                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    viewLine.visibility = View.GONE
+                    llTxId.visibility = View.VISIBLE
+                    tvTxId.text = tradeOrderDetail.order.txid
+                    tvTxId.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    if (tradeOrderDetail.order.appealStatus.equals("NO")) {
+                        tvOpreate3.text = getString(R.string.appeal)
+                    } else {
+                        if (tradeOrderDetail.order.appealerId.equals(ConstantValue.currentUser.userId)) {
+                            tvOpreate3.text = getString(R.string.check_the_appeal_result)
+                        } else {
+                            tvOpreate3.text = getString(R.string.appealed)
+                        }
+                    }
+                    tvOpreate3.setOnClickListener {
+                        var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
+                        remainTime = tradeOrderExistTime - remainTime
+                        if (remainTime > 0) {
+                            alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
+                                positiveButton("OK") { dismiss() }
+                            }.show()
+                        } else {
+                            if (tradeOrderDetail.order.appealStatus.equals("NO")) {
+                                startActivityForResult(Intent(this, AppealActivity::class.java).putExtra("tradeOrder", mTradeOrderDetail.order), 0)
+                            } else {
+                                startActivityForResult(Intent(this, AppealDetailActivity::class.java).putExtra("tradeOrderId", mTradeOrderDetail.order.id), 0)
+                            }
+                        }
+                    }
+                }
+                "USDT_PENDING" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
                     tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
@@ -244,6 +288,66 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                             .subscribe();
                 }
                 "USDT_PAID"-> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
+                    tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
+                    tvOrderStateTip.text = getString(R.string.please_check_your_usdt_balance)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.VISIBLE
+                    tvOpreate3.visibility = View.VISIBLE
+                    viewLine.visibility = View.VISIBLE
+                    tvOpreate2.text = getString(R.string.appeal)
+                    tvOpreate3.text = getString(R.string.i_have_received)
+                    llPayAddress.visibility = View.VISIBLE
+                    tvPayAddressTip.text = "Buyer's ERC-20 address"
+                    tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
+                    tvPayAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    llTxId.visibility = View.VISIBLE
+                    tvTxId.text = tradeOrderDetail.order.txid
+
+                    llOrderPayTime.visibility = View.VISIBLE
+                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+
+                    tvTxId.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        showReceivedDialog()
+                    }
+                    if (tradeOrderDetail.order.appealStatus.equals("NO")) {
+                        tvOpreate2.text = getString(R.string.appeal)
+                    } else {
+                        if (tradeOrderDetail.order.appealerId.equals(ConstantValue.currentUser.userId)) {
+                            tvOpreate2.text = getString(R.string.check_the_appeal_result)
+                        } else {
+                            tvOpreate2.text = getString(R.string.appealed)
+                        }
+                    }
+                    tvOpreate2.setOnClickListener {
+                        var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
+                        remainTime = tradeOrderExistTime - remainTime
+                        if (remainTime > 0) {
+                            alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
+                                positiveButton("OK") { dismiss() }
+                            }.show()
+                        } else {
+                            if (tradeOrderDetail.order.appealStatus.equals("NO")) {
+                                startActivityForResult(Intent(this, AppealActivity::class.java).putExtra("tradeOrder", mTradeOrderDetail.order), 0)
+                            } else {
+                                startActivityForResult(Intent(this, AppealDetailActivity::class.java).putExtra("tradeOrderId", mTradeOrderDetail.order.id), 0)
+                            }
+                        }
+                    }
+                }
+                "USDT_PENDING"-> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
                     tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
                     tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)

@@ -22,8 +22,8 @@ object KotlinConvertJavaUtils {
     }
 
     fun showNotApprovedDialog(context: Activity) {
-        context.alert("VPlease resubmit the required information. Photos submitted before were not eligible.", "Not approved") {
-            positiveButton("ok") { context.finish() }
+        context.alert("Please resubmit the required information. Photos submitted before were not eligible.", "Not approved") {
+            positiveButton("ok") { dismiss() }
         }.show()
     }
 }

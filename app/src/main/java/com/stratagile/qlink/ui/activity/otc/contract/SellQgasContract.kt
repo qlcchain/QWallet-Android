@@ -23,6 +23,7 @@ interface SellQgasContract {
         fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo)
 
         fun generateBuyQgasOrderSuccess()
+        fun generateSellQgasOrderFailed(content : String)
 
         fun generateTradeSellQgasOrderSuccess()
     }

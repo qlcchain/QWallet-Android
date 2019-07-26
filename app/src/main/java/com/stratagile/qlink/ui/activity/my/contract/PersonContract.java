@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.my.contract;
 
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
@@ -26,6 +27,8 @@ public interface PersonContract {
 
 
         void changeNickNameBack(BaseBack baseBack);
+
+        void setUsrInfo(UserInfo vcodeLogin);
     }
 
     interface PersonContractPresenter extends BasePresenter {

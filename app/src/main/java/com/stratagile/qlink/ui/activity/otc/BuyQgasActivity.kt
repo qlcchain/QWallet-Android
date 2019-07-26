@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.LinearLayout
+import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -18,8 +20,16 @@ import com.stratagile.qlink.ui.activity.otc.module.BuyQgasModule
 import com.stratagile.qlink.ui.activity.otc.presenter.BuyQgasPresenter
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.AccountUtil
-import com.stratagile.qlink.utils.eth.ETHWalletUtils
+import com.stratagile.qlink.utils.PopWindowUtil
+import com.stratagile.qlink.utils.SpringAnimationUtil
 import kotlinx.android.synthetic.main.activity_buy_qgas.*
+import kotlinx.android.synthetic.main.activity_buy_qgas.etQgas
+import kotlinx.android.synthetic.main.activity_buy_qgas.etReceiveAddress
+import kotlinx.android.synthetic.main.activity_buy_qgas.etUsdt
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvAmount
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvNext
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvQgasVolume
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvUnitPrice
 import qlc.mng.AccountMng
 import qlc.mng.WalletMng
 import qlc.utils.Helper
@@ -36,12 +46,18 @@ import javax.inject.Inject;
 
 class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
     override fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo) {
+        closeProgressDialog()
         this.entrustOrderInfo = entrustOrderInfo
         maxQgas = entrustOrderInfo.order.totalAmount.toInt() - entrustOrderInfo.order.lockingAmount.toInt() - entrustOrderInfo.order.completeAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
         etUsdt.hint = "Max " + maxUsdt.toPlainString()
         etQgas.hint = "Max " + maxQgas
-        tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
+        tvAmount.text = maxQgas.toString()
+        if (maxQgas.toBigDecimal() < BigDecimal.valueOf(orderList.maxAmount)) {
+            tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.toString()
+        } else {
+            tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
+        }
     }
 
     override fun generateTradeBuyQgasOrderSuccess() {
@@ -77,7 +93,6 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         title.text = "BUY QGAS"
         orderList = intent.getParcelableExtra("order")
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
-        tvAmount.text = BigDecimal.valueOf(orderList.totalAmount).stripTrailingZeros().toPlainString()
         maxQgas = orderList.totalAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
         etUsdt.hint = "Max " + maxUsdt.toPlainString()
@@ -114,9 +129,11 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             } else {
                 // 最小的数量要大于等于minAmount
                 if (etQgas.text.toString().toInt() < entrustOrderInfo.order.minAmount) {
+                    toast("The smallest QGAS is " + entrustOrderInfo.order.minAmount.toInt())
                     return@setOnClickListener
                 }
             }
+            showProgressDialog()
             var map = hashMapOf<String, String>()
             map.put("account", ConstantValue.currentUser.account)
             map.put("token", AccountUtil.getUserToken())
@@ -183,6 +200,24 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
 
             }
         })
+        walletMore.setOnClickListener {
+            showSpinnerPopWindow()
+        }
+    }
+
+    private fun showSpinnerPopWindow() {
+        var ethWalletList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+        if (ethWalletList.size > 0) {
+            PopWindowUtil.showSharePopWindow(this, walletMore, ethWalletList.map { it.address }, object : PopWindowUtil.OnItemSelectListener {
+                override fun onSelect(content: String) {
+                    if ("" != content) {
+                        etReceiveAddress.setText(content)
+                    }
+                    SpringAnimationUtil.endRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
+                }
+            })
+            SpringAnimationUtil.startRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
+        }
     }
 
     override fun setupActivityComponent() {

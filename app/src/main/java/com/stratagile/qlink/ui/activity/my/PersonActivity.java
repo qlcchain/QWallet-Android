@@ -11,12 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.ui.activity.main.EditInputActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerPersonComponent;
@@ -116,13 +118,62 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
                     .apply(AppConfig.getInstance().options)
                     .into(ivAvatar);
         }
+        Map map = new HashMap<String, String>();
+        map.put("account", ConstantValue.currentUser.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        mPresenter.getUserInfo(map);
 //        switch (ConstantValue.currentUser.getVstatus()) {
 //            case "":
 //                break;
 //            default:
 //                break;
 //        }
-        tvVerification.setText(ConstantValue.currentUser.getVstatus());
+        switch (ConstantValue.currentUser.getVstatus()) {
+            case "NOT_UPLOAD":
+                tvVerification.setText("Unverified");
+                break;
+            case "UPLOADED":
+                tvVerification.setText("Under review");
+                break;
+            case "KYC_SUCCESS":
+                tvVerification.setText("Verified");
+                break;
+            case "KYC_FAIL":
+                tvVerification.setText("Not approved");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void setUsrInfo(UserInfo vcodeLogin) {
+        KLog.i("更新呢用户信息");
+        ConstantValue.currentUser.setHoldingPhoto(vcodeLogin.getData().getHoldingPhoto());
+        ConstantValue.currentUser.setFacePhoto(vcodeLogin.getData().getFacePhoto());
+        ConstantValue.currentUser.setVstatus(vcodeLogin.getData().getVStatus());
+        ConstantValue.currentUser.setAvatar(vcodeLogin.getData().getHead());
+        ConstantValue.currentUser.setUserName(vcodeLogin.getData().getNickname());
+        ConstantValue.currentUser.setUserId(vcodeLogin.getData().getId());
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+        switch (ConstantValue.currentUser.getVstatus()) {
+            case "NOT_UPLOAD":
+                tvVerification.setText("Unverified");
+                break;
+            case "UPLOADED":
+                tvVerification.setText("Under review");
+                break;
+            case "KYC_SUCCESS":
+                tvVerification.setText("Verified");
+                break;
+            case "KYC_FAIL":
+                tvVerification.setText("Not approved");
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     @Override
@@ -215,7 +266,22 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
-            tvVerification.setText(ConstantValue.currentUser.getVstatus());
+            switch (ConstantValue.currentUser.getVstatus()) {
+                case "NOT_UPLOAD":
+                    tvVerification.setText("Unverified");
+                    break;
+                case "UPLOADED":
+                    tvVerification.setText("Under review");
+                    break;
+                case "KYC_SUCCESS":
+                    tvVerification.setText("Verified");
+                    break;
+                case "KYC_FAIL":
+                    tvVerification.setText("Not approved");
+                    break;
+                default:
+                    break;
+            }
         }
         if (requestCode == 1 && resultCode == -1) {
             changeNickNmae(data.getStringExtra("result"));

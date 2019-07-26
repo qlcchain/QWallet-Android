@@ -23,7 +23,6 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.EntrustOrderList
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
-import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter
 import com.stratagile.qlink.ui.adapter.otc.EntrustPostedOrderListAdapter
 import kotlinx.android.synthetic.main.fragment_posted.*
 import java.util.ArrayList

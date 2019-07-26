@@ -33,7 +33,7 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
         }
         helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
         helper.setText(R.id.tvNickName, item.getNickname());
-        helper.setText(R.id.tvAmount, BigDecimal.valueOf(item.getTotalAmount()).stripTrailingZeros().toPlainString() + "");
+        helper.setText(R.id.tvAmount, (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()) + "");
         helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());
         Glide.with(mContext)
                 .load(API.BASE_URL + item.getHead())
