@@ -848,6 +848,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="get_into_wallet_detail">Get into wallet detail</string>
     <string name="make_sure_you_backup_this">Make sure you backup this</string>
     <string name="choose_a_country">Choose a country</string>
+    <string name="choose_a_wallet">Choose a Wallet</string>
     <string name="vpn_list">VPN List</string>
     <string name="REGISTER_YOUR_VPN_">REGISTER YOUR VPN</string>
     <string name="please_wait_vpn_online">please wait this vpn online</string>
@@ -1178,6 +1179,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="kyc_not_success">KYC NOT SUCCESS</string>
     <string name="transaction_id">Transaction ID</string>
     <string name="please_be_patiently_it_hasnot_been_30_minutes">Please be patiently. It hasn\'t been 30 minutes.</string>
-    <string name="need_verify">Need to finish the verification on Me page firstly.</string>
+    <string name="need_verify">Please finish the verification on Me Page.</string>
     <string name="create_one_now">Create one now</string>
 </resources>

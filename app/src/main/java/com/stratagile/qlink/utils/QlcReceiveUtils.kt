@@ -110,7 +110,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
 }
 
 object QlcReceiveUtils {
-    fun sendQGas(qlcAccount: QLCAccount, receiveAddress : String, amount : String, sendBack: SendBack) {
+    fun sendQGas(qlcAccount: QLCAccount, receiveAddress : String, amount : String, message : String, sendBack: SendBack) {
         val qlcClient = QlcClient(ConstantValue.qlcNode)
         val rpc = LedgerRpc(qlcClient)
         var bendi = true

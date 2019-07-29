@@ -332,6 +332,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
 
     @Override
     public void getLoginVCodeSuccess() {
+        ToastUtil.displayShortToast("The verification code has been sent successfully.");
         startVCodeCountDown();
     }
 }

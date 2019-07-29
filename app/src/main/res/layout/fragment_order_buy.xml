@@ -22,7 +22,6 @@
             android:id="@+id/etUnitPrice"
             app:layout_constraintTop_toBottomOf="@+id/tvUnitPrice"
             android:layout_width="match_parent"
-            android:hint="Unit Price"
             android:background="@null"
             android:inputType="numberDecimal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -69,7 +68,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tvAmount"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
-            android:hint="Total Amount"
             android:background="@null"
             android:inputType="number"
             android:layout_marginTop="@dimen/x10"
@@ -169,26 +167,57 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content" />
     <LinearLayout
+        android:id="@+id/llSelectQlcWallet"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/x30"
-        android:layout_marginRight="@dimen/x30"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/etReceiveAddress"
-            android:layout_width="0px"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x138">
+
+        <ImageView
+            android:layout_width="@dimen/x88"
+            android:src="@mipmap/icons_qlc_wallet"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_height="@dimen/x88" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Select a QLC wallet to send out QGAS"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:id="@+id/tvQLCWalletName"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a_40"
+                android:layout_marginTop="@dimen/x10"
+                android:maxEms="10"
+                android:text="Input QLC Wallet Address"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:maxWidth="@dimen/x400"
+                android:id="@+id/tvQLCWalletAddess"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@null"
-            android:hint="QLC Chain Wallet Address"
-            android:minHeight="@dimen/x77"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"/>
+
         <ImageView
             android:padding="@dimen/x15"
-            android:id="@+id/walletMore"
+            android:layout_marginRight="@dimen/x30"
             android:layout_width="@dimen/x60"
             android:layout_gravity="center_vertical"
             android:src="@mipmap/icon_enter1"
-            android:rotation="90"
             android:layout_height="@dimen/x60" />
     </LinearLayout>
     <View

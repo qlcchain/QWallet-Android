@@ -92,7 +92,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                             qlcTokenbalances = baseResult
                             if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
                                 if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, object : SendBack {
+                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "SELL QGAS", object : SendBack {
                                         override fun send(suceess: String) {
                                             if ("".equals(suceess)) {
                                                 mView.generateSellQgasOrderFailed("send qgas error")

@@ -64,7 +64,7 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
             cm.primaryClip = mClipData
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
-        tvOrderId.text = tradeOrderDetail.order.id
+        tvOrderId.text = tradeOrderDetail.order.number
         tvOrderTime.text = tradeOrderDetail.order.orderTime
         tvTxId.text = tradeOrderDetail.order.txid
         tvTxId.setOnClickListener {

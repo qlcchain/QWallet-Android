@@ -95,7 +95,7 @@ public class AllWallet {
     /**
      *
      */
-    public enum WalletType implements Parcelable {
+    public enum WalletType  implements Parcelable{
         NeoWallet, EthWallet, EosWallet, QlcWallet;
 
         public static final Creator<WalletType> CREATOR = new Creator<WalletType>() {
