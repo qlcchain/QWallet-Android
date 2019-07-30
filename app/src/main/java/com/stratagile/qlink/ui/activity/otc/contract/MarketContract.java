@@ -24,7 +24,9 @@ public interface MarketContract {
          */
         void closeProgressDialog();
 
-        void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list);
+        void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list, int currentPage);
+
+        void getEutrustOrderError();
     }
 
     interface MarketContractPresenter extends BasePresenter {

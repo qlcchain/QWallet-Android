@@ -62,6 +62,7 @@
             <TextView
                 android:id="@+id/tvWhatsMnemonic"
                 android:layout_width="wrap_content"
+                android:visibility="invisible"
                 android:text="What is a private key?"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/x20"
@@ -110,6 +111,7 @@
             <TextView
                 android:id="@+id/tvWhatsMnemonic1"
                 android:layout_width="wrap_content"
+                android:visibility="invisible"
                 android:text="What is a private key?"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/x20"

@@ -29,6 +29,7 @@
             <TextView
                 android:id="@+id/tvWhatsMnemonic"
                 android:layout_width="wrap_content"
+                android:visibility="invisible"
                 android:text="What is a wallet seed?"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/x20"

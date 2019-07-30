@@ -38,9 +38,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Appe
         mCompositeDisposable.add(httpAPIWrapper.tradeOrderInfo(map).subscribe({
             mView.setTradeOrderDetail(it)
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 }

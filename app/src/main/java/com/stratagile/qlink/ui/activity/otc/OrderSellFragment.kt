@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,11 +33,22 @@ import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.MoneyValueFilter
 import com.stratagile.qlink.utils.UserUtils
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
+import kotlinx.android.synthetic.main.fragment_order_buy.*
 import kotlinx.android.synthetic.main.fragment_order_sell.*
+import kotlinx.android.synthetic.main.fragment_order_sell.etAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etMaxAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etMinAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etUnitPrice
+import kotlinx.android.synthetic.main.fragment_order_sell.llSelectQlcWallet
+import kotlinx.android.synthetic.main.fragment_order_sell.tvNext
+import kotlinx.android.synthetic.main.fragment_order_sell.tvQLCWalletAddess
+import kotlinx.android.synthetic.main.fragment_order_sell.tvQLCWalletName
 import org.greenrobot.eventbus.EventBus
+import java.math.BigDecimal
 
 /**
  * @author hzp
@@ -80,6 +94,10 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast("illegal value")
                 return@setOnClickListener
             }
+            if (etMinAmount.text.toString().toBigDecimal() < 1.toBigDecimal()) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
             if (etMinAmount.text.toString().trim().toInt() > etMaxAmount.text.toString().trim().toInt()) {
                 toast("illegal value")
                 return@setOnClickListener
@@ -90,6 +108,10 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             }
             if ("".equals(tvQLCWalletAddess.text.toString())) {
                 toast("Please select a qlc wallet to payment")
+                return@setOnClickListener
+            }
+            if (etUnitPrice.text.toString().toBigDecimal() == BigDecimal.ZERO) {
+                toast("illegal value")
                 return@setOnClickListener
             }
             if (!ETHWalletUtils.isETHValidAddress(tvWalletAddess.text.toString().trim())) {
@@ -106,6 +128,26 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             activity!!.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
 //            showSpinnerPopWindow()
         }
+
+        etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(3))
+        etUnitPrice.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (!"".equals(etUnitPrice.text.toString())) {
+                    if (etUnitPrice.text.toString().length == 5 && etUnitPrice.text.toString().toBigDecimal() < 0.001.toBigDecimal()) {
+                        etUnitPrice.setText("0.001")
+                        etUnitPrice.setSelection(5)
+                    }
+                }
+            }
+
+        })
 
         qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
         if (qlcAccounList.size > 0) {

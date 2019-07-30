@@ -31,6 +31,7 @@
                 android:layout_width="wrap_content"
                 android:text="What is a mnemonic?"
                 android:layout_alignParentRight="true"
+                android:visibility="invisible"
                 android:layout_marginRight="@dimen/x20"
                 android:layout_marginBottom="@dimen/x20"
                 android:textColor="@color/mainColor"

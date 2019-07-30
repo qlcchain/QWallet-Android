@@ -43,9 +43,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Post
                 .subscribe({ baseBack ->
                     //isSuccesse
                     mView.setEntrustOrderList(baseBack.orderList)
-                }, { }, {
+                }, { mView.closeProgressDialog()}, {
                     //onComplete
                     KLog.i("onComplete")
+                    mView.closeProgressDialog()
                 })
         mCompositeDisposable.add(disposable)
     }

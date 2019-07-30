@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.Nullable
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,22 +30,26 @@ import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
+import com.stratagile.qlink.utils.MoneyValueFilter
 import com.stratagile.qlink.utils.PopWindowUtil
 import com.stratagile.qlink.utils.SpringAnimationUtil
 import com.stratagile.qlink.utils.UserUtils
 import com.stratagile.qlink.view.SweetAlertDialog
+import kotlinx.android.synthetic.main.activity_buy_qgas.*
 import kotlinx.android.synthetic.main.fragment_order_buy.*
 import kotlinx.android.synthetic.main.fragment_order_buy.etAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etMaxAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
 import kotlinx.android.synthetic.main.fragment_order_buy.llSelectQlcWallet
+import kotlinx.android.synthetic.main.fragment_order_buy.tvCreateWallet
 import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
 import kotlinx.android.synthetic.main.fragment_order_buy.tvQLCWalletAddess
 import kotlinx.android.synthetic.main.fragment_order_buy.tvQLCWalletName
 import kotlinx.android.synthetic.main.fragment_order_sell.*
 import qlc.mng.AccountMng
 import qlc.mng.WalletMng
+import java.math.BigDecimal
 
 /**
  * @author hzp
@@ -80,6 +87,10 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast("illegal value")
                 return@setOnClickListener
             }
+            if (etMinAmount.text.toString().toBigDecimal() < 1.toBigDecimal()) {
+                toast("illegal value")
+                return@setOnClickListener
+            }
             if (etMinAmount.text.toString().trim().toInt() > etMaxAmount.text.toString().trim().toInt()) {
                 toast("illegal value")
                 return@setOnClickListener
@@ -90,6 +101,10 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             }
             if (!AccountMng.isValidAddress(tvQLCWalletAddess.text.toString())) {
                 toast("Illegal Receipt Address")
+                return@setOnClickListener
+            }
+            if (etUnitPrice.text.toString().toBigDecimal() == BigDecimal.ZERO) {
+                toast("illegal value")
                 return@setOnClickListener
             }
             var map = mutableMapOf<String, String>()
@@ -106,6 +121,25 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             map.put("txid", "")
             mPresenter.generateBuyQgasOrder(map)
         }
+        etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(3))
+        etUnitPrice.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (!"".equals(etUnitPrice.text.toString())) {
+                    if (etUnitPrice.text.toString().length == 5 && etUnitPrice.text.toString().toBigDecimal() < 0.001.toBigDecimal()) {
+                        etUnitPrice.setText("0.001")
+                        etUnitPrice.setSelection(5)
+                    }
+                }
+            }
+
+        })
         llSelectQlcWallet.setOnClickListener {
             var intent1 = Intent(activity, OtcChooseWalletActivity::class.java)
             intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)

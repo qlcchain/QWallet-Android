@@ -164,7 +164,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         map.put("page", currentPage + "");
         map.put("size", "5");
         map.put("status", "NORMAL");
-        mPresenter.getOrderList(map);
+        mPresenter.getOrderList(map, currentPage);
     }
 
     @Override
@@ -198,14 +198,22 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     }
 
     @Override
-    public void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list) {
+    public void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list, int currentPage1) {
+        if (currentPage1 == 1) {
+            entrustOrderListAdapter.setNewData(new ArrayList<>());
+        }
         entrustOrderListAdapter.addData(list);
-        if (currentPage != 1) {
+        if (currentPage1 != 1) {
             entrustOrderListAdapter.loadMoreComplete();
         }
         if (list.size() == 0) {
             entrustOrderListAdapter.loadMoreEnd(true);
         }
+    }
+
+    @Override
+    public void getEutrustOrderError() {
+        entrustOrderListAdapter.loadMoreEnd(true);
     }
 
     @Override

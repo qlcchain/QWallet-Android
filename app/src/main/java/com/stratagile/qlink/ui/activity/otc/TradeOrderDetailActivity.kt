@@ -61,7 +61,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         tvNickName.text = tradeOrderDetail.order.nickname
         tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
         tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
-        tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " QGAS/USDT"
+        tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " USDT"
         tvOrderId.text = tradeOrderDetail.order.number
         tvReceiveAddress.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -90,7 +90,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)
                     tvOrderStateTip.text = "The order will be closed automatically, if no further confirmation within 30 minutes."
-                    tvOpreate1.visibility = View.VISIBLE
+                    tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.VISIBLE
                     tvOpreate3.visibility = View.VISIBLE
                     viewLine.visibility = View.GONE

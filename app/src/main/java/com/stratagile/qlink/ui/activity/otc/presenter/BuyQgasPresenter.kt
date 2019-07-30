@@ -22,8 +22,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: BuyQ
             mView.generateTradeBuyQgasOrderSuccess()
         }, {
             it.printStackTrace()
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 
@@ -31,9 +32,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: BuyQ
         mCompositeDisposable.add(httpAPIWrapper.getEntrustOrderInfo(map).subscribe({
             mView.setEntrustOrder(it)
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 

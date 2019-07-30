@@ -50,24 +50,25 @@ public class MarketPresenter implements MarketContract.MarketContractPresenter{
         }
     }
 
-    public void getOrderList(Map map) {
+    public void getOrderList(Map map, int currentPage) {
         Disposable disposable = httpAPIWrapper.getEntrustOrderList(map)
                 .subscribe(new Consumer<EntrustOrderList>() {
                     @Override
                     public void accept(EntrustOrderList baseBack) throws Exception {
                         //isSuccesse
-                        mView.setEntrustOrderList(baseBack.getOrderList());
+                        mView.setEntrustOrderList(baseBack.getOrderList(), currentPage);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        mView.getEutrustOrderError();
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
                         //onComplete
                         KLog.i("onComplete");
+                        mView.getEutrustOrderError();
                     }
                 });
         mCompositeDisposable.add(disposable);

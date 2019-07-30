@@ -43,7 +43,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Appe
             it.printStackTrace()
             mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 }

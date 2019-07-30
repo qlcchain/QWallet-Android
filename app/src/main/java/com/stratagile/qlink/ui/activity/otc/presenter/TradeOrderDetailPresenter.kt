@@ -39,9 +39,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
         mCompositeDisposable.add(httpAPIWrapper.tradeOrderInfo(map).subscribe({
             mView.setTradeOrderDetail(it)
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 
@@ -49,9 +49,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
         mCompositeDisposable.add(httpAPIWrapper.tradeBuyerConfirm(map).subscribe({
             mView.markAsPaidSuccess()
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 
@@ -59,9 +59,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
         mCompositeDisposable.add(httpAPIWrapper.tradeSellerConfirm(map).subscribe({
             mView.confirmCheckSuccess()
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 }

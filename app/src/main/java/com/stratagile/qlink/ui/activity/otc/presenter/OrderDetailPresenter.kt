@@ -38,9 +38,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         mCompositeDisposable.add(httpAPIWrapper.getEntrustOrderInfo(map).subscribe({
             mView.setEntrustOrder(it)
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 
@@ -48,18 +48,18 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         mCompositeDisposable.add(httpAPIWrapper.tradeOrderList(map).subscribe({
             mView.setTradeOrderList(it)
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
     fun revokeOrder(map : MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.cancelEntrustOrder(map).subscribe({
             mView.revokeOrderSuccess()
         }, {
-
+            mView.closeProgressDialog()
         }, {
-
+            mView.closeProgressDialog()
         }))
     }
 }

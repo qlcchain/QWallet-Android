@@ -117,7 +117,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_toRightOf="@+id/tvUnitPrice"
-                android:text="QGAS/USDT"
+                android:text="USDT"
                 android:layout_marginBottom="@dimen/x8"
                 android:layout_alignBottom="@+id/tvUnitPrice"
                 android:layout_marginLeft="@dimen/x12"

@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/color_808080"
-                android:text=" QGAS/USDT"
+                android:text=" USDT"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout

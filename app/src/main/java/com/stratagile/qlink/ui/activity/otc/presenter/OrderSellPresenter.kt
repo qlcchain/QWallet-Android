@@ -92,7 +92,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             //isSuccesse
             mView.closeProgressDialog()
             mView.generateSellQgasOrderSuccess()
-        }, { mView.closeProgressDialog() }, {
+        }, {
+            mView.closeProgressDialog()
+        }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
