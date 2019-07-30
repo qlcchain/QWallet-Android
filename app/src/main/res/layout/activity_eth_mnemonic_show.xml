@@ -4,34 +4,77 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
-        android:id="@+id/tvChoose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x12"
-        android:text="WALLET CREATED SUCCESSFULLY"
-        android:textColor="@color/color_1F314A"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv3"
+    <LinearLayout
+        android:id="@+id/ll1"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChoose"
-        android:layout_marginLeft="@dimen/x45"
-        android:layout_marginRight="@dimen/x45"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
         android:layout_marginTop="@dimen/x25"
-        android:fontFamily="@font/roboto_regular"
-        android:textColor="@color/color_9b9b9bb"
-        android:text="Mnemonic is used to restore your wallet. Anyone who has your mnemonic can control your wallet, SO keepit in a safe place to prevent the loss of your assets. Kcash does not store user 'S mnemonics and can not help you to retrieve them. "
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="@dimen/x8"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x15"
+            android:background="@drawable/dot_29292a_bg"
+            android:layout_height="@dimen/x8" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/color_29282a"
+            android:text="It is created successfully，Mnemonic is used to restore your wallet."
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/ll1"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="@dimen/x8"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x15"
+            android:background="@drawable/dot_29292a_bg"
+            android:layout_height="@dimen/x8" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/color_29282a"
+            android:text="Anyone who has your mnemonic can control your wallet, SO keepit in a safe place to prevent the loss of your assets. "
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/ll2"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="@dimen/x8"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x15"
+            android:background="@drawable/dot_29292a_bg"
+            android:layout_height="@dimen/x8" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:text="Q-Wallet does not store user's mnemonics and can not help you to retrieve them. "
+            android:textColor="@color/color_29282a"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvMnemonic"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv3"
+        app:layout_constraintTop_toBottomOf="@+id/ll3"
         android:background="#eae5f0"
         android:textColor="@color/mainColor"
         android:layout_marginTop="@dimen/x35"

@@ -72,7 +72,7 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
     @Override
     protected void initData() {
         tvMnemonic.setText(ethWallet.getMnemonic());
-        setTitle("Backup Mnemonic");
+        setTitle("Create Wallet");
     }
 
     @Override
