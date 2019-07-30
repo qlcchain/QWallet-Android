@@ -27,12 +27,15 @@ public interface SelectWalletTypeContract {
         void createNeoWalletSuccess(Wallet wallet);
 
         void reportCreatedWalletSuccess();
+
+        void createQlcWalletSuccess();
     }
 
     interface SelectWalletTypeContractPresenter extends BasePresenter {
         void createEthWallet();
 
         void createNeoWallet();
+        void createQlcWallet();
         void reportWalletCreated(String address, String blockChain, String publicKey, String signData);
     }
 }

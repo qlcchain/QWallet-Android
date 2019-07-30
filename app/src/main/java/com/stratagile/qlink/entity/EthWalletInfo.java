@@ -3,21 +3,21 @@ package com.stratagile.qlink.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EthWalletInfo extends BaseBack {
+public class EthWalletInfo extends BaseBack<EthWalletInfo.DataBean> {
 
     /**
      * data : {"address":"0x7d5114d0eb75beaa24344a8f8adbdf1936525cc5","ETH":{"balance":0},"countTxs":23,"tokens":[{"tokenInfo":{"address":"0x7f686b69565522ed7fb05c2ee1406a3a0b45fcaa","name":"MyTokenC","decimals":"3","symbol":"YYC","totalSupply":"1000000000000","owner":"0xfdae196edc10a085d95cf157c658d526fb94e4ae","lastUpdated":1527143709,"issuancesCount":0,"holdersCount":8,"price":false},"balance":89991000,"totalIn":0,"totalOut":0},{"tokenInfo":{"address":"0x48f775efbe4f5ece6e0df2f7b5932df56823b990","name":"R token","decimals":"0","symbol":"R","totalSupply":"1000000000","owner":"0x","lastUpdated":1540547052,"issuancesCount":0,"holdersCount":53004,"ethTransfersCount":1,"price":{"rate":"0.2421342518","diff":17.31,"diff7d":55.03,"ts":"1540546538","marketCapUsd":"80981801.0","availableSupply":"334450000.0","volume24h":"3631741.74917","diff30d":130.76668,"currency":"USD"}},"balance":4,"totalIn":0,"totalOut":0},{"tokenInfo":{"address":"0x4022eb64d742d88f71070ba6a1fcbb5d11275a9f","name":"Payin Token","decimals":"18","symbol":"PAYIN","totalSupply":"1000000000000000000000000000","owner":"0x","lastUpdated":1535996749,"issuancesCount":0,"holdersCount":1648,"price":false},"balance":1.3734217E19,"totalIn":0,"totalOut":0}]}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**
@@ -145,7 +145,7 @@ public class EthWalletInfo extends BaseBack {
                 private String symbol;
                 private String totalSupply;
                 private String owner;
-                private int lastUpdated;
+                private long lastUpdated;
                 private int issuancesCount;
                 private int holdersCount;
                 private Object price;
@@ -206,11 +206,11 @@ public class EthWalletInfo extends BaseBack {
                     this.owner = owner;
                 }
 
-                public int getLastUpdated() {
+                public long getLastUpdated() {
                     return lastUpdated;
                 }
 
-                public void setLastUpdated(int lastUpdated) {
+                public void setLastUpdated(long lastUpdated) {
                     this.lastUpdated = lastUpdated;
                 }
 

@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.stratagile.qlink.ColdWallet;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -119,7 +118,7 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
             closeProgressDialog();
             return;
         }
-        String currentPassword = ETHWalletUtils.enCodePassword(etCurrentPassword.getText().toString().trim());
+        String currentPassword = ETHWalletUtils.encryption(etCurrentPassword.getText().toString().trim());
         if (!currentPassword.equals(SpUtil.getString(this, ConstantValue.walletPassWord, ""))) {
             ToastUtil.displayShortToast("old password error");
             closeProgressDialog();
@@ -131,7 +130,7 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
                 closeProgressDialog();
                 return;
             }
-            String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
+            String password = ETHWalletUtils.encryption(etPassword.getText().toString().trim());
             SpUtil.putString(ChangePasswordActivity.this, ConstantValue.walletPassWord, password);
             ConstantValue.isShouldShowVertifyPassword = false;
             showTestDialog();

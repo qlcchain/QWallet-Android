@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/x10"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="Warning: Export plain private key is very dangerous. We recommend you backup withmnemonic or keystore."
+                    android:text="Warning: Export plain private key is very dangerous. We recommend you backup with mnemonic or keystore."
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginTop="@dimen/x20"
                     android:textColor="@color/color_d0021b" />

@@ -21,9 +21,8 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
-import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.TokenInfo;
-import com.stratagile.qlink.ui.activity.eth.EthWalletDetailActivity;
+import com.stratagile.qlink.ui.activity.eth.WalletDetailActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletTokenComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletTokenContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AllWalletTokenModule;
@@ -281,9 +280,9 @@ public class AllWalletTokenActivity extends BaseActivity implements AllWalletTok
     @OnClick(R.id.cardView)
     public void onViewClicked() {
         if (currentSelectWallet.getWalletType() == AllWallet.WalletType.EthWallet) {
-            startActivity(new Intent(this, EthWalletDetailActivity.class).putExtra("ethwallet", currentSelectWallet.getEthWallet()).putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal()));
+            startActivity(new Intent(this, WalletDetailActivity.class).putExtra("ethwallet", currentSelectWallet.getEthWallet()).putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal()));
         } else if (currentSelectWallet.getWalletType() == AllWallet.WalletType.NeoWallet) {
-            startActivity(new Intent(this, EthWalletDetailActivity.class).putExtra("neowallet", currentSelectWallet.getWallet()).putExtra("walletType", AllWallet.WalletType.NeoWallet.ordinal()));
+            startActivity(new Intent(this, WalletDetailActivity.class).putExtra("neowallet", currentSelectWallet.getWallet()).putExtra("walletType", AllWallet.WalletType.NeoWallet.ordinal()));
         }
     }
 

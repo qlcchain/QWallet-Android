@@ -1,20 +1,20 @@
 package com.stratagile.qlink.entity;
 
-public class GotWinqGas extends BaseBack {
+public class GotWinqGas extends BaseBack<GotWinqGas.DataBean> {
 
     /**
      * data : {"receiveNum":0.01347419,"tips":"Receive success,It takes 1-2 minutes to arrive."}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

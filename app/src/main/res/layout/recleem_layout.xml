@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="@dimen/x628"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        app:cardCornerRadius="@dimen/x20">
+
+        <LinearLayout
+            android:layout_width="@dimen/x628"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x60"
+                android:layout_marginTop="@dimen/x20">
+
+                <ImageView
+                    android:id="@+id/ivClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/x20"
+                    android:src="@mipmap/close_h" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:text="Redeem"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x38"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/x20"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x38"
+                    android:layout_height="@dimen/x38"
+                    android:src="@mipmap/qlc" />
+
+                <TextView
+                    android:id="@+id/tvProductName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:includeFontPadding="false"
+                    android:text="dddddddddd"
+                    android:textColor="#4d4d4d"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x33"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Principal"
+                        android:textColor="#888"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvPrincipal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12.88"
+                        android:textColor="@color/color_29282a"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llEarn"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvQlcCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Earnings"
+                        android:textColor="@color/color_999"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvCumulativeEarning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1.288"
+                        android:textColor="#01B5AB"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x1"
+                android:layout_marginTop="@dimen/x20"
+                android:background="@color/color_29282a_40" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x45"
+                android:layout_marginTop="@dimen/x42"
+                android:text="Principal and earnings will be transfered to the below address automatically." />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/x42"
+                android:text="Redeem to" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/x15"
+                android:layout_height="@dimen/x138">
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/switchWallet"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/ivWalletAvatar"
+                        android:layout_width="@dimen/x88"
+                        android:layout_height="@dimen/x88"
+                        android:src="@mipmap/neo_wallet_select"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="@dimen/x46"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvWalletName"
+                        android:textColor="@color/color_29282a"
+                        android:text="Eth wallet Address"
+                        android:layout_marginTop="@dimen/x5"
+                        android:maxEms="12"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        app:layout_constraintStart_toEndOf="@id/ivWalletAvatar"
+                        app:layout_constraintTop_toTopOf="@+id/ivWalletAvatar"
+                        android:layout_marginLeft="@dimen/x20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tvWalletAddress"
+                        app:layout_constraintStart_toEndOf="@id/ivWalletAvatar"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivWalletAvatar"
+                        android:layout_marginLeft="@dimen/x20"
+                        android:textColor="@color/color_b2b2b2"
+                        android:text="0xdssdfsfsfsdfssdsdfsfsdfsdfsdfsdfsfsfdsfdsdfsdf"
+                        android:layout_marginBottom="@dimen/x5"
+                        android:ellipsize="middle"
+                        android:maxEms="8"
+                        android:singleLine="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </android.support.constraint.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/llNoWallet"
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="No wallet has been found, "
+                        android:textSize="14sp"
+                        android:textColor="@color/color_29282a"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="create NOW"
+                        android:textSize="14sp"
+                        android:textColor="@color/mainColor"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </RelativeLayout>
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x1"
+                android:layout_marginTop="@dimen/x50"
+                android:background="@color/color_29282a_40" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x96"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="confirm"
+                    android:textColor="@color/mainColor"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

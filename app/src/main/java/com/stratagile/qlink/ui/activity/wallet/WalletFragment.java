@@ -119,7 +119,7 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
         tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(WalletDetailActivity.class);
+                startActivity(new Intent(getActivity(), WalletDetailActivity.class));
                 return true;
             }
         });
@@ -380,7 +380,7 @@ public class WalletFragment extends BaseFragment implements WalletContract.View,
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == -1) {
-            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(getActivity(), ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
+            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/" + SpUtil.getString(getActivity(), ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
             Glide.with(getActivity())
                     .load(dataFile)
                     .apply(AppConfig.getInstance().options)

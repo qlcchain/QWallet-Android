@@ -4,21 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class EosAccountTransaction extends BaseBack {
+public class EosAccountTransaction extends BaseBack<EosAccountTransaction.DataBeanX> {
 
     /**
      * data : {"errno":0,"data":{"trace_count":22,"trace_list":[{"trx_id":"dfab30f059c8180d6aa04db5818486cc67daaa35a63b6d58d47a53eadb8be4f3","symbol":"HVT","code":"hirevibeshvt","quantity":"0.8775","receiver":"yfhuangeos55","sender":"airdropsdac5","memo":"*HireVibes (HVT) https://www.hirevibes.io/ Token Airdrop and Claim opportunity has started. For more info visit: https://goo.gl/nrELgi | To claim, use our website Claim Tool OR go to: https://goo.gl/em1x3o OR Transfer any amount of HVT to any account.*","timestamp":"2018-11-05T05:26:28.500","status":"executed"}]},"errmsg":"Success"}
      */
 
-    private DataBeanX data;
-
-    public DataBeanX getData() {
-        return data;
-    }
-
-    public void setData(DataBeanX data) {
-        this.data = data;
-    }
+//    private DataBeanX data;
+//
+//    public DataBeanX getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBeanX data) {
+//        this.data = data;
+//    }
 
     public static class DataBeanX {
         /**

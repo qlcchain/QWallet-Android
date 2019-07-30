@@ -6,17 +6,17 @@ import java.util.List;
  * Created by huzhipeng on 2018/2/8.
  */
 
-public class ChainVpn extends BaseBack {
+public class ChainVpn extends BaseBack<List<ChainVpn.DataBean>> {
 
-    private List<DataBean> data;
-
-    public List<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(List<DataBean> data) {
-        this.data = data;
-    }
+//    private List<DataBean> data;
+//
+//    public List<DataBean> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<DataBean> data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         private List<VpnListBean> vpnList;

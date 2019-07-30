@@ -10,6 +10,15 @@ public class TransactionInfo {
     private long timestamp;
     private String transactionState;
     private int tokenDecimals;
+    private String showAddress;
+
+    public String getShowAddress() {
+        return showAddress;
+    }
+
+    public void setShowAddress(String showAddress) {
+        this.showAddress = showAddress;
+    }
 
     public int getTokenDecimals() {
         return tokenDecimals;

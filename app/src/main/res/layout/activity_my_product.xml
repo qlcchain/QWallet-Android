@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/color_f2f2f2"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/main_bg_shape"
+        android:layout_height="@dimen/x410">
+        <View
+            android:id="@+id/statusBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"/>
+        <RelativeLayout
+            android:id="@+id/rlTitle"
+            android:layout_below="@+id/statusBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x84">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/x46"
+                android:src="@mipmap/icon_back"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_height="@dimen/x46" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                android:text="@string/my_portfolio"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/ivHsitory"
+                android:layout_width="@dimen/x46"
+                android:src="@mipmap/icon_protfolio_more"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_height="@dimen/x46" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:text="@string/total_qlc"
+            android:layout_below="@+id/rlTitle"
+            android:layout_marginTop="@dimen/x4"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/x30"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/totolQlc"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tv1"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/x30"
+            android:textSize="31sp"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/totolQlc"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/yesterday_earnings"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvYesterdayEarn"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/cumulative_earnings"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/totolEarn"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x20"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:layout_height="@dimen/x92">
+        <View
+            android:layout_width="@dimen/x8"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/mainColor"
+            android:layout_height="@dimen/x29"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:text="@string/details__"
+            android:layout_marginLeft="@dimen/x13"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_marginTop="@dimen/x1"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

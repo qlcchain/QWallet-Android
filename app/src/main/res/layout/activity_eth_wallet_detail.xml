@@ -328,6 +328,70 @@
             android:background="@color/color_b2b2b2"
             android:layout_height="@dimen/x1"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ExportQlcPrivateKey"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export Mnemonic Phrase"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ExportQlcSeed"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x45"
+        android:orientation="vertical"
+        android:layout_height="@dimen/x93">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Export Wallet Seed"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_dark"
+                android:rotation="180"
+                android:layout_marginRight="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_b2b2b2"
+            android:layout_height="@dimen/x1"/>
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0px"

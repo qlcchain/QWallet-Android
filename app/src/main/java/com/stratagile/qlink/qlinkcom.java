@@ -55,42 +55,50 @@ public class qlinkcom {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink", "");
+                File dataFile = new File(Environment.getExternalStorageDirectory() + "/QWallet", "");
                 if (!dataFile.exists()) {
                     dataFile.mkdir();
                 }
-                File cacheVpnFile = new File(AppConfig.getInstance().getFilesDir() + "Qlink/vpn", "");
+                File cacheVpnFile = new File(AppConfig.getInstance().getFilesDir() + "QWallet/vpn", "");
                 if (!cacheVpnFile.exists()) {
                     cacheVpnFile.mkdir();
                 }
-                File vpnFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/vpn", "");
+                File vpnFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/vpn", "");
                 if (!vpnFile.exists()) {
                     vpnFile.mkdir();
                 }
-                File imageFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image", "");
+                File imageFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/image", "");
                 if (!imageFile.exists()) {
                     imageFile.mkdir();
                 }
-                File addressFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Address", "");
+                File addressFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/Address", "");
                 if (!addressFile.exists()) {
                     addressFile.mkdir();
                 }
-                File ethKeystore = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "");
+                File ethKeystore = new File(Environment.getExternalStorageDirectory() + "/QWallet/KeyStore", "");
                 if (!ethKeystore.exists()) {
                     ethKeystore.mkdir();
                 }
-                File profileFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Profile", "");
+                File profileFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/Profile", "");
                 if (!profileFile.exists()) {
                     profileFile.mkdir();
                 }
                 //用于资产永久化存储
-                File assetsFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Assets", "");
+                File assetsFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/Assets", "");
                 if (!assetsFile.exists()) {
                     assetsFile.mkdir();
                 }
-                File backupFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/backup", "");
+                File backupFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/backup", "");
                 if (!backupFile.exists()) {
                     backupFile.mkdir();
+                }
+                File otcFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/otc", "");
+                if (!otcFile.exists()) {
+                    otcFile.mkdir();
+                }
+                File btcFile = new File(Environment.getExternalStorageDirectory() + "/QWallet/btc", "");
+                if (!btcFile.exists()) {
+                    btcFile.mkdir();
                 }
                 String path = dataFile.getPath() + "/";
                 try {
@@ -480,7 +488,7 @@ public class qlinkcom {
 
     public String GetFilePath(String oldFilePath) {
         KLog.i(oldFilePath);
-        String newPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn";
+        String newPath = Environment.getExternalStorageDirectory() + "/QWallet/vpn";
         String fileName = oldFilePath.substring(oldFilePath.lastIndexOf("/"), oldFilePath.length());
         KLog.i(fileName);
         newPath = newPath + fileName;
@@ -495,7 +503,7 @@ public class qlinkcom {
         String toxJsonResult = "";
         toxJsonResult = FileUtil.getJson(AppConfig.getInstance(), "tox.json");
 //        KLog.i(toxJsonResult);
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
+        String jsonPath = Environment.getExternalStorageDirectory() + "/QWallet/Profile/jsonFile.json";
         File jsonFile = new File(jsonPath);
         if (jsonFile.exists()) {
             try {

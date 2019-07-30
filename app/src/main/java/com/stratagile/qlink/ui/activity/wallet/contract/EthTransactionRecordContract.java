@@ -39,5 +39,7 @@ public interface EthTransactionRecordContract {
         void getTokenKline(Map map, double price);
 
         void getEosAccountTransaction(String account, Map map);
+
+        void getQlcAccountHistoryTopn(String account, int count, int offset);
     }
 }

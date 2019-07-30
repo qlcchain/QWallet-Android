@@ -39,6 +39,10 @@ data class Assets(
 		val net: String //MainNet
 )
 
+data class UTXOS(var data: Array<UTXO>)
+
+data class UTXO(val asset: String, val index: Int, val txid: String, val value: String,  val createdAtBlock: Int)
+
 data class GAS(
 		val balance: Double, //1.7666314800000003
 		val unspent: List<Unspent>

@@ -1,6 +1,6 @@
 package com.stratagile.qlink.entity;
 
-public class ShowAct extends BaseBack {
+public class ShowAct extends BaseBack<ShowAct.DataBean> {
 
     /**
      * data : {"isShow":1}

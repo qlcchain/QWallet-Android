@@ -338,7 +338,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
     private void exportKeys(String name) {
         showProgressDialog();
         KLog.i("写入的内容为:" + privatekey.getText().toString());
-        File walletFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/Address/" + name + ".txt", "");
+        File walletFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/Address/" + name + ".txt", "");
         if (!walletFile.exists()) {
             try {
                 walletFile.createNewFile();
@@ -403,7 +403,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/Qlink/Address/");
+                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/Qwallet/Address/");
                 intent.setDataAndType(uri, "*/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivity(intent);

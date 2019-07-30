@@ -2,6 +2,8 @@ package com.stratagile.qlink.data.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
+import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
@@ -24,6 +26,7 @@ import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.utils.DigestUtils;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -146,8 +149,8 @@ public class MainHttpAPIWrapper {
         return wrapper(mainHttpAPI.batchImportWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
 
-    public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody p2pId) {     //String userId, String nickName   userId, nickName
-        return wrapper(mainHttpAPI.updateMyAvatar(p2pId, photo)).compose(SCHEDULERS_TRANSFORMER);
+    public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
+        return wrapper(mainHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
     }
     public Observable<UpLoadAvatar> userHeadView(Map map) {
         return wrapper(mainHttpAPI.userHeadView(map)).compose(SCHEDULERS_TRANSFORMER);

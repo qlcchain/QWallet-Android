@@ -12,7 +12,6 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.qlinkcom;
-import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.SpUtil;
 
 import org.bitcoinj.crypto.ChildNumber;
@@ -254,8 +253,8 @@ public class ETHWalletUtils {
 
         BigInteger publicKey = ecKeyPair.getPublicKey();
         String s = publicKey.toString();
-        KLog.i("ETHWalletUtils", "publicKey = " + s);
-        File destination = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletFile.getAddress() + ".json");
+        KLog.i("publicKey = " + s);
+        File destination = new File(Environment.getExternalStorageDirectory() + "/Qwallet/KeyStore", "keystore_" + walletFile.getAddress() + ".json");
 
         //目录不存在则创建目录，创建不了则报错
         if (!createParentDir(destination)) {
@@ -273,7 +272,7 @@ public class ETHWalletUtils {
         ethWallet.setKeystorePath(destination.getAbsolutePath());
         ethWallet.setCurrent(true);
         ethWallet.setIsLook(false);
-        ethWallet.setPassword(enCodePassword(pwd));
+        ethWallet.setPassword(encryption(pwd));
         return ethWallet;
     }
 
@@ -294,9 +293,9 @@ public class ETHWalletUtils {
             credentials = Credentials.create(Wallet.decrypt(pwd, walletFile));
         } catch (IOException e) {
             e.printStackTrace();
-            KLog.e("ETHWalletUtils", e.toString());
+            KLog.e( e.toString());
         } catch (CipherException e) {
-            KLog.e("ETHWalletUtils", e.toString());
+            KLog.e( e.toString());
 //            ToastUtils.showToast(R.string.load_wallet_by_official_wallet_keystore_input_tip);
             e.printStackTrace();
         }
@@ -323,18 +322,23 @@ public class ETHWalletUtils {
      * @return
      */
     public static String getPassword() {
-        KLog.i(SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, ""));
-        String password = new String(qlinkcom.AES(Base64.decode(SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, ""), Base64.NO_WRAP), 1));
-        KLog.i(password);
-        return password;
+        KLog.i(SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "123456789"));
+        String pa = SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "123456789");
+        if (pa.equals("123456789")) {
+//            pa = Base64.encodeToString(pa.getBytes(), Base64.NO_WRAP);
+            return pa;
+        } else {
+            String password = new String(qlinkcom.AES(pa.getBytes(), 1));
+            KLog.i(password);
+            return password;
+        }
     }
 
     /**
-     * 使用钱包的时候，要用钱包里边保存的密码
      * @param content
      * @return
      */
-    public static String getPassword(String content) {
+    public static String decrypt(String content) {
 //        KLog.i(content);
         String password = "";
         try {
@@ -347,7 +351,7 @@ public class ETHWalletUtils {
         return password;
     }
 
-    public static String enCodePassword(String password) {
+    public static String encryption(String password) {
         String encode = Base64.encodeToString(qlinkcom.AES(password.getBytes(),0),Base64.NO_WRAP);
         return encode;
     }
@@ -382,7 +386,7 @@ public class ETHWalletUtils {
         try {
             credentials = WalletUtils.loadCredentials(oldPassword, ethWallet.getKeystorePath());
             keypair = credentials.getEcKeyPair();
-            File destinationDirectory = new File(Environment.getExternalStorageDirectory() + "/Qlink/KeyStore", "keystore_" + walletName + ".json");
+            File destinationDirectory = new File(Environment.getExternalStorageDirectory() + "/Qwallet/KeyStore", "keystore_" + walletName + ".json");
             WalletUtils.generateWalletFile(newPassword, keypair, destinationDirectory, true);
             ethWallet.setPassword(newPassword);
             AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallet);
@@ -403,7 +407,7 @@ public class ETHWalletUtils {
      */
     public static String derivePrivateKey(long walletId) {
         EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
-        String pwd = getPassword(ethWallet.getPassword());
+        String pwd = decrypt(ethWallet.getPassword());
         Credentials credentials;
         ECKeyPair keypair;
         String privateKey = null;
@@ -427,7 +431,7 @@ public class ETHWalletUtils {
      */
     public static String derivePublickKey(long walletId) {
         EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
-        String pwd = getPassword(ethWallet.getPassword());
+        String pwd = decrypt(ethWallet.getPassword());
         Credentials credentials;
         ECKeyPair keypair;
         String publicKey = null;
@@ -450,7 +454,7 @@ public class ETHWalletUtils {
      */
     public static String signPublickKey(long walletId, String message) {
         EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
-        String pwd = getPassword(ethWallet.getPassword());
+        String pwd = decrypt(ethWallet.getPassword());
         Credentials credentials;
         ECKeyPair keypair;
         String publicKey = null;

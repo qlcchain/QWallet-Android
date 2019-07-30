@@ -24,28 +24,19 @@
         android:layout_height="@dimen/x84">
         <ImageView
             android:id="@+id/iv_avater"
-            android:layout_width="@dimen/x50"
+            android:layout_width="@dimen/x100"
             android:transitionName="avater"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x23"
-            android:src="@mipmap/img_connected_head_portrait"
-            android:layout_height="@dimen/x50" />
+            android:src="@mipmap/icon_protfolio_more"
+            android:layout_height="@dimen/x42" />
 
-        <ImageView
-            android:id="@+id/my_status"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20"
-            android:layout_marginTop="-8dp"
-            android:layout_below="@id/iv_avater"
-            android:layout_alignRight="@+id/iv_avater"
-            android:src="@mipmap/icon_search_red" />
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/roboto_regular"
-            android:text="@string/my_wallet"
+            android:text="@string/wallet"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -56,38 +47,58 @@
             android:layout_toLeftOf="@+id/rlWallet"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
-            android:layout_width="@dimen/x50"
-            android:layout_height="@dimen/x50"
+            android:layout_width="@dimen/x46"
+            android:layout_height="@dimen/x46"
             android:scaleType="fitCenter"
             android:src="@mipmap/icons_scan_qrcode_n"
             />
 
         <RelativeLayout
             android:id="@+id/rlWallet"
-            android:layout_width="@dimen/x96"
+            android:layout_width="@dimen/x100"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/x60">
+
             <ImageView
                 android:id="@+id/iv_wallet"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible"
-                android:layout_width="@dimen/x50"
-                android:layout_height="@dimen/x50"
+                android:layout_width="@dimen/x46"
+                android:layout_height="@dimen/x46"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/x30"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/icon_free"
-                />
-            <TextView
-                android:id="@+id/tv_free"
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textSize="9sp"
-                android:fontFamily="@font/vagroundedbt"
-                android:textColor="@color/white"
-                android:layout_alignBottom="@id/iv_wallet"
-                android:layout_marginBottom="@dimen/x15"
-                android:layout_height="wrap_content" />
+                android:visibility="invisible" />
         </RelativeLayout>
+
+        <info.hoang8f.android.segmented.SegmentedGroup
+            android:id="@+id/segmentControlView"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            app:sc_border_width="@dimen/x2"
+            app:sc_checked_text_color="@color/mainColor"
+            app:sc_tint_color="@color/white"
+            app:sc_corner_radius="@dimen/x10"
+            android:layout_centerInParent="true"
+            android:layout_height="@dimen/x54">
+            <RadioButton
+                android:id="@+id/button21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buy"
+                style="@style/RadioButton"
+                android:textSize="13sp"
+                />
+
+            <RadioButton
+                android:id="@+id/button22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SELL"
+                style="@style/RadioButton"
+                android:textSize="13sp"
+                />
+        </info.hoang8f.android.segmented.SegmentedGroup>
 
 
     </RelativeLayout>
@@ -101,7 +112,16 @@
 
     </com.stratagile.qlink.view.NoScrollViewPager>
 
+    <ImageView
+        android:id="@+id/financeCome"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/xxx"
+        android:scaleType="fitXY"
+        android:src="@mipmap/finance_soon"
+        android:layout_height="match_parent" />
     <View
+        android:id="@+id/xxx"
         android:layout_width="match_parent"
         android:layout_above="@+id/rl2"
         android:layout_height="@dimen/x1"
@@ -146,9 +166,4 @@
                 android:layout_weight="1"/>
         </LinearLayout>
     </RelativeLayout>
-    <com.stratagile.qlink.view.DownCheckView
-        android:layout_below="@+id/status_bar"
-        android:id="@+id/downCHeckView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </RelativeLayout>

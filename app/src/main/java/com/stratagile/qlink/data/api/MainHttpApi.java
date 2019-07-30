@@ -1,6 +1,7 @@
 package com.stratagile.qlink.data.api;
 
 
+import com.github.mikephil.charting.data.BaseEntry;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
@@ -76,6 +77,7 @@ import static com.stratagile.qlink.data.api.MainAPI.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.MainAPI.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.MainAPI.url_token_price;
 import static com.stratagile.qlink.data.api.MainAPI.url_transaction_v2;
+import static com.stratagile.qlink.data.api.MainAPI.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.MainAPI.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.MainAPI.user_update_avatar;
 
@@ -172,7 +174,7 @@ public interface MainHttpApi {
 
     @POST(user_update_avatar)
     @Multipart
-    Observable<UpLoadAvatar> updateMyAvatar(@Part("p2pId") RequestBody p2pId, @Part MultipartBody.Part head);
+    Observable<UpLoadAvatar> updateMyAvatar(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part head);
 
     @GET(MainAPI.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);
@@ -316,6 +318,10 @@ public interface MainHttpApi {
     @POST(API.url_got_winq_gas)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ClaimData> neoGasClaim(@Body RequestBody map);
+
+    @POST(url_vcode_signup_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getSignUpVcode(@Body RequestBody map);
 
     /*************************************************/
 }

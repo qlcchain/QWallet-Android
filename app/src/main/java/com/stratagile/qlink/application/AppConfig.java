@@ -29,17 +29,15 @@ import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.facebook.FacebookSdk;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+//import com.facebook.FacebookSdk;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
+import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.core.OpenVPNService;
-import com.stratagile.qlink.core.PRNGFixes;
-import com.stratagile.qlink.core.StatusListener;
 import com.stratagile.qlink.db.DaoMaster;
 import com.stratagile.qlink.db.DaoSession;
 import com.stratagile.qlink.db.MySQLiteOpenHelper;
@@ -47,14 +45,6 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
-import com.stratagile.qlink.qlinkcom;
-import com.stratagile.qlink.shadowsocks.bg.BaseService;
-import com.stratagile.qlink.shadowsocks.database.Profile;
-import com.stratagile.qlink.shadowsocks.database.ProfileManager;
-import com.stratagile.qlink.shadowsocks.preference.DataStore;
-import com.stratagile.qlink.shadowsocks.utils.Action;
-import com.stratagile.qlink.shadowsocks.utils.DeviceStorageApp;
-import com.stratagile.qlink.shadowsocks.utils.DirectBoot;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.GlideCircleTransform;
@@ -68,6 +58,8 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxDataTool;
 import com.vondear.rxtools.RxTool;
 
+import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.params.TestNet3Params;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -76,7 +68,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.facebook.appevents.AppEventsLogger;
+//import com.facebook.appevents.AppEventsLogger;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -95,27 +87,13 @@ public class AppConfig extends MultiDexApplication {
     private SQLiteDatabase db;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
-    private StatusListener mStatus;
 
     private PackageInfo info;
-    private Profile currentProfile;
     public Application deviceStorage;
 //    public FirebaseRemoteConfig remoteConfig;
     public Handler handler;
 
-    public Profile getCurrentProfile() {
-//        DataStore.INSTANCE.setProfileId(2);
-        if ((DataStore.INSTANCE.getDirectBootAware())) {
-            return DirectBoot.INSTANCE.getDeviceProfile();
-        } else {
-            try {
-                return ProfileManager.INSTANCE.getProfile(DataStore.INSTANCE.getProfileId());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
+    public WalletAppKit walletAppKit;
 
     public PackageInfo getInfo() {
         return info;
@@ -136,22 +114,27 @@ public class AppConfig extends MultiDexApplication {
     public RequestOptions options = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransform())
-            .placeholder(R.mipmap.img_connected_head_portrait)
-            .error(R.mipmap.img_connected_head_portrait)
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
     public RequestOptions optionsMainColor = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
-            .placeholder(R.mipmap.img_connected_head_portrait)
-            .error(R.mipmap.img_connected_head_portrait)
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
     public RequestOptions optionsAvater = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
-            .placeholder(R.mipmap.img_connected_head_portrait)
-            .error(R.mipmap.img_connected_head_portrait)
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
+            .priority(Priority.HIGH);
+    public RequestOptions optionsAppeal = new RequestOptions()
+            .centerCrop()
+            .skipMemoryCache(true)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .priority(Priority.HIGH);
 
     public AppConfig() {
@@ -162,8 +145,7 @@ public class AppConfig extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         FileUtil.removeAllImageAvater(this);
-        FacebookSdk.sdkInitialize(this);
-        AppEventsLogger.activateApp(this);
+//        AppEventsLogger.activateApp(this);
         instance = this;
         KLog.init(BuildConfig.LOG_DEBUG);
         CrashReport.initCrashReport(this, "2d19fdd0a6", BuildConfig.LOG_DEBUG);
@@ -171,28 +153,21 @@ public class AppConfig extends MultiDexApplication {
         setDatabase();
         Qsdk.init();
         RxTool.init(this);
-        PRNGFixes.apply();
         ToastUtil.init();
-        com.stratagile.qlink.core.ProfileManager.removeAllProfile(this);
         initMoney();
         AppFilePath.init(this);
-//        LeakCanary.install(this);
         NickUtil.initUserNickName(this);
-//        mAppActivityManager = new AppActivityManager(this);
-//        ProfileManager.getInstance(this).removeAllProfile(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            createNotificationChannels();
-        }
         initDbUpdate();
         initResumeListener();
         initMiPush();
         info = getPackageInfo(getPackageName());
-        deviceStorage = Build.VERSION.SDK_INT < 24 ? this : new DeviceStorageApp(this);
         handler = new Handler(Looper.getMainLooper());
-        mStatus = new StatusListener();
-        mStatus.init(getApplicationContext());
         updateNotificationChannels();
+        //初始化btc钱包
+        org.bitcoinj.core.Context.enableStrictMode();
+        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
+        KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
+//        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
     }
 
@@ -207,6 +182,7 @@ public class AppConfig extends MultiDexApplication {
             nm.deleteNotificationChannel("service-nat");
         }
     }
+
 
     private void initMoney() {
         ArrayList<CurrencyBean> currencyBeans = new ArrayList<>();
@@ -253,7 +229,7 @@ public class AppConfig extends MultiDexApplication {
 
             @Override
             public void log(String content, Throwable t) {
-                KLog.i(content, t);
+                KLog.i(content + t);
             }
 
             @Override
@@ -388,35 +364,6 @@ public class AppConfig extends MultiDexApplication {
         return db;
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    private void createNotificationChannels() {
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Background message
-        CharSequence name = getString(R.string.channel_name_background);
-        NotificationChannel mChannel = new NotificationChannel(OpenVPNService.NOTIFICATION_CHANNEL_BG_ID,
-                name, NotificationManager.IMPORTANCE_MIN);
-
-        mChannel.setDescription(getString(R.string.channel_description_background));
-        mChannel.enableLights(false);
-
-        mChannel.setLightColor(Color.DKGRAY);
-        mNotificationManager.createNotificationChannel(mChannel);
-
-        // Connection status change messages
-
-        name = getString(R.string.channel_name_status);
-        mChannel = new NotificationChannel(OpenVPNService.NOTIFICATION_CHANNEL_NEWSTATUS_ID,
-                name, NotificationManager.IMPORTANCE_LOW);
-
-        mChannel.setDescription(getString(R.string.channel_description_status));
-        mChannel.enableLights(true);
-
-        mChannel.setLightColor(Color.BLUE);
-        mNotificationManager.createNotificationChannel(mChannel);
-    }
-
     /**
      * 收益通知栏
      *
@@ -483,23 +430,6 @@ public class AppConfig extends MultiDexApplication {
         }
     }
 
-    public void startService() {
-        Intent intent = new Intent(this, BaseService.class);
-        if (Build.VERSION.SDK_INT >= 26) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
-    }
-
-    public void reloadService() {
-        sendBroadcast(new Intent(Action.RELOAD));
-    }
-
-    public void stopService() {
-        sendBroadcast(new Intent(Action.CLOSE));
-    }
-
     public BroadcastReceiver listenForPackageChanges(boolean onetime, Callback callback) {
         IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
         filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -522,17 +452,6 @@ public class AppConfig extends MultiDexApplication {
 
     public interface Callback {
         void callback();
-    }
-
-    public Profile switchProfile(long id) {
-        Profile result = null;
-        try {
-            result = ProfileManager.INSTANCE.getProfile(id) == null? ProfileManager.INSTANCE.createProfile(new Profile()): ProfileManager.INSTANCE.getProfile(id);
-        } catch (Exception e) {
-
-        }
-        DataStore.INSTANCE.setProfileId(result.getId());
-        return result;
     }
 
 }

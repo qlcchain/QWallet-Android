@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x216"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/x30"
+    android:paddingRight="@dimen/x30"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x27"
+        android:layout_height="@dimen/x38">
+        <ImageView
+            android:layout_width="@dimen/x38"
+            android:src="@mipmap/qlc"
+            android:layout_height="@dimen/x38" />
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:includeFontPadding="false"
+            android:text="dddddddddd"
+            android:layout_marginLeft="@dimen/x15"
+            android:textSize="14sp"
+            android:textColor="#4d4d4d"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/soldOut"
+            android:layout_width="@dimen/x110"
+            android:text="@string/sold_out"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:background="@drawable/sold_out_bg"
+            android:layout_marginLeft="@dimen/x6"
+            android:layout_height="@dimen/x30" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x150">
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x150">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x64">
+                <TextView
+                    android:id="@+id/tvProfit"
+                    android:text="100%"
+                    android:textSize="23sp"
+                    android:textColor="@color/color_01b5ab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvRate"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#888"
+                android:text="@string/annual_percentage_rate"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="@dimen/x2"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="@dimen/x88"/>
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/x46"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_height="@dimen/x150">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/x64">
+                <TextView
+                    android:id="@+id/tvDayTime"
+                    android:text="360"
+                    android:layout_width="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvDays"
+                    android:text="@string/days"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_29282a"
+                    android:layout_marginLeft="@dimen/x8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvQlcCount"
+                android:layout_width="wrap_content"
+                android:text="From 1000 QLC"
+                android:textSize="13sp"
+                android:textColor="@color/color_999"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/x30"
+            android:src="@mipmap/icon_enter1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_f2f2f2"
+        android:layout_height="@dimen/x1" />
+
+
+</LinearLayout>

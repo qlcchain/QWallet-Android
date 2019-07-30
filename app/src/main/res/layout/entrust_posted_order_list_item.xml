@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="@dimen/x20"
+    android:layout_marginLeft="@dimen/x20"
+    app:cardCornerRadius="@dimen/x10"
+    app:cardElevation="@dimen/x10"
+    android:layout_marginRight="@dimen/x20"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:paddingLeft="@dimen/x20"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/x20"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x90">
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="@dimen/x58"
+                android:layout_height="@dimen/x58" />
+            <TextView
+                android:id="@+id/tvNickName"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:textColor="@color/color_222222"
+                android:textSize="14sp"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvDeals"
+                android:textSize="12sp"
+                android:textColor="@color/color_808080"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text="Unit Price"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvUnitPrice"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text="467723839"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text=" USDT"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text="Total Amount"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text="467723839"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text=" QGAS"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="Volume Settings"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvQgasVolume"
+                android:layout_width="wrap_content"
+                android:text="1000-10000"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/color_808080"
+                android:text=" QGAS"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:layout_marginBottom="@dimen/x17"
+            android:layout_height="@dimen/x50">
+            <TextView
+                android:id="@+id/tvOrderType"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:textColor="@color/color_29282a"
+                android:textSize="18sp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvOrderState"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

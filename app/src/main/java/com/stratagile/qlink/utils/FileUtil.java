@@ -9,7 +9,6 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.qlinkcom;
 
-import org.apache.http.util.EncodingUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,34 +29,34 @@ import java.util.Calendar;
 
 public class FileUtil {
     public static void removeAllImageAvater(Context context) {
-        File vpn = new File(Environment.getExternalStorageDirectory() + "/Qlink/vpn");
-        String[] vpnchildren = vpn.list();
-        if (vpnchildren != null && vpnchildren.length != 0) {
-            for (int i=0; i<vpnchildren.length; i++) {
-                File chilrenFile = new File(vpn, vpnchildren[i]);
-                chilrenFile.delete();
-            }
-        }
-        if (Calendar.getInstance().getTimeInMillis() - SpUtil.getLong(context, ConstantValue.lastRemoveImageAvaterTime, 0) > 1000 * 60 * 60 * 24 * 7) {
-            String jsonPath =Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
-            File jsonFile = new File(jsonPath);
-            if (jsonFile.exists()) {
-                jsonFile.delete();
-            }
-
-            SpUtil.putLong(context, ConstantValue.lastRemoveImageAvaterTime, Calendar.getInstance().getTimeInMillis());
-            File dir = new File(Environment.getExternalStorageDirectory() + "/Qlink/image");
-            String[] children = dir.list();
-            if (children != null && children.length != 0) {
-                for (int i=0; i<children.length; i++) {
-                    File chilrenFile = new File(dir, children[i]);
-                    if (chilrenFile.getName().substring(0, chilrenFile.getName().lastIndexOf(".")).equals(SpUtil.getString(context, ConstantValue.myAvaterUpdateTime, ""))) {
-                        continue;
-                    }
-                    chilrenFile.delete();
-                }
-            }
-        }
+//        File vpn = new File(Environment.getExternalStorageDirectory() + "/QWallet/vpn");
+//        String[] vpnchildren = vpn.list();
+//        if (vpnchildren != null && vpnchildren.length != 0) {
+//            for (int i=0; i<vpnchildren.length; i++) {
+//                File chilrenFile = new File(vpn, vpnchildren[i]);
+//                chilrenFile.delete();
+//            }
+//        }
+//        if (Calendar.getInstance().getTimeInMillis() - SpUtil.getLong(context, ConstantValue.lastRemoveImageAvaterTime, 0) > 1000 * 60 * 60 * 24 * 7) {
+//            String jsonPath =Environment.getExternalStorageDirectory() + "/QWallet/Profile/jsonFile.json";
+//            File jsonFile = new File(jsonPath);
+//            if (jsonFile.exists()) {
+//                jsonFile.delete();
+//            }
+//
+//            SpUtil.putLong(context, ConstantValue.lastRemoveImageAvaterTime, Calendar.getInstance().getTimeInMillis());
+//            File dir = new File(Environment.getExternalStorageDirectory() + "/QWallet/image");
+//            String[] children = dir.list();
+//            if (children != null && children.length != 0) {
+//                for (int i=0; i<children.length; i++) {
+//                    File chilrenFile = new File(dir, children[i]);
+//                    if (chilrenFile.getName().substring(0, chilrenFile.getName().lastIndexOf(".")).equals(SpUtil.getString(context, ConstantValue.myAvaterUpdateTime, ""))) {
+//                        continue;
+//                    }
+//                    chilrenFile.delete();
+//                }
+//            }
+//        }
     }
 
     /**
@@ -67,7 +66,7 @@ public class FileUtil {
         String lastP2pId = getLocalP2pId();
         if ("".equals(lastP2pId)) {
             copyDataFile();
-            String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/backup/p2p.json";
+            String jsonPath = Environment.getExternalStorageDirectory() + "/QWallet/backup/p2p.json";
             File jsonFile = new File(jsonPath);
 
             FileWriter fw = null;
@@ -113,7 +112,7 @@ public class FileUtil {
         ObjectInputStream ois = null;
         String p2pIdJson = "";
         try {
-            File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/backup/p2p.json");
+            File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/backup/p2p.json");
             if(!file.exists())
             {
                 return p2pIdJson;
@@ -122,7 +121,8 @@ public class FileUtil {
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
             fis.close();
-            p2pIdJson = EncodingUtils.getString(buffer, "UTF-8");
+//            String res = new String(buffer);
+            p2pIdJson = new String(buffer);
         } catch (IOException  e) {
             e.printStackTrace();
         } finally {
@@ -140,7 +140,7 @@ public class FileUtil {
      * 复制data文件到backup文件夹
      */
     public static void copyDataFile() {
-        copyFile(Environment.getExternalStorageDirectory() + "/Qlink/data", Environment.getExternalStorageDirectory() + "/Qlink/backup/data");
+        copyFile(Environment.getExternalStorageDirectory() + "/QWallet/data", Environment.getExternalStorageDirectory() + "/QWallet/backup/data");
     }
 
     /**
@@ -199,7 +199,7 @@ public class FileUtil {
      * @param jsonStr 数据
      */
     public static void saveAssetsData(String walletAdress,String jsonStr) {
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/Assets/"+walletAdress+".json";
+        String jsonPath = Environment.getExternalStorageDirectory() + "/QWallet/Assets/"+walletAdress+".json";
         File jsonFile = new File(jsonPath);
 
         FileWriter fw = null;
@@ -239,7 +239,7 @@ public class FileUtil {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/Assets/"+walletAdress+".json");
+                File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/Assets/"+walletAdress+".json");
                 if(!file.exists())
                 {
                     return  "";
@@ -248,7 +248,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -272,7 +273,7 @@ public class FileUtil {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/Assets/");
+                File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/Assets/");
                 if(!file.exists())
                 {
                     return  "";
@@ -314,7 +315,7 @@ public class FileUtil {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                File file = new File(Environment.getExternalStorageDirectory(),"/Qlink/Address/");
+                File file = new File(Environment.getExternalStorageDirectory(),"/QWallet/Address/");
                 if(!file.exists())
                 {
                     return  "";
@@ -399,7 +400,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -432,7 +434,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -454,7 +457,7 @@ public class FileUtil {
      */
     public static void savaData(String path,String data)
     {
-        File walletFile = new File(Environment.getExternalStorageDirectory() + path, "");//"/Qlink/Address/index.txt"
+        File walletFile = new File(Environment.getExternalStorageDirectory() + path, "");//"/QWallet/Address/index.txt"
         if (!walletFile.exists()) {
             try {
                 walletFile.createNewFile();
@@ -507,7 +510,8 @@ public class FileUtil {
                 byte[] buffer = new byte[fis.available()];
                 fis.read(buffer);
                 fis.close();
-                String res = EncodingUtils.getString(buffer, "UTF-8");
+                String res = new String(buffer);
+//                String res = EncodingUtils.getString(buffer, "UTF-8");
                 return res;
             } catch (IOException  e) {
                 e.printStackTrace();
@@ -523,39 +527,4 @@ public class FileUtil {
         return "";
     }
 
-    /**
-     *  保持vpn server数据到sd卡
-     * @param name 文件名称
-     * @param jsonStr 数据内容
-     */
-    public static void saveVpnServerData(String name,String jsonStr) {
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/vpn/"+name;
-        File jsonFile = new File(jsonPath);
-
-        FileWriter fw = null;
-        BufferedWriter out = null;
-        try {
-            if (!jsonFile.exists()) {
-                jsonFile.createNewFile();
-            }
-            fw = new FileWriter(jsonFile);
-            out = new BufferedWriter(fw);
-            out.write(jsonStr, 0, jsonStr.length());
-            out.close();
-        } catch (Exception e)
-        {
-            System.out.println("保持vpn sever数据异常" + e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
 }

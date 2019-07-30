@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
-import com.stratagile.qlink.activities.DisconnectVPN;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.utils.ToastUtil;

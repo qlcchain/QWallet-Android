@@ -14,13 +14,14 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:minHeight="@dimen/x530"
             android:layout_height="wrap_content"
             app:elevation="0px">
 
             <android.support.constraint.ConstraintLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x300"
+                android:background="@color/mainColor"
                 app:layout_scrollFlags="scroll|snap">
 
                 <TextView
@@ -111,25 +112,27 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:minHeight="@dimen/x230"
                 android:background="@color/white"
                 android:layout_height="wrap_content">
 
                 <View
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x105"
+                    android:layout_height="@dimen/x125"
                     android:background="@color/mainColor" />
 
                 <View
                     android:id="@+id/view2"
                     android:layout_below="@+id/view1"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x105" />
+                    android:background="@color/white"
+                    android:layout_height="@dimen/x125" />
                 <!--76.5-->
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/x20"
+                    android:layout_marginBottom="@dimen/x20"
                     android:layout_height="@dimen/x210"
                     android:layout_marginLeft="@dimen/x13"
                     android:layout_marginRight="@dimen/x13"
@@ -226,6 +229,7 @@
                     android:id="@+id/llGetGas"
                     android:layout_width="match_parent"
                     android:orientation="vertical"
+                    android:background="@color/white"
                     android:layout_below="@+id/view2"
                     android:layout_height="@dimen/x123">
                     <android.support.constraint.ConstraintLayout

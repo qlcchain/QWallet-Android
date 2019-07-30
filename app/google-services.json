@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:665126481188:android:fc017974e5e47aa2",
         "android_client_info": {
-          "package_name": "com.stratagile.winq.dapp"
+          "package_name": "com.stratagile.qwallet"
         }
       },
       "oauth_client": [

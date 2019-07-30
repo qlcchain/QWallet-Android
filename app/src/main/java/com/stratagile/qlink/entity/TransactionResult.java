@@ -1,20 +1,20 @@
 package com.stratagile.qlink.entity;
 
-public class TransactionResult extends BaseBack {
+public class TransactionResult extends BaseBack<TransactionResult.DataBean> {
 
     /**
      * data : {"recordId":"bc986634644e4fc5810a7ee5539e3847","operationResult":true}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

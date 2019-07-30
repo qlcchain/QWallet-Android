@@ -5,14 +5,25 @@ import android.os.Parcelable;
 
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
 
 import java.util.Objects;
 
 public class AllWallet {
     private WalletType walletType;
+
+    public QLCAccount getQlcAccount() {
+        return qlcAccount;
+    }
+
+    public void setQlcAccount(QLCAccount qlcAccount) {
+        this.qlcAccount = qlcAccount;
+    }
+
     private EthWallet ethWallet;
     private EosAccount eosAccount;
+    private QLCAccount qlcAccount;
 
     public EosAccount getEosAccount() {
         return eosAccount;
@@ -84,8 +95,8 @@ public class AllWallet {
     /**
      *
      */
-    public enum WalletType implements Parcelable {
-        NeoWallet, EthWallet, EosWallet;
+    public enum WalletType  implements Parcelable{
+        NeoWallet, EthWallet, EosWallet, QlcWallet;
 
         public static final Creator<WalletType> CREATOR = new Creator<WalletType>() {
             @Override
@@ -98,6 +109,10 @@ public class AllWallet {
                 return new WalletType[size];
             }
         };
+
+        public String getTokenImg() {
+            return "";
+        }
 
         @Override
         public int describeContents() {

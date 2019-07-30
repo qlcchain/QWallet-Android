@@ -15,6 +15,7 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
 import com.stratagile.qlink.entity.EosKeyAccount;
@@ -28,6 +29,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
 import com.stratagile.qlink.entity.MainAddress;
@@ -41,18 +43,30 @@ import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
-import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
+import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.finance.EarnRank;
+import com.stratagile.qlink.entity.finance.HistoryRecord;
+import com.stratagile.qlink.entity.finance.MyRanking;
+import com.stratagile.qlink.entity.newwinq.Order;
+import com.stratagile.qlink.entity.newwinq.Product;
+import com.stratagile.qlink.entity.newwinq.ProductDetail;
+import com.stratagile.qlink.entity.newwinq.Register;
+import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
+import com.stratagile.qlink.entity.otc.Passport;
+import com.stratagile.qlink.entity.otc.TradeOrderDetail;
+import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -84,6 +98,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.HttpException;
+import retrofit2.http.Part;
 
 /**
  * @author hu
@@ -288,11 +303,20 @@ public class HttpAPIWrapper {
 
     }
 
-    public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody p2pId) {     //String userId, String nickName   userId, nickName
+    public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.updateMyAvatar(p2pId, photo)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
         } else {
-            return wrapper(mHttpAPI.updateMyAvatar(p2pId, photo)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
+        }
+
+    }
+
+    public Observable<Passport> updateIdCard(MultipartBody.Part photo, MultipartBody.Part holdphoto, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }
@@ -616,8 +640,233 @@ public class HttpAPIWrapper {
     }
 
 
-    public Observable<ArrayList<EosKeyAccount>> getKeyAccount(Map map) {
-        return wrapperArrayList(mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
+    public Observable<EosKeyAccount> getKeyAccount(Map map) {
+        return (mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<BaseBack> getSignUpVcode(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getSignUpVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getSignUpVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> getSignInVcode(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getSignInVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getSignInVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> getForgetPasswordVcode(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getForgetPasswordVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getForgetPasswordVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<VcodeLogin> resetPassword(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.resetPassword(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.resetPassword(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<VcodeLogin> userRegister(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<Register> userLogin(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.userLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.userLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<VcodeLogin> vCodeLogin(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.vCodeLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.vCodeLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Product> getProductList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<ProductDetail> getProductDetail(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getProductDetail(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getProductDetail(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> buyQLCProduct(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.buyQLCProduct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.buyQLCProduct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Order> getOrderList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Order> redeemOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.redeemOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.redeemOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    //更多的排名
+    public Observable<MyRanking> getRankings(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    //富豪榜
+    public Observable<EarnRank> getEarnRankings(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getEarnRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEarnRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<HistoryRecord> getHistoryRecord(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getHistoryRecord(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getHistoryRecord(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<InviteList> getInivteTop5(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getInivteTop5(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getInivteTop5(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> changeNickName(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> generateBuyQgasOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.generateEntrustBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.generateEntrustBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<EntrustOrderList> getEntrustOrderList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getEntrustOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEntrustOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<EntrustOrderInfo> getEntrustOrderInfo(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getEntrustOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getEntrustOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> cancelEntrustOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.cancelEntrustOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.cancelEntrustOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> generateTradeBuyQgasOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.generateTradeBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.generateTradeBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> tradeBuyerConfirm(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.tradeBuyerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.tradeBuyerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> generateTradeSellOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.generateTradeSellOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.generateTradeSellOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<BaseBack> tradeSellerConfirm(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.tradeSellerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.tradeSellerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<TradeOrderList> tradeOrderList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.tradeOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.tradeOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<TradeOrderDetail> tradeOrderInfo(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<UserInfo> getUserInfo(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getUserInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getUserInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TradeOrderDetail> generateAppeal(RequestBody account, RequestBody token, RequestBody tradeOrderId, RequestBody reason, MultipartBody.Part photo1, MultipartBody.Part photo2, MultipartBody.Part photo3, MultipartBody.Part photo4) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.generateAppeal(account, token, tradeOrderId, reason, photo1, photo2, photo3, photo4)).compose(SCHEDULERS_TRANSFORMER);
+//            return wrapper(mHttpAPI.generateAppeal(account, token, photo1)).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.generateAppeal(account, token, tradeOrderId, reason, photo1, photo2, photo3, photo4)).compose(SCHEDULERS_TRANSFORMER);
+        }
     }
 
     /**
@@ -814,7 +1063,8 @@ public class HttpAPIWrapper {
     //需要额外的添加其他的参数进去，所以把原有的参数和额外的参数通过这个方法一起添加进去.
     private static RequestBody addParams(Map<String, String> data) {
         Map<String, Object> map = new HashMap<>();
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+        //SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)
+        if (false) {
             map.put("appid", MainConstant.MainAppid);
             map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));

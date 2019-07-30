@@ -30,6 +30,7 @@
                 android:id="@+id/tvWhatsMnemonic"
                 android:layout_width="wrap_content"
                 android:text="What is a private key?"
+                android:visibility="invisible"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/x20"
                 android:layout_marginBottom="@dimen/x20"

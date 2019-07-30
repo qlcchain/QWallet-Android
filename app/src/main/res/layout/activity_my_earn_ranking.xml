@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/color_f2f2f2"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_above="@+id/llBottom"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/llBottom"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x113">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:background="@color/mainColor"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="@string/view_my_earnings"
+            android:layout_height="@dimen/x77" />
+    </LinearLayout>
+</RelativeLayout>

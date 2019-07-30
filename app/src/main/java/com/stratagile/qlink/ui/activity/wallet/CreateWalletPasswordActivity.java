@@ -3,24 +3,17 @@ package com.stratagile.qlink.ui.activity.wallet;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
-import android.os.CancellationSignal;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.fingerprint.MyAuthCallback;
-import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerCreateWalletPasswordComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.CreateWalletPasswordContract;
 import com.stratagile.qlink.ui.activity.wallet.module.CreateWalletPasswordModule;
@@ -33,7 +26,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * @author hzp
@@ -98,7 +90,7 @@ public class CreateWalletPasswordActivity extends BaseActivity implements Create
                         ToastUtil.displayShortToast(getString(R.string.The_password_must_contain_at_least_6_characters));
                         return;
                     }
-                    String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
+                    String password = ETHWalletUtils.encryption(etPassword.getText().toString().trim());
                     SpUtil.putString(CreateWalletPasswordActivity.this, ConstantValue.walletPassWord, password);
                     ConstantValue.isShouldShowVertifyPassword = false;
                     ToastUtil.displayShortToast(getString(R.string.Passwords_match));
@@ -155,7 +147,7 @@ public class CreateWalletPasswordActivity extends BaseActivity implements Create
 //                        ToastUtil.displayShortToast(getString(R.string.The_password_must_contain_at_least_6_characters));
 //                        return;
 //                    }
-//                    String password = ETHWalletUtils.enCodePassword(etPassword.getText().toString().trim());
+//                    String password = ETHWalletUtils.encryption(etPassword.getText().toString().trim());
 //                    SpUtil.putString(this, ConstantValue.walletPassWord, password);
 //                    ConstantValue.isShouldShowVertifyPassword = false;
 //                    ToastUtil.displayShortToast(getString(R.string.Passwords_match));

@@ -15,6 +15,7 @@ import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
@@ -126,6 +127,24 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
             }
         }
 
+        List<QLCAccount> qlcAccounts = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+        if (qlcAccounts != null && qlcAccounts.size() != 0) {
+            for (int i = 0; i < qlcAccounts.size(); i++) {
+                if (qlcAccounts.get(i).getAccountName() == null) {
+                    continue;
+                }
+                AllWallet allWallet = new AllWallet();
+                allWallet.setQlcAccount(qlcAccounts.get(i));
+                allWallet.setWalletAddress(qlcAccounts.get(i).getAddress());
+                allWallet.setWalletName(qlcAccounts.get(i).getAccountName() == null? qlcAccounts.get(i).getAccountName() : qlcAccounts.get(i).getAccountName());
+                allWallet.setWalletType(AllWallet.WalletType.QlcWallet);
+                allWallets.add(allWallet);
+                if (qlcAccounts.get(i).getAccountName() != null && qlcAccounts.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
+                    currentSelectWallet = allWallet;
+                }
+            }
+        }
+
         downCheckAdapter = new SelectWalletAdapter(allWallets);
         recyclerView.setAdapter(downCheckAdapter);
         downCheckAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -151,6 +170,12 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                         downCheckAdapter.getData().get(i).getEosAccount().setIsCurrent(false);
                         AppConfig.getInstance().getDaoSession().getEosAccountDao().update(downCheckAdapter.getData().get(i).getEosAccount());
                     }
+                    if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.QlcWallet && downCheckAdapter.getData().get(i).getQlcAccount().getIsCurrent()) {
+                        downCheckAdapter.getData().get(i).getQlcAccount().setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(downCheckAdapter.getData().get(i).getQlcAccount());
+                    }
+
+
 
                     if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.EosWallet && position == i) {
                         downCheckAdapter.getData().get(i).getEosAccount().setIsCurrent(true);
@@ -185,6 +210,13 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                             }
                         }).start();
                     }
+                    if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.QlcWallet && position == i) {
+                        downCheckAdapter.getData().get(i).getQlcAccount().setCurrent(true);
+                        AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(downCheckAdapter.getData().get(i).getQlcAccount());
+                        closeProgressDialog();
+                        setResult(RESULT_OK);
+                        onBackPressed();
+                    }
                 }
             }
         });
@@ -193,6 +225,7 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
         LocalWalletUtil.updateLocalNeoWallet();
         LocalWalletUtil.updateLocalEthWallet();
         LocalWalletUtil.updateLocalEosWallet();
+        LocalWalletUtil.updateLocalQlcWallet();
     }
 
     @Override

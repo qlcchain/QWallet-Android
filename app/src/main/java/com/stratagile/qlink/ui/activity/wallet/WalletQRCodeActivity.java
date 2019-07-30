@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -58,7 +59,10 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
     TextView tvWalletAddess;
     @BindView(R.id.parent)
     ConstraintLayout parent;
+    @BindView(R.id.tvTip)
+    TextView tvTip;
     private QrEntity qrEntity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +80,23 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
     @Override
     protected void initData() {
         qrEntity = getIntent().getParcelableExtra("qrentity");
+        String imgStr = "";
+        switch (qrEntity.getChain()) {
+            case 1 :
+                imgStr = "qrcode_neo";
+                break;
+            case 2 :
+                imgStr = "qrcode_eth";
+                break;
+            case 3 :
+                imgStr = "qrcode_eos";
+                break;
+            case 4 :
+                imgStr = "qrcode_qlcchain";
+                break;
+        }
         if (qrEntity.getIcon() != null && !"".equals(qrEntity.getIcon())) {
-            Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(qrEntity.getIcon(), "mipmap", getPackageName()));
+            Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(imgStr, "mipmap", getPackageName()));
             ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(qrEntity.getContent(), ivQRCode, logo);
             createEnglishQRCode.execute();
         } else {
@@ -85,6 +104,12 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
             createEnglishQRCode.execute();
         }
         setTitle(qrEntity.getTitle());
+        if (qrEntity.getChain() == 4) {
+            tvTip.setText("This address is only for receiving QGAS.");
+            setTitle("Receivable Address");
+        } else {
+            tvTip.setText("This address only receives " + qrEntity.getIcon().toUpperCase() + ", sending other currencies. This address will not be recovered.");
+        }
         tvWalletAddess.setText(qrEntity.getContent());
     }
 
@@ -132,7 +157,7 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
      */
     private Uri saveBitmap(Bitmap bm, String picName) {
         try {
-            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qlink/image/" + picName + ".jpg";
+            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qwallet/image/" + picName + ".jpg";
             File f = new File(dir);
             if (!f.exists()) {
                 f.getParentFile().mkdirs();

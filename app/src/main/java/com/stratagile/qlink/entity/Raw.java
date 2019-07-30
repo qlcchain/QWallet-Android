@@ -4,21 +4,21 @@ package com.stratagile.qlink.entity;
  * Created by huzhipeng on 2018/1/26.
  */
 
-public class Raw extends BaseBack {
+public class Raw extends BaseBack<Raw.DataBean> {
 
     /**
      * data : {"rates":{"NEO":{"QLC":460.59},"GAS":{"QLC":164.5},"BNB":{"QLC":103.31}}}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

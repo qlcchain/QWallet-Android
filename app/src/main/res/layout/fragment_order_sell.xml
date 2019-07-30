@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_height="@dimen/x138">
+            <TextView
+                android:id="@+id/tvUnitPrice"
+                android:layout_width="wrap_content"
+                android:text="Unit Price"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="@dimen/x21"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/etUnitPrice"
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:layout_marginTop="@dimen/x10"
+                android:layout_marginBottom="@dimen/x4"
+                android:background="@null"
+                android:inputType="numberDecimal"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvUnitPrice" />
+            <TextView
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/etUnitPrice"
+                app:layout_constraintTop_toTopOf="@id/etUnitPrice"
+                android:text="USDT"
+                android:layout_marginRight="@dimen/x31"
+                android:layout_width="wrap_content"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
+                android:layout_height="wrap_content" />
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/color_f2f2f2"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_height="@dimen/x138">
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:text="Amount"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="@dimen/x21"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/etAmount"
+                app:layout_constraintTop_toBottomOf="@+id/tvAmount"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:background="@null"
+                android:inputType="number"
+                android:layout_marginTop="@dimen/x10"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
+                android:layout_marginBottom="@dimen/x4"
+                android:layout_height="wrap_content" />
+            <TextView
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="QGAS"
+                app:layout_constraintBottom_toBottomOf="@id/etAmount"
+                app:layout_constraintTop_toTopOf="@id/etAmount"
+                android:layout_marginRight="@dimen/x31"
+                android:layout_width="wrap_content"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
+                android:layout_height="wrap_content" />
+        </android.support.constraint.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/color_f2f2f2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Volume Settings"
+            android:textSize="16sp"
+            android:layout_marginLeft="@dimen/x30"
+            android:textColor="@color/color_29282a"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="@dimen/x21"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginTop="@dimen/x12"
+            android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/x30"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/x42">
+            <EditText
+                android:id="@+id/etMinAmount"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:hint="Min Amount"
+                android:inputType="number"
+                android:textSize="16sp"
+                android:background="@null"
+                android:layout_height="match_parent" />
+            <View
+                android:layout_width="@dimen/x30"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:background="#979797"
+                android:layout_height="@dimen/x2" />
+            <EditText
+                android:id="@+id/etMaxAmount"
+                android:layout_width="0px"
+                android:background="@null"
+                android:hint="Max Amount"
+                android:inputType="number"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/color_f2f2f2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/x8"
+            android:textColor="@color/color_808080"
+            android:text="The Min Amount should be equal or greater than 1. And the Max Amount should be equal or less than the Total Amount you set."
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/color_f2f2f2"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="ERC20 Address to receive USDT"
+            android:textSize="16sp"
+            android:layout_marginLeft="@dimen/x30"
+            android:textColor="@color/color_29282a"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="@dimen/x21"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/llSelectEthWallet"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x138">
+
+            <ImageView
+                android:layout_width="@dimen/x88"
+                android:src="@mipmap/icons_eth_wallet"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_height="@dimen/x88" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Select a ETH wallet to receive USDT"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:singleLine="true"
+                    android:maxWidth="@dimen/x480"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:id="@+id/tvWalletName"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_29282a_40"
+                    android:text="Input ETH Wallet Address"
+                    android:layout_marginTop="@dimen/x10"
+                    android:maxEms="10"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:maxWidth="@dimen/x400"
+                    android:id="@+id/tvWalletAddess"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:padding="@dimen/x15"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_width="@dimen/x60"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/icon_enter1"
+                android:layout_height="@dimen/x60" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/color_f2f2f2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="QLC Chain Wallet to send out QGAS"
+            android:textSize="16sp"
+            android:layout_marginLeft="@dimen/x30"
+            android:textColor="@color/color_29282a"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="@dimen/x21"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/llSelectQlcWallet"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x138">
+
+            <ImageView
+                android:id="@+id/iv_country"
+                android:layout_width="@dimen/x88"
+                android:src="@mipmap/icons_qlc_wallet"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_height="@dimen/x88" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Select a QLC wallet to send out QGAS"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:singleLine="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:id="@+id/tvQLCWalletName"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_29282a_40"
+                    android:layout_marginTop="@dimen/x10"
+                    android:maxEms="10"
+                    android:ellipsize="middle"
+                    android:text="Select a QLC Wallet"
+                    android:singleLine="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:maxWidth="@dimen/x400"
+                    android:id="@+id/tvQLCWalletAddess"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:padding="@dimen/x15"
+                android:id="@+id/walletMore"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_width="@dimen/x60"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/icon_enter1"
+                android:layout_height="@dimen/x60" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x30"
+            android:background="@color/color_f2f2f2"/>
+
+        <TextView
+            android:id="@+id/tvNext"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/x60"
+            android:background="@drawable/main_color_bt_bg"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/next"
+            android:textSize="16sp"
+            android:layout_height="@dimen/x94" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

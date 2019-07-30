@@ -4,7 +4,7 @@ package com.stratagile.qlink.entity;
  * Created by huzhipeng on 2018/1/19.
  */
 
-public class Balance extends BaseBack {
+public class Balance extends BaseBack<Balance.DataBean> {
 
     /**
      * data : {"QLC":"0","NEO":1,"GAS":0.5}
@@ -12,7 +12,7 @@ public class Balance extends BaseBack {
      *
      */
 
-    private DataBean data;
+//    private DataBean data;
 
     private String walletAddress;
 
@@ -24,13 +24,13 @@ public class Balance extends BaseBack {
         this.walletAddress = walletAddress;
     }
 
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

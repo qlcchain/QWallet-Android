@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/qrcode"
-        android:icon="@mipmap/icons_qrcode"
+        android:icon="@mipmap/scavenging_h"
         app:showAsAction="always"
         android:title="" />
 </menu>

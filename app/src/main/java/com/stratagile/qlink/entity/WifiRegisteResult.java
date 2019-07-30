@@ -1,23 +1,24 @@
 package com.stratagile.qlink.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huzhipeng on 2018/1/10.
  */
 
-public class WifiRegisteResult extends BaseBack {
+public class WifiRegisteResult extends BaseBack<ArrayList<WifiRegisteResult.DataBean>> {
 
 
-    private ArrayList<DataBean> data;
-
-    public ArrayList<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(ArrayList<DataBean> data) {
-        this.data = data;
-    }
+//    private ArrayList<DataBean> data;
+//
+//    public ArrayList<DataBean> getData() {
+//        return data;
+//    }
+//
+//    public void setData(ArrayList<DataBean> data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

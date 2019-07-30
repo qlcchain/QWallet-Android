@@ -172,7 +172,7 @@ public class SettingsFragment extends BaseFragment implements SettingsContract.V
                 startActivity(intent1);
                 break;
             case R.id.llAboutWinQ:
-//                startActivity(new Intent(getActivity(), TestActivity.class));
+                startActivity(new Intent(getActivity(), TestActivity.class));
                 break;
             default:
                 break;

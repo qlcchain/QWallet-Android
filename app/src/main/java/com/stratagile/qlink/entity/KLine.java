@@ -2,17 +2,17 @@ package com.stratagile.qlink.entity;
 
 import java.util.List;
 
-public class KLine extends BaseBack {
+public class KLine extends BaseBack<List<List<String>>> {
 
-    private List<List<String>> data;
-
-    public List<List<String>> getData() {
-        return data;
-    }
-
-    public void setData(List<List<String>> data) {
-        this.data = data;
-    }
+//    private List<List<String>> data;
+//
+//    public List<List<String>> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<List<String>> data) {
+//        this.data = data;
+//    }
 
     public static class Line {
         private long openTime;

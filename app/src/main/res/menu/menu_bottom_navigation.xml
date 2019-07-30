@@ -2,19 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_sms"
-        android:icon="@mipmap/icon_vpn_n"
-        android:title="@string/vpn" />
-    <!--<item-->
-        <!--android:id="@+id/item_market"-->
-        <!--android:visible="false"-->
-        <!--android:icon="@mipmap/icon_markets_n"-->
-        <!--android:title="@string/market" />-->
+        android:icon="@mipmap/finance_n"
+        android:title="@string/finance" />
     <item
         android:id="@+id/item_all_wallet"
-        android:icon="@mipmap/icon_wallet_n"
+        android:icon="@mipmap/wallet_n"
         android:title="@string/wallet" />
     <item
         android:id="@+id/item_settings"
-        android:icon="@mipmap/icon_settings_n"
-        android:title="@string/settings" />
+        android:icon="@mipmap/settings_n"
+        android:title="@string/me" />
 </menu>

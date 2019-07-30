@@ -39,4 +39,14 @@
         android:layout_marginLeft="@dimen/x45"
         android:layout_marginRight="@dimen/x45"
         android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvTip"
+        app:layout_constraintTop_toBottomOf="@+id/tvWalletAddess"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:layout_marginTop="@dimen/x42"
+        android:textSize="12sp"
+        android:textColor="@color/color_d0021b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>

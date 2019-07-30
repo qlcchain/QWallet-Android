@@ -27,9 +27,6 @@ import com.stratagile.qlink.ui.activity.sms.component.DaggerSmsComponent;
 import com.stratagile.qlink.ui.activity.sms.contract.SmsContract;
 import com.stratagile.qlink.ui.activity.sms.module.SmsModule;
 import com.stratagile.qlink.ui.activity.sms.presenter.SmsPresenter;
-import com.stratagile.qlink.ui.activity.vpn.MyAssetsActivity;
-import com.stratagile.qlink.ui.activity.vpn.RegisteVpnActivity;
-import com.stratagile.qlink.ui.activity.vpn.VpnListFragment;
 import com.stratagile.qlink.ui.activity.wallet.CreateWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.NoWalletActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
@@ -102,7 +99,7 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
             public Fragment getItem(int position) {
                 switch (position) {
                     case 0:
-                        return new VpnListFragment();
+//                        return new VpnListFragment();
 //                    case 1:
 //                        return new VpnListFragment();
 //                    case 2:
@@ -244,10 +241,6 @@ public class SmsFragment extends BaseFragment implements SmsContract.View {
                     getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                     return;
                 }
-                Intent intent = new Intent(getActivity(), MyAssetsActivity.class);
-//                intent.putExtra("flag", "");
-                startActivityForResult(intent, 0);
-                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 break;
 //            case R.id.iv_world:
 //                startActivity(new Intent(getActivity(), WordCupIntroduceActivity.class));

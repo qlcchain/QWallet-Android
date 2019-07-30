@@ -2,65 +2,167 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/content_background_shape"
+    android:background="@color/white"
     android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v7.widget.CardView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginLeft="@dimen/x33"
-            android:layout_marginRight="@dimen/x33"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/x5"
-            app:cardElevation="@dimen/x2"
-            android:layout_marginTop="@dimen/x28"
-            android:layout_height="wrap_content">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.RecyclerView>
-
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:id="@+id/tv_join_telegram"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/x13"
-            android:layout_marginLeft="@dimen/x33"
-            android:layout_marginRight="@dimen/x33"
-            android:includeFontPadding="false"
+            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/x24"
-            android:drawablePadding="@dimen/x20"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:background="@drawable/join_telegram"
-            android:drawableLeft="@mipmap/icon_telegram"
-            android:text="@string/Join_our_Telegram"
-            android:layout_height="@dimen/x88" />
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/touch_face_id_to_unlock"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <Switch
+                android:id="@+id/touchIdToUnlock"
+                android:layout_width="@dimen/x98"
+                android:layout_height="@dimen/x60" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_share_facebook"
+        <View
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/x13"
-            android:layout_marginLeft="@dimen/x33"
-            android:layout_marginRight="@dimen/x33"
-            android:includeFontPadding="false"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+
+        <LinearLayout
+            android:id="@+id/resetPassword"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/x35"
-            android:drawablePadding="@dimen/x20"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:background="@drawable/share_facebook"
-            android:drawableLeft="@mipmap/icon_facebook"
-            android:text="@string/Share_your_Experience"
-            android:layout_height="@dimen/x88" />
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/reset_password"
+                android:textColor="@color/color_29282a"
+                android:textSize="16sp"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:id="@+id/selectUnit"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/currency_unit"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/version"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:id="@+id/llLoginOut"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/log_out"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"/>
+        <!--<TextView-->
+            <!--android:id="@+id/tv_join_telegram"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_marginTop="@dimen/x13"-->
+            <!--android:layout_marginLeft="@dimen/x33"-->
+            <!--android:layout_marginRight="@dimen/x33"-->
+            <!--android:includeFontPadding="false"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:paddingLeft="@dimen/x24"-->
+            <!--android:drawablePadding="@dimen/x20"-->
+            <!--android:fontFamily="@font/roboto_regular"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:background="@drawable/join_telegram"-->
+            <!--android:drawableLeft="@mipmap/icon_telegram"-->
+            <!--android:text="@string/Join_our_Telegram"-->
+            <!--android:layout_height="@dimen/x88" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_share_facebook"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_marginTop="@dimen/x13"-->
+            <!--android:layout_marginLeft="@dimen/x33"-->
+            <!--android:layout_marginRight="@dimen/x33"-->
+            <!--android:includeFontPadding="false"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:paddingLeft="@dimen/x35"-->
+            <!--android:drawablePadding="@dimen/x20"-->
+            <!--android:fontFamily="@font/roboto_regular"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:background="@drawable/share_facebook"-->
+            <!--android:drawableLeft="@mipmap/icon_facebook"-->
+            <!--android:text="@string/Share_your_Experience"-->
+            <!--android:layout_height="@dimen/x88" />-->
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -2,21 +2,21 @@ package com.stratagile.qlink.entity;
 
 import java.util.List;
 
-public class Active extends BaseBack {
+public class Active extends BaseBack<Active.DataBean> {
 
     /**
      * data : {"currentDate":"2018-08-02 09:24:00","acts":[{"actEndDate":"2018-08-03 17:00:00","actStatus":"NEW","actStartDate":"2018-08-02 12:00:00","actId":"1","actName":"奖池瓜分","actAmount":2300}]}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         @Override

@@ -4,6 +4,7 @@ import android.net.wifi.WifiInfo;
 
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.TransactionRecord;
+import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.MainAddress;
@@ -34,6 +35,16 @@ public class ConstantValue {
     public static String unlockTime = "unlocktime";
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
+    //测试 http://47.103.40.20:19735
+    //正式 https://rpc.qlcchain.online   http://wrpc.qlcchain.org:9735
+//    public static String qlcNode = "https://rpc.qlcchain.online";
+
+
+
+    public static String qlcNode = "http://wrpc.qlcchain.org:9735";
+//    public static String qlcNode = "http://47.103.40.20:19735";
+
+    public static UserAccount currentUser;
     /**
      * 拥有的免费连接次数
      */
@@ -44,6 +55,8 @@ public class ConstantValue {
     public static String ethMainAddress = "";
 
     public static boolean canClickWallet = true;
+
+    public static UserAccount lastLoginOut;
 
     /**
      * eth的bnb契约地址
@@ -233,4 +246,13 @@ public class ConstantValue {
     public static final String sendVpnFileNewRsp = "sendVpnFileNewRsp";
 
     public static final String vpnRegisterSuccessNotify = "vpnRegisterSuccessNotify";
+
+    public static final String userPhone = "userPhone";
+    public static final String userPassword = "userPassword";
+    public static final String userEmail = "userEmail";
+    public static final String userRsaPubKey = "userRsaPubKey";
+    public static final String isUserLogin = "isUserLogin";
+
+    public static final String orderTypeBuy = "BUY";
+    public static final String orderTypeSell = "SELL";
 }

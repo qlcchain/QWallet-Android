@@ -1,9 +1,14 @@
 package com.stratagile.qlink.ui.activity.wallet.presenter;
 import android.support.annotation.NonNull;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
+import com.stratagile.qlc.entity.QlcTokenbalance;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.HttpObserver;
@@ -29,6 +34,7 @@ import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +47,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import qlc.bean.Token;
+import qlc.mng.LedgerMng;
+import qlc.network.QlcClient;
+import qlc.network.QlcException;
+import qlc.rpc.impl.LedgerRpc;
 
 /**
  * @author hzp
@@ -301,7 +312,7 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
         } else {
             tokenInfo1.setTokenValue(Double.parseDouble(ethWalletInfo.getData().getETH().getBalance().toString()));
         }
-        tokenInfo1.setTokenImgName("eth_eth");
+        tokenInfo1.setTokenImgName("eth");
         tokenInfo1.setWalletType(AllWallet.WalletType.EthWallet);
         tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());
         tokenInfo1.setMainNetToken(true);
@@ -348,7 +359,7 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
     private boolean isEthMainNetToken(EthWalletInfo.DataBean.TokensBean tokensBean) {
         String jsonStr = new Gson().toJson(tokensBean.getTokenInfo().getPrice());
         KLog.i(jsonStr);
-        if (!"false".equals(jsonStr)) {
+        if (!"false".equals(jsonStr) || tokensBean.getTokenInfo().getSymbol().toLowerCase().equals("usdt")) {
             return true;
         } else {
             //没有上交易所
@@ -359,9 +370,8 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
     private String getEthTokenImg(EthWalletInfo.DataBean.TokensBean tokensBean) {
         String jsonStr = new Gson().toJson(tokensBean.getTokenInfo().getPrice());
         KLog.i(jsonStr);
-        if (!"false".equals(jsonStr)) {
-            JSONObject.parseObject(jsonStr).getString("ts");
-            return "eth_" + tokensBean.getTokenInfo().getSymbol().toLowerCase();
+        if (!"false".equals(jsonStr) || tokensBean.getTokenInfo().getSymbol().toLowerCase().equals("usdt")) {
+            return tokensBean.getTokenInfo().getSymbol().toLowerCase();
         } else {
             //没有上交易所
             return "";
@@ -430,12 +440,72 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
         getTokenPrice(tokenInfos);
     }
 
+    @Override
+    public void getQlcTokensInfo(ArrayList<QlcTokenbalance> qlcWalletInfo, String address) {
+        ArrayList<TokenInfo> tokenInfos = new ArrayList<>();
+        if (qlcWalletInfo == null || qlcWalletInfo.size() == 0) {
+//            TokenInfo tokenInfo = new TokenInfo();
+//            tokenInfo.setTokenName("QLC");
+//            tokenInfo.setTokenSymol("QLC");
+//            tokenInfo.setTokenValue(0);
+//            tokenInfo.setTokenDecimals(8);
+//            tokenInfo.setTokenAddress("");
+//            tokenInfo.setTokenImgName("qlc_qlc");
+//            tokenInfo.setWalletAddress(address);
+//            tokenInfo.setMainNetToken(true);
+//            tokenInfo.setWalletType(AllWallet.WalletType.QlcWallet);
+//            tokenInfos.add(tokenInfo);
+            getQlcTokensDecimals(tokenInfos);
+            return;
+        }
+        for (int i = 0; i < qlcWalletInfo.size(); i++) {
+            TokenInfo tokenInfo = new TokenInfo();
+            tokenInfo.setTokenName(qlcWalletInfo.get(i).getSymbol());
+            tokenInfo.setTokenSymol(qlcWalletInfo.get(i).getSymbol());
+            tokenInfo.setTokenValue(Double.parseDouble(qlcWalletInfo.get(i).getBalance()));
+            tokenInfo.setTokenAddress(qlcWalletInfo.get(i).getSymbol());
+            tokenInfo.setTokenImgName(qlcWalletInfo.get(i).getSymbol().toLowerCase());
+            tokenInfo.setWalletAddress(address);
+            tokenInfo.setMainNetToken(true);
+            tokenInfo.setWalletType(AllWallet.WalletType.QlcWallet);
+            tokenInfos.add(tokenInfo);
+        }
+        getQlcTokensDecimals(tokenInfos);
+    }
+
+    private void getQlcTokensDecimals(ArrayList<TokenInfo> tokenInfos) {
+        if (tokenInfos.size() == 0) {
+            mView.getTokenPriceBack(tokenInfos);
+            return;
+        }
+        try {
+            QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
+            LedgerRpc rpc = new LedgerRpc(qlcClient);
+            JSONObject jsonObject = rpc.tokens(null);
+            KLog.i(jsonObject);
+            ArrayList<Token> tokens = new Gson().fromJson(jsonObject.getJSONArray("result").toJSONString(), new TypeToken<ArrayList<Token>>(){}.getType());
+            for (TokenInfo tokenInfo : tokenInfos) {
+                for (Token token : tokens) {
+                    if (tokenInfo.getTokenSymol().equals(token.getTokenSymbol())) {
+                        tokenInfo.setTokenDecimals(token.getDecimals());
+                    }
+                }
+            }
+            getTokenPrice(tokenInfos);
+
+        } catch (QlcException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private String getNeoTokenImg(NeoWalletInfo.DataBean.BalanceBean balanceBean) {
-        return "neo_" + balanceBean.getAsset_symbol().toLowerCase();
+        return balanceBean.getAsset_symbol().toLowerCase();
     }
 
     private String getEosTokenImg(EosTokens.DataBeanX.DataBean.SymbolListBean balanceBean) {
-        return "eos_" + balanceBean.getSymbol().toLowerCase();
+        return balanceBean.getSymbol().toLowerCase();
     }
 
     @Override

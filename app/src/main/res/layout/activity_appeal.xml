@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Reason"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/color_29282a"
+        android:textSize="14sp"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/x18"
+        app:cardCornerRadius="@dimen/x10"
+        app:cardMaxElevation="@dimen/x10"
+        android:layout_height="@dimen/x276">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x14"
+            android:layout_marginBottom="@dimen/x14"
+            android:layout_marginLeft="@dimen/x22"
+            android:layout_marginRight="@dimen/x22"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/etContent"
+                android:hint="For example, incorrect amount, no payment received, etc."
+                android:layout_width="match_parent"
+                android:gravity="top"
+                android:textSize="14sp"
+                android:background="@null"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/tvTypeCount"
+                android:layout_width="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="0/100"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Upload (max:5M)"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/color_29282a"
+        android:textSize="14sp"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/x30"
+        android:id="@+id/recyclerView"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Must be JPG,JPEG,PNG,or BMP format"
+        android:textColor="@color/color_d0021b"
+        android:textSize="12sp"
+        android:layout_marginBottom="@dimen/x30"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_f2f2f2"/>
+    <TextView
+        android:id="@+id/tvSubmit"
+        android:layout_width="match_parent"
+        android:background="@color/mainColor"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="Submit"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginBottom="@dimen/x20"
+        android:layout_height="@dimen/x77" />
+</LinearLayout>

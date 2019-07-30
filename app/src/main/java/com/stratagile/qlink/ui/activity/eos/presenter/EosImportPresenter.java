@@ -16,6 +16,7 @@ import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.ui.activity.eos.contract.EosImportContract;
 import com.stratagile.qlink.ui.activity.eos.EosImportActivity;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,9 +67,9 @@ public class EosImportPresenter implements EosImportContract.EosImportContractPr
 
     public void getEosKeyAccount(Map map) {
         Disposable disposable = httpAPIWrapper.getKeyAccount(map)
-                .subscribe(new Consumer<ArrayList<EosKeyAccount>>() {
+                .subscribe(new Consumer<EosKeyAccount>() {
                     @Override
-                    public void accept(ArrayList<EosKeyAccount> baseBack) throws Exception {
+                    public void accept(EosKeyAccount baseBack) throws Exception {
                         //isSuccesse
                         KLog.i("onSuccesse");
                         mView.getEosKeyAccountBack(baseBack);
@@ -79,6 +80,7 @@ public class EosImportPresenter implements EosImportContract.EosImportContractPr
                     public void accept(Throwable throwable) throws Exception {
                         //onError
                         KLog.i("onError");
+                        ToastUtil.displayShortToast(throwable.getMessage());
                         throwable.printStackTrace();
                         mView.closeProgressDialog();
                     }

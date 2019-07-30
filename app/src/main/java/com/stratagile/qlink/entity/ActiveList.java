@@ -2,21 +2,21 @@ package com.stratagile.qlink.entity;
 
 import java.util.List;
 
-public class ActiveList extends BaseBack {
+public class ActiveList extends BaseBack<ActiveList.DataBean> {
 
     /**
      * data : {"actStatus":"START","vpnRanking":[{"imgUrl":"/data/dapp/head/ff1b71a06b264278b7b70deb9d1163fe.jpg","assetName":"StevenNL","connectSuccessNum":4},{"imgUrl":"/data/dapp/head/802d994df59a480697edc0f41e404c9c.jpg","assetName":"Finland_vpn","connectSuccessNum":3},{"imgUrl":"/data/dapp/head/182fef1c66f54c1683e74bf37045a537.jpg","assetName":"PrivateNL","connectSuccessNum":2},{"imgUrl":"/data/dapp/head/802d994df59a480697edc0f41e404c9c.jpg","assetName":"Japan_vpn_1","connectSuccessNum":1},{"imgUrl":"/data/dapp/head/802d994df59a480697edc0f41e404c9c.jpg","assetName":"Japan_vpn_2","connectSuccessNum":1},{"imgUrl":"/data/dapp/head/802d994df59a480697edc0f41e404c9c.jpg","assetName":"germany_vpn","connectSuccessNum":1},{"imgUrl":"/data/dapp/head/802d994df59a480697edc0f41e404c9c.jpg","assetName":"vpn_test1","connectSuccessNum":1}]}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

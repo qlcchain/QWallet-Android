@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.wallet.contract;
 
+import com.stratagile.qlc.entity.QlcTokenbalance;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.NeoTransfer;
@@ -74,5 +75,7 @@ public interface AllWalletContract {
         void getNeoGasClaim(Map map);
 
         void claimGas(String address, String amount, String txid);
+
+        void getQlcTokensInfo(ArrayList<QlcTokenbalance> neoWalletInfo, String address);
     }
 }

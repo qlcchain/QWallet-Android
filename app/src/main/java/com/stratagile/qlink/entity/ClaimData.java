@@ -2,21 +2,21 @@ package com.stratagile.qlink.entity;
 
 import java.util.List;
 
-public class ClaimData extends BaseBack {
+public class ClaimData extends BaseBack<ClaimData.DataBean> {
 
     /**
      * data : {"address":"AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK","claims":[{"start":"2936848","claim":"0.000021","txid":"ee3fae2e0efcfbce0173180c34e1838ea7ed09f998c33e7333856654b6244fa6","index":0,"end":"2937148","value":1}],"net":"MainNet"}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

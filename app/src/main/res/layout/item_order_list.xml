@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x216"
+    android:paddingLeft="@dimen/x30"
+    android:background="@color/white"
+    android:paddingRight="@dimen/x30"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x27"
+        android:layout_height="@dimen/x38">
+        <ImageView
+            android:layout_width="@dimen/x38"
+            android:src="@mipmap/qlc"
+            android:layout_height="@dimen/x38" />
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:includeFontPadding="false"
+            android:text="dddddddddd"
+            android:layout_marginLeft="@dimen/x15"
+            android:textSize="14sp"
+            android:textColor="#4d4d4d"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x150">
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x150">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#888"
+                android:text="@string/principal"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvPrincipal"
+                android:text="12.88"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llEarn"
+            android:layout_width="0px"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_height="@dimen/x150">
+            <TextView
+                android:id="@+id/tvQlcCount"
+                android:layout_width="wrap_content"
+                android:text="@string/cumulative_earnings"
+                android:textSize="12sp"
+                android:textColor="@color/color_999"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvCumulativeEarning"
+                android:text="1.288"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#01B5AB"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llMaturityTime"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:gravity="center_vertical|right"
+            android:layout_height="@dimen/x150">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#888"
+                android:text="@string/maturity_date"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvMaturityDate"
+                android:text="1 Jan"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llRedeem"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:gravity="right|center_vertical"
+            android:layout_height="@dimen/x150">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:background="@drawable/bt_108ee9_bg"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:paddingTop="@dimen/x4"
+                android:paddingBottom="@dimen/x4"
+                android:textColor="@color/color_108ee9"
+                android:text="@string/redeem"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llNotReceived"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:gravity="right|center_vertical"
+            android:layout_height="@dimen/x150">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:paddingTop="@dimen/x4"
+                android:paddingBottom="@dimen/x4"
+                android:textColor="@color/color_808080"
+                android:text="@string/not_received"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llRedeemed"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:gravity="right|center_vertical"
+            android:layout_height="@dimen/x150">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:paddingTop="@dimen/x4"
+                android:paddingBottom="@dimen/x4"
+                android:textColor="@color/color_808080"
+                android:text="@string/redeemed"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_f2f2f2"
+        android:layout_height="@dimen/x1" />
+</LinearLayout>

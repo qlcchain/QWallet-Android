@@ -2,21 +2,21 @@ package com.stratagile.qlink.entity.eos;
 
 import com.stratagile.qlink.entity.BaseBack;
 
-public class EosResourcePrice extends BaseBack {
+public class EosResourcePrice extends BaseBack<EosResourcePrice.DataBean> {
 
     /**
      * data : {"cpuPrice":1.2415,"ramPrice":0.0637,"cpuPriceUnit":"EOS/ms/Day","netPriceUnit":"EOS/KB/Day","ramPriceUnit":"EOS/KB","netPrice":4.0E-4}
      */
 
-    private DataBean data;
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+//    private DataBean data;
+//
+//    public DataBean getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBean data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

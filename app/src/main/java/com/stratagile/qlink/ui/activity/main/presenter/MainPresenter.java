@@ -126,7 +126,7 @@ public class MainPresenter implements MainContract.MainContractPresenter {
     public void getTox() {
         KLog.i("获取tox的json");
         getMainAddress();
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qlink/Profile/jsonFile.json";
+        String jsonPath = Environment.getExternalStorageDirectory() + "/Qwallet/Profile/jsonFile.json";
         File jsonFile = new File(jsonPath);
         if (!jsonFile.exists()) {
             new Thread(new Runnable() {

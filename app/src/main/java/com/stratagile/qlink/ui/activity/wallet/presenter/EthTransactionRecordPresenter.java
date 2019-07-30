@@ -3,16 +3,13 @@ package com.stratagile.qlink.ui.activity.wallet.presenter;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.socks.library.KLog;
-import com.stratagile.qlink.R;
-import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlc.entity.AccountHistory;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.BaseBack;
@@ -26,6 +23,7 @@ import com.stratagile.qlink.entity.TransactionInfo;
 import com.stratagile.qlink.ui.activity.wallet.contract.EthTransactionRecordContract;
 import com.stratagile.qlink.ui.activity.wallet.EthTransactionRecordActivity;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +38,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import qlc.mng.AccountMng;
+import qlc.network.QlcClient;
+import qlc.network.QlcException;
+import qlc.rpc.impl.LedgerRpc;
+import qlc.utils.Helper;
 
 /**
  * @author hzp
@@ -108,7 +111,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     @Override
                     public void accept(OnlyEthTransactionHistory baseBack) throws Exception {
                         //isSuccesse
-                        String data = "{\"operations\":"  + baseBack.getData() + "}";
+                        String data = "{\"operations\":" + baseBack.getData() + "}";
                         KLog.i(data);
                         OnlyEthTransactionHistory.EthTransactionBean ethTransactionBean = new Gson().fromJson(data, OnlyEthTransactionHistory.EthTransactionBean.class);
                         getOnlyEthTransactionHistory(ethTransactionBean.getOperations(), walletAddress);
@@ -139,8 +142,13 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
             transactionInfo.setTransationHash(dataBean.get(i).getHash());
             transactionInfo.setFrom(dataBean.get(i).getFrom());
             transactionInfo.setTo(dataBean.get(i).getTo());
-            transactionInfo.setTransactionState(dataBean.get(i).isSuccess()? "success" : "failed");
+            transactionInfo.setTransactionState(dataBean.get(i).isSuccess() ? "success" : "failed");
             transactionInfo.setOwner(walletAddress);
+            if (walletAddress.equals(dataBean.get(i).getFrom())) {
+                transactionInfo.setShowAddress(dataBean.get(i).getTo());
+            } else {
+                transactionInfo.setShowAddress(dataBean.get(i).getFrom());
+            }
             transactionInfo.setTimestamp(dataBean.get(i).getTimestamp());
             transactionInfo.setTokenDecimals(0);
             transactionInfos.add(transactionInfo);
@@ -158,9 +166,15 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                 transactionInfo.setTransactionValue(operationsBeans.get(i).getValue());
                 transactionInfo.setTransationHash(operationsBeans.get(i).getTransactionHash());
                 transactionInfo.setFrom("");
+                transactionInfo.setShowAddress(operationsBeans.get(i).getTo());
                 transactionInfo.setTo(operationsBeans.get(i).getTo());
                 transactionInfo.setTransactionState(operationsBeans.get(i).getType());
                 transactionInfo.setOwner(address);
+                if (address.equals(operationsBeans.get(i).getFrom())) {
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
+                } else {
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
+                }
                 transactionInfo.setTimestamp(operationsBeans.get(i).getTimestamp());
                 transactionInfo.setTokenDecimals(Integer.parseInt(operationsBeans.get(i).getTokenInfo().getDecimals()));
                 transactionInfos.add(transactionInfo);
@@ -172,6 +186,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                 transactionInfo1.setTransationHash(operationsBeans.get(i).getTransactionHash());
                 transactionInfo1.setFrom(operationsBeans.get(i).getFrom());
                 transactionInfo1.setTo("");
+                transactionInfo1.setShowAddress(operationsBeans.get(i).getTransactionHash());
                 transactionInfo1.setTransactionState(operationsBeans.get(i).getType());
                 transactionInfo1.setOwner(address);
                 transactionInfo1.setTimestamp(operationsBeans.get(i).getTimestamp());
@@ -187,6 +202,11 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                 transactionInfo.setTo(operationsBeans.get(i).getTo());
                 transactionInfo.setTransactionState(operationsBeans.get(i).getType());
                 transactionInfo.setOwner(address);
+                if (address.equals(operationsBeans.get(i).getFrom())) {
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
+                } else {
+                    transactionInfo.setShowAddress(operationsBeans.get(i).getTransactionHash());
+                }
                 transactionInfo.setTimestamp(operationsBeans.get(i).getTimestamp());
                 transactionInfo.setTokenDecimals(Integer.parseInt(operationsBeans.get(i).getTokenInfo().getDecimals()));
                 transactionInfos.add(transactionInfo);
@@ -216,6 +236,11 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                             transactionInfo.setTo(baseBack.getData().get(i).getAddress_to());
                             transactionInfo.setTransactionState("success");
                             transactionInfo.setOwner((String) map.get("address"));
+                            if (((String) map.get("address")).equals(baseBack.getData().get(i).getAddress_from())) {
+                                transactionInfo.setShowAddress(baseBack.getData().get(i).getAddress_to());
+                            } else {
+                                transactionInfo.setShowAddress(baseBack.getData().get(i).getAddress_from());
+                            }
                             transactionInfo.setTimestamp(baseBack.getData().get(i).getTime());
                             transactionInfos.add(transactionInfo);
                         }
@@ -281,6 +306,11 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                             transactionInfo.setTo(baseBack.getData().getData().getTrace_list().get(i).getReceiver());
                             transactionInfo.setTransactionState(baseBack.getData().getData().getTrace_list().get(i).getStatus());
                             transactionInfo.setOwner((String) map.get("account"));
+                            if (((String) map.get("account")).equals(baseBack.getData().getData().getTrace_list().get(i).getSender())) {
+                                transactionInfo.setShowAddress(baseBack.getData().getData().getTrace_list().get(i).getReceiver());
+                            } else {
+                                transactionInfo.setShowAddress(baseBack.getData().getData().getTrace_list().get(i).getSender());
+                            }
                             transactionInfo.setTimestamp(parseEosTransactionTimestamp(baseBack.getData().getData().getTrace_list().get(i).getTimestamp()));
                             transactionInfos.add(transactionInfo);
                         }
@@ -299,6 +329,74 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     }
                 });
         mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getQlcAccountHistoryTopn(String account, int count, int offset) {
+        JSONArray params = new JSONArray();
+        params.add(account);
+        params.add(count);
+        params.add(offset);
+
+        JSONArray blockHashJsonArray = new JSONArray();
+        JSONArray receiveJsonArray = new JSONArray();
+        try {
+            ArrayList<TransactionInfo> transactionInfos = new ArrayList<>();
+            QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
+            LedgerRpc rpc = new LedgerRpc(qlcClient);
+            JSONObject jsonObject = rpc.accountHistoryTopn(params);
+            AccountHistory accountHistory = new Gson().fromJson(jsonObject.toJSONString(), AccountHistory.class);
+            for (int i = 0; i < accountHistory.getResult().size(); i++) {
+                TransactionInfo transactionInfo = new TransactionInfo();
+                transactionInfo.setTransactionType(AllWallet.WalletType.QlcWallet);
+                transactionInfo.setTransactionToken(accountHistory.getResult().get(i).getTokenName());
+                transactionInfo.setTransactionValue(accountHistory.getResult().get(i).getAmount());
+                if ("Receive".equals(accountHistory.getResult().get(i).getType()) || "Open".equals(accountHistory.getResult().get(i).getType())) {
+                    transactionInfo.setFrom("unkwon");
+                    transactionInfo.setTo(accountHistory.getResult().get(i).getAddress());
+                    transactionInfo.setTransationHash(accountHistory.getResult().get(i).getHash());
+                    transactionInfo.setShowAddress(accountHistory.getResult().get(i).getLink());
+                    receiveJsonArray.add(accountHistory.getResult().get(i).getLink());
+                } else if ("ContractReward".equals(accountHistory.getResult().get(i).getType())) {
+                    transactionInfo.setFrom(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                    transactionInfo.setTo(accountHistory.getResult().get(i).getAddress());
+                    transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
+                    transactionInfo.setShowAddress(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                } else if ("Send".equals(accountHistory.getResult().get(i).getType())) {
+                    transactionInfo.setFrom(accountHistory.getResult().get(i).getAddress());
+                    transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
+                    transactionInfo.setTo(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                    transactionInfo.setShowAddress(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                }
+                transactionInfo.setOwner(account);
+                transactionInfo.setTokenDecimals(8);
+                transactionInfo.setTimestamp(accountHistory.getResult().get(i).getTimestamp());
+                transactionInfos.add(transactionInfo);
+            }
+            blockHashJsonArray.add(receiveJsonArray);
+            JSONObject sendJsonObject = rpc.blocksInfo(blockHashJsonArray);
+            KLog.i(sendJsonObject);
+            AccountHistory sendHistory = new Gson().fromJson(sendJsonObject.toJSONString(), AccountHistory.class);
+            for (TransactionInfo transactionInfo : transactionInfos) {
+                for (int i = 0; i < sendHistory.getResult().size(); i++) {
+                    if (transactionInfo.getShowAddress().equals(sendHistory.getResult().get(i).getHash())) {
+                        transactionInfo.setFrom(sendHistory.getResult().get(i).getAddress());
+                        transactionInfo.setShowAddress(sendHistory.getResult().get(i).getAddress());
+                    }
+                }
+            }
+            mView.setEthTransactionHistory(transactionInfos);
+        } catch (QlcException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(AccountMng.publicKeyToAddress(Helper.hexStringToBytes("6bad3bc9587f61bfcab2b48707d7d9fdae2bdf98c91dcb1d8fed89c3911375b3")));
+        System.out.println(AccountMng.publicKeyToAddress(Helper.hexStringToBytes("d614bb9d5e20ad063316ce091148e77c99136c6194d55c7ecc7ffa9620dbcaeb")));
+        System.out.println(AccountMng.publicKeyToAddress(Helper.hexStringToBytes("8f807e8ccc9a081bb035da3ecef214ed525a31529f217c7e16b883306016fb52")));
     }
 
     private long parseEosTransactionTimestamp(String time) {

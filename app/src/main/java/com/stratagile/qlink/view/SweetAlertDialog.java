@@ -64,16 +64,6 @@ public class SweetAlertDialog extends Dialog {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mDialogView.setVisibility(View.GONE);
-                mDialogView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mCloseFromCancel) {
-                            SweetAlertDialog.super.cancel();
-                        } else {
-                            SweetAlertDialog.super.dismiss();
-                        }
-                    }
-                });
             }
 
             @Override
@@ -130,6 +120,16 @@ public class SweetAlertDialog extends Dialog {
     private void dismissWithAnimation(boolean fromCancel) {
         mCloseFromCancel = fromCancel;
         mDialogView.startAnimation(mModalOutAnim);
+        mDialogView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mCloseFromCancel) {
+                    SweetAlertDialog.super.cancel();
+                } else {
+                    SweetAlertDialog.super.dismiss();
+                }
+            }
+        }, 60);
     }
 
 }

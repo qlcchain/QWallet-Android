@@ -8,18 +8,18 @@ import java.util.List;
  * Created by huzhipeng on 2018/4/26.
  */
 
-public class Unspent extends BaseBack{
+public class Unspent extends BaseBack<List<Unspent.DataBean>>{
 
 
-    private List<DataBean> data;
-
-    public List<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(List<DataBean> data) {
-        this.data = data;
-    }
+//    private List<DataBean> data;
+//
+//    public List<DataBean> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<DataBean> data) {
+//        this.data = data;
+//    }
 
     public static class DataBean {
         /**

@@ -1,6 +1,7 @@
 package com.stratagile.qlink.data.api;
 
 
+import com.github.mikephil.charting.data.BaseEntry;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AssetsWarpper;
@@ -11,6 +12,7 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
 import com.stratagile.qlink.entity.EosKeyAccount;
@@ -24,6 +26,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
 import com.stratagile.qlink.entity.MainAddress;
@@ -44,11 +47,24 @@ import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
+import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
+import com.stratagile.qlink.entity.finance.EarnRank;
+import com.stratagile.qlink.entity.finance.HistoryRecord;
+import com.stratagile.qlink.entity.finance.MyRanking;
+import com.stratagile.qlink.entity.newwinq.Order;
+import com.stratagile.qlink.entity.newwinq.Product;
+import com.stratagile.qlink.entity.newwinq.ProductDetail;
+import com.stratagile.qlink.entity.newwinq.Register;
+import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
+import com.stratagile.qlink.entity.otc.Passport;
+import com.stratagile.qlink.entity.otc.TradeOrderDetail;
+import com.stratagile.qlink.entity.otc.TradeOrderList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +80,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 import static com.stratagile.qlink.data.api.API.act_asset;
@@ -73,17 +90,28 @@ import static com.stratagile.qlink.data.api.API.get_eth_wallet_info;
 import static com.stratagile.qlink.data.api.API.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
+import static com.stratagile.qlink.data.api.API.ulr_user_sign_up;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.API.url_create_eos_account;
 import static com.stratagile.qlink.data.api.API.url_create_eos_need_info;
+import static com.stratagile.qlink.data.api.API.url_entrust_cancel_order;
+import static com.stratagile.qlink.data.api.API.url_entrust_order;
+import static com.stratagile.qlink.data.api.API.url_entrust_order_info;
+import static com.stratagile.qlink.data.api.API.url_entrust_order_list;
 import static com.stratagile.qlink.data.api.API.url_eos_account_info;
 import static com.stratagile.qlink.data.api.API.url_eos_account_transaction_info;
 import static com.stratagile.qlink.data.api.API.url_eos_resource_price;
 import static com.stratagile.qlink.data.api.API.url_eos_token_list;
 import static com.stratagile.qlink.data.api.API.url_eth_address_history;
 import static com.stratagile.qlink.data.api.API.url_eth_history;
+import static com.stratagile.qlink.data.api.API.url_finance_history_record;
+import static com.stratagile.qlink.data.api.API.url_financial_order_list;
+import static com.stratagile.qlink.data.api.API.url_financial_product_info;
+import static com.stratagile.qlink.data.api.API.url_financial_product_list;
+import static com.stratagile.qlink.data.api.API.url_financial_product_order;
+import static com.stratagile.qlink.data.api.API.url_financial_redeem;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
 import static com.stratagile.qlink.data.api.API.url_get_account_resource;
 import static com.stratagile.qlink.data.api.API.url_get_server_time;
@@ -97,7 +125,27 @@ import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
+import static com.stratagile.qlink.data.api.API.url_trade_appeal;
+import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
+import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
+import static com.stratagile.qlink.data.api.API.url_trade_order_info;
+import static com.stratagile.qlink.data.api.API.url_trade_order_list;
+import static com.stratagile.qlink.data.api.API.url_trade_sell_order;
+import static com.stratagile.qlink.data.api.API.url_trade_seller_confirm;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
+import static com.stratagile.qlink.data.api.API.url_uploadIdCard;
+import static com.stratagile.qlink.data.api.API.url_user_change_nickname;
+import static com.stratagile.qlink.data.api.API.url_user_change_password;
+import static com.stratagile.qlink.data.api.API.url_user_invite;
+import static com.stratagile.qlink.data.api.API.url_user_invite_ranking;
+import static com.stratagile.qlink.data.api.API.url_user_rich_list;
+import static com.stratagile.qlink.data.api.API.url_user_sign_in;
+import static com.stratagile.qlink.data.api.API.url_user_signin_code;
+import static com.stratagile.qlink.data.api.API.url_user_upload_headview;
+import static com.stratagile.qlink.data.api.API.url_user_userinfo;
+import static com.stratagile.qlink.data.api.API.url_vcode_change_password_code;
+import static com.stratagile.qlink.data.api.API.url_vcode_sign_in_code;
+import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.API.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.API.url_zs_free_num;
 import static com.stratagile.qlink.data.api.API.user_update_avatar;
@@ -193,9 +241,13 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ImportWalletResult> batchImportWallet(@Body RequestBody map);
 
-    @POST(user_update_avatar)
+    @POST(url_user_upload_headview)
     @Multipart
-    Observable<UpLoadAvatar> updateMyAvatar(@Part("p2pId") RequestBody p2pId, @Part MultipartBody.Part head);
+    Observable<UpLoadAvatar> updateMyAvatar(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part head);
+
+    @POST(url_uploadIdCard)
+    @Multipart
+    Observable<Passport> updateIdCard(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part faceOhoto, @Part MultipartBody.Part holdingPhoto);
 
     @GET(API.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);
@@ -375,8 +427,126 @@ public interface HttpApi {
 
 
     @GET(url_key_account)
-    Observable<ArrayList<EosKeyAccount>> getKeyAccount(@Path("public_key") String address);
+    Observable<EosKeyAccount> getKeyAccount(@Query("public_key") String address);
 
+
+    @POST(url_vcode_signup_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getSignUpVcode(@Body RequestBody map);
+
+
+    @POST(url_vcode_sign_in_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getSignInVcode(@Body RequestBody map);
+
+    @POST(url_vcode_change_password_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> getForgetPasswordVcode(@Body RequestBody map);
+
+    @POST(url_user_change_password)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VcodeLogin> resetPassword(@Body RequestBody map);
+
+    @POST(ulr_user_sign_up)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VcodeLogin> userRegister(@Body RequestBody map);
+
+    @POST(url_user_sign_in)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Register> userLogin(@Body RequestBody map);
+
+    @POST(url_user_signin_code)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VcodeLogin> vCodeLogin(@Body RequestBody map);
+
+    @POST(url_financial_product_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Product> getProductList(@Body RequestBody map);
+
+    @POST(url_financial_product_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ProductDetail> getProductDetail(@Body RequestBody map);
+
+    @POST(url_financial_product_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> buyQLCProduct(@Body RequestBody map);
+
+    @POST(url_financial_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Order> getOrderList(@Body RequestBody map);
+
+    @POST(url_financial_redeem)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Order> redeemOrder(@Body RequestBody map);
+
+    @POST(url_user_invite_ranking)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MyRanking> getRankings(@Body RequestBody map);
+
+    @POST(url_user_rich_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EarnRank> getEarnRankings(@Body RequestBody map);
+
+    @POST(url_finance_history_record)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<HistoryRecord> getHistoryRecord(@Body RequestBody map);
+
+    @POST(url_user_invite)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<InviteList> getInivteTop5(@Body RequestBody map);
+
+    @POST(url_user_change_nickname)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> changeNickName(@Body RequestBody map);
+
+    @POST(url_entrust_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> generateEntrustBuyQgasOrder(@Body RequestBody map);
+
+    @POST(url_entrust_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EntrustOrderList> getEntrustOrderList(@Body RequestBody map);
+
+    @POST(url_entrust_order_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<EntrustOrderInfo> getEntrustOrderInfo(@Body RequestBody map);
+
+    @POST(url_entrust_cancel_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> cancelEntrustOrder(@Body RequestBody map);
+
+    @POST(url_trade_buy_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> generateTradeBuyQgasOrder(@Body RequestBody map);
+
+    @POST(url_trade_buyer_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> tradeBuyerConfirm(@Body RequestBody map);
+
+    @POST(url_trade_sell_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> generateTradeSellOrder(@Body RequestBody map);
+
+    @POST(url_trade_seller_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> tradeSellerConfirm(@Body RequestBody map);
+
+    @POST(url_trade_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradeOrderList> tradeOrderList(@Body RequestBody map);
+
+    @POST(url_trade_order_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradeOrderDetail> tradeOrderInfo(@Body RequestBody map);
+
+    @POST(url_user_userinfo)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<UserInfo> getUserInfo(@Body RequestBody map);
+
+    @POST(url_trade_appeal)
+    @Multipart
+    Observable<TradeOrderDetail> generateAppeal(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part("tradeOrderId") RequestBody tradeOrderId, @Part("reason") RequestBody reason, @Part MultipartBody.Part photo1, @Part MultipartBody.Part photo2, @Part MultipartBody.Part photo3, @Part MultipartBody.Part photo4);
+//    Observable<TradeOrderDetail> generateAppeal(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part photo1);
 
     /*************************************************/
 }

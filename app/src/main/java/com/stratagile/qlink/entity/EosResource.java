@@ -1,20 +1,20 @@
 package com.stratagile.qlink.entity;
 
-public class EosResource extends BaseBack {
+public class EosResource extends BaseBack<EosResource.DataBeanX> {
 
     /**
      * data : {"errno":0,"data":{"staked":{"net_weight":"0.1343 EOS","cpu_weight":"3.2500 EOS"},"cpu":{"max":25060,"available":16741,"used":8319},"net":{"max":101291,"available":99698,"used":1593},"ram":{"available":10098,"used":4114}},"errmsg":"Success"}
      */
 
-    private DataBeanX data;
-
-    public DataBeanX getData() {
-        return data;
-    }
-
-    public void setData(DataBeanX data) {
-        this.data = data;
-    }
+//    private DataBeanX data;
+//
+//    public DataBeanX getData() {
+//        return data;
+//    }
+//
+//    public void setData(DataBeanX data) {
+//        this.data = data;
+//    }
 
     public static class DataBeanX {
         /**

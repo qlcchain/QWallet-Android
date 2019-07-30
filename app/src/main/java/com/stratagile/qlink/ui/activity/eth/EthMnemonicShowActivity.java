@@ -11,10 +11,13 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.ui.activity.eth.component.DaggerEthMnemonicShowComponent;
 import com.stratagile.qlink.ui.activity.eth.contract.EthMnemonicShowContract;
 import com.stratagile.qlink.ui.activity.eth.module.EthMnemonicShowModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.EthMnemonicShowPresenter;
+import com.stratagile.qlink.ui.activity.qlc.QlcMnemonicShowActivity;
+import com.stratagile.qlink.ui.activity.qlc.QlcMnemonicbackupActivity;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
 import javax.inject.Inject;
@@ -40,6 +43,8 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
     Button btBackup;
     private EthWallet ethWallet;
 
+    private QLCAccount qlcAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainColor = R.color.white;
@@ -51,16 +56,23 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
         setContentView(R.layout.activity_eth_mnemonic_show);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ethWallet = getIntent().getParcelableExtra("wallet");
-        if (ethWallet.getMnemonic() == null || ethWallet.isBackup()) {
-            btBackup.setVisibility(View.GONE);
+        if (getIntent().getBooleanExtra("isEth", true)) {
+            ethWallet = getIntent().getParcelableExtra("wallet");
+            if (ethWallet.getMnemonic() == null || ethWallet.isBackup()) {
+                btBackup.setVisibility(View.GONE);
+            }
+        } else {
+            qlcAccount = getIntent().getParcelableExtra("wallet");
+            if (qlcAccount.getMnemonic() == null || qlcAccount.getIsBackUp()) {
+                btBackup.setVisibility(View.GONE);
+            }
         }
     }
 
     @Override
     protected void initData() {
         tvMnemonic.setText(ethWallet.getMnemonic());
-        setTitle("Backup Mnemonic");
+        setTitle("Create Wallet");
     }
 
     @Override
@@ -101,7 +113,11 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
         tvOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(EthMnemonicShowActivity.this, EthMnemonicbackupActivity.class).putExtra("wallet", ethWallet), 0);
+                if (getIntent().getBooleanExtra("isEth", true)) {
+                    startActivityForResult(new Intent(EthMnemonicShowActivity.this, EthMnemonicbackupActivity.class).putExtra("wallet", ethWallet), 0);
+                } else {
+                    startActivityForResult(new Intent(EthMnemonicShowActivity.this, QlcMnemonicbackupActivity.class).putExtra("wallet", qlcAccount), 0);
+                }
                 sweetAlertDialog.cancel();
             }
         });

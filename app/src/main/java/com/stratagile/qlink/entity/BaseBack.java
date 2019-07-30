@@ -4,7 +4,7 @@ package com.stratagile.qlink.entity;
  * Created by huzhipeng on 2018/1/9.
  */
 
-public class BaseBack {
+public class BaseBack<T> {
 
     /**
      * code : 0
@@ -13,6 +13,15 @@ public class BaseBack {
 
     private String code;
     private String msg;
+    private T data;
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 
     public String getCode() {
         return code;

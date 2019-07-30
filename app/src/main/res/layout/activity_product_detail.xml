@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="@dimen/x10" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/x30"
+            android:background="@color/white"
+            android:paddingRight="@dimen/x30"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x209">
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_height="@dimen/x150">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x64">
+                    <TextView
+                        android:id="@+id/tvProfit"
+                        android:text="100%"
+                        android:textSize="23sp"
+                        android:textColor="#01B5AB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="#888"
+                    android:text="@string/annual_percentage_rate"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:layout_width="@dimen/x2"
+                android:background="@color/color_f2f2f2"
+                android:layout_height="@dimen/x88"/>
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="@dimen/x150">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_height="@dimen/x64">
+                    <TextView
+                        android:id="@+id/tvDayTime"
+                        android:text="360"
+                        android:layout_width="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/color_29282a"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="@string/days"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_29282a"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvQlcCount"
+                    android:layout_width="wrap_content"
+                    android:text="From 1000 QLC"
+                    android:textSize="13sp"
+                    android:textColor="@color/color_999"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="@dimen/x1" />
+        <TextView
+            android:id="@+id/productPoint"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/x30"
+            android:gravity="center"
+            android:background="@color/white"
+            android:text="High APR"
+            android:textColor="@color/color_4b494d"
+            android:textSize="14sp"
+            android:paddingRight="@dimen/x30"
+            android:layout_height="@dimen/x70" />
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="@dimen/x20" />
+        <LinearLayout
+            android:id="@+id/llRule"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/x30"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/x30"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/rules_"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/details_"
+                android:textSize="14sp"
+                android:textColor="@color/color_999"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_enter1"
+                android:layout_marginLeft="@dimen/x35"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="@dimen/x1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/x30"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingRight="@dimen/x30"
+            android:layout_height="@dimen/x208">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="@dimen/x200"
+                    android:text="@string/purchase_date"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:text="@string/value_date"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:layout_width="@dimen/x200"
+                    android:textColor="@color/color_29282a"
+                    android:gravity="right"
+                    android:textSize="12sp"
+                    android:text="@string/maturity_date"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <com.stratagile.qlink.view.sidebar.ProductView
+                android:layout_marginTop="@dimen/x20"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x20" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/x20"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="@dimen/x200"
+                    android:text="@string/today"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/tvValueDate"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:text="03-19"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/tvMaturityDate"
+                    android:layout_width="@dimen/x200"
+                    android:gravity="right"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="12sp"
+                    android:text="2020-03-18"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="@dimen/x20" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/x30"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/x30"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/amount"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/allIn"
+                android:layout_width="wrap_content"
+                android:text="@string/all_"
+                android:textSize="14sp"
+                android:textColor="@color/mainColor"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="@dimen/x124">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/x30"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/x30"
+                android:layout_height="@dimen/x123">
+                <EditText
+                    android:id="@+id/etQlcCount"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:hint="From 1000 QLC"
+                    android:background="@null"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="QLC"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/color_f2f2f2"
+            android:layout_marginLeft="@dimen/x30"/>
+
+        <LinearLayout
+            android:id="@+id/llPayWay1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/x58"
+                android:layout_height="wrap_content">
+                <com.stratagile.qlink.view.SmoothCheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="@dimen/x40"
+                    android:layout_marginRight="@dimen/x12"
+                    app:color_unchecked_stroke="@color/mainColor"
+                    app:color_unchecked="@color/white"
+                    app:color_checked="@color/mainColor"
+                    app:stroke_width="@dimen/x4"
+                    android:layout_height="@dimen/x40"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/read_and_agree_on_terms_of"
+                    android:textSize="12sp"
+                    android:layout_marginRight="@dimen/x8"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/servicePrivacyPolicy"
+                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:text="@string/service_and_privacy_policy"
+                    android:textColor="@color/mainColor"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvConfirm"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:background="@drawable/main_color_bt_bg"
+                android:layout_marginTop="@dimen/x60"
+                android:gravity="center"
+                android:text="@string/confirm"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:layout_height="@dimen/x94" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

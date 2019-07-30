@@ -78,6 +78,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         } else {
             StatusBarUtil.setTransparent(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //设置状态栏黑色字体
+            }
         }
         initToolbar();
 //        AppConfig.getInstance().mAppActivityManager.addActivity(this);
@@ -105,40 +108,45 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             {
                 case "English":
                     configuration.locale = Locale.ENGLISH;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(Locale.ENGLISH);
                     break;
                 case "Turkish"://土耳其语
                     locale = new Locale("tr","TR");
                     configuration.locale = locale;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(locale);
+                    break;
+                case "中文"://土耳其语
+//                    locale = new Locale("zh","");
+//                    configuration.locale = locale;
+//                    Locale.setDefault(locale);
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
                     break;
                 default:
                     configuration.locale = Locale.ENGLISH;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(Locale.ENGLISH);
                     break;
             }
         }else{
             switch (defaultLanguage)
             {
-                case "tr"://土耳其语
-                    configuration.locale = Locale.getDefault();
-                    Locale.setDefault(Locale.getDefault());
+                case "en":
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
+                    break;
+                case "zh"://土耳其语
+//                    locale = new Locale("zh","");
+//                    configuration.locale = locale;
+                    configuration.locale = Locale.ENGLISH;
+                    Locale.setDefault(Locale.ENGLISH);
                     break;
                 default:
                     configuration.locale = Locale.ENGLISH;
-                    //configuration.setLayoutDirection(Locale.CHINESE);
                     Locale.setDefault(Locale.ENGLISH);
                     break;
             }
         }
 
-//        if (SpUtil.getInt(this, ConstantValue.Language, 0) == 0) {
-//        } else {
-//            configuration.locale = Locale.CHINA;
-//        }
         getResources().updateConfiguration(configuration, displayMetrics);
         if (isUpdate) {
             Intent intent = new Intent(this, MainActivity.class);

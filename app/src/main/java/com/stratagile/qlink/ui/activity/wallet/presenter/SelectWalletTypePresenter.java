@@ -13,6 +13,7 @@ import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.eth.EthWalletActivity;
@@ -100,6 +101,14 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                     if (wallet.getIsCurrent()) {
                         wallet.setIsCurrent(false);
                         AppConfig.getInstance().getDaoSession().getEosAccountDao().update(wallet);
+                        break;
+                    }
+                }
+                List<QLCAccount> qlcAccounts = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+                for (QLCAccount wallet : qlcAccounts) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(wallet);
                         break;
                     }
                 }
@@ -203,6 +212,14 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                         break;
                     }
                 }
+                List<QLCAccount> qlcAccounts = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
+                for (QLCAccount wallet : qlcAccounts) {
+                    if (wallet.getIsCurrent()) {
+                        wallet.setIsCurrent(false);
+                        AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(wallet);
+                        break;
+                    }
+                }
                 Account.INSTANCE.createNewWallet();
                 neoutils.Wallet wallet = Account.INSTANCE.getWallet();
                 Wallet walletWinq = new Wallet();
@@ -223,5 +240,10 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                 mView.createNeoWalletSuccess(walletWinq);
             }
         }).start();
+    }
+
+    @Override
+    public void createQlcWallet() {
+
     }
 }

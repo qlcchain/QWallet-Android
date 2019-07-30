@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x170"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x58"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x17"
+        android:paddingLeft="@dimen/x30"
+        android:paddingRight="@dimen/x30">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="@dimen/x58"
+            android:layout_height="@dimen/x58" />
+
+        <TextView
+            android:id="@+id/tvNickName"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_weight="1"
+            android:textColor="@color/color_222222"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvQgasAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x40"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvOrderType"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_29282a"
+                    android:layout_marginLeft="@dimen/x78"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x78"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textColor="@color/color_808080"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tvOrderState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:layout_marginLeft="@dimen/x12"
+            android:textColor="@color/color_999"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x108"
+        android:background="@color/color_f2f2f2" />
+
+</LinearLayout>

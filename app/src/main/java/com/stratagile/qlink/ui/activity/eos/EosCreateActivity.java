@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.animation.DynamicAnimation;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.view.Menu;
@@ -19,8 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.socks.library.KLog;
-import com.stratagile.qlink.ColdWallet;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
@@ -42,46 +39,25 @@ import com.stratagile.qlink.ui.activity.eos.module.EosCreateModule;
 import com.stratagile.qlink.ui.activity.eos.presenter.EosCreatePresenter;
 import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.PopWindowUtil;
-import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ThreadUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.CustomPopWindow;
-import com.vondear.rxtools.view.RxQRCode;
-
-import org.jetbrains.annotations.NotNull;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jFactory;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.utils.Convert;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author hzp
@@ -265,10 +241,10 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
     }
 
     @Override
-    public void getEosKeyAccountBack(ArrayList<EosKeyAccount> eosKeyAccounts) {
+    public void getEosKeyAccountBack(EosKeyAccount eosKeyAccounts) {
         closeProgressDialog();
-        if (eosKeyAccounts.size() != 0) {
-            eosAccount.setAccountName(eosKeyAccounts.get(0).getAccount());
+        if (eosKeyAccounts.getAccount_names().size() != 0) {
+            eosAccount.setAccountName(eosKeyAccounts.getAccount_names().get(0));
             eosAccount.setIsCreating(false);
             AppConfig.getInstance().getDaoSession().getEosAccountDao().update(eosAccount);
             mPresenter.reportWalletCreated(eosAccount.getAccountName(), eosAccount.getOwnerPublicKey(), eosAccount.getOwnerPrivateKey());
@@ -444,7 +420,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
      */
     private Uri saveBitmap(Bitmap bm, String picName) {
         try {
-            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qlink/image/" + picName + ".jpg";
+            String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qwallet/image/" + picName + ".jpg";
             File f = new File(dir);
             if (!f.exists()) {
                 f.getParentFile().mkdirs();

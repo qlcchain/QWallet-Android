@@ -149,7 +149,7 @@ public class ChangeWalletActivity extends BaseActivity implements ChangeWalletCo
 
     private void changeSelectWallet() {
         SpUtil.putInt(this, ConstantValue.currentWallet, walletListAdapter.getSelectItem());
-        FileUtil.savaData("/Qlink/Address/index.txt",walletListAdapter.getSelectItem()+"");
+        FileUtil.savaData("/Qwallet/Address/index.txt",walletListAdapter.getSelectItem()+"");
         showProgressDialog();
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (walletList != null && walletList.size() != 0) {

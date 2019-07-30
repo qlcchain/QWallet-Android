@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mainColor">#490080</color>
+    <color name="mainColor">#108EE9</color>
+    <color name="color_21beb5">#21BEB5</color>
     <color name="f6f6f6">#f6f6f6</color>
     <color name="mainColorTwo">#5b4278</color>
     <color name="mainColorThree">#8F74AC</color>
-    <color name="mainColorDark">#3B0060</color>
-    <color name="colorPrimary">#490080</color>
-    <color name="colorPrimaryDark">#3B0060</color>
-    <color name="colorAccent">#490080</color>
+    <color name="mainColorDark">#108EE9</color>
+    <color name="colorPrimary">#108EE9</color>
+    <color name="colorPrimaryDark">#108EE9</color>
+    <color name="colorAccent">#108EE9</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="splashtext">#9100c8</color>
     <color name="colorFade">#D1D1D1</color>
@@ -18,7 +19,7 @@
     <color name="color_45cf80">#45cf80ff</color>
     <color name="color_8F74AC">#8F74AC</color>
     <color name="color_40ffffff">#40ffffff</color>
-    <color name="main_color">#490080</color>
+    <color name="main_color">#108EE9</color>
     <color name="white">#ffffff</color>
     <color name="white40">#4cffffff</color>
     <color name="black">#000</color>
@@ -38,6 +39,7 @@
     <color name="content_background">#eeeeee</color>
     <color name="color_666">#666666</color>
     <color name="color_999">#999</color>
+    <color name="color_4accaf">#4ACCAF</color>
     <color name="color_a8a6a6">#a8a6a6</color>
     <color name="color_4c000000">#4c000000</color>
     <color name="color_bbb">#bbb</color>
@@ -82,9 +84,20 @@
     <color name="color_d0021b">#D0021B</color>
     <color name="color_eaf1fe">#eaf1fe</color>
     <color name="color_07cdb3">#07CDB3</color>
-    <color name="color_ff3669">#FF3669</color>
     <color name="color_eceff1">#ECEFF1</color>
     <color name="color_f9f9f9">#F9F9F9</color>
+    <color name="color_f2f2f2">#f2f2f2</color>
+    <color name="color_b3b3b3">#B3B3B3</color>
+    <color name="color_4b494d">#4B494D</color>
+    <color name="color_01b5ab">#01B5AB</color>
+    <color name="color_108ee9">#108EE9</color>
+    <color name="color_808080">#808080</color>
+    <color name="color_ececec">#ececec</color>
+    <color name="color_969696">#969696</color>
+    <color name="color_ff3669">#FF3669</color>
+    <color name="color_222222">#222222</color>
+    <color name="color_e6e6e6">#e6e6e6</color>
+    <color name="color_1e1e24">#1e1e24</color>
 
 
 </resources>

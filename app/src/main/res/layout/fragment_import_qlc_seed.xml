@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:layout_marginTop="@dimen/x35">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:minHeight="@dimen/x242"
+            android:orientation="vertical"
+            android:layout_height="@dimen/x242">
+            <EditText
+                android:id="@+id/etPrivateKey"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/x20"
+                android:gravity="left"
+                android:textSize="14sp"
+                android:background="@null"
+                android:hint="Please input your wallet seed"
+                android:layout_height="@dimen/x160" />
+            <TextView
+                android:id="@+id/tvWhatsMnemonic"
+                android:layout_width="wrap_content"
+                android:visibility="invisible"
+                android:text="What is a wallet seed?"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/x20"
+                android:layout_marginBottom="@dimen/x20"
+                android:textColor="@color/mainColor"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_height="wrap_content">
+        <com.stratagile.qlink.view.SmoothCheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="@dimen/x31"
+            android:layout_marginRight="@dimen/x12"
+            app:color_unchecked_stroke="@color/mainColor"
+            app:color_unchecked="@color/white"
+            app:color_checked="@color/mainColor"
+            app:stroke_width="@dimen/x2"
+            android:layout_height="@dimen/x31"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Agree on"
+            android:textSize="12sp"
+            android:layout_marginRight="@dimen/x8"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            android:text="Terms of Service and Privacy Policy"
+            android:textColor="@color/mainColor"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btImport"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_43"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginRight="@dimen/x45"
+        android:layout_marginTop="@dimen/x150"
+        android:background="@drawable/change_wallet"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Start Importing"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+</LinearLayout>
