@@ -55,9 +55,28 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
         }))
     }
 
+    fun tradeOrderCancel(map: Map<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.tradeOrderCancel(map).subscribe({
+            mView.cancelOrderSuccess()
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
     fun confirmCheck(map: Map<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.tradeSellerConfirm(map).subscribe({
             mView.confirmCheckSuccess()
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+    fun getSysTime() {
+        mCompositeDisposable.add(httpAPIWrapper.getServerTime(hashMapOf<String, String>()).subscribe({
+            mView.setServerTime(it.data.sysTime)
         }, {
             mView.closeProgressDialog()
         }, {

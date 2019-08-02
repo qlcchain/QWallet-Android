@@ -25,7 +25,11 @@ interface TradeOrderDetailContract {
 
         fun markAsPaidSuccess()
 
+        fun cancelOrderSuccess()
+
         fun confirmCheckSuccess()
+
+        fun setServerTime(time : String)
 
     }
 

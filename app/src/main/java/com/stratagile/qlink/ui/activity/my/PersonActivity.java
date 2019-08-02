@@ -106,7 +106,11 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
             tvMobile.setText(R.string.unverified);
         }
         tvInviteCode.setText(ConstantValue.currentUser.getInviteCode());
-        tvUserName.setText(ConstantValue.currentUser.getUserName());
+        if ("".equals(ConstantValue.currentUser.getUserName())) {
+            tvUserName.setText(ConstantValue.currentUser.getAccount());
+        } else {
+            tvUserName.setText(ConstantValue.currentUser.getUserName());
+        }
         if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
                     .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())

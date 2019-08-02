@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.otc.contract
 
 import com.stratagile.qlink.entity.otc.EntrustOrderInfo
+import com.stratagile.qlink.entity.otc.GenerageTradeOrder
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -21,7 +22,7 @@ interface BuyQgasContract {
          */
         fun closeProgressDialog()
 
-        fun generateTradeBuyQgasOrderSuccess()
+        fun generateTradeBuyQgasOrderSuccess(generageTradeOrder: GenerageTradeOrder)
 
         fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo)
     }

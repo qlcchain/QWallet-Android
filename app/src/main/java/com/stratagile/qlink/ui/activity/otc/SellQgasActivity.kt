@@ -71,11 +71,11 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
     }
 
     override fun generateTradeSellQgasOrderSuccess() {
-        val qrEntity = QrEntity(entrustOrderInfo.order.qgasAddress, "QGAS" + " Receivable Address", "qgas", 4)
-        val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
-        intent.putExtra("qrentity", qrEntity)
-        startActivity(intent)
-        finish()
+//        val qrEntity = QrEntity(entrustOrderInfo.order.qgasAddress, "QGAS" + " Receivable Address", "qgas", 4)
+//        val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+//        intent.putExtra("qrentity", qrEntity)
+//        startActivity(intent)
+//        finish()
     }
 
     override fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo) {
@@ -159,6 +159,10 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         mPresenter.getEntrustOrderDetail(map)
 
         tvNext.setOnClickListener {
+            if (entrustOrderInfo.order.userId.equals(ConstantValue.currentUser.userId)) {
+
+                return@setOnClickListener
+            }
             if ("".equals(etQgas.text.toString())) {
                 return@setOnClickListener
             }

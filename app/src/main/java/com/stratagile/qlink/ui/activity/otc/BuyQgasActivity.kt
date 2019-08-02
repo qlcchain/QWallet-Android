@@ -20,6 +20,7 @@ import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.EntrustOrderList
 import com.stratagile.qlink.entity.QrEntity
 import com.stratagile.qlink.entity.otc.EntrustOrderInfo
+import com.stratagile.qlink.entity.otc.GenerageTradeOrder
 import com.stratagile.qlink.ui.activity.otc.component.DaggerBuyQgasComponent
 import com.stratagile.qlink.ui.activity.otc.contract.BuyQgasContract
 import com.stratagile.qlink.ui.activity.otc.module.BuyQgasModule
@@ -71,9 +72,13 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         }
     }
 
-    override fun generateTradeBuyQgasOrderSuccess() {
-        val qrEntity = QrEntity(entrustOrderInfo.order.usdtAddress, "USDT" + " Receivable Address", "usdt", 2)
+    override fun generateTradeBuyQgasOrderSuccess(generageTradeOrder: GenerageTradeOrder) {
+        val qrEntity = QrEntity(generageTradeOrder.order.usdtToAddress, "USDT" + " Receivable Address", "usdt", 2)
         val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+        intent.putExtra("usdt", generageTradeOrder.order.usdtAmount.toString())
+        intent.putExtra("receiveAddress", generageTradeOrder.order.usdtToAddress)
+        intent.putExtra("tradeOrderId", generageTradeOrder.order.id)
+        intent.putExtra("orderNumber", generageTradeOrder.order.number.toString())
         intent.putExtra("qrentity", qrEntity)
         startActivity(intent)
         finish()
@@ -113,6 +118,10 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         map.put("entrustOrderId", orderList.id)
         mPresenter.getEntrustOrderDetail(map)
         tvNext.setOnClickListener {
+            if (entrustOrderInfo.order.userId.equals(ConstantValue.currentUser.userId)) {
+
+                return@setOnClickListener
+            }
             if ("".equals(etQgas.text.toString())) {
                 return@setOnClickListener
             }

@@ -11,6 +11,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.TimeUtil;
 
 import java.math.BigDecimal;
@@ -49,6 +50,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, R.string.completed);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
                     break;
+                case "CANCEL":
+                    helper.setText(R.id.tvOrderState, R.string.canceled);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
                 default:
                     break;
             }
@@ -76,13 +81,17 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, R.string.completed);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
                     break;
+                case "CANCEL":
+                    helper.setText(R.id.tvOrderState, R.string.canceled);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
                 default:
                     break;
             }
         }
         helper.setText(R.id.tvAmountUsdt, BigDecimal.valueOf(item.getUsdtAmount()).stripTrailingZeros().toPlainString() + "");
         helper.setText(R.id.tvTime, TimeUtil.getOrderTime(TimeUtil.timeStamp(item.getCreateDate())));
-        helper.setText(R.id.tvNickName, item.getNickname());
+        helper.setText(R.id.tvNickName, AccountUtil.setUserNickName(item.getNickname()));
         Glide.with(mContext)
                 .load(API.BASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)

@@ -8,6 +8,7 @@ public class ShowAct extends BaseBack<ShowAct.DataBean> {
 
     private DataBean data;
 
+    @Override
     public DataBean getData() {
         return data;
     }

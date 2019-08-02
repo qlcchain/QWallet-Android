@@ -43,6 +43,16 @@ import javax.inject.Inject;
  */
 
 class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
+    override fun setServerTime(time: String) {
+        sysTime = TimeUtil.timeStamp(time)
+    }
+
+    override fun cancelOrderSuccess() {
+        closeProgressDialog()
+        toast(getString(R.string.success))
+        finish()
+    }
+
     override fun markAsPaidSuccess() {
         closeProgressDialog()
         toast(getString(R.string.success))
@@ -58,7 +68,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     @SuppressLint("SetTextI18n")
     override fun setTradeOrderDetail(tradeOrderDetail: TradeOrderDetail) {
         this.mTradeOrderDetail = tradeOrderDetail
-        tvNickName.text = tradeOrderDetail.order.nickname
+        tvNickName.text = AccountUtil.setUserNickName(tradeOrderDetail.order.nickname)
         tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
         tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
         tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " USDT"
@@ -84,13 +94,13 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
             receiveAddressTip.text = "QLC Chain Address to receive QGAS"
             tvReceiveAddress.text = tradeOrderDetail.order.qgasToAddress
-            when(tradeOrderDetail.order.status) {
-                "QGAS_TO_PLATFORM"-> {
+            when (tradeOrderDetail.order.status) {
+                "QGAS_TO_PLATFORM" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)
                     tvOrderStateTip.text = "The order will be closed automatically, if no further confirmation within 30 minutes."
-                    tvOpreate1.visibility = View.GONE
+                    tvOpreate1.visibility = View.VISIBLE
                     tvOpreate2.visibility = View.VISIBLE
                     tvOpreate3.visibility = View.VISIBLE
                     viewLine.visibility = View.GONE
@@ -103,29 +113,38 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate3.setOnClickListener {
                         val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, "USDT" + " Receivable Address", "usdt", 2)
                         val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+                        intent.putExtra("usdt", tradeOrderDetail.order.usdtAmount.toString())
+                        intent.putExtra("receiveAddress", tradeOrderDetail.order.usdtToAddress)
+                        intent.putExtra("tradeOrderId", tradeOrderId)
+                        intent.putExtra("orderNumber", tradeOrderDetail.order.number.toString())
                         intent.putExtra("qrentity", qrEntity)
-                        startActivity(intent)
+                        startActivityForResult(intent, 0)
                     }
                     tvOpreate2.setOnClickListener {
                         showEnterTxIdDialog()
                     }
-                    var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
                     remainTime = tradeOrderExistTime - remainTime
-                    mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext {
-                                var fen = (remainTime - it) / 60
-                                var miao = (remainTime - it) % 60
-                                if (fen > 0) {
-                                    tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
-                                } else {
-                                    tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                    if (remainTime > 0) {
+                        mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext {
+                                    var fen = (remainTime - it) / 60
+                                    var miao = (remainTime - it) % 60
+                                    if (fen > 0) {
+                                        tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                    } else {
+                                        tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                    }
                                 }
-                            }
-                            .doOnComplete {
-                                getTradeOrderDetail()
-                            }
-                            .subscribe();
+                                .doOnComplete {
+                                    getTradeOrderDetail()
+                                }
+                                .subscribe();
+                    }
                 }
                 "USDT_PAID" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
@@ -225,6 +244,17 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate3.visibility = View.GONE
                     viewLine.visibility = View.GONE
                 }
+                "CANCEL" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_999))
+                    tvOrderState.text = getString(R.string.canceled)
+                    tvOrderState1.text = getString(R.string.canceled)
+                    tvOrderStateTip.text = getString(R.string.the_order_closed_by_the_buyer)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    llOpreate.visibility = View.GONE
+                }
                 "QGAS_PAID" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_4accaf))
                     tvOrderState.text = getString(R.string.successful_deal)
@@ -259,8 +289,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
             receiveAddressTip.text = "ERC20 Address to receive USDT"
             tvReceiveAddress.text = tradeOrderDetail.order.usdtToAddress
-            when(tradeOrderDetail.order.status) {
-                "QGAS_TO_PLATFORM"-> {
+            when (tradeOrderDetail.order.status) {
+                "QGAS_TO_PLATFORM" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)
@@ -287,7 +317,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                             }
                             .subscribe();
                 }
-                "USDT_PAID"-> {
+                "USDT_PAID" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
                     tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
                     tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
@@ -298,15 +328,6 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     viewLine.visibility = View.VISIBLE
                     tvOpreate2.text = getString(R.string.appeal)
                     tvOpreate3.text = getString(R.string.i_have_received)
-                    llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = "Buyer's ERC-20 address"
-                    tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
-                    tvPayAddress.setOnClickListener {
-                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
-                        cm.primaryClip = mClipData
-                        ToastUtil.displayShortToast(getString(R.string.copy_success))
-                    }
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
 
@@ -347,15 +368,15 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         }
                     }
                 }
-                "USDT_PENDING"-> {
+                "USDT_PENDING" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
                     tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
                     tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
                     tvOrderStateTip.text = getString(R.string.please_check_your_usdt_balance)
                     tvOpreate1.visibility = View.GONE
-                    tvOpreate2.visibility = View.VISIBLE
-                    tvOpreate3.visibility = View.VISIBLE
-                    viewLine.visibility = View.VISIBLE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
                     tvOpreate2.text = getString(R.string.appeal)
                     tvOpreate3.text = getString(R.string.i_have_received)
                     llPayAddress.visibility = View.VISIBLE
@@ -418,6 +439,17 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     viewLine.visibility = View.GONE
                     llOpreate.visibility = View.GONE
                 }
+                "CANCEL" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_999))
+                    tvOrderState.text = getString(R.string.canceled)
+                    tvOrderState1.text = getString(R.string.canceled)
+                    tvOrderStateTip.text = getString(R.string.the_order_closed_by_the_buyer)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    llOpreate.visibility = View.GONE
+                }
                 "QGAS_PAID" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_4accaf))
                     tvOrderState.text = getString(R.string.successful_deal)
@@ -455,7 +487,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     /**
      * 买家标记为已经付款
      */
-    fun markAsPaid(txid : String) {
+    fun markAsPaid(txid: String) {
         showProgressDialog()
         var map = mutableMapOf<String, String>()
         map["account"] = ConstantValue.currentUser.account
@@ -481,11 +513,25 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             sweetAlertDialog.cancel()
         }
         tvOk.setOnClickListener {
-//            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            //            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 //            cm.primaryClip = ClipData.newPlainText("", etContent.text.toString().trim())
             sweetAlertDialog.cancel()
             markAsPaid(etContent.text.toString().trim())
         }
+    }
+
+    fun tradeCancel() {
+        alert("Revoke Order?") {
+            positiveButton("OK") {
+                showProgressDialog()
+                var map = mutableMapOf<String, String>()
+                map["account"] = ConstantValue.currentUser.account
+                map["token"] = AccountUtil.getUserToken()
+                map["tradeOrderId"] = tradeOrderId
+                mPresenter.tradeOrderCancel(map)
+            }
+            negativeButton("Cancel") { dismiss() }
+        }.show()
     }
 
     /**
@@ -519,6 +565,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     lateinit var mTradeOrderDetail: TradeOrderDetail
     var tradeOrderExistTime = 30 * 60
 
+    var sysTime = System.currentTimeMillis()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -527,9 +575,11 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     override fun initView() {
         setContentView(R.layout.activity_trade_order_detail)
     }
+
     override fun initData() {
         title.text = "Detail"
         tradeOrderId = intent.getStringExtra("tradeOrderId")
+        mPresenter.getSysTime()
         getTradeOrderDetail()
     }
 
@@ -545,16 +595,17 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     }
 
     override fun setupActivityComponent() {
-       DaggerTradeOrderDetailComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .tradeOrderDetailModule(TradeOrderDetailModule(this))
-               .build()
-               .inject(this)
+        DaggerTradeOrderDetailComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .tradeOrderDetailModule(TradeOrderDetailModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: TradeOrderDetailContract.TradeOrderDetailContractPresenter) {
-            mPresenter = presenter as TradeOrderDetailPresenter
-        }
+        mPresenter = presenter as TradeOrderDetailPresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()

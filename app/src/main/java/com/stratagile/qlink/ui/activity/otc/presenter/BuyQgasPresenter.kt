@@ -19,7 +19,7 @@ class BuyQgasPresenter @Inject
 constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: BuyQgasContract.View) : BuyQgasContract.BuyQgasContractPresenter {
     override fun generateTradeBuyQgasOrder(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.generateTradeBuyQgasOrder(map).subscribe({
-            mView.generateTradeBuyQgasOrderSuccess()
+            mView.generateTradeBuyQgasOrderSuccess(it)
         }, {
             it.printStackTrace()
             mView.closeProgressDialog()

@@ -290,8 +290,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
         Function function = new Function(
                 "transfer",
                 Arrays.asList(new Address(toAddress), new Uint256(baseToSubunit(amount, decimals))),
-                Arrays.asList(new TypeReference<Type>() {
-                }));
+                Arrays.asList(new TypeReference<Type>() {}));
 
         String encodedFunction = FunctionEncoder.encode(function);
 

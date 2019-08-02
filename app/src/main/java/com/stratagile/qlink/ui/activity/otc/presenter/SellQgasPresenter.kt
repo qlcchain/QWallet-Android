@@ -57,16 +57,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         }))
     }
 
-    fun generateTradeSellQgasOrder(map: MutableMap<String, String>) {
-        mCompositeDisposable.add(httpAPIWrapper.generateTradeSellOrder(map).subscribe({
-            mView.generateTradeSellQgasOrderSuccess()
-        }, {
-            it.printStackTrace()
-        }, {
-
-        }))
-    }
-
     fun sendQgas(amount: String, receiveAddress: String, map: MutableMap<String, String>) {
         var qlcAccounts = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
         var qlcAccount: QLCAccount

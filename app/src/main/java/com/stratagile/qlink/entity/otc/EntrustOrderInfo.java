@@ -48,15 +48,6 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
         private String type;
         private double completeAmount;
         private String head;
-        private String number;
-        private double totalAmount;
-        private String usdtAddress;
-        private String orderTime;
-        private String nickname;
-        private String id;
-        private double maxAmount;
-        private int otcTimes;
-        private String status;
 
         protected OrderBean(Parcel in) {
             unitPrice = in.readDouble();
@@ -69,6 +60,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             number = in.readString();
             totalAmount = in.readDouble();
             usdtAddress = in.readString();
+            userId = in.readString();
             orderTime = in.readString();
             nickname = in.readString();
             id = in.readString();
@@ -88,6 +80,27 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
                 return new OrderBean[size];
             }
         };
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        private String number;
+        private double totalAmount;
+        private String usdtAddress;
+        private String userId;
+        private String orderTime;
+        private String nickname;
+        private String id;
+        private double maxAmount;
+        private int otcTimes;
+        private String status;
+
+
 
         public double getUnitPrice() {
             return unitPrice;
@@ -217,6 +230,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             this.status = status;
         }
 
+
         @Override
         public int describeContents() {
             return 0;
@@ -234,6 +248,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             parcel.writeString(number);
             parcel.writeDouble(totalAmount);
             parcel.writeString(usdtAddress);
+            parcel.writeString(userId);
             parcel.writeString(orderTime);
             parcel.writeString(nickname);
             parcel.writeString(id);

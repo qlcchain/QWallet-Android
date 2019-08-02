@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -285,13 +286,18 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         TextView tvQrCode = view.findViewById(R.id.tvQrCode);
         ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
-        view.findViewById(R.id.tv_warn).setVisibility(View.GONE);
+        TextView tvWarn = view.findViewById(R.id.tv_warn);
+        tvWarn.setVisibility(View.GONE);
+        tvWarn.setText("Warning: Export plain Mnemonic is very dangerous. We recommend you backup with mnemonic or keystore.");
         Bitmap bitmap = RxQRCode.builder(privateKey).
                 backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
                 codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
                 codeSide(800).
                 into(ivQRCode);
         tvContent.setText(privateKey);
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tvContent.getLayoutParams();
+        lp.setMargins((int) getResources().getDimension(R.dimen.x30), (int) getResources().getDimension(R.dimen.x70), (int) getResources().getDimension(R.dimen.x30), (int) getResources().getDimension(R.dimen.x70));
+        tvContent.setLayoutParams(lp);
         //取消或确定按钮监听事件处l
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         Window window = sweetAlertDialog.getWindow();
@@ -336,7 +342,9 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         TextView tvQrCode = view.findViewById(R.id.tvQrCode);
         ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
-        view.findViewById(R.id.tv_warn).setVisibility(View.GONE);
+        TextView tvWarn = view.findViewById(R.id.tv_warn);
+        tvWarn.setText("Warning: Export plain seed is very dangerous. We recommend you backup with mnemonic or keystore.");
+//        view.findViewById(R.id.tv_warn).setVisibility(View.GONE);
         Bitmap bitmap = RxQRCode.builder(privateKey).
                 backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
                 codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).

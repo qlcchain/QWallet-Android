@@ -582,6 +582,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         return;
                     }
                     Pending pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
+                    KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
                     if (pending.getInfoList().size() != 0) {
                         isPending = true;
                         QlcReceiveUtilsKt.recevive(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()), qlcAccount, rpc, new ReceiveBack() {
@@ -598,26 +599,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                                 }
                             }
                         });
-//                        StateBlock sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()));
-//                        JSONObject receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()));
-//                        JSONArray aaaa = new JSONArray();
-//                        aaaa.add(receiveBlockJson);
-//                        try {
-//                            JSONObject result = rpc.process (aaaa);
-//                            if (result.getString("result") != null && !"".equals(result.getString("result"))) {
-//                                KLog.i(result);
-//                                isPending = false;
-//                                getActivity().runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        initData();
-//                                    }
-//                                });
-//                            }
-//                        } catch (QlcException q) {
-//                            isPending = false;
-//                            q.printStackTrace();
-//                        }
                 } else{
                     isPending = false;
                 }
