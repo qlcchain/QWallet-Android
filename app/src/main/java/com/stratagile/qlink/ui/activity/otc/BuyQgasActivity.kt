@@ -62,8 +62,8 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         this.entrustOrderInfo = entrustOrderInfo
         maxQgas = entrustOrderInfo.order.totalAmount.toInt() - entrustOrderInfo.order.lockingAmount.toInt() - entrustOrderInfo.order.completeAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
-        etUsdt.hint = "Max " + maxUsdt.toPlainString()
-        etQgas.hint = "Max " + maxQgas
+        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
+        etQgas.hint = getString(R.string.max) + " " + maxQgas
         tvAmount.text = maxQgas.toString()
         if (maxQgas.toBigDecimal() < BigDecimal.valueOf(orderList.maxAmount)) {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.toString()
@@ -106,13 +106,13 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         tvCreateWallet.setOnClickListener {
             startActivity(Intent(this, SelectWalletTypeActivity::class.java))
         }
-        title.text = "BUY QGAS"
+        title.text = getString(R.string.buy_qgas)
         orderList = intent.getParcelableExtra("order")
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
         maxQgas = orderList.totalAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
-        etUsdt.hint = "Max " + maxUsdt.toPlainString()
-        etQgas.hint = "Max " + maxQgas
+        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
+        etQgas.hint = getString(R.string.max) + " " + maxQgas
         tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         var map = hashMapOf<String, String>()
         map.put("entrustOrderId", orderList.id)
@@ -280,7 +280,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                 tvQLCWalletName.text = etContent.text.toString().trim()
                 tvQLCWalletAddess.text = etContent.text.toString().trim()
             } else {
-                toast("Illegal Receipt Address")
+                toast(getString(R.string.illegal_receipt_address))
             }
             sweetAlertDialog.cancel()
         }

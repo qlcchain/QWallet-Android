@@ -100,7 +100,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 return@setOnClickListener
             }
             if (!AccountMng.isValidAddress(tvQLCWalletAddess.text.toString())) {
-                toast("Illegal Receipt Address")
+                toast(getString(R.string.illegal_receipt_address))
                 return@setOnClickListener
             }
             if (etUnitPrice.text.toString().toBigDecimal() == BigDecimal.ZERO) {

@@ -99,54 +99,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         // 获取应用内语言
         final Configuration configuration = resources.getConfiguration();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        String defaultLanguage = Locale.getDefault().getLanguage();
-        String selectLanguage = SpUtil.getString(AppConfig.getInstance(), ConstantValue.selectLanguage, "");
-        Locale locale = Locale.ENGLISH;
-        if(!"".equals(selectLanguage))
-        {
-            switch (selectLanguage)
-            {
-                case "English":
-                    configuration.locale = Locale.ENGLISH;
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-                case "Turkish"://土耳其语
-                    locale = new Locale("tr","TR");
-                    configuration.locale = locale;
-                    Locale.setDefault(locale);
-                    break;
-                case "中文"://土耳其语
-//                    locale = new Locale("zh","");
-//                    configuration.locale = locale;
-//                    Locale.setDefault(locale);
-                    configuration.locale = Locale.ENGLISH;
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-                default:
-                    configuration.locale = Locale.ENGLISH;
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-            }
-        }else{
-            switch (defaultLanguage)
-            {
-                case "en":
-                    configuration.locale = Locale.ENGLISH;
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-                case "zh"://土耳其语
-//                    locale = new Locale("zh","");
-//                    configuration.locale = locale;
-                    configuration.locale = Locale.ENGLISH;
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-                default:
-                    configuration.locale = Locale.ENGLISH;
-                    Locale.setDefault(Locale.ENGLISH);
-                    break;
-            }
+        if (SpUtil.getInt(this, ConstantValue.Language, 0) == 0) {
+            configuration.locale = Locale.ENGLISH;
+            Locale.setDefault(Locale.ENGLISH);
+        } else {
+            configuration.locale = Locale.CHINESE;
+            Locale.setDefault(Locale.CHINESE);
         }
-
         getResources().updateConfiguration(configuration, displayMetrics);
         if (isUpdate) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -201,9 +160,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
 //
 //    }
 
-    public  boolean isShouldHideInput(View v, MotionEvent event) {
+    public boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && ((v instanceof EditText) && !(v.getParent() instanceof ShowKeyRelativeLayout))) {
-            int[] leftTop = { 0, 0 };
+            int[] leftTop = {0, 0};
             //获取输入框当前的location位置
             v.getLocationInWindow(leftTop);
             int left = leftTop[0];
@@ -217,7 +176,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                 return true;
             }
         } else if (v != null && ((v instanceof EditText) && (v.getParent() instanceof ShowKeyRelativeLayout))) {
-            int[] leftTop = { 0, 0 };
+            int[] leftTop = {0, 0};
             //获取输入框当前的location位置
             v.getLocationInWindow(leftTop);
             int left = leftTop[0];

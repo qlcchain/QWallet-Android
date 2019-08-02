@@ -94,7 +94,7 @@
                 android:id="@+id/button22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SELL"
+                android:text="@string/sell"
                 style="@style/RadioButton"
                 android:textSize="13sp"
                 />

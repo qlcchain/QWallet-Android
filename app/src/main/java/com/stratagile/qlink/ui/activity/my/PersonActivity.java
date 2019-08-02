@@ -134,16 +134,16 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
 //        }
         switch (ConstantValue.currentUser.getVstatus()) {
             case "NOT_UPLOAD":
-                tvVerification.setText("Unverified");
+                tvVerification.setText(getString(R.string.unverified));
                 break;
             case "UPLOADED":
-                tvVerification.setText("Under review");
+                tvVerification.setText(getString(R.string.under_review));
                 break;
             case "KYC_SUCCESS":
-                tvVerification.setText("Verified");
+                tvVerification.setText(getString(R.string.verified));
                 break;
             case "KYC_FAIL":
-                tvVerification.setText("Not approved");
+                tvVerification.setText(getString(R.string.not_approved));
                 break;
             default:
                 break;
@@ -162,16 +162,16 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
         switch (ConstantValue.currentUser.getVstatus()) {
             case "NOT_UPLOAD":
-                tvVerification.setText("Unverified");
+                tvVerification.setText(getString(R.string.unverified));
                 break;
             case "UPLOADED":
-                tvVerification.setText("Under review");
+                tvVerification.setText(getString(R.string.under_review));
                 break;
             case "KYC_SUCCESS":
-                tvVerification.setText("Verified");
+                tvVerification.setText(getString(R.string.verified));
                 break;
             case "KYC_FAIL":
-                tvVerification.setText("Not approved");
+                tvVerification.setText(getString(R.string.not_approved));
                 break;
             default:
                 break;
@@ -272,16 +272,16 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         if (requestCode == 0) {
             switch (ConstantValue.currentUser.getVstatus()) {
                 case "NOT_UPLOAD":
-                    tvVerification.setText("Unverified");
+                    tvVerification.setText(getString(R.string.unverified));
                     break;
                 case "UPLOADED":
-                    tvVerification.setText("Under review");
+                    tvVerification.setText(getString(R.string.under_review));
                     break;
                 case "KYC_SUCCESS":
-                    tvVerification.setText("Verified");
+                    tvVerification.setText(getString(R.string.verified));
                     break;
                 case "KYC_FAIL":
-                    tvVerification.setText("Not approved");
+                    tvVerification.setText(getString(R.string.not_approved));
                     break;
                 default:
                     break;

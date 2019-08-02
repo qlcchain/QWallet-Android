@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/x10"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="The system will verify the Transction ID you filled. "
+                    android:text="@string/the_system_will_verify_the_transction_id_you_filled"
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginTop="@dimen/x20"
                     android:textColor="@color/color_d0021b" />

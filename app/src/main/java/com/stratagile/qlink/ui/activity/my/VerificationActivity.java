@@ -87,7 +87,7 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
         setContentView(R.layout.activity_verification);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Verification");
+        setTitle(getString(R.string.verification));
     }
 
     @Override
@@ -97,16 +97,16 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
         }
         switch (ConstantValue.currentUser.getVstatus()) {
             case "NOT_UPLOAD":
-                tvTip.setText("Please upload the required information of your PASSPORT.");
+                tvTip.setText(getString(R.string.please_upload_the_required_information_of_your_passport));
                 break;
             case "UPLOADED":
-                tvTip.setText("Under review");
+                tvTip.setText(getString(R.string.under_review));
                 break;
             case "KYC_SUCCESS":
-                tvTip.setText("Verified");
+                tvTip.setText(getString(R.string.verified));
                 break;
             case "KYC_FAIL":
-                tvTip.setText("Not approved");
+                tvTip.setText(getString(R.string.not_approved));
                 break;
             default:
                 break;

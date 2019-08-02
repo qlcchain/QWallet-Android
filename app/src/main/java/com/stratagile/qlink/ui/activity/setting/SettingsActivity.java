@@ -3,7 +3,6 @@ package com.stratagile.qlink.ui.activity.setting;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
@@ -23,32 +21,23 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.MyAsset;
-import com.stratagile.qlink.entity.SettingBean;
-import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
-import com.stratagile.qlink.entity.eventbus.Set2Asset;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.ui.activity.my.RetrievePasswordActivity;
 import com.stratagile.qlink.ui.activity.setting.component.DaggerSettingsComponent;
 import com.stratagile.qlink.ui.activity.setting.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.setting.module.SettingsModule;
 import com.stratagile.qlink.ui.activity.setting.presenter.SettingsPresenter;
-import com.stratagile.qlink.ui.activity.wallet.ChangeWalletActivity;
-import com.stratagile.qlink.ui.activity.wallet.TransactionRecordActivity;
-import com.stratagile.qlink.ui.activity.wallet.WalletDetailActivity;
 import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -79,6 +68,8 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     LinearLayout selectUnit;
     @BindView(R.id.tvVersion)
     TextView tvVersion;
+    @BindView(R.id.language)
+    LinearLayout language;
     private Guide guide;
 
     @Override
@@ -93,7 +84,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        tvVersion.setText(VersionUtil.getAppVersionName(this));
-        tvVersion.setText(getString(R.string.version) +" "+ BuildConfig.VERSION_NAME +" ("+getString(R.string.Build) + " " +BuildConfig.VERSION_CODE+")");
+        tvVersion.setText(getString(R.string.version) + " " + BuildConfig.VERSION_NAME + " (" + getString(R.string.Build) + " " + BuildConfig.VERSION_CODE + ")");
         touchIdToUnlock.setChecked(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true));
         touchIdToUnlock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -390,7 +381,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         progressDialog.hide();
     }
 
-    @OnClick({R.id.llLoginOut, R.id.resetPassword, R.id.selectUnit})
+    @OnClick({R.id.llLoginOut, R.id.resetPassword, R.id.selectUnit, R.id.language})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llLoginOut:
@@ -414,6 +405,9 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                 break;
             case R.id.selectUnit:
                 startActivity(new Intent(this, CurrencyUnitActivity.class));
+                break;
+            case R.id.language:
+                startActivity(new Intent(this, SelectLanguageActivityActivity.class));
                 break;
             default:
                 break;

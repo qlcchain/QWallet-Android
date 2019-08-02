@@ -59,8 +59,11 @@ public class SelectLanguageActivityActivity extends BaseActivity implements Sele
     @BindView(R.id.et_search)
     EditText et_search;
 
+    private int defaultLanguage = 0;
+
     private LanguageCityAdapter mAdapterContactCity;
     private LanguageCountry.ContinentBean continentChose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,47 +84,24 @@ public class SelectLanguageActivityActivity extends BaseActivity implements Sele
         LanguageCountry LanguageCountry = gson.fromJson(FileUtil.getJson(SelectLanguageActivityActivity.this, "Language.json"), LanguageCountry.class);
         for (int i = 0; i < LanguageCountry.getContinent().size(); i++) {
             KLog.i("设置适配器。。。");
-            Collections.sort(LanguageCountry.getContinent().get(i).getCountry());
+//            Collections.sort(LanguageCountry.getContinent().get(i).getCountry());
             continentChose = LanguageCountry.getContinent().get(i);
             mAdapterContactCity = new LanguageCityAdapter(LanguageCountry.getContinent().get(i).getCountry());
             recyclerView.setAdapter(mAdapterContactCity);
             mAdapterContactCity.setOnItemChangeListener(new LanguageCityAdapter.OnItemChangeListener() {
                 @Override
                 public void onItemChange(int position) {
-
+                    SpUtil.putInt(SelectLanguageActivityActivity.this, ConstantValue.Language, position);
                 }
             });
         }
+        defaultLanguage = SpUtil.getInt(SelectLanguageActivityActivity.this, ConstantValue.Language, 0);
         String selectLanguage = SpUtil.getString(AppConfig.getInstance(), ConstantValue.selectLanguage, "");
         String defaultLanguage = Locale.getDefault().getLanguage();
-        if(mAdapterContactCity != null)
-        {
-            if(!"".equals(selectLanguage))
-            {
-                switch (selectLanguage)
-                {
-                    case "English":
-                        mAdapterContactCity.setSelectItem(0);
-                        break;
-                    case "Turkish"://土耳其语
-                        mAdapterContactCity.setSelectItem(1);
-                        break;
-                    default:
-                        mAdapterContactCity.setSelectItem(0);
-                        break;
-                }
-            }else{
-                switch (defaultLanguage)
-                {
-                    case "tr"://土耳其语
-                        mAdapterContactCity.setSelectItem(1);
-                        break;
-                    default:
-                        mAdapterContactCity.setSelectItem(0);
-                        break;
-                }
-            }
-
+        KLog.i(selectLanguage);
+        KLog.i(defaultLanguage);
+        if (mAdapterContactCity != null) {
+            mAdapterContactCity.setSelectItem(SpUtil.getInt(SelectLanguageActivityActivity.this, ConstantValue.Language, 0));
         }
 
         et_search.addTextChangedListener(new TextWatcher() {
@@ -132,25 +112,23 @@ public class SelectLanguageActivityActivity extends BaseActivity implements Sele
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(continentChose == null)
-                {
+                if (continentChose == null) {
                     return;
                 }
                 KLog.i(charSequence.toString());
                 String inputStr = charSequence.toString();
                 List<LanguageCountry.ContinentBean.CountryBean> countTryList = continentChose.getCountry();
-                KLog.i("old_"+countTryList.size());
+                KLog.i("old_" + countTryList.size());
                 List<LanguageCountry.ContinentBean.CountryBean> newCountTryList = new ArrayList<>();
-                for(int j = 0 ; j < countTryList.size() ; j++) {
+                for (int j = 0; j < countTryList.size(); j++) {
                     LanguageCountry.ContinentBean.CountryBean temp = countTryList.get(j);
-                    if(StringUitl.isSimilar(inputStr,temp.getName()))
-                    {
+                    if (StringUitl.isSimilar(inputStr, temp.getName())) {
                         newCountTryList.add(temp);
                     }
                 }
                 mAdapterContactCity = new LanguageCityAdapter(newCountTryList);
                 recyclerView.setAdapter(mAdapterContactCity);
-                KLog.i("new_"+newCountTryList.size());
+                KLog.i("new_" + newCountTryList.size());
             }
 
             @Override
@@ -192,51 +170,20 @@ public class SelectLanguageActivityActivity extends BaseActivity implements Sele
                 finish();
                 break;
             case R.id.bt_continue:
-                if(mAdapterContactCity == null  || mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()) == null)
-                {
+                if (mAdapterContactCity == null || mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()) == null) {
                     ToastUtil.displayShortToast(getResources().getString(R.string.please_choose_a_region));
                     return;
                 }
-                String selectLanguage = SpUtil.getString(AppConfig.getInstance(), ConstantValue.selectLanguage, "");
-                String defaultLanguage = Locale.getDefault().getLanguage();
-                if(!"".equals(selectLanguage))
-                {
-                    if(selectLanguage.equals(mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()).getName()))
-                    {
-                        finish();
-                        return;
-                    }
-                }else{
-                    switch (defaultLanguage)
-                    {
-                        case "tr"://土耳其语
-                            if("Turkish".equals(mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()).getName()))
-                            {
-                                finish();
-                                return;
-                            }
-                            break;
-                        default:
-                            if("English".equals(mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()).getName()))
-                            {
-                                finish();
-                                return;
-                            }
-                            break;
-                    }
+                if (mAdapterContactCity.getSelectItem() == defaultLanguage) {
+                    finish();
+                } else {
+                    SpUtil.putString(AppConfig.getInstance(), ConstantValue.selectLanguage, mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()).getName());
+                    Intent intent = new Intent(this, SplashActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(0);
                 }
-
-                //qlinkcom.endP2PConnenct();
-                SpUtil.putString(AppConfig.getInstance(), ConstantValue.selectLanguage, mAdapterContactCity.getItem(mAdapterContactCity.getSelectItem()).getName());
-                /*final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
-                Intent intent = new Intent(this, SplashActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
                 break;
             default:
                 break;

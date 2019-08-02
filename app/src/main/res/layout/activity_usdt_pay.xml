@@ -10,7 +10,7 @@
         android:id="@+id/paymentWallet"
         android:layout_width="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Payment Wallet"
+        android:text="@string/payment_wallet"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/x50"
         android:textColor="@color/color_7f7f7f"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Select a ETH wallet to receive QGAS"
+                android:text="@string/select_a_eth_wallet_to_send_usdt"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
@@ -54,7 +54,7 @@
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
-                android:text="Select a ETH wallet"
+                android:text="@string/select_a_eth_wallet"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:maxWidth="@dimen/x400"
@@ -134,7 +134,7 @@
     <TextView
         android:id="@+id/tvSendTo"
         android:layout_width="wrap_content"
-        android:text="Send to"
+        android:text="@string/send_to"
         android:textSize="16sp"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/view2"
@@ -163,7 +163,7 @@
 
     <TextView
         android:id="@+id/Memo"
-        android:text="Memo"
+        android:text="@string/memo"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/llSelectEthWallet"
         app:layout_constraintTop_toBottomOf="@+id/view5"
@@ -195,7 +195,7 @@
         android:background="@color/color_29282a_40"/>
     <TextView
         android:id="@+id/cost"
-        android:text="Miner cost"
+        android:text="@string/miner_cost"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/llSelectEthWallet"
         app:layout_constraintTop_toBottomOf="@+id/view3"
@@ -254,7 +254,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
-            android:text="Slow"
+            android:text="@string/slow"
             android:layout_height="wrap_content" />
         <View
             android:layout_width="0px"
@@ -271,7 +271,7 @@
             android:layout_weight="1"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="Fast"
+            android:text="@string/fast"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

@@ -15,7 +15,7 @@
             <TextView
                 android:id="@+id/tvUnitPrice"
                 android:layout_width="wrap_content"
-                android:text="Unit Price"
+                android:text="@string/unit_price"
                 android:textSize="16sp"
                 android:textColor="@color/color_29282a"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -60,7 +60,7 @@
             <TextView
                 android:id="@+id/tvAmount"
                 android:layout_width="wrap_content"
-                android:text="Amount"
+                android:text="@string/amount"
                 android:textSize="16sp"
                 android:textColor="@color/color_29282a"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -98,7 +98,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Volume Settings"
+            android:text="@string/volume_settings"
             android:textSize="16sp"
             android:layout_marginLeft="@dimen/x30"
             android:textColor="@color/color_29282a"
@@ -118,7 +118,7 @@
                 android:id="@+id/etMinAmount"
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:hint="Min Amount"
+                android:hint="@string/min_amount"
                 android:inputType="number"
                 android:textSize="16sp"
                 android:background="@null"
@@ -133,7 +133,7 @@
                 android:id="@+id/etMaxAmount"
                 android:layout_width="0px"
                 android:background="@null"
-                android:hint="Max Amount"
+                android:hint="@string/max_amount"
                 android:inputType="number"
                 android:textSize="16sp"
                 android:layout_weight="1"
@@ -152,7 +152,7 @@
             android:layout_marginRight="@dimen/x30"
             android:layout_marginTop="@dimen/x8"
             android:textColor="@color/color_808080"
-            android:text="The Min Amount should be equal or greater than 1. And the Max Amount should be equal or less than the Total Amount you set."
+            android:text="@string/the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set"
             android:layout_height="wrap_content" />
         <View
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
             android:background="@color/color_f2f2f2"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="ERC20 Address to receive USDT"
+            android:text="@string/erc20_address_to_receive_usdt"
             android:textSize="16sp"
             android:layout_marginLeft="@dimen/x30"
             android:textColor="@color/color_29282a"
@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Select a ETH wallet to receive USDT"
+                    android:text="@string/select_a_eth_wallet_to_receive_usdt"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_29282a"
                     android:singleLine="true"
@@ -201,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_29282a_40"
-                    android:text="Input ETH Wallet Address"
+                    android:text="@string/input_eth_wallet_address"
                     android:layout_marginTop="@dimen/x10"
                     android:maxEms="10"
                     android:ellipsize="middle"
@@ -235,7 +235,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="QLC Chain Wallet to send out QGAS"
+            android:text="@string/qlc_chain_wallet_to_send_out_qgas"
             android:textSize="16sp"
             android:layout_marginLeft="@dimen/x30"
             android:textColor="@color/color_29282a"
@@ -264,7 +264,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Select a QLC wallet to send out QGAS"
+                    android:text="@string/select_a_qlc_wallet_to_send_out_qgas"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_29282a"
                     android:singleLine="true"
@@ -278,7 +278,7 @@
                     android:layout_marginTop="@dimen/x10"
                     android:maxEms="10"
                     android:ellipsize="middle"
-                    android:text="Select a QLC Wallet"
+                    android:text="@string/select_a_qlc_wallet"
                     android:singleLine="true"
                     android:layout_marginLeft="@dimen/x30"
                     android:maxWidth="@dimen/x400"

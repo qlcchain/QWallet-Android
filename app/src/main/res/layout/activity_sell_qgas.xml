@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
     <TextView
         android:layout_width="wrap_content"
-        android:text="Unit Price (USDT)"
+        android:text="@string/unit_price_usdt"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/x30"
         android:layout_height="wrap_content" />
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Volume Amount (QGAS)"
+                android:text="@string/volume_amount_qgas"
                 android:textColor="@color/color_808080"
                 android:textSize="12sp"
                 android:layout_height="wrap_content" />
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Volume Settings (QGAS)"
+                android:text="@string/volume_settings_qgas"
                 android:textColor="@color/color_808080"
                 android:textSize="12sp"
                 android:layout_height="wrap_content" />
@@ -76,7 +76,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="Account Receivable"
+        android:text="@string/account_receivable"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -150,7 +150,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="ERC20 Address to receive USDT"
+        android:text="@string/erc20_address_to_receive_usdt"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -177,7 +177,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Select a ETH wallet to receive USDT"
+                android:text="@string/select_a_eth_wallet_to_receive_usdt"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
@@ -189,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a_40"
-                android:text="Input ETH Wallet Address"
+                android:text="@string/input_eth_wallet_address"
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
@@ -221,7 +221,7 @@
         android:background="@color/color_f2f2f2"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="QLC Chain Wallet to send out QGAS"
+        android:text="@string/qlc_chain_wallet_to_send_out_qgas"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -249,7 +249,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Select a QLC wallet to send out QGAS"
+                android:text="@string/select_a_qlc_wallet_to_send_out_qgas"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
@@ -263,7 +263,7 @@
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
-                android:text="Select a QLC Wallet"
+                android:text="@string/select_a_qlc_wallet"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:maxWidth="@dimen/x400"
@@ -301,7 +301,7 @@
         android:background="@drawable/main_color_bt_bg"
         android:gravity="center"
         android:textColor="@color/white"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textSize="16sp"
         android:layout_height="@dimen/x94" />
 </LinearLayout>

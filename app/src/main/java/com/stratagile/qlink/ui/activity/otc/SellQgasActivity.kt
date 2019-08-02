@@ -83,8 +83,8 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         this.entrustOrderInfo = entrustOrderInfo
         maxQgas = entrustOrderInfo.order.totalAmount.toInt() - entrustOrderInfo.order.lockingAmount.toInt() - entrustOrderInfo.order.completeAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
-        etUsdt.hint = "Max " + maxUsdt.toPlainString()
-        etQgas.hint = "Max " + maxQgas
+        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
+        etQgas.hint = getString(R.string.max) + " " + maxQgas
         tvAmount.text = maxQgas.toString()
         if (maxQgas.toBigDecimal() < BigDecimal.valueOf(orderList.maxAmount)) {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.toString()
@@ -111,15 +111,15 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         setContentView(R.layout.activity_sell_qgas)
     }
     override fun initData() {
-        title.text = "SELL QGAS"
+        title.text = getString(R.string.sell_qgas)
         orderList = intent.getParcelableExtra("order")
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
         tvAmount.text= BigDecimal.valueOf(orderList.totalAmount).stripTrailingZeros().toPlainString()
         tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         maxQgas = orderList.totalAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
-        etUsdt.hint = "Max " + maxUsdt.toPlainString()
-        etQgas.hint = "Max " + maxQgas
+        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
+        etQgas.hint = getString(R.string.max) + " " + maxQgas
 
         qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
         if (qlcAccounList.size > 0) {
@@ -183,7 +183,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             }
 
             if ("".equals(tvQLCWalletAddess.text.toString())) {
-                toast("Please select a qlc wallet to payment")
+                toast(getString(R.string.please_select_a_qlc_wallet_to_payment))
                 return@setOnClickListener
             }
 
@@ -389,7 +389,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                 tvWalletAddess.text = etContent.text.toString().trim()
                 tvWalletName.text = etContent.text.toString().trim()
             } else {
-                toast("Illegal Receipt Address")
+                toast(getString(R.string.illegal_receipt_address))
             }
             sweetAlertDialog.cancel()
         }

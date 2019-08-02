@@ -48,13 +48,13 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
         setContentView(R.layout.activity_otc_order_record)
     }
     override fun initData() {
-        title.text = "Record"
+        title.text = getString(R.string.order_record)
         val titles = ArrayList<String>()
-        titles.add("Posted")
-        titles.add("Processing")
-        titles.add("Completed")
-        titles.add("Closed")
-        titles.add("Appealed")
+        titles.add(getString(R.string.posted))
+        titles.add(getString(R.string.processing))
+        titles.add(getString(R.string.completed))
+        titles.add(getString(R.string.closed))
+        titles.add(getString(R.string.appealed))
         viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 when(position) {
