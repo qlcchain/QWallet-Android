@@ -11,6 +11,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.entity.EntrustOrderList;
+import com.stratagile.qlink.utils.AccountUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,7 +33,7 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
             helper.setBackgroundRes(R.id.tvOpreate, R.drawable.sell_bg);
         }
         helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
-        helper.setText(R.id.tvNickName, item.getNickname());
+        helper.setText(R.id.tvNickName, AccountUtil.setUserNickName(item.getNickname()));
         helper.setText(R.id.tvAmount, (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()) + "");
         if (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue() < BigDecimal.valueOf(item.getMaxAmount()).intValue()) {
             helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()));

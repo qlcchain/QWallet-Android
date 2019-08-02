@@ -1,7 +1,6 @@
 package com.stratagile.qlink.entity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EthWalletInfo extends BaseBack<EthWalletInfo.DataBean> {
 
@@ -65,8 +64,9 @@ public class EthWalletInfo extends BaseBack<EthWalletInfo.DataBean> {
         }
 
         public static class ETHBean {
+
             /**
-             * balance : 0
+             * balance : 0.028255103
              */
 
             private Object balance;

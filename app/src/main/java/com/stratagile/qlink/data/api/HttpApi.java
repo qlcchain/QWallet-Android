@@ -62,6 +62,7 @@ import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
+import com.stratagile.qlink.entity.otc.GenerageTradeOrder;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
@@ -128,6 +129,7 @@ import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
+import static com.stratagile.qlink.data.api.API.url_trade_cancel;
 import static com.stratagile.qlink.data.api.API.url_trade_order_info;
 import static com.stratagile.qlink.data.api.API.url_trade_order_list;
 import static com.stratagile.qlink.data.api.API.url_trade_sell_order;
@@ -517,7 +519,7 @@ public interface HttpApi {
 
     @POST(url_trade_buy_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> generateTradeBuyQgasOrder(@Body RequestBody map);
+    Observable<GenerageTradeOrder> generateTradeBuyQgasOrder(@Body RequestBody map);
 
     @POST(url_trade_buyer_confirm)
     @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -538,6 +540,10 @@ public interface HttpApi {
     @POST(url_trade_order_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TradeOrderDetail> tradeOrderInfo(@Body RequestBody map);
+
+    @POST(url_trade_cancel)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> tradeOrderCancel(@Body RequestBody map);
 
     @POST(url_user_userinfo)
     @Headers({"Content-Type: application/json","Accept: application/json"})

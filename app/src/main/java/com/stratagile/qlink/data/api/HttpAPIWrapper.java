@@ -64,6 +64,7 @@ import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.entity.otc.EntrustOrderInfo;
+import com.stratagile.qlink.entity.otc.GenerageTradeOrder;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
@@ -810,7 +811,7 @@ public class HttpAPIWrapper {
         }
     }
 
-    public Observable<BaseBack> generateTradeBuyQgasOrder(Map map) {
+    public Observable<GenerageTradeOrder> generateTradeBuyQgasOrder(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
             return wrapper(mHttpAPI.generateTradeBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
@@ -850,6 +851,14 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> tradeOrderCancel(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.tradeOrderCancel(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.tradeOrderCancel(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
     public Observable<UserInfo> getUserInfo(Map map) {
@@ -895,6 +904,7 @@ public class HttpAPIWrapper {
                                                 errorTips = errorTips.substring(errorTips.indexOf("|") + 1, errorTips.length());
                                             }
                                             ToastUtil.displayShortToast(errorTips);
+                                            KLog.i("请求错误。。");
                                             e.onComplete();
                                         } else {
                                             e.onNext(baseResponse);

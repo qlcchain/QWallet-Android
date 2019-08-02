@@ -30,4 +30,14 @@ public class AccountUtil {
         String token = RSAEncrypt.encrypt(orgin, ConstantValue.currentUser.getPubKey());
         return token;
     }
+
+    public static String setUserNickName(String nickName) {
+        if (isEmail(nickName)) {
+            return nickName.substring(0, 3) + "...";
+        } else if (isTelephone(nickName)) {
+            return nickName.substring(0, 3) + "****" + nickName.substring(7, 11);
+        } else {
+            return nickName;
+        }
+    }
 }

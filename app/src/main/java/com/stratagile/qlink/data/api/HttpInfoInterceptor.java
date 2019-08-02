@@ -31,11 +31,11 @@ public class HttpInfoInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
 
         Request request = chain.request();
+        KLog.i("请求的地址为：" + request.url());
         Response response = chain.proceed(request);
         ResponseBody responseBody = response.body();
 //        KLog.i("网络请求的网址为:" + request.toString());
         long contentLength = responseBody.contentLength();
-        KLog.i("请求的地址为：" + request.url());
 //        KLog.i("reqeust的body为:" + request.body());
 //        KLog.i("reqeust的head为:" + request.headers());
         //注意 >>>>>>>>> okhttp3.4.1这里变成了 !HttpHeader.hasBody(response)

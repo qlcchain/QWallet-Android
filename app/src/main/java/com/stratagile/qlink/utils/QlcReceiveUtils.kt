@@ -33,6 +33,7 @@ import java.math.BigDecimal
 fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount, rpc : LedgerRpc, receiveBack: ReceiveBack){
     KLog.i("开始接收")
     val sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
+    KLog.i(sendBlock)
     var isBendi = true
     //QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()
     val receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, qlcAccount.address, null)
@@ -66,6 +67,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 } else {
 
                 }
+                KLog.i("接收传过去的参数：" + aaaa)
                 var result = rpc.process(aaaa)
                 KLog.i(result.toJSONString())
                 if (result.getString("result") != null && !"".equals(result.getString("result"))) {
@@ -97,6 +99,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
         }
         stateBlock.setSignature(Helper.byteToHexString(signature))
         aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
+        KLog.i("接收传过去的参数：" + aaaa)
         var result = rpc.process(aaaa)
         KLog.i(result.toJSONString())
         if (result.getString("result") != null && !"".equals(result.getString("result"))) {
@@ -154,6 +157,7 @@ object QlcReceiveUtils {
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    sendBack.send("")
                 }
             }
             KLog.i(aaaa)

@@ -25,6 +25,8 @@ interface TradeOrderDetailContract {
 
         fun markAsPaidSuccess()
 
+        fun cancelOrderSuccess()
+
         fun confirmCheckSuccess()
 
     }

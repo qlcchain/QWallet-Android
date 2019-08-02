@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.otc
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -62,8 +63,14 @@ class UsdtReceiveAddressActivity : BaseActivity(), UsdtReceiveAddressContract.Vi
         createEnglishQRCode.execute()
         tvWalletAddess.text = qrEntity.content
         understand.setOnClickListener {
-            finish()
+            var intent1 = Intent(this, UsdtPayActivity::class.java)
+            intent1.putExtra("usdt", intent.getStringExtra("usdt"))
+            intent1.putExtra("receiveAddress", intent.getStringExtra("receiveAddress"))
+            intent1.putExtra("tradeOrderId", intent.getStringExtra("tradeOrderId"))
+            intent1.putExtra("orderNumber", intent.getStringExtra("orderNumber"))
+            startActivityForResult(intent1, 0)
         }
+
         tvWalletAddess.setOnClickListener {
             //获取剪贴板管理器：
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -95,6 +102,13 @@ class UsdtReceiveAddressActivity : BaseActivity(), UsdtReceiveAddressContract.Vi
             startActivity(share_intent)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            finish()
+        }
     }
 
     /**

@@ -223,6 +223,7 @@
         <activity android:name=".ui.activity.otc.AppealDetailActivity" />
         <activity android:name=".ui.activity.otc.AppealSubmittedActivity" />
         <activity android:name=".ui.activity.otc.OtcChooseWalletActivity" />
+        <activity android:name=".ui.activity.otc.UsdtPayActivity" />
 
 
         <meta-data

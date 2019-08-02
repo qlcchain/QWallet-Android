@@ -54,7 +54,7 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
             startActivity(Intent(this, AppealSubmittedActivity::class.java).putExtra("orderDetail", tradeOrderDetail.order))
         }
 
-        tvNickName.text = tradeOrderDetail.order.nickname
+        tvNickName.text = AccountUtil.setUserNickName(tradeOrderDetail.order.nickname)
         tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
         tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
         tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " USDT"

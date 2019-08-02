@@ -35,9 +35,9 @@ public class ConstantValue {
     public static String unlockTime = "unlocktime";
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
+
     //测试 http://47.103.40.20:19735
-    //正式 https://rpc.qlcchain.online   http://wrpc.qlcchain.org:9735
-//    public static String qlcNode = "https://rpc.qlcchain.online";
+    //正式 http://wrpc.qlcchain.org:9735
 
 
 
