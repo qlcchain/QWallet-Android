@@ -29,6 +29,8 @@ interface TradeOrderDetailContract {
 
         fun confirmCheckSuccess()
 
+        fun setServerTime(time : String)
+
     }
 
     interface TradeOrderDetailContractPresenter : BasePresenter {

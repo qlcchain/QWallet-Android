@@ -44,6 +44,7 @@ import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
@@ -297,7 +298,7 @@ public class HttpAPIWrapper {
 
     public Observable<ImportWalletResult> batchImportWallet(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.batchImportWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.batchImportWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.batchImportWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
@@ -323,7 +324,7 @@ public class HttpAPIWrapper {
     }
     public Observable<UpLoadAvatar> userHeadView(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.userHeadView(map)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.userHeadView(map)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.userHeadView(map)).compose(SCHEDULERS_TRANSFORMER);
         }
@@ -331,7 +332,7 @@ public class HttpAPIWrapper {
     }
     public Observable<BaseBack> heartBeat(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.heartBeat(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.heartBeat(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.heartBeat(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
@@ -340,7 +341,7 @@ public class HttpAPIWrapper {
 
     public Observable<UpdateVpn> updateVpnInfo(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.updateVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
@@ -349,7 +350,7 @@ public class HttpAPIWrapper {
 
     public Observable<BaseBack> updateWiFiInfo(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.updateWiFiInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateWiFiInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateWiFiInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
@@ -359,16 +360,25 @@ public class HttpAPIWrapper {
 
     public Observable<AssetsWarpper> getUnspentAsset(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.getUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.getUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }
 
+    public Observable<SysTime> getServerTime(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+            return wrapper(mHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+
+    }
+
     public Observable<BaseBack> sendRawTransaction(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
-            return wrapper(mMainHttpAPI.sendRawTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.sendRawTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.sendRawTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }

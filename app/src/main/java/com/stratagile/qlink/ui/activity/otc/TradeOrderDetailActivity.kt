@@ -43,6 +43,10 @@ import javax.inject.Inject;
  */
 
 class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
+    override fun setServerTime(time: String) {
+        sysTime = TimeUtil.timeStamp(time)
+    }
+
     override fun cancelOrderSuccess() {
         closeProgressDialog()
         toast(getString(R.string.success))
@@ -122,7 +126,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate1.setOnClickListener {
                         tradeCancel()
                     }
-                    var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
                     remainTime = tradeOrderExistTime - remainTime
                     if (remainTime > 0) {
                         mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
@@ -561,6 +565,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     lateinit var mTradeOrderDetail: TradeOrderDetail
     var tradeOrderExistTime = 30 * 60
 
+    var sysTime = System.currentTimeMillis()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -573,6 +579,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     override fun initData() {
         title.text = "Detail"
         tradeOrderId = intent.getStringExtra("tradeOrderId")
+        mPresenter.getSysTime()
         getTradeOrderDetail()
     }
 

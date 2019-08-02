@@ -74,4 +74,13 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
             mView.closeProgressDialog()
         }))
     }
+    fun getSysTime() {
+        mCompositeDisposable.add(httpAPIWrapper.getServerTime(hashMapOf<String, String>()).subscribe({
+            mView.setServerTime(it.data.sysTime)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
 }

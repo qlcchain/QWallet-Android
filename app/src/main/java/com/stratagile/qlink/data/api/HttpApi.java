@@ -42,6 +42,7 @@ import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
 import com.stratagile.qlink.entity.TransactionResult;
@@ -271,6 +272,10 @@ public interface HttpApi {
     @POST(API.getUnspentAsset)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<AssetsWarpper> getUnspentAsset(@Body RequestBody map);
+
+    @POST(API.url_get_server_time)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<SysTime> getServerTime(@Body RequestBody map);
 
     @POST(sendRow)
     @Headers({"Content-Type: application/json","Accept: application/json"})
