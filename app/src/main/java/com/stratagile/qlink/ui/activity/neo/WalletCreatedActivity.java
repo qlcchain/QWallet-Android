@@ -49,7 +49,7 @@ public class WalletCreatedActivity extends BaseActivity implements WalletCreated
     protected void initView() {
         setContentView(R.layout.activity_wallet_created);
         ButterKnife.bind(this);
-        setTitle("Create Wallet");
+        setTitle(getString(R.string.create_wallet));
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

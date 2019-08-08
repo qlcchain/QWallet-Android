@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x12"
-        android:text="WALLET CREATED SUCCESSFULLY"
+        android:text="@string/wallet_created_successfully"
         android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,7 @@
         android:layout_marginTop="@dimen/x25"
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/color_1F314A"
-        android:text="Caution! Whoever has the wallet seed can completely control all assets in the wallet."
+        android:text="@string/caution_whoever_has_the_wallet_seed_can_completely_control_all_assets_in_the_wallet"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -76,7 +76,7 @@
         android:layout_marginTop="@dimen/x25"
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/color_9b9b9bb"
-        android:text="Please backup carefully and keep it safe."
+        android:text="@string/please_backup_carefully_and_keep_it_safe"
         android:layout_height="wrap_content" />
 
     <Button
@@ -88,7 +88,7 @@
         android:layout_marginTop="@dimen/x70"
         android:background="@drawable/change_wallet"
         android:fontFamily="@font/roboto_regular"
-        android:text="Backup wallet seed"
+        android:text="@string/backup_wallet_seed"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

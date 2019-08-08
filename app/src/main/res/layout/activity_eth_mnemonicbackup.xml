@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x12"
-        android:text="CONFIRM YOUR MNEMONIC WORDS"
+        android:text="@string/confirm_your_mnemonic_words"
         android:textColor="@color/color_1F314A"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/x25"
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/color_9b9b9bb"
-        android:text="Please choose mnemonic words in order and make sure your mnemonic was correct written "
+        android:text="@string/please_choose_mnemonic_words_in_order_and_make_sure_your_mnemonic_was_correct_written"
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView

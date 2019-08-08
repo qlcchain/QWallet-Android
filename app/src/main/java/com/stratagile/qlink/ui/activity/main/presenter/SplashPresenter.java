@@ -150,8 +150,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
                 .requestCode(101)
                 .permission(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_FINE_LOCATION
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
                 .rationale(rationaleListener)
                 .callback(permission)
@@ -185,7 +184,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
     private PermissionListener permission = new PermissionListener() {
         @Override
         public void onSucceed(int requestCode, List<String> grantedPermissions) {
-            LocalAssetsUtils.updateGreanDaoFromLocal();
+//            LocalAssetsUtils.updateGreanDaoFromLocal();
             // 权限申请成功回调。
             if (requestCode == 101) {
                 qlinkcom.init();

@@ -124,21 +124,21 @@ public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKey
     @OnClick(R.id.btImport)
     public void onViewClicked() {
         if ("".equals(etPrivateKey.getText().toString().trim())) {
-            ToastUtil.displayShortToast("please type privatekey");
+            ToastUtil.displayShortToast(getString(R.string.please_type_privatekey));
             return;
         }
         showProgressDialog();
         EthWallet ethWallet = ETHWalletUtils.loadWalletByPrivateKey(etPrivateKey.getText().toString());
         if (ethWallet == null) {
             closeProgressDialog();
-            ToastUtil.displayShortToast("import eth wallet error");
+            ToastUtil.displayShortToast(getString(R.string.import_wallet_error));
             return;
         }
         List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         if (wallets != null && wallets.size() != 0) {
             for (int i = 0; i < wallets.size(); i++) {
                 if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
-                    ToastUtil.displayShortToast("wallet exist");
+                    ToastUtil.displayShortToast(getString(R.string.wallet_exist));
                     closeProgressDialog();
                     return;
                 }

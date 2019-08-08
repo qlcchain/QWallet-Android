@@ -123,11 +123,11 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
         if (!"".equals(ConstantValue.currentUser.getAvatar())) {
             if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
                 Glide.with(this)
-                        .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                        .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                         .into(ivPicture);
             } else {
                 Glide.with(this)
-                        .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                        .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                         .into(ivPicture);
             }
         } }

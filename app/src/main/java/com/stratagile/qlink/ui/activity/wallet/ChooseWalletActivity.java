@@ -66,7 +66,7 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
     protected void initView() {
         setContentView(R.layout.activity_choose_wallet);
         ButterKnife.bind(this);
-        setTitle("Choose a Wallet");
+        setTitle(getString(R.string.choose_wallet));
     }
 
     @Override

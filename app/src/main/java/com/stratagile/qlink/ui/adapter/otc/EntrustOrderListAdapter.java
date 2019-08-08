@@ -10,6 +10,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.utils.AccountUtil;
 
@@ -41,7 +42,7 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
             helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());
         }
         Glide.with(mContext)
-                .load(API.BASE_URL + item.getHead())
+                .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.ivAvatar));
     }

@@ -12,6 +12,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.TimeUtil;
@@ -51,7 +52,7 @@ public class AppealImgAdapter extends BaseQuickAdapter<ImageEntity, BaseViewHold
             if (isSee) {
                 helper.setVisible(R.id.ivDelete, false);
                 Glide.with(mContext)
-                        .load(API.BASE_URL + item.getName())
+                        .load(MainAPI.MainBASE_URL + item.getName())
                         .apply(AppConfig.getInstance().optionsAppeal)
                         .into((ImageView) helper.getView(R.id.imageView));
             } else {

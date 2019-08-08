@@ -82,7 +82,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Mnemonic Phrase"
+                android:text="@string/export_mnemonic_phrase"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -115,7 +115,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Keystore"
+                android:text="@string/export_keystore"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -148,7 +148,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export private key"
+                android:text="@string/export_private_key"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -181,7 +181,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Encrypted Key(WIF)"
+                android:text="@string/export_encrypted_key_wif"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -213,7 +213,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Private Key(HEX)"
+                android:text="@string/export_private_key_hex"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -245,7 +245,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Resource Management"
+                android:text="@string/resource_management"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -277,7 +277,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export owner private key"
+                android:text="@string/export_owner_private_key"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -309,7 +309,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export active private key"
+                android:text="@string/export_active_private_key"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -341,7 +341,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Mnemonic Phrase"
+                android:text="@string/export_mnemonic_phrase"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -373,7 +373,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Export Wallet Seed"
+                android:text="@string/export_wallet_seed"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -400,7 +400,7 @@
         android:id="@+id/tvDeleteWallet"
         android:layout_width="@dimen/x200"
         android:textColor="@color/color_d0021b"
-        android:text="Delete Wallet"
+        android:text="@string/delete_wallet"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/x44"

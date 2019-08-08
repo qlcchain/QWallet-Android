@@ -133,11 +133,11 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
     @OnClick(R.id.btImport)
     public void onViewClicked() {
         if ("".equals(etKeystroe.getText().toString().trim())) {
-            ToastUtil.displayShortToast("please type keystore");
+            ToastUtil.displayShortToast(getString(R.string.please_type_keystore));
             return;
         }
         if (etPassword.getText().toString().equals("")) {
-            ToastUtil.displayShortToast("please type password");
+            ToastUtil.displayShortToast(getString(R.string.please_type_password));
             return;
         }
         showProgressDialog();
@@ -156,14 +156,14 @@ public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeCont
         wallet = ETHWalletUtils.loadWalletByKeystore(keystore, pwd);
         if (wallet == null) {
             closeProgressDialog();
-            ToastUtil.displayShortToast("import eth wallet error");
+            ToastUtil.displayShortToast(getString(R.string.import_wallet_error));
             return;
         }
         KLog.i(wallet.toString());
         List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         for (int i = 0; i < wallets.size(); i++) {
             if (wallets.get(i).getAddress().equals(wallet.getAddress())) {
-                ToastUtil.displayShortToast("wallet exist");
+                ToastUtil.displayShortToast(getString(R.string.wallet_exist));
                 closeProgressDialog();
                 return;
             }

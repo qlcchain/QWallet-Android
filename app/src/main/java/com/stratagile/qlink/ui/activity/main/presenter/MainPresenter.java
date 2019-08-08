@@ -181,52 +181,51 @@ public class MainPresenter implements MainContract.MainContractPresenter {
         }
     }
 
-    @Override
-    public void getLocation() {
-        AndPermission.with(((Activity) mView))
-                .requestCode(101)
-                .permission(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                )
-                .rationale((requestCode, rationale) -> {
-                            AndPermission
-                                    .rationaleDialog((((Activity) mView)), rationale)
-                                    .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
-                                    .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
-                                    .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ToastUtil.displayShortToast(AppConfig.getInstance().getString(R.string.permission_denied));
-//                                            mView.getPermissionSuccess();
-                                        }
-                                    })
-                                    .show();
-                        }
-                )
-                .callback(permission)
-                .start();
-    }
-
-    private PermissionListener permission = new PermissionListener() {
-        @Override
-        public void onSucceed(int requestCode, List<String> grantedPermissions) {
-            // 权限申请成功回调。
-            if (requestCode == 101) {
-                mView.getPermissionSuccess();
-            }
-        }
-
-        @Override
-        public void onFailed(int requestCode, List<String> deniedPermissions) {
-            // 权限申请失败回调。
-            if (requestCode == 101) {
-                KLog.i("权限申请失败");
-                ToastUtil.show(((Activity) mView), AppConfig.getInstance().getResources().getString(R.string.permission_denied));
-            }
-        }
-    };
+//    @Override
+//    public void getLocation() {
+//        AndPermission.with(((Activity) mView))
+//                .requestCode(101)
+//                .permission(
+//                        Manifest.permission.READ_EXTERNAL_STORAGE,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                )
+//                .rationale((requestCode, rationale) -> {
+//                            AndPermission
+//                                    .rationaleDialog((((Activity) mView)), rationale)
+//                                    .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
+//                                    .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
+//                                    .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            ToastUtil.displayShortToast(AppConfig.getInstance().getString(R.string.permission_denied));
+////                                            mView.getPermissionSuccess();
+//                                        }
+//                                    })
+//                                    .show();
+//                        }
+//                )
+//                .callback(permission)
+//                .start();
+//    }
+//
+//    private PermissionListener permission = new PermissionListener() {
+//        @Override
+//        public void onSucceed(int requestCode, List<String> grantedPermissions) {
+//            // 权限申请成功回调。
+//            if (requestCode == 101) {
+//                mView.getPermissionSuccess();
+//            }
+//        }
+//
+//        @Override
+//        public void onFailed(int requestCode, List<String> deniedPermissions) {
+//            // 权限申请失败回调。
+//            if (requestCode == 101) {
+//                KLog.i("权限申请失败");
+//                ToastUtil.show(((Activity) mView), AppConfig.getInstance().getResources().getString(R.string.permission_denied));
+//            }
+//        }
+//    };
 
     @Override
     public void importWallet(Map map) {

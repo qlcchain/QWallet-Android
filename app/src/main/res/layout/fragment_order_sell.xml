@@ -60,7 +60,7 @@
             <TextView
                 android:id="@+id/tvAmount"
                 android:layout_width="wrap_content"
-                android:text="@string/amount"
+                android:text="@string/amount_sell"
                 android:textSize="16sp"
                 android:textColor="@color/color_29282a"
                 app:layout_constraintLeft_toLeftOf="parent"

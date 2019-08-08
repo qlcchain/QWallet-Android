@@ -76,7 +76,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/account_receivable"
+        android:text="@string/account_payable"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"

@@ -81,8 +81,8 @@ public class ImportQlcActivity extends BaseActivity implements ImportQlcContract
 
     @Override
     protected void initData() {
-        titles.add("Mnemonic");
-        titles.add("Wallet Seed");
+        titles.add(getString(R.string.mnemonic));
+        titles.add(getString(R.string.wallet_seed));
         viewModel = ViewModelProviders.of(this).get(ImportViewModel.class);
         viewModel.walletAddress.observe(this, new Observer<String>() {
             @Override

@@ -7,7 +7,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="Account name"
+        android:text="@string/account_name"
         android:layout_marginLeft="@dimen/x45"
         android:layout_height="wrap_content" />
     <EditText
@@ -20,7 +20,7 @@
         android:inputType="textEmailAddress"
         android:layout_marginRight="@dimen/x45"
         android:background="@null"
-        android:hint="A-z and 1-5 combination of 12-bit characters"
+        android:hint="@string/a_z_and_1_5_combination_of_12_bit_characters"
         android:textSize="15sp"
         android:layout_height="wrap_content" />
 
@@ -41,7 +41,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Owner Private Key"
+            android:text="@string/owner_private_key"
             android:layout_marginLeft="@dimen/x20"
             android:layout_height="@dimen/x40"
             android:gravity="center_vertical" />
@@ -57,7 +57,7 @@
                 android:gravity="left"
                 android:textSize="14sp"
                 android:background="@null"
-                android:hint="Please input your owner private key"
+                android:hint="@string/please_input_your_owner_private_key"
                 android:layout_height="@dimen/x160" />
             <TextView
                 android:id="@+id/tvWhatsMnemonic"
@@ -89,7 +89,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Active Private Key"
+            android:text="@string/active_private_key"
             android:layout_marginLeft="@dimen/x20"
             android:layout_height="@dimen/x40"
             android:gravity="center_vertical" />
@@ -106,7 +106,7 @@
                 android:gravity="left"
                 android:textSize="14sp"
                 android:background="@null"
-                android:hint="Please input your active private key"
+                android:hint="@string/please_input_your_active_private_key"
                 android:layout_height="@dimen/x160" />
             <TextView
                 android:id="@+id/tvWhatsMnemonic1"

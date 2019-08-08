@@ -72,7 +72,7 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
     @Override
     protected void initData() {
         tvMnemonic.setText(ethWallet.getMnemonic());
-        setTitle("Create Wallet");
+        setTitle(getString(R.string.create_wallet));
     }
 
     @Override
@@ -105,11 +105,11 @@ public class EthMnemonicShowActivity extends BaseActivity implements EthMnemonic
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.careful));
-        tvContent.setText("The exposure of the mnemonic code will cause the loss of the assets, please copy carefully, do not take a screenshot! ");
+        tvContent.setText(getString(R.string.the_exposure_of_the_mnemonic_code_will_cause_the_loss_of_the_assets_please_copy_carefully_do_not_take_a_screenshot));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvOk = view.findViewById(R.id.tvOpreate);
-        tvOk.setText("OK");
+        tvOk.setText(getString(R.string.ok));
         tvOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

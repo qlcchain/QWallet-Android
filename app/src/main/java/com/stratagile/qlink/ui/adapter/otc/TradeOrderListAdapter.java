@@ -10,6 +10,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.TimeUtil;
@@ -93,7 +94,7 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
         helper.setText(R.id.tvTime, TimeUtil.getOrderTime(TimeUtil.timeStamp(item.getCreateDate())));
         helper.setText(R.id.tvNickName, AccountUtil.setUserNickName(item.getNickname()));
         Glide.with(mContext)
-                .load(API.BASE_URL + item.getHead())
+                .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.ivAvatar));
     }

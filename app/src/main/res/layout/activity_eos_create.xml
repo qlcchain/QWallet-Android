@@ -13,7 +13,7 @@
             android:background="@color/color_f9f9f9"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="Account name"
+            android:text="@string/account_name"
             android:layout_marginLeft="@dimen/x45"
             android:layout_height="wrap_content" />
         <EditText
@@ -26,7 +26,7 @@
             android:inputType="textEmailAddress"
             android:layout_marginRight="@dimen/x45"
             android:background="@null"
-            android:hint="A-z and 1-5 combination of 12-bit characters"
+            android:hint="@string/a_z_and_1_5_combination_of_12_bit_characters"
             android:textSize="15sp"
             android:layout_height="wrap_content" />
         <View
@@ -37,7 +37,7 @@
             android:background="@color/color_29282a_40"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="owner Key"
+            android:text="@string/owner_private_key"
             android:layout_marginTop="@dimen/x20"
             android:layout_marginLeft="@dimen/x45"
             android:layout_height="wrap_content" />
@@ -58,7 +58,7 @@
             android:background="@color/color_29282a_40"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="active Key"
+            android:text="@string/active_private_key"
             android:layout_marginTop="@dimen/x20"
             android:layout_marginLeft="@dimen/x45"
             android:layout_height="wrap_content" />
@@ -94,7 +94,7 @@
             <TextView
                 android:id="@+id/tvControllerQrcode"
                 android:layout_width="wrap_content"
-                android:text="Open QR code"
+                android:text="@string/open_qr_code"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -120,7 +120,7 @@
             android:background="@drawable/main_color_bt_bg"
             android:gravity="center"
             android:textColor="@color/white"
-            android:text="Register EOS Account"
+            android:text="@string/register_eos_account"
             android:layout_height="@dimen/x94" />
 
         <LinearLayout
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/x17"
                 android:includeFontPadding="false"
-                android:text="ETH payment, self-registration"
+                android:text="@string/eth_payment_self_registration"
                 android:textColor="@color/color_29282a" />
         </LinearLayout>
 
@@ -149,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/x45"
             android:layout_marginRight="@dimen/x45"
-            android:text="Input the desired EOS account name and make payment in ETH to complete the registration."
+            android:text="@string/input_the_desired_eos_account_name_and_make_payment_in_eth_to_complete_the_registration"
             android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/x17"
                 android:includeFontPadding="false"
-                android:text="Share the QR Code with a friend to help with registration "
+                android:text="@string/share_the_qr_code_with_a_friend_to_help_with_registration"
                 android:textColor="@color/color_29282a" />
         </LinearLayout>
 
@@ -177,7 +177,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/x45"
             android:layout_marginRight="@dimen/x45"
-            android:text="1. Input a desired EOS account name and share the QR Code with a friend. \n2. Your friend uses WinQ to scan and pay with EOS."
+            android:text="@string/_1_input_a_desired_eos_account_name_and_share_the_qr_code_with_a_friend_n2_your_friend_uses_winq_to_scan_and_pay_with_eos"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

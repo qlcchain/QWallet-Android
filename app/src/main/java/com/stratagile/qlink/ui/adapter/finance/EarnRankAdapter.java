@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.finance.EarnRank;
 import com.stratagile.qlink.entity.finance.MyRanking;
 
@@ -26,7 +27,7 @@ public class EarnRankAdapter extends BaseQuickAdapter<EarnRank.DataBean, BaseVie
         helper.setText(R.id.tvRank, item.getSequence() + "");
         helper.setText(R.id.earnQlc, "+" + item.getTotalRevenue() + " QLC");
         Glide.with(mContext)
-                .load(API.BASE_URL + item.getHead())
+                .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.userAvatar));
     }

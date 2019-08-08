@@ -39,7 +39,7 @@ class AppealSubmittedActivity : BaseActivity(), AppealSubmittedContract.View {
 
     override fun initView() {
         setContentView(R.layout.activity_appeal_submitted)
-        title.text = "Submitted"
+        title.text = getString(R.string.submitted)
     }
     override fun initData() {
         var tradeOrderDetail = intent.getParcelableExtra<TradeOrderDetail.OrderBean>("orderDetail")

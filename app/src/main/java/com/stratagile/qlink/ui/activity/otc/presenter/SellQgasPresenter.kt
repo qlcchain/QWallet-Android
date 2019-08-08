@@ -4,6 +4,7 @@ import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.ui.activity.otc.contract.SellQgasContract
@@ -21,6 +22,7 @@ import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.lang.Error
 import java.math.BigDecimal
+import java.util.HashMap
 
 /**
  * @author hzp
@@ -121,5 +123,18 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             mView.closeProgressDialog()
         })
         mCompositeDisposable.add(disposable)
+    }
+
+    fun getMainAddress() {
+        mCompositeDisposable.add(httpAPIWrapper.getMainAddress(HashMap<String, String>()).subscribe({
+            KLog.i("onSuccesse")
+            ConstantValue.mainAddress = it.data.neo.address
+            ConstantValue.ethMainAddress = it.data.eth.address
+            ConstantValue.mainAddressData = it.data
+        }, {
+
+        }, {
+
+        }))
     }
 }

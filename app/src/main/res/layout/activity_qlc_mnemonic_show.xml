@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x54"
         android:layout_marginTop="@dimen/x65"
-        android:text="Wallet Mnemonic Phrase" />
+        android:text="@string/wallet_mnemonic_phrase" />
 
     <TextView
         android:id="@+id/tvMnemonic"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x54"
         android:layout_marginTop="@dimen/x65"
-        android:text="Wallet Seed" />
+        android:text="@string/wallet_seed" />
 
     <TextView
         android:id="@+id/tvSeed"
@@ -92,7 +92,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="12sp"
-            android:text="I have backuped the Priate key"
+            android:text="@string/i_have_backuped_the_priate_key"
             android:textColor="@color/color_29282a"
             android:layout_height="wrap_content" />
     </LinearLayout>

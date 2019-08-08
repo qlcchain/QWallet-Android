@@ -160,6 +160,7 @@ public class AppConfig extends MultiDexApplication {
         initDbUpdate();
         initResumeListener();
         initMiPush();
+        setMode();
         setLanguage(false);
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
@@ -170,6 +171,14 @@ public class AppConfig extends MultiDexApplication {
         KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
 //        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
+    }
+
+    private void setMode() {
+        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
+            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+        } else {
+            ConstantValue.qlcNode = "http://47.103.40.20:19735";
+        }
     }
 
     private void updateNotificationChannels() {

@@ -146,9 +146,9 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             tokenInfo = getIntent().getParcelableExtra("tokenInfo");
         }
 
-        setTitle("Send " + tokenInfo.getTokenSymol());
+        setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
         String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-        tvEthTokenValue.setText("Balance: " + value);
+        tvEthTokenValue.setText(getString(R.string.balance) + " " + value);
 
         tvEthTokenName.setText(tokenInfo.getTokenSymol());
 
@@ -225,9 +225,9 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
                     for (int i = 0; i < tokenInfoArrayList.size(); i++) {
                         if (tokenInfoArrayList.get(i).getTokenSymol().equals(content)) {
                             tokenInfo = tokenInfoArrayList.get(i);
-                            setTitle("Send " + tokenInfo.getTokenSymol());
+                            setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
                             String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-                            tvEthTokenValue.setText("Balance: " + value);
+                            tvEthTokenValue.setText(getString(R.string.balance) + " " + value);
                             tvEthTokenName.setText(tokenInfo.getTokenSymol());
                             etEthTokenSendValue.setText("");
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEthTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
@@ -264,9 +264,9 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             for (int i = 0; i < tokenInfoArrayList.size(); i++) {
                 if (tokenInfoArrayList.get(i).getTokenSymol().equals(ctype.get(position))) {
                     tokenInfo = tokenInfoArrayList.get(i);
-                    setTitle("Send " + tokenInfo.getTokenSymol());
+                    setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
                     String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-                    tvEthTokenValue.setText("Balance: " + value);
+                    tvEthTokenValue.setText(getString(R.string.balance) + " " + value);
                     tvEthTokenName.setText(tokenInfo.getTokenSymol());
                     etEthTokenSendValue.setText("");
 
@@ -355,9 +355,9 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
                     tokenInfo1.setMainNetToken(true);
                     tokenInfo = tokenInfo1;
 
-                    setTitle("Send " + tokenInfo.getTokenSymol());
+                    setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
                     String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-                    tvEthTokenValue.setText("Balance: " + value);
+                    tvEthTokenValue.setText(getString(R.string.balance) + " " + value);
                 }
             }
         } else {
@@ -375,9 +375,9 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             tokenInfo1.setWalletAddress(ethWalletInfo.getData().getAddress());
             tokenInfo1.setMainNetToken(true);
             tokenInfo = tokenInfo1;
-            setTitle("Send " + tokenInfo.getTokenSymol());
+            setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
             String value = tokenInfo.getTokenValue() / (Math.pow(10.0, tokenInfo.getTokenDecimals())) + "";
-            tvEthTokenValue.setText("Balance: " + value);
+            tvEthTokenValue.setText(getString(R.string.balance) + " " + value);
         }
     }
 
@@ -445,11 +445,11 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     private void sendEthToken() {
         if (etEthTokenSendAddress.getText().toString().equals("")) {
-            ToastUtil.displayShortToast("Wallet Address Error");
+            ToastUtil.displayShortToast(getString(R.string.wallet_address_error));
             return;
         }
         if (!ETHWalletUtils.isETHValidAddress(etEthTokenSendAddress.getText().toString().trim())) {
-            ToastUtil.displayShortToast("Wallet Address Error");
+            ToastUtil.displayShortToast(getString(R.string.wallet_address_error));
             return;
         }
         if (etEthTokenSendAddress.getText().toString().toLowerCase().equals(tokenInfo.getWalletAddress().toLowerCase())) {
@@ -457,15 +457,15 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
             return;
         }
         if (etEthTokenSendValue.getText().toString().equals("")) {
-            ToastUtil.displayShortToast("illegal value");
+            ToastUtil.displayShortToast(getString(R.string.illegal_value));
             return;
         }
         if (etEthTokenSendValue.getText().toString().equals("0")) {
-            ToastUtil.displayShortToast("illegal value");
+            ToastUtil.displayShortToast(getString(R.string.illegal_value));
             return;
         }
         if (Double.parseDouble(etEthTokenSendValue.getText().toString()) > tokenInfo.getTokenValue()) {
-            ToastUtil.displayShortToast("Not enough " + tokenInfo.getTokenSymol());
+            ToastUtil.displayShortToast(getString(R.string.not_enough) + " " + tokenInfo.getTokenSymol());
             return;
         }
         if (tokenInfo.getTokenSymol().toLowerCase().equals("eth")) {
@@ -473,14 +473,14 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
                 showProgressDialog();
                 mPresenter.transactionEth(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
             } else {
-                ToastUtil.displayShortToast("Not enough eth");
+                ToastUtil.displayShortToast(getString(R.string.not_enough) + " eth" );
             }
         } else {
             if (ethTokenInfo.getTokenValue() >= Double.parseDouble(gasEth)) {
                 showProgressDialog();
                 mPresenter.transaction(tokenInfo, etEthTokenSendAddress.getText().toString(), etEthTokenSendValue.getText().toString(), gasLimit, gasPrice);
             } else {
-                ToastUtil.displayShortToast("Not enough eth");
+                ToastUtil.displayShortToast(getString(R.string.not_enough) + " eth" );
             }
         }
 

@@ -111,6 +111,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         setContentView(R.layout.activity_sell_qgas)
     }
     override fun initData() {
+        if (ConstantValue.mainAddressData == null) {
+            mPresenter.getMainAddress()
+        }
         title.text = getString(R.string.sell_qgas)
         orderList = intent.getParcelableExtra("order")
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()

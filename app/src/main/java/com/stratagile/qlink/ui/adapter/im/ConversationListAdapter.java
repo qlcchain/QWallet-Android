@@ -16,6 +16,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.im.Message;
 import com.stratagile.qlink.utils.SpUtil;
@@ -75,7 +76,7 @@ public class ConversationListAdapter extends BaseQuickAdapter<Message, BaseViewH
             rlContent.setLayoutParams(fl);
             rlContent.setBackgroundResource(R.mipmap.rc_ic_bubble_no_right);
             Glide.with(mContext)
-                    .load(API.BASE_URL + SpUtil.getString(mContext, ConstantValue.myAvatarPath, ""))
+                    .load(MainAPI.MainBASE_URL + SpUtil.getString(mContext, ConstantValue.myAvatarPath, ""))
                     .apply(AppConfig.getInstance().optionsMainColor)
                     .into(ivRight);
         } else {
@@ -102,7 +103,7 @@ public class ConversationListAdapter extends BaseQuickAdapter<Message, BaseViewH
                 }
             } else {
                 Glide.with(mContext)
-                        .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
+                        .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivLeft);
             }

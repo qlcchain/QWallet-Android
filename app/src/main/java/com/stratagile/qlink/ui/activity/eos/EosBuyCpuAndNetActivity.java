@@ -123,7 +123,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
                 checkBoxStake.setChecked(false);
                 llReclaim.setVisibility(View.VISIBLE);
                 llStake.setVisibility(View.GONE);
-                tvOpreate.setText("Reclaim");
+                tvOpreate.setText(getString(R.string.reclaim));
             }
         });
         checkBoxStake.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +133,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
                 checkBoxStake.setChecked(true);
                 llReclaim.setVisibility(View.GONE);
                 llStake.setVisibility(View.VISIBLE);
-                tvOpreate.setText("Stake");
+                tvOpreate.setText(getString(R.string.stake));
             }
         });
         checkBoxStake.setChecked(true);
@@ -146,7 +146,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         Map map = new HashMap<String, Object>();
         map.put("account", eosAccount.getAccountName());
         mPresenter.getEosResource(map);
-        eosBalance.setText("Balance:" + eosToken.getEosTokenValue() + " EOS");
+        eosBalance.setText(getString(R.string.balance) + " " + eosToken.getEosTokenValue() + " EOS");
         etRecipientAccount.setText(eosAccount.getAccountName());
         seekBar.setProgress(cpuRate);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -224,8 +224,8 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         avaliableCpu.setText(parseCpu(eosResource.getData().getData().getCpu().getAvailable()) + "/" + parseCpu(eosResource.getData().getData().getCpu().getMax()));
         stakedCpuEos.setText(eosResource.getData().getData().getStaked().getCpu_weight());
         stakedNetEos.setText(eosResource.getData().getData().getStaked().getNet_weight());
-        cpuBalance.setText("Balance: " + eosResource.getData().getData().getCpu().getAvailable() + " us");
-        netBalance.setText("Balance: " + eosResource.getData().getData().getNet().getAvailable() + " Bytes");
+        cpuBalance.setText(getString(R.string.balance) + " " + eosResource.getData().getData().getCpu().getAvailable() + " us");
+        netBalance.setText(getString(R.string.balance) + " " + eosResource.getData().getData().getNet().getAvailable() + " Bytes");
     }
 
     @Override
@@ -290,29 +290,29 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
     public void onViewClicked() {
         if (checkBoxStake.isChecked()) {
             if ("".equals(etStakeEos.getText().toString())) {
-                ToastUtil.displayShortToast("please input stake EOS");
+                ToastUtil.displayShortToast(getString(R.string.please_input_stake_eos));
                 return;
             }
             if (Double.parseDouble(etStakeEos.getText().toString()) > Double.parseDouble(eosToken.getEosTokenValue())) {
-                ToastUtil.displayShortToast("Not enough EOS");
+                ToastUtil.displayShortToast(getString(R.string.not_enough) + " EOS");
                 closeProgressDialog();
                 return;
             }
         } else {
             if ("".equals(etReclaimCpu.getText().toString().trim()) && "".equals(etReclaimNet.getText().toString().trim())) {
-                ToastUtil.displayShortToast("please input reclaim cpu or net");
+                ToastUtil.displayShortToast(getString(R.string.please_input_reclaim_cpu_or_net));
                 return;
             }
             if ("0".equals(etReclaimCpu.getText().toString().trim()) && "0".equals(etReclaimNet.getText().toString().trim())) {
-                ToastUtil.displayShortToast("please input reclaim cpu or net");
+                ToastUtil.displayShortToast(getString(R.string.please_input_reclaim_cpu_or_net));
                 return;
             }
             if (!"".equals(etReclaimCpu.getText().toString()) && Double.parseDouble(etReclaimCpu.getText().toString()) > eosResource.getData().getData().getCpu().getAvailable()) {
-                ToastUtil.displayShortToast("Not enough CPU to Reclaim");
+                ToastUtil.displayShortToast(getString(R.string.not_enough_cpu_to_reclaim));
                 return;
             }
             if (!"".equals(etReclaimNet.getText().toString()) && Double.parseDouble(etReclaimNet.getText().toString()) > eosResource.getData().getData().getNet().getAvailable()) {
-                ToastUtil.displayShortToast("Not enough NET to Reclaim");
+                ToastUtil.displayShortToast(getString(R.string.not_enough_net_to_reclaim));
                 return;
             }
 
@@ -325,7 +325,7 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
-        tvContent.setText("Success");
+        tvContent.setText(getString(R.string.success));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();
@@ -404,13 +404,13 @@ public class EosBuyCpuAndNetActivity extends BaseActivity implements EosBuyCpuAn
         TextView tvFrom = view.findViewById(R.id.tvFrom);
 
         if (checkBoxStake.isChecked()) {
-            tvPaymentType.setText("Stake");
+            tvPaymentType.setText(getString(R.string.stake));
             tvCount.setText(EosUtil.setEosValue(etStakeEos.getText().toString()));
         } else {
             setUnstakeCpu();
             setUnstakeNet();
             tvCount.setText(new BigDecimal(setUnstakeCpu()).add(new BigDecimal(setUnstakeNet())).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
-            tvPaymentType.setText("Reclaim");
+            tvPaymentType.setText(getString(R.string.reclaim));
         }
 
         tvTo.setText(etRecipientAccount.getText().toString());

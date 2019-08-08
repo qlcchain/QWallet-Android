@@ -45,9 +45,9 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
     override fun setTradeOrderDetail(tradeOrderDetail: TradeOrderDetail) {
         tvOrderAppealTime.text = tradeOrderDetail.order.appealDate
         if (tradeOrderDetail.order.appealerId.equals(tradeOrderDetail.order.sellerId)) {
-            tvOrderAppealant.text = "Appellant：Seller"
+            tvOrderAppealant.text = getString(R.string.appellant) + ": " + getString(R.string.seller)
         } else {
-            tvOrderAppealant.text = "Appellant：Buyer"
+            tvOrderAppealant.text = getString(R.string.appellant) + ": " + getString(R.string.buyer)
         }
 
         llSubmit.setOnClickListener {
@@ -98,12 +98,12 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
 
         if (tradeOrderDetail.order.buyerId.equals(ConstantValue.currentUser.userId)) {
             //我买
-            tvOrderType.text = ConstantValue.orderTypeBuy
+            tvOrderType.text = getString(R.string.buy)
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
             tvOtherUser.text = getString(R.string.seller)
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_ff3669))
         } else {
-            tvOrderType.text = ConstantValue.orderTypeSell
+            tvOrderType.text = getString(R.string.sell)
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
             tvOtherUser.text = getString(R.string.buyer)
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_108ee9))
@@ -112,12 +112,12 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
             "FAIL" ->{
                 tvOrderAppealState.text = getString(R.string.appeal_failed)
                 tvOrderAppealResult.visibility = View.VISIBLE
-                tvOrderAppealResult.text = "Appeal Result：" + tradeOrderDetail.order.auditFeedback
+                tvOrderAppealResult.text = getString(R.string.appeal_result) + ": " + tradeOrderDetail.order.auditFeedback
             }
             "SUCCESS" -> {
                 tvOrderAppealState.text = getString(R.string.successful_appeal)
                 tvOrderAppealResult.visibility = View.VISIBLE
-                tvOrderAppealResult.text = "Appeal Result：" + tradeOrderDetail.order.auditFeedback
+                tvOrderAppealResult.text = getString(R.string.appeal_result) + ": "  + tradeOrderDetail.order.auditFeedback
             }
             "YES" -> {
                 tvOrderAppealState.text = getString(R.string.wait_appeal_result)
@@ -142,7 +142,7 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
         setContentView(R.layout.activity_appeal_detail)
     }
     override fun initData() {
-        title.text = "Appeal Detail"
+        title.text = getString(R.string.appeal_detail)
         tradeOrderId = intent.getStringExtra("tradeOrderId")
         getTradeOrderDetail()
     }

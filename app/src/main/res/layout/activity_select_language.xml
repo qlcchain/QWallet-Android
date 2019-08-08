@@ -71,7 +71,6 @@
             android:layout_height="@dimen/dp_43"
             android:layout_weight="1"
             android:background="@drawable/cancal_button_bg"
-            android:fontFamily="@font/vagroun_q"
             android:letterSpacing="0.1"
             android:text="@string/cancel"
             android:textColor="@color/white" />
@@ -83,9 +82,8 @@
             android:layout_marginLeft="@dimen/dp_6"
             android:layout_weight="1"
             android:background="@drawable/comfirm_button_bg"
-            android:fontFamily="@font/vagroun_q"
             android:letterSpacing="0.1"
-            android:text="@string/ok_btn_dialog"
+            android:text="@string/ok"
             android:textColor="@color/mainColor" />
     </LinearLayout>
 </LinearLayout>

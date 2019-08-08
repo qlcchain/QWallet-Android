@@ -41,7 +41,7 @@ class OtcChooseWalletActivity : BaseActivity(), OtcChooseWalletContract.View {
 
     override fun initView() {
         setContentView(R.layout.activity_choose_wallet)
-        title.text = getString(R.string.choose_a_wallet)
+        title.text = getString(R.string.choose_wallet)
     }
     override fun initData() {
         KLog.i("    " + intent.getIntExtra("walletType", 0))

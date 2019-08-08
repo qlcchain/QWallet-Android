@@ -105,10 +105,10 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
         }
         setTitle(qrEntity.getTitle());
         if (qrEntity.getChain() == 4) {
-            tvTip.setText("This address is only for receiving QGAS.");
-            setTitle("Receivable Address");
+            tvTip.setText(getString(R.string.this_address_is_only_for_receiving_qgas));
+            setTitle(getString(R.string.receivable_address));
         } else {
-            tvTip.setText("This address only receives " + qrEntity.getIcon().toUpperCase() + ", sending other currencies. This address will not be recovered.");
+            tvTip.setText(getString(R.string.this_address_only_receives) + qrEntity.getIcon().toUpperCase() + getString(R.string.sending_other_currencies_this_address_will_not_be_recovered));
         }
         tvWalletAddess.setText(qrEntity.getContent());
     }
@@ -169,7 +169,7 @@ public class WalletQRCodeActivity extends BaseActivity implements WalletQRCodeCo
             out.close();
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(this, "com.stratagile.qlink.dapp.fileprovider", f);
+                uri = FileProvider.getUriForFile(this, "com.stratagile.qwallet.fileprovider", f);
             } else {
                 uri = Uri.fromFile(f);
             }

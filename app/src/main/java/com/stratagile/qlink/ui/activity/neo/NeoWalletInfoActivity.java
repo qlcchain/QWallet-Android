@@ -62,7 +62,7 @@ public class NeoWalletInfoActivity extends BaseActivity implements NeoWalletInfo
 
     @Override
     protected void initData() {
-        setTitle("NEO Wallet");
+        setTitle(getString(R.string.neo_wallet));
         wallet = getIntent().getParcelableExtra("wallet");
         tvHex.setText(wallet.getPrivateKey());
         tvWif.setText(wallet.getWif());
@@ -98,11 +98,11 @@ public class NeoWalletInfoActivity extends BaseActivity implements NeoWalletInfo
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvWif:
-                QrEntity qrEntity = new QrEntity(tvWif.getText().toString(), "Encrypted Key(WIF)", "");
+                QrEntity qrEntity = new QrEntity(tvWif.getText().toString(), getString(R.string.Encrypted_Key_WIF), "");
                 startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                 break;
             case R.id.tvHex:
-                QrEntity qrEntity1 = new QrEntity(tvHex.getText().toString(), "Private Key(HEX)", "");
+                QrEntity qrEntity1 = new QrEntity(tvHex.getText().toString(), getString(R.string.Private_Key_HEX), "");
                 startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity1));
                 break;
             case R.id.tvSend:

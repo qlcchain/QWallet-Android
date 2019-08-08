@@ -191,7 +191,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     public static MainActivity mainActivity;
 
-    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
+//    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
     private LocationManager locationManager;
 
     private MyStatus myStatusFlag;
@@ -217,19 +217,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         SpUtil.putBoolean(this, ConstantValue.showTestFlag, false);
         RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.getStatusBarHeight(this));
         statusBar.setLayoutParams(llp);
-        if (!SpUtil.getString(this, ConstantValue.myAvatarPath, "").equals("")) {
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
-                Glide.with(this)
-                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsMainColor)
-                        .into(ivAvater);
-            } else {
-                Glide.with(this)
-                        .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsMainColor)
-                        .into(ivAvater);
-            }
-        }
         financeCome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -341,19 +328,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     protected void initData() {
         LocalWalletUtil.initGreenDaoFromLocal();
-//        if (!SpUtil.getString(this, ConstantValue.walletPassWord, "").equals("")) {
-//            if (ConstantValue.isShouldShowVertifyPassword) {
-//                Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-//            }
-//        } else {
-//            Intent intent = new Intent(this, CreateWalletPasswordActivity.class);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-//        }
         mPresenter.getTox();
-        getLocation();
+//        getLocation();
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
@@ -420,15 +396,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         bottomNavigation.enableAnimation(false);
         bottomNavigation.enableShiftingMode(false);
         bottomNavigation.enableItemShiftingMode(false);
-        bottomNavigation.setTextSize(12);
-//        bottomNavigation.setTypeface(Typeface.createFromAsset(getAssets(), "vagroundedbt.ttf"));
         viewPager.setOffscreenPageLimit(4);
-        bottomNavigation.setIconSizeAt(0, 25f, 20.8f);
-        bottomNavigation.setIconSizeAt(1, 25f, 20.8f);
-        bottomNavigation.setIconSizeAt(2, 25f, 20.8f);
-//        bottomNavigation.setIconSizeAt(3, 25f, 20.8f);
-        bottomNavigation.setIconsMarginTop((int) getResources().getDimension(R.dimen.x22));
-        bottomNavigation.setItemIconTintList(null);
+//        bottomNavigation.setTextSize(12);
+//        bottomNavigation.setIconSizeAt(0, 25f, 20.8f);
+//        bottomNavigation.setIconSizeAt(1, 25f, 20.8f);
+//        bottomNavigation.setIconSizeAt(2, 25f, 20.8f);
+//        bottomNavigation.setIconsMarginTop((int) getResources().getDimension(R.dimen.x22));
+//        bottomNavigation.setItemIconTintList(null);
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -454,9 +428,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         });
         bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
 //        setVpnPage();
-        IntentFilter intent = new IntentFilter();
-        intent.addAction(BroadCastAction.disconnectVpnSuccess);
-        registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
+//        IntentFilter intent = new IntentFilter();
+//        intent.addAction(BroadCastAction.disconnectVpnSuccess);
+//        registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
 //        startService(new Intent(this, ClientConnectedWifiRecordService.class));
         /**
          * @see WalletFragment#refreshNeo(NeoRefrash)
@@ -688,7 +662,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         .into(ivAvater);
             } else {
                 Glide.with(this)
-                        .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivAvater);
             }
@@ -745,11 +719,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     protected void onDestroy() {
         KLog.i("mainactivity关闭");
 //        BitUtil.closedWallet();
-        Intent intent = new Intent();
-        intent.setAction(BroadCastAction.disconnectVpn);
-        sendBroadcast(intent);
+//        Intent intent = new Intent();
+//        intent.setAction(BroadCastAction.disconnectVpn);
+//        sendBroadcast(intent);
         EventBus.getDefault().unregister(this);
-        unregisterReceiver(disconnectVpnSuccessBroadReceiver);
+//        unregisterReceiver(disconnectVpnSuccessBroadReceiver);
         ActivityManager activityMgr = (ActivityManager) AppConfig.getInstance()
                 .getSystemService(Context.ACTIVITY_SERVICE);
         activityMgr.killBackgroundProcesses(AppConfig.getInstance().getPackageName());
@@ -789,46 +763,46 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         progressDialog.hide();
     }
 
-    @Override
-    public void getPermissionSuccess() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 1000, mLocationListener);
-            return;
-        }
-    }
+//    @Override
+//    public void getPermissionSuccess() {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 1000, mLocationListener);
+//            return;
+//        }
+//    }
 
-    //获取是否已打开自身GPS
-    public boolean isGpsEnable() {
-        String providers = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+//    //获取是否已打开自身GPS
+//    public boolean isGpsEnable() {
+//        String providers = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+//
+//        if (providers != null && providers.contains(LocationManager.GPS_PROVIDER)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
-        if (providers != null && providers.contains(LocationManager.GPS_PROVIDER)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void getLocation() {
-        if (!isGpsEnable()) {
-            Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(callGPSSettingIntent);
-        }
-        // 获取位置管理服务
-        String serviceName = Context.LOCATION_SERVICE;
-        locationManager = (LocationManager) this.getSystemService(serviceName);
-        // 查找到服务信息
-//        Criteria criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
-//        criteria.setAltitudeRequired(false);
-//        criteria.setBearingRequired(false);
-//        criteria.setCostAllowed(true);
-//        criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-//        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-//        Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
-//        updateToNewLocation(location);
-        // 设置监听*器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
-        mPresenter.getLocation();
-    }
+//    private void getLocation() {
+//        if (!isGpsEnable()) {
+//            Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            startActivity(callGPSSettingIntent);
+//        }
+//        // 获取位置管理服务
+//        String serviceName = Context.LOCATION_SERVICE;
+//        locationManager = (LocationManager) this.getSystemService(serviceName);
+//        // 查找到服务信息
+////        Criteria criteria = new Criteria();
+////        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
+////        criteria.setAltitudeRequired(false);
+////        criteria.setBearingRequired(false);
+////        criteria.setCostAllowed(true);
+////        criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
+////        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
+////        Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
+////        updateToNewLocation(location);
+//        // 设置监听*器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
+//        mPresenter.getLocation();
+//    }
 
     LocationListener mLocationListener = new LocationListener() {
         @TargetApi(17)
@@ -899,16 +873,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
                     if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), "ETH Receivable Address", "eth", 2);
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), getString(R.string.eth_receivable_address), "eth", 2);
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), "NEO Receivable Address", "neo", 1);
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), getString(R.string.neo_receivable_address), "neo", 1);
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EosWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), "EOS Receivable Address", "eos", 3);
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), getString(R.string.eos_receivable_address), "eos", 3);
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.QlcWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), "Receivable Address", "qlc", 4);
+                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), getString(R.string.receivable_address), "qlc", 4);
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     }
                 }
@@ -923,7 +897,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-                    if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
+                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                         KotlinConvertJavaUtils.INSTANCE.needVerify(this);
                         return;
                     }
@@ -984,22 +958,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
-    public class DisconnectVpnSuccessBroadReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            KLog.i("断开vpn成功， 开始更改ui");
-            if (intent.getAction().equals(BroadCastAction.disconnectVpnSuccess)) {
-                List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-                for (VpnEntity vpnEntity : vpnEntityList) {
-                    if (vpnEntity.getIsConnected()) {
-                        vpnEntity.setIsConnected(false);
-                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-                    }
-                }
-                EventBus.getDefault().post(new DisconnectVpn());
-            }
-        }
-    }
+//    public class DisconnectVpnSuccessBroadReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            KLog.i("断开vpn成功， 开始更改ui");
+//            if (intent.getAction().equals(BroadCastAction.disconnectVpnSuccess)) {
+//                List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+//                for (VpnEntity vpnEntity : vpnEntityList) {
+//                    if (vpnEntity.getIsConnected()) {
+//                        vpnEntity.setIsConnected(false);
+//                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
+//                    }
+//                }
+//                EventBus.getDefault().post(new DisconnectVpn());
+//            }
+//        }
+//    }
 
     @Override
     public void onCreatWalletSuccess(ArrayList<Wallet> importWalletResult, int flag) {
@@ -1023,7 +997,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         .into(ivAvater);
             } else {
                 Glide.with(this)
-                        .load(API.BASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)
                         .into(ivAvater);
             }

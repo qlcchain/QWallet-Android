@@ -24,7 +24,7 @@
                 android:gravity="left"
                 android:textSize="14sp"
                 android:background="@null"
-                android:hint="Please input your address"
+                android:hint="@string/please_input_your_address"
                 android:layout_height="@dimen/x160" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -69,7 +69,7 @@
         android:layout_marginTop="@dimen/x150"
         android:background="@drawable/change_wallet"
         android:fontFamily="@font/roboto_regular"
-        android:text="Start Importing"
+        android:text="@string/start_importing"
         android:textAllCaps="false"
         android:textColor="@color/white" />
 

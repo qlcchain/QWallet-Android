@@ -56,12 +56,11 @@
         <Button
             android:id="@+id/btn_right"
             android:layout_width="match_parent"
-            android:fontFamily="@font/vagroun_q"
             style="?android:attr/borderlessButtonStyle"
             android:layout_height="match_parent"
             android:background="@drawable/comfirm_button_bg"
             android:textColor="@color/main_color"
             android:layout_weight="1"
-            android:text="@string/ok_btn_dialog" />
+            android:text="@string/ok" />
     </LinearLayout>
 </LinearLayout>

@@ -12,7 +12,7 @@
         android:background="@color/color_f2f2f2"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="Reason"
+        android:text="@string/reason"
         android:layout_marginTop="@dimen/x30"
         android:paddingTop="@dimen/x20"
         android:layout_marginLeft="@dimen/x30"
@@ -37,7 +37,7 @@
         android:background="@color/color_f2f2f2"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="Upload"
+        android:text="@string/upload"
         android:layout_marginTop="@dimen/x30"
         android:paddingTop="@dimen/x20"
         android:layout_marginLeft="@dimen/x30"

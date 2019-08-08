@@ -79,10 +79,10 @@ public class ImportEthWalletActivity extends BaseActivity implements ImportEthWa
 
     @Override
     protected void initData() {
-        titles.add("Mnemonic");
-        titles.add("Official");
-        titles.add("Private Key");
-        titles.add("Watch");
+        titles.add(getString(R.string.mnemonic));
+        titles.add(getString(R.string.official));
+        titles.add(getString(R.string.private_key));
+        titles.add(getString(R.string.watch));
         viewModel = ViewModelProviders.of(this).get(ImportViewModel.class);
         viewModel.walletAddress.observe(this, new Observer<String>() {
             @Override

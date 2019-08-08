@@ -106,12 +106,12 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
             public void onClick(View v) {
                 checkBoxBuy.setChecked(true);
                 checkBoxSell.setChecked(false);
-                tvOpreate.setText("Buy");
+                tvOpreate.setText(getString(R.string.buy));
                 tvTip.setVisibility(View.VISIBLE);
-                tvRamTitle.setText("Purchase Amount");
-                amountEos.setText("Balance: " + eosToken.getEosTokenValue() + " EOS");
+                tvRamTitle.setText(getString(R.string.purchase_amount));
+                amountEos.setText(getString(R.string.balance) + " " + eosToken.getEosTokenValue() + " EOS");
                 etPurchaseEos.setText("");
-                etPurchaseEos.setHint("Input EOS Amount");
+                etPurchaseEos.setHint(getString(R.string.input_eos_account));
                 etPurchaseEos.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(4)});
                 etPurchaseEos.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
             }
@@ -121,15 +121,15 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
             public void onClick(View v) {
                 checkBoxBuy.setChecked(false);
                 checkBoxSell.setChecked(true);
-                tvOpreate.setText("Sell");
+                tvOpreate.setText(getString(R.string.sell));
                 tvTip.setVisibility(View.INVISIBLE);
-                tvRamTitle.setText("Sell Amount(bytes)");
-                etPurchaseEos.setHint("Input RAM Amount");
+                tvRamTitle.setText(getString(R.string.sell_amount_bytes));
+                etPurchaseEos.setHint(getString(R.string.input_ram_amount));
                 etPurchaseEos.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(0)});
                 etPurchaseEos.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
                 etPurchaseEos.setText("");
                 if (eosResource != null) {
-                    amountEos.setText("Balance: " + (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed()) + " bytes");
+                    amountEos.setText(getString(R.string.balance) + " " + (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed()) + " bytes");
                 }
             }
         });
@@ -149,7 +149,7 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
         eosAccount = getIntent().getParcelableExtra("eosAccount");
         eosToken = getIntent().getParcelableExtra("eosToken");
         checkBoxBuy.setChecked(true);
-        amountEos.setText("Balance: " + eosToken.getEosTokenValue() + " EOS");
+        amountEos.setText(getString(R.string.balance) + " " + eosToken.getEosTokenValue() + " EOS");
         Map map = new HashMap<String, Object>();
         map.put("account", eosAccount.getAccountName());
         mPresenter.getEosResource(map);
@@ -165,7 +165,7 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
         this.eosResource = eosResource;
         availableRam.setText(parseRam((eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed())) + "/" + parseRam(eosResource.getData().getData().getRam().getAvailable()));
         if (checkBoxSell.isChecked()) {
-            amountEos.setText("Balance: " + (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed()) + " Bytes");
+            amountEos.setText(getString(R.string.balance) + " " + (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed()) + " Bytes");
         }
     }
 
@@ -232,12 +232,12 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
         TextView tvCount = view.findViewById(R.id.tvCount);
 
         if (checkBoxBuy.isChecked()) {
-            tvPaymentType.setText("Purchase RAM");
+            tvPaymentType.setText(getString(R.string.purchase_ram));
             tvCount.setText(EosUtil.setEosValue(etPurchaseEos.getText().toString()));
         } else {
             String sellEos = BigDecimal.valueOf(eosResourcePrice.getData().getRamPrice()).multiply(new BigDecimal(etPurchaseEos.getText().toString())).divide(BigDecimal.valueOf(1024)).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
             KLog.i(sellEos);
-            tvPaymentType.setText("Sell RAM");
+            tvPaymentType.setText(getString(R.string.sell) + " RAM");
             tvCount.setText(sellEos + " EOS");
         }
 
@@ -275,7 +275,7 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
-        tvContent.setText("Success");
+        tvContent.setText(getString(R.string.success));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();
@@ -296,7 +296,7 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
 
     private void buyRam() {
         if (Double.parseDouble(etPurchaseEos.getText().toString()) > Double.parseDouble(eosToken.getEosTokenValue())) {
-            ToastUtil.displayShortToast("Not enough EOS");
+            ToastUtil.displayShortToast(getString(R.string.not_enough) + " EOS");
             closeProgressDialog();
             return;
         }
@@ -338,7 +338,7 @@ public class EosBuyRamActivity extends BaseActivity implements EosBuyRamContract
 
     private void sellRam() {
         if (Double.parseDouble(etPurchaseEos.getText().toString()) > (eosResource.getData().getData().getRam().getAvailable() - eosResource.getData().getData().getRam().getUsed())) {
-            ToastUtil.displayShortToast("Not enough RAM");
+            ToastUtil.displayShortToast(getString(R.string.not_enough) + " RAM");
             closeProgressDialog();
             return;
         }

@@ -119,7 +119,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                     startActivity(new Intent(getActivity(), AccountActivity.class));
                     return;
                 }
-                if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
+                if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                     KotlinConvertJavaUtils.INSTANCE.needVerify(getActivity());
                     return;
                 }

@@ -49,6 +49,7 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
         if (entrustOrderInfo.order.type.equals(ConstantValue.orderTypeBuy)) {
             tvOrderType.text = getString(R.string.buy_qgas)
             tvDealQgasAmounnt.text = "+" + entrustOrderInfo.order.completeAmount.toString() + " QGAS"
+            tvReceiveAddressTip.text = getString(R.string.go_qlc_address_to_receive_qgas)
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.mainColor))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
             when (entrustOrderInfo.order.status) {
@@ -76,6 +77,7 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
             tvOrderType.text = getString(R.string.sell_qgas)
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
             tvDealQgasAmounnt.text = "-" + entrustOrderInfo.order.completeAmount.toString() + " QGAS"
+            tvReceiveAddressTip.text = getString(R.string.erc20_address_to_receive_usdt)
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.color_ff3669))
             when (entrustOrderInfo.order.status) {
                 "NORMAL" -> {

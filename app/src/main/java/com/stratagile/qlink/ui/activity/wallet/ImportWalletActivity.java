@@ -64,7 +64,7 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
         setContentView(R.layout.activity_import_wallet);
         ButterKnife.bind(this);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Import Neo Wallet");
+        setTitle(getString(R.string.import_neo_wallet));
     }
 
     @Override
@@ -229,7 +229,7 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ToastUtil.displayShortToast("import wallet error");
+                                        ToastUtil.displayShortToast(getString(R.string.import_wallet_error));
                                         closeProgressDialog();
                                     }
                                 });

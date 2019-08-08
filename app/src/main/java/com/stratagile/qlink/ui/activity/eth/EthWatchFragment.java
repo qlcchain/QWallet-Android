@@ -123,7 +123,7 @@ public class EthWatchFragment extends BaseFragment implements EthWatchContract.V
             AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
             viewModel.walletAddress.postValue(ethWallet.getAddress());
         } else {
-            ToastUtil.displayShortToast("Invalid ETH Wallet Address");
+            ToastUtil.displayShortToast(getString(R.string.invalid_eth_wallet_address));
         }
 
     }

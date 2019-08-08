@@ -142,7 +142,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
                 break;
             case R.id.btImport:
                 if ("".equals(etMnemonic.getText().toString())) {
-                    ToastUtil.displayShortToast("please type mnemonic");
+                    ToastUtil.displayShortToast(getString(R.string.please_type_mnemonic));
                     return;
                 }
                 showProgressDialog();
@@ -151,7 +151,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
                     public void subscribe(ObservableEmitter<EthWallet> e) throws Exception {
                         EthWallet ethWallet = ETHWalletUtils.importMnemonic(tvEthType.getText().toString(), Arrays.asList(etMnemonic.getText().toString().split(" ")));
                         if (ethWallet == null) {
-                            ToastUtil.displayShortToast("import eth wallet error");
+                            ToastUtil.displayShortToast(getString(R.string.import_eth_wallet_error));
                             e.onComplete();
                             return;
                         }
@@ -159,7 +159,7 @@ public class EthMnemonicFragment extends BaseFragment implements EthMnemonicCont
                             List<EthWallet> wallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
                             for (int i = 0; i < wallets.size(); i++) {
                                 if (wallets.get(i).getAddress().equals(ethWallet.getAddress())) {
-                                    ToastUtil.displayShortToast("wallet exist");
+                                    ToastUtil.displayShortToast(getString(R.string.wallet_exist));
                                     closeProgressDialog();
                                     return;
                                 }

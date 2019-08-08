@@ -25,10 +25,10 @@
         android:layout_weight="1"/>
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/x720"
         android:scaleType="fitXY"
         android:src="@mipmap/boot"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/x764" />
     <LinearLayout
         android:id="@+id/start"
         android:layout_width="match_parent"

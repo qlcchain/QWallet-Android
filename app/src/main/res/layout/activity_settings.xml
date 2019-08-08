@@ -151,40 +151,29 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
             android:background="@color/color_f2f2f2"/>
-        <!--<TextView-->
-            <!--android:id="@+id/tv_join_telegram"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_marginTop="@dimen/x13"-->
-            <!--android:layout_marginLeft="@dimen/x33"-->
-            <!--android:layout_marginRight="@dimen/x33"-->
-            <!--android:includeFontPadding="false"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:paddingLeft="@dimen/x24"-->
-            <!--android:drawablePadding="@dimen/x20"-->
-            <!--android:fontFamily="@font/roboto_regular"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:background="@drawable/join_telegram"-->
-            <!--android:drawableLeft="@mipmap/icon_telegram"-->
-            <!--android:text="@string/Join_our_Telegram"-->
-            <!--android:layout_height="@dimen/x88" />-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_share_facebook"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_marginTop="@dimen/x13"-->
-            <!--android:layout_marginLeft="@dimen/x33"-->
-            <!--android:layout_marginRight="@dimen/x33"-->
-            <!--android:includeFontPadding="false"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:paddingLeft="@dimen/x35"-->
-            <!--android:drawablePadding="@dimen/x20"-->
-            <!--android:fontFamily="@font/roboto_regular"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:background="@drawable/share_facebook"-->
-            <!--android:drawableLeft="@mipmap/icon_facebook"-->
-            <!--android:text="@string/Share_your_Experience"-->
-            <!--android:layout_height="@dimen/x88" />-->
+        <LinearLayout
+            android:id="@+id/llDebugMode"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x92">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="调试模式"
+                android:textSize="16sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <Switch
+                android:id="@+id/debugMode"
+                android:layout_width="@dimen/x98"
+                android:layout_height="@dimen/x60" />
+        </LinearLayout>
+
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

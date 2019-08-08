@@ -56,19 +56,6 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     protected void initView() {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-//        Glide.with(this)
-//                .load(R.mipmap.launch_nimate)
-//                .into(new SimpleTarget<Drawable>() {
-//                            @Override
-//                            public void onResourceReady(Drawable drawable, Transition<? super Drawable> transition) {
-//                                if (drawable instanceof GifDrawable) {
-//                                    GifDrawable gifDrawable = (GifDrawable) drawable;
-//                                    gifDrawable.setLoopCount(1);
-//                                    activitySplashImageViewLogo.setImageDrawable(drawable);
-//                                    gifDrawable.start();
-//                                }
-//                            }
-//                        });
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.ui.activity.my.component.DaggerVerificationComponent;
 import com.stratagile.qlink.ui.activity.my.contract.VerificationContract;
@@ -92,7 +93,7 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
 
     @Override
     protected void initData() {
-        if (ConstantValue.currentUser.getVstatus().equals("KYC_FAIL")) {
+        if ("KYC_FAIL".equals(ConstantValue.currentUser.getVstatus())) {
             KotlinConvertJavaUtils.INSTANCE.showNotApprovedDialog(this);
         }
         switch (ConstantValue.currentUser.getVstatus()) {
@@ -132,14 +133,14 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
             outputFile = Uri.fromFile(tempFile);
         }
         //验证状态[NOT_UPLOAD/未上传,UPLOADED/已上传,KYC_SUCCESS/KYC成功,KYC_FAIL/KYC失败]
-        if (!ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD") && !ConstantValue.currentUser.getVstatus().equals("KYC_FAIL")) {
+        if (!"NOT_UPLOAD".equals(ConstantValue.currentUser.getVstatus()) && !"KYC_FAIL".equals(ConstantValue.currentUser.getVstatus())) {
             submit.setVisibility(View.GONE);
             Glide.with(this)
-                    .load(API.BASE_URL + ConstantValue.currentUser.getFacePhoto())
+                    .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getFacePhoto())
                     .apply(AppConfig.getInstance().optionsAppeal)
                     .into((ImageView) passport1);
             Glide.with(this)
-                    .load(API.BASE_URL + ConstantValue.currentUser.getHoldingPhoto())
+                    .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getHoldingPhoto())
                     .apply(AppConfig.getInstance().optionsAppeal)
                     .into((ImageView) passport2);
             passport1.setEnabled(false);

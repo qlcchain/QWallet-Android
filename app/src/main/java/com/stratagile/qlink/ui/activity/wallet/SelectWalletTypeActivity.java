@@ -332,7 +332,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 break;
             case R.id.btCreate:
                 if (!checkBox.isChecked()) {
-                    ToastUtil.displayShortToast("Please agree to the service agreement.");
+                    ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
                     return;
                 }
                 if (walletType == AllWallet.WalletType.EthWallet) {
@@ -348,7 +348,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
                 break;
             case R.id.btImport:
                 if (!checkBox.isChecked()) {
-                    ToastUtil.displayShortToast("Please agree to the service agreement.");
+                    ToastUtil.displayShortToast(getString(R.string.please_agree_to_the_service_agreement));
                     return;
                 }
                 if (walletType == AllWallet.WalletType.EthWallet) {
@@ -367,7 +367,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
             case R.id.servicePrivacyPolicy:
                 Intent intent = new Intent(this, WebViewActivity.class);
                 intent.putExtra("url", "https://docs.google.com/document/d/1yTr1EDXmOclDuSt4o0RRUc0fVjJU3zPREK97C1RmYdI/edit?usp=sharing");
-                intent.putExtra("title", "Service agreement");
+                intent.putExtra("title", R.string.service_agreement);
                 startActivity(intent);
                 break;
             default:

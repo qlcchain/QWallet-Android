@@ -23,6 +23,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerInviteComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteContract;
@@ -172,11 +173,11 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             if (LanguageUtil.isCN(InviteActivity.this)) {
                 Glide.with(InviteActivity.this)
-                        .load(API.BASE_URL + guanggaoListBeans.get(position).getImgPath())
+                        .load(MainAPI.MainBASE_URL + guanggaoListBeans.get(position).getImgPath())
                         .into(imageView);
             } else {
                 Glide.with(InviteActivity.this)
-                        .load(API.BASE_URL + guanggaoListBeans.get(position).getImgPathEn())
+                        .load(MainAPI.MainBASE_URL + guanggaoListBeans.get(position).getImgPathEn())
                         .into(imageView);
             }
             container.addView(imageView);
@@ -224,7 +225,7 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
             }
         });
         Glide.with(this)
-                .load(API.BASE_URL + inviteList.getMyInfo().getHead())
+                .load(MainAPI.MainBASE_URL + inviteList.getMyInfo().getHead())
                 .apply(AppConfig.getInstance().options)
                 .into(userAvatar);
         viewPager.setAdapter(new ViewAdapter(inviteList.getGuanggaoList()));

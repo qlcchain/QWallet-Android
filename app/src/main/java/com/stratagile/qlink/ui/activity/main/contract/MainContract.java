@@ -27,7 +27,7 @@ public interface MainContract {
          */
         void closeProgressDialog();
 
-        void getPermissionSuccess();
+//        void getPermissionSuccess();
 
         void onCreatWalletSuccess(ArrayList<Wallet> importWalletResult, int flag);
 
@@ -43,7 +43,7 @@ public interface MainContract {
 
         void getTox();
 
-        void getLocation();
+//        void getLocation();
 
         void importWallet(Map map);
 

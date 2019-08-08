@@ -17,18 +17,18 @@
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="@dimen/x60"
-            android:layout_height="@dimen/x60"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="15dp"
             />
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/black"
             tools:text=""
-            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginLeft="8dp"
             />
         <View
             android:layout_width="0dp"
@@ -46,10 +46,10 @@
             />
         <ImageView
             android:id="@+id/ivNext"
-            android:layout_width="@dimen/x30"
-            android:layout_height="@dimen/x30"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_marginRight="15dp"
             />
     </LinearLayout>
     <View
@@ -58,7 +58,7 @@
         android:layout_weight="1"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x105"
+        android:layout_height="1dp"
+        android:layout_marginLeft="54dp"
         android:background="#f2f2f2"/>
 </LinearLayout>

@@ -37,143 +37,143 @@ public class LocalAssetsUtils {
      * 同步sd上的资产数据到greenDao
      */
     public static void updateGreanDaoFromLocal() {
-        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        if (walletList != null && walletList.size() != 0) {
-            //wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
-            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-            for (Wallet wallet : walletList) {
-                Gson gson = new Gson();
-                ArrayList<MyAsset> localAssetArrayList;
-                try {
-                    //开始读取sd卡的资产数据
-                    String assetStr = "";
-                    if (wallet != null) {
-                        assetStr = FileUtil.readAssetsData(wallet.getAddress());
-//                        KLog.i("开始同步本地资产" + assetStr);
-                    }
-                    if (!assetStr.equals("")) {
-                        localAssetArrayList = gson.fromJson(assetStr, new TypeToken<ArrayList<MyAsset>>() {
-                        }.getType());
-                        for (MyAsset myAsset : localAssetArrayList) {
-
-                            if (myAsset.getType() == 0)//wifi
-                            {
-                            } else if (myAsset.getType() == 1)//vpn
-                            {
-                                for (VpnEntity vpnEntity : vpnEntityList) {
-
-                                    if (vpnEntity.getVpnName().equals(myAsset.getVpnEntity().getVpnName()) && vpnEntity.getIsMainNet() == myAsset.getVpnEntity().getIsMainNet()) {
-                                        myAsset.getVpnEntity().setId(vpnEntity.getId());//这个很重要，要不没法更新greenDao
-                                        myAsset.getVpnEntity().setIsConnected(vpnEntity.getIsConnected());
-                                        myAsset.getVpnEntity().setOnline(vpnEntity.getOnline());
-                                        myAsset.getVpnEntity().setIsLoadingAvater(vpnEntity.getIsLoadingAvater());
-                                        myAsset.getVpnEntity().setAvaterUpdateTime(vpnEntity.getAvaterUpdateTime());
-                                        myAsset.getVpnEntity().setUnReadMessageCount(vpnEntity.getUnReadMessageCount());
-                                        myAsset.getVpnEntity().setGroupNum(vpnEntity.getGroupNum());
-                                        myAsset.getVpnEntity().setAssetTranfer(vpnEntity.getAssetTranfer());
-                                        myAsset.getVpnEntity().setFriendNum(vpnEntity.getFriendNum());
-                                        myAsset.getVpnEntity().setAvatar(vpnEntity.getAvatar());
-                                        myAsset.getVpnEntity().setCountry(vpnEntity.getCountry());
-                                        myAsset.getVpnEntity().setRegisterQlc(vpnEntity.getRegisterQlc());
-                                        myAsset.getVpnEntity().setConnsuccessNum(vpnEntity.getConnsuccessNum());
-                                        myAsset.getVpnEntity().setOwnerP2pId(vpnEntity.getOwnerP2pId());
-                                        myAsset.getVpnEntity().setProfileLocalPath(vpnEntity.getProfileLocalPath());
-                                        myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
-                                        //添加了抢注册功能，p2pId和钱包地址可能会变化
-                                        myAsset.getVpnEntity().setP2pId(vpnEntity.getP2pId());
-                                        if (vpnEntity.getP2pIdPc() != null && !vpnEntity.getP2pIdPc().equals("")) {
-                                            myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
-                                        }
-                                        myAsset.getVpnEntity().setAddress(vpnEntity.getAddress());
-                                        if (vpnEntity.getUsername() == null || vpnEntity.getUsername().equals("")) {
-
-                                        } else {
-                                            myAsset.getVpnEntity().setUsername(vpnEntity.getUsername());
-                                        }
-                                        if (vpnEntity.getPassword() == null || vpnEntity.getPassword().equals("")) {
-
-                                        } else {
-                                            myAsset.getVpnEntity().setPassword(vpnEntity.getPassword());
-                                        }
-                                        if (vpnEntity.getPrivateKeyPassword() == null || vpnEntity.getPrivateKeyPassword().equals("")) {
-
-                                        } else {
-                                            myAsset.getVpnEntity().setPrivateKeyPassword(vpnEntity.getPrivateKeyPassword());
-                                        }
-                                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(myAsset.getVpnEntity());
-
-
-//                                        Map<String, Object> infoMap = new HashMap<>();
-//                                        infoMap.put("vpnName", vpnEntity.getVpnName());
-//                                        infoMap.put("p2pId", vpnEntity.getP2pId());
-//                                        infoMap.put("country", vpnEntity.getCountry());
-//                                        infoMap.put("continent", vpnEntity.getContinent());
-//                                        infoMap.put("connectMaxnumber", vpnEntity.getConnectMaxnumber());
-//                                        infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath());
-//                                        infoMap.put("bandwidth", vpnEntity.getBandwidth());
-//                                        infoMap.put("currentConnect", vpnEntity.getCurrentConnect());
-//                                        infoMap.put("avaterUpdateTime", vpnEntity.getAvaterUpdateTime());
-//                                        infoMap.put("qlc", vpnEntity.getQlc());
-//                                        infoMap.put("exist", true);
-//                                        infoMap.put("ipV4Address", vpnEntity.getIpV4Address());
-//                                        infoMap.put("username", vpnEntity.getUsername());
-//                                        infoMap.put("password", vpnEntity.getPassword());
-//                                        infoMap.put("privateKeyPassword", vpnEntity.getPrivateKeyPassword());
-//                                        vpnList.add(infoMap);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                } catch (Exception e) {
-
-                } finally {
-
-                }
-            }
-        } else {
-            String allWalletNames = FileUtil.getAllWalletNames();
-            if (!"".equals(allWalletNames)) {
-                String[] allWalletNamesArray = allWalletNames.split(",");
-                for (int i = 0; i < allWalletNamesArray.length; i++) {
-                    Gson gson = new Gson();
-                    ArrayList<MyAsset> localAssetArrayList;
-                    try {
-                        //开始读取sd卡的资产数据
-                        String assetStr = "";
-                        assetStr = FileUtil.readAssetsData(allWalletNamesArray[i]);
-                        if (!assetStr.equals("")) {
-                            localAssetArrayList = gson.fromJson(assetStr, new TypeToken<ArrayList<MyAsset>>() {
-                            }.getType());
-                            for (MyAsset myAsset : localAssetArrayList) {
-
-                                if (myAsset.getType() == 0)//wifi
-                                {
-                                } else if (myAsset.getType() == 1)//vpn
-                                {
-                                   /* VpnEntityDao vpnEntityDao = AppConfig.getInstance().getDaoSession().getVpnEntityDao();
-                                    boolean isMainNet = myAsset.getVpnEntity().getIsMainNet();
-                                    List<VpnEntity> VpnEntityList = vpnEntityDao.queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(myAsset.getVpnEntity().getVpnName())).list();
-                                    if(VpnEntityList != null && VpnEntityList.size() == 0)
-                                    {
-                                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
-                                    }*/
-                                    myAsset.getVpnEntity().setId(null);
-                                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
-                                }
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-
-                    }
-                }
-            }
-
-        }
+//        List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
+//        if (walletList != null && walletList.size() != 0) {
+//            //wallet = walletList.get(SpUtil.getInt(AppConfig.getInstance(), ConstantValue.currentWallet, 0));
+//            List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
+//            for (Wallet wallet : walletList) {
+//                Gson gson = new Gson();
+//                ArrayList<MyAsset> localAssetArrayList;
+//                try {
+//                    //开始读取sd卡的资产数据
+//                    String assetStr = "";
+//                    if (wallet != null) {
+//                        assetStr = FileUtil.readAssetsData(wallet.getAddress());
+////                        KLog.i("开始同步本地资产" + assetStr);
+//                    }
+//                    if (!assetStr.equals("")) {
+//                        localAssetArrayList = gson.fromJson(assetStr, new TypeToken<ArrayList<MyAsset>>() {
+//                        }.getType());
+//                        for (MyAsset myAsset : localAssetArrayList) {
+//
+//                            if (myAsset.getType() == 0)//wifi
+//                            {
+//                            } else if (myAsset.getType() == 1)//vpn
+//                            {
+//                                for (VpnEntity vpnEntity : vpnEntityList) {
+//
+//                                    if (vpnEntity.getVpnName().equals(myAsset.getVpnEntity().getVpnName()) && vpnEntity.getIsMainNet() == myAsset.getVpnEntity().getIsMainNet()) {
+//                                        myAsset.getVpnEntity().setId(vpnEntity.getId());//这个很重要，要不没法更新greenDao
+//                                        myAsset.getVpnEntity().setIsConnected(vpnEntity.getIsConnected());
+//                                        myAsset.getVpnEntity().setOnline(vpnEntity.getOnline());
+//                                        myAsset.getVpnEntity().setIsLoadingAvater(vpnEntity.getIsLoadingAvater());
+//                                        myAsset.getVpnEntity().setAvaterUpdateTime(vpnEntity.getAvaterUpdateTime());
+//                                        myAsset.getVpnEntity().setUnReadMessageCount(vpnEntity.getUnReadMessageCount());
+//                                        myAsset.getVpnEntity().setGroupNum(vpnEntity.getGroupNum());
+//                                        myAsset.getVpnEntity().setAssetTranfer(vpnEntity.getAssetTranfer());
+//                                        myAsset.getVpnEntity().setFriendNum(vpnEntity.getFriendNum());
+//                                        myAsset.getVpnEntity().setAvatar(vpnEntity.getAvatar());
+//                                        myAsset.getVpnEntity().setCountry(vpnEntity.getCountry());
+//                                        myAsset.getVpnEntity().setRegisterQlc(vpnEntity.getRegisterQlc());
+//                                        myAsset.getVpnEntity().setConnsuccessNum(vpnEntity.getConnsuccessNum());
+//                                        myAsset.getVpnEntity().setOwnerP2pId(vpnEntity.getOwnerP2pId());
+//                                        myAsset.getVpnEntity().setProfileLocalPath(vpnEntity.getProfileLocalPath());
+//                                        myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
+//                                        //添加了抢注册功能，p2pId和钱包地址可能会变化
+//                                        myAsset.getVpnEntity().setP2pId(vpnEntity.getP2pId());
+//                                        if (vpnEntity.getP2pIdPc() != null && !vpnEntity.getP2pIdPc().equals("")) {
+//                                            myAsset.getVpnEntity().setP2pIdPc(vpnEntity.getP2pIdPc());
+//                                        }
+//                                        myAsset.getVpnEntity().setAddress(vpnEntity.getAddress());
+//                                        if (vpnEntity.getUsername() == null || vpnEntity.getUsername().equals("")) {
+//
+//                                        } else {
+//                                            myAsset.getVpnEntity().setUsername(vpnEntity.getUsername());
+//                                        }
+//                                        if (vpnEntity.getPassword() == null || vpnEntity.getPassword().equals("")) {
+//
+//                                        } else {
+//                                            myAsset.getVpnEntity().setPassword(vpnEntity.getPassword());
+//                                        }
+//                                        if (vpnEntity.getPrivateKeyPassword() == null || vpnEntity.getPrivateKeyPassword().equals("")) {
+//
+//                                        } else {
+//                                            myAsset.getVpnEntity().setPrivateKeyPassword(vpnEntity.getPrivateKeyPassword());
+//                                        }
+//                                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(myAsset.getVpnEntity());
+//
+//
+////                                        Map<String, Object> infoMap = new HashMap<>();
+////                                        infoMap.put("vpnName", vpnEntity.getVpnName());
+////                                        infoMap.put("p2pId", vpnEntity.getP2pId());
+////                                        infoMap.put("country", vpnEntity.getCountry());
+////                                        infoMap.put("continent", vpnEntity.getContinent());
+////                                        infoMap.put("connectMaxnumber", vpnEntity.getConnectMaxnumber());
+////                                        infoMap.put("profileLocalPath", vpnEntity.getProfileLocalPath());
+////                                        infoMap.put("bandwidth", vpnEntity.getBandwidth());
+////                                        infoMap.put("currentConnect", vpnEntity.getCurrentConnect());
+////                                        infoMap.put("avaterUpdateTime", vpnEntity.getAvaterUpdateTime());
+////                                        infoMap.put("qlc", vpnEntity.getQlc());
+////                                        infoMap.put("exist", true);
+////                                        infoMap.put("ipV4Address", vpnEntity.getIpV4Address());
+////                                        infoMap.put("username", vpnEntity.getUsername());
+////                                        infoMap.put("password", vpnEntity.getPassword());
+////                                        infoMap.put("privateKeyPassword", vpnEntity.getPrivateKeyPassword());
+////                                        vpnList.add(infoMap);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                } catch (Exception e) {
+//
+//                } finally {
+//
+//                }
+//            }
+//        } else {
+//            String allWalletNames = FileUtil.getAllWalletNames();
+//            if (!"".equals(allWalletNames)) {
+//                String[] allWalletNamesArray = allWalletNames.split(",");
+//                for (int i = 0; i < allWalletNamesArray.length; i++) {
+//                    Gson gson = new Gson();
+//                    ArrayList<MyAsset> localAssetArrayList;
+//                    try {
+//                        //开始读取sd卡的资产数据
+//                        String assetStr = "";
+//                        assetStr = FileUtil.readAssetsData(allWalletNamesArray[i]);
+//                        if (!assetStr.equals("")) {
+//                            localAssetArrayList = gson.fromJson(assetStr, new TypeToken<ArrayList<MyAsset>>() {
+//                            }.getType());
+//                            for (MyAsset myAsset : localAssetArrayList) {
+//
+//                                if (myAsset.getType() == 0)//wifi
+//                                {
+//                                } else if (myAsset.getType() == 1)//vpn
+//                                {
+//                                   /* VpnEntityDao vpnEntityDao = AppConfig.getInstance().getDaoSession().getVpnEntityDao();
+//                                    boolean isMainNet = myAsset.getVpnEntity().getIsMainNet();
+//                                    List<VpnEntity> VpnEntityList = vpnEntityDao.queryBuilder().where(VpnEntityDao.Properties.VpnName.eq(myAsset.getVpnEntity().getVpnName())).list();
+//                                    if(VpnEntityList != null && VpnEntityList.size() == 0)
+//                                    {
+//                                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
+//                                    }*/
+//                                    myAsset.getVpnEntity().setId(null);
+//                                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(myAsset.getVpnEntity());
+//                                }
+//                            }
+//                        }
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    } finally {
+//
+//                    }
+//                }
+//            }
+//
+//        }
     }
 
     /**
