@@ -362,7 +362,12 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     transactionInfo.setTo(accountHistory.getResult().get(i).getAddress());
                     transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
                     transactionInfo.setShowAddress(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
-                } else if ("Send".equals(accountHistory.getResult().get(i).getType())) {
+                } else if ("ContractSend".equals(accountHistory.getResult().get(i).getType())) {
+                    transactionInfo.setFrom(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                    transactionInfo.setTo(accountHistory.getResult().get(i).getAddress());
+                    transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
+                    transactionInfo.setShowAddress(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                }else if ("Send".equals(accountHistory.getResult().get(i).getType())) {
                     transactionInfo.setFrom(accountHistory.getResult().get(i).getAddress());
                     transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
                     transactionInfo.setTo(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));

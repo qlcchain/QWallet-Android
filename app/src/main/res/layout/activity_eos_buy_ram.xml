@@ -33,7 +33,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Available" />
+                android:text="@string/available" />
 
             <View
                 android:layout_width="0px"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/x35"
                 android:textColor="@color/white"
-                android:text="Current Price" />
+                android:text="@string/current_price" />
 
             <View
                 android:layout_width="0px"
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x10"
-                    android:text="Buy" />
+                    android:text="@string/buy" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x10"
-                    android:text="Sell" />
+                    android:text="@string/sell" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -145,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
-                android:text="Purchase Amount" />
+                android:text="@string/purchase_amount" />
 
             <View
                 android:layout_width="0px"
@@ -168,7 +168,7 @@
             android:inputType="numberDecimal"
             android:textSize="13sp"
             android:background="@null"
-            android:hint="Input EOS Amount"
+            android:hint="@string/input_eos_amount"
             android:layout_height="wrap_content" />
         <View
             android:layout_width="match_parent"
@@ -178,7 +178,7 @@
             android:background="@color/color_29282a_40"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="Recipient Account"
+            android:text="@string/recipient_account"
             android:textSize="13sp"
             android:layout_marginLeft="@dimen/x45"
             android:textColor="@color/color_29282a"
@@ -206,7 +206,7 @@
             android:layout_gravity="right"
             android:textSize="11sp"
             android:layout_marginRight="@dimen/x45"
-            android:text="*Purchase RAM for another account"
+            android:text="@string/purchase_ram_for_another_account"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tvOpreate"
@@ -217,7 +217,7 @@
             android:background="@drawable/main_color_bt_bg"
             android:textColor="@color/white"
             android:gravity="center"
-            android:text="Buy"
+            android:text="@string/buy"
             android:layout_height="@dimen/x92" />
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

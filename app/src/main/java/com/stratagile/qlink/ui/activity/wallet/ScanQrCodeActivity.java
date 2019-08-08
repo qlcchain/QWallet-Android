@@ -87,7 +87,7 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
 
     @Override
     protected void initView() {
-        setTitle("Scan");
+        setTitle(getString(R.string.scan));
         setContentView(R.layout.activity_scan_qr_code);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -211,7 +211,7 @@ public class ScanQrCodeActivity extends BaseActivity implements ScanQrCodeContra
 //                        mScanerListener.onFail("From to Picture", "图片识别失败");
 //                    }
 //                }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

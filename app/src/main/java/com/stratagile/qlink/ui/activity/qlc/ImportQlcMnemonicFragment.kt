@@ -62,7 +62,7 @@ class ImportQlcMnemonicFragment : BaseFragment(), ImportQlcMnemonicContract.View
         super.onViewCreated(view, savedInstanceState)
         btImport.setOnClickListener {
             if ("" == etMnemonic.getText().toString().trim({ it <= ' ' })) {
-                ToastUtil.displayShortToast("please type mnemonic")
+                ToastUtil.displayShortToast(getString(R.string.please_type_mnemonic))
                 return@setOnClickListener
             }
 
@@ -92,7 +92,7 @@ class ImportQlcMnemonicFragment : BaseFragment(), ImportQlcMnemonicContract.View
                 if (wallets3 != null && wallets3.size != 0) {
                     for (i in wallets3.indices) {
                         if (wallets3[i].address.toLowerCase() == qlcAccount.address) {
-                            ToastUtil.displayShortToast("wallet exist")
+                            ToastUtil.displayShortToast(getString(R.string.wallet_exist))
                             closeProgressDialog()
                             return@setOnClickListener
                         }

@@ -120,11 +120,11 @@ public class ImportQlcSeedFragment extends BaseFragment implements ImportQlcSeed
     @OnClick(R.id.btImport)
     public void onViewClicked() {
         if ("".equals(etPrivateKey.getText().toString().trim())) {
-            ToastUtil.displayShortToast("please type seed");
+            ToastUtil.displayShortToast(getString(R.string.please_type_seed));
             return;
         }
         if (etPrivateKey.getText().toString().trim().length() != 64) {
-            ToastUtil.displayShortToast("seed error");
+            ToastUtil.displayShortToast(getString(R.string.seed_error));
             return;
         }
         showProgressDialog();
@@ -155,7 +155,7 @@ public class ImportQlcSeedFragment extends BaseFragment implements ImportQlcSeed
             if (wallets3 != null && wallets3.size() != 0) {
                 for (int i = 0; i < wallets3.size(); i++) {
                     if (wallets3.get(i).getAddress().toLowerCase().equals(qlcAccount.getAddress())) {
-                        ToastUtil.displayShortToast("wallet exist");
+                        ToastUtil.displayShortToast(getString(R.string.wallet_exist));
                         closeProgressDialog();
                         return;
                     }

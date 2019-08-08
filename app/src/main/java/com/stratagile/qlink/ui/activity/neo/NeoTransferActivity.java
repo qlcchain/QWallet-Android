@@ -127,9 +127,9 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                 break;
             }
         }
-        setTitle("Send " + tokenInfo.getTokenSymol());
+        setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
         tvNeoTokenName.setText(tokenInfo.getTokenSymol());
-        tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+        tvNeoTokenValue.setText(getString(R.string.balance) + " " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
 
 
 //        Map<String, String> infoMap = new HashMap<>();
@@ -248,7 +248,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         }
         for (int i = 0; i < tokenInfos.size(); i++) {
             if (tokenInfos.get(i).getTokenSymol().equals(tokenInfo.getTokenSymol())) {
-                tvNeoTokenValue.setText("Balance: " + tokenInfos.get(i).getTokenValue() + " " + tokenInfo.getTokenSymol());
+                tvNeoTokenValue.setText(getString(R.string.balance) + " " + tokenInfos.get(i).getTokenValue() + " " + tokenInfo.getTokenSymol());
                 tokenInfo.setTokenAddress(tokenInfos.get(i).getTokenAddress());
             }
         }
@@ -292,19 +292,19 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         switch (view.getId()) {
             case R.id.tvSend:
                 if ("".equals(etNeoTokenSendValue.getText().toString().trim())) {
-                    ToastUtil.displayShortToast("illegal value");
+                    ToastUtil.displayShortToast(getString(R.string.illegal_value));
                     return;
                 }
                 if (Float.parseFloat(etNeoTokenSendValue.getText().toString()) <= 0) {
-                    ToastUtil.displayShortToast("illegal value");
+                    ToastUtil.displayShortToast(getString(R.string.illegal_value));
                     return;
                 }
                 if ("".equals(etNeoTokenSendAddress.getText().toString().trim())) {
-                    ToastUtil.displayShortToast("please enter neo wallet address");
+                    ToastUtil.displayShortToast(getString(R.string.please_enter_neo_wallet_address));
                     return;
                 }
                 if (!Neoutils.validateNEOAddress(etNeoTokenSendAddress.getText().toString().trim())) {
-                    ToastUtil.displayShortToast("please enter neo wallet address");
+                    ToastUtil.displayShortToast(getString(R.string.please_enter_neo_wallet_address));
                     return;
                 }
                 if (tokenInfo.getWalletAddress().equals(etNeoTokenSendAddress.getText().toString())) {
@@ -316,11 +316,11 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                     mPresenter.sendNeo(etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), tokenInfo);
                 } else {
                     if (gasTokenInfo == null) {
-                        ToastUtil.displayShortToast("Not enough gas");
+                        ToastUtil.displayShortToast(getString(R.string.not_enough) + " gas");
                         return;
                     }
                     if (gasTokenInfo.getTokenValue() < 0.00000001) {
-                        ToastUtil.displayShortToast("Not enough gas");
+                        ToastUtil.displayShortToast(getString(R.string.not_enough) + " gas");
                         return;
                     }
                     showProgressDialog();
@@ -344,7 +344,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                     for (int i = 0; i < tokenInfoArrayList.size(); i++) {
                         if (tokenInfoArrayList.get(i).getTokenSymol().equals(content)) {
                             tokenInfo = tokenInfoArrayList.get(i);
-                            setTitle("Send " + tokenInfo.getTokenSymol());
+                            setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
                             tvNeoTokenName.setText(tokenInfo.getTokenSymol());
                             if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
                                 etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
@@ -352,7 +352,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                                 etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
                             }
                             etNeoTokenSendValue.setText("");
-                            tvNeoTokenValue.setText("Balance: " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
+                            tvNeoTokenValue.setText(getString(R.string.balance) + " " + BigDecimal.valueOf(tokenInfo.getTokenValue()));
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvNeoTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
                             viewLine.setLayoutParams(layoutParams);
                         }

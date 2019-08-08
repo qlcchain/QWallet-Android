@@ -193,7 +193,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         if (!currentSelectWallet.getEthWallet().getIsLook()) {
 
                         } else {
-                            ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot Transfer");
+                            ToastUtil.displayShortToast(getString(R.string.only_watch_eth_wallet_cannot_transfer));
                             return;
                         }
                         ArrayList<TokenInfo> arrayList = new ArrayList<>();
@@ -202,7 +202,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         intent.putParcelableArrayListExtra("tokens", arrayList);
                         startActivity(intent);
                     } else {
-                        ToastUtil.displayShortToast("Please scan the ETH wallet address and make a transfer.");
+                        ToastUtil.displayShortToast(getString(R.string.please_scan_the_eth_wallet_address_and_make_a_transfer));
                     }
                 } else if (Neoutils.validateNEOAddress(s)) {
                     if (currentSelectWallet.getWalletType() == AllWallet.WalletType.NeoWallet) {
@@ -212,7 +212,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         intent.putParcelableArrayListExtra("tokens", arrayList);
                         startActivity(intent);
                     } else {
-                        ToastUtil.displayShortToast("Please scan the NEO wallet address and make a transfer.");
+                        ToastUtil.displayShortToast(getString(R.string.please_scan_the_neo_wallet_address_and_make_a_transfer));
                     }
                 } else if (EosUtil.isEosName(s)) {
                     if (currentSelectWallet.getWalletType() == AllWallet.WalletType.EosWallet) {
@@ -222,7 +222,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         intent.putParcelableArrayListExtra("tokens", arrayList);
                         startActivity(intent);
                     } else {
-                        ToastUtil.displayShortToast("Please scan the EOS wallet address and make a transfer.");
+                        ToastUtil.displayShortToast(getString(R.string.please_scan_the_eos_wallet_address_and_make_a_transfer));
                     }
                 } else if (AccountMng.isValidAddress(s)) {
                     if (currentSelectWallet.getWalletType() == AllWallet.WalletType.QlcWallet) {
@@ -232,7 +232,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         intent.putParcelableArrayListExtra("tokens", arrayList);
                         startActivity(intent);
                     } else {
-                        ToastUtil.displayShortToast("Please scan the EOS wallet address and make a transfer.");
+                        ToastUtil.displayShortToast(getString(R.string.please_scan_the_qlc_wallet_address_and_make_a_transfer));
                     }
                 } else {
                     try {
@@ -243,7 +243,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             startActivity(new Intent(getActivity(), EosActivationActivity.class).putExtra("eosQrBean", eosQrBean));
                         }
                     } catch (Exception e) {
-                        ToastUtil.displayShortToast("Invalid QR code");
+                        ToastUtil.displayShortToast(getString(R.string.invalid_qr_code));
                     }
                 }
             }
@@ -795,7 +795,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             infoMap.put("address", Account.INSTANCE.getWallet().getAddress());
             mPresenter.gotWinqGas(infoMap);
         } else {
-            ToastUtil.displayShortToast("please create a neo wallet first");
+            ToastUtil.displayShortToast(getString(R.string.please_create_a_neo_wallet_first));
         }
     }
 

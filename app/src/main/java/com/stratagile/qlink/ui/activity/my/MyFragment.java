@@ -19,6 +19,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
@@ -117,7 +118,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
                         Glide.with(this)
-                                .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
                     } else {
@@ -135,7 +136,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     public void updateImg(UpdateAvatar updateAvatar) {
         if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
-                    .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                    .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                     .apply(AppConfig.getInstance().options)
                     .into(userAvatar);
         } else {
@@ -161,7 +162,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
                         Glide.with(this)
-                                .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
                     } else {
@@ -215,7 +216,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
                         Glide.with(this)
-                                .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                                .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                                 .apply(AppConfig.getInstance().options)
                                 .into(userAvatar);
                     } else {
@@ -277,6 +278,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     for (UserAccount userAccount : userAccounts) {
                         if (userAccount.getIsLogin()) {
                             loginUser = userAccount;
+                            ConstantValue.currentUser = userAccount;
                             isLogin = true;
                             userName.setText(loginUser.getAccount());
                             startActivity(new Intent(getActivity(), PersonActivity.class));
@@ -308,7 +310,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
                 break;
             case R.id.testView:
-                startActivityForResult(new Intent(getActivity(), OrderDetailActivity.class), 0);
+//                startActivityForResult(new Intent(getActivity(), OrderDetailActivity.class), 0);
                 break;
             default:
                 break;

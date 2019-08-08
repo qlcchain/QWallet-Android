@@ -190,8 +190,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
 
     @Override
     protected void initData() {
-        KLog.i(Helper.byteToHexString("哈哈哈哈".getBytes()));
-        setTitle("Manage");
+        setTitle(getString(R.string.wallet_manage));
     }
 
     @Override
@@ -224,7 +223,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         switch (view.getId()) {
             case R.id.llAbucoins:
                 if (ethWallet.getIsLook()) {
-                    ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot look Mnemonic");
+                    ToastUtil.displayShortToast(getString(R.string.only_watch_eth_wallet_cannot_look_mnemonic));
                     return;
                 }
                 if (ethWallet.getMnemonic() == null) {
@@ -242,7 +241,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
                 break;
             case R.id.llExportPrivateKey:
                 if (ethWallet.getIsLook()) {
-                    ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot ExportPrivateKey");
+                    ToastUtil.displayShortToast(getString(R.string.only_watch_wallet_cannot_export_keystore));
                     return;
                 }
                 ExportPrivateKey();
@@ -282,13 +281,13 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvTitle = view.findViewById(R.id.tvTitle);
-        tvTitle.setText("Export Mnemonic");
+        tvTitle.setText(getString(R.string.export_mnemonic_phrase));
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         TextView tvQrCode = view.findViewById(R.id.tvQrCode);
         ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
         TextView tvWarn = view.findViewById(R.id.tv_warn);
         tvWarn.setVisibility(View.GONE);
-        tvWarn.setText("Warning: Export plain Mnemonic is very dangerous. We recommend you backup with mnemonic or keystore.");
+        tvWarn.setText(getString(R.string.warning_export_mnemonic_is_very_dangerous_we_recommend_you_backup_with_keystore));
         Bitmap bitmap = RxQRCode.builder(privateKey).
                 backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
                 codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
@@ -338,12 +337,12 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvTitle = view.findViewById(R.id.tvTitle);
-        tvTitle.setText("Export Seed");
+        tvTitle.setText(getString(R.string.export_wallet_seed));
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮
         TextView tvQrCode = view.findViewById(R.id.tvQrCode);
         ImageView ivQRCode = view.findViewById(R.id.ivQRCode);
         TextView tvWarn = view.findViewById(R.id.tv_warn);
-        tvWarn.setText("Warning: Export plain seed is very dangerous. We recommend you backup with mnemonic or keystore.");
+        tvWarn.setText(getString(R.string.warning_export_plain_mnemonic_is_very_dangerous_we_recommend_you_backup_with_mnemonic_or_keystore));
 //        view.findViewById(R.id.tv_warn).setVisibility(View.GONE);
         Bitmap bitmap = RxQRCode.builder(privateKey).
                 backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
@@ -484,7 +483,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
     private void cannotShowMnemonic() {
         View view = getLayoutInflater().inflate(R.layout.alert_dialog, null, false);
         TextView tvContent = view.findViewById(R.id.tvContent);
-        tvContent.setText("Wallet can not be seen through the private key and keystore import wallet.");
+        tvContent.setText(getString(R.string.wallet_can_not_be_seen_through_the_private_key_and_keystore_import_wallet));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         ImageView ivClose = view.findViewById(R.id.ivClose);
         ImageView ivTitle = view.findViewById(R.id.ivTitle);
@@ -532,7 +531,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
             }
         });
 
-        tvContent.setText("Do you confirm to delete the wallet?");
+        tvContent.setText(getString(R.string.do_you_confirm_to_delete_the_wallet));
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();
 
@@ -569,7 +568,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
-        tvContent.setText("delete wallet success");
+        tvContent.setText(getString(R.string.delete_wallet_success));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();
@@ -693,7 +692,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);//输入内容
         TextView tv_warn = (TextView) view.findViewById(R.id.tv_warn);//输入内容
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);//输入内容
-        tvTitle.setText("Export Encrypted Key");
+        tvTitle.setText(getString(R.string.export_encrypted_key));
         tv_warn.setVisibility(View.GONE);
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView tvCopy = view.findViewById(R.id.tvCopy);//取消按钮

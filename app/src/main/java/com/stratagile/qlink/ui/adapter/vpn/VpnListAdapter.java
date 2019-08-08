@@ -53,7 +53,7 @@ public class VpnListAdapter extends BaseQuickAdapter<VpnEntity, BaseViewHolder> 
         ImageView avater = (ImageView) helper.getView(R.id.freind_avater);
         if (item.getAvatar() != null && !"".equals(item.getAvatar())) {
             Glide.with(mContext)
-                    .load(API.BASE_URL + item.getAvatar().replace("\\", "/"))
+                    .load(MainAPI.MainBASE_URL + item.getAvatar().replace("\\", "/"))
                     .apply(AppConfig.getInstance().optionsAvater)
                     .into(avater);
         } else {

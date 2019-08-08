@@ -24,7 +24,7 @@
                 android:gravity="left"
                 android:textSize="14sp"
                 android:background="@null"
-                android:hint="Please input your private key"
+                android:hint="@string/please_input_your_private_key"
                 android:layout_height="@dimen/x160" />
             <TextView
                 android:id="@+id/tvWhatsMnemonic"
@@ -80,7 +80,7 @@
         android:layout_marginTop="@dimen/x150"
         android:background="@drawable/change_wallet"
         android:fontFamily="@font/roboto_regular"
-        android:text="Start Importing"
+        android:text="@string/start_importing"
         android:textAllCaps="false"
         android:textColor="@color/white" />
 

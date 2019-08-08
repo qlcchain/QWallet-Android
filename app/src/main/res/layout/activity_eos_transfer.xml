@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     app:layout_constraintLeft_toRightOf="parent"
     android:background="@color/white"
@@ -52,20 +53,19 @@
         android:layout_marginTop="@dimen/x56"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
     <EditText
         android:id="@+id/etEosTokenSendValue"
-        app:layout_constraintTop_toBottomOf="@+id/tvEosTokenName"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x16"
+        app:layout_constraintTop_toBottomOf="@+id/tvEosTokenValue"
         android:layout_marginLeft="@dimen/x45"
-        android:textColor="@color/color_29282a"
-        android:layout_marginTop="@dimen/x10"
-        android:inputType="numberDecimal"
-        android:textSize="15sp"
-        app:layout_constraintLeft_toLeftOf="@+id/tvEosTokenName"
-        android:layout_marginRight="@dimen/x40"
-        android:hint="Amount"
         android:background="@null"
-        android:layout_height="wrap_content" />
+        android:hint="@string/transfer_amount"
+        android:inputType="numberDecimal"
+        android:textColor="@color/color_29282a"
+        android:textSize="15sp" />
 
     <View
         android:id="@+id/view1"
@@ -78,7 +78,7 @@
 
     <TextView
         android:id="@+id/sendto"
-        android:text="Send to"
+        android:text="@string/send_to"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/tvEosTokenName"
         app:layout_constraintTop_toBottomOf="@+id/view1"
@@ -96,7 +96,7 @@
         android:layout_marginTop="@dimen/x10"
         android:textSize="15sp"
         android:textColor="@color/color_29282a"
-        android:hint="Eos Wallet Address"
+        android:hint="@string/eos_wallet_address"
         android:background="@null"
         android:layout_height="wrap_content" />
 
@@ -111,7 +111,7 @@
 
     <TextView
         android:id="@+id/Memo"
-        android:text="Memo"
+        android:text="@string/memo"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/tvEosTokenName"
         app:layout_constraintTop_toBottomOf="@+id/view2"
@@ -129,7 +129,7 @@
         android:textSize="15sp"
         android:inputType="textEmailAddress"
         android:textColor="@color/color_29282a"
-        android:hint="if any"
+        android:hint="@string/if_any"
         android:background="@null"
         android:layout_height="wrap_content" />
 

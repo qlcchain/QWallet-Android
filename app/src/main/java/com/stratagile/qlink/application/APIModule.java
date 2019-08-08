@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpInfoInterceptor;
 import com.stratagile.qlink.data.api.MainAPI;
-import com.stratagile.qlink.data.api.MainHttpAPIWrapper;
 import com.stratagile.qlink.data.api.MainHttpApi;
 import com.stratagile.qlink.data.api.RequestBodyInterceptor;
 import com.stratagile.qlink.data.api.StringConverterFactory;
@@ -101,12 +100,5 @@ public final class APIModule {
     @Singleton
     public MainHttpApi provideMainHttpAPI(Retrofit restAdapter) {
         return restAdapter.create(MainHttpApi.class);
-    }
-    //这里是对外输出部分
-    @Provides
-    @Singleton
-    @Remote
-    public MainHttpAPIWrapper provideMainHttpAPIWrapper(MainHttpApi httpAPI) {
-        return new MainHttpAPIWrapper(httpAPI);
     }
 }

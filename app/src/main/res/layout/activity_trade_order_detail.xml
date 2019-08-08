@@ -55,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:text="-/-"
+                    android:layout_marginBottom="@dimen/x25"
                     android:layout_marginTop="@dimen/x12"
                     android:drawableRight="@mipmap/copy_h"
                     android:layout_marginRight="@dimen/x30"
@@ -84,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:textSize="18sp"
                         android:textColor="@color/color_29282a"
-                        android:text="BUY"
+                        android:text="@string/the_order_will_be_closed_automatically_if_no_further_confirmation_within"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:id="@+id/tvCoin"
@@ -125,7 +126,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Amount"
+                        android:text="@string/amount"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
@@ -146,7 +147,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Unit Price"
+                        android:text="@string/unit_price"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
@@ -172,7 +173,7 @@
                 <TextView
                     android:layout_width="0px"
                     android:layout_weight="1"
-                    android:text="Amount"
+                    android:text="@string/amount"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
                     android:layout_height="wrap_content" />
@@ -202,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/x30"
-                    android:text="Order Information"
+                    android:text="@string/order_information"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
                     android:layout_height="@dimen/x92" />
@@ -212,7 +213,7 @@
                     android:background="@color/color_f2f2f2"/>
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Order ID"
+                    android:text="@string/order_id"
                     android:layout_marginTop="@dimen/x12"
                     android:textColor="@color/color_808080"
                     android:textSize="14sp"
@@ -228,7 +229,7 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Order Time"
+                    android:text="@string/order_time"
                     android:layout_marginTop="@dimen/x12"
                     android:textColor="@color/color_808080"
                     android:textSize="14sp"
@@ -250,7 +251,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Payment Confirmation Time"
+                        android:text="@string/payment_confirmation_time"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -273,7 +274,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Successful Deal Time"
+                        android:text="@string/successful_deal_time"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -296,7 +297,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Cloesed Time"
+                        android:text="@string/cloesed_time"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"
@@ -312,7 +313,7 @@
                 </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Order Status"
+                    android:text="@string/order_status"
                     android:layout_marginTop="@dimen/x12"
                     android:textColor="@color/color_808080"
                     android:textSize="14sp"
@@ -361,7 +362,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Transaction ID"
+                        android:text="@string/transaction_id"
                         android:layout_marginTop="@dimen/x12"
                         android:textColor="@color/color_808080"
                         android:textSize="14sp"

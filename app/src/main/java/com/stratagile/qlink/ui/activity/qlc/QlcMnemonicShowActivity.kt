@@ -50,7 +50,7 @@ class QlcMnemonicShowActivity : BaseActivity(), QlcMnemonicShowContract.View {
     override fun initData() {
         qlcAccount = intent.getParcelableExtra("wallet")
         tvMnemonic.setText(qlcAccount?.getMnemonic())
-        setTitle("QLC Wallet")
+        setTitle(getString(R.string.qlc_wallet))
         tvMnemonic.text = qlcAccount?.mnemonic
         tvSeed.text = qlcAccount?.seed
         tvMnemonic.setOnClickListener {

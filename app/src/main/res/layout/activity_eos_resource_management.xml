@@ -49,7 +49,7 @@
                 android:layout_height="@dimen/x20" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Balance"
+                android:text="@string/balance"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -74,7 +74,7 @@
                 android:layout_height="@dimen/x20" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Reclaim"
+                android:text="@string/reclaim"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -99,7 +99,7 @@
                 android:layout_height="@dimen/x20" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Staked"
+                android:text="@string/staked"
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <View
@@ -154,7 +154,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Avaliable RAM"
+                android:text="@string/avaliable_ram"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -176,7 +176,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/x45"
             android:gravity="center_vertical"
-            android:text="Note:EOS is required to purchase RAM"
+            android:text="@string/note_eos_is_required_to_purchase_ram"
             android:layout_height="@dimen/x92" />
 
         <View
@@ -219,7 +219,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Avaliable CPU"
+                android:text="@string/avaliable_cpu"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -245,7 +245,7 @@
             android:layout_height="@dimen/x92">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Avaliable NET"
+                android:text="@string/avaliable_net"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="0px"
@@ -267,7 +267,7 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/x45"
             android:gravity="center_vertical"
-            android:text="Note: Stake EOS to exchange for CPU/NET"
+            android:text="@string/note_stake_eos_to_exchange_for_cpu_net"
             android:layout_height="@dimen/x92" />
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

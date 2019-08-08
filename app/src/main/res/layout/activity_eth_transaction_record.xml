@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:textColor="@color/mainColor"
-                android:text="Recive"
+                android:text="@string/recive"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>

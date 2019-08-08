@@ -18,7 +18,7 @@
             android:layout_height="@dimen/x90"
             android:gravity="center"
             android:background="@color/white"
-            android:text="Select Path"
+            android:text="@string/select_path"
             android:textColor="#FF9B9B9B"
             android:textSize="16sp" />
 

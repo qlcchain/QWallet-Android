@@ -54,7 +54,7 @@ class UsdtReceiveAddressActivity : BaseActivity(), UsdtReceiveAddressContract.Vi
 
     override fun initView() {
         setContentView(R.layout.activity_usdt_receive_address)
-        title.text = "USDT Receivable Address"
+        title.text = getString(R.string.usdt_receivable_address)
     }
     override fun initData() {
         qrEntity = intent.getParcelableExtra("qrentity")

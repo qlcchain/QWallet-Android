@@ -68,7 +68,7 @@ class AppealActivity : BaseActivity(), AppealContract.View {
         setContentView(R.layout.activity_appeal)
     }
     override fun initData() {
-        title.text = "OrderAppeal"
+        title.text = getString(R.string.order_appeal)
         mTradeOrderDetail = intent.getParcelableExtra("tradeOrder")
         galleryPackName = SystemUtil.getSystemPackagesName(this, "gallery")
         if ("" == galleryPackName) {

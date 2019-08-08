@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x12"
-        android:text="CHOOSE A WALLET TYPE"
+        android:text="@string/choose_a_wallet_type"
         android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +164,7 @@
             android:layout_height="@dimen/x40"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="Agree on"
+            android:text="@string/agree_on"
             android:textSize="12sp"
             android:layout_marginRight="@dimen/x8"
             android:layout_height="wrap_content" />
@@ -172,7 +172,7 @@
             android:id="@+id/servicePrivacyPolicy"
             android:layout_width="wrap_content"
             android:textSize="12sp"
-            android:text="Terms of Service and Privacy Policy"
+            android:text="@string/terms_of_service_and_privacy_policy"
             android:textColor="@color/mainColor"
             android:layout_height="wrap_content" />
     </LinearLayout>

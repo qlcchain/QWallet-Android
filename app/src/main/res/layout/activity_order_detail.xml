@@ -51,11 +51,12 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvReceiveAddressTip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/x17"
-                    android:text="QLC Chain Address to receive QGAS"
+                    android:text="@string/go_qlc_address_to_receive_qgas"
                     android:textColor="@color/color_29282a"
                     android:textSize="16sp" />
 
@@ -100,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Amount"
+                        android:text="@string/amount"
                         android:textColor="@color/color_29282a"
                         android:textSize="14sp" />
 
@@ -124,7 +125,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unit Price"
+                        android:text="@string/unit_price"
                         android:textColor="@color/color_29282a"
                         android:textSize="14sp" />
 
@@ -149,7 +150,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Volume Settings"
+                        android:text="@string/volume_settings"
                         android:textColor="@color/color_29282a"
                         android:textSize="14sp" />
 
@@ -176,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_weight="1"
-                    android:text="Remaining Volume"
+                    android:text="@string/remaining_volume"
                     android:textColor="@color/color_29282a"
                     android:textSize="16sp" />
 
@@ -198,7 +199,7 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/x30"
-                android:text="Record"
+                android:text="@string/order_record"
                 android:textColor="@color/color_29282a"
                 android:textSize="16sp" />
 

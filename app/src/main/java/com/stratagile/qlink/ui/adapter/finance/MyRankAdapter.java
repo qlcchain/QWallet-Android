@@ -6,11 +6,14 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.finance.MyRanking;
+import com.stratagile.qlink.utils.AccountUtil;
 
 import java.util.List;
 
@@ -22,11 +25,11 @@ public class MyRankAdapter extends BaseQuickAdapter<MyRanking.DataBean, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, MyRanking.DataBean item) {
-        helper.setText(R.id.userName, item.getName());
+        helper.setText(R.id.userName, AccountUtil.setUserNickName(item.getName()));
         helper.setText(R.id.tvRank, item.getSequence() + "");
         helper.setText(R.id.invitePersons, mContext.getString(R.string.invited_) + " " + item.getTotalInvite() + " " +  mContext.getString(R.string.friends));
         Glide.with(mContext)
-                .load(API.BASE_URL + item.getHead())
+                .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.userAvatar));
     }

@@ -87,7 +87,7 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
         setContentView(R.layout.activity_eos_resource_management);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Resources");
+        setTitle(getString(R.string.resources));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -159,12 +159,12 @@ public class EosResourceManagementActivity extends BaseActivity implements EosRe
             double total = eosToken.getTokenValue();
             double staked = Double.parseDouble(eosResource.getData().getData().getStaked().getCpu_weight().replace(" EOS", "")) + Double.parseDouble(eosResource.getData().getData().getStaked().getNet_weight().replace(" EOS", ""));
             BigDecimal bigDecimal = BigDecimal.valueOf(total + staked);
-            totalAssets.setText("Total Assets " + bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
+            totalAssets.setText(getString(R.string.total_assets) + " " + bigDecimal.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
             balanceAsset.setText(eosToken.getEosTokenValue() + " EOS");
             stakeAsset.setText(BigDecimal.valueOf(staked).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString() + " EOS");
         } else {
             double total = Double.parseDouble(eosResource.getData().getData().getStaked().getCpu_weight().replace(" EOS", "")) + Double.parseDouble(eosResource.getData().getData().getStaked().getNet_weight().replace(" EOS", ""));
-            totalAssets.setText("Total Assets " + total + " EOS");
+            totalAssets.setText(getString(R.string.total_assets) + " " + total + " EOS");
             balanceAsset.setText("0.0000 EOS");
             stakeAsset.setText(total + " EOS");
         }

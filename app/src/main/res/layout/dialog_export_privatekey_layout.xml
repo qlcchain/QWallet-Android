@@ -34,7 +34,7 @@
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
-                    android:text="Export Private Key"
+                    android:text="@string/export_private_key"
                     android:textColor="@color/color_29282a"
                     android:textSize="16sp"
                     android:layout_height="wrap_content" />
@@ -58,7 +58,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/x10"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="Warning: Export plain private key is very dangerous. We recommend you backup with mnemonic or keystore."
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/x200"
+                    android:text="@string/warning_export_plain_private_key_is_very_dangerous_we_recommend_you_backup_with_mnemonic_or_keystore"
                     android:layout_marginRight="@dimen/x30"
                     android:layout_marginTop="@dimen/x20"
                     android:textColor="@color/color_d0021b" />
@@ -84,7 +86,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="18sp"
-                        android:text="QRCode"
+                        android:text="@string/qrcode"
                         android:textColor="@color/mainColor" />
 
                     <View
@@ -99,7 +101,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="18sp"
-                        android:text="Copy"
+                        android:text="@string/copy"
                         android:textColor="@color/mainColor" />
 
                 </LinearLayout>

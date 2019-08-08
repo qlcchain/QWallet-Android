@@ -135,7 +135,7 @@ public class NewRankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.Vpn
                     .into(imageView);
         } else {
             Glide.with(mContext)
-                    .load(API.BASE_URL + item.getImgUrl())
+                    .load(MainAPI.MainBASE_URL + item.getImgUrl())
                     .apply(AppConfig.getInstance().optionsAvater)
                     .into(imageView);
         }

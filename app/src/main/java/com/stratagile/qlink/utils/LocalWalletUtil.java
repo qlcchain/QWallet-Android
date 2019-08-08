@@ -19,10 +19,12 @@ import java.util.List;
 public class LocalWalletUtil {
     public static void updateLocalQlcWallet() {
         List<QLCAccount> walletList = AppConfig.getInstance().getDaoSession().getQLCAccountDao().loadAll();
-        Gson gson = new Gson();
-        String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qwallet/qlcWallet", saveData);
+        if (walletList != null && walletList.size() > 0) {
+            Gson gson = new Gson();
+            String saveData = gson.toJson(walletList);
+            saveData = ETHWalletUtils.encryption(saveData);
+            FileUtil.savaData("/Qwallet/qlcWallet", saveData);
+        }
     }
 
     public static ArrayList<QLCAccount> getLocalQlcWallet() {
@@ -41,10 +43,12 @@ public class LocalWalletUtil {
     }
     public static void updateLocalNeoWallet() {
         List<Wallet> walletList = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        Gson gson = new Gson();
-        String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qwallet/neoWallet", saveData);
+        if (walletList != null && walletList.size() > 0) {
+            Gson gson = new Gson();
+            String saveData = gson.toJson(walletList);
+            saveData = ETHWalletUtils.encryption(saveData);
+            FileUtil.savaData("/Qwallet/neoWallet", saveData);
+        }
     }
 
     public static ArrayList<Wallet> getLocalNeoWallet() {
@@ -64,18 +68,22 @@ public class LocalWalletUtil {
 
     public static void updateLocalEthWallet() {
         List<EthWallet> walletList = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
-        Gson gson = new Gson();
-        String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qwallet/ethWallet", saveData);
+        if (walletList != null && walletList.size() > 0) {
+            Gson gson = new Gson();
+            String saveData = gson.toJson(walletList);
+            saveData = ETHWalletUtils.encryption(saveData);
+            FileUtil.savaData("/Qwallet/ethWallet", saveData);
+        }
     }
 
     public static void updateLocalEosWallet() {
         List<EosAccount> walletList = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();
-        Gson gson = new Gson();
-        String saveData = gson.toJson(walletList);
-        saveData = ETHWalletUtils.encryption(saveData);
-        FileUtil.savaData("/Qwallet/eosWallet", saveData);
+        if (walletList != null && walletList.size() > 0) {
+            Gson gson = new Gson();
+            String saveData = gson.toJson(walletList);
+            saveData = ETHWalletUtils.encryption(saveData);
+            FileUtil.savaData("/Qwallet/eosWallet", saveData);
+        }
     }
 
     public static void initGreenDaoFromLocal() {

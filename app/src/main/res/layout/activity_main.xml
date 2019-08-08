@@ -21,14 +21,14 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/status_bar"
         android:background="@color/mainColor"
-        android:layout_height="@dimen/x84">
+        android:layout_height="42dp">
         <ImageView
             android:id="@+id/iv_avater"
-            android:layout_width="@dimen/x100"
+            android:layout_width="50dp"
             android:transitionName="avater"
             android:layout_centerVertical="true"
             android:src="@mipmap/icon_protfolio_more"
-            android:layout_height="@dimen/x42" />
+            android:layout_height="23dp" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -46,26 +46,26 @@
             android:visibility="invisible"
             android:layout_toLeftOf="@+id/rlWallet"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x10"
-            android:layout_width="@dimen/x46"
-            android:layout_height="@dimen/x46"
+            android:layout_marginRight="5dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/icons_scan_qrcode_n"
             />
 
         <RelativeLayout
             android:id="@+id/rlWallet"
-            android:layout_width="@dimen/x100"
+            android:layout_width="50dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_height="@dimen/x60">
+            android:layout_height="30dp">
 
             <ImageView
                 android:id="@+id/iv_wallet"
-                android:layout_width="@dimen/x46"
-                android:layout_height="@dimen/x46"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
                 android:layout_centerInParent="true"
-                android:layout_marginRight="@dimen/x30"
+                android:layout_marginRight="12dp"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/icon_free"
                 android:visibility="invisible" />
@@ -75,28 +75,28 @@
             android:id="@+id/segmentControlView"
             android:layout_width="wrap_content"
             android:orientation="horizontal"
-            app:sc_border_width="@dimen/x2"
+            app:sc_border_width="1dp"
             app:sc_checked_text_color="@color/mainColor"
             app:sc_tint_color="@color/white"
-            app:sc_corner_radius="@dimen/x10"
+            app:sc_corner_radius="4dp"
             android:layout_centerInParent="true"
-            android:layout_height="@dimen/x54">
+            android:layout_height="29dp">
             <RadioButton
                 android:id="@+id/button21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buy"
                 style="@style/RadioButton"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 />
 
             <RadioButton
                 android:id="@+id/button22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SELL"
+                android:text="@string/sell"
                 style="@style/RadioButton"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 />
         </info.hoang8f.android.segmented.SegmentedGroup>
 
@@ -131,7 +131,7 @@
         android:id="@+id/rl2"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x100">
+        android:layout_height="46dp">
         <com.stratagile.qlink.view.BottomNavigationViewEx
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"

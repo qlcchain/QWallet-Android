@@ -47,7 +47,7 @@
         android:layout_marginTop="@dimen/x42"
         android:textSize="12sp"
         android:gravity="center"
-        android:text="You have to pay within 30 minus."
+        android:text="@string/you_have_to_pay_within_30_minus"
         android:textColor="@color/color_d0021b"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTip"
         android:layout_marginTop="@dimen/x60"
         android:layout_marginLeft="@dimen/x30"
-        android:text="Pay Now"
+        android:text="@string/pay_now"
         android:textColor="@color/white"
         android:gravity="center"
         android:textSize="18sp"

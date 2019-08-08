@@ -131,45 +131,32 @@
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/x20"
-                    android:layout_marginBottom="@dimen/x20"
-                    android:layout_height="@dimen/x210"
-                    android:layout_marginLeft="@dimen/x13"
-                    android:layout_marginRight="@dimen/x13"
-                    app:cardCornerRadius="@dimen/x10"
-                    app:cardElevation="@dimen/x10">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="106dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="6dp">
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/cardView1"
-                            android:layout_width="@dimen/x90"
-                            android:layout_height="@dimen/x92"
-                            android:layout_marginStart="@dimen/x10"
-                            android:layout_marginTop="@dimen/x20"
-                            app:cardCornerRadius="@dimen/x10"
+                        <ImageView
+                            android:id="@+id/ivWalletAvatar"
+                            android:layout_marginTop="11dp"
+                            android:layout_marginLeft="6dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:id="@+id/ivWalletAvatar"
-                                    android:layout_width="@dimen/x70"
-                                    android:layout_height="@dimen/x70" />
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp" />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:src="@mipmap/details"
-                            android:layout_marginTop="@dimen/x48"
-                            android:layout_marginRight="@dimen/x17"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginRight="14dp"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:layout_height="wrap_content" />
@@ -178,31 +165,31 @@
                             android:id="@+id/tvWalletName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/x20"
+                            android:layout_marginLeft="11dp"
                             android:drawableRight="@mipmap/down_y"
-                            android:drawablePadding="@dimen/x10"
+                            android:drawablePadding="2dp"
                             android:ellipsize="middle"
                             android:gravity="center"
                             android:maxEms="8"
                             android:singleLine="true"
                             android:textColor="@color/mainColor"
-                            app:layout_constraintStart_toEndOf="@id/cardView1"
-                            app:layout_constraintTop_toTopOf="@+id/cardView1" />
+                            app:layout_constraintStart_toEndOf="@id/ivWalletAvatar"
+                            app:layout_constraintTop_toTopOf="@+id/ivWalletAvatar" />
 
                         <TextView
                             android:id="@+id/tvWalletAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/x20"
+                            android:layout_marginLeft="11dp"
                             android:drawableRight="@mipmap/icon_copy_h"
-                            android:drawablePadding="@dimen/x10"
+                            android:drawablePadding="2dp"
                             android:ellipsize="middle"
                             android:gravity="center"
                             android:maxEms="8"
                             android:singleLine="true"
                             android:textColor="@color/color_29282a_40"
-                            app:layout_constraintBottom_toBottomOf="@+id/cardView1"
-                            app:layout_constraintStart_toEndOf="@id/cardView1" />
+                            app:layout_constraintBottom_toBottomOf="@+id/ivWalletAvatar"
+                            app:layout_constraintStart_toEndOf="@id/ivWalletAvatar" />
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -217,8 +204,8 @@
                             android:id="@+id/tvWalletAsset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/x20"
-                            android:layout_marginBottom="@dimen/x20"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="11dp"
                             android:text="- -"
                             android:textColor="@color/color_29282a"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -263,7 +250,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/tvGasValue"
                             app:layout_constraintStart_toEndOf="@+id/ivTokenAvatar"
                             android:layout_marginLeft="@dimen/x40"
-                            android:text="Estimated GAS"
+                            android:text="@string/estimated_gas"
                             app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -274,7 +261,7 @@
                             android:layout_height="@dimen/x40"
                             android:layout_marginRight="@dimen/x54"
                             android:textColor="@color/white"
-                            android:text="Sync"
+                            android:text="@string/sync"
                             android:includeFontPadding="false"
                             android:gravity="center"
                             android:background="@drawable/claim_bg"
@@ -310,7 +297,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:textSize="15sp"
-                            android:text="Resources"
+                            android:text="@string/resources"
                             android:textStyle="bold"
                             android:textColor="@color/color_29282a"
                             android:layout_marginLeft="@dimen/x38"

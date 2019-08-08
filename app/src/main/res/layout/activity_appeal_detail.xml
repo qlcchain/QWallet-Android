@@ -86,7 +86,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="Submitted"
+                    android:text="@string/submitted"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
                     android:drawableRight="@mipmap/icon_enter1"
@@ -155,7 +155,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Amount"
+                        android:text="@string/purchase_quantity"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
@@ -176,7 +176,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="Unit Price"
+                        android:text="@string/unit_price"
                         android:textSize="14sp"
                         android:textColor="@color/color_29282a"
                         android:layout_height="wrap_content" />
@@ -202,7 +202,7 @@
                 <TextView
                     android:layout_width="0px"
                     android:layout_weight="1"
-                    android:text="Amount"
+                    android:text="@string/amount"
                     android:textSize="16sp"
                     android:textColor="@color/color_29282a"
                     android:layout_height="wrap_content" />
@@ -227,7 +227,7 @@
                 android:layout_width="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/x30"
-                android:text="Order Information"
+                android:text="@string/order_information"
                 android:textSize="16sp"
                 android:textColor="@color/color_29282a"
                 android:layout_height="@dimen/x92" />
@@ -237,7 +237,7 @@
                 android:background="@color/color_f2f2f2"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Order ID"
+                android:text="@string/order_id"
                 android:layout_marginTop="@dimen/x12"
                 android:textColor="@color/color_808080"
                 android:textSize="14sp"
@@ -254,7 +254,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Order Time"
+                android:text="@string/order_time"
                 android:layout_marginTop="@dimen/x12"
                 android:textColor="@color/color_808080"
                 android:textSize="14sp"
@@ -270,7 +270,7 @@
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Order Status"
+                android:text="@string/order_status"
                 android:layout_marginTop="@dimen/x12"
                 android:textColor="@color/color_808080"
                 android:textSize="14sp"
@@ -292,7 +292,7 @@
                 <TextView
                     android:id="@+id/tvPayAddressTip"
                     android:layout_width="wrap_content"
-                    android:text="Buyer's ERC-20 address"
+                    android:text="@string/buyers_erc20_address"
                     android:layout_marginTop="@dimen/x12"
                     android:textColor="@color/color_808080"
                     android:textSize="14sp"
@@ -317,7 +317,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Transaction ID"
+                    android:text="@string/transaction_id"
                     android:layout_marginTop="@dimen/x12"
                     android:textColor="@color/color_808080"
                     android:textSize="14sp"

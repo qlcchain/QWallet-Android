@@ -1,13 +1,20 @@
 package com.stratagile.qlink.ui.activity.otc.presenter
 import android.support.annotation.NonNull
+import com.socks.library.KLog
+import com.stratagile.qlink.api.HttpObserver
+import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.entity.MainAddress
 import com.stratagile.qlink.ui.activity.otc.contract.NewOrderContract
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity
+import com.stratagile.qlink.utils.SpUtil
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import java.util.HashMap
 
 /**
  * @author hzp
@@ -33,4 +40,18 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: NewO
             mCompositeDisposable.dispose()
         }
     }
+
+    fun getMainAddress() {
+        mCompositeDisposable.add(httpAPIWrapper.getMainAddress(HashMap<String, String>()).subscribe({
+            KLog.i("onSuccesse")
+            ConstantValue.mainAddress = it.data.neo.address
+            ConstantValue.ethMainAddress = it.data.eth.address
+            ConstantValue.mainAddressData = it.data
+        }, {
+
+        }, {
+
+        }))
+    }
+
 }

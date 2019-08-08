@@ -84,7 +84,7 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
 
     @Override
     protected void initData() {
-        setTitle("Import Eos Account");
+        setTitle(getString(R.string.import_eos_account));
         eosAccount = new EosAccount();
     }
 
@@ -185,7 +185,7 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
                 mPresenter.reportWalletCreated(eosAccount.getAccountName(), eosAccount.getActivePublicKey(), eosAccount.getActivePrivateKey());
             }
         } else {
-            ToastUtil.displayShortToast("ownerKey or activeKey error");
+            ToastUtil.displayShortToast(getString(R.string.ownerkey_or_activekey_error));
         }
     }
 
@@ -226,14 +226,14 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
         if (wallets2 != null && wallets2.size() != 0) {
             for (int i = 0; i < wallets2.size(); i++) {
                 if (isSameKey(wallets2.get(i).getOwnerPrivateKey(), eosAccount.getOwnerPrivateKey()) || isSameKey(wallets2.get(i).getActivePrivateKey(), eosAccount.getActivePrivateKey())) {
-                    ToastUtil.displayShortToast("wallet exist");
+                    ToastUtil.displayShortToast(getString(R.string.wallet_exist));
                     return;
                 }
             }
         }
         showProgressDialog();
         if (!"".equals(etEosAccountName.getText().toString().trim())) {
-            ToastUtil.displayShortToast("eos account length error");
+            ToastUtil.displayShortToast(getString(R.string.eos_account_length_error));
             if (etEosAccountName.getText().toString().length() != 12) {
                 return;
             }
@@ -263,7 +263,7 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
     @Override
     public void reportCreatedWalletSuccess() {
         closeProgressDialog();
-        ToastUtil.displayShortToast("import eos account success");
+        ToastUtil.displayShortToast(getString(R.string.import_eos_account_success));
         setResult(RESULT_OK);
         finish();
     }
@@ -274,7 +274,7 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
         TextView tvConform = view.findViewById(R.id.tvConform);
         TextView tvCancel = view.findViewById(R.id.tvCancel);
         TextView imageView = view.findViewById(R.id.tvTitle);
-        imageView.setText("Confirmation account");
+        imageView.setText(getString(R.string.confirmation_account));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override

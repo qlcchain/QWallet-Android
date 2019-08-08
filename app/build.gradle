@@ -42,7 +42,7 @@ android {
         targetSdkVersion 28
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.2.0"
+        versionName "2.2.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        externalNativeBuild {
@@ -247,6 +247,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs'
     }
     implementation project(':neoutils')
+    implementation project(':autosize')
 
     //    implementation project(':libsodium-jni-release')
     implementation 'com.github.kotlin-graphics:kotlin-unsigned:v2.1'

@@ -31,6 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_trade_order_detail.*
 import java.math.BigDecimal
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 import javax.inject.Inject;
@@ -45,6 +46,7 @@ import javax.inject.Inject;
 class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     override fun setServerTime(time: String) {
         sysTime = TimeUtil.timeStamp(time)
+        getTradeOrderDetail()
     }
 
     override fun cancelOrderSuccess() {
@@ -67,6 +69,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
 
     @SuppressLint("SetTextI18n")
     override fun setTradeOrderDetail(tradeOrderDetail: TradeOrderDetail) {
+        closeProgressDialog()
         this.mTradeOrderDetail = tradeOrderDetail
         tvNickName.text = AccountUtil.setUserNickName(tradeOrderDetail.order.nickname)
         tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
@@ -89,17 +92,17 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         if (mTradeOrderDetail.order.buyerId.equals(ConstantValue.currentUser.userId)) {
             //我买
             tvOtherUser.text = getString(R.string.seller)
-            tvOrderType.text = ConstantValue.orderTypeBuy
+            tvOrderType.text = getString(R.string.buy)
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_ff3669))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
-            receiveAddressTip.text = "QLC Chain Address to receive QGAS"
+            receiveAddressTip.text = getString(R.string.go_qlc_address_to_receive_qgas)
             tvReceiveAddress.text = tradeOrderDetail.order.qgasToAddress
             when (tradeOrderDetail.order.status) {
                 "QGAS_TO_PLATFORM" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)
-                    tvOrderStateTip.text = "The order will be closed automatically, if no further confirmation within 30 minutes."
+                    tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
                     tvOpreate1.visibility = View.VISIBLE
                     tvOpreate2.visibility = View.VISIBLE
                     tvOpreate3.visibility = View.VISIBLE
@@ -135,9 +138,17 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                                     var fen = (remainTime - it) / 60
                                     var miao = (remainTime - it) % 60
                                     if (fen > 0) {
-                                        tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + fen + " : " + miao + "分钟内没有支付完成，系统将自动关闭订单")
+                                        }
                                     } else {
-                                        tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + miao + "秒钟内没有支付完成，系统将自动关闭订单")
+                                        }
                                     }
                                 }
                                 .doOnComplete {
@@ -179,7 +190,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
-                                positiveButton("OK") { dismiss() }
+                                positiveButton(getString(R.string.ok)) { dismiss() }
                             }.show()
                         } else {
                             if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -223,7 +234,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
-                                positiveButton("OK") { dismiss() }
+                                positiveButton(getString(R.string.ok)) { dismiss() }
                             }.show()
                         } else {
                             if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -276,7 +287,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = tradeOrderDetail.order.sellerConfirmDate
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = "Buyer's ERC-20 address"
+                    tvPayAddressTip.text = getString(R.string.buyers_erc20_address)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
                 }
@@ -284,38 +295,48 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         } else {
             //我卖
             tvOtherUser.text = getString(R.string.buyer)
-            tvOrderType.text = ConstantValue.orderTypeSell
+            tvOrderType.text = getString(R.string.sell)
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_108ee9))
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
-            receiveAddressTip.text = "ERC20 Address to receive USDT"
+            receiveAddressTip.text = getString(R.string.erc20_address_to_receive_usdt)
             tvReceiveAddress.text = tradeOrderDetail.order.usdtToAddress
             when (tradeOrderDetail.order.status) {
                 "QGAS_TO_PLATFORM" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)
-                    tvOrderStateTip.text = "The order will be closed automatically, if no further confirmation within 30 minutes."
+                    tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
                     tvOpreate3.visibility = View.GONE
                     viewLine.visibility = View.GONE
                     var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
                     remainTime = tradeOrderExistTime - remainTime
-                    mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext {
-                                var fen = (remainTime - it) / 60
-                                var miao = (remainTime - it) % 60
-                                if (fen > 0) {
-                                    tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
-                                } else {
-                                    tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                    if (remainTime > 0) {
+                        mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext {
+                                    var fen = (remainTime - it) / 60
+                                    var miao = (remainTime - it) % 60
+                                    if (fen > 0) {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + fen + " : " + miao + "分钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    } else {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + miao + "秒钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    }
                                 }
-                            }
-                            .doOnComplete {
-                                getTradeOrderDetail()
-                            }
-                            .subscribe();
+                                .doOnComplete {
+                                    getTradeOrderDetail()
+                                }
+                                .subscribe();
+                    }
                 }
                 "USDT_PAID" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
@@ -357,7 +378,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
-                                positiveButton("OK") { dismiss() }
+                                positiveButton(getString(R.string.ok)) { dismiss() }
                             }.show()
                         } else {
                             if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -380,7 +401,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.text = getString(R.string.appeal)
                     tvOpreate3.text = getString(R.string.i_have_received)
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = "Buyer's ERC-20 address"
+                    tvPayAddressTip.text = getString(R.string.buyers_erc20_address)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
                     tvPayAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -417,7 +438,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
-                                positiveButton("OK") { dismiss() }
+                                positiveButton(getString(R.string.ok)) { dismiss() }
                             }.show()
                         } else {
                             if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -471,7 +492,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = tradeOrderDetail.order.sellerConfirmDate
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = "Buyer's ERC-20 address"
+                    tvPayAddressTip.text = getString(R.string.buyers_erc20_address)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
                 }
@@ -481,7 +502,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        getTradeOrderDetail()
+        mdDisposable?.dispose()
+        mPresenter.getSysTime()
     }
 
     /**
@@ -521,8 +543,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     }
 
     fun tradeCancel() {
-        alert("Revoke Order?") {
-            positiveButton("OK") {
+        alert(getString(R.string.revoke_order)) {
+            positiveButton(getString(R.string.ok)) {
                 showProgressDialog()
                 var map = mutableMapOf<String, String>()
                 map["account"] = ConstantValue.currentUser.account
@@ -530,7 +552,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                 map["tradeOrderId"] = tradeOrderId
                 mPresenter.tradeOrderCancel(map)
             }
-            negativeButton("Cancel") { dismiss() }
+            negativeButton(getString(R.string.cancel)) { dismiss() }
         }.show()
     }
 
@@ -547,9 +569,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     }
 
     fun showReceivedDialog() {
-        alert("I've received USDT.") {
-            positiveButton("OK") { confirmCheck() }
-            negativeButton("Cancel") { dismiss() }
+        alert(getString(R.string.i_have_received)) {
+            positiveButton(getString(R.string.ok)) { confirmCheck() }
+            negativeButton(getString(R.string.cancel)) { dismiss() }
         }.show()
     }
 
@@ -577,10 +599,10 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     }
 
     override fun initData() {
-        title.text = "Detail"
+        title.text = getString(R.string.detail)
         tradeOrderId = intent.getStringExtra("tradeOrderId")
+        showProgressDialog()
         mPresenter.getSysTime()
-        getTradeOrderDetail()
     }
 
     fun getTradeOrderDetail() {

@@ -9,16 +9,16 @@
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:layout_height="@dimen/x177">
+        android:layout_height="88dp">
         <ImageView
             android:id="@+id/userAvatar"
-            android:layout_width="@dimen/x115"
+            android:layout_width="58dp"
             android:src="@mipmap/icon_user_default"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_height="@dimen/x115" />
+            android:layout_marginLeft="15dp"
+            android:layout_height="58dp" />
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginLeft="15dp"
             android:orientation="vertical"
             android:layout_height="wrap_content">
             <TextView
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:text="@string/login_register"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/userId"
@@ -42,10 +42,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="@dimen/x30"
+            android:layout_width="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_height="@dimen/x30" />
+            android:layout_marginRight="15dp"
+            android:layout_height="15dp" />
 
     </LinearLayout>
     
@@ -55,7 +55,7 @@
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_crypto_wallet"
         app:textmy="@string/crypto_wallet"
-        android:layout_height="@dimen/x108">
+        android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
     <com.stratagile.qlink.view.MyItemView
@@ -64,7 +64,7 @@
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_share_friend"
         app:textmy="@string/share_with_friends"
-        android:layout_height="@dimen/x108">
+        android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
     <com.stratagile.qlink.view.MyItemView
@@ -73,7 +73,7 @@
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_join_community"
         app:textmy="@string/join_the_community"
-        android:layout_height="@dimen/x108">
+        android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
     <com.stratagile.qlink.view.MyItemView
@@ -83,7 +83,7 @@
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_contact_us"
         app:textmy="@string/contact_us"
-        android:layout_height="@dimen/x108">
+        android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
     <com.stratagile.qlink.view.MyItemView
@@ -92,12 +92,12 @@
         app:showNextmy="true"
         app:srcmy="@mipmap/icon_settings"
         app:textmy="@string/settings"
-        android:layout_height="@dimen/x108">
+        android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
 
     <View
         android:id="@+id/testView"
-        android:layout_width="@dimen/x80"
-        android:layout_height="@dimen/x80"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
 </LinearLayout>

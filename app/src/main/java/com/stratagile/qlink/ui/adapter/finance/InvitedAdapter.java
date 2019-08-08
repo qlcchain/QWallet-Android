@@ -9,9 +9,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.newwinq.Order;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.DateUtil;
+import com.stratagile.qlink.utils.UserUtils;
 
 import java.util.List;
 
@@ -23,11 +26,11 @@ public class InvitedAdapter extends BaseQuickAdapter<InviteList.Top5Bean, BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, InviteList.Top5Bean item) {
-        helper.setText(R.id.userName, item.getName());
+        helper.setText(R.id.userName, AccountUtil.setUserNickName(item.getName()));
         helper.setText(R.id.tvRank, item.getSequence() + "");
         helper.setText(R.id.invitePersons, mContext.getString(R.string.invited_) + " " + item.getTotalInvite() + " " +  mContext.getString(R.string.friends));
         Glide.with(mContext)
-                .load(API.BASE_URL + item.getHead())
+                .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.userAvatar));
     }

@@ -297,19 +297,6 @@ public interface HttpApi {
     Observable<EthWalletDetail> getEthAddressDetail(@Path("address") String address, @QueryMap Map<String, String> map);
 
 
-    /*************************************************/
-//    @POST(url_get_server_time)
-//    @Headers({"Content-Type: application/json","Accept: application/json"})
-//    Observable<ServerTime> getServerTime(@Body RequestBody map);
-//
-//    @POST(url_bet)
-//    @Headers({"Content-Type: application/json","Accept: application/json"})
-//    Observable<BetResult> betRace(@Body RequestBody map);
-//
-//    @POST(url_race_times)
-//    @Headers({"Content-Type: application/json","Accept: application/json"})
-//    Observable<RaceTimes> getRaceTimes(@Body RequestBody map);
-
     @POST(url_zs_free_num)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<FreeNum> zsFreeNum(@Body RequestBody map);

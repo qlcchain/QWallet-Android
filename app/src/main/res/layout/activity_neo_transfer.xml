@@ -63,7 +63,7 @@
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="@+id/tvNeoTokenName"
         android:layout_marginRight="@dimen/x40"
-        android:hint="Amount"
+        android:hint="@string/transfer_amount"
         android:background="@null"
         android:layout_height="wrap_content" />
 
@@ -78,7 +78,7 @@
 
     <TextView
         android:id="@+id/sendto"
-        android:text="Send to"
+        android:text="@string/send_to"
         android:textSize="16sp"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/tvNeoTokenName"
@@ -96,7 +96,7 @@
         android:layout_marginTop="@dimen/x10"
         android:textSize="16sp"
         android:textColor="@color/color_29282a"
-        android:hint="NEO Wallet Address"
+        android:hint="@string/neo_wallet_address"
         android:background="@null"
         android:layout_height="wrap_content" />
 
@@ -111,7 +111,7 @@
 
     <TextView
         android:id="@+id/Memo"
-        android:text="Memo"
+        android:text="@string/memo"
         android:textSize="16sp"
         android:textColor="@color/color_29282a_40"
         app:layout_constraintLeft_toLeftOf="@+id/tvNeoTokenName"
@@ -129,7 +129,7 @@
         android:layout_marginTop="@dimen/x10"
         android:textSize="16sp"
         android:textColor="@color/color_29282a"
-        android:hint="if any"
+        android:hint="@string/if_any"
         android:background="@null"
         android:layout_height="wrap_content" />
 

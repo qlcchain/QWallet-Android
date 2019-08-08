@@ -17,6 +17,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
@@ -93,6 +94,9 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
 
     @Override
     protected void initData() {
+        if (ConstantValue.currentUser == null) {
+            finish();
+        }
         setTitle(getString(R.string.person_info));
         EventBus.getDefault().register(this);
         if (!"".equals(ConstantValue.currentUser.getEmail())) {
@@ -113,7 +117,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         }
         if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
-                    .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                    .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                     .apply(AppConfig.getInstance().options)
                     .into(ivAvatar);
         } else {
@@ -134,16 +138,16 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
 //        }
         switch (ConstantValue.currentUser.getVstatus()) {
             case "NOT_UPLOAD":
-                tvVerification.setText("Unverified");
+                tvVerification.setText(getString(R.string.unverified));
                 break;
             case "UPLOADED":
-                tvVerification.setText("Under review");
+                tvVerification.setText(getString(R.string.under_review));
                 break;
             case "KYC_SUCCESS":
-                tvVerification.setText("Verified");
+                tvVerification.setText(getString(R.string.verified));
                 break;
             case "KYC_FAIL":
-                tvVerification.setText("Not approved");
+                tvVerification.setText(getString(R.string.not_approved));
                 break;
             default:
                 break;
@@ -162,16 +166,16 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
         switch (ConstantValue.currentUser.getVstatus()) {
             case "NOT_UPLOAD":
-                tvVerification.setText("Unverified");
+                tvVerification.setText(getString(R.string.unverified));
                 break;
             case "UPLOADED":
-                tvVerification.setText("Under review");
+                tvVerification.setText(getString(R.string.under_review));
                 break;
             case "KYC_SUCCESS":
-                tvVerification.setText("Verified");
+                tvVerification.setText(getString(R.string.verified));
                 break;
             case "KYC_FAIL":
-                tvVerification.setText("Not approved");
+                tvVerification.setText(getString(R.string.not_approved));
                 break;
             default:
                 break;
@@ -190,7 +194,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
     public void updateImg(UpdateAvatar updateAvatar) {
         if (!"".equals(ConstantValue.currentUser.getAvatar())) {
             Glide.with(this)
-                    .load(API.BASE_URL + ConstantValue.currentUser.getAvatar())
+                    .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getAvatar())
                     .apply(AppConfig.getInstance().options)
                     .into(ivAvatar);
         }
@@ -272,16 +276,16 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         if (requestCode == 0) {
             switch (ConstantValue.currentUser.getVstatus()) {
                 case "NOT_UPLOAD":
-                    tvVerification.setText("Unverified");
+                    tvVerification.setText(getString(R.string.unverified));
                     break;
                 case "UPLOADED":
-                    tvVerification.setText("Under review");
+                    tvVerification.setText(getString(R.string.under_review));
                     break;
                 case "KYC_SUCCESS":
-                    tvVerification.setText("Verified");
+                    tvVerification.setText(getString(R.string.verified));
                     break;
                 case "KYC_FAIL":
-                    tvVerification.setText("Not approved");
+                    tvVerification.setText(getString(R.string.not_approved));
                     break;
                 default:
                     break;

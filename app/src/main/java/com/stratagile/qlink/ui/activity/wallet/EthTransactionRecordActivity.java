@@ -387,7 +387,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                     default:
                         break;
                 }
-                QrEntity qrEntity = new QrEntity(tokenInfo.getWalletAddress(), tokenInfo.getTokenName() + " Receivable Address", tokenInfo.getTokenSymol(), type);
+                QrEntity qrEntity = new QrEntity(tokenInfo.getWalletAddress(), tokenInfo.getTokenName() + " " + getString(R.string.receivable_address), tokenInfo.getTokenSymol(), type);
                 Intent intent = new Intent(this, WalletQRCodeActivity.class);
                 intent.putExtra("qrentity", qrEntity);
                 startActivity(intent);

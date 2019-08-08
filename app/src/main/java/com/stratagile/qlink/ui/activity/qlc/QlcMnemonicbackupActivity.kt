@@ -54,7 +54,7 @@ class QlcMnemonicbackupActivity : BaseActivity(), QlcMnemonicbackupContract.View
     }
     override fun initData() {
         qlcAccount = intent.getParcelableExtra("wallet")
-        setTitle("Backup Mnemonic")
+        setTitle(getString(R.string.backup_mnemonic))
         val words = qlcAccount!!.getMnemonic().split(" ".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         for (i in words.indices) {
             mnemonicList.add(words[i])
@@ -85,12 +85,12 @@ class QlcMnemonicbackupActivity : BaseActivity(), QlcMnemonicbackupContract.View
         })
         btBackup.setOnClickListener {
             if (selectedMnemonicList.size != mnemonicList.size) {
-                ToastUtil.displayShortToast("please select all mnemonic")
+                ToastUtil.displayShortToast(getString(R.string.please_select_all_mnemonic))
                 return@setOnClickListener
             }
             for (i in mnemonicList.indices) {
                 if (mnemonicList[i] != selectedMnemonicList[i]) {
-                    ToastUtil.displayShortToast("Incorrect sequence")
+                    ToastUtil.displayShortToast(getString(R.string.incorrect_sequence))
                     return@setOnClickListener
                 }
             }
@@ -105,7 +105,7 @@ class QlcMnemonicbackupActivity : BaseActivity(), QlcMnemonicbackupContract.View
         val tvContent = view.findViewById<TextView>(R.id.tvContent)
         val imageView = view.findViewById<ImageView>(R.id.ivTitle)
         imageView.setImageDrawable(resources.getDrawable(R.mipmap.op_success))
-        tvContent.text = "backup success"
+        tvContent.text = getString(R.string.backup_success)
         val sweetAlertDialog = SweetAlertDialog(this)
         sweetAlertDialog.setView(view)
         sweetAlertDialog.show()

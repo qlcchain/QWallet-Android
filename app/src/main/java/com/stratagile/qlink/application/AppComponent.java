@@ -19,12 +19,10 @@ import android.content.Context;
 
 
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
-import com.stratagile.qlink.data.api.MainHttpAPIWrapper;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
-import retrofit2.Retrofit;
 
 /**
  * @author yuyh.
@@ -39,8 +37,6 @@ public interface AppComponent {
     Context getContext();
 
     HttpAPIWrapper getHttpApiWrapper();
-
-    MainHttpAPIWrapper getMainHttpAPIWrapper();
 
     void inject(AppConfig appConfig);
 

@@ -111,7 +111,7 @@ public class EthMnemonicbackupActivity extends BaseActivity implements EthMnemon
 
     @Override
     protected void initData() {
-        setTitle("Backup Mnemonic");
+        setTitle(getString(R.string.backup_mnemonic));
     }
 
     @Override
@@ -142,12 +142,12 @@ public class EthMnemonicbackupActivity extends BaseActivity implements EthMnemon
     @OnClick(R.id.btBackup)
     public void onViewClicked() {
         if (selectedMnemonicList.size() != mnemonicList.size()) {
-            ToastUtil.displayShortToast("please select all mnemonic");
+            ToastUtil.displayShortToast(getString(R.string.please_select_all_mnemonic));
             return;
         }
         for (int i = 0; i < mnemonicList.size(); i++) {
             if (!mnemonicList.get(i).equals(selectedMnemonicList.get(i))) {
-                ToastUtil.displayShortToast("Incorrect sequence");
+                ToastUtil.displayShortToast(getString(R.string.incorrect_sequence));
                 return;
             }
         }
@@ -162,7 +162,7 @@ public class EthMnemonicbackupActivity extends BaseActivity implements EthMnemon
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
-        tvContent.setText("backup success");
+        tvContent.setText(getString(R.string.backup_success));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();

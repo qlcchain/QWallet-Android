@@ -125,9 +125,9 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
         for (int i = 0; i < tokenInfoArrayList.size(); i++) {
             list.add(tokenInfoArrayList.get(i).getTokenSymol());
         }
-        setTitle("Send " + tokenInfo.getTokenSymol());
+        setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
         tvEosTokenName.setText(tokenInfo.getTokenSymol());
-        tvEosTokenValue.setText("Balance: " + tokenInfo.getEosTokenValue());
+        tvEosTokenValue.setText(getString(R.string.balance) + " " + tokenInfo.getEosTokenValue());
         eosAccount = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.AccountName.eq(tokenInfo.getWalletAddress())).unique();
 
         etEosTokenSendValue.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(getDot())});
@@ -200,11 +200,11 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                 break;
             case R.id.tvSend:
                 if (etEosTokenSendAddress.getText().toString().equals("")) {
-                    ToastUtil.displayShortToast("Wallet Address Error");
+                    ToastUtil.displayShortToast(getString(R.string.wallet_address_error));
                     return;
                 }
                 if (!EosUtil.isEosName(etEosTokenSendAddress.getText().toString().trim())) {
-                    ToastUtil.displayShortToast("Wallet Address Error");
+                    ToastUtil.displayShortToast(getString(R.string.wallet_address_error));
                     return;
                 }
                 if (etEosTokenSendAddress.getText().toString().toLowerCase().equals(tokenInfo.getWalletAddress().toLowerCase())) {
@@ -212,15 +212,15 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                     return;
                 }
                 if (etEosTokenSendValue.getText().toString().equals("")) {
-                    ToastUtil.displayShortToast("illegal value");
+                    ToastUtil.displayShortToast(getString(R.string.illegal_value));
                     return;
                 }
                 if (etEosTokenSendValue.getText().toString().equals("0")) {
-                    ToastUtil.displayShortToast("illegal value");
+                    ToastUtil.displayShortToast(getString(R.string.illegal_value));
                     return;
                 }
                 if (Double.parseDouble(etEosTokenSendValue.getText().toString()) > Double.parseDouble(tokenInfo.getEosTokenValue())) {
-                    ToastUtil.displayShortToast("Not enough " + tokenInfo.getTokenSymol());
+                    ToastUtil.displayShortToast(getString(R.string.not_enough) + " " + tokenInfo.getTokenSymol());
                     return;
                 }
                 String privateKey = "";
@@ -247,11 +247,11 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                     for (int i = 0; i < tokenInfoArrayList.size(); i++) {
                         if (tokenInfoArrayList.get(i).getTokenSymol().equals(content)) {
                             tokenInfo = tokenInfoArrayList.get(i);
-                            setTitle("Send " + tokenInfo.getTokenSymol());
+                            setTitle(getString(R.string.send) + " " + tokenInfo.getTokenSymol());
                             tvEosTokenName.setText(tokenInfo.getTokenSymol());
                             etEosTokenSendValue.setText("");
                             etEosTokenSendValue.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(getDot())});
-                            tvEosTokenValue.setText("Balance: " + tokenInfo.getEosTokenValue());
+                            tvEosTokenValue.setText(getString(R.string.balance) + " " + tokenInfo.getEosTokenValue());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(tvEosTokenName.getWidth(), (int) getResources().getDimension(R.dimen.x1));
                             viewLine.setLayoutParams(layoutParams);
                         }
@@ -302,9 +302,9 @@ public class EosTransferActivity extends BaseActivity implements EosTransferCont
                         }
                     });
                     if (txid == null || txid.equals("")) {
-                        ToastUtil.displayShortToast("transfer error");
+                        ToastUtil.displayShortToast(getString(R.string.transfer_error));
                     } else {
-                        ToastUtil.displayShortToast("transfer success");
+                        ToastUtil.displayShortToast(getString(R.string.transfer_success));
                         finish();
                     }
                 });

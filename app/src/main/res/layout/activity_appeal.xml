@@ -8,7 +8,7 @@
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
-        android:text="Reason"
+        android:text="@string/reason"
         android:layout_marginTop="@dimen/x30"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -31,7 +31,7 @@
             android:layout_height="match_parent">
             <EditText
                 android:id="@+id/etContent"
-                android:hint="For example, incorrect amount, no payment received, etc."
+                android:hint="@string/for_example_incorrect_amount_no_payment_received_etc"
                 android:layout_width="match_parent"
                 android:gravity="top"
                 android:textSize="14sp"
@@ -48,7 +48,7 @@
     </android.support.v7.widget.CardView>
     <TextView
         android:layout_width="wrap_content"
-        android:text="Upload (max:5M)"
+        android:text="@string/upload_max_5m"
         android:layout_marginTop="@dimen/x30"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -70,7 +70,7 @@
         android:layout_weight="1"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="Must be JPG,JPEG,PNG,or BMP format"
+        android:text="@string/must_be_jpg_jpeg_png_or_bmp_format"
         android:textColor="@color/color_d0021b"
         android:textSize="12sp"
         android:layout_marginBottom="@dimen/x30"
@@ -89,7 +89,7 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:text="Submit"
+        android:text="@string/submit"
         android:layout_marginTop="@dimen/x20"
         android:layout_marginBottom="@dimen/x20"
         android:layout_height="@dimen/x77" />

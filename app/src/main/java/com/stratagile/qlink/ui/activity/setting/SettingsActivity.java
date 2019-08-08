@@ -3,7 +3,6 @@ package com.stratagile.qlink.ui.activity.setting;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.socks.library.KLog;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
@@ -23,32 +21,24 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.MyAsset;
-import com.stratagile.qlink.entity.SettingBean;
-import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
-import com.stratagile.qlink.entity.eventbus.Set2Asset;
 import com.stratagile.qlink.guideview.Guide;
+import com.stratagile.qlink.ui.activity.main.SplashActivity;
 import com.stratagile.qlink.ui.activity.my.RetrievePasswordActivity;
 import com.stratagile.qlink.ui.activity.setting.component.DaggerSettingsComponent;
 import com.stratagile.qlink.ui.activity.setting.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.setting.module.SettingsModule;
 import com.stratagile.qlink.ui.activity.setting.presenter.SettingsPresenter;
-import com.stratagile.qlink.ui.activity.wallet.ChangeWalletActivity;
-import com.stratagile.qlink.ui.activity.wallet.TransactionRecordActivity;
-import com.stratagile.qlink.ui.activity.wallet.WalletDetailActivity;
 import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.VpnUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -79,6 +69,12 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     LinearLayout selectUnit;
     @BindView(R.id.tvVersion)
     TextView tvVersion;
+    @BindView(R.id.language)
+    LinearLayout language;
+    @BindView(R.id.debugMode)
+    Switch debugMode;
+    @BindView(R.id.llDebugMode)
+    LinearLayout llDebugMode;
     private Guide guide;
 
     @Override
@@ -92,8 +88,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        tvVersion.setText(VersionUtil.getAppVersionName(this));
-        tvVersion.setText(getString(R.string.version) +" "+ BuildConfig.VERSION_NAME +" ("+getString(R.string.Build) + " " +BuildConfig.VERSION_CODE+")");
+        tvVersion.setText(getString(R.string.version) + " " + BuildConfig.VERSION_NAME + " (" + getString(R.string.Build) + " " + BuildConfig.VERSION_CODE + ")");
         touchIdToUnlock.setChecked(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true));
         touchIdToUnlock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -105,128 +100,31 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
             llLoginOut.setVisibility(View.GONE);
             resetPassword.setVisibility(View.GONE);
         }
+        debugMode.setChecked(!SpUtil.getBoolean(this, ConstantValue.isMainNet, true));
+        debugMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SpUtil.putBoolean(SettingsActivity.this, ConstantValue.isMainNet, !b);
+                Intent intent = new Intent(SettingsActivity.this, SplashActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(0);
+            }
+        });
+        tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                llDebugMode.setVisibility(View.VISIBLE);
+                return true;
+            }
+        });
     }
 
     @Override
     protected void initData() {
         setTitle(R.string.settings);
         settingsAdapter = new SettingsAdapter(new ArrayList<>());
-//        ArrayList<SettingBean> settingBeanArrayList = new ArrayList<>();
-//        Wallet wallet = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().get(SpUtil.getInt(this, ConstantValue.currentWallet, 0));
-//        settingBeanArrayList.add(new SettingBean("icon_wallet", getString(R.string.Wallet_Details), wallet.getAddress(), 0));
-//        settingBeanArrayList.add(new SettingBean("icon_switch", getString(R.string.Switch_Wallet), AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size() + getString(R.string.Wallets_available2), 0));
-////        settingBeanArrayList.add(new SettingBean("icon_history", "Wallet history Records", "Registrations, Sharing, Transactions", 0));
-//        settingBeanArrayList.add(new SettingBean("icon_registered", getString(R.string.My_Registered_Assets), getString(R.string.WiFi_Assets) + getWiFiCount(getasseList()) + "  " + getString(R.string.VPN_Assets) + getVPNCount(getasseList()), 0));
-//        if (isSupportFingerPrint()) {
-//            SettingBean fingerPrintUnLock = new SettingBean("icon_fingerprint", getString(R.string.Fingerprint_to_unlock), "", 1);
-//            fingerPrintUnLock.setFingerprintUnLock(SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true));
-//            if (SpUtil.getBoolean(this, ConstantValue.fingerprintUnLock, true)) {
-//                fingerPrintUnLock.setDesc("");
-//            } else {
-//                fingerPrintUnLock.setDesc("");
-//            }
-//            fingerPrintUnLock.setOnStr("");
-//            fingerPrintUnLock.setOffStr("");
-//            settingBeanArrayList.add(fingerPrintUnLock);
-//        }
-//        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
-//            SettingBean switchNet = new SettingBean("icon_cut", getString(R.string.Switch_Net), "", 1);
-//            switchNet.setFingerprintUnLock(true);
-//            switchNet.setOnStr(getString(R.string.MainNet));
-//            switchNet.setOffStr(getString(R.string.TestNet));
-//            settingBeanArrayList.add(switchNet);
-//
-//        } else {
-//            SettingBean switchNet = new SettingBean("icon_cut", getString(R.string.Switch_Net), "", 1);
-//            switchNet.setFingerprintUnLock(false);
-//            switchNet.setOnStr(getString(R.string.MainNet));
-//            switchNet.setOffStr(getString(R.string.TestNet));
-//            settingBeanArrayList.add(switchNet);
-//        }
-//        String selectLanguage = SpUtil.getString(AppConfig.getInstance(), ConstantValue.selectLanguage, "");
-//        String defaultLanguage = Locale.getDefault().getLanguage();
-//        if ("".equals(selectLanguage)) {
-//            switch (defaultLanguage) {
-//                case "tr"://土耳其语
-//                    selectLanguage = "Türkçe";
-//                    break;
-//                default:
-//                    selectLanguage = "English";
-//                    break;
-//            }
-//        } else {
-//            switch (selectLanguage) {
-//                case "Turkish"://土耳其语
-//                    selectLanguage = "Türkçe";
-//                    break;
-//                default:
-//                    selectLanguage = "English";
-//                    break;
-//            }
-//        }
-//        settingBeanArrayList.add(new SettingBean("icon_language", getString(R.string.Language), selectLanguage, 0));
-//        settingBeanArrayList.add(new SettingBean("icon_website", getString(R.string.website), "https://winq.net", 2));
-//        settingBeanArrayList.add(new SettingBean("icon_version", getString(R.string.Version), getString(R.string.Version) + " " + VersionUtil.getAppVersionName(this), 2));
-////        settingBeanArrayList.add(new SettingBean("icon_disclaimer", "Disclaimer", "My government...", 2));
-//        settingsAdapter.setNewData(settingBeanArrayList);
-//        settingsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                switch (((SettingsAdapter) adapter).getItem(position).getIcon()) {
-//                    case "icon_wallet":
-//                        Intent intent = new Intent(SettingsActivity.this, WalletDetailActivity.class);
-//                        intent.putExtra("fromType", "test");
-//                        startActivityForResult(intent, 0);
-//                        break;
-//                    case "icon_switch":
-//                        Intent in = new Intent(SettingsActivity.this, ChangeWalletActivity.class);
-//                        in.putExtra("fromType", "test");
-//                        startActivityForResult(in, 0);
-//                        break;
-//                    case "icon_history":
-//                        startActivity(new Intent(SettingsActivity.this, TransactionRecordActivity.class));
-//                        break;
-//                    case "icon_registered":
-//                        EventBus.getDefault().post(new Set2Asset());
-//                        finish();
-//                        break;
-//                    case "icon_fingerprint":
-//                        break;
-//                    case "icon_website":
-//                        Intent intent1 = new Intent();
-//                        intent1.setAction("android.intent.action.VIEW");
-//                        Uri content_url1 = Uri.parse("https://winq.net");
-//                        intent1.setData(content_url1);
-//                        startActivity(intent1);
-//                        break;
-//                    case "icon_language":
-//                        startActivity(new Intent(SettingsActivity.this, SelectLanguageActivityActivity.class));
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        });
-//        settingsAdapter.setOnCheckChangeListener(new SettingsAdapter.OnCheckChangeListener() {
-//            @Override
-//            public void onCheck(boolean isCheck, int position, String icon) {
-//                if ("icon_fingerprint".equals(icon)) {
-//                    SpUtil.putBoolean(AppConfig.getInstance(), ConstantValue.fingerprintUnLock, isCheck);
-//                } else if ("icon_cut".equals(icon)) {
-//                    SpUtil.putBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, isCheck);
-//                    EventBus.getDefault().post(new ChangeWalletNeedRefesh());
-//                    if (SpUtil.getBoolean(SettingsActivity.this, ConstantValue.showTestFlag, true)) {
-//                        if (isCheck) {
-//                            view.setText("");
-//                            view.setBackground(getResources().getDrawable(R.drawable.navigation_shape));
-//                        } else {
-//                            view.setText(getString(R.string.testnet));
-//                            view.setBackgroundColor(getResources().getColor(R.color.color_f51818));
-//                        }
-//                    }
-//                }
-//            }
-//        });
 
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         for (UserAccount userAccount : userAccounts) {
@@ -236,35 +134,6 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         }
 
     }
-
-//    private void showGuideView() {
-//        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowSettingGuide, false)) {
-//            EventBus.getDefault().post(new ShowGuide(3));
-//            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowSettingGuide, true);
-//            GuideBuilder builder = new GuideBuilder();
-//            builder.setTargetView(recyclerView.getChildAt(0))
-//                    .setAlpha(150)
-//                    .setHighTargetCorner(15)
-//                    .setHighTargetPadding(0)
-//                    .setOverlayTarget(false)
-//                    .setOutsideTouchable(false);
-//            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-//                @Override
-//                public void onShown() {
-//                }
-//
-//                @Override
-//                public void onDismiss() {
-//
-//                }
-//            });
-//
-//            builder.addComponent(new WalletDetailComponent());
-//            guide = builder.createGuide();
-//            guide.setShouldCheckLocInWindow(false);
-//            guide.show(this);
-//        }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -390,7 +259,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         progressDialog.hide();
     }
 
-    @OnClick({R.id.llLoginOut, R.id.resetPassword, R.id.selectUnit})
+    @OnClick({R.id.llLoginOut, R.id.resetPassword, R.id.selectUnit, R.id.language})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llLoginOut:
@@ -414,6 +283,9 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                 break;
             case R.id.selectUnit:
                 startActivity(new Intent(this, CurrencyUnitActivity.class));
+                break;
+            case R.id.language:
+                startActivity(new Intent(this, SelectLanguageActivityActivity.class));
                 break;
             default:
                 break;

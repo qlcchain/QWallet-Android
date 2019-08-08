@@ -127,9 +127,9 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
             list!!.add(tokenInfoArrayList!![i].tokenSymol)
 
         }
-        setTitle("Send " + tokenInfo!!.tokenSymol)
+        setTitle(getString(R.string.send) + " " + tokenInfo!!.tokenSymol)
         tvQlcTokenName!!.text = tokenInfo!!.tokenSymol
-        tvQlcTokenValue!!.text = "Balance: " + BigDecimal.valueOf(tokenInfo!!.tokenValue).divide(BigDecimal.TEN.pow(tokenInfo!!.getTokenDecimals()), tokenInfo!!.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros().toPlainString() + ""
+        tvQlcTokenValue!!.text = getString(R.string.balance) + " " + BigDecimal.valueOf(tokenInfo!!.tokenValue).divide(BigDecimal.TEN.pow(tokenInfo!!.getTokenDecimals()), tokenInfo!!.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros().toPlainString() + ""
 
         etQlcTokenSendValue.filters = arrayOf(DecimalDigitsInputFilter(tokenInfo!!.tokenDecimals))
 
@@ -182,19 +182,19 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
         }
         tvSend.setOnClickListener {
             if ("" == etQlcTokenSendValue!!.text.toString().trim { it <= ' ' }) {
-                ToastUtil.displayShortToast("illegal value")
+                ToastUtil.displayShortToast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if (java.lang.Float.parseFloat(etQlcTokenSendValue!!.text.toString()) <= 0) {
-                ToastUtil.displayShortToast("illegal value")
+                ToastUtil.displayShortToast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if ("" == etQlcTokenSendAddress!!.text.toString().trim { it <= ' ' }) {
-                ToastUtil.displayShortToast("please enter Qlc wallet address")
+                ToastUtil.displayShortToast(getString(R.string.please_enter_qlc_wallet_address))
                 return@setOnClickListener
             }
             if (!AccountMng.isValidAddress(etQlcTokenSendAddress!!.text.toString().trim { it <= ' ' })) {
-                ToastUtil.displayShortToast("please enter Qlc wallet address")
+                ToastUtil.displayShortToast(getString(R.string.please_enter_qlc_wallet_address))
                 return@setOnClickListener
             }
             if (tokenInfo!!.walletAddress == etQlcTokenSendAddress!!.text.toString()) {
@@ -374,11 +374,11 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                     for (i in tokenInfoArrayList!!.indices) {
                         if (tokenInfoArrayList!![i].tokenSymol == content) {
                             tokenInfo = tokenInfoArrayList!![i]
-                            setTitle("Send " + tokenInfo!!.tokenSymol)
+                            setTitle(getString(R.string.send) + " " + tokenInfo!!.tokenSymol)
                             tvQlcTokenName!!.text = tokenInfo!!.tokenSymol
                             etQlcTokenSendValue.filters = arrayOf(DecimalDigitsInputFilter(tokenInfo!!.tokenDecimals))
                             etQlcTokenSendValue!!.setText("")
-                            tvQlcTokenValue!!.text = "Balance: " + BigDecimal.valueOf(tokenInfo!!.tokenValue).divide(BigDecimal.TEN.pow(tokenInfo!!.getTokenDecimals()), tokenInfo!!.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros().toPlainString() + ""
+                            tvQlcTokenValue!!.text = getString(R.string.balance) + " " + BigDecimal.valueOf(tokenInfo!!.tokenValue).divide(BigDecimal.TEN.pow(tokenInfo!!.getTokenDecimals()), tokenInfo!!.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros().toPlainString() + ""
                             val layoutParams = LinearLayout.LayoutParams(tvQlcTokenName!!.width, resources.getDimension(R.dimen.x1).toInt())
                             viewLine!!.layoutParams = layoutParams
                         }

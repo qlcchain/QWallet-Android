@@ -48,7 +48,7 @@ import javax.inject.Inject;
 class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
     override fun sendUsdtSuccess(txid: String) {
         closeProgressDialog()
-        toast("success")
+        toast(getString(R.string.success))
         setResult(Activity.RESULT_OK)
         finish()
     }
@@ -57,15 +57,15 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         if (ethWalletInfo.data.eth != null && !"false".equals(ethWalletInfo.data.eth.balance.toString()) && !"-1".equals(ethWalletInfo.data.eth.balance.toString())) {
             ethCount = ethWalletInfo.data.eth.balance.toString().toDouble()
             if (gasEth.toDouble() > ethCount) {
-                toast("Not enough eth")
+                toast(getString(R.string.no_enough_eth))
             }
         } else {
-            toast("Not enough eth")
+            toast(getString(R.string.no_enough_eth))
         }
         ethWalletInfo.data.tokens.forEach {
             if ("USDT".equals(it.tokenInfo.symbol)) {
                 usdtCount = it.balance / Math.pow(10.0, it.tokenInfo.decimals.toDouble())
-                tvUsdtBalance.text = "Balance: $usdtCount USDT"
+                tvUsdtBalance.text = getString(R.string.balance) + ": $usdtCount USDT"
                 return@forEach
             }
         }
@@ -115,11 +115,12 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
     }
 
     override fun initData() {
-        title.text = "Send USDT"
+        title.text = getString(R.string.send_usdt)
         llOpen.setOnClickListener {
             toggleCost()
         }
-        etEthTokenSendMemo.setText("BUY QGAS( " + intent.getStringExtra("orderNumber") + " )")
+        tvUsdtBalance.text = getString(R.string.balance) + ": -/- USDT"
+        etEthTokenSendMemo.setText(getString(R.string.buy_qgas) + "( " + intent.getStringExtra("orderNumber") + " )")
         mPresenter.getEthPrice()
         tvReceiveAddress.text = intent.getStringExtra("receiveAddress")
         tvAmountUsdt.text = intent.getStringExtra("usdt")
@@ -179,11 +180,11 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         }
         tvSend.setOnClickListener {
             if (usdtAmount > usdtCount) {
-                toast("Not enough usdt")
+                toast(getString(R.string.no_enough_usdt))
                 return@setOnClickListener
             }
             if (gasEth.toDouble() > ethCount) {
-                toast("Not enough eth")
+                toast(getString(R.string.no_enough_usdt))
                 return@setOnClickListener
             }
             showConfirmSendUsdtDialog()

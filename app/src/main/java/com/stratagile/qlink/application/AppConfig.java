@@ -160,6 +160,8 @@ public class AppConfig extends MultiDexApplication {
         initDbUpdate();
         initResumeListener();
         initMiPush();
+        setMode();
+        setLanguage(false);
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
         updateNotificationChannels();
@@ -169,6 +171,14 @@ public class AppConfig extends MultiDexApplication {
         KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
 //        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
+    }
+
+    private void setMode() {
+        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
+            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+        } else {
+            ConstantValue.qlcNode = "http://47.103.40.20:19735";
+        }
     }
 
     private void updateNotificationChannels() {
@@ -310,14 +320,12 @@ public class AppConfig extends MultiDexApplication {
         // 获取应用内语言
         final Configuration configuration = resources.getConfiguration();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-//        configuration.locale = Locale.CHINA;
-        configuration.locale = Locale.CHINA;
-        //configuration.setLayoutDirection(Locale.CHINA);
-        Locale.setDefault(Locale.CHINA);
-//        if (SpUtil.getInt(this, ConstantValue.Language, 0) == 0) {
-//        } else {
-//            configuration.locale = Locale.CHINA;
-//        }
+        if (SpUtil.getInt(this, ConstantValue.Language, 0) == 0) {
+            configuration.locale = Locale.ENGLISH;
+        } else {
+            KLog.i("设置为中文");
+            configuration.locale = Locale.CHINESE;
+        }
         getResources().updateConfiguration(configuration, displayMetrics);
         if (isUpdate) {
             Intent intent = new Intent(this, MainActivity.class);

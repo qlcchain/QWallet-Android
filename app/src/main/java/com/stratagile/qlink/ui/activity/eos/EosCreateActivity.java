@@ -113,7 +113,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
 
     @Override
     protected void initData() {
-        setTitle("Register EOS Account");
+        setTitle(getString(R.string.register_eos_account));
         ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().queryBuilder().where(EthWalletDao.Properties.IsLook.eq(false)).list();
         List<EosAccount> eosAccounts = AppConfig.getInstance().getDaoSession().getEosAccountDao().queryBuilder().where(EosAccountDao.Properties.IsCreating.eq(true)).list();
         if (eosAccounts.size() != 0) {
@@ -200,7 +200,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
     public void transferEthSuccess(String hash) {
         closeProgressDialog();
         if ("".equals(hash)) {
-            ToastUtil.displayShortToast("transfer error");
+            ToastUtil.displayShortToast(getString(R.string.transfer_error));
         } else {
             transferHash = hash;
             regsiterEos();
@@ -219,19 +219,19 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
     @Override
     public void accountInfoBack(EosAccountInfo eosAccountInfo, int flag) {
         closeProgressDialog();
-        if ("".equals(eosAccountInfo.getData().getData().getCreate_timestamp())) {
+        if (eosAccountInfo.getData().getErrno() != 0 || "".equals(eosAccountInfo.getData().getData().getCreate_timestamp())) {
             if (flag == 0) {
                 currentSelectEthWallet = -1;
                 switchEthWallet();
             } else if (flag == 1) {
                 ivQRCode.setVisibility(View.VISIBLE);
-                tvControllerQrcode.setText("Hide QR code");
+                tvControllerQrcode.setText(getString(R.string.hide_qr_code));
                 generateQrCode();
             }
         } else {
             eosAccount.setAccountName("");
             etEosAccountName.setText("");
-            ToastUtil.displayShortToast("EOS Account exist");
+            ToastUtil.displayShortToast(getString(R.string.eos_account_exist));
         }
     }
 
@@ -290,7 +290,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
         switch (view.getId()) {
             case R.id.ll_controllerQrCode:
                 if (!EosUtil.isEosName(etEosAccountName.getText().toString().trim())) {
-                    ToastUtil.displayShortToast("Inavalid Account name");
+                    ToastUtil.displayShortToast(getString(R.string.innavalid_account_name));
                     return;
                 }
                 if (ivQRCode.getVisibility() == View.GONE) {
@@ -299,14 +299,14 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
                     getEosAccountInfo(1);
                 } else {
                     ivQRCode.setVisibility(View.GONE);
-                    tvControllerQrcode.setText("Open QR code");
+                    tvControllerQrcode.setText(getString(R.string.open_qr_code));
                 }
                 break;
             case R.id.tvRegister:
                 if (EosUtil.isEosName(etEosAccountName.getText().toString().trim())) {
                     eosAccount.setAccountName(etEosAccountName.getText().toString().trim());
                     if (eosNeedInfo == null) {
-                        ToastUtil.displayShortToast("please wait");
+                        ToastUtil.displayShortToast(getString(R.string.please_wait));
                         Map<String, String> infoMap = new HashMap<>();
                         mPresenter.getEosNeedInfo(infoMap);
                         return;
@@ -314,7 +314,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
                     getEosAccountInfo(0);
                     showProgressDialog();
                 } else {
-                    ToastUtil.displayShortToast("Inavalid Account name");
+                    ToastUtil.displayShortToast(getString(R.string.innavalid_account_name));
                 }
                 break;
             default:
@@ -345,7 +345,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
         showProgressDialog();
         if (currentSelectEthWallet >= ethWallets.size() - 1) {
             closeProgressDialog();
-            ToastUtil.displayShortToast("There's not enough ETH without a wallet.");
+            ToastUtil.displayShortToast(getString(R.string.there_not_enough_eth_without_a_wallet));
             return;
         }
         currentSelectEthWallet++;
@@ -432,7 +432,7 @@ public class EosCreateActivity extends BaseActivity implements EosCreateContract
             out.close();
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(this, "com.stratagile.qlink.dapp.fileprovider", f);
+                uri = FileProvider.getUriForFile(this, "com.stratagile.qwallet.fileprovider", f);
             } else {
                 uri = Uri.fromFile(f);
             }
