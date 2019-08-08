@@ -52,6 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     public TextView view;
     public TextView title;
     public int mainColor = 0;
+    public int drawableBg = 0;
     /**
      * 公共的加载进度弹窗
      */
@@ -223,6 +224,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         relativeLayout_root = (RelativeLayout) findViewById(R.id.root_rl);
         view = findViewById(R.id.view);
         view.setBackgroundColor(getResources().getColor(mainColor));
+        if (drawableBg != 0) {
+            view.setBackgroundResource(drawableBg);
+        }
         if (mainColor == R.color.white) {
             toolbar.setBackgroundColor(getResources().getColor(mainColor));
             title.setTextColor(getResources().getColor(R.color.color_1F314A));
@@ -232,6 +236,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             }
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
+        }
+        if (drawableBg != 0) {
+            toolbar.setBackgroundResource(drawableBg);
         }
         view.setLayoutParams(new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) (UIUtils.getStatusBarHeight(this))));
 //        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {

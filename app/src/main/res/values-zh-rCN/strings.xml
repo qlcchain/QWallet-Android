@@ -854,4 +854,12 @@
     <string name="volume_settings_sell">卖出数量</string>
     <string name="amount_sell">卖出数量</string>
     <string name="account_payable">应收数量</string>
+    <string name="my_stakeings">我的抵押</string>
+    <string name="re_try">Re Try</string>
+    <string name="invoke_new_staking">Invoke New Staking</string>
+    <string name="new_stakeing">New Staking</string>
+    <string name="vote_mining_node">Voting/Mining Node</string>
+    <string name="confidant">Confidant</string>
+    <string name="token_mintage">Token Mintage</string>
+    <string name="enter_your_e_mail_address_used_to_purchase_your_confidant_station_click_on_send_confirmation_code_and_check_your_inbox_you_will_receive_a_security_code_that_will_prove_you_re_the_owner">Enter your E-mail address, used to purchase your Confidant Station. Click on \"Send Confirmation Code\" and check your Inbox. You will receive a security code that will prove you\'re the owner.</string>
 </resources>

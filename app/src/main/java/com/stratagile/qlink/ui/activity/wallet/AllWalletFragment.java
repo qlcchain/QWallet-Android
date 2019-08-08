@@ -56,6 +56,7 @@ import com.stratagile.qlink.ui.activity.eth.WalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
+import com.stratagile.qlink.ui.activity.stake.MyStakeActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AllWalletModule;
@@ -142,6 +143,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     LinearLayout llGetGas;
     @BindView(R.id.llResouces)
     LinearLayout llResouces;
+    @BindView(R.id.llStake)
+    LinearLayout llStake;
 
     private double walletAsset;
 
@@ -431,6 +434,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         tvWalletGas.setText("- -");
         llGetGas.setVisibility(View.GONE);
         llResouces.setVisibility(View.GONE);
+        llStake.setVisibility(View.GONE);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -532,6 +536,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 tvWalletName.setText(qlcAccount.getAccountName());
                 ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
                 llGetGas.setVisibility(View.GONE);
+                llStake.setVisibility(View.VISIBLE);
             }
         });
         AllWallet allWallet = new AllWallet();
@@ -712,7 +717,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         super.onDestroyView();
     }
 
-    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.ivClaim, R.id.tvClaim, R.id.tvWalletGas, R.id.llResouces})
+    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.ivClaim, R.id.tvClaim, R.id.tvWalletGas, R.id.llResouces, R.id.llStake})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvWalletName:
@@ -747,6 +752,9 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 break;
             case R.id.llResouces:
                 startActivity(new Intent(getActivity(), EosResourceManagementActivity.class).putExtra("eosAccount", currentSelectWallet.getEosAccount()));
+                break;
+            case R.id.llStake:
+                startActivity(new Intent(getActivity(), MyStakeActivity.class));
                 break;
             default:
                 break;

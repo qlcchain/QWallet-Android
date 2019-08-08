@@ -914,7 +914,6 @@ public class HttpAPIWrapper {
     public Observable<TradeOrderDetail> generateAppeal(RequestBody account, RequestBody token, RequestBody tradeOrderId, RequestBody reason, MultipartBody.Part photo1, MultipartBody.Part photo2, MultipartBody.Part photo3, MultipartBody.Part photo4) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
             return wrapper(mMainHttpAPI.generateAppeal(account, token, tradeOrderId, reason, photo1, photo2, photo3, photo4)).compose(SCHEDULERS_TRANSFORMER);
-//            return wrapper(mHttpAPI.generateAppeal(account, token, photo1)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.generateAppeal(account, token, tradeOrderId, reason, photo1, photo2, photo3, photo4)).compose(SCHEDULERS_TRANSFORMER);
         }
