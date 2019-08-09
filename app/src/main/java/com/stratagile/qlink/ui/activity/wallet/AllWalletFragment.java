@@ -56,6 +56,7 @@ import com.stratagile.qlink.ui.activity.eth.WalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
+import com.stratagile.qlink.ui.activity.stake.MyStakeActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AllWalletModule;
@@ -122,18 +123,18 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     TextView tvWalletAddress;
     @BindView(R.id.tvWalletAsset)
     TextView tvWalletAsset;
-    @BindView(R.id.tvWalletMoney)
-    TextView tvWalletMoney;
-    @BindView(R.id.tvWalletGas)
-    TextView tvWalletGas;
+//    @BindView(R.id.tvWalletMoney)
+//    TextView tvWalletMoney;
+//    @BindView(R.id.tvWalletGas)
+//    TextView tvWalletGas;
     @BindView(R.id.cardView)
     CardView cardView;
     @BindView(R.id.appBarLayout)
     AppBarLayout appBarLayout;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.ivClaim)
-    ImageView ivClaim;
+//    @BindView(R.id.ivClaim)
+//    ImageView ivClaim;
     @BindView(R.id.tvGasValue)
     TextView tvGasValue;
     @BindView(R.id.tvClaim)
@@ -142,6 +143,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     LinearLayout llGetGas;
     @BindView(R.id.llResouces)
     LinearLayout llResouces;
+    @BindView(R.id.llStake)
+    LinearLayout llStake;
 
     private double walletAsset;
 
@@ -358,7 +361,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     @Override
     public void getWinqGasBack(Balance balance) {
-        tvWalletGas.setText(BigDecimal.valueOf(balance.getData().getQLC()).setScale(8, ROUND_HALF_UP).toPlainString() + "");
+//        tvWalletGas.setText(BigDecimal.valueOf(balance.getData().getQLC()).setScale(8, ROUND_HALF_UP).toPlainString() + "");
         viewModel.balanceMutableLiveData.postValue(balance);
     }
 
@@ -413,7 +416,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         for (AllWallet allWallet : allWalletMoney.keySet()) {
             allMoney += allWalletMoney.get(allWallet);
         }
-        tvWalletMoney.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + BigDecimal.valueOf(allMoney).setScale(2, ROUND_HALF_UP).toPlainString());
+//        tvWalletMoney.setText(ConstantValue.currencyBean.getCurrencyImg() + " " + BigDecimal.valueOf(allMoney).setScale(2, ROUND_HALF_UP).toPlainString());
     }
 
 
@@ -428,9 +431,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         hasSelectedWallet = false;
         tokensAdapter.setNewData(new ArrayList<>());
         tvWalletAsset.setText("- -");
-        tvWalletGas.setText("- -");
+//        tvWalletGas.setText("- -");
         llGetGas.setVisibility(View.GONE);
         llResouces.setVisibility(View.GONE);
+        llStake.setVisibility(View.GONE);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -532,6 +536,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 tvWalletName.setText(qlcAccount.getAccountName());
                 ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
                 llGetGas.setVisibility(View.GONE);
+                llStake.setVisibility(View.GONE);
             }
         });
         AllWallet allWallet = new AllWallet();
@@ -712,7 +717,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         super.onDestroyView();
     }
 
-    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.ivClaim, R.id.tvClaim, R.id.tvWalletGas, R.id.llResouces})
+    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.tvClaim, R.id.llResouces, R.id.llStake})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvWalletName:
@@ -736,17 +741,20 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     startActivityForResult(new Intent(getActivity(), WalletDetailActivity.class).putExtra("qlcwallet", currentSelectWallet.getQlcAccount()).putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal()), 1);
                 }
                 break;
-            case R.id.ivClaim:
-                queryWinqGas();
-                break;
+//            case R.id.ivClaim:
+//                queryWinqGas();
+//                break;
             case R.id.tvClaim:
                 getGas();
                 break;
-            case R.id.tvWalletGas:
-                queryWinqGas();
-                break;
+//            case R.id.tvWalletGas:
+//                queryWinqGas();
+//                break;
             case R.id.llResouces:
                 startActivity(new Intent(getActivity(), EosResourceManagementActivity.class).putExtra("eosAccount", currentSelectWallet.getEosAccount()));
+                break;
+            case R.id.llStake:
+                startActivity(new Intent(getActivity(), MyStakeActivity.class));
                 break;
             default:
                 break;
