@@ -123,7 +123,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     TextView tvWalletAddress;
     @BindView(R.id.tvWalletAsset)
     TextView tvWalletAsset;
-//    @BindView(R.id.tvWalletMoney)
+    //    @BindView(R.id.tvWalletMoney)
 //    TextView tvWalletMoney;
 //    @BindView(R.id.tvWalletGas)
 //    TextView tvWalletGas;
@@ -133,7 +133,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     AppBarLayout appBarLayout;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
-//    @BindView(R.id.ivClaim)
+    //    @BindView(R.id.ivClaim)
 //    ImageView ivClaim;
     @BindView(R.id.tvGasValue)
     TextView tvGasValue;
@@ -582,7 +582,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     JSONObject jsonObject = rpc.accountsPending(jsonArray);
 //                    KLog.i(jsonObject.toJSONString());
                     JSONObject jsonObject1 = JSONObject.parseObject(jsonObject.get("result").toString());
-                    KLog.i(jsonObject1.toJSONString());
+//                    KLog.i(jsonObject1.toJSONString());
                     if (jsonObject1.get(qlcAccount.getAddress()) == null) {
                         return;
                     }
@@ -604,28 +604,19 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                                 }
                             }
                         });
-                } else{
+                    } else {
+                        isPending = false;
+                    }
+                } catch (Exception e) {
                     isPending = false;
+                    e.printStackTrace();
                 }
-            } catch(
-            QlcException e)
-
-            {
-                isPending = false;
-                e.printStackTrace();
-            } catch(
-            IOException e)
-
-            {
-                isPending = false;
-                e.printStackTrace();
             }
-        }
-    }).
+        }).
 
-    start();
+                start();
 
-}
+    }
 
     private void getEosToken(EosAccount eosAccount) {
         Map<String, Object> infoMap = new HashMap<>();

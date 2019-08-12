@@ -12,28 +12,6 @@ checkstyle {
     showViolations true
 }
 
-//def openvpn3SwigFiles = new File(buildDir, "generated/source/ovpn3swig/ovpn3")
-
-//def getCurrentFlavor() {
-//    String task = getGradle().getStartParameter().getTaskRequests().toString()
-//    Matcher matcher = Pattern.compile("(assemble|generate)\\w*(Release|Debug)").matcher(task)
-//    if (matcher.find()) return matcher.group(2).toLowerCase() else {
-//        println "Warning: No match found for $task"
-//        return "debug"
-//    }
-//}
-
-//task("generateOpenVPN3Swig", type: Exec) {
-//    doFirst {
-//        mkdir openvpn3SwigFiles
-//    }
-//    commandLine "swig", "-outdir", openvpn3SwigFiles, "-outcurrentdir", "-c++", "-java", "-package", "net.qlink.ovpn3",
-//            "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
-//            "-o", "${openvpn3SwigFiles}/ovpncli_wrap.cxx", "-oh", "${openvpn3SwigFiles}/ovpncli_wrap.h",
-//            "src/main/cpp/openvpn3/javacli/ovpncli.i"
-//
-//}
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -42,15 +20,9 @@ android {
         targetSdkVersion 28
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.2.1"
+        versionName "2.2.2"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        externalNativeBuild {
-//            cmake {
-//                arguments '-DANDROID_TOOLCHAIN=clang',
-//                        '-DANDROID_STL=c++_static'
-//            }
-//        }
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
         }
@@ -62,10 +34,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildTypes {
         debug {
             minifyEnabled false
             buildConfigField "boolean", "LOG_DEBUG", "true"
+//            signingConfig signingConfigs.release
             jniDebuggable true
         }
         release {
@@ -88,19 +62,10 @@ android {
     configurations {
         all*.exclude group: 'com.android.support', module: 'support-v13'
     }
-//    externalNativeBuild {
-//        cmake {
-//            path "src/main/cpp/CMakeLists.txt"
-//        }
-//    }
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
-//            assets.srcDirs = ['src/main/assets', 'build/ovpnassets']
         }
-//        normal {
-//            java.srcDirs = ["src/ovpn3/java/", openvpn3SwigFiles]
-//        }
 
         noovpn3 {
         }
@@ -115,6 +80,7 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').buildDir, "intermediates/bundles/${getCurrentFlavor()}/jni")
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
+
     greendao {
         schemaVersion 66//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
@@ -129,11 +95,6 @@ android {
             buildConfigField 'boolean', 'openvpn3', 'false'
         }
 
-//        normal {
-//            dimension "implementation"
-//            buildConfigField 'boolean', 'openvpn3', 'true'
-//
-//        }
     }
     buildToolsVersion '28.0.3'
 }
@@ -143,17 +104,6 @@ repositories {
     flatDir {
         dirs 'libs' //就是你放aar的目录地址
     }
-}
-
-if (project.hasProperty('keystoreFile') &&
-        project.hasProperty('keystorePassword') &&
-        project.hasProperty('keystoreAliasPassword')) {
-    android.signingConfigs.release.storeFile = file(keystoreFile)
-    android.signingConfigs.release.storePassword = keystorePassword
-    android.signingConfigs.release.keyPassword = keystoreAliasPassword
-    android.signingConfigs.release.keyAlias = keystoreAlias
-} else {
-    android.buildTypes.release.signingConfig = null
 }
 
 // Ensure native build is run before assets, so assets are ready to be merged into the apk
