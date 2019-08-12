@@ -9,12 +9,12 @@
         android:orientation="vertical">
         <ImageView
             android:layout_width="58dp"
-            android:src="@mipmap/icon_token_mintage"
+            android:src="@mipmap/token_mintage"
             android:layout_marginTop="23dp"
             android:layout_height="58dp" />
         <TextView
-            android:layout_width="180dp"
-            android:layout_height="19dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="FOR Token Mintage"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="8dp"

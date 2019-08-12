@@ -1,11 +1,14 @@
 package com.stratagile.qlink.ui.activity.stake
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.LinearLayout
 import com.stratagile.qlink.R
 
@@ -15,6 +18,7 @@ import com.stratagile.qlink.ui.activity.stake.component.DaggerNewStakeComponent
 import com.stratagile.qlink.ui.activity.stake.contract.NewStakeContract
 import com.stratagile.qlink.ui.activity.stake.module.NewStakeModule
 import com.stratagile.qlink.ui.activity.stake.presenter.NewStakePresenter
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.UIUtils
 import kotlinx.android.synthetic.main.activity_new_stake.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -127,6 +131,18 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
 
     override fun closeProgressDialog() {
         progressDialog.hide()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.stake_explain, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.stakeExplain) {
+            startActivity(Intent(this, StakeExplainActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

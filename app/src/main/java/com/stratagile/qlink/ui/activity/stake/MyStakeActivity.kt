@@ -39,6 +39,9 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         newStaking.setOnClickListener {
             startActivity(Intent(this, NewStakeActivity::class.java))
         }
+        tvStakeVol.setOnClickListener {
+            startActivity(Intent(this, StakeDetailActivity::class.java))
+        }
     }
 
     override fun setupActivityComponent() {

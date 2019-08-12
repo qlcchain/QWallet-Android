@@ -1429,4 +1429,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="confidant">Confidant</string>
     <string name="token_mintage">Token Mintage</string>
     <string name="enter_your_e_mail_address_used_to_purchase_your_confidant_station_click_on_send_confirmation_code_and_check_your_inbox_you_will_receive_a_security_code_that_will_prove_you_re_the_owner">Enter your E-mail address, used to purchase your Confidant Station. Click on \"Send Confirmation Code\" and check your Inbox. You will receive a security code that will prove you\'re the owner.</string>
+    <string name="about_staking_types">About Staking Types</string>
 </resources>

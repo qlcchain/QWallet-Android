@@ -248,7 +248,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
 //        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.dip2px(getResources().getDimension(R.dimen.dp_69), this) - (UIUtils.getStatusBarHeight(this)));
 //        toolbar.setLayoutParams(rlp);
         toolbar.setTitle("");
-        relativeLayout_root.setLayoutParams(new FitRelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) ((UIUtils.getStatusBarHeight(this)) + getResources().getDimension(R.dimen.x84))));
+        relativeLayout_root.setLayoutParams(new FitRelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) ((UIUtils.getStatusBarHeight(this)) + UIUtils.dip2px(42f, this))));
         if (toolbar != null && !needFront) {
             setSupportActionBar(toolbar);
         }

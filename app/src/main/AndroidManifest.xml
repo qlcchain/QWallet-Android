@@ -225,7 +225,11 @@
         <activity android:name=".ui.activity.otc.OtcChooseWalletActivity" />
         <activity android:name=".ui.activity.otc.UsdtPayActivity" />
         <activity android:name=".ui.activity.stake.MyStakeActivity" />
-        <activity android:name=".ui.activity.stake.NewStakeActivity" />
+        <activity android:name=".ui.activity.stake.NewStakeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            />
+        <activity android:name=".ui.activity.stake.StakeDetailActivity" />
+        <activity android:name=".ui.activity.stake.StakeExplainActivity" />
 
 
         <meta-data
