@@ -3,6 +3,7 @@ package com.stratagile.qlink.data.api;
 
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
@@ -469,6 +470,10 @@ public interface MainHttpApi {
     @POST(MainAPI.url_user_userinfo)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<UserInfo> getUserInfo(@Body RequestBody map);
+
+    @POST(MainAPI.url_app_version_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<AppVersion> getAppLastVersion(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

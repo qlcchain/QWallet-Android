@@ -48,6 +48,7 @@ import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
@@ -292,6 +293,20 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        }
     }
 
+    @Override
+    public void setLastVersion(AppVersion appVersion) {
+        String[] version = appVersion.getData().getVersion_number().split("#");
+        int lastVersion = Integer.valueOf(version[0]);
+        int ignoreVersion = SpUtil.getInt(this, ConstantValue.ignoreVersion, 310);
+        int currentVersion = VersionUtil.getAppVersionCode(this);
+        KLog.i("currentVersion= " + currentVersion);
+        if (lastVersion > currentVersion) {
+            if (lastVersion > ignoreVersion) {
+                KotlinConvertJavaUtils.INSTANCE.showNewVersionDialog(this, lastVersion);
+            }
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetFreeNumBack(FreeCount freeCount) {
 //        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
@@ -347,31 +362,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 }
             }
         });
-//        qlinkcom.getP2PConnnectStatus(new P2PCallBack() {
-//            @Override
-//            public void onResult(String result) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        SpUtil.putString(MainActivity.this, ConstantValue.P2PID, result);
-//                        EventBus.getDefault().post(new P2pBack());
-//                        String p2pId = result;
-//                        String saveResult = FileUtil.saveP2pId2Local(result);
-//                        KLog.i("上次的p2pId" + saveResult);
-//                        if ("".equals(saveResult)) {
-//
-//                        } else {
-//                            showp2pIdChangeDialog(result, saveResult);
-//                        }
-//                        if (SpUtil.getString(MainActivity.this, ConstantValue.myAvatarPath, "").equals("")) {
-//                            Map<String, String> infoMap = new HashMap<>();
-//                            infoMap.put("p2pId", p2pId);
-//                            mPresenter.userAvatar(infoMap);
-//                        }
-//                    }
-//                });
-//            }
-//        });
         LogUtil.addLog(SystemUtil.getDeviceBrand() + "  " + SystemUtil.getSystemModel() + "   " + SystemUtil.getSystemVersion() + "   " + VersionUtil.getAppVersionName(this), getClass().getSimpleName());
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -452,6 +442,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             }
         }
         button21.toggle();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mPresenter.getLastAppVersion();
+            }
+        }).start();
 
 //        ivWallet.post(new Runnable() {
 //            @Override

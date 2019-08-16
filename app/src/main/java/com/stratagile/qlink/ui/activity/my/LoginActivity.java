@@ -197,7 +197,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         userAccount.setPubKey(register.getData());
         userAccount.setAccount(register.getAccount());
         userAccount.setAvatar(register.getHead());
-        userAccount.setInviteCode(register.getId());
+        userAccount.setInviteCode(register.getNumber());
         userAccount.setEmail(register.getEmail());
         userAccount.setPhone(register.getPhone());
         userAccount.setUserName(register.getNickname());

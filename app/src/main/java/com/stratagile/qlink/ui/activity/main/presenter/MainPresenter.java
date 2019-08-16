@@ -13,6 +13,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.GoogleResult;
@@ -327,22 +328,20 @@ public class MainPresenter implements MainContract.MainContractPresenter {
     }
 
     public void zsFreeNum(Map map) {
-        httpAPIWrapper.zsFreeNum(map)
-                .subscribe(new HttpObserver<FreeNum>() {
-                    @Override
-                    public void onNext(FreeNum baseBack) {
-                        mView.onGetFreeNumBack(baseBack.getData().getFreeNum());
-                    }
-                });
+
+    }
+
+    public void getLastAppVersion() {
+        httpAPIWrapper.getAppLastVersion(new HashMap()).subscribe(new HttpObserver<AppVersion>() {
+            @Override
+            public void onNext(AppVersion mainAddress) {
+                mView.setLastVersion(mainAddress);
+                onComplete();
+            }
+        });
     }
 
     public void getShowAct() {
-        httpAPIWrapper.getShowAct(new HashMap<String, Object>())
-                .subscribe(new HttpObserver<ShowAct>() {
-                    @Override
-                    public void onNext(ShowAct baseBack) {
-                        mView.onGetShowActBack(baseBack.getData().getIsShow());
-                    }
-                });
+
     }
 }

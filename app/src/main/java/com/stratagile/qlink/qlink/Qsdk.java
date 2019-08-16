@@ -134,95 +134,95 @@ public class Qsdk {
      * @param message      发送过来的消息内容
      * @param friendNumber 好友的位置
      */
-    public void handlerFriendMessage(String message, String friendNumber) {
-        Gson gson = new Gson();
-        try {
-            QlinkEntity qlinkEntity = gson.fromJson(message, QlinkEntity.class);
-            switch (qlinkEntity.getType()) {
-//                case ConstantValue.checkConnectReq:
-//                    QlinkUtil.parseMap2StringAndSend(friendNumber, ConstantValue.checkConnectRsp, new HashMap());
+//    public void handlerFriendMessage(String message, String friendNumber) {
+//        Gson gson = new Gson();
+//        try {
+//            QlinkEntity qlinkEntity = gson.fromJson(message, QlinkEntity.class);
+//            switch (qlinkEntity.getType()) {
+////                case ConstantValue.checkConnectReq:
+////                    QlinkUtil.parseMap2StringAndSend(friendNumber, ConstantValue.checkConnectRsp, new HashMap());
+////                    break;
+//                case ConstantValue.checkConnectRsp:
+//                    CheckConnectRsp checkConnectRsp = gson.fromJson(qlinkEntity.getData().toString(), CheckConnectRsp.class);
+//                    EventBus.getDefault().post(checkConnectRsp);
 //                    break;
-                case ConstantValue.checkConnectRsp:
-                    CheckConnectRsp checkConnectRsp = gson.fromJson(qlinkEntity.getData().toString(), CheckConnectRsp.class);
-                    EventBus.getDefault().post(checkConnectRsp);
-                    break;
-
-                case ConstantValue.sendVpnFileRsp:
-                    QlinkEntity1 qlinkEntity1 = gson.fromJson(message, QlinkEntity1.class);
-                    ServerVpnSendComplete vpnSendEnd = new ServerVpnSendComplete();
-                    KLog.i("vpnServerFileRsp0:"+qlinkEntity.getData());
-                    VpnServerFileRsp vpnServerFileRsp = gson.fromJson(qlinkEntity1.getData(), VpnServerFileRsp.class);
-                    KLog.i("vpnServerFileRsp1:"+vpnServerFileRsp);
-                    vpnSendEnd.setData(vpnServerFileRsp);
-                    EventBus.getDefault().post(vpnSendEnd);
-                    break;
-
-                case ConstantValue.vpnUserPassAndPrivateKeyReq:
-                    VpnUserPassAndPrivateKeyReq vpnUserPassAndPrivateKeyReq = gson.fromJson(qlinkEntity.getData().toString(), VpnUserPassAndPrivateKeyReq.class);
-                    handleVpnUserAndPasswordAndPrivateKeyReq(friendNumber, vpnUserPassAndPrivateKeyReq);
-                    break;
-
-                case ConstantValue.vpnUserAndPasswordReq:
-                    VpnUserAndPasswordReq vpnUserAndPasswordReq = gson.fromJson(qlinkEntity.getData().toString(), VpnUserAndPasswordReq.class);
-                    handleVpnUserAndPasswordReq(friendNumber, vpnUserAndPasswordReq);
-                    break;
-                case ConstantValue.vpnUserAndPasswordRsp:
-                    VpnUserAndPasswordRsp vpnUserAndPasswordRsp = gson.fromJson(qlinkEntity.getData().toString(), VpnUserAndPasswordRsp.class);
-                    handleVpnUserAndPasswordRsp(friendNumber, vpnUserAndPasswordRsp);
-                    break;
-
-                case ConstantValue.vpnPrivateKeyReq:
-                    VpnPrivateKeyReq vpnPrivateKeyReq = gson.fromJson(qlinkEntity.getData().toString(), VpnPrivateKeyReq.class);
-                    handleVpnPrivateKeyReq(friendNumber, vpnPrivateKeyReq);
-                    break;
-                case ConstantValue.vpnPrivateKeyRsp:
-                    VpnPrivateKeyRsp vpnPrivateKeyRsp = gson.fromJson(qlinkEntity.getData().toString(), VpnPrivateKeyRsp.class);
-                    handleVpnPrivateKeyRsp(friendNumber, vpnPrivateKeyRsp);
-                    break;
-
-                case ConstantValue.joinGroupChatReq:
-                    InviteToGroupChatReq inviteToGroupChatReq = gson.fromJson(qlinkEntity.getData().toString(), InviteToGroupChatReq.class);
-                    handleInviteToGroupChatReq(friendNumber, inviteToGroupChatReq);
-                    break;
-                case ConstantValue.joinGroupChatRsp:
-                    InviteToGroupChatRsp inviteToGroupChatRsp = gson.fromJson(qlinkEntity.getData().toString(), InviteToGroupChatRsp.class);
-                    EventBus.getDefault().post(new JoinGroupChatSuccess(inviteToGroupChatRsp.getGroupNum()));
-                    break;
-
-                case ConstantValue.recordSaveReq:
-                    RecordSaveReq recordSaveReq = gson.fromJson(qlinkEntity.getData().toString(), RecordSaveReq.class);
-                    handleRecordSaveReq(friendNumber, recordSaveReq);
-                    break;
-                case ConstantValue.recordSaveRsp:
-                    RecordSaveRsp recordSaveRsp = gson.fromJson(qlinkEntity.getData().toString(), RecordSaveRsp.class);
-                    handleRecordSaveRsp(friendNumber, recordSaveRsp);
-                    break;
-
-                case ConstantValue.sendVpnFileListRsp:
-                    handlerSendVpnFileListRsp(friendNumber, gson.fromJson(message, SendVpnFileList.class));
-                    break;
-                case ConstantValue.sendVpnFileNewRsp:
-                    handlerSendVpnFileNewRsp(friendNumber, gson.fromJson(message, SendVpnFileNew.class));
-//                    handlerSendVpnFileNewRsp(friendNumber, JSONObject.parseObject(qlinkEntity.getData().toString(), SendVpnFileNew.class));
-                    break;
-
-                case ConstantValue.defaultRsp:
-                    //处理低版本没有这个type，的返回，可以在这里做默认处理。。
-//                    DefaultRsp defaultRsp = gson.fromJson(qlinkEntity.getData(), DefaultRsp.class);
-                    break;
-                default:
-                    KLog.i("没有匹配上。。。");
-                    Map<String, Object> infoMap = new HashMap<>();
-                    infoMap.put("type", qlinkEntity.getType());
-                    QlinkUtil.parseMap2StringAndSend(friendNumber, ConstantValue.defaultRsp, infoMap);
-                    break;
-            }
-        } catch (Exception e) {
-            KLog.i("数据解析错误");
-            e.printStackTrace();
-        }
-
-    }
+//
+//                case ConstantValue.sendVpnFileRsp:
+//                    QlinkEntity1 qlinkEntity1 = gson.fromJson(message, QlinkEntity1.class);
+//                    ServerVpnSendComplete vpnSendEnd = new ServerVpnSendComplete();
+//                    KLog.i("vpnServerFileRsp0:"+qlinkEntity.getData());
+//                    VpnServerFileRsp vpnServerFileRsp = gson.fromJson(qlinkEntity1.getData(), VpnServerFileRsp.class);
+//                    KLog.i("vpnServerFileRsp1:"+vpnServerFileRsp);
+//                    vpnSendEnd.setData(vpnServerFileRsp);
+//                    EventBus.getDefault().post(vpnSendEnd);
+//                    break;
+//
+//                case ConstantValue.vpnUserPassAndPrivateKeyReq:
+//                    VpnUserPassAndPrivateKeyReq vpnUserPassAndPrivateKeyReq = gson.fromJson(qlinkEntity.getData().toString(), VpnUserPassAndPrivateKeyReq.class);
+//                    handleVpnUserAndPasswordAndPrivateKeyReq(friendNumber, vpnUserPassAndPrivateKeyReq);
+//                    break;
+//
+//                case ConstantValue.vpnUserAndPasswordReq:
+//                    VpnUserAndPasswordReq vpnUserAndPasswordReq = gson.fromJson(qlinkEntity.getData().toString(), VpnUserAndPasswordReq.class);
+//                    handleVpnUserAndPasswordReq(friendNumber, vpnUserAndPasswordReq);
+//                    break;
+//                case ConstantValue.vpnUserAndPasswordRsp:
+//                    VpnUserAndPasswordRsp vpnUserAndPasswordRsp = gson.fromJson(qlinkEntity.getData().toString(), VpnUserAndPasswordRsp.class);
+//                    handleVpnUserAndPasswordRsp(friendNumber, vpnUserAndPasswordRsp);
+//                    break;
+//
+//                case ConstantValue.vpnPrivateKeyReq:
+//                    VpnPrivateKeyReq vpnPrivateKeyReq = gson.fromJson(qlinkEntity.getData().toString(), VpnPrivateKeyReq.class);
+//                    handleVpnPrivateKeyReq(friendNumber, vpnPrivateKeyReq);
+//                    break;
+//                case ConstantValue.vpnPrivateKeyRsp:
+//                    VpnPrivateKeyRsp vpnPrivateKeyRsp = gson.fromJson(qlinkEntity.getData().toString(), VpnPrivateKeyRsp.class);
+//                    handleVpnPrivateKeyRsp(friendNumber, vpnPrivateKeyRsp);
+//                    break;
+//
+//                case ConstantValue.joinGroupChatReq:
+//                    InviteToGroupChatReq inviteToGroupChatReq = gson.fromJson(qlinkEntity.getData().toString(), InviteToGroupChatReq.class);
+//                    handleInviteToGroupChatReq(friendNumber, inviteToGroupChatReq);
+//                    break;
+//                case ConstantValue.joinGroupChatRsp:
+//                    InviteToGroupChatRsp inviteToGroupChatRsp = gson.fromJson(qlinkEntity.getData().toString(), InviteToGroupChatRsp.class);
+//                    EventBus.getDefault().post(new JoinGroupChatSuccess(inviteToGroupChatRsp.getGroupNum()));
+//                    break;
+//
+//                case ConstantValue.recordSaveReq:
+//                    RecordSaveReq recordSaveReq = gson.fromJson(qlinkEntity.getData().toString(), RecordSaveReq.class);
+//                    handleRecordSaveReq(friendNumber, recordSaveReq);
+//                    break;
+//                case ConstantValue.recordSaveRsp:
+//                    RecordSaveRsp recordSaveRsp = gson.fromJson(qlinkEntity.getData().toString(), RecordSaveRsp.class);
+//                    handleRecordSaveRsp(friendNumber, recordSaveRsp);
+//                    break;
+//
+//                case ConstantValue.sendVpnFileListRsp:
+//                    handlerSendVpnFileListRsp(friendNumber, gson.fromJson(message, SendVpnFileList.class));
+//                    break;
+//                case ConstantValue.sendVpnFileNewRsp:
+//                    handlerSendVpnFileNewRsp(friendNumber, gson.fromJson(message, SendVpnFileNew.class));
+////                    handlerSendVpnFileNewRsp(friendNumber, JSONObject.parseObject(qlinkEntity.getData().toString(), SendVpnFileNew.class));
+//                    break;
+//
+//                case ConstantValue.defaultRsp:
+//                    //处理低版本没有这个type，的返回，可以在这里做默认处理。。
+////                    DefaultRsp defaultRsp = gson.fromJson(qlinkEntity.getData(), DefaultRsp.class);
+//                    break;
+//                default:
+//                    KLog.i("没有匹配上。。。");
+//                    Map<String, Object> infoMap = new HashMap<>();
+//                    infoMap.put("type", qlinkEntity.getType());
+//                    QlinkUtil.parseMap2StringAndSend(friendNumber, ConstantValue.defaultRsp, infoMap);
+//                    break;
+//            }
+//        } catch (Exception e) {
+//            KLog.i("数据解析错误");
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     /**
      * 将该好友添加进对应的资产的群组中

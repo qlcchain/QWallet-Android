@@ -149,7 +149,7 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
             userAccount.setPubKey(register.getData());
             userAccount.setAccount(register.getAccount());
             userAccount.setAvatar(register.getHead());
-            userAccount.setInviteCode(register.getId());
+            userAccount.setInviteCode(register.getNumber());
             userAccount.setPassword(MD5Util.getStringMD5(etPassword.getText().toString().trim()));
             userAccount.setEmail(register.getEmail());
             userAccount.setPhone(register.getPhone());

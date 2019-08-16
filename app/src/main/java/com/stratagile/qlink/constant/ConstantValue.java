@@ -255,4 +255,6 @@ public class ConstantValue {
 
     public static final String orderTypeBuy = "BUY";
     public static final String orderTypeSell = "SELL";
+
+    public static final String ignoreVersion = "ignoreVersion";
 }

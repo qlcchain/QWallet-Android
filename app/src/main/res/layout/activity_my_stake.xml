@@ -77,7 +77,7 @@
                     android:textColor="@color/white"
                     android:textSize="12sp" />
                 <TextView
-                    android:id="@+id/tvDayTime"
+                    android:id="@+id/tvEarnQgas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="360"

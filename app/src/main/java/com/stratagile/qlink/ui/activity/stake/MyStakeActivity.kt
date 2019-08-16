@@ -42,6 +42,9 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         tvStakeVol.setOnClickListener {
             startActivity(Intent(this, StakeDetailActivity::class.java))
         }
+        tvEarnQgas.setOnClickListener {
+            startActivity(Intent(this, QlcPayActivity::class.java))
+        }
     }
 
     override fun setupActivityComponent() {

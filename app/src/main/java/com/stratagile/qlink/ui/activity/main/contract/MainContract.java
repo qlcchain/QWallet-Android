@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.main.contract;
 
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
@@ -36,6 +37,8 @@ public interface MainContract {
         void onGetFreeNumBack(int num);
 
         void onGetShowActBack(int isShow);
+
+        void setLastVersion(AppVersion appVersion);
     }
 
     interface MainContractPresenter extends BasePresenter {

@@ -7,6 +7,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
@@ -908,6 +909,14 @@ public class HttpAPIWrapper {
             return wrapper(mMainHttpAPI.getUserInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getUserInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<AppVersion> getAppLastVersion(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getAppLastVersion(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getAppLastVersion(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

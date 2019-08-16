@@ -4,6 +4,7 @@ package com.stratagile.qlink.data.api;
 import com.github.mikephil.charting.data.BaseEntry;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
@@ -93,6 +94,7 @@ import static com.stratagile.qlink.data.api.API.get_neo_wallet_info;
 import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.ulr_user_sign_up;
+import static com.stratagile.qlink.data.api.API.url_app_version_info;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
@@ -540,6 +542,10 @@ public interface HttpApi {
     @POST(url_user_userinfo)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<UserInfo> getUserInfo(@Body RequestBody map);
+
+    @POST(url_app_version_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<AppVersion> getAppLastVersion(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart

@@ -442,10 +442,10 @@ public class qlinkcom {
      * @param friendNumber 好友编号
      */
     public void CallFriendMessageProcess(String message, String friendNumber) {
-        KLog.i("好友传过来的消息为:" + message);
-        LogUtil.addLog("收到的消息为：" + message, getClass().getSimpleName());
-//        KLog.i("好友的编号为:" + friendNumber);
-        Qsdk.getInstance().handlerFriendMessage(message, friendNumber);
+//        KLog.i("好友传过来的消息为:" + message);
+//        LogUtil.addLog("收到的消息为：" + message, getClass().getSimpleName());
+////        KLog.i("好友的编号为:" + friendNumber);
+//        Qsdk.getInstance().handlerFriendMessage(message, friendNumber);
     }
 
     public void ShowNativeLog(String message) {

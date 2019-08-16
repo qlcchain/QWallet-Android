@@ -17,6 +17,13 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import com.stratagile.qlink.R
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
+import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.fragment_confidant.*
+import java.util.concurrent.TimeUnit
 
 /**
  * @author hzp
@@ -37,6 +44,12 @@ class ConfidantFragment : BaseFragment(), ConfidantContract.View {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        tvVerification.setOnClickListener {
+            startVCodeCountDown()
+        }
+    }
 
 
     override fun setupFragmentComponent() {
@@ -46,6 +59,28 @@ class ConfidantFragment : BaseFragment(), ConfidantContract.View {
                 .confidantModule(ConfidantModule(this))
                 .build()
                 .inject(this)
+    }
+
+    private var mdDisposable: Disposable? = null
+
+    private fun startVCodeCountDown() {
+        tvVerification.setEnabled(false)
+        tvVerification.setBackground(resources.getDrawable(R.drawable.vcode_count_down_bg))
+        mdDisposable = Flowable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { aLong -> tvVerification.setText("" + (60 - aLong!!) + "") }
+                .doOnComplete {
+                    //倒计时完毕置为可点击状态
+                    tvVerification.setEnabled(true)
+                    tvVerification.setText(getString(R.string.get_the_code))
+                    tvVerification.setBackgroundColor(resources.getColor(R.color.white))
+                }
+                .subscribe()
+    }
+
+    override fun onDestroy() {
+        mdDisposable?.dispose()
+        super.onDestroy()
     }
 
     override fun setPresenter(presenter: ConfidantContract.ConfidantContractPresenter) {

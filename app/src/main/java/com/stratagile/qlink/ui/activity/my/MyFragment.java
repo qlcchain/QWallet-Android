@@ -252,14 +252,15 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     }
 
     @Override
-    public void setUsrInfo(UserInfo vcodeLogin) {
+    public void setUsrInfo(UserInfo usrInfo) {
         KLog.i("更新呢用户信息");
-        ConstantValue.currentUser.setHoldingPhoto(vcodeLogin.getData().getHoldingPhoto());
-        ConstantValue.currentUser.setFacePhoto(vcodeLogin.getData().getFacePhoto());
-        ConstantValue.currentUser.setVstatus(vcodeLogin.getData().getVStatus());
-        ConstantValue.currentUser.setAvatar(vcodeLogin.getData().getHead());
-        ConstantValue.currentUser.setUserName(vcodeLogin.getData().getNickname());
-        ConstantValue.currentUser.setUserId(vcodeLogin.getData().getId());
+        ConstantValue.currentUser.setHoldingPhoto(usrInfo.getData().getHoldingPhoto());
+        ConstantValue.currentUser.setFacePhoto(usrInfo.getData().getFacePhoto());
+        ConstantValue.currentUser.setVstatus(usrInfo.getData().getVStatus());
+        ConstantValue.currentUser.setInviteCode(usrInfo.getData().getNumber());
+        ConstantValue.currentUser.setAvatar(usrInfo.getData().getHead());
+        ConstantValue.currentUser.setUserName(usrInfo.getData().getNickname());
+        ConstantValue.currentUser.setUserId(usrInfo.getData().getId());
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
     }
 

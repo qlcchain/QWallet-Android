@@ -230,6 +230,7 @@
             />
         <activity android:name=".ui.activity.stake.StakeDetailActivity" />
         <activity android:name=".ui.activity.stake.StakeExplainActivity" />
+        <activity android:name=".ui.activity.stake.QlcPayActivity" />
 
 
         <meta-data
