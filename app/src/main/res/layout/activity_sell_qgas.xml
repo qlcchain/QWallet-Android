@@ -183,6 +183,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/select_a_wallet_to_receive_token"
+                android:maxEms="12"
+                android:ellipsize="end"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
@@ -196,7 +198,7 @@
                 android:textColor="@color/color_29282a_40"
                 android:text="@string/input_wallet_address"
                 android:layout_marginTop="@dimen/x10"
-                android:maxEms="10"
+                android:maxEms="12"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
@@ -254,6 +256,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/select_a_wallet_to_send_out_token"
+                android:maxEms="15"
+                android:ellipsize="end"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"

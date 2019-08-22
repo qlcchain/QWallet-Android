@@ -54,6 +54,9 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
                 payTokenAmount = it.amount
                 payTokenInfo = it
             }
+            if (it.asset_symbol.equals("GAS")) {
+                gasTokenInfo = it
+            }
         }
     }
 
@@ -61,6 +64,7 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
     internal lateinit var mPresenter: OtcNeoChainPayPresenter
     var neoWalletInfo: NeoWalletInfo? = null
     var payTokenInfo : NeoWalletInfo.DataBean.BalanceBean? = null
+    var gasTokenInfo : NeoWalletInfo.DataBean.BalanceBean? = null
     var payTokenAmount = 0.toDouble()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +91,10 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
         }
         tvSend.setOnClickListener {
             if (neoWallet == null) {
+                return@setOnClickListener
+            }
+            if (gasTokenInfo == null || gasTokenInfo!!.amount < 0.00000001) {
+                toast(getString(R.string.no_enough) + " GAS")
                 return@setOnClickListener
             }
             if (neoWalletInfo == null || intent.getStringExtra("usdt").toDouble() > payTokenAmount) {

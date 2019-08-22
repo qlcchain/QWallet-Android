@@ -86,7 +86,7 @@
                 android:id="@+id/tvPayToken"
                 android:layout_width="wrap_content"
                 android:layout_toRightOf="@+id/tvAmountUsdt"
-                android:text="USDT"
+                android:text="-/-"
                 android:layout_marginBottom="@dimen/x8"
                 android:layout_alignBottom="@+id/tvAmountUsdt"
                 android:layout_marginLeft="@dimen/x12"

@@ -185,6 +185,8 @@
                 android:text="@string/select_a_wallet_to_receive_token"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
+                android:maxEms="12"
+                android:ellipsize="end"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:id="@+id/tvReceiveWalletName"

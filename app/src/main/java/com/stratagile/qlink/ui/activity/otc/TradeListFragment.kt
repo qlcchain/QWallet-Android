@@ -55,7 +55,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
 
     @Inject
     lateinit internal var mPresenter: TradeListPresenter
-    lateinit internal var viewModel: MainViewModel
+    var viewModel: MainViewModel? = null
     lateinit var entrustOrderListAdapter: EntrustOrderListAdapter
 
     var currentOrderType = ConstantValue.orderTypeSell
@@ -76,7 +76,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         recyclerView.setAdapter(entrustOrderListAdapter)
         currentOrderType = ConstantValue.orderTypeSell
         viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-        viewModel.currentEntrustOrderType.observe(this, Observer<String> { s ->
+        viewModel!!.currentEntrustOrderType.observe(this, Observer<String> { s ->
             if (isVisibleToUser) {
                 currentPage = 0
                 KLog.i("------>>>>" + arguments!!["tradeToken"])
@@ -101,7 +101,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
             }
         })
 
-        viewModel.timeStampLiveData.observe(this, Observer {
+        viewModel!!.timeStampLiveData.observe(this, Observer {
             if (isVisibleToUser) {
                 currentPage = 0
                 KLog.i("------>>>>" + arguments!!["tradeToken"])
@@ -113,7 +113,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
 
         entrustOrderListAdapter.setOnLoadMoreListener({ getOrderList() }, recyclerView)
 
-        viewModel.currentUserAccount.observe(this, Observer<UserAccount> {
+        viewModel!!.currentUserAccount.observe(this, Observer<UserAccount> {
             if (isVisibleToUser) {
                 KLog.i("------>>>>" + arguments!!["tradeToken"])
                 currentPage = 0
@@ -130,6 +130,17 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
                 getOrderList()
             }
         })
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser  && viewModel != null && !currentOrderType.equals(viewModel!!.currentEntrustOrderType.value)) {
+            currentOrderType = viewModel!!.currentEntrustOrderType.value!!
+            refreshLayout.isRefreshing = true
+            currentPage = 0
+            entrustOrderListAdapter.setNewData(ArrayList())
+            getOrderList()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -150,7 +161,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         map.put("size", "5")
         var pairsId = arrayListOf<String>()
         var pairsIds = ""
-        viewModel.pairsLiveData.value!!.forEach {
+        viewModel!!.pairsLiveData.value!!.forEach {
             if (it.tradeToken.equals(arguments!!["tradeToken"]) && it.isSelect) {
                 pairsId.add(it.id)
                 pairsIds += it.id + ","
@@ -184,6 +195,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
     override fun getEutrustOrderError() {
         entrustOrderListAdapter.loadMoreEnd(true)
     }
+
 
     override fun setupFragmentComponent() {
         DaggerTradeListComponent
