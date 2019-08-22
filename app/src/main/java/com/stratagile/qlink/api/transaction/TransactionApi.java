@@ -6,6 +6,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.Assets;
+import com.stratagile.qlink.data.NeoCallBack;
 import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.UTXOS;
 import com.stratagile.qlink.db.TransactionRecord;
@@ -295,7 +296,7 @@ public class TransactionApi {
                             KLog.i("onSuccesse");
                             KLog.i(baseBack);
                             if (baseBack.getData().isTransferResult()) {
-                                sendCallBack.onSuccess(tx.getHash().toHexString());
+                                sendCallBack.onSuccess(tx.getHash().toReverseHexString());
                             } else {
                                 sendCallBack.onSuccess("error");
                             }
@@ -433,80 +434,80 @@ public class TransactionApi {
             return;
         }
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, "", isSuccess -> {
-            KLog.i("开始调用sendRow");
-            KLog.i(isSuccess);
-            Transaction tx = getTxid(isSuccess);
-            KLog.i(tx.getHash());
-            map.put("tx", isSuccess);
-            AppConfig.getInstance().getApplicationComponent().getHttpApiWrapper().vpnRegisterV2(map)
-                    .subscribe(new Observer<RegisterVpn>() {
-                        Disposable disposable;
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            disposable = d;
-                        }
+        neoNodeRPC.sendNEP5Token(assets, wallet, tokenContractHash, fromAddress, toAddress, amount, "", new NeoCallBack() {
+            @Override
+            public void NeoTranscationResult(String isSuccess) {
+                KLog.i("开始调用sendRow");
+                KLog.i(isSuccess);
+                Transaction tx = TransactionApi.this.getTxid(isSuccess);
+                KLog.i(tx.getHash());
+                map.put("tx", isSuccess);
+                AppConfig.getInstance().getApplicationComponent().getHttpApiWrapper().vpnRegisterV2(map)
+                        .subscribe(new Observer<RegisterVpn>() {
+                            Disposable disposable;
 
-                        @Override
-                        public void onNext(RegisterVpn registerWiFi) {
-                            KLog.i("onSuccesse");
-                            TransactionRecord recordSave = new TransactionRecord();
-                            recordSave.setTxid(registerWiFi.getRecordId());
-                            recordSave.setExChangeId(registerWiFi.getRecordId());
-                            recordSave.setAssetName(map.get("vpnName") + "");
-                            recordSave.setTransactiomType(5);
-                            recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
-                            recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
-                            AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
-                            vpnEntity.setVpnName(registerWiFi.getVpnName());
-                            vpnEntity.setIsConnected(false);
-                            vpnEntity.setP2pId(registerWiFi.getP2pId());
-                            vpnEntity.setProfileLocalPath(registerWiFi.getProfileLocalPath());
-                            if(registerWiFi.getImgUrl() != null && !"".equals(registerWiFi.getImgUrl()))
-                            {
-                                vpnEntity.setAvatar(registerWiFi.getImgUrl());
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                disposable = d;
                             }
-                            if(ConstantValue.windowsVpnName.equals(registerWiFi.getVpnName()))
-                            {
-                                vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
-                                ConstantValue.windowsVpnName ="";
-                            }else{
-                                if(registerWiFi.getImgUrl() != null && !"".equals(registerWiFi.getImgUrl()))
-                                {
+
+                            @Override
+                            public void onNext(RegisterVpn registerWiFi) {
+                                KLog.i("onSuccesse");
+                                TransactionRecord recordSave = new TransactionRecord();
+                                recordSave.setTxid(registerWiFi.getRecordId());
+                                recordSave.setExChangeId(registerWiFi.getRecordId());
+                                recordSave.setAssetName(map.get("vpnName") + "");
+                                recordSave.setTransactiomType(5);
+                                recordSave.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                                recordSave.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+                                AppConfig.getInstance().getDaoSession().getTransactionRecordDao().insert(recordSave);
+                                vpnEntity.setVpnName(registerWiFi.getVpnName());
+                                vpnEntity.setIsConnected(false);
+                                vpnEntity.setP2pId(registerWiFi.getP2pId());
+                                vpnEntity.setProfileLocalPath(registerWiFi.getProfileLocalPath());
+                                if (registerWiFi.getImgUrl() != null && !"".equals(registerWiFi.getImgUrl())) {
                                     vpnEntity.setAvatar(registerWiFi.getImgUrl());
                                 }
-                             }
-                            vpnEntity.setCountry(registerWiFi.getCountry());
-                            vpnEntity.setAddress(registerWiFi.getAddress());
-                            vpnEntity.setRegisterQlc(registerWiFi.getRegisterQlc());
-                            vpnEntity.setAssetTranfer(registerWiFi.getQlc());
-                            vpnEntity.setIsInMainWallet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
-                            vpnEntity.setOnline(true);
-                            vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(),ConstantValue.isMainNet,false));
-                            if(vpnEntity.getP2pIdPc() == null  || "".equals(vpnEntity.getP2pIdPc()))
-                            {
-                                //String aa = "";
+                                if (ConstantValue.windowsVpnName.equals(registerWiFi.getVpnName())) {
+                                    vpnEntity.setAvatar(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvatarPath, ""));
+                                    ConstantValue.windowsVpnName = "";
+                                } else {
+                                    if (registerWiFi.getImgUrl() != null && !"".equals(registerWiFi.getImgUrl())) {
+                                        vpnEntity.setAvatar(registerWiFi.getImgUrl());
+                                    }
+                                }
+                                vpnEntity.setCountry(registerWiFi.getCountry());
+                                vpnEntity.setAddress(registerWiFi.getAddress());
+                                vpnEntity.setRegisterQlc(registerWiFi.getRegisterQlc());
+                                vpnEntity.setAssetTranfer(registerWiFi.getQlc());
+                                vpnEntity.setIsInMainWallet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+                                vpnEntity.setOnline(true);
+                                vpnEntity.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+                                if (vpnEntity.getP2pIdPc() == null || "".equals(vpnEntity.getP2pIdPc())) {
+                                    //String aa = "";
+                                }
+                                AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
+                                sendCallBack.onSuccess(registerWiFi.getRecordId());
+                                disposable.dispose();
                             }
-                            AppConfig.getInstance().getDaoSession().getVpnEntityDao().insert(vpnEntity);
-                            sendCallBack.onSuccess(registerWiFi.getRecordId());
-                            disposable.dispose();
-                        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            KLog.i("onError");
-                            e.printStackTrace();
-                            sendCallBack.onFailure();
-                            disposable.dispose();
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                KLog.i("onError");
+                                e.printStackTrace();
+                                sendCallBack.onFailure();
+                                disposable.dispose();
+                            }
 
-                        @Override
-                        public void onComplete() {
-                            KLog.i("onComplete");
-                            sendCallBack.onFailure();
-                            disposable.dispose();
-                        }
-                    });
+                            @Override
+                            public void onComplete() {
+                                KLog.i("onComplete");
+                                sendCallBack.onFailure();
+                                disposable.dispose();
+                            }
+                        });
+            }
         });
     }
 

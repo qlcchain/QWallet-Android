@@ -43,13 +43,13 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
 
     override fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo) {
         this.entrustOrderInfo = entrustOrderInfo
-        tvQgasAmount.text = entrustOrderInfo.order.totalAmount.toString() + " QGAS"
-        tvUnitPrice.text = BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).stripTrailingZeros().toPlainString() + " USDT"
+        tvQgasAmount.text = entrustOrderInfo.order.totalAmount.toString() + " " + entrustOrderInfo.order.tradeToken
+        tvUnitPrice.text = BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).stripTrailingZeros().toPlainString() + " " + entrustOrderInfo.order.payToken
         tvQgasVolume.text = BigDecimal.valueOf(entrustOrderInfo.order.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(entrustOrderInfo.order.getMaxAmount()).stripTrailingZeros().toPlainString() + " QGAS"
         if (entrustOrderInfo.order.type.equals(ConstantValue.orderTypeBuy)) {
-            tvOrderType.text = getString(R.string.buy_qgas)
-            tvDealQgasAmounnt.text = "+" + entrustOrderInfo.order.completeAmount.toString() + " QGAS"
-            tvReceiveAddressTip.text = getString(R.string.go_qlc_address_to_receive_qgas)
+            tvOrderType.text = getString(R.string.buy) + " " + entrustOrderInfo.order.tradeToken
+            tvDealQgasAmounnt.text = (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount - entrustOrderInfo.order.lockingAmount).toString() + " " + entrustOrderInfo.order.tradeToken
+            tvReceiveAddressTip.text = getString(R.string.receivable_address)
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.mainColor))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
             when (entrustOrderInfo.order.status) {
@@ -74,10 +74,10 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
                 }
             }
         } else {
-            tvOrderType.text = getString(R.string.sell_qgas)
+            tvOrderType.text = getString(R.string.sell) + " " + entrustOrderInfo.order.tradeToken
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
-            tvDealQgasAmounnt.text = "-" + entrustOrderInfo.order.completeAmount.toString() + " QGAS"
-            tvReceiveAddressTip.text = getString(R.string.erc20_address_to_receive_usdt)
+            tvDealQgasAmounnt.text = (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount - entrustOrderInfo.order.lockingAmount).toString() + " " + entrustOrderInfo.order.tradeToken
+            tvReceiveAddressTip.text = getString(R.string.receivable_address)
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.color_ff3669))
             when (entrustOrderInfo.order.status) {
                 "NORMAL" -> {
@@ -133,6 +133,9 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
     }
 
     override fun setTradeOrderList(tradeOrderList: TradeOrderList) {
+        if (tradeOrderList.orderList.size == 0) {
+            tvRecord.visibility = View.GONE
+        }
         entrustOrderTradeOrderListAdapter = EntrustOrderTradeOrderListAdapter(tradeOrderList.orderList)
         recyclerView.adapter = entrustOrderTradeOrderListAdapter
     }

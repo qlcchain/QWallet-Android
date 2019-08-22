@@ -1,16 +1,13 @@
 package com.stratagile.qlink.ui.activity.main;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,33 +15,36 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
-import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
-import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -55,13 +55,14 @@ import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
-import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
+import com.stratagile.qlink.entity.eventbus.StartFilter;
+import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.guideview.Component;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
@@ -72,25 +73,24 @@ import com.stratagile.qlink.guideview.compnonet.EnterVpnComponent;
 import com.stratagile.qlink.guideview.compnonet.EnterWalletComponent;
 import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.Qsdk;
-import com.stratagile.qlink.ui.activity.finance.MyProductActivity;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
-import com.stratagile.qlink.ui.activity.my.VerificationActivity;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
-import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.WalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
+import com.stratagile.qlink.ui.adapter.TradePairDecoration;
+import com.stratagile.qlink.ui.adapter.otc.TradePairAdapter;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
@@ -150,7 +150,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     ImageView ivAvater;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-//    @BindView(R.id.tv_free)
+    //    @BindView(R.id.tv_free)
 //    TextView tvFree;
     @BindView(R.id.iv_wallet)
     ImageView ivWallet;
@@ -178,6 +178,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     View xxx;
     @BindView(R.id.view_all_wallet)
     View viewAllWallet;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.recyclerViewTradePair)
+    RecyclerView recyclerViewTradePair;
+    @BindView(R.id.tvReset)
+    TextView tvReset;
+    @BindView(R.id.tvConfirm)
+    TextView tvConfirm;
+    @BindView(R.id.drawerlayout_side_tv)
+    LinearLayout drawerlayoutSideTv;
     private FirebaseAnalytics mFirebaseAnalytics;
     private MainViewModel viewModel;
 
@@ -192,7 +202,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     public static MainActivity mainActivity;
 
-//    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
+    //    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
     private LocationManager locationManager;
 
     private MyStatus myStatusFlag;
@@ -224,14 +234,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             }
         });
-        //AppEventsLogger logger = AppEventsLogger.newLogger(this);
-        //logger.logEvent("MainActivity");
+        recyclerViewTradePair.addItemDecoration(new TradePairDecoration(10));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showVpnGuide(ShowGuide showGuide) {
         if (showGuide.getNumber() == 3) {
 //            showGuideViewVpnFragment();
+        }
+    }
+
+    TradePairAdapter tradePairAdapter;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void startFilter(StartFilter startFilter) {
+        recyclerViewTradePair.setLayoutManager(new GridLayoutManager(this, 2));
+        ArrayList<TradePair.PairsListBean> arrayList = new ArrayList<>();
+        try {
+            for (int i = 0; i < viewModel.pairsLiveData.getValue().size(); i++) {
+                arrayList.add(viewModel.pairsLiveData.getValue().get(i).clone());
+            }
+            tradePairAdapter = new TradePairAdapter(arrayList);
+            recyclerViewTradePair.setAdapter(tradePairAdapter);
+            drawerLayout.openDrawer(GravityCompat.END);
+            tradePairAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    tradePairAdapter.getData().get(position).setSelect(!tradePairAdapter.getData().get(position).isSelect());
+                    tradePairAdapter.notifyItemChanged(position);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -345,7 +379,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         LocalWalletUtil.initGreenDaoFromLocal();
         mPresenter.getTox();
 //        getLocation();
-
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
@@ -454,13 +488,21 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 mPresenter.getLastAppVersion();
             }
         }).start();
+        viewModel.pairsLiveData.observe(this, new Observer<ArrayList<TradePair.PairsListBean>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<TradePair.PairsListBean> pairsListBeans) {
+                ArrayList<String> titles = new ArrayList<>();
+                for (int i = 0; i < viewModel.pairsLiveData.getValue().size(); i++) {
+                    if (!titles.contains(viewModel.pairsLiveData.getValue().get(i).getTradeToken()) && viewModel.pairsLiveData.getValue().get(i).isSelect()) {
+                        titles.add(viewModel.pairsLiveData.getValue().get(i).getTradeToken());
+                    }
+                }
+                if (titles.size() == 0) {
+                    titles.add(viewModel.pairsLiveData.getValue().get(0).getTradeToken());
+                }
 
-//        ivWallet.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                showGuideViewEnterWallet();
-//            }
-//        });
+            }
+        });
     }
 
     private void showp2pIdChangeDialog(String currentP2pId, String lastP2pId) {
@@ -685,6 +727,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
+            return;
+        }
         if (DoubleClickHelper.isDoubleClick()) {
             finish();
         } else {
@@ -855,7 +901,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     @SuppressLint("RestrictedApi")
-    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode})
+    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode, R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
@@ -864,13 +910,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-//                    if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
-//                        startActivity(new Intent(this, VerificationActivity.class));
-//                        return;
-//                    } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
-//                        ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
-//                        return;
-//                    }
+
                     Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
                     startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
@@ -924,6 +964,34 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 break;
             case R.id.ivQRCode:
                 startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
+                break;
+            case R.id.drawerlayout_side_tv:
+                break;
+            case R.id.tvReset:
+                for (int i = 0; i < tradePairAdapter.getData().size(); i++) {
+                    tradePairAdapter.getData().get(i).setSelect(false);
+                }
+                tradePairAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tvConfirm:
+                boolean hasSelectedTradePair = false;
+                ArrayList<TradePair.PairsListBean> pairsListBeans = new ArrayList<>();
+                for (int i = 0; i < tradePairAdapter.getData().size(); i++) {
+                    if (tradePairAdapter.getData().get(i).isSelect()) {
+                        hasSelectedTradePair = true;
+                        pairsListBeans.add(tradePairAdapter.getData().get(i));
+                    }
+                }
+                if (hasSelectedTradePair) {
+                    viewModel.pairsLiveData.postValue((ArrayList<TradePair.PairsListBean>) tradePairAdapter.getData());
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                    if (pairsListBeans.size() > 0) {
+                        String saveData = new Gson().toJson(pairsListBeans);
+                        FileUtil.savaData("/Qwallet/tradePair.json", saveData);
+                    }
+                 } else {
+                    ToastUtil.displayShortToast(getString(R.string.choose_at_least_one_trading_pair));
+                }
                 break;
             default:
                 break;

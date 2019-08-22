@@ -26,27 +26,33 @@ import butterknife.ButterKnife;
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.db.EosAccount
+import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.db.Wallet
 import com.stratagile.qlink.entity.AllWallet
+import com.stratagile.qlink.entity.otc.TradePair
 import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
-import com.stratagile.qlink.utils.MoneyValueFilter
-import com.stratagile.qlink.utils.PopWindowUtil
-import com.stratagile.qlink.utils.SpringAnimationUtil
-import com.stratagile.qlink.utils.UserUtils
+import com.stratagile.qlink.utils.*
+import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.activity_buy_qgas.*
 import kotlinx.android.synthetic.main.fragment_order_buy.*
+import kotlinx.android.synthetic.main.fragment_order_buy.buyingToken
+import kotlinx.android.synthetic.main.fragment_order_buy.buyingTokenPrice
 import kotlinx.android.synthetic.main.fragment_order_buy.etAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etMaxAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
-import kotlinx.android.synthetic.main.fragment_order_buy.llSelectQlcWallet
-import kotlinx.android.synthetic.main.fragment_order_buy.tvCreateWallet
+import kotlinx.android.synthetic.main.fragment_order_buy.ivReceiveChain
+import kotlinx.android.synthetic.main.fragment_order_buy.llBuyToken
+import kotlinx.android.synthetic.main.fragment_order_buy.llSellToken
+import kotlinx.android.synthetic.main.fragment_order_buy.sellingToken
+import kotlinx.android.synthetic.main.fragment_order_buy.sellinngTokenQuantity
 import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
-import kotlinx.android.synthetic.main.fragment_order_buy.tvQLCWalletAddess
-import kotlinx.android.synthetic.main.fragment_order_buy.tvQLCWalletName
-import kotlinx.android.synthetic.main.fragment_order_sell.*
+import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletAddess
+import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletName
+import neoutils.Neoutils
 import qlc.mng.AccountMng
 import qlc.mng.WalletMng
 import java.math.BigDecimal
@@ -60,7 +66,7 @@ import java.math.BigDecimal
 
 class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
     override fun generateBuyQgasOrderSuccess() {
-        toast("success")
+        toast(getString(R.string.success))
         closeProgressDialog()
         activity?.finish()
     }
@@ -69,6 +75,15 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
     lateinit internal var mPresenter: OrderBuyPresenter
 
     var receiveQgasWallet : QLCAccount? = null
+
+    val sendTokenType = 0
+    val receiveTokenType = 1
+    val selectPair = 11
+
+    var receiveEthWallet : EthWallet? = null
+    var receiveEosWallet : EosAccount? = null
+    var receiveQlcWallet : QLCAccount? = null
+    var receiveNeoWallet : Wallet? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_order_buy, null)
@@ -84,40 +99,63 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
         }
         tvNext.setOnClickListener {
             if ("".equals(etMinAmount.text.toString()) || "".equals(etMaxAmount.text.toString()) || "".equals(etAmount.text.toString()) || "".equals(etUnitPrice.text.toString())) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if (etMinAmount.text.toString().toBigDecimal() < 1.toBigDecimal()) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if (etMinAmount.text.toString().trim().toInt() > etMaxAmount.text.toString().trim().toInt()) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if (etMaxAmount.text.toString().trim().toInt() > etAmount.text.toString().trim().toInt()) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (!AccountMng.isValidAddress(tvQLCWalletAddess.text.toString())) {
-                toast(getString(R.string.illegal_receipt_address))
-                return@setOnClickListener
+            when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
+                AllWallet.WalletType.QlcWallet -> {
+                    if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.EthWallet -> {
+                    if (!ETHWalletUtils.isETHValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.EosWallet -> {
+                    if (!EosUtil.isEosName(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
             }
             if (etUnitPrice.text.toString().toBigDecimal() == BigDecimal.ZERO) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             var map = mutableMapOf<String, String>()
             map.put("account", ConstantValue.currentUser.account)
             map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
+            map["pairsId"] = selectedPair!!.id
             map.put("type", ConstantValue.orderTypeBuy)
             map.put("unitPrice", etUnitPrice.text.toString().trim())
             map.put("totalAmount", etAmount.text.toString().trim())
             map.put("minAmount", etMinAmount.text.toString().trim())
             map.put("maxAmount", etMaxAmount.text.toString().trim())
-            map.put("qgasAddress",tvQLCWalletAddess.text.toString().trim())
-            map.put("usdtAddress", "")
-            map.put("fromAddress", "")
+            map.put("qgasAddress",tvReceiveWalletAddess.text.toString().trim())
+//            map.put("usdtAddress", "")
+//            map.put("fromAddress", "")
             map.put("txid", "")
             mPresenter.generateBuyQgasOrder(map)
         }
@@ -140,14 +178,18 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             }
 
         })
-        llSelectQlcWallet.setOnClickListener {
+        llSelectReceiveWallet.setOnClickListener {
+            if (selectedPair == null) {
+                toast(getString(R.string.please_select_a_trade_pair))
+                return@setOnClickListener
+            }
             var intent1 = Intent(activity, OtcChooseWalletActivity::class.java)
-            intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
+            intent1.putExtra("walletType", OtcUtils.parseChain(selectedPair!!.tradeTokenChain).ordinal)
             intent1.putExtra("select", true)
-            startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+            startActivityForResult(intent1, receiveTokenType)
             activity!!.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
         }
-        tvQLCWalletAddess.setOnClickListener {
+        tvReceiveWalletAddess.setOnClickListener {
             showEnterQlcWalletDialog()
         }
         var qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
@@ -155,22 +197,73 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             qlcAccounList.forEach {
                 if (it.isCurrent()) {
                     receiveQgasWallet = it
-                    tvQLCWalletName.text = it.accountName
-                    tvQLCWalletAddess.text = it.address
+                    tvReceiveWalletName.text = it.accountName
+                    tvReceiveWalletAddess.text = it.address
                     return@forEach
                 }
             }
         }
+        llSellToken.setOnClickListener {
+            startActivityForResult(Intent(activity, SelectCurrencyActivity::class.java), selectPair)
+        }
+        llBuyToken.setOnClickListener {
+            startActivityForResult(Intent(activity, SelectCurrencyActivity::class.java), selectPair)
+        }
     }
-
+    var selectedPair : TradePair.PairsListBean? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                AllWallet.WalletType.QlcWallet.ordinal -> {
-                    receiveQgasWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
-                    tvQLCWalletName.text = receiveQgasWallet!!.accountName
-                    tvQLCWalletAddess.text = receiveQgasWallet!!.address
+                receiveTokenType -> {
+                    when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
+                        AllWallet.WalletType.EthWallet -> {
+                            receiveEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
+                            tvReceiveWalletName.text = receiveEthWallet!!.name
+                            tvReceiveWalletAddess.text = receiveEthWallet!!.address
+                        }
+                        AllWallet.WalletType.EosWallet -> {
+                            receiveEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
+                            tvReceiveWalletName.text = receiveEosWallet!!.walletName
+                            tvReceiveWalletAddess.text = receiveEosWallet!!.accountName
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            receiveNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
+                            tvReceiveWalletName.text = receiveNeoWallet!!.name
+                            tvReceiveWalletAddess.text = receiveNeoWallet!!.address
+                        }
+                        AllWallet.WalletType.QlcWallet -> {
+                            receiveQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
+                            tvReceiveWalletName.text = receiveQlcWallet!!.accountName
+                            tvReceiveWalletAddess.text = receiveQlcWallet!!.address
+                        }
+                    }
+                }
+                selectPair -> {
+                    selectedPair = data!!.getParcelableExtra("pair")
+                    buyingToken.text = selectedPair!!.tradeToken
+                    buyingTokenPrice.text = selectedPair!!.tradeToken
+                    sellingToken.text = selectedPair!!.payToken
+                    sellinngTokenQuantity.text = selectedPair!!.payToken
+                    ivReceiveChain.setImageDrawable(null)
+
+                    tvReceiveWalletAddess.text = getString(R.string.input_wallet_address)
+                    tvReceiveWalletName.text = getString(R.string.select_a_wallet_to_receive_token)
+
+                    when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
+                        AllWallet.WalletType.QlcWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_qlc_wallet)
+                        }
+                        AllWallet.WalletType.EthWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_eth_wallet)
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_neo_wallet)
+                        }
+                        AllWallet.WalletType.EosWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_eos_wallet)
+                        }
+                    }
                 }
             }
         }
@@ -193,29 +286,14 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
         }
         tvOk.setOnClickListener {
             if (AccountMng.isValidAddress(etContent.text.toString().trim())) {
-                tvQLCWalletName.text = etContent.text.toString().trim()
-                tvQLCWalletAddess.text = etContent.text.toString().trim()
+                tvReceiveWalletName.text = etContent.text.toString().trim()
+                tvReceiveWalletAddess.text = etContent.text.toString().trim()
             } else {
-                toast("Illegal Receipt Address")
+                toast(getString(R.string.illegal_receipt_address))
             }
             sweetAlertDialog.cancel()
         }
     }
-
-//    private fun showSpinnerPopWindow() {
-//        var ethWalletList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
-//        if (ethWalletList.size > 0) {
-//            PopWindowUtil.showSharePopWindow(activity!!, walletMore, ethWalletList.map { it.address }, object : PopWindowUtil.OnItemSelectListener {
-//                override fun onSelect(content: String) {
-//                    if ("" != content) {
-//                        etReceiveAddress.setText(content)
-//                    }
-//                    SpringAnimationUtil.endRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
-//                }
-//            })
-//            SpringAnimationUtil.startRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
-//        }
-//    }
 
     override fun setupFragmentComponent() {
         DaggerOrderBuyComponent

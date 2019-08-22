@@ -190,18 +190,18 @@ public class AllWalletPresenter implements AllWalletContract.AllWalletContractPr
 
     @Override
     public void getWinqGas(String address) {
-        Map<String, String> map = new HashMap<>();
-        map.put("address", address);
-        httpAPIWrapper.getBalance(map)
-                .subscribe(new HttpObserver<Balance>() {
-                    @Override
-                    public void onNext(Balance balance) {
-                        //isSuccesse
-                        KLog.i("onSuccesse");
-                        balance.setWalletAddress(address);
-                        mView.getWinqGasBack(balance);
-                    }
-                });
+//        Map<String, String> map = new HashMap<>();
+//        map.put("address", address);
+//        httpAPIWrapper.getBalance(map)
+//                .subscribe(new HttpObserver<Balance>() {
+//                    @Override
+//                    public void onNext(Balance balance) {
+//                        //isSuccesse
+//                        KLog.i("onSuccesse");
+//                        balance.setWalletAddress(address);
+//                        mView.getWinqGasBack(balance);
+//                    }
+//                });
     }
 
     @Override

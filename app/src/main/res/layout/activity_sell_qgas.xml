@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/tvUnitPriceTip"
         android:layout_width="wrap_content"
         android:text="@string/unit_price_usdt"
         android:layout_gravity="center_horizontal"
@@ -35,6 +36,7 @@
 
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tvVolumeAmount"
                 android:layout_width="wrap_content"
                 android:text="@string/volume_amount_qgas"
                 android:textColor="@color/color_808080"
@@ -59,6 +61,7 @@
             android:gravity="center_horizontal"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tvVolumeSetting"
                 android:layout_width="wrap_content"
                 android:text="@string/volume_settings_qgas"
                 android:textColor="@color/color_808080"
@@ -103,7 +106,8 @@
             android:layout_marginBottom="@dimen/x4"
             android:layout_height="wrap_content" />
         <TextView
-            android:text="USDT"
+            android:id="@+id/tvPayToken"
+            android:text="-/-"
             android:layout_marginRight="@dimen/x31"
             android:layout_width="wrap_content"
             android:textColor="@color/color_29282a"
@@ -134,7 +138,8 @@
             android:layout_marginBottom="@dimen/x4"
             android:layout_height="wrap_content" />
         <TextView
-            android:text="QGAS"
+            android:id="@+id/tvTradeToken"
+            android:text="-/-"
             android:layout_marginRight="@dimen/x31"
             android:layout_width="wrap_content"
             android:textColor="@color/color_29282a"
@@ -150,7 +155,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/erc20_address_to_receive_usdt"
+        android:text="@string/receive_from"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -159,15 +164,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content" />
     <LinearLayout
-        android:id="@+id/llSelectEthWallet"
+        android:id="@+id/llSelectReceiveWallet"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_height="@dimen/x138">
 
         <ImageView
+            android:id="@+id/ivReceiveChain"
             android:layout_width="@dimen/x88"
-            android:src="@mipmap/icons_eth_wallet"
             android:layout_marginLeft="@dimen/x30"
             android:layout_height="@dimen/x88" />
 
@@ -177,26 +182,26 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/select_a_eth_wallet_to_receive_usdt"
+                android:text="@string/select_a_wallet_to_receive_token"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
                 android:maxWidth="@dimen/x480"
                 android:layout_marginLeft="@dimen/x30"
-                android:id="@+id/tvWalletName"
+                android:id="@+id/tvReceiveWalletName"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a_40"
-                android:text="@string/input_eth_wallet_address"
+                android:text="@string/input_wallet_address"
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:maxWidth="@dimen/x400"
-                android:id="@+id/tvWalletAddess"
+                android:id="@+id/tvReceiveWalletAddess"
                 />
         </LinearLayout>
 
@@ -221,7 +226,7 @@
         android:background="@color/color_f2f2f2"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/qlc_chain_wallet_to_send_out_qgas"
+        android:text="@string/send_to"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -230,16 +235,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content" />
     <LinearLayout
-        android:id="@+id/llSelectQlcWallet"
+        android:id="@+id/llSelectSendWallet"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_height="@dimen/x138">
 
         <ImageView
-            android:id="@+id/iv_country"
+            android:id="@+id/ivSendChain"
             android:layout_width="@dimen/x88"
-            android:src="@mipmap/icons_qlc_wallet"
             android:layout_marginLeft="@dimen/x30"
             android:layout_height="@dimen/x88" />
 
@@ -249,12 +253,12 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/select_a_qlc_wallet_to_send_out_qgas"
+                android:text="@string/select_a_wallet_to_send_out_token"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
-                android:id="@+id/tvQLCWalletName"
+                android:id="@+id/tvSendWalletName"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -263,11 +267,11 @@
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
-                android:text="@string/select_a_qlc_wallet"
+                android:text="@string/select_a_wallet"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:maxWidth="@dimen/x400"
-                android:id="@+id/tvQLCWalletAddess"
+                android:id="@+id/tvSendWalletAddess"
                 />
         </LinearLayout>
 

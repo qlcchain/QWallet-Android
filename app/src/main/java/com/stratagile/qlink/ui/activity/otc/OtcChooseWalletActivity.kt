@@ -128,6 +128,18 @@ class OtcChooseWalletActivity : BaseActivity(), OtcChooseWalletContract.View {
                     setResult(Activity.RESULT_OK, returnItent)
                     finish()
                 }
+                AllWallet.WalletType.NeoWallet.ordinal -> {
+                   var returnItent  = Intent()
+                    returnItent.putExtra("wallet", downCheckAdapter.data[position].wallet)
+                    setResult(Activity.RESULT_OK, returnItent)
+                    finish()
+                }
+                AllWallet.WalletType.EosWallet.ordinal -> {
+                   var returnItent  = Intent()
+                    returnItent.putExtra("wallet", downCheckAdapter.data[position].eosAccount)
+                    setResult(Activity.RESULT_OK, returnItent)
+                    finish()
+                }
             }
         }
     }

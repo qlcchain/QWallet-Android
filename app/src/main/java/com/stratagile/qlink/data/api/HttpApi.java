@@ -68,6 +68,7 @@ import com.stratagile.qlink.entity.otc.GenerageTradeOrder;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
+import com.stratagile.qlink.entity.otc.TradePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,6 +125,7 @@ import static com.stratagile.qlink.data.api.API.url_key_account;
 import static com.stratagile.qlink.data.api.API.url_main_address;
 import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
+import static com.stratagile.qlink.data.api.API.url_pairs;
 import static com.stratagile.qlink.data.api.API.url_queryFreeRecords;
 import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_race_times;
@@ -546,6 +548,10 @@ public interface HttpApi {
     @POST(url_app_version_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<AppVersion> getAppLastVersion(@Body RequestBody map);
+
+    @POST(url_pairs)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradePair> getPairs(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart

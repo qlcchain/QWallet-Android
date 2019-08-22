@@ -27,21 +27,17 @@ import com.stratagile.qlink.ui.activity.otc.module.BuyQgasModule
 import com.stratagile.qlink.ui.activity.otc.presenter.BuyQgasPresenter
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.EosUtil
+import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.PopWindowUtil
+import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_buy_qgas.*
-import kotlinx.android.synthetic.main.activity_buy_qgas.etQgas
-import kotlinx.android.synthetic.main.activity_buy_qgas.etUsdt
 import kotlinx.android.synthetic.main.activity_buy_qgas.llSelectQlcWallet
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvAmount
-import kotlinx.android.synthetic.main.activity_buy_qgas.tvCreateWallet
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvNext
-import kotlinx.android.synthetic.main.activity_buy_qgas.tvQLCWalletAddess
-import kotlinx.android.synthetic.main.activity_buy_qgas.tvQLCWalletName
-import kotlinx.android.synthetic.main.activity_buy_qgas.tvQgasVolume
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvUnitPrice
-import kotlinx.android.synthetic.main.activity_sell_qgas.*
-import kotlinx.android.synthetic.main.fragment_order_buy.*
+import neoutils.Neoutils
 import qlc.mng.AccountMng
 import qlc.mng.WalletMng
 import qlc.utils.Helper
@@ -75,7 +71,10 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
     override fun generateTradeBuyQgasOrderSuccess(generageTradeOrder: GenerageTradeOrder) {
         val qrEntity = QrEntity(generageTradeOrder.order.usdtToAddress, "USDT" + " Receivable Address", "usdt", 2)
         val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+        intent.putExtra("tradeToken", generageTradeOrder.order.tradeToken)
         intent.putExtra("usdt", generageTradeOrder.order.usdtAmount.toString())
+        intent.putExtra("payToken", generageTradeOrder.order.payToken)
+        intent.putExtra("payTokenChain", generageTradeOrder.order.payTokenChain)
         intent.putExtra("receiveAddress", generageTradeOrder.order.usdtToAddress)
         intent.putExtra("tradeOrderId", generageTradeOrder.order.id)
         intent.putExtra("orderNumber", generageTradeOrder.order.number.toString())
@@ -106,8 +105,13 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         tvCreateWallet.setOnClickListener {
             startActivity(Intent(this, SelectWalletTypeActivity::class.java))
         }
-        title.text = getString(R.string.buy_qgas)
         orderList = intent.getParcelableExtra("order")
+        title.text = getString(R.string.buy) + " " + orderList.tradeToken
+        tvTradeToken.text = orderList.tradeToken
+        tvPayToken.text = orderList.payToken
+        tvUnitPriceTip.text = getString(R.string.unit_price) + "(" + orderList.payToken + ")"
+        tvVolumeAmount.text = getString(R.string.volume_amount_qgas) + "(" + orderList.tradeToken + ")"
+        tvVolumeSetting.text = getString(R.string.volume_settings) + "(" + orderList.tradeToken + ")"
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
         maxQgas = orderList.totalAmount.toInt()
         maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
@@ -134,11 +138,34 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             if (etQgas.text.toString().toInt() > maxQgas) {
                 return@setOnClickListener
             }
-            if ("".equals(tvQLCWalletAddess)) {
+            if ("".equals(tvReceiveWalletAddess)) {
                 return@setOnClickListener
             }
-            if (!AccountMng.isValidAddress(tvQLCWalletAddess.text.toString())) {
-                return@setOnClickListener
+            when(OtcUtils.parseChain(orderList.tradeToken)) {
+                AllWallet.WalletType.QlcWallet -> {
+                    if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.EthWallet -> {
+                    if (!ETHWalletUtils.isETHValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.EosWallet -> {
+                    if (!EosUtil.isEosName(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
             }
 
             if (maxQgas < entrustOrderInfo.order.minAmount) {
@@ -149,7 +176,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             } else {
                 // 最小的数量要大于等于minAmount
                 if (etQgas.text.toString().toInt() < entrustOrderInfo.order.minAmount) {
-                    toast("The smallest QGAS is " + entrustOrderInfo.order.minAmount.toInt())
+                    toast(getString(R.string.the_smallest) + entrustOrderInfo.order.tradeToken + getString(R.string.is_otc) + entrustOrderInfo.order.minAmount.toInt())
                     return@setOnClickListener
                 }
             }
@@ -160,7 +187,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             map.put("entrustOrderId", orderList.id)
             map.put("usdtAmount", etUsdt.text.toString())
             map.put("qgasAmount", etQgas.text.toString())
-            map.put("qgasToAddress", tvQLCWalletAddess.text.toString())
+            map.put("qgasToAddress", tvReceiveWalletAddess.text.toString())
             mPresenter.generateTradeBuyQgasOrder(map)
         }
         etUsdt.addTextChangedListener(object : TextWatcher {
@@ -220,7 +247,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
 
             }
         })
-        tvQLCWalletAddess.setOnClickListener {
+        tvReceiveWalletAddess.setOnClickListener {
             showEnterQlcWalletDialog()
         }
 
@@ -237,8 +264,8 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             qlcAccounList.forEach {
                 if (it.isCurrent()) {
                     receiveQgasWallet = it
-                    tvQLCWalletName.text = it.accountName
-                    tvQLCWalletAddess.text = it.address
+                    tvReceiveWalletName.text = it.accountName
+                    tvReceiveWalletAddess.text = it.address
                     return@forEach
                 }
             }
@@ -253,8 +280,8 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             when (requestCode) {
                 AllWallet.WalletType.QlcWallet.ordinal -> {
                     receiveQgasWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
-                    tvQLCWalletName.text = receiveQgasWallet!!.accountName
-                    tvQLCWalletAddess.text = receiveQgasWallet!!.address
+                    tvReceiveWalletName.text = receiveQgasWallet!!.accountName
+                    tvReceiveWalletAddess.text = receiveQgasWallet!!.address
                 }
             }
         }
@@ -277,29 +304,14 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         }
         tvOk.setOnClickListener {
             if (AccountMng.isValidAddress(etContent.text.toString().trim())) {
-                tvQLCWalletName.text = etContent.text.toString().trim()
-                tvQLCWalletAddess.text = etContent.text.toString().trim()
+                tvReceiveWalletName.text = etContent.text.toString().trim()
+                tvReceiveWalletAddess.text = etContent.text.toString().trim()
             } else {
                 toast(getString(R.string.illegal_receipt_address))
             }
             sweetAlertDialog.cancel()
         }
     }
-
-//    private fun showSpinnerPopWindow() {
-//        var ethWalletList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
-//        if (ethWalletList.size > 0) {
-//            PopWindowUtil.showSharePopWindow(this, walletMore, ethWalletList.map { it.address }, object : PopWindowUtil.OnItemSelectListener {
-//                override fun onSelect(content: String) {
-//                    if ("" != content) {
-//                        etReceiveAddress.setText(content)
-//                    }
-//                    SpringAnimationUtil.endRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
-//                }
-//            })
-//            SpringAnimationUtil.startRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
-//        }
-//    }
 
     override fun setupActivityComponent() {
         DaggerBuyQgasComponent

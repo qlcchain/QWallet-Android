@@ -7,9 +7,11 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.NeoWalletInfo;
 import com.stratagile.qlink.entity.newwinq.Order;
+import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.ui.activity.otc.contract.MarketContract;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -50,28 +52,25 @@ public class MarketPresenter implements MarketContract.MarketContractPresenter{
         }
     }
 
-    public void getOrderList(Map map, int currentPage) {
-        Disposable disposable = httpAPIWrapper.getEntrustOrderList(map)
-                .subscribe(new Consumer<EntrustOrderList>() {
+    public void getPairs() {
+        Disposable disposable = httpAPIWrapper.getPairs(new HashMap<String, String>())
+                .subscribe(new Consumer<TradePair>() {
                     @Override
-                    public void accept(EntrustOrderList baseBack) throws Exception {
+                    public void accept(TradePair baseBack) throws Exception {
                         //isSuccesse
-                        mView.setEntrustOrderList(baseBack.getOrderList(), currentPage);
+                        mView.setRemoteTradePairs(baseBack.getPairsList());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mView.getEutrustOrderError();
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
                         //onComplete
                         KLog.i("onComplete");
-                        mView.getEutrustOrderError();
                     }
                 });
         mCompositeDisposable.add(disposable);
     }
-
 }

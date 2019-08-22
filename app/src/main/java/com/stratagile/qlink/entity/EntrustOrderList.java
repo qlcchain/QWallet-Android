@@ -4,8 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
+
 
     private ArrayList<OrderListBean> orderList;
 
@@ -18,54 +20,62 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
     }
 
     public static class OrderListBean implements Parcelable {
-
         /**
          * unitPrice : 0.001
          * minAmount : 1.0
-         * lockingAmount : 3.0
-         * type : BUY
+         * lockingAmount : 0.0
+         * type : SELL
+         * userId : 7060628a65e4450690976bf56c127787
          * completeAmount : 0.0
          * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
-         * number : 20190726124722241514
+         * number : 20190820155720763031
          * totalAmount : 100.0
-         * orderTime : 2019-07-26 12:47:23
+         * orderTime : 2019-08-20 15:57:21
          * nickname : hzp
-         * id : df164590b0d64b849c0f1dc5d8a62e49
-         * maxAmount : 10.0
-         * otcTimes : 8
+         * tradeToken : QGAS
+         * id : 1b7b17cd27ad45fa990f0331ac8c5347
+         * maxAmount : 100.0
+         * otcTimes : 9
          * status : NORMAL
+         * payToken : USDT
          */
 
         private double unitPrice;
         private double minAmount;
         private double lockingAmount;
         private String type;
+        private String userId;
         private double completeAmount;
         private String head;
         private String number;
         private double totalAmount;
         private String orderTime;
         private String nickname;
+        private String tradeToken;
         private String id;
         private double maxAmount;
         private int otcTimes;
         private String status;
+        private String payToken;
 
         protected OrderListBean(Parcel in) {
             unitPrice = in.readDouble();
             minAmount = in.readDouble();
             lockingAmount = in.readDouble();
             type = in.readString();
+            userId = in.readString();
             completeAmount = in.readDouble();
             head = in.readString();
             number = in.readString();
             totalAmount = in.readDouble();
             orderTime = in.readString();
             nickname = in.readString();
+            tradeToken = in.readString();
             id = in.readString();
             maxAmount = in.readDouble();
             otcTimes = in.readInt();
             status = in.readString();
+            payToken = in.readString();
         }
 
         public static final Creator<OrderListBean> CREATOR = new Creator<OrderListBean>() {
@@ -110,6 +120,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
 
         public double getCompleteAmount() {
@@ -160,6 +178,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.nickname = nickname;
         }
 
+        public String getTradeToken() {
+            return tradeToken;
+        }
+
+        public void setTradeToken(String tradeToken) {
+            this.tradeToken = tradeToken;
+        }
+
         public String getId() {
             return id;
         }
@@ -192,6 +218,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.status = status;
         }
 
+        public String getPayToken() {
+            return payToken;
+        }
+
+        public void setPayToken(String payToken) {
+            this.payToken = payToken;
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -203,16 +237,19 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             parcel.writeDouble(minAmount);
             parcel.writeDouble(lockingAmount);
             parcel.writeString(type);
+            parcel.writeString(userId);
             parcel.writeDouble(completeAmount);
             parcel.writeString(head);
             parcel.writeString(number);
             parcel.writeDouble(totalAmount);
             parcel.writeString(orderTime);
             parcel.writeString(nickname);
+            parcel.writeString(tradeToken);
             parcel.writeString(id);
             parcel.writeDouble(maxAmount);
             parcel.writeInt(otcTimes);
             parcel.writeString(status);
+            parcel.writeString(payToken);
         }
     }
 }

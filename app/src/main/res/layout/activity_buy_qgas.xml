@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/tvUnitPriceTip"
         android:layout_width="wrap_content"
         android:text="@string/unit_price_usdt"
         android:layout_gravity="center_horizontal"
@@ -35,6 +36,7 @@
             android:orientation="vertical"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tvVolumeAmount"
                 android:layout_width="wrap_content"
                 android:text="@string/volume_amount_qgas"
                 android:textColor="@color/color_808080"
@@ -59,6 +61,7 @@
             android:gravity="center_horizontal"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tvVolumeSetting"
                 android:layout_width="wrap_content"
                 android:text="@string/volume_settings_qgas"
                 android:textColor="@color/color_808080"
@@ -102,6 +105,7 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/tvPayToken"
             android:text="USDT"
             android:layout_marginRight="@dimen/x31"
             android:layout_width="wrap_content"
@@ -132,6 +136,7 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/tvTradeToken"
             android:text="QGAS"
             android:layout_marginRight="@dimen/x31"
             android:layout_width="wrap_content"
@@ -148,7 +153,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/go_qlc_address_to_receive_qgas"
+        android:text="@string/receive_from"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -177,12 +182,12 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/select_a_qlc_wallet_to_receive_qgas"
+                android:text="@string/select_a_wallet_to_receive_token"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
-                android:id="@+id/tvQLCWalletName"
+                android:id="@+id/tvReceiveWalletName"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -191,11 +196,11 @@
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
-                android:text="@string/input_qlc_wallet_address"
+                android:text="@string/input_wallet_address"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:maxWidth="@dimen/x400"
-                android:id="@+id/tvQLCWalletAddess"
+                android:id="@+id/tvReceiveWalletAddess"
                 />
         </LinearLayout>
 
@@ -221,6 +226,7 @@
         android:background="@color/color_f2f2f2"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvCreateWallet"
         android:layout_width="match_parent"
         android:text="@string/create_one_now"

@@ -5,7 +5,7 @@ import com.stratagile.qlink.entity.BaseBack;
 public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
 
     /**
-     * order : {"unitPrice":0.1,"qgasFromAddress":"qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7","appealStatus":"NO","txid":"","buyerId":"7060628a65e4450690976bf56c127787","usdtFromAddress":"","qgasToAddress":"qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7","usdtAmount":0.1,"closeDate":"","head":"/data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg","number":"20190731143923846241","qgasAmount":1,"buyerConfirmDate":"","sellerId":"7060628a65e4450690976bf56c127787","orderTime":"2019-07-31 14:39:23","usdtToAddress":"0x255eEcd17E11C5d2FFD5818da31d04B5c1721D7C","nickname":"hzp","entrustOrderId":"f5a662d5876948d8bf53abe10bc84025","id":"931ff0f74ec6477abf347c266df74b9e","qgasTransferAddress":"qlc_3wpp343n1kfsd4r6zyhz3byx4x74hi98r6f1es4dw5xkyq8qdxcxodia4zbb","sellerConfirmDate":"","status":"QGAS_TO_PLATFORM"}
+     * order : {"unitPrice":1,"appealStatus":"NO","txid":"","buyerId":"bafe415310bd41fdb055fb0fe6cd1080","payTokenAmount":1,"closeDate":"","head":"/data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg","number":"20190821100236270718","tradeTokenAmount":1,"tradeTokenFromAddress":"qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7","buyerConfirmDate":"","sellerId":"7060628a65e4450690976bf56c127787","orderTime":"2019-08-21 10:02:36","payTokenFromAddress":"","nickname":"hzp","payTokenToAddress":"AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK","entrustOrderId":"50212355d722444fb77440a4ca7d8992","tradeTokenTransferAddress":"qlc_3wpp343n1kfsd4r6zyhz3byx4x74hi98r6f1es4dw5xkyq8qdxcxodia4zbb","tradeToken":"QGAS","id":"dfd9470d89bc4bc4b58c3d84da723524","sellerConfirmDate":"","tradeTokenToAddress":"qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7","status":"TRADE_TOKEN_TO_PLATFORM","payToken":"QLC"}
      */
 
     private OrderBean order;
@@ -19,29 +19,32 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
     }
 
     public static class OrderBean {
+
         /**
-         * unitPrice : 0.1
+         * unitPrice : 1.0
          * qgasFromAddress : qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7
          * appealStatus : NO
          * txid :
-         * buyerId : 7060628a65e4450690976bf56c127787
+         * buyerId : bafe415310bd41fdb055fb0fe6cd1080
          * usdtFromAddress :
          * qgasToAddress : qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7
-         * usdtAmount : 0.1
+         * usdtAmount : 10
          * closeDate :
          * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
-         * number : 20190731143923846241
-         * qgasAmount : 1
+         * number : 20190821141140332734
+         * qgasAmount : 10
          * buyerConfirmDate :
          * sellerId : 7060628a65e4450690976bf56c127787
-         * orderTime : 2019-07-31 14:39:23
-         * usdtToAddress : 0x255eEcd17E11C5d2FFD5818da31d04B5c1721D7C
+         * orderTime : 2019-08-21 14:11:40
+         * usdtToAddress : AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK
          * nickname : hzp
-         * entrustOrderId : f5a662d5876948d8bf53abe10bc84025
-         * id : 931ff0f74ec6477abf347c266df74b9e
+         * entrustOrderId : 50212355d722444fb77440a4ca7d8992
+         * tradeToken : QGAS
+         * id : 9a618a4c89304b57a267eeadbdc87882
          * qgasTransferAddress : qlc_3wpp343n1kfsd4r6zyhz3byx4x74hi98r6f1es4dw5xkyq8qdxcxodia4zbb
          * sellerConfirmDate :
          * status : QGAS_TO_PLATFORM
+         * payToken : QLC
          */
 
         private double unitPrice;
@@ -51,7 +54,7 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
         private String buyerId;
         private String usdtFromAddress;
         private String qgasToAddress;
-        private double usdtAmount;
+        private float usdtAmount;
         private String closeDate;
         private String head;
         private String number;
@@ -62,10 +65,31 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
         private String usdtToAddress;
         private String nickname;
         private String entrustOrderId;
+        private String tradeToken;
+
+        public String getTradeTokenChain() {
+            return tradeTokenChain;
+        }
+
+        public void setTradeTokenChain(String tradeTokenChain) {
+            this.tradeTokenChain = tradeTokenChain;
+        }
+
         private String id;
         private String qgasTransferAddress;
         private String sellerConfirmDate;
+        private String tradeTokenChain;
+        public String getPayTokenChain() {
+            return payTokenChain;
+        }
+
+        public void setPayTokenChain(String payTokenChain) {
+            this.payTokenChain = payTokenChain;
+        }
+
         private String status;
+        private String payToken;
+        private String payTokenChain;
 
         public double getUnitPrice() {
             return unitPrice;
@@ -123,11 +147,11 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
             this.qgasToAddress = qgasToAddress;
         }
 
-        public double getUsdtAmount() {
+        public float getUsdtAmount() {
             return usdtAmount;
         }
 
-        public void setUsdtAmount(double usdtAmount) {
+        public void setUsdtAmount(float usdtAmount) {
             this.usdtAmount = usdtAmount;
         }
 
@@ -211,6 +235,14 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
             this.entrustOrderId = entrustOrderId;
         }
 
+        public String getTradeToken() {
+            return tradeToken;
+        }
+
+        public void setTradeToken(String tradeToken) {
+            this.tradeToken = tradeToken;
+        }
+
         public String getId() {
             return id;
         }
@@ -241,6 +273,14 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public String getPayToken() {
+            return payToken;
+        }
+
+        public void setPayToken(String payToken) {
+            this.payToken = payToken;
         }
     }
 }

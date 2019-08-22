@@ -23,6 +23,7 @@ import com.stratagile.qlink.ui.activity.otc.contract.TradeOrderDetailContract
 import com.stratagile.qlink.ui.activity.otc.module.TradeOrderDetailModule
 import com.stratagile.qlink.ui.activity.otc.presenter.TradeOrderDetailPresenter
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.TimeUtil
 import com.stratagile.qlink.utils.ToastUtil
 import com.stratagile.qlink.view.SweetAlertDialog
@@ -72,9 +73,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         closeProgressDialog()
         this.mTradeOrderDetail = tradeOrderDetail
         tvNickName.text = AccountUtil.setUserNickName(tradeOrderDetail.order.nickname)
-        tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
-        tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
-        tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " USDT"
+        tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " " + tradeOrderDetail.order.tradeToken
+        tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " " + tradeOrderDetail.order.payToken
+        tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " " + tradeOrderDetail.order.payToken
         tvOrderId.text = tradeOrderDetail.order.number
         tvReceiveAddress.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -95,9 +96,44 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             tvOrderType.text = getString(R.string.buy)
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_ff3669))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
-            receiveAddressTip.text = getString(R.string.go_qlc_address_to_receive_qgas)
+//            receiveAddressTip.text = getString(R.string.go_qlc_address_to_receive_qgas)
             tvReceiveAddress.text = tradeOrderDetail.order.qgasToAddress
             when (tradeOrderDetail.order.status) {
+                "TRADE_TOKEN_PENDING" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.wating_for_the_public_chain_confirm_the_transaction)
+                    tvOrderState1.text = getString(R.string.wating_for_the_public_chain_confirm_the_transaction)
+                    tvOrderStateTip.text = getString(R.string.please_wait_patiently)
+                    tvOpreate1.visibility = View.VISIBLE
+                    tvOpreate2.visibility = View.VISIBLE
+                    tvOpreate3.visibility = View.VISIBLE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, tradeOrderDetail.order.payToken + " Receivable Address", tradeOrderDetail.order.payToken.toLowerCase(), OtcUtils.parseChain(tradeOrderDetail.order.payTokenChain).ordinal)
+                        val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+                        intent.putExtra("usdt", tradeOrderDetail.order.usdtAmount.toString())
+                        intent.putExtra("tradeToken", tradeOrderDetail.order.tradeToken)
+                        intent.putExtra("payToken", tradeOrderDetail.order.payToken)
+                        intent.putExtra("payTokenChain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("receiveAddress", tradeOrderDetail.order.usdtToAddress)
+                        intent.putExtra("tradeOrderId", tradeOrderId)
+                        intent.putExtra("orderNumber", tradeOrderDetail.order.number.toString())
+                        intent.putExtra("qrentity", qrEntity)
+                        startActivityForResult(intent, 0)
+                    }
+                    tvOpreate2.setOnClickListener {
+                        showEnterTxIdDialog()
+                    }
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
+                }
                 "QGAS_TO_PLATFORM" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
@@ -114,9 +150,13 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
-                        val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, "USDT" + " Receivable Address", "usdt", 2)
+                        val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, tradeOrderDetail.order.payToken + " Receivable Address", tradeOrderDetail.order.payToken.toLowerCase(), OtcUtils.parseChain(tradeOrderDetail.order.payTokenChain).ordinal)
                         val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+                        intent.putExtra("tradeToken", tradeOrderDetail.order.tradeToken)
                         intent.putExtra("usdt", tradeOrderDetail.order.usdtAmount.toString())
+                        intent.putExtra("payToken", tradeOrderDetail.order.payToken)
+                        intent.putExtra("payTokenChain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("chain", tradeOrderDetail.order.payTokenChain)
                         intent.putExtra("receiveAddress", tradeOrderDetail.order.usdtToAddress)
                         intent.putExtra("tradeOrderId", tradeOrderId)
                         intent.putExtra("orderNumber", tradeOrderDetail.order.number.toString())
@@ -298,9 +338,45 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             tvOrderType.text = getString(R.string.sell)
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_108ee9))
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
-            receiveAddressTip.text = getString(R.string.erc20_address_to_receive_usdt)
+//            receiveAddressTip.text = getString(R.string.erc20_address_to_receive_usdt)
             tvReceiveAddress.text = tradeOrderDetail.order.usdtToAddress
             when (tradeOrderDetail.order.status) {
+                "TRADE_TOKEN_PENDING" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.wating_for_the_public_chain_confirm_the_transaction)
+                    tvOrderState1.text = getString(R.string.wating_for_the_public_chain_confirm_the_transaction)
+                    tvOrderStateTip.text = getString(R.string.please_wait_patiently)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, tradeOrderDetail.order.payToken + " Receivable Address", tradeOrderDetail.order.payToken.toLowerCase(), OtcUtils.parseChain(tradeOrderDetail.order.payTokenChain).ordinal)
+                        val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+                        intent.putExtra("usdt", tradeOrderDetail.order.usdtAmount.toString())
+                        intent.putExtra("payToken", tradeOrderDetail.order.payToken)
+                        intent.putExtra("tradeToken", tradeOrderDetail.order.tradeToken)
+                        intent.putExtra("payTokenChain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("chain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("receiveAddress", tradeOrderDetail.order.usdtToAddress)
+                        intent.putExtra("tradeOrderId", tradeOrderId)
+                        intent.putExtra("orderNumber", tradeOrderDetail.order.number.toString())
+                        intent.putExtra("qrentity", qrEntity)
+                        startActivityForResult(intent, 0)
+                    }
+                    tvOpreate2.setOnClickListener {
+                        showEnterTxIdDialog()
+                    }
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
+                }
                 "QGAS_TO_PLATFORM" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)

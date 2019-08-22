@@ -26,9 +26,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
 
     @Override
     protected void convert(BaseViewHolder helper, TradeOrderList.OrderListBean item) {
+        helper.setText(R.id.tvPayToken, item.getPayToken());
         if (item.getBuyerId().equals(ConstantValue.currentUser.getUserId())) {
             //我买单
-            helper.setText(R.id.tvOrderType, R.string.buy_qgas);
+            helper.setText(R.id.tvOrderType, mContext.getString(R.string.buy) + item.getTradeToken());
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.mainColor));
             switch (item.getStatus()) {
                 case "QGAS_TO_PLATFORM":
@@ -40,7 +41,7 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;
                 case "USDT_PENDING":
-                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
+                    helper.setText(R.id.tvOrderState, R.string.wait_public_chain_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;
                 case "OVERTIME":
@@ -59,7 +60,7 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     break;
             }
         } else {
-            helper.setText(R.id.tvOrderType, R.string.sell_qgas);
+            helper.setText(R.id.tvOrderType, mContext.getString(R.string.sell) + item.getTradeToken());
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.color_ff3669));
             switch (item.getStatus()) {
                 case "QGAS_TO_PLATFORM":

@@ -19,20 +19,23 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
 
     public static class OrderListBean {
 
+
         /**
-         * unitPrice : 0.001
-         * appealStatus : FAIL
+         * unitPrice : 1.0
+         * appealStatus : NO
          * buyerId : 7060628a65e4450690976bf56c127787
-         * usdtAmount : 0.05
-         * head : /data/dapp/head/f597e8eccf8e4624bcd92ef04d6881cb.jpg
-         * number : 20190719111929654715
-         * qgasAmount : 50.0
+         * usdtAmount : 10.0
+         * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
+         * number : 20190821112115263366
+         * qgasAmount : 10.0
          * sellerId : bafe415310bd41fdb055fb0fe6cd1080
-         * nickname : hzpa
-         * entrustOrderId : 36c6bb2e05df4ad9ad6cd8f4d5fe9be4
-         * id : ec841bb576564b6cb9158eed0ca8529f
-         * status : USDT_PAID
-         * createDate : 2019-07-19 11:19:30
+         * nickname : hzp
+         * entrustOrderId : 7dc7eb7f78554e6985c5b76020a67731
+         * tradeToken : QGAS
+         * id : 8593d9ffc8484c699318b79eec489cc1
+         * status : TRADE_TOKEN_TO_PLATFORM
+         * createDate : 2019-08-21 11:21:16
+         * payToken : QLC
          */
 
         private double unitPrice;
@@ -45,9 +48,11 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
         private String sellerId;
         private String nickname;
         private String entrustOrderId;
+        private String tradeToken;
         private String id;
         private String status;
         private String createDate;
+        private String payToken;
 
         public double getUnitPrice() {
             return unitPrice;
@@ -129,6 +134,14 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
             this.entrustOrderId = entrustOrderId;
         }
 
+        public String getTradeToken() {
+            return tradeToken;
+        }
+
+        public void setTradeToken(String tradeToken) {
+            this.tradeToken = tradeToken;
+        }
+
         public String getId() {
             return id;
         }
@@ -151,6 +164,14 @@ public class TradeOrderList extends BaseBack<TradeOrderList.OrderListBean> {
 
         public void setCreateDate(String createDate) {
             this.createDate = createDate;
+        }
+
+        public String getPayToken() {
+            return payToken;
+        }
+
+        public void setPayToken(String payToken) {
+            this.payToken = payToken;
         }
     }
 }

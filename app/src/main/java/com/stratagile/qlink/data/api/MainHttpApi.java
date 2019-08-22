@@ -66,6 +66,7 @@ import com.stratagile.qlink.entity.otc.GenerageTradeOrder;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
+import com.stratagile.qlink.entity.otc.TradePair;
 
 import java.util.Map;
 
@@ -81,6 +82,8 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+
+import static com.stratagile.qlink.data.api.API.url_pairs;
 
 
 /**
@@ -474,6 +477,10 @@ public interface MainHttpApi {
     @POST(MainAPI.url_app_version_info)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<AppVersion> getAppLastVersion(@Body RequestBody map);
+
+    @POST(MainAPI.url_pairs)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradePair> getPairs(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

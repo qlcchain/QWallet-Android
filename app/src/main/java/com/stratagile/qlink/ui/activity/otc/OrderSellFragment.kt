@@ -3,7 +3,6 @@ package com.stratagile.qlink.ui.activity.otc
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.Nullable
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
@@ -28,26 +27,23 @@ import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.db.EosAccount
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.db.Wallet
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
-import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.entity.otc.TradePair
+import com.stratagile.qlink.utils.EosUtil
 import com.stratagile.qlink.utils.MoneyValueFilter
+import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.UserUtils
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.fragment_order_buy.*
 import kotlinx.android.synthetic.main.fragment_order_sell.*
-import kotlinx.android.synthetic.main.fragment_order_sell.etAmount
-import kotlinx.android.synthetic.main.fragment_order_sell.etMaxAmount
-import kotlinx.android.synthetic.main.fragment_order_sell.etMinAmount
-import kotlinx.android.synthetic.main.fragment_order_sell.etUnitPrice
-import kotlinx.android.synthetic.main.fragment_order_sell.llSelectQlcWallet
-import kotlinx.android.synthetic.main.fragment_order_sell.tvNext
-import kotlinx.android.synthetic.main.fragment_order_sell.tvQLCWalletAddess
-import kotlinx.android.synthetic.main.fragment_order_sell.tvQLCWalletName
+import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
+import qlc.mng.AccountMng
 import java.math.BigDecimal
 
 /**
@@ -74,11 +70,21 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
     @Inject
     lateinit internal var mPresenter: OrderSellPresenter
 
-    var qlcAccounList = mutableListOf<QLCAccount>()
-
     var receiveEthWallet : EthWallet? = null
+    var receiveEosWallet : EosAccount? = null
+    var receiveQlcWallet : QLCAccount? = null
+    var receiveNeoWallet : Wallet? = null
 
-    var sendQgasWallet : QLCAccount? = null
+    var sendQlcWallet : QLCAccount? = null
+    var sendEthWallet : EthWallet? = null
+    var sendEosWallet : EosAccount? = null
+    var sendNeoWallet : Wallet? = null
+
+    var selectedPair : TradePair.PairsListBean? = null
+
+    val sendTokenType = 0
+    val receiveTokenType = 1
+    val selectPair = 11
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_order_sell, null)
@@ -106,7 +112,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast("illegal value")
                 return@setOnClickListener
             }
-            if ("".equals(tvQLCWalletAddess.text.toString())) {
+            if ("".equals(tvSendWalletAddess.text.toString())) {
                 toast("Please select a qlc wallet to payment")
                 return@setOnClickListener
             }
@@ -114,17 +120,46 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast("illegal value")
                 return@setOnClickListener
             }
-            if (!ETHWalletUtils.isETHValidAddress(tvWalletAddess.text.toString().trim())) {
-                toast("USDT address error")
-                return@setOnClickListener
+            when(OtcUtils.parseChain(selectedPair!!.payTokenChain)) {
+                AllWallet.WalletType.QlcWallet -> {
+                    if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.EthWallet -> {
+                    if (!ETHWalletUtils.isETHValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+            }
+                AllWallet.WalletType.EosWallet -> {
+                    if (!EosUtil.isEosName(tvReceiveWalletAddess.text.toString().trim())) {
+                        toast(getString(R.string.illegal_receipt_address))
+                        return@setOnClickListener
+                    }
+                }
             }
             showConfirmSellDialog()
+            if (OtcUtils.parseChain(selectedPair!!.tradeTokenChain) == AllWallet.WalletType.QlcWallet && OtcUtils.parseChain(selectedPair!!.payTokenChain) == AllWallet.WalletType.EthWallet) {
+
+            }
         }
-        llSelectEthWallet.setOnClickListener {
+        llSelectSendWallet.setOnClickListener {
+            if (selectedPair == null) {
+                toast(getString(R.string.please_select_a_trade_pair))
+                return@setOnClickListener
+            }
             var intent1 = Intent(activity, OtcChooseWalletActivity::class.java)
-            intent1.putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal)
+            intent1.putExtra("walletType", OtcUtils.parseChain(selectedPair!!.tradeTokenChain).ordinal)
             intent1.putExtra("select", false)
-            startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
+            startActivityForResult(intent1, sendTokenType)
             activity!!.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
 //            showSpinnerPopWindow()
         }
@@ -149,26 +184,25 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
 
         })
 
-        qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
-        if (qlcAccounList.size > 0) {
-            qlcAccounList.forEach {
-                if (it.isCurrent()) {
-                    sendQgasWallet = it
-                    tvQLCWalletAddess.text = it.address
-                    tvQLCWalletName.text = it.accountName
-                    return@forEach
-                }
+        llSelectReceiveWallet.setOnClickListener {
+            if (selectedPair == null) {
+                toast(getString(R.string.please_select_a_trade_pair))
+                return@setOnClickListener
             }
-        }
-        llSelectQlcWallet.setOnClickListener {
             var intent1 = Intent(activity, OtcChooseWalletActivity::class.java)
-            intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
+            intent1.putExtra("walletType", OtcUtils.parseChain(selectedPair!!.payTokenChain).ordinal)
             intent1.putExtra("select", true)
-            startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+            startActivityForResult(intent1, receiveTokenType)
             activity!!.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
         }
-        tvWalletAddess.setOnClickListener {
+        tvReceiveWalletAddess.setOnClickListener {
             showEnterEthWalletDialog()
+        }
+        llSellToken.setOnClickListener {
+            startActivityForResult(Intent(activity, SelectCurrencyActivity::class.java), selectPair)
+        }
+        llBuyToken.setOnClickListener {
+            startActivityForResult(Intent(activity, SelectCurrencyActivity::class.java), selectPair)
         }
     }
 
@@ -181,9 +215,9 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
         val tvQLCWalletAddess1 = view.findViewById<TextView>(R.id.tvQLCWalletAddess1)
         val tvQgasAmount1 = view.findViewById<TextView>(R.id.tvQgasAmount1)
         val tvMainQgasAddress = view.findViewById<TextView>(R.id.tvMainQgasAddress)
-        tvQLCWalletName1.text = sendQgasWallet!!.accountName
-        tvQLCWalletAddess1.text = sendQgasWallet!!.address
-        tvQgasAmount1.text = etAmount.text.toString().trim() + " QGAS"
+        tvQLCWalletName1.text = sendQlcWallet!!.accountName
+        tvQLCWalletAddess1.text = sendQlcWallet!!.address
+        tvQgasAmount1.text = etAmount.text.toString().trim() + " " + selectedPair!!.tradeToken
         tvMainQgasAddress.text = ConstantValue.mainAddressData.qlcchian.address
         //取消或确定按钮监听事件处l
         val sweetAlertDialog = SweetAlertDialog(activity!!)
@@ -200,13 +234,14 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             var map = mutableMapOf<String, String>()
             map.put("account", ConstantValue.currentUser.account)
             map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
+            map["pairsId"] = selectedPair!!.id
             map.put("type", ConstantValue.orderTypeSell)
             map.put("unitPrice", etUnitPrice.text.toString().trim())
             map.put("totalAmount", etAmount.text.toString().trim())
             map.put("minAmount", etMinAmount.text.toString().trim())
             map.put("maxAmount", etMaxAmount.text.toString().trim())
             map.put("qgasAddress","")
-            map.put("usdtAddress", tvWalletAddess.text.toString().trim())
+            map.put("usdtAddress", tvReceiveWalletAddess.text.toString().trim())
             mPresenter.sendQgas(etAmount.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
         }
     }
@@ -229,8 +264,8 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
         }
         tvOk.setOnClickListener {
             if (ETHWalletUtils.isETHValidAddress(etContent.text.toString().trim())) {
-                tvWalletAddess.text = etContent.text.toString().trim()
-                tvWalletName.text = etContent.text.toString().trim()
+                tvReceiveWalletAddess.text = etContent.text.toString().trim()
+                tvReceiveWalletName.text = etContent.text.toString().trim()
             } else {
                 toast("Illegal Receipt Address")
             }
@@ -242,15 +277,31 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when(requestCode) {
-                AllWallet.WalletType.EthWallet.ordinal -> {
-                    receiveEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
-                    tvWalletName.text = receiveEthWallet!!.name
-                    tvWalletAddess.text = receiveEthWallet!!.address
+                receiveTokenType -> {
+                    when(OtcUtils.parseChain(selectedPair!!.payTokenChain)) {
+                        AllWallet.WalletType.EthWallet -> {
+                            receiveEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
+                            tvReceiveWalletName.text = receiveEthWallet!!.name
+                            tvReceiveWalletAddess.text = receiveEthWallet!!.address
+                        }
+                        AllWallet.WalletType.EosWallet -> {
+                            receiveEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
+                            tvReceiveWalletName.text = receiveEosWallet!!.walletName
+                            tvReceiveWalletAddess.text = receiveEosWallet!!.accountName
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            receiveNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
+                            tvReceiveWalletName.text = receiveNeoWallet!!.name
+                            tvReceiveWalletAddess.text = receiveNeoWallet!!.address
+                        }
+                        AllWallet.WalletType.QlcWallet -> {
+                            receiveQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
+                            tvReceiveWalletName.text = receiveQlcWallet!!.accountName
+                            tvReceiveWalletAddess.text = receiveQlcWallet!!.address
+                        }
+                    }
                 }
-                AllWallet.WalletType.QlcWallet.ordinal -> {
-                    sendQgasWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
-                    tvQLCWalletName.text = sendQgasWallet!!.accountName
-                    tvQLCWalletAddess.text = sendQgasWallet!!.address
+                sendTokenType -> {
                     val ethWallets = AppConfig.getInstance().daoSession.ethWalletDao.loadAll()
                     if (ethWallets.size != 0) {
                         ethWallets.forEach {
@@ -282,106 +333,128 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                             }
                         }
                     }
+                    val qlcAccountList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+                    qlcAccountList.forEach {
+                        if (it.isCurrent()) {
+                            it.setIsCurrent(false)
+                            AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
+                            return@forEach
+                        }
+                    }
 
-                    if (qlcAccounList != null && qlcAccounList.size != 0) {
-                        qlcAccounList.forEach {
-                            if (it.isCurrent()) {
-                                it.setIsCurrent(false)
-                                AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
-                                return@forEach
+                    when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
+                        AllWallet.WalletType.EthWallet -> {
+                            sendEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
+                            tvSendWalletName.text = sendEthWallet!!.name
+                            tvSendWalletAddess.text = sendEthWallet!!.address
+
+                            if (ethWallets != null && ethWallets.size != 0) {
+                                ethWallets.forEach {
+                                    if (it.address.equals(sendEthWallet!!.address)) {
+                                        it.setIsCurrent(true)
+                                        AppConfig.getInstance().daoSession.ethWalletDao.update(it)
+                                        EventBus.getDefault().post(ChangeCurrency())
+                                        return@forEach
+                                    }
+                                }
                             }
                         }
-                        qlcAccounList.forEach {
-                            if (it.address.equals(sendQgasWallet!!.address)) {
-                                it.setIsCurrent(true)
-                                AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
-                                EventBus.getDefault().post(ChangeCurrency())
-                                return@forEach
+                        AllWallet.WalletType.EosWallet -> {
+                            sendEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
+                            tvSendWalletName.text = sendEosWallet!!.walletName
+                            tvSendWalletAddess.text = sendEosWallet!!.accountName
+
+                            if (wallets2 != null && wallets2.size != 0) {
+                                wallets2.forEach {
+                                    if (it.accountName.equals(sendEosWallet!!.accountName)) {
+                                        it.setIsCurrent(true)
+                                        AppConfig.getInstance().daoSession.eosAccountDao.update(it)
+                                        EventBus.getDefault().post(ChangeCurrency())
+                                        return@forEach
+                                    }
+                                }
                             }
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            sendNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
+                            tvSendWalletName.text = sendNeoWallet!!.name
+                            tvSendWalletAddess.text = sendNeoWallet!!.address
+
+                            if (neoWallets != null && neoWallets.size != 0) {
+                                neoWallets.forEach {
+                                    if (it.address.equals(sendNeoWallet!!.address)) {
+                                        it.setIsCurrent(true)
+                                        AppConfig.getInstance().daoSession.walletDao.update(it)
+                                        EventBus.getDefault().post(ChangeCurrency())
+                                        return@forEach
+                                    }
+                                }
+                            }
+                        }
+                        AllWallet.WalletType.QlcWallet -> {
+                            sendQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
+                            tvSendWalletName.text = sendQlcWallet!!.accountName
+                            tvSendWalletAddess.text = sendQlcWallet!!.address
+
+                            if (qlcAccountList != null && qlcAccountList.size != 0) {
+                                qlcAccountList.forEach {
+                                    if (it.address.equals(sendQlcWallet!!.address)) {
+                                        it.setIsCurrent(true)
+                                        AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
+                                        EventBus.getDefault().post(ChangeCurrency())
+                                        return@forEach
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                selectPair -> {
+                    selectedPair = data!!.getParcelableExtra("pair")
+                    buyingToken.text = selectedPair!!.payToken
+                    buyingTokenPrice.text = selectedPair!!.payToken
+                    sellingToken.text = selectedPair!!.tradeToken
+                    sellinngTokenQuantity.text = selectedPair!!.tradeToken
+                    ivReceiveChain.setImageDrawable(null)
+                    ivSendChain.setImageDrawable(null)
+                    tvSendWalletAddess.text = getString(R.string.select_a_wallet)
+                    tvSendWalletName.text = getString(R.string.select_a_wallet_to_send_out_token)
+
+                    tvReceiveWalletAddess.text = getString(R.string.input_wallet_address)
+                    tvReceiveWalletName.text = getString(R.string.select_a_wallet_to_receive_token)
+
+                    when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
+                        AllWallet.WalletType.QlcWallet -> {
+                            ivSendChain.setImageResource(R.mipmap.icons_qlc_wallet)
+                        }
+                        AllWallet.WalletType.EthWallet -> {
+                            ivSendChain.setImageResource(R.mipmap.icons_eth_wallet)
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            ivSendChain.setImageResource(R.mipmap.icons_neo_wallet)
+                        }
+                        AllWallet.WalletType.EosWallet -> {
+                            ivSendChain.setImageResource(R.mipmap.icons_eos_wallet)
+                        }
+                    }
+                    when(OtcUtils.parseChain(selectedPair!!.payTokenChain)) {
+                        AllWallet.WalletType.QlcWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_qlc_wallet)
+                        }
+                        AllWallet.WalletType.EthWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_eth_wallet)
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_neo_wallet)
+                        }
+                        AllWallet.WalletType.EosWallet -> {
+                            ivReceiveChain.setImageResource(R.mipmap.icons_eos_wallet)
                         }
                     }
                 }
             }
         }
     }
-
-//    private fun showSendQGASWalletPopWindow() {
-//        if (qlcAccounList.size > 0) {
-//            PopWindowUtil.showSharePopWindow(activity!!, sendWalletMore, qlcAccounList.map { it.address }, object : PopWindowUtil.OnItemSelectListener {
-//                override fun onSelect(content: String) {
-//                    if ("" != content) {
-//                        etSendAddress.setText(content)
-//                        val ethWallets = AppConfig.getInstance().daoSession.ethWalletDao.loadAll()
-//                        if (ethWallets.size != 0) {
-//                            ethWallets.forEach {
-//                                if (it.isCurrent()) {
-//                                    it.setIsCurrent(false)
-//                                    AppConfig.getInstance().daoSession.ethWalletDao.update(it)
-//                                    return@forEach
-//                                }
-//                            }
-//                        }
-//                        val neoWallets = AppConfig.getInstance().daoSession.walletDao.loadAll()
-//                        if (neoWallets.size != 0) {
-//                            neoWallets.forEach {
-//                                if (it.isCurrent) {
-//                                    it.setIsCurrent(false)
-//                                    AppConfig.getInstance().daoSession.walletDao.update(it)
-//                                    return@forEach
-//                                }
-//                            }
-//                        }
-//
-//                        val wallets2 = AppConfig.getInstance().daoSession.eosAccountDao.loadAll()
-//                        if (wallets2 != null && wallets2.size != 0) {
-//                            wallets2.forEach {
-//                                if (it.isCurrent) {
-//                                    it.setIsCurrent(false)
-//                                    AppConfig.getInstance().daoSession.eosAccountDao.update(it)
-//                                    return@forEach
-//                                }
-//                            }
-//                        }
-//
-//                        if (qlcAccounList != null && qlcAccounList.size != 0) {
-//                            qlcAccounList.forEach {
-//                                if (it.isCurrent()) {
-//                                    it.setIsCurrent(false)
-//                                    AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
-//                                    return@forEach
-//                                }
-//                            }
-//                            qlcAccounList.forEach {
-//                                if (it.address.equals(content)) {
-//                                    it.setIsCurrent(true)
-//                                    AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
-//                                    EventBus.getDefault().post(ChangeCurrency())
-//                                    return@forEach
-//                                }
-//                            }
-//                        }
-//                    }
-//                    SpringAnimationUtil.endRotatoSpringViewAnimation(sendWalletMore) { animation, canceled, value, velocity -> }
-//                }
-//            })
-//            SpringAnimationUtil.startRotatoSpringViewAnimation(sendWalletMore) { animation, canceled, value, velocity -> }
-//        }
-//    }
-
-//    private fun showSpinnerPopWindow() {
-//        var ethWalletList = AppConfig.instance.daoSession.ethWalletDao.loadAll()
-//        if (ethWalletList.size > 0) {
-//            PopWindowUtil.showSharePopWindow(activity!!, walletMore, ethWalletList.map { it.address }, object : PopWindowUtil.OnItemSelectListener {
-//                override fun onSelect(content: String) {
-//                    if ("" != content) {
-//                        etReceiveAddress.setText(content)
-//                    }
-//                    SpringAnimationUtil.endRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
-//                }
-//            })
-//            SpringAnimationUtil.startRotatoSpringViewAnimation(walletMore) { animation, canceled, value, velocity -> }
-//        }
-//    }
 
     override fun setupFragmentComponent() {
         DaggerOrderSellComponent

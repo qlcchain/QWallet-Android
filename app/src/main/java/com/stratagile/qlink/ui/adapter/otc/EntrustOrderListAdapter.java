@@ -26,6 +26,9 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
     @Override
     protected void convert(BaseViewHolder helper, EntrustOrderList.OrderListBean item) {
         helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString());
+        helper.setText(R.id.tvPayToken, item.getPayToken());
+        helper.setText(R.id.tvTradeToken0, "(" + item.getTradeToken() + ")");
+        helper.setText(R.id.tvTradeToken1, "(" + item.getTradeToken() + ")");
         if (item.getType().equals(ConstantValue.orderTypeSell)) {
             helper.setText(R.id.tvOpreate, mContext.getResources().getString(R.string.buy).toUpperCase());
             helper.setBackgroundRes(R.id.tvOpreate, R.drawable.buy_bg);

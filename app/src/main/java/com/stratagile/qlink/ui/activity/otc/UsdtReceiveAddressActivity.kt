@@ -14,15 +14,18 @@ import android.os.Environment
 import android.support.v4.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.QrEntity
 import com.stratagile.qlink.ui.activity.otc.component.DaggerUsdtReceiveAddressComponent
 import com.stratagile.qlink.ui.activity.otc.contract.UsdtReceiveAddressContract
 import com.stratagile.qlink.ui.activity.otc.module.UsdtReceiveAddressModule
 import com.stratagile.qlink.ui.activity.otc.presenter.UsdtReceiveAddressPresenter
+import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.ThreadUtil
 import com.stratagile.qlink.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_usdt_receive_address.*
@@ -54,21 +57,43 @@ class UsdtReceiveAddressActivity : BaseActivity(), UsdtReceiveAddressContract.Vi
 
     override fun initView() {
         setContentView(R.layout.activity_usdt_receive_address)
-        title.text = getString(R.string.usdt_receivable_address)
     }
     override fun initData() {
         qrEntity = intent.getParcelableExtra("qrentity")
-        val logo = BitmapFactory.decodeResource(resources, resources.getIdentifier("usdt", "mipmap", packageName))
+        title.text = intent.getStringExtra("payToken") + getString(R.string.receivable_address)
+        val logo = BitmapFactory.decodeResource(resources, resources.getIdentifier(intent.getStringExtra("payToken").toLowerCase(), "mipmap", packageName))
         val createEnglishQRCode = ThreadUtil.Companion.CreateEnglishQRCode(qrEntity.content, ivQRCode, logo)
         createEnglishQRCode.execute()
         tvWalletAddess.text = qrEntity.content
         understand.setOnClickListener {
-            var intent1 = Intent(this, UsdtPayActivity::class.java)
-            intent1.putExtra("usdt", intent.getStringExtra("usdt"))
-            intent1.putExtra("receiveAddress", intent.getStringExtra("receiveAddress"))
-            intent1.putExtra("tradeOrderId", intent.getStringExtra("tradeOrderId"))
-            intent1.putExtra("orderNumber", intent.getStringExtra("orderNumber"))
-            startActivityForResult(intent1, 0)
+            when(OtcUtils.parseChain(intent.getStringExtra("payTokenChain"))) {
+                AllWallet.WalletType.QlcWallet -> {
+
+                }
+                AllWallet.WalletType.EthWallet -> {
+                    var intent1 = Intent(this, UsdtPayActivity::class.java)
+                    intent1.putExtra("usdt", intent.getStringExtra("usdt"))
+                    intent1.putExtra("payToken", intent.getStringExtra("payToken"))
+                    intent1.putExtra("tradeToken", intent.getStringExtra("tradeToken"))
+                    intent1.putExtra("receiveAddress", intent.getStringExtra("receiveAddress"))
+                    intent1.putExtra("tradeOrderId", intent.getStringExtra("tradeOrderId"))
+                    intent1.putExtra("orderNumber", intent.getStringExtra("orderNumber"))
+                    startActivityForResult(intent1, 0)
+                }
+                AllWallet.WalletType.EosWallet -> {
+
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    var intent1 = Intent(this, OtcNeoChainPayActivity::class.java)
+                    intent1.putExtra("usdt", intent.getStringExtra("usdt"))
+                    intent1.putExtra("payToken", intent.getStringExtra("payToken"))
+                    intent1.putExtra("tradeToken", intent.getStringExtra("tradeToken"))
+                    intent1.putExtra("receiveAddress", intent.getStringExtra("receiveAddress"))
+                    intent1.putExtra("tradeOrderId", intent.getStringExtra("tradeOrderId"))
+                    intent1.putExtra("orderNumber", intent.getStringExtra("orderNumber"))
+                    startActivityForResult(intent1, 0)
+                }
+            }
         }
 
         tvWalletAddess.setOnClickListener {

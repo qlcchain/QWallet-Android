@@ -193,6 +193,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvRecord"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x92"
                 android:layout_marginTop="@dimen/x20"

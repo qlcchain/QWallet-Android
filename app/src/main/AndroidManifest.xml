@@ -212,7 +212,8 @@
         <activity android:name=".ui.activity.qlc.QlcMnemonicShowActivity" />
         <activity android:name=".ui.activity.qlc.QlcMnemonicbackupActivity" />
         <activity android:name=".ui.activity.my.VerificationActivity" />
-        <activity android:name=".ui.activity.otc.NewOrderActivity" />
+        <activity android:name=".ui.activity.otc.NewOrderActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
         <activity android:name=".ui.activity.otc.BuyQgasActivity" />
         <activity android:name=".ui.activity.otc.SellQgasActivity" />
         <activity android:name=".ui.activity.otc.OrderDetailActivity" />
@@ -231,6 +232,8 @@
         <activity android:name=".ui.activity.stake.StakeDetailActivity" />
         <activity android:name=".ui.activity.stake.StakeExplainActivity" />
         <activity android:name=".ui.activity.stake.QlcPayActivity" />
+        <activity android:name=".ui.activity.otc.SelectCurrencyActivity" />
+        <activity android:name=".ui.activity.otc.OtcNeoChainPayActivity" />
 
 
         <meta-data

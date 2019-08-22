@@ -23,6 +23,38 @@ public class TradeOrderDetail extends BaseBack<TradeOrderDetail.OrderBean> {
     }
 
     public static class OrderBean implements Parcelable {
+        public String getTradeTokenChain() {
+            return tradeTokenChain;
+        }
+
+        public void setTradeTokenChain(String tradeTokenChain) {
+            this.tradeTokenChain = tradeTokenChain;
+        }
+
+        public String getPayTokenChain() {
+            return payTokenChain;
+        }
+
+        public void setPayTokenChain(String payTokenChain) {
+            this.payTokenChain = payTokenChain;
+        }
+
+        public String getTradeToken() {
+            return tradeToken;
+        }
+
+        public void setTradeToken(String tradeToken) {
+            this.tradeToken = tradeToken;
+        }
+
+        public String getPayToken() {
+            return payToken;
+        }
+
+        public void setPayToken(String payToken) {
+            this.payToken = payToken;
+        }
+
         /**
          * reason : 是的
          * appealStatus : YES
@@ -86,6 +118,11 @@ public class TradeOrderDetail extends BaseBack<TradeOrderDetail.OrderBean> {
         private String sellerConfirmDate;
         private String auditFeedback;
         private String status;
+        private String tradeTokenChain;
+        private String payTokenChain;
+        private String tradeToken;
+        private String payToken;
+
 
         protected OrderBean(Parcel in) {
             reason = in.readString();
@@ -118,6 +155,10 @@ public class TradeOrderDetail extends BaseBack<TradeOrderDetail.OrderBean> {
             sellerConfirmDate = in.readString();
             auditFeedback = in.readString();
             status = in.readString();
+            tradeTokenChain = in.readString();
+            payTokenChain = in.readString();
+            tradeToken = in.readString();
+            payToken = in.readString();
         }
 
         public static final Creator<OrderBean> CREATOR = new Creator<OrderBean>() {
@@ -372,6 +413,7 @@ public class TradeOrderDetail extends BaseBack<TradeOrderDetail.OrderBean> {
             this.status = status;
         }
 
+
         @Override
         public int describeContents() {
             return 0;
@@ -409,6 +451,10 @@ public class TradeOrderDetail extends BaseBack<TradeOrderDetail.OrderBean> {
             parcel.writeString(sellerConfirmDate);
             parcel.writeString(auditFeedback);
             parcel.writeString(status);
+            parcel.writeString(tradeTokenChain);
+            parcel.writeString(payTokenChain);
+            parcel.writeString(tradeToken);
+            parcel.writeString(payToken);
         }
     }
 }

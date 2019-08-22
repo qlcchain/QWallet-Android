@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.otc.contract;
 
 import com.stratagile.qlink.entity.EntrustOrderList;
+import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
@@ -24,9 +25,7 @@ public interface MarketContract {
          */
         void closeProgressDialog();
 
-        void setEntrustOrderList(ArrayList<EntrustOrderList.OrderListBean> list, int currentPage);
-
-        void getEutrustOrderError();
+        void setRemoteTradePairs(ArrayList<TradePair.PairsListBean> pairsListBeans);
     }
 
     interface MarketContractPresenter extends BasePresenter {
