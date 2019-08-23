@@ -234,6 +234,7 @@
         <activity android:name=".ui.activity.stake.QlcPayActivity" />
         <activity android:name=".ui.activity.otc.SelectCurrencyActivity" />
         <activity android:name=".ui.activity.otc.OtcNeoChainPayActivity" />
+        <activity android:name=".ui.activity.otc.OtcQlcChainPayActivity" />
 
 
         <meta-data

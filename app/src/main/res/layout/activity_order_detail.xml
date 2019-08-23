@@ -67,9 +67,10 @@
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/x12"
                     android:layout_marginRight="@dimen/x30"
+                    android:layout_marginBottom="10dp"
                     android:drawableRight="@mipmap/copy_h"
                     android:drawablePadding="@dimen/x40"
-                    android:text="0x235eD15f617039f6572d6A3BE2A23b0a83717873"
+                    android:text="-/-"
                     android:textColor="@color/color_29282a"
                     android:textSize="16sp" />
             </LinearLayout>

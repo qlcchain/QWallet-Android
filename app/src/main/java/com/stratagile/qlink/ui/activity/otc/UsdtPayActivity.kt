@@ -63,13 +63,16 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
             toast(getString(R.string.no_enough_eth))
         }
         ethWalletInfo.data.tokens.forEach {
-            if ("USDT".equals(it.tokenInfo.symbol)) {
+            if (intent.getStringExtra("payToken").equals(it.tokenInfo.symbol)) {
                 usdtCount = it.balance / Math.pow(10.0, it.tokenInfo.decimals.toDouble())
-                tvUsdtBalance.text = getString(R.string.balance) + ": $usdtCount USDT"
+                tvUsdtBalance.text = getString(R.string.balance) + ": $usdtCount ${it.tokenInfo.symbol}"
+                payTokenBean = it
                 return@forEach
             }
         }
     }
+
+    var payTokenBean : EthWalletInfo.DataBean.TokensBean? = null
 
     override fun setEthPrice(tokenPrice: TokenPrice) {
         ethPrice = tokenPrice.data[0].price
@@ -220,7 +223,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvOk.setOnClickListener {
             sweetAlertDialog.cancel()
             showProgressDialog()
-            mPresenter.transferUsdt(ethWallet!!.address, tvReceiveAddress.text.toString(), usdtAmount.toString(), gasPrice, intent.getStringExtra("tradeOrderId"))
+            mPresenter.transferUsdt(ethWallet!!.address, tvReceiveAddress.text.toString(), usdtAmount.toString(), gasPrice, intent.getStringExtra("tradeOrderId"), payTokenBean!!.tokenInfo.address)
         }
     }
 

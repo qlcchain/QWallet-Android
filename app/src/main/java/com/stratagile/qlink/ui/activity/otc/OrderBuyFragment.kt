@@ -102,15 +102,11 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (etMinAmount.text.toString().toBigDecimal() < 1.toBigDecimal()) {
+            if (etMinAmount.text.toString().trim().toBigDecimal() > etMaxAmount.text.toString().trim().toBigDecimal()) {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (etMinAmount.text.toString().trim().toInt() > etMaxAmount.text.toString().trim().toInt()) {
-                toast(getString(R.string.illegal_value))
-                return@setOnClickListener
-            }
-            if (etMaxAmount.text.toString().trim().toInt() > etAmount.text.toString().trim().toInt()) {
+            if (etMaxAmount.text.toString().trim().toBigDecimal() > etAmount.text.toString().trim().toBigDecimal()) {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }

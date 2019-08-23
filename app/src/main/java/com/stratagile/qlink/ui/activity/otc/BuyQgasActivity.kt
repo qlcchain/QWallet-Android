@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
@@ -15,7 +14,10 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.db.EosAccount
+import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.db.Wallet
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.EntrustOrderList
 import com.stratagile.qlink.entity.QrEntity
@@ -29,7 +31,6 @@ import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.EosUtil
 import com.stratagile.qlink.utils.OtcUtils
-import com.stratagile.qlink.utils.PopWindowUtil
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_buy_qgas.*
@@ -39,8 +40,6 @@ import kotlinx.android.synthetic.main.activity_buy_qgas.tvNext
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvUnitPrice
 import neoutils.Neoutils
 import qlc.mng.AccountMng
-import qlc.mng.WalletMng
-import qlc.utils.Helper
 import java.math.BigDecimal
 
 import javax.inject.Inject;
@@ -56,13 +55,13 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
     override fun setEntrustOrder(entrustOrderInfo: EntrustOrderInfo) {
         closeProgressDialog()
         this.entrustOrderInfo = entrustOrderInfo
-        maxQgas = entrustOrderInfo.order.totalAmount.toInt() - entrustOrderInfo.order.lockingAmount.toInt() - entrustOrderInfo.order.completeAmount.toInt()
-        maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
-        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
-        etQgas.hint = getString(R.string.max) + " " + maxQgas
-        tvAmount.text = maxQgas.toString()
-        if (maxQgas.toBigDecimal() < BigDecimal.valueOf(orderList.maxAmount)) {
-            tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.toString()
+        maxQgas = entrustOrderInfo.order.totalAmount.toBigDecimal() - entrustOrderInfo.order.lockingAmount.toBigDecimal() - entrustOrderInfo.order.completeAmount.toBigDecimal()
+        maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
+        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.stripTrailingZeros().toPlainString()
+        etQgas.hint = getString(R.string.max) + " " + maxQgas.stripTrailingZeros().toPlainString()
+        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+        if (maxQgas < BigDecimal.valueOf(orderList.maxAmount)) {
+            tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.stripTrailingZeros().toPlainString()
         } else {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         }
@@ -89,8 +88,8 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
     lateinit var orderList: EntrustOrderList.OrderListBean
     lateinit var entrustOrderInfo: EntrustOrderInfo
 
-    var maxUsdt = BigDecimal.ONE
-    var maxQgas = 0
+    var maxUsdt = BigDecimal.ZERO
+    var maxQgas = BigDecimal.ZERO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white;
@@ -113,14 +112,30 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         tvVolumeAmount.text = getString(R.string.volume_amount_qgas) + "(" + orderList.tradeToken + ")"
         tvVolumeSetting.text = getString(R.string.volume_settings) + "(" + orderList.tradeToken + ")"
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
-        maxQgas = orderList.totalAmount.toInt()
-        maxUsdt = BigDecimal.valueOf(orderList.unitPrice * maxQgas)
-        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
-        etQgas.hint = getString(R.string.max) + " " + maxQgas
+        maxQgas = orderList.totalAmount.toBigDecimal()
+        maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
+        etUsdt.hint = getString(R.string.max) + " " + maxUsdt.stripTrailingZeros().toPlainString()
+        etQgas.hint = getString(R.string.max) + " " + maxQgas.stripTrailingZeros().toPlainString()
         tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         var map = hashMapOf<String, String>()
         map.put("entrustOrderId", orderList.id)
         mPresenter.getEntrustOrderDetail(map)
+
+        when(OtcUtils.parseChain(orderList.tradeTokenChain)) {
+            AllWallet.WalletType.QlcWallet -> {
+                ivReceiveChain.setImageResource(R.mipmap.icons_qlc_wallet)
+            }
+            AllWallet.WalletType.EthWallet -> {
+                ivReceiveChain.setImageResource(R.mipmap.icons_eth_wallet)
+            }
+            AllWallet.WalletType.NeoWallet -> {
+                ivReceiveChain.setImageResource(R.mipmap.icons_neo_wallet)
+            }
+            AllWallet.WalletType.EosWallet -> {
+                ivReceiveChain.setImageResource(R.mipmap.icons_eos_wallet)
+            }
+        }
+
         tvNext.setOnClickListener {
             if (entrustOrderInfo.order.userId.equals(ConstantValue.currentUser.userId)) {
 
@@ -135,13 +150,13 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             if (etUsdt.text.toString().toBigDecimal() > maxUsdt) {
                 return@setOnClickListener
             }
-            if (etQgas.text.toString().toInt() > maxQgas) {
+            if (etQgas.text.toString().toBigDecimal() > maxQgas) {
                 return@setOnClickListener
             }
             if ("".equals(tvReceiveWalletAddess)) {
                 return@setOnClickListener
             }
-            when(OtcUtils.parseChain(orderList.tradeToken)) {
+            when(OtcUtils.parseChain(orderList.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
@@ -168,9 +183,9 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                 }
             }
 
-            if (maxQgas < entrustOrderInfo.order.minAmount) {
+            if (maxQgas < entrustOrderInfo.order.minAmount.toBigDecimal()) {
                 //交易量不足的情况，输入剩余的数量
-                if (etQgas.text.toString().toInt() < maxQgas) {
+                if (etQgas.text.toString().toBigDecimal() < maxQgas) {
                     return@setOnClickListener
                 }
             } else {
@@ -202,10 +217,10 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
 
                     } else {
                         if (etUsdt.text.toString().toBigDecimal() > maxUsdt) {
-                            etUsdt.setText(maxUsdt.toPlainString())
-                            etQgas.setText(maxQgas.toString())
+                            etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
+                            etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etQgas.setText((etUsdt.text.toString().toBigDecimal().divide(entrustOrderInfo.order.unitPrice.toBigDecimal(), 0, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString())
+                            etQgas.setText((etUsdt.text.toString().toBigDecimal().divide(entrustOrderInfo.order.unitPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {
@@ -227,9 +242,9 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                     if ("".equals(etQgas.text.toString())) {
                         etUsdt.setText("")
                     } else {
-                        if (etQgas.text.toString().toInt() > maxQgas) {
-                            etUsdt.setText(maxUsdt.toPlainString())
-                            etQgas.setText(maxQgas.toString())
+                        if (etQgas.text.toString().toBigDecimal() > maxQgas) {
+                            etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
+                            etQgas.setText(maxQgas.stripTrailingZeros().toString())
                         } else {
                             etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).stripTrailingZeros().toPlainString())
                         }
@@ -251,37 +266,69 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             showEnterQlcWalletDialog()
         }
 
-        llSelectQlcWallet.setOnClickListener {
-            var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
-            intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
-            intent1.putExtra("select", true)
-            startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
-            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
-        }
 
-        var qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
-        if (qlcAccounList.size > 0) {
-            qlcAccounList.forEach {
-                if (it.isCurrent()) {
-                    receiveQgasWallet = it
-                    tvReceiveWalletName.text = it.accountName
-                    tvReceiveWalletAddess.text = it.address
-                    return@forEach
+        llSelectQlcWallet.setOnClickListener {
+            when(OtcUtils.parseChain(orderList.tradeTokenChain)) {
+                AllWallet.WalletType.QlcWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+                AllWallet.WalletType.EthWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.NeoWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, AllWallet.WalletType.NeoWallet.ordinal)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+                AllWallet.WalletType.EosWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.EosWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, AllWallet.WalletType.EosWallet.ordinal)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
                 }
             }
         }
     }
 
-    var receiveQgasWallet : QLCAccount? = null
+    var receiveQlcWallet : QLCAccount? = null
+    var receiveEthWallet: EthWallet? = null
+    var receiveEosWallet: EosAccount? = null
+    var receiveNeoWallet: Wallet? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 AllWallet.WalletType.QlcWallet.ordinal -> {
-                    receiveQgasWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
-                    tvReceiveWalletName.text = receiveQgasWallet!!.accountName
-                    tvReceiveWalletAddess.text = receiveQgasWallet!!.address
+                    receiveQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
+                    tvReceiveWalletName.text = receiveQlcWallet!!.accountName
+                    tvReceiveWalletAddess.text = receiveQlcWallet!!.address
+                }
+                AllWallet.WalletType.EthWallet.ordinal -> {
+                    receiveEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
+                    tvReceiveWalletName.text = receiveEthWallet!!.name
+                    tvReceiveWalletAddess.text = receiveEthWallet!!.address
+                }
+                AllWallet.WalletType.NeoWallet.ordinal -> {
+                    receiveNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
+                    tvReceiveWalletName.text = receiveNeoWallet!!.name
+                    tvReceiveWalletAddess.text = receiveNeoWallet!!.address
+                }
+                AllWallet.WalletType.EosWallet.ordinal -> {
+                    receiveEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
+                    tvReceiveWalletName.text = receiveEosWallet!!.accountName
+                    tvReceiveWalletAddess.text = receiveEosWallet!!.accountName
                 }
             }
         }

@@ -112,7 +112,7 @@ class NeoNodeRPC {
         return byteArrayOf((script.length / 2).toUByte()) + script.hexStringToByteArray()
     }
 
-    private fun generateInvokeTransactionPayload(wallet: Wallet, assets: UTXOS?, script: String, contractAddress: String, remark : String): ByteArray {
+    private fun generateInvokeTransactionPayload(wallet: Wallet, utxos: UTXOS?, script: String, contractAddress: String, remark : String): ByteArray {
 //        val inputData = getInputsNecessaryToSendAsset(NeoNodeRPC.Asset.GAS, 0.00000001, assets)
 //        val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
 //        var rawTransaction = packRawTransactionBytes(payloadPrefix, wallet, Asset.GAS,
@@ -132,14 +132,14 @@ class NeoNodeRPC {
         var attachedNEOAmount = BigDecimal.ZERO
         var attachedGasAmount = BigDecimal.ZERO
 
-        if (attachedNEOAmount > BigDecimal.ZERO) {
+//        if (attachedNEOAmount > BigDecimal.ZERO) {
 //            neoInput = getInputsNecessaryToSendNEO(attachedNEOAmount, utxos)
-        }
-
-//        if (attachedGasAmount > BigDecimal.ZERO || fee > BigDecimal.ZERO ) {
-//            val toSendGasAmount = if (attachedGasAmount == BigDecimal.ZERO) BigDecimal(0.00000001) else attachedGasAmount
-//            gasInput = getInputsNecessaryToSendGAS(toSendGasAmount, utxos, fee)
 //        }
+
+        if (attachedGasAmount > BigDecimal.ZERO || "0.00000001".toBigDecimal() > BigDecimal.ZERO ) {
+            val toSendGasAmount = if (attachedGasAmount == BigDecimal.ZERO) BigDecimal(0.00000001) else attachedGasAmount
+            gasInput = getInputsNecessaryToSendGAS(toSendGasAmount, utxos, "0.00000001".toBigDecimal())
+        }
 
 //        if (neoInput != null) {
 //            neoOutput = getOutputDataPayload(wallet,
@@ -147,11 +147,11 @@ class NeoNodeRPC {
 //                    attachedNEOAmount, contractHash.hexStringToByteArray().reversedArray().toHex(), neoInput.fee)
 //        }
 
-//        if (gasInput != null) {
-//            gasOutput = getOutputDataPayload(wallet,
-//                    Asset.GAS, gasInput.totalAmount!!,
-//                    attachedGasAmount, contractHash.hexStringToByteArray().reversedArray().toHex(), gasInput.fee)
-//        }
+        if (gasInput != null) {
+            gasOutput = getOutputDataPayload(wallet,
+                    Asset.GAS, gasInput.totalAmount!!,
+                    attachedGasAmount, contractAddress.hexStringToByteArray().reversedArray().toHex(), gasInput.fee)
+        }
         var finalAttributes = arrayOf<TransactionAttribute>(
                 TransactionAttribute().scriptAttribute(wallet.address.hashFromAddress()),
                 TransactionAttribute().remarkAttribute(String.format(remark, Date().time.toString())),

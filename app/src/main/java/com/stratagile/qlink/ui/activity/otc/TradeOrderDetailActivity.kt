@@ -94,6 +94,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             //我买
             tvOtherUser.text = getString(R.string.seller)
             tvOrderType.text = getString(R.string.buy)
+            tvCoin.text = " " + tradeOrderDetail.order.tradeToken
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_ff3669))
             tvOrderType.setTextColor(resources.getColor(R.color.mainColor))
 //            receiveAddressTip.text = getString(R.string.go_qlc_address_to_receive_qgas)
@@ -104,9 +105,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderState.text = getString(R.string.wating_for_the_public_chain_confirm_the_transaction)
                     tvOrderState1.text = getString(R.string.wating_for_the_public_chain_confirm_the_transaction)
                     tvOrderStateTip.text = getString(R.string.please_wait_patiently)
-                    tvOpreate1.visibility = View.VISIBLE
-                    tvOpreate2.visibility = View.VISIBLE
-                    tvOpreate3.visibility = View.VISIBLE
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
                     viewLine.visibility = View.GONE
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -243,8 +244,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                 }
                 "USDT_PENDING" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
-                    tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
-                    tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
+                    tvOrderState.text = getString(R.string.wait_public_chain_confirmation)
+                    tvOrderState1.text = getString(R.string.wait_public_chain_confirmation)
                     tvOrderStateTip.text = ""
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
@@ -327,7 +328,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = tradeOrderDetail.order.sellerConfirmDate
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.buyers_erc20_address)
+                    tvPayAddressTip.text = getString(R.string.send_to)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
                 }
@@ -336,9 +337,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             //我卖
             tvOtherUser.text = getString(R.string.buyer)
             tvOrderType.text = getString(R.string.sell)
+            tvCoin.text = " " + tradeOrderDetail.order.tradeToken
             tvAmountUsdt.setTextColor(resources.getColor(R.color.color_108ee9))
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
-//            receiveAddressTip.text = getString(R.string.erc20_address_to_receive_usdt)
             tvReceiveAddress.text = tradeOrderDetail.order.usdtToAddress
             when (tradeOrderDetail.order.status) {
                 "TRADE_TOKEN_PENDING" -> {
@@ -467,9 +468,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                 }
                 "USDT_PENDING" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
-                    tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
-                    tvOrderState1.text = getString(R.string.buyer_has_comfirmed_the_payment)
-                    tvOrderStateTip.text = getString(R.string.please_check_your_usdt_balance)
+                    tvOrderState.text = getString(R.string.wait_public_chain_confirmation)
+                    tvOrderState1.text = getString(R.string.wait_public_chain_confirmation)
+                    tvOrderStateTip.text = getString(R.string.please_wait_patiently)
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
                     tvOpreate3.visibility = View.GONE
@@ -477,7 +478,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.text = getString(R.string.appeal)
                     tvOpreate3.text = getString(R.string.i_have_received)
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.buyers_erc20_address)
+                    tvPayAddressTip.text = getString(R.string.send_to)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
                     tvPayAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -568,7 +569,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = tradeOrderDetail.order.sellerConfirmDate
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.buyers_erc20_address)
+                    tvPayAddressTip.text = getString(R.string.send_to)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
                 }

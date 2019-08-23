@@ -429,12 +429,16 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     private void initData() {
         hasSelectedWallet = false;
-        tokensAdapter.setNewData(new ArrayList<>());
-        tvWalletAsset.setText("- -");
-//        tvWalletGas.setText("- -");
-        llGetGas.setVisibility(View.GONE);
-        llResouces.setVisibility(View.GONE);
-        llStake.setVisibility(View.GONE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tokensAdapter.setNewData(new ArrayList<>());
+                tvWalletAsset.setText("- -");
+                llGetGas.setVisibility(View.GONE);
+                llResouces.setVisibility(View.GONE);
+                llStake.setVisibility(View.GONE);
+            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -450,6 +454,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     for (int i = 0; i < neoWallets.size(); i++) {
                         if (neoWallets.get(i).getIsCurrent()) {
                             hasSelectedWallet = true;
+                            KLog.i("生成neo钱包的结果为：" + Account.INSTANCE.fromWIF(neoWallets.get(i).getWif()));
                             getNeoToken(neoWallets.get(i));
                         }
                     }
@@ -684,8 +689,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     mPresenter.getNeoWalletDetail(wallet.getAddress(), infoMap);
                     Thread.sleep(1000);
                     queryGas(wallet.getAddress());
-                    Thread.sleep(1000);
-                    mPresenter.getWinqGas(wallet.getAddress());
+//                    Thread.sleep(1000);
+//                    mPresenter.getWinqGas(wallet.getAddress());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

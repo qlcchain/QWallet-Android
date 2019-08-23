@@ -123,7 +123,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="@string/min_amount"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textSize="16sp" />
 
             <View
@@ -140,7 +140,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="@string/max_amount"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x30"
             android:layout_marginTop="@dimen/x21"
-            android:text="@string/receive_from"
+            android:text="@string/send_to"
             android:textColor="@color/color_29282a"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"

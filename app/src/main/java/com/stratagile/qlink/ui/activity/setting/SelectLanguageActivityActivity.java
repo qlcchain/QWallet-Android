@@ -1,11 +1,14 @@
 package com.stratagile.qlink.ui.activity.setting;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,13 +98,23 @@ public class SelectLanguageActivityActivity extends BaseActivity implements Sele
                 }
             });
         }
-        defaultLanguage = SpUtil.getInt(SelectLanguageActivityActivity.this, ConstantValue.Language, 0);
-        String selectLanguage = SpUtil.getString(AppConfig.getInstance(), ConstantValue.selectLanguage, "");
-        String defaultLanguage = Locale.getDefault().getLanguage();
-        KLog.i(selectLanguage);
-        KLog.i(defaultLanguage);
+        defaultLanguage = SpUtil.getInt(SelectLanguageActivityActivity.this, ConstantValue.Language, -1);
+        if (defaultLanguage == -1) {
+            Resources resources = getResources();
+            // 获取应用内语言
+            final Configuration configuration = resources.getConfiguration();
+            if (configuration.locale == Locale.ENGLISH) {
+                defaultLanguage = 0;
+            } else {
+                defaultLanguage = 1;
+            }
+        }
+//        String selectLanguage = SpUtil.getString(AppConfig.getInstance(), ConstantValue.selectLanguage, "");
+//        String defaultLanguage = Locale.getDefault().getLanguage();
+//        KLog.i(selectLanguage);
+//        KLog.i(defaultLanguage);
         if (mAdapterContactCity != null) {
-            mAdapterContactCity.setSelectItem(SpUtil.getInt(SelectLanguageActivityActivity.this, ConstantValue.Language, 0));
+            mAdapterContactCity.setSelectItem(defaultLanguage);
         }
 
         et_search.addTextChangedListener(new TextWatcher() {

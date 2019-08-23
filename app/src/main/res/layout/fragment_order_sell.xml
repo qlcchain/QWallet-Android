@@ -113,7 +113,7 @@
                 android:layout_width="0px"
                 android:layout_weight="1"
                 android:hint="@string/min_amount"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textSize="16sp"
                 android:background="@null"
                 android:layout_height="match_parent" />
@@ -128,7 +128,7 @@
                 android:layout_width="0px"
                 android:background="@null"
                 android:hint="@string/max_amount"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_height="match_parent" />
@@ -156,7 +156,7 @@
             android:background="@color/color_f2f2f2"/>
         <TextView
             android:layout_width="wrap_content"
-            android:text="@string/send_to"
+            android:text="@string/receive_from"
             android:textSize="16sp"
             android:layout_marginLeft="@dimen/x30"
             android:textColor="@color/color_29282a"
@@ -307,7 +307,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="@string/receive_from"
+            android:text="@string/send_to"
             android:textSize="16sp"
             android:layout_marginLeft="@dimen/x30"
             android:textColor="@color/color_29282a"

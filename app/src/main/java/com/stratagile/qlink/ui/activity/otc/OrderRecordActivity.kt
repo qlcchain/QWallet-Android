@@ -71,34 +71,18 @@ class OrderRecordActivity : BaseActivity(), OrderRecordContract.View {
 data class Student(var name: String, var math : Int, var english : Int)
 
 fun main(args : Array<String>) {
-    println("哈哈哈")
-    Observable.create(ObservableOnSubscribe<Student> {
-        var list = mutableListOf<Student>()
-        list.add(Student("张三", 10, 20))
-        list.add(Student("李四", 20, 20))
-        list.add(Student("王五", 30, 20))
-        list.add(Student("赵柳", 40, 20))
-        it.onNext(list[0])
-        it.onNext(list[1])
-        it.onNext(list[2])
-        it.onNext(list[3])
-    })
-            .flatMap {
-                var list = arrayListOf<String>()
-                list.add(it.name)
-                Observable.just(it.name)
+    var txid = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+    try {
+        var addStr = ""
+        var addCount = 64 - txid.length
+        if (addCount > 0) {
+            for (i in 0..addCount) {
+                addStr+= "0"
             }
-//            .map {
-//                it.reverse()
-//                it
-//            }
-//            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-            .observeOn(io.reactivex.schedulers.Schedulers.newThread())
-            .subscribe {
-                it.forEach { println(it) }
-            }
-
-
-
-
+        }
+        txid = addStr + txid
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    println(txid)
 }

@@ -56,6 +56,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, R.string.canceled);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
+                case "TRADE_TOKEN_PENDING":
+                    helper.setText(R.id.tvOrderState, R.string.pending);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
                 default:
                     break;
             }
@@ -72,7 +76,7 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "USDT_PENDING":
-                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
+                    helper.setText(R.id.tvOrderState, R.string.wait_public_chain_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "OVERTIME":
@@ -85,6 +89,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     break;
                 case "CANCEL":
                     helper.setText(R.id.tvOrderState, R.string.canceled);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
+                case "TRADE_TOKEN_PENDING":
+                    helper.setText(R.id.tvOrderState, R.string.pending);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 default:

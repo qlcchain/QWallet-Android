@@ -563,9 +563,9 @@
     <string name="overtime">超时</string>
     <string name="wait_buyer_payment">等待买家付款</string>
     <string name="wait_buyer_payment1">等待买家付款</string>
-    <string name="wait_seller_confirmation">等待卖家确认付款</string>
-    <string name="wait_public_chain_confirmation">等待公链确认付款</string>
-    <string name="wait_seller_confirmation1">等待卖家确认付款</string>
+    <string name="wait_seller_confirmation">等待卖家确认</string>
+    <string name="wait_public_chain_confirmation">等待公链确认</string>
+    <string name="wait_seller_confirmation1">等待卖家确认</string>
     <string name="buyer">买家</string>
     <string name="revoke">撤销</string>
     <string name="order_record">订单记录</string>
@@ -895,8 +895,8 @@
     <string name="selling_quantity">卖出数量</string>
     <string name="buying">买入</string>
     <string name="buying_quantity">买入数量</string>
-    <string name="receive_from">接收钱包</string>
-    <string name="send_to">发送钱包</string>
+    <string name="receive_from">付款钱包</string>
+    <string name="send_to">收币地址</string>
     <string name="select_currency">选择交易对</string>
     <string name="illegal_send_address">非法发送地址</string>
     <string name="wating_for_the_public_chain_confirm_the_transaction">等待公共链确认交易</string>
@@ -909,4 +909,7 @@
     <string name="the_smallest">最少的</string>
     <string name="is_otc">数量为</string>
     <string name="choose_at_least_one_trading_pair">至少选择一个交易对</string>
+    <string name="pending">等待公链确认交易</string>
+    <string name="amount_">数量</string>
+    <string name="please_check_your_usdt_balance">请检查你的余额</string>
 </resources>

@@ -812,7 +812,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
 
     <!--20180626 待翻译-->
     <string name="testnet">TestNet!</string>
-    <string name="setting_language">SETTING LANGUAGE</string>
+    <string name="setting_language">Setting Language</string>
     <string name="Wallet_Details">Wallet Details</string>
     <string name="Switch_Wallet">Switch Wallet</string>
     <string name="Wallets_available">Wallets_available</string>
@@ -1158,7 +1158,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="wait_buyer_payment">Waiting for\nBuyer\'s payment</string>
     <string name="wait_buyer_payment1">Waiting for Buyer\'s payment</string>
     <string name="wait_seller_confirmation">Waiting for\nSeller\'s confirmation</string>
-    <string name="wait_public_chain_confirmation">Waiting for\nPublic Chainn\'s confirmation</string>
+    <string name="wait_public_chain_confirmation">Waiting for\nPublic Chain\'s confirmation</string>
     <string name="wait_seller_confirmation1">Waiting for Seller\'s confirmation</string>
     <string name="buyer">Buyer</string>
     <string name="revoke">Revoke</string>
@@ -1170,7 +1170,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="the_order_closed_by_the_system">The order is closed by the system</string>
     <string name="the_order_closed_by_the_buyer">The order is closed by the buyer</string>
     <string name="buyer_has_comfirmed_the_payment">Buyer has confirmed the payment</string>
-    <string name="please_check_your_usdt_balance">Please check your USDT balance</string>
+    <string name="please_check_your_usdt_balance">Please check your balance</string>
     <string name="successful_deal">Successful Deal</string>
     <string name="i_ve_transfered">I\'ve transfered</string>
     <string name="transfer">Transfer</string>
@@ -1467,7 +1467,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="buying_quantity">Buying Quantity</string>
     <string name="receive_from">Receive from</string>
     <string name="select_currency">Select Currency</string>
-    <string name="wating_for_the_public_chain_confirm_the_transaction">Waiting for the public chain to confirm the transaction</string>
+    <string name="wating_for_the_public_chain_confirm_the_transaction">Transaction Pending</string>
     <string name="please_wait_patiently">Please wait patiently.</string>
     <string name="reset">Reset</string>
     <string name="trading_pairs">Trading Pairs</string>
@@ -1476,4 +1476,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="the_smallest">The smallest</string>
     <string name="is_otc">is</string>
     <string name="choose_at_least_one_trading_pair">Choose at least one trading pair</string>
+    <string name="pending">Pending</string>
+    <string name="amount_">Amount</string>
 </resources>

@@ -100,10 +100,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         // 获取应用内语言
         final Configuration configuration = resources.getConfiguration();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        if (SpUtil.getInt(this, ConstantValue.Language, 0) == 0) {
+        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
             configuration.locale = Locale.ENGLISH;
             Locale.setDefault(Locale.ENGLISH);
-        } else {
+        } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 1){
             configuration.locale = Locale.CHINESE;
             Locale.setDefault(Locale.CHINESE);
         }

@@ -68,7 +68,14 @@ class UsdtReceiveAddressActivity : BaseActivity(), UsdtReceiveAddressContract.Vi
         understand.setOnClickListener {
             when(OtcUtils.parseChain(intent.getStringExtra("payTokenChain"))) {
                 AllWallet.WalletType.QlcWallet -> {
-
+                    var intent1 = Intent(this, OtcQlcChainPayActivity::class.java)
+                    intent1.putExtra("usdt", intent.getStringExtra("usdt"))
+                    intent1.putExtra("payToken", intent.getStringExtra("payToken"))
+                    intent1.putExtra("tradeToken", intent.getStringExtra("tradeToken"))
+                    intent1.putExtra("receiveAddress", intent.getStringExtra("receiveAddress"))
+                    intent1.putExtra("tradeOrderId", intent.getStringExtra("tradeOrderId"))
+                    intent1.putExtra("orderNumber", intent.getStringExtra("orderNumber"))
+                    startActivityForResult(intent1, 0)
                 }
                 AllWallet.WalletType.EthWallet -> {
                     var intent1 = Intent(this, UsdtPayActivity::class.java)

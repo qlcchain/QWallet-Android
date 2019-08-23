@@ -42,6 +42,10 @@ public class EntrustPostedOrderListAdapter extends BaseQuickAdapter<EntrustOrder
                 helper.setText(R.id.tvOrderState, R.string.active);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                 break;
+            case "PENDING":
+                helper.setText(R.id.tvOrderState, R.string.pending);
+                helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_29282a));
+                break;
             case "END":
                 helper.setText(R.id.tvOrderState, R.string.completed);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_21beb5));
@@ -53,11 +57,11 @@ public class EntrustPostedOrderListAdapter extends BaseQuickAdapter<EntrustOrder
             default:
                 break;
         }
-        helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString() + "");
+        helper.setText(R.id.tvUnitPrice, BigDecimal.valueOf(item.getUnitPrice()).stripTrailingZeros().toPlainString() + " ");
         helper.setText(R.id.tvDeals, TimeUtil.getOrderTime(TimeUtil.timeStamp(item.getOrderTime())));
         helper.setText(R.id.tvNickName, AccountUtil.setUserNickName(item.getNickname()));
-        helper.setText(R.id.tvAmount, BigDecimal.valueOf(item.getTotalAmount()).stripTrailingZeros().toPlainString() + "");
-        helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());
+        helper.setText(R.id.tvAmount, BigDecimal.valueOf(item.getTotalAmount()).stripTrailingZeros().toPlainString() + " ");
+        helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString() + " ");
         Glide.with(mContext)
                 .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)

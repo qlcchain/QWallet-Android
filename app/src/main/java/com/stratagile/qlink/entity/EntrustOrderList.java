@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
@@ -20,24 +19,27 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
     }
 
     public static class OrderListBean implements Parcelable {
+
         /**
-         * unitPrice : 0.001
+         * unitPrice : 1.0
          * minAmount : 1.0
-         * lockingAmount : 0.0
+         * lockingAmount : 1.0
          * type : SELL
-         * userId : 7060628a65e4450690976bf56c127787
+         * userId : 61be9c09c0784827af303005f983c705
+         * tradeTokenChain : NEO_CHAIN
          * completeAmount : 0.0
-         * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
-         * number : 20190820155720763031
-         * totalAmount : 100.0
-         * orderTime : 2019-08-20 15:57:21
-         * nickname : hzp
-         * tradeToken : QGAS
-         * id : 1b7b17cd27ad45fa990f0331ac8c5347
-         * maxAmount : 100.0
-         * otcTimes : 9
+         * head :
+         * number : 20190823212742197841
+         * totalAmount : 2.0
+         * orderTime : 2019-08-23 21:27:42
+         * nickname : ios_test
+         * payTokenChain : QLC_CHAIN
+         * tradeToken : QLC
+         * id : 38013bdf37f84c4fad8e688dd186bb39
+         * maxAmount : 2.0
+         * otcTimes : 0
          * status : NORMAL
-         * payToken : USDT
+         * payToken : QGAS
          */
 
         private double unitPrice;
@@ -45,12 +47,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
         private double lockingAmount;
         private String type;
         private String userId;
+        private String tradeTokenChain;
         private double completeAmount;
         private String head;
         private String number;
         private double totalAmount;
         private String orderTime;
         private String nickname;
+        private String payTokenChain;
         private String tradeToken;
         private String id;
         private double maxAmount;
@@ -64,12 +68,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             lockingAmount = in.readDouble();
             type = in.readString();
             userId = in.readString();
+            tradeTokenChain = in.readString();
             completeAmount = in.readDouble();
             head = in.readString();
             number = in.readString();
             totalAmount = in.readDouble();
             orderTime = in.readString();
             nickname = in.readString();
+            payTokenChain = in.readString();
             tradeToken = in.readString();
             id = in.readString();
             maxAmount = in.readDouble();
@@ -130,6 +136,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.userId = userId;
         }
 
+        public String getTradeTokenChain() {
+            return tradeTokenChain;
+        }
+
+        public void setTradeTokenChain(String tradeTokenChain) {
+            this.tradeTokenChain = tradeTokenChain;
+        }
+
         public double getCompleteAmount() {
             return completeAmount;
         }
@@ -176,6 +190,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
         public void setNickname(String nickname) {
             this.nickname = nickname;
+        }
+
+        public String getPayTokenChain() {
+            return payTokenChain;
+        }
+
+        public void setPayTokenChain(String payTokenChain) {
+            this.payTokenChain = payTokenChain;
         }
 
         public String getTradeToken() {
@@ -238,12 +260,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             parcel.writeDouble(lockingAmount);
             parcel.writeString(type);
             parcel.writeString(userId);
+            parcel.writeString(tradeTokenChain);
             parcel.writeDouble(completeAmount);
             parcel.writeString(head);
             parcel.writeString(number);
             parcel.writeDouble(totalAmount);
             parcel.writeString(orderTime);
             parcel.writeString(nickname);
+            parcel.writeString(payTokenChain);
             parcel.writeString(tradeToken);
             parcel.writeString(id);
             parcel.writeDouble(maxAmount);

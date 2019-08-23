@@ -1,6 +1,9 @@
 package com.stratagile.qlink.ui.activity.otc
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -19,7 +22,17 @@ import com.stratagile.qlink.ui.activity.otc.module.OrderDetailModule
 import com.stratagile.qlink.ui.activity.otc.presenter.OrderDetailPresenter
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderTradeOrderListAdapter
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_order_detail.*
+import kotlinx.android.synthetic.main.activity_order_detail.llOpreate
+import kotlinx.android.synthetic.main.activity_order_detail.llOrderState
+import kotlinx.android.synthetic.main.activity_order_detail.tvOrderState
+import kotlinx.android.synthetic.main.activity_order_detail.tvOrderStateTip
+import kotlinx.android.synthetic.main.activity_order_detail.tvOrderType
+import kotlinx.android.synthetic.main.activity_order_detail.tvQgasAmount
+import kotlinx.android.synthetic.main.activity_order_detail.tvReceiveAddress
+import kotlinx.android.synthetic.main.activity_order_detail.tvUnitPrice
+import kotlinx.android.synthetic.main.activity_trade_order_detail.*
 import java.math.BigDecimal
 import java.util.HashMap
 
@@ -48,6 +61,7 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
         tvQgasVolume.text = BigDecimal.valueOf(entrustOrderInfo.order.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(entrustOrderInfo.order.getMaxAmount()).stripTrailingZeros().toPlainString() + " QGAS"
         if (entrustOrderInfo.order.type.equals(ConstantValue.orderTypeBuy)) {
             tvOrderType.text = getString(R.string.buy) + " " + entrustOrderInfo.order.tradeToken
+            tvReceiveAddress.text = entrustOrderInfo.order.qgasAddress
             tvDealQgasAmounnt.text = (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount - entrustOrderInfo.order.lockingAmount).toString() + " " + entrustOrderInfo.order.tradeToken
             tvReceiveAddressTip.text = getString(R.string.receivable_address)
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.mainColor))
@@ -57,6 +71,13 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
                     tvOrderState.text = getString(R.string.active)
                     tvOrderStateTip.text = ""
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                }
+                "PENDING" -> {
+                    tvOrderState.text = getString(R.string.pending)
+                    tvOrderStateTip.text = ""
+                    llOpreate.visibility = View.GONE
+                    tvOpreate.visibility = View.GONE
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_808080))
                 }
                 "END" -> {
                     tvOrderState.text = getString(R.string.completed)
@@ -75,6 +96,7 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
             }
         } else {
             tvOrderType.text = getString(R.string.sell) + " " + entrustOrderInfo.order.tradeToken
+            tvReceiveAddress.text = entrustOrderInfo.order.usdtAddress
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))
             tvDealQgasAmounnt.text = (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount - entrustOrderInfo.order.lockingAmount).toString() + " " + entrustOrderInfo.order.tradeToken
             tvReceiveAddressTip.text = getString(R.string.receivable_address)
@@ -84,6 +106,13 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
                     tvOrderState.text = getString(R.string.active)
                     tvOrderStateTip.text = ""
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                }
+                "PENDING" -> {
+                    tvOrderState.text = getString(R.string.pending)
+                    tvOrderStateTip.text = ""
+                    llOpreate.visibility = View.GONE
+                    tvOpreate.visibility = View.GONE
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_808080))
                 }
                 "END" -> {
                     tvOrderState.text = getString(R.string.completed)
@@ -162,6 +191,12 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
         var map = hashMapOf<String, String>()
         map.put("entrustOrderId", order.id)
         mPresenter.getEntrustOrderDetail(map)
+        tvReceiveAddress.setOnClickListener {
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+            cm.primaryClip = mClipData
+            ToastUtil.displayShortToast(getString(R.string.copy_success))
+        }
     }
 
     override fun setupActivityComponent() {
