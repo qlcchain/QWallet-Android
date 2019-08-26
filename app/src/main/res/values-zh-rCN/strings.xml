@@ -604,7 +604,7 @@
     <string name="erc20_address_to_receive_usdt">接收USDT的ERC20地址</string>
     <string name="select_a_eth_wallet_to_receive_usdt">选择一个ERC20钱包接收USDT</string>
     <string name="input_eth_wallet_address">输入以太坊钱包地址</string>
-    <string name="please_select_a_qlc_wallet_to_payment">请选择一个QLC Chian钱包支付</string>
+    <string name="please_select_a_qlc_wallet_to_payment">请选择一个钱包支付</string>
     <string name="qlc_chain_wallet_to_send_out_qgas">发送QGAS的QLC Chain钱包</string>
     <string name="to_verify">去认证</string>
     <string name="not_approved">认证失败</string>

@@ -1201,7 +1201,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="illegal_send_address">Illegal send Address</string>
     <string name="amount_entrust_list_item">Amount</string>
     <string name="volume_settings">Volume Settings</string>
-    <string name="select_a_qlc_wallet_to_send_out_qgas">Select a QLC wallet to send out QGAS</string>
+    <string name="select_a_qlc_wallet_to_send_out_qgas">Select a wallet to send out Token</string>
     <string name="select_a_qlc_wallet">Select a QLC Wallet</string>
     <string name="erc20_address_to_receive_usdt">ERC20 Address to receive USDT</string>
     <string name="select_a_eth_wallet_to_receive_usdt">Select a ETH wallet to receive USDT</string>

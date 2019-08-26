@@ -153,28 +153,25 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        KLog.i(mPresenter.getTxidByHex("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"))
-        KLog.i(mPresenter.getTxidByHex("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzhijklmnopqrt"))
-        KLog.i(mPresenter.getTxidByHex("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzhijklmnopqrstuvwxyzhijklmnopqrstuvwxyz"))
         tvNext.setOnClickListener {
             if ("".equals(etMinAmount.text.toString()) || "".equals(etMaxAmount.text.toString()) || "".equals(etAmount.text.toString()) || "".equals(etUnitPrice.text.toString())) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if (etMinAmount.text.toString().trim().toBigDecimal() > etMaxAmount.text.toString().trim().toBigDecimal()) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if (etMaxAmount.text.toString().trim().toBigDecimal() > etAmount.text.toString().trim().toBigDecimal()) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             if ("".equals(tvSendWalletAddess.text.toString())) {
-                toast("Please select a qlc wallet to payment")
+                toast(getString(R.string.please_select_a_qlc_wallet_to_payment))
                 return@setOnClickListener
             }
             if (etUnitPrice.text.toString().toBigDecimal() == BigDecimal.ZERO) {
-                toast("illegal value")
+                toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
             when (OtcUtils.parseChain(selectedPair!!.payTokenChain)) {
