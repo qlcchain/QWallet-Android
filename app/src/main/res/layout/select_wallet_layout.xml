@@ -71,7 +71,6 @@
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x10"
                 android:textColor="@color/color_1F314A"
-                android:fontFamily="@font/roboto_regular"
                 android:textSize="14sp"
                 android:layout_height="wrap_content" />
             <ImageView

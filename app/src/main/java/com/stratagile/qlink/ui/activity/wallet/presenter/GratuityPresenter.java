@@ -85,19 +85,19 @@ public class GratuityPresenter implements GratuityContract.GratuityContractPrese
     @Override
     public void reward(Map map, Wallet wallet, String qlc, String toAddress) {
         mView.showProgressDialog();
-        TransactionApi.getInstance().v2Transaction(map, wallet.getAddress(), toAddress, qlc +"", new SendBackWithTxId() {
-            @Override
-            public void onSuccess(String txid) {
-                mView.closeProgressDialog();
-                mView.rewardBack(null);
-            }
-
-            @Override
-            public void onFailure() {
-                mView.closeProgressDialog();
-                ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.gratuity_failure));
-            }
-        });
+//        TransactionApi.getInstance().v2Transaction(map, wallet.getAddress(), toAddress, qlc +"", new SendBackWithTxId() {
+//            @Override
+//            public void onSuccess(String txid) {
+//                mView.closeProgressDialog();
+//                mView.rewardBack(null);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//                mView.closeProgressDialog();
+//                ToastUtil.displayShortToast(AppConfig.getInstance().getResources().getString(R.string.gratuity_failure));
+//            }
+//        });
 //        Disposable disposable = httpAPIWrapper.reward(map)
 //                .subscribe(new Consumer<Reward>() {
 //                    @Override

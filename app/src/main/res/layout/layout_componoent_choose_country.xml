@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:fontFamily="@font/vagroundedbt"
         android:text="@string/prioritize_the_list_by_server_location"
         android:textColor="@color/white"
         android:textSize="17sp" />

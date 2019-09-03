@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="wendu.jsbdemo.MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp"
+            android:text="Because unpkg.com's CDN has a slower access speed in China, it's normal to open the test page slowly sometimes, it's not a problem for DSBridge."
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="18dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="由于测试页面(h5)中是通过unpkg的CDN引入的dsbridge.js，但unpkg在中国地区访问速度会比较慢，所以当您发现有时打开测试页面比较慢时是正常的，这并不是DSBridge的问题，所以建议您在使用时将dsbridge.js下载并集成到您的工程。"
+            />
+        <Button
+            android:id="@+id/callJs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Native call Javascript"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/callNative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Javascript call Native"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/fly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Work with fly.js test"
+            android:textAllCaps="false"
+            />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

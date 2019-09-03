@@ -60,7 +60,6 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-        <service android:name=".service.ClientVpnService"/>
         <activity android:name=".ui.activity.main.MainActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan|stateHidden"
@@ -235,6 +234,15 @@
         <activity android:name=".ui.activity.otc.SelectCurrencyActivity" />
         <activity android:name=".ui.activity.otc.OtcNeoChainPayActivity" />
         <activity android:name=".ui.activity.otc.OtcQlcChainPayActivity" />
+        <activity android:name="wendu.jsbdemo.MainActivity" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name="wendu.jsbdemo.WrokWithFlyioTestActivity" />
+        <activity android:name="wendu.jsbdemo.JavascriptCallNativeActivity" />
+        <activity android:name="wendu.jsbdemo.CallJavascriptActivity" />
 
 
         <meta-data
@@ -242,9 +250,9 @@
             android:value="@string/google_map_key" />
         <meta-data android:name="android.max_aspect"
             android:value="2.5"/>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+<!--        <meta-data-->
+<!--            android:name="preloaded_fonts"-->
+<!--            android:resource="@array/preloaded_fonts" />-->
         <meta-data
             android:name="design_width_in_dp"
             android:value="360"/>

@@ -53,6 +53,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wendu.jsbdemo.MainActivity;
 
 /**
  * @author hzp
@@ -311,7 +312,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
                 break;
             case R.id.testView:
-//                startActivityForResult(new Intent(getActivity(), OrderDetailActivity.class), 0);
+                startActivityForResult(new Intent(getActivity(), TestActivity.class), 0);
                 break;
             default:
                 break;

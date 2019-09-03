@@ -27,7 +27,6 @@ import com.stratagile.qlink.ui.activity.eth.module.ImportEthWalletModule;
 import com.stratagile.qlink.ui.activity.eth.presenter.ImportEthWalletPresenter;
 import com.stratagile.qlink.ui.activity.wallet.AssetListFragment;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
-import com.stratagile.qlink.ui.activity.wallet.UseHistoryListFragment;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import com.stratagile.qlink.view.CustomPopWindow;

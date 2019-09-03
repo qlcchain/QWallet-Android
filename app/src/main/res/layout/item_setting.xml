@@ -24,7 +24,6 @@
         android:layout_marginTop="@dimen/x13"
         android:layout_marginLeft="@dimen/x23"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_regular"
         android:text="dddddddd"
         android:textColor="@color/color_333"
         android:id="@+id/tv_name"
@@ -39,7 +38,6 @@
         android:layout_alignLeft="@+id/tv_name"
         android:layout_below="@+id/tv_name"
         android:layout_marginTop="@dimen/x6"
-        android:fontFamily="@font/roboto_regular"
         android:textSize="12sp"
         />
     <LinearLayout

@@ -137,7 +137,6 @@
         android:layout_marginRight="@dimen/x44"
         android:layout_marginTop="@dimen/x80"
         android:background="@drawable/main_color_bt_bg"
-        android:fontFamily="@font/roboto_regular"
         android:text="@string/import2"
         android:textAllCaps="false"
         android:textColor="@color/white" />

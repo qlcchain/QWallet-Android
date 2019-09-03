@@ -15,9 +15,6 @@ import com.stratagile.qlink.utils.UIUtils;
 
 import javax.annotation.Resource;
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IntegerRes;
-
 /**
  * 作者：hu on 2017/6/8
  * 邮箱：365941593@qq.com
@@ -112,7 +109,7 @@ public class PopWindowUtil {
         maskView.setOnClickListener(clickListener);
     }
 
-    public static void showTipDialog(View showView, String content, @DrawableRes int tipImg, TipDialogDismissListener tipDialogDismissListener) {
+    public static void showTipDialog(View showView, String content, int tipImg, TipDialogDismissListener tipDialogDismissListener) {
         View view = ((Activity) showView.getContext()).getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);

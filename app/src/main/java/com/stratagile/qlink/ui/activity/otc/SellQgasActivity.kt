@@ -139,9 +139,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
         etUsdt.hint = getString(R.string.max) + " " + maxUsdt.stripTrailingZeros().toPlainString()
         etQgas.hint = getString(R.string.max) + " " + maxQgas
-        tvAmount.text = maxQgas.stripTrailingZeros().toString()
+        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
         if (maxQgas < BigDecimal.valueOf(orderList.maxAmount)) {
-            tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.stripTrailingZeros().toString()
+            tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.stripTrailingZeros().toPlainString()
         } else {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         }

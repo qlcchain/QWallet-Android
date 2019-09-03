@@ -61,7 +61,6 @@
         android:layout_marginLeft="@dimen/x65"
         android:layout_marginRight="@dimen/x65"
         android:layout_marginTop="@dimen/x25"
-        android:fontFamily="@font/roboto_regular"
         android:textColor="@color/color_1F314A"
         android:text="@string/caution_whoever_has_the_mnemonic_can_completely_control_the_assets_in_the_wallet_so_you_are_strongly_supposed_to_record_the_mnemonic_carefully_andkeepitin_a_safe_place"
         android:layout_height="wrap_content" />
@@ -73,7 +72,6 @@
         android:layout_marginLeft="@dimen/x65"
         android:layout_marginRight="@dimen/x65"
         android:layout_marginTop="@dimen/x25"
-        android:fontFamily="@font/roboto_regular"
         android:textColor="@color/color_9b9b9bb"
         android:text="@string/it_is_suggested_to_immediately_restore_once_after_backup_is_completed_in_order_to_ensure_safety_then_try_to_transfer_in"
         android:layout_height="wrap_content" />
@@ -86,7 +84,6 @@
         android:layout_marginRight="@dimen/x44"
         android:layout_marginTop="@dimen/x70"
         android:background="@drawable/change_wallet"
-        android:fontFamily="@font/roboto_regular"
         android:text="@string/backup_mnemonic"
         android:textAllCaps="false"
         android:textColor="@color/white"

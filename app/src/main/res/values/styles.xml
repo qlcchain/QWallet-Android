@@ -11,7 +11,6 @@
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:fontFamily">@font/roboto_regular_q</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowAnimationStyle">@style/AnimaActivity</item>
         <!--<item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>-->
@@ -22,12 +21,10 @@
     </style>
 
     <style name="MenuTextStyle">
-        <item name="android:fontFamily">@font/vagroun_q</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="BottomNavigationView_style">
-        <item name="android:fontFamily">@font/vagroundedbt</item>
     </style>
 
     <style name="AnimaActivity">
@@ -45,7 +42,6 @@
 
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">12sp</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
     <style name="blinkt.baseTheme" parent="android:Theme.DeviceDefault.Light" />
     <style name="blinkt" parent="blinkt.baseTheme" />

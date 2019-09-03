@@ -15,7 +15,6 @@
       android:layout_width="wrap_content"
       android:text="@string/make_sure_you_backup_this"
       android:layout_marginRight="@dimen/x60"
-      android:fontFamily="@font/vagroundedbt"
       android:gravity="right"
       android:textSize="17sp"
       android:textColor="@color/white"

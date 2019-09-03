@@ -87,7 +87,6 @@ import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
-import com.stratagile.qlink.ui.activity.wallet.WalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.ui.adapter.TradePairDecoration;
 import com.stratagile.qlink.ui.adapter.otc.TradePairAdapter;
@@ -457,7 +456,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
 //        startService(new Intent(this, ClientConnectedWifiRecordService.class));
         /**
-         * @see WalletFragment#refreshNeo(NeoRefrash)
          */
 //        EventBus.getDefault().post(new NeoRefrash());
         //创建neo钱包。为唯一对象，每次在使用的钱包只有一个。

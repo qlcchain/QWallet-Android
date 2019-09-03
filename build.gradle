@@ -23,7 +23,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-rc2'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
@@ -42,6 +42,10 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url "https://maven.google.com" }
+        maven {
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
+        mavenCentral()
     }
 
 

@@ -29,7 +29,6 @@
         android:layout_marginTop="@dimen/x45"
         android:textSize="16sp"
         android:gravity="center"
-        android:fontFamily="@font/vagroun_q"
         />
 
     <ImageView
@@ -67,7 +66,6 @@
                 android:maxLength="20"
                 android:ellipsize="end"
                 android:textColor="@color/white"
-                android:fontFamily="@font/roboto_regular_q"
                 android:text="@string/ssid"
                 />
             <ImageView

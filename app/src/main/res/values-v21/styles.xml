@@ -31,7 +31,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/roboto_regular_q</item>
         <!--<item name="android:navigationBarColor"></item>-->
         <item name="android:windowAnimationStyle">@style/AnimaActivity</item>
     </style>

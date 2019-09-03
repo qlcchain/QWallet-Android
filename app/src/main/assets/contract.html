@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cmn-Hans">
+    <meta charset="UTF-8">
+    <title>qlc staking</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <!--require dsbridge init js-->
+	<script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
+	<script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>
+</head>
+<body>
+
+	<script>
+		// smart contract script hash
+		const smartContractScript = '3078aa0e095defba3f00e0af12810187ecfb586a';
+		const apiProvider = new Neon.api.neoscan.instance("MainNet");
+		// createMultiSig
+		dsBridge.registerAsyn("staking", {
+			tag: "staking",
+			// multisig
+			createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
+				// user neo public key
+				const accountA = new Neon.wallet.Account(publicKeyA);
+				// environment neo public key
+				const accountB = new Neon.wallet.Account(publicKeyB);
+				// multisig account
+				const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
+					accountA.publicKey,
+					accountB.publicKey
+				]);
+				responseCallback(multisigAcct);
+			},
+			// lock
+			contractLock:function (privateKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime, responseCallback) {
+			
+				const account = new Neon.wallet.Account(privateKey);
+	
+				const amountWithDecimals = new BigNumber(qlcAmount).multipliedBy(100000000);
+				
+				const invoke = {
+					scriptHash: smartContractScript, // Scripthash for the contract
+					operation: 'lock', // name of operation to perform.
+					args: [
+						Neon.sc.ContractParam.byteArray(fromAddress, 'address'), // neo address
+						Neon.sc.ContractParam.byteArray(toAddress, 'address'), // multisig neo address
+						Neon.sc.ContractParam.byteArray(Neon.u.str2hexstring(qlcchainAddress), 'string'), // qlc address
+						Neon.sc.ContractParam.integer(amountWithDecimals.toNumber()), // qlc amount // check integer limit for big numbers !! should be 2,147,483,647 that's max 21 qlc ?
+						Neon. sc.ContractParam.integer(lockTime), // lock time
+					] 
+				}
+				//console.log(invoke);
+				
+				const script = Neon.sc.createScript(invoke);
+				//console.log("\n\n--- API Provider RPC Endpoint ---");
+				//console.log(script);
+
+				const invokeConfig = {
+					api: apiProvider, // The API Provider that we rely on for balance and rpc information
+					account: account, // The sending Account
+					script: script // The Smart Contract invocation script
+				};
+
+				const returnTokeninvokeConfig = Neon.api.doInvoke(invokeConfig)
+				.then(res => {
+					responseCallback(res.response);
+					//console.log("\n\n--- Response ---");
+					//console.log(res);
+					//return res.response;
+				})
+				.catch(err => {
+					responseCallback(err);
+					//console.log(err);
+					//return err;
+				});
+			},
+		})
+
+	</script>
+</body>
+</html>

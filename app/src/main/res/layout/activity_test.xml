@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:text="signBtc"
-        android:layout_marginTop="@dimen/x200"
+        android:layout_marginTop="@dimen/x100"
         android:gravity="center"
         android:background="@color/mainColor"
         android:layout_width="@dimen/x200"
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/getBtc"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/x200"
+        android:layout_marginTop="@dimen/x100"
         android:textColor="@color/white"
         android:text="getBtc"
         android:gravity="center"
@@ -31,7 +31,7 @@
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:text="transferBtc"
-        android:layout_marginTop="@dimen/x200"
+        android:layout_marginTop="@dimen/x100"
         android:gravity="center"
         android:background="@color/mainColor"
         android:layout_width="@dimen/x200"
@@ -42,9 +42,25 @@
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:text="importBtc"
-        android:layout_marginTop="@dimen/x200"
+        android:layout_marginTop="@dimen/x100"
         android:gravity="center"
         android:background="@color/mainColor"
         android:layout_width="@dimen/x200"
         android:layout_height="@dimen/x80" />
+    <TextView
+        android:id="@+id/addValue"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:text="addValue"
+        android:layout_marginTop="@dimen/x100"
+        android:gravity="center"
+        android:background="@color/mainColor"
+        android:layout_width="@dimen/x200"
+        android:layout_height="@dimen/x80" />
+
+    <wendu.dsbridge.DWebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </LinearLayout>

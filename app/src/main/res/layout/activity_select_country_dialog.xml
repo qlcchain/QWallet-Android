@@ -15,7 +15,6 @@
         android:textSize="@dimen/sp9"
         android:paddingLeft="15px"
         android:gravity="left"
-        android:fontFamily="@font/roboto_regular"
         android:text="@string/VPN_Server_Location"
         android:textColor="@color/c">
     </TextView>
@@ -28,7 +27,6 @@
         android:gravity="left"
         android:drawableRight="@mipmap/icon_expand"
         android:drawablePadding="@dimen/x10"
-        android:fontFamily="@font/roboto_regular"
         android:paddingLeft="15px"
         android:textSize="@dimen/sp15"
         android:text="@string/choose_a_country"
@@ -66,7 +64,6 @@
             android:layout_height="@dimen/dp_43"
             android:layout_weight="1"
             android:background="@drawable/cancal_button_bg"
-            android:fontFamily="@font/vagroun_q"
             android:letterSpacing="0.1"
             android:text="@string/back"
             android:textColor="@color/white" />
@@ -78,7 +75,6 @@
             android:layout_marginLeft="@dimen/dp_6"
             android:layout_weight="1"
             android:background="@drawable/comfirm_button_bg"
-            android:fontFamily="@font/vagroun_q"
             android:letterSpacing="0.1"
             android:text="@string/continue2"
             android:textColor="@color/mainColor" />

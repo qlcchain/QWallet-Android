@@ -17,6 +17,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import com.stratagile.qlink.R
+import com.stratagile.qlink.entity.stake.StakeType
+import kotlinx.android.synthetic.main.fragment_vote_node.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @author hzp
@@ -35,6 +38,13 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         ButterKnife.bind(this, view)
         val mBundle = arguments
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        invoke.setOnClickListener {
+            EventBus.getDefault().post(StakeType(0))
+        }
     }
 
 

@@ -2,7 +2,6 @@ package com.stratagile.qlink.ui.activity.neo.presenter;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
-import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.api.transaction.SendCallBack;
@@ -24,11 +23,14 @@ import com.stratagile.qlink.ui.activity.neo.contract.NeoTransferContract;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
 import com.stratagile.qlink.utils.ToastUtil;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -193,6 +195,23 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
 
     @Override
     public void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress, String remark) {
+//        Neow3j neow3j = Neow3j.build(new HttpService("https://node2.neocompiler.io"));
+//        Account acct = Account.fromWIF("KzviPYuqHtQvw4T6vkbxJGnyoRGo1yYULAAn6WbTLwpQboHEkXcW").build();
+//        try {
+//            acct.updateAssetBalances(neow3j);
+//            RawTransactionOutput output = new RawTransactionOutput(tokenInfo.getTokenAddress(), amount, toAddress);
+//            AssetTransfer transfer = new AssetTransfer.Builder(neow3j)
+//                    .account(acct)
+//                    .output(output)
+//                    .networkFee(new BigDecimal("0.00000001"))
+//                    .build()
+//                    .sign()
+//                    .send();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ErrorResponseException e) {
+//            e.printStackTrace();
+//        }
         if (assets == null) {
             ToastUtil.displayShortToast("please wait");
             mView.showProgressDialog();
@@ -206,7 +225,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
                     map.put("addressTo", toAddress);
                     map.put("symbol", tokenInfo.getTokenSymol());
                     map.put("amount", amount);
-                    TransactionApi.getInstance().sendNEP5Token(assets, map, Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
+                    TransactionApi.getInstance().sendNEP5Token(assets, map, com.stratagile.qlink.Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
 
                         @Override
                         public void onSuccess(String txid) {
@@ -235,7 +254,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
         map.put("addressTo", toAddress);
         map.put("symbol", tokenInfo.getTokenSymol());
         map.put("amount", amount);
-        TransactionApi.getInstance().sendNEP5Token(assets, map, Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
+        TransactionApi.getInstance().sendNEP5Token(assets, map, com.stratagile.qlink.Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
 
             @Override
             public void onSuccess(String txid) {
@@ -255,7 +274,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
     public void sendNeo(String amount, String toAddress, TokenInfo tokenInfo) {
         mView.showProgressDialog();
         if (assets == null) {
-            getUtxo(Account.INSTANCE.getWallet().getAddress(), new SendCallBack() {
+            getUtxo(com.stratagile.qlink.Account.INSTANCE.getWallet().getAddress(), new SendCallBack() {
                 @Override
                 public void onSuccess() {
                     mView.closeProgressDialog();
@@ -270,7 +289,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
             return;
         }
         if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
-            TransactionApi.getInstance().sendNeo(assets, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.NEO, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
+            TransactionApi.getInstance().sendNeo(assets, com.stratagile.qlink.Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.NEO, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
                 @Override
                 public void onSuccess(String txid) {
                     KLog.i(txid);
@@ -319,7 +338,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
                 }
             });
         } else {
-            TransactionApi.getInstance().sendNeo(assets, Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.GAS, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
+            TransactionApi.getInstance().sendNeo(assets, com.stratagile.qlink.Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.GAS, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
                 @Override
                 public void onSuccess(String txid) {
                     KLog.i(txid);

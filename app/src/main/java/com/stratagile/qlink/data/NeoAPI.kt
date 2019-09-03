@@ -132,26 +132,27 @@ class NeoNodeRPC {
         var attachedNEOAmount = BigDecimal.ZERO
         var attachedGasAmount = BigDecimal.ZERO
 
-//        if (attachedNEOAmount > BigDecimal.ZERO) {
-//            neoInput = getInputsNecessaryToSendNEO(attachedNEOAmount, utxos)
-//        }
+        if (attachedNEOAmount > BigDecimal.ZERO) {
+            neoInput = getInputsNecessaryToSendNEO(attachedNEOAmount, utxos)
+        }
 
         if (attachedGasAmount > BigDecimal.ZERO || "0.00000001".toBigDecimal() > BigDecimal.ZERO ) {
             val toSendGasAmount = if (attachedGasAmount == BigDecimal.ZERO) BigDecimal(0.00000001) else attachedGasAmount
             gasInput = getInputsNecessaryToSendGAS(toSendGasAmount, utxos, "0.00000001".toBigDecimal())
         }
 
-//        if (neoInput != null) {
-//            neoOutput = getOutputDataPayload(wallet,
-//                    Asset.NEO, neoInput.totalAmount!!,
-//                    attachedNEOAmount, contractHash.hexStringToByteArray().reversedArray().toHex(), neoInput.fee)
-//        }
+        if (neoInput != null) {
+            neoOutput = getOutputDataPayload(wallet,
+                    Asset.NEO, neoInput.totalAmount!!,
+                    attachedNEOAmount, contractAddress.hexStringToByteArray().reversedArray().toHex(), neoInput.fee)
+        }
 
         if (gasInput != null) {
             gasOutput = getOutputDataPayload(wallet,
                     Asset.GAS, gasInput.totalAmount!!,
                     attachedGasAmount, contractAddress.hexStringToByteArray().reversedArray().toHex(), gasInput.fee)
         }
+
         var finalAttributes = arrayOf<TransactionAttribute>(
                 TransactionAttribute().scriptAttribute(wallet.address.hashFromAddress()),
                 TransactionAttribute().remarkAttribute(String.format(remark, Date().time.toString())),
@@ -207,38 +208,6 @@ class NeoNodeRPC {
     data class SendAssetReturn1(val totalAmount: Double?, val payload: ByteArray?, val error: Error?)
     data class TransactionAttritbute(val messaeg: String?)
     private fun getInputsNecessaryToSendAsset1(wallet: Wallet, asset: Asset, amount: Double, utxos: UTXOS, toAddress: String): ByteArray {
-//        var sortedUnspents: List<Unspent>
-//        var neededForTransaction: MutableList<Unspent> = arrayListOf()
-//
-//        if (asset == Asset.NEO) {
-//            if (assets.NEO.balance < amount) {
-//                return SendAssetReturn1(null, null, Error("insufficient balance"))
-//            }
-//            sortedUnspents = assets.NEO.unspent.sortedBy { it.value }
-//        } else {
-//            if (assets.GAS.balance < amount) {
-//                return SendAssetReturn1(null, null, Error("insufficient balance"))
-//            }
-//            sortedUnspents = assets.GAS.unspent.sortedBy { it.value }
-//        }
-//        var runningAmount = 0.0
-//        var index = 0
-//        var count: Int = 0
-//        //Assume we always have enough balance to do this, prevent the check for bal
-//        while (runningAmount < amount) {
-//            neededForTransaction.add(sortedUnspents[index])
-//            runningAmount += sortedUnspents[index].value
-//            index += 1
-//            count += 1
-//        }
-//        var inputData: ByteArray = byteArrayOf(count.toByte())
-//        for (t: Unspent in neededForTransaction) {
-//            val data = hexStringToByteArray(t.txid)
-//            val reversedBytes = data.reversedArray()
-//            inputData = inputData + reversedBytes + ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(t.index.toShort()).array()
-//        }
-//        return SendAssetReturn1(runningAmount, inputData, null)
-
         val mainInput: SendAssetReturn
         var optionalFeeInput: SendAssetReturn? = null
         val payloadPrefix = byteArrayOf(0x80.toUByte(), 0x00.toByte())

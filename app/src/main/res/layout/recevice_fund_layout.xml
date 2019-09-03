@@ -111,7 +111,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:textSize="@dimen/sp7"
                         android:textColor="#a8a6ae"
                         android:text="@string/To_receive_NEP5_tokens_copy_the_address_and_share_it_with_the_sender"
@@ -132,7 +131,6 @@
                 android:layout_weight="1"
                 style="?android:attr/borderlessButtonStyle"
                 android:text="@string/back"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/aler_left_bt_bg"
                 android:textColor="@color/white"
                 android:layout_height="@dimen/dp_43" />
@@ -143,7 +141,6 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:text="@string/copy_address"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/comfirm_button_bg"
                 android:textColor="@color/main_color"
                 android:layout_height="@dimen/dp_43" />

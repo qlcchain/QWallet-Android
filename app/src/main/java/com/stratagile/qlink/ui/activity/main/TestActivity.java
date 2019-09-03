@@ -1,17 +1,16 @@
 package com.stratagile.qlink.ui.activity.main;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.DSBridge.JsApi;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
-import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.blockchain.cypto.util.HexUtils;
 import com.stratagile.qlink.db.BtcWallet;
 import com.stratagile.qlink.ui.activity.main.component.DaggerTestComponent;
@@ -29,16 +28,13 @@ import org.bitcoinj.core.InsufficientMoneyException;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionConfidence;
 import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.Wallet;
-import org.bitcoinj.wallet.WalletTransaction;
-import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
+import org.json.JSONObject;
 
-import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +44,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import kotlin.Pair;
+import wendu.dsbridge.DWebView;
+import wendu.dsbridge.OnReturnValue;
+
+import static com.vondear.rxtools.view.RxToast.showToast;
 
 /**
  * @author hzp
@@ -73,6 +72,10 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     TextView importBtc;
 
     WalletAppKit kit;
+    @BindView(R.id.webview)
+    DWebView webview;
+    @BindView(R.id.addValue)
+    TextView addValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,17 +88,46 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        DWebView.setWebContentsDebuggingEnabled(true);
     }
 
     @Override
     protected void initData() {
-        List<BtcWallet> btcWallets = AppConfig.getInstance().getDaoSession().getBtcWalletDao().loadAll();
-        kit = AppConfig.getInstance().walletAppKit;
-        if (btcWallets == null || btcWallets.size() == 0) {
-            return;
-        }
-        btcWallet = btcWallets.get(0);
-        KLog.i(btcWallet.toString());
+        webview.loadUrl("file:///android_asset/contract.html");
+        webview.addJavascriptObject(new JsApi(), null);
+        addValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KLog.i("点击。。");
+                webview.callHandler("staking.createMultiSig", new Object[]{"030a21d4f076f8098a7ad738fc60bb3edd8fa069e3ea3421cdc4beca739a1b4e5f", "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5"}, new OnReturnValue<JSONObject>() {
+                    @Override
+                    public void onValue(JSONObject retValue) {
+                        KLog.i("call succeed,return value is "+retValue.toString());
+                        ToastUtil.displayShortToast("" + retValue.toString());
+                    }
+                });
+//                webview.hasJavascriptMethod("asyn.addValue", new OnReturnValue<Boolean>() {
+//                    @Override
+//                    public void onValue(Boolean retValue) {
+//                        showToast(retValue + "");
+//                    }
+//                });
+
+//                webview.callHandler("syn.addValue", new Object[]{5, 6}, new OnReturnValue<Integer>() {
+//                    @Override
+//                    public void onValue(Integer retValue) {
+//                        KLog.i("call succeed,return value is "+retValue);
+//                    }
+//                });
+            }
+        });
+//        List<BtcWallet> btcWallets = AppConfig.getInstance().getDaoSession().getBtcWalletDao().loadAll();
+//        kit = AppConfig.getInstance().walletAppKit;
+//        if (btcWallets == null || btcWallets.size() == 0) {
+//            return;
+//        }
+//        btcWallet = btcWallets.get(0);
+//        KLog.i(btcWallet.toString());
 //        String path = Environment.getExternalStorageDirectory() + "/Qlink/btc";
 //        File file = new File(path);
 //        kit = new WalletAppKit(getParams(), file, "") {
@@ -302,7 +334,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         return TestNet3Params.get();
     }
 
-    public void transferBtc(String privateKey,String recipientAddress,String amount){
+    public void transferBtc(String privateKey, String recipientAddress, String amount) {
         Context context = new Context(getParams());
         Context.propagate(context);
         DumpedPrivateKey dumpedPrivateKey = DumpedPrivateKey.fromBase58(getParams(), privateKey);
@@ -338,7 +370,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
 //        signingtrasaction(privateKey,request.tx.getHashAsString());
     }
 
-    public static  void signingtrasaction(String wif, String msg) {
+    public static void signingtrasaction(String wif, String msg) {
         try {
             // creating a key object from WiF
             DumpedPrivateKey dpk = DumpedPrivateKey.fromBase58(getParams(), wif);
@@ -359,7 +391,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
             // String hex = new String(res);
             String hex = new String(Base64.encode(res, Base64.DEFAULT));
             Log.e("sigendTransaction", hex);
-            Log.e("decrypttx",""+ HexUtils.toHex(sig.encodeToDER()));
+            Log.e("decrypttx", "" + HexUtils.toHex(sig.encodeToDER()));
         } catch (Exception e) {   //signingkey = ecdsa.from_string(privateKey.decode('hex'), curve=ecdsa.SECP256k1)
             e.printStackTrace();
         }

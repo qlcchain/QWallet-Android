@@ -24,7 +24,6 @@
         android:layout_marginRight="@dimen/x45"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/x25"
-        android:fontFamily="@font/roboto_regular"
         android:textColor="@color/color_9b9b9bb"
         android:text="@string/please_choose_mnemonic_words_in_order_and_make_sure_your_mnemonic_was_correct_written"
         android:layout_height="wrap_content" />
@@ -57,7 +56,6 @@
         android:layout_marginRight="@dimen/x44"
         android:layout_marginTop="@dimen/x20"
         android:background="@drawable/change_wallet"
-        android:fontFamily="@font/roboto_regular"
         android:text="@string/next"
         android:textAllCaps="false"
         android:textColor="@color/white"

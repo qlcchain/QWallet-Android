@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ellipsize="end"
-            android:fontFamily="@font/roboto_regular"
             android:gravity="center"
             android:includeFontPadding="false"
             android:singleLine="true"

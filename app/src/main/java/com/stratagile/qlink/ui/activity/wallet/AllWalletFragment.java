@@ -541,7 +541,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 tvWalletName.setText(qlcAccount.getAccountName());
                 ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
                 llGetGas.setVisibility(View.GONE);
-                llStake.setVisibility(View.GONE);
+                llStake.setVisibility(View.VISIBLE);
             }
         });
         AllWallet allWallet = new AllWallet();

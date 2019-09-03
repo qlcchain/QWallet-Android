@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:fontFamily="@font/vagroun_q"
         android:textColor="@color/white"
         android:background="@drawable/navigation_shape"
         android:text=""
@@ -23,7 +22,6 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:textColor="@color/color_333"
-        android:fontFamily="@font/roboto_regular_q"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginBottom="@dimen/dp_10"
         android:layout_height="wrap_content"
@@ -45,7 +43,6 @@
             android:layout_width="150dp"
             android:textColor="@color/white"
             style="?android:attr/borderlessButtonStyle"
-            android:fontFamily="@font/vagroun_q"
             android:layout_height="match_parent"
             android:background="@drawable/yes_button_bg"
             android:text="@string/ok_btn_dialog" />

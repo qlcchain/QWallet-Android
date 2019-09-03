@@ -26,7 +26,6 @@
             android:textSize="16sp"
             android:layout_marginTop="@dimen/dp_10"
             android:textColor="@color/white"
-            android:fontFamily="@font/vagroun_q"
             />
         <ImageView
             android:id="@+id/iv_avater"
@@ -48,7 +47,6 @@
         android:textSize="13sp"
         android:text="@string/CONNECT_TO_VPN_SERVER"
         android:textColor="@color/white"
-        android:fontFamily="@font/vagroun_q"
         android:layout_height="@dimen/x80" />
 
     <android.support.v4.widget.NestedScrollView
@@ -79,7 +77,6 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:textSize="14sp"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/roboto_regular_q"
                     android:text="@string/ssid"
                     />
             </LinearLayout>
@@ -109,7 +106,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:textSize="14sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text=""
                         />
                 </LinearLayout>
@@ -131,7 +127,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:textSize="14sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text=""
                         />
                 </LinearLayout>
@@ -162,7 +157,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:textSize="14sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text=""
                         />
                 </LinearLayout>
@@ -184,7 +178,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:textSize="14sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text=""
                         />
                 </LinearLayout>
@@ -222,7 +215,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:textSize="14sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text=""
                         />
                 </LinearLayout>
@@ -244,7 +236,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:textSize="14sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text="1/10"
                         />
                 </LinearLayout>
@@ -271,7 +262,6 @@
                 android:textSize="16sp"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/white"
-                android:fontFamily="@font/vagroun_q"
                 />
 
             <LinearLayout
@@ -288,14 +278,12 @@
                     android:textSize="12sp"
                     android:background="@drawable/cancal_button_bg"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/vagroundedbt"
                     android:layout_height="@dimen/x85" />
                 <Button
                     android:id="@+id/bt_connect"
                     android:layout_width="@dimen/x315"
                     android:layout_marginLeft="@dimen/x15"
                     android:textSize="12sp"
-                    android:fontFamily="@font/vagroundedbt"
                     android:background="@drawable/comfirm_button_bg"
                     android:text="@string/yes_connect"
                     android:textColor="@color/mainColor"

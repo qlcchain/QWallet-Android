@@ -8,7 +8,6 @@
   <TextView
       android:layout_width="wrap_content"
       android:text="@string/start_vpn_with_qlc_powered_by_blockchain_technology"
-      android:fontFamily="@font/vagroundedbt"
       android:gravity="left"
       android:layout_marginLeft="@dimen/x10"
       android:textSize="17sp"

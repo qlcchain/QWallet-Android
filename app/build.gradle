@@ -276,6 +276,10 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
 
+//    implementation 'com.github.wendux:DSBridge-Android:3.0-SNAPSHOT'
+
+//    implementation 'io.neow3j:contract:2.2.0'
+
     //    compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:2.0.1'
 }
 // ADD THIS AT THE BOTTOM

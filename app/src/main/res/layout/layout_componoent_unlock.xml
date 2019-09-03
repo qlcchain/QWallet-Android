@@ -14,7 +14,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/vagroundedbt"
         android:text="@string/secure_your_qlc_token_and_assets"
         android:textColor="@color/white"
         android:textSize="17sp" />

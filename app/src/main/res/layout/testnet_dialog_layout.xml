@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:fontFamily="@font/vagroun_q"
         android:textColor="@color/white"
         android:background="#d40000"
         android:text="@string/WARNING"
@@ -23,7 +22,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_marginTop="@dimen/x20"
-        android:fontFamily="@font/vagroun_q"
         android:textColor="@color/color_333"
         android:text="@string/Testnet_version"
         android:textSize="18sp" />
@@ -35,7 +33,6 @@
         android:layout_marginLeft="@dimen/x20"
         android:layout_marginRight="@dimen/x20"
         android:textColor="@color/color_333"
-        android:fontFamily="@font/roboto_regular_q"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginBottom="@dimen/dp_10"
         android:layout_height="wrap_content"
@@ -67,7 +64,6 @@
         <Button
             android:id="@+id/btn_right"
             android:layout_width="match_parent"
-            android:fontFamily="@font/vagroun_q"
             style="?android:attr/borderlessButtonStyle"
             android:layout_height="match_parent"
             android:background="@drawable/comfirm_button_bg"
