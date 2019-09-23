@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:textSize="15sp"
-            android:text="For Voting/Mining Node"
+            android:text="@string/for_voting_mining_node"
             android:textColor="@color/color_29282a" />
     </LinearLayout>
     <LinearLayout
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Minimum Amount: "
+            android:text="@string/minimum_amount"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
         <TextView
@@ -58,14 +58,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Minimum Staking Period: "
+            android:text="@string/minimum_staking_period_10_days"
             android:textColor="@color/color_808080"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/color_29282a"
-            android:text="10 days"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
@@ -77,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Voting Earning per day: "
+            android:text="@string/voting_earning_per_day"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -87,7 +81,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textColor="@color/color_29282a"
-        android:text="Your staked amount/whole network staked amount x 8,302 QGAS"
+        android:text="@string/your_staked_amount_whole_network_staked_amount_x_8_302_qgas"
         android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,7 +92,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Mining Earning per day: "
+            android:text="@string/mining_earning_per_day"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -108,7 +102,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textColor="@color/color_29282a"
-        android:text="Miners to share the pool of 8219 QGAS Miner Earning = Voting + Mining Earning"
+        android:text="@string/miners_to_share_the_pool_of_8219_qgas_miner_earning_voting_mining_earning"
         android:layout_height="wrap_content" />
     <TextView
         android:layout_width="wrap_content"
@@ -116,7 +110,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textColor="@color/color_808080"
-        android:text="*Stake 1 million QLC or above is entitled to be a mining node, or run a mining pool"
+        android:text="@string/stake_1_million_qlc_or_above_is_entitled_to_be_a_mining_node_or_run_a_mining_pool"
         android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -137,7 +131,7 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:textSize="15sp"
-            android:text="For Confidant Station"
+            android:text="@string/for_confidant_station"
             android:textColor="@color/color_29282a" />
     </LinearLayout>
     <LinearLayout
@@ -149,7 +143,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Minimum Amount: "
+            android:text="@string/minimum_amount"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
         <TextView
@@ -168,14 +162,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Minimum Staking Period: "
+            android:text="@string/minimum_staking_period_90_days"
             android:textColor="@color/color_808080"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/color_29282a"
-            android:text="90 days"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
@@ -187,7 +175,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Rewards: "
+            android:text="@string/rewards_stake"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -197,13 +185,13 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textColor="@color/color_29282a"
-        android:text="Same as voting node - QGAS consumption"
+        android:text="@string/same_as_voting_node_qgas_consumption"
         android:layout_height="wrap_content" />
     <TextView
         android:layout_width="wrap_content"
         android:textSize="13sp"
         android:layout_marginLeft="15dp"
-        android:text="*First three month promotional period QGAS consumption will be 0"
+        android:text="@string/first_three_month_promotional_period_qgas_consumption_will_be_0"
         android:layout_marginRight="15dp"
         android:textColor="@color/color_808080"
         android:layout_height="wrap_content" />
@@ -212,7 +200,7 @@
         android:textSize="13sp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:text="Purchase a Confidant with 20% discount with Crypto Payment"
+        android:text="@string/purchase_a_confidant_with_20_discount_with_crypto_payment"
         android:textColor="@color/color_29282a"
         android:layout_height="wrap_content" />
     <LinearLayout
@@ -234,7 +222,7 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:textSize="15sp"
-            android:text="For Token Mintage"
+            android:text="@string/for_token_mintage"
             android:textColor="@color/color_29282a" />
     </LinearLayout>
     <LinearLayout
@@ -246,7 +234,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Minimum Amount: "
+            android:text="@string/minimum_amount"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
         <TextView
@@ -265,14 +253,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Minimum Staking Period: "
+            android:text="@string/minimum_staking_period_180_days"
             android:textColor="@color/color_808080"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/color_29282a"
-            android:text="180 days"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
@@ -284,7 +266,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:textSize="13sp"
-            android:text="Rewards: "
+            android:text="@string/rewards_stake"
             android:textColor="@color/color_808080"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -294,6 +276,6 @@
         android:textColor="@color/color_29282a"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:text="Same as voting node and entitled to issue a token"
+        android:text="@string/same_as_voting_node_and_entitled_to_issue_a_token"
         android:layout_height="wrap_content" />
 </LinearLayout>

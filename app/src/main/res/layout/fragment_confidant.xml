@@ -138,6 +138,7 @@
             android:background="@color/color_f2f2f2"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/invoke"
                 android:layout_width="match_parent"
                 android:gravity="center"
                 android:layout_marginLeft="15dp"

@@ -16,7 +16,17 @@ import com.stratagile.qlink.ui.activity.stake.presenter.ConfidantPresenter
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import com.alibaba.fastjson.JSONObject
+import com.github.kittinunf.fuel.httpPost
+import com.github.salomonbrys.kotson.jsonArray
+import com.github.salomonbrys.kotson.jsonObject
+import com.google.gson.Gson
+import com.socks.library.KLog
+import com.stratagile.qlc.QLCAPI
+import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.R
+import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.stake.CheckSecurityResult
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -24,6 +34,7 @@ import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_confidant.*
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 /**
  * @author hzp
@@ -48,6 +59,97 @@ class ConfidantFragment : BaseFragment(), ConfidantContract.View {
         super.onViewCreated(view, savedInstanceState)
         tvVerification.setOnClickListener {
             startVCodeCountDown()
+            sendSecurityCode()
+        }
+        invoke.setOnClickListener {
+
+        }
+    }
+
+    fun sendSecurityCode() {
+        thread {
+            val dataJson = jsonObject(
+                    "action" to "sendSecurityCode",
+                    "email_address" to "dzerix@gmail.com"
+            )
+            KLog.i(dataJson.toString())
+            var request = "https://myconfidant.io/api/explorer".httpPost().body(dataJson.toString())
+            request.headers["Content-Type"] = "application/json"
+            request.responseString { _, _, result ->
+                val (data, error) = result
+                if (error == null) {
+                    try {
+                        KLog.i(data)
+                        val jsonObject = JSONObject.parseObject(data)
+                        val resultCode = jsonObject.getIntValue("status")
+                    } catch (e : Exception) {
+                        e.printStackTrace()
+                    }
+                } else {
+                }
+            }
+        }
+    }
+
+    fun checkSecurityCode() {
+        thread {
+            val dataJson = jsonObject(
+                    "action" to "checkSecurityCode",
+                    "address" to "dzerix@gmail.com",
+                    "security_code" to "9r4mGjEzbMMbcuPRNAFuDu9e0rIjGjY8"
+            )
+            KLog.i(dataJson.toString())
+            var request = "https://myconfidant.io/api/explorer".httpPost().body(dataJson.toString())
+            request.headers["Content-Type"] = "application/json"
+            request.responseString { _, _, result ->
+                val (data, error) = result
+                if (error == null) {
+                    try {
+                        KLog.i(data)
+                        var checkSecurityResult = Gson().fromJson<CheckSecurityResult>(data, CheckSecurityResult::class.java)
+
+                        val jsonObject = JSONObject.parseObject(data)
+                        val resultCode = jsonObject.getIntValue("valid")
+                    } catch (e : Exception) {
+                        e.printStackTrace()
+                    }
+                } else {
+                }
+            }
+        }
+    }
+
+    fun confirmMacAddresses() {
+        thread {
+            val macAddressJsonArrayData = jsonArray()
+
+            val dataJson = jsonObject(
+                    "action" to "confirmMacAddresses",
+                    "address" to "dzerix@gmail.com",
+                    "security_code" to "9r4mGjEzbMMbcuPRNAFuDu9e0rIjGjY8",
+                    "qlc_address" to "9r4mGjEzbMMbcuPRNAFuDu9e0rIjGjY8",
+                    "neo_address" to "9r4mGjEzbMMbcuPRNAFuDu9e0rIjGjY8",
+                    "txid" to "9r4mGjEzbMMbcuPRNAFuDu9e0rIjGjY8",
+                    "mac_addresses" to "9r4mGjEzbMMbcuPRNAFuDu9e0rIjGjY8"
+            )
+            KLog.i(dataJson.toString())
+            var request = "https://myconfidant.io/api/explorer".httpPost().body(dataJson.toString())
+            request.headers["Content-Type"] = "application/json"
+            request.responseString { _, _, result ->
+                val (data, error) = result
+                if (error == null) {
+                    try {
+                        KLog.i(data)
+                        var checkSecurityResult = Gson().fromJson<CheckSecurityResult>(data, CheckSecurityResult::class.java)
+
+                        val jsonObject = JSONObject.parseObject(data)
+                        val resultCode = jsonObject.getIntValue("valid")
+                    } catch (e : Exception) {
+                        e.printStackTrace()
+                    }
+                } else {
+                }
+            }
         }
     }
 

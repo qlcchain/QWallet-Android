@@ -809,95 +809,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         progressDialog.hide();
     }
 
-//    @Override
-//    public void getPermissionSuccess() {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 1000, mLocationListener);
-//            return;
-//        }
-//    }
-
-//    //获取是否已打开自身GPS
-//    public boolean isGpsEnable() {
-//        String providers = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-//
-//        if (providers != null && providers.contains(LocationManager.GPS_PROVIDER)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
-//    private void getLocation() {
-//        if (!isGpsEnable()) {
-//            Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//            startActivity(callGPSSettingIntent);
-//        }
-//        // 获取位置管理服务
-//        String serviceName = Context.LOCATION_SERVICE;
-//        locationManager = (LocationManager) this.getSystemService(serviceName);
-//        // 查找到服务信息
-////        Criteria criteria = new Criteria();
-////        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
-////        criteria.setAltitudeRequired(false);
-////        criteria.setBearingRequired(false);
-////        criteria.setCostAllowed(true);
-////        criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-////        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-////        Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
-////        updateToNewLocation(location);
-//        // 设置监听*器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
-//        mPresenter.getLocation();
-//    }
-
-    LocationListener mLocationListener = new LocationListener() {
-        @TargetApi(17)
-        @Override
-        public void onLocationChanged(Location mlocal) {
-            if (mlocal == null) {
-                return;
-            }
-            String strResult = "getAccuracy:" + mlocal.getAccuracy() + "\r\n"
-                    + "getAltitude:" + mlocal.getAltitude() + "\r\n"
-                    + "getBearing:" + mlocal.getBearing() + "\r\n"
-                    + "getElapsedRealtimeNanos:" + String.valueOf(mlocal.getElapsedRealtimeNanos()) + "\r\n"
-                    + "getLatitude:" + mlocal.getLatitude() + "\r\n"
-                    + "getLongitude:" + mlocal.getLongitude() + "\r\n"
-                    + "getProvider:" + mlocal.getProvider() + "\r\n"
-                    + "getSpeed:" + mlocal.getSpeed() + "\r\n"
-                    + "getTime:" + mlocal.getTime() + "\r\n";
-            KLog.i(strResult);
-            ConstantValue.mLatitude = (float) mlocal.getLatitude();
-            ConstantValue.mLongitude = (float) mlocal.getLongitude();
-            Map<String, String> map = new HashMap<>();
-            map.put("latlng", mlocal.getLatitude() + "," + mlocal.getLongitude());
-            map.put("language", "en_us");
-            map.put("sensor", "false");
-            mPresenter.latlngParseCountry(map);
-        }
-
-        @Override
-        public void onProviderDisabled(String arg0) {
-        }
-
-        @Override
-        public void onProviderEnabled(String arg0) {
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int event, Bundle extras) {
-        }
-    };
-
-    private void updateToNewLocation(Location location) {
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-        } else {
-
-        }
-    }
-
     @SuppressLint("RestrictedApi")
     @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode, R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
     public void onViewClicked(View view) {
@@ -937,10 +848,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
-                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
-                        return;
-                    }
+//                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+//                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
+//                        return;
+//                    }
                     startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
                     return;
                 }

@@ -186,6 +186,7 @@
                 android:textColor="@color/color_29282a"
                 android:layout_height="wrap_content" />
             <TextView
+                android:id="@+id/tvQlcBalance"
                 android:layout_width="wrap_content"
                 android:textColor="@color/mainColor"
                 android:textSize="13sp"
@@ -200,9 +201,11 @@
             android:layout_marginRight="15dp"
             android:layout_height="46dp">
             <EditText
+                android:id="@+id/etStakeQlcAmount"
                 android:layout_width="0px"
                 android:layout_weight="1"
                 android:hint="@string/from_1_qlc"
+                android:inputType="number"
                 android:background="@null"
                 android:textSize="15sp"
                 android:textColor="@color/color_29282a"
@@ -248,9 +251,11 @@
             android:layout_marginRight="15dp"
             android:layout_height="46dp">
             <EditText
+                android:id="@+id/etStakeDays"
                 android:layout_width="0px"
                 android:layout_weight="1"
                 android:hint="@string/from_10"
+                android:inputType="number"
                 android:background="@null"
                 android:textSize="15sp"
                 android:textColor="@color/color_29282a"
@@ -265,7 +270,7 @@
         <TextView
             android:layout_width="match_parent"
             android:background="@color/color_f2f2f2"
-            android:text="@string/staking_will_end_on_2019_01_10_the_minimum_period_is_10_days"
+            android:text="@string/the_minimum_period_is_10_days"
             android:textSize="12sp"
             android:textColor="@color/color_808080"
             android:paddingRight="21dp"
@@ -273,6 +278,7 @@
             android:paddingBottom="11dp"
             android:paddingTop="4dp"
             android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:background="@color/color_f2f2f2"
@@ -284,6 +290,7 @@
                 android:layout_width="match_parent"
                 android:gravity="center"
                 android:layout_marginLeft="15dp"
+                android:textColor="@color/white"
                 android:layout_marginRight="15dp"
                 android:text="@string/invoke"
                 android:background="@drawable/unable_bt_bg"

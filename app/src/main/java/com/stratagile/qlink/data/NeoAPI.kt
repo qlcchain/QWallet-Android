@@ -100,6 +100,37 @@ class NeoNodeRPC {
         return data.toHex()
     }
 
+    fun buildUnlock(wallet: Wallet, tokenContractHash: String, fromAddress: String, toAddress: String, amount: Double, remark: String, callBack: NeoCallBack) {
+        val amountToSendInMemory: Long = (amount * 100000000).toLong()
+        val fromAddressHash = fromAddress.hashFromAddress()
+        val toAddressHash = toAddress.hashFromAddress()
+        val scriptBuilder = ScriptBuilder()
+        scriptBuilder.pushContractInvoke(tokenContractHash, operation = "unlock",
+                args = arrayOf(amountToSendInMemory, toAddressHash, fromAddressHash)
+        )
+        var script = scriptBuilder.getScriptHexString()
+        val byteArray = byteArrayOf((script.length / 2).toUByte()) + script.hexStringToByteArray()
+        val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
+
+
+        var finalAttributes = arrayOf<TransactionAttribute>(
+                TransactionAttribute().scriptAttribute(wallet.address.hashFromAddress()),
+                TransactionAttribute().remarkAttribute(String.format(remark, Date().time.toString())),
+                TransactionAttribute().hexDescriptionAttribute(tokenContractHash))  + arrayOf()
+
+
+        val rawTransaction = payloadPrefix +
+                getAttributesPayload(finalAttributes)
+
+        val privateKeyHex = wallet.privateKey.toHex()
+        val signature = Neoutils.sign(rawTransaction, privateKeyHex)
+        var finalPayload = concatenatePayloadData(wallet, rawTransaction, signature)
+        finalPayload = finalPayload + tokenContractHash.hexStringToByteArray()
+
+
+        val jsonBody = sendRawTransaction(finalPayload)
+    }
+
     fun buildNEP5TransferScript(scriptHash: String, fromAddress: String, toAddress: String, amount: Double): ByteArray {
         val amountToSendInMemory: Long = (amount * 100000000).toLong()
         val fromAddressHash = fromAddress.hashFromAddress()
@@ -113,17 +144,6 @@ class NeoNodeRPC {
     }
 
     private fun generateInvokeTransactionPayload(wallet: Wallet, utxos: UTXOS?, script: String, contractAddress: String, remark : String): ByteArray {
-//        val inputData = getInputsNecessaryToSendAsset(NeoNodeRPC.Asset.GAS, 0.00000001, assets)
-//        val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
-//        var rawTransaction = packRawTransactionBytes(payloadPrefix, wallet, Asset.GAS,
-//                inputData.inputPayload!!, inputData.totalAmount!!.toDouble(), 0.00000001,
-//                Account?.getWallet()?.address!!, null)
-//
-//        val privateKeyHex = wallet.privateKey.toHex()
-//        val signature = Neoutils.sign(rawTransaction, privateKeyHex)
-//        var finalPayload = concatenatePayloadData(wallet, rawTransaction, signature)
-//        finalPayload = finalPayload + contractAddress.hexStringToByteArray()
-//        return finalPayload
         val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
         var neoInput: SendAssetReturn? = null
         var gasInput: SendAssetReturn? = null

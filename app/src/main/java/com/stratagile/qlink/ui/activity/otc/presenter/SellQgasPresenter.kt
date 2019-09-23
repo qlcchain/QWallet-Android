@@ -339,8 +339,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
     fun getNeoWalletDetail(map: HashMap<String, String>, address: String) {
         val disposable = httpAPIWrapper.getNeoWalletInfo(map)
                 .subscribe({ baseBack ->
-                    //isSuccesse
-//                    getNeoTokensInfo(baseBack)
                     mView.setNeoDetail(baseBack)
                     getUtxo(address)
                 }, { }, {

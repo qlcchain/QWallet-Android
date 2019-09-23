@@ -48,7 +48,13 @@ public class TimeUtil {
         SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.CHINA);
         return sdr.format(new Date(timestamp));
     }
+    public static String getRevokeTime(long timestamp) {
+        timestamp = timestamp * 1000;
+        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd ", Locale.CHINA);
+        return sdr.format(new Date(timestamp));
+    }
     public static String getOrderTime(long timestamp) {
+        timestamp = timestamp * 1000;
         SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         return sdr.format(new Date(timestamp));
     }

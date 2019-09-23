@@ -110,8 +110,7 @@ class ScriptBuilder {
         }
     }
 
-    fun pushContractInvoke(scriptHash: String, operation: String? = null,
-                           args: Any? = null, useTailCall: Boolean = false) {
+    fun pushContractInvoke(scriptHash: String, operation: String? = null, args: Any? = null, useTailCall: Boolean = false) {
         pushData(args)
         if (operation != null) {
             val hex = operation.toByteArray().toHex()

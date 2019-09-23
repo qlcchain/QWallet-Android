@@ -71,6 +71,7 @@ import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.stake.UnLock;
 import com.stratagile.qlink.utils.DigestUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -934,6 +935,14 @@ public class HttpAPIWrapper {
             return wrapper(mMainHttpAPI.getPairs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getPairs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<UnLock> unLock(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.unLock(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.unLock(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

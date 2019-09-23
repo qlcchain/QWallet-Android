@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x21"
-                android:text="@string/selling_quantity"
+                android:text="@string/selling_amount"
                 android:textColor="@color/color_29282a"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -92,7 +92,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="@string/volume_settings"
+            android:text="@string/limits"
             android:textSize="16sp"
             android:layout_marginLeft="@dimen/x30"
             android:textColor="@color/color_29282a"
@@ -234,7 +234,7 @@
             <TextView
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:text="@string/buying"
+                android:text="@string/market_otc"
                 android:textSize="15sp"
                 android:layout_marginLeft="15dp"
                 android:textColor="@color/color_29282a"

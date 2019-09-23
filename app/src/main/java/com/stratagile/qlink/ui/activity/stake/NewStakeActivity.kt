@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.stake
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -10,6 +11,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
+import com.google.gson.Gson
 import com.socks.library.KLog
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.DSBridge.JsApi
@@ -17,7 +19,10 @@ import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.entity.stake.LockResult
+import com.stratagile.qlink.entity.stake.MultSign
 import com.stratagile.qlink.entity.stake.StakeType
+import com.stratagile.qlink.ui.activity.main.MainViewModel
 import com.stratagile.qlink.ui.activity.stake.component.DaggerNewStakeComponent
 import com.stratagile.qlink.ui.activity.stake.contract.NewStakeContract
 import com.stratagile.qlink.ui.activity.stake.module.NewStakeModule
@@ -25,6 +30,7 @@ import com.stratagile.qlink.ui.activity.stake.presenter.NewStakePresenter
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.ToastUtil
 import com.stratagile.qlink.utils.UIUtils
+import kotlinx.android.synthetic.main.activity_my_stake.*
 import kotlinx.android.synthetic.main.activity_new_stake.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -55,9 +61,12 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
     @Inject
     internal lateinit var mPresenter: NewStakePresenter
 
+    lateinit var stakeViewModel : NewStakeViewModel
+
+    lateinit var webview : DWebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
-        EventBus.getDefault().register(this)
         super.onCreate(savedInstanceState)
     }
 
@@ -72,35 +81,34 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun createMultSign(stakeType: StakeType) {
-        var pubKey = Account.getWallet()!!.publicKey.toString()
-        pubKey = "030a21d4f076f8098a7ad738fc60bb3edd8fa069e3ea3421cdc4beca739a1b4e5f"
-        webview.callHandler("staking.createMultiSig", arrayOf<Any>(pubKey, "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5"), OnReturnValue<JSONObject> { retValue ->
+        webview = DWebView(this)
+        webview.loadUrl("file:///android_asset/contract.html")
+
+        webview.callHandler("staking.createMultiSig", arrayOf<Any>(stakeType.neoPubKey, "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5"), OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
-            ToastUtil.displayShortToast("" + retValue)
-            lockQlc()
+            var multSign = Gson().fromJson(retValue.toString(), MultSign::class.java)
+            stakeType.toAddress = multSign._address
+            lockQlc(stakeType)
         })
     }
 
-    fun lockQlc() {
-        var priKey = ""
-        var fromAddress = "AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK"
-        var toAddress = "AQ4SCrvgeU5AzfhL4QVvy2FC2TPqUgJLBd"
-        var qlcchainAddress = "qlc_1fyz7ksawbgak4tqfyhspsbo4udsao1x8prui9unp6ggw7rpifea6ia76pj7"
-        var qlcAmount = "1"
-        var lockTime = "10"
-        webview.callHandler("staking.contractLock", arrayOf<Any>(priKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime), OnReturnValue<JSONObject> { retValue ->
+    fun lockQlc(stakeType: StakeType) {
+        webview.callHandler("staking.contractLock", arrayOf<Any>(stakeType.neoPriKey, stakeType.fromNeoAddress, stakeType.toAddress, stakeType.qlcchainAddress, stakeType.stakeQLcAmount, stakeType.stakeQlcDays), OnReturnValue<JSONObject> { retValue ->
             KLog.i("lock result= " + retValue!!)
-            ToastUtil.displayShortToast("" + retValue)
+            var lockResult = Gson().fromJson(retValue.toString(), LockResult::class.java)
+            lockResult.stakeType = stakeType
+            stakeViewModel.lockResult.postValue(lockResult)
         })
     }
     override fun initData() {
-        DWebView.setWebContentsDebuggingEnabled(true)
-        webview.loadUrl("file:///android_asset/contract.html")
-        webview.addJavascriptObject(JsApi(), null)
+        EventBus.getDefault().register(this)
+        stakeViewModel = ViewModelProviders.of(this).get<NewStakeViewModel>(NewStakeViewModel::class.java)
+//        DWebView.setWebContentsDebuggingEnabled(true)
+//        webview.addJavascriptObject(JsApi(), null)
         title.text = getString(R.string.new_stakeing)
         val titles = ArrayList<String>()
         titles.add(getString(R.string.vote_mining_node))
-        titles.add(getString(R.string.confidant))
+//        titles.add(getString(R.string.confidant))
         titles.add(getString(R.string.token_mintage))
         viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -108,10 +116,10 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
                     0 -> {
                         return VoteNodeFragment()
                     }
+//                    1 -> {
+//                        return ConfidantFragment()
+//                    }
                     1 -> {
-                        return ConfidantFragment()
-                    }
-                    2 -> {
                         return TokenMintageFragment()
                     }
                 }

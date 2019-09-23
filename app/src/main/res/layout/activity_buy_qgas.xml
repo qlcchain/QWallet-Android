@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/x40"
+        android:paddingBottom="10dp"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -63,7 +64,7 @@
             <TextView
                 android:id="@+id/tvVolumeSetting"
                 android:layout_width="wrap_content"
-                android:text="@string/volume_settings_qgas"
+                android:text="@string/limits"
                 android:textColor="@color/color_808080"
                 android:textSize="12sp"
                 android:layout_height="wrap_content" />
@@ -76,10 +77,13 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f2f2f2"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/account_payable"
+        android:text="@string/buying_amount"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -87,38 +91,6 @@
         android:layout_marginTop="@dimen/x21"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/x30"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_height="@dimen/x92">
-        <EditText
-            android:id="@+id/etUsdt"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:inputType="numberDecimal"
-            android:hint="@string/max"
-            android:background="@null"
-            android:textColor="@color/color_29282a"
-            android:textSize="16sp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tvPayToken"
-            android:text="USDT"
-            android:layout_marginRight="@dimen/x31"
-            android:layout_width="wrap_content"
-            android:textColor="@color/color_29282a"
-            android:textSize="16sp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x30"
-        android:background="@color/color_f2f2f2"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/x30"
@@ -149,6 +121,47 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/x1"
         android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="@string/to_pay"
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/color_29282a"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/x21"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x92">
+        <EditText
+            android:id="@+id/etUsdt"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:hint="@string/max"
+            android:background="@null"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvPayToken"
+            android:text="USDT"
+            android:layout_marginRight="@dimen/x31"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
         android:background="@color/color_f2f2f2"/>
 
     <TextView

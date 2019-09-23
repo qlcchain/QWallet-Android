@@ -55,8 +55,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 if (error == null) {
                     stateBlock.work = data
                     var hash = BlockMng.getHash(stateBlock)
-                    var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(qlcAccount.address).substring(0, 64)))
-                    val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(qlcAccount.address)))
+                    var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(qlcAccount.address).substring(0, 64)))
+                    val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePublicKey(qlcAccount.address)))
                     if (!signCheck) {
                         KLog.i("签名验证失败")
                         receiveBack.recevie(false)
@@ -90,8 +90,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
         KLog.i("走本地work逻辑")
         stateBlock.work = work
         var hash = BlockMng.getHash(stateBlock)
-        var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(qlcAccount.address).substring(0, 64)))
-        val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(qlcAccount.address)))
+        var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(qlcAccount.address).substring(0, 64)))
+        val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePublicKey(qlcAccount.address)))
         if (!signCheck) {
             KLog.i("签名验证失败")
             receiveBack.recevie(false)
@@ -279,29 +279,29 @@ object QlcReceiveUtils {
             e.printStackTrace()
         }
     }
-}
 
-
-private fun drivePrivateKey(address: String): String {
-    val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
-    qlcAccounts.forEach {
-        if (it.address.toLowerCase().equals(address)) {
+    fun drivePrivateKey(address: String): String {
+        val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
+        qlcAccounts.forEach {
+            if (it.address.toLowerCase().equals(address)) {
 //            KLog.i(it.privKey)
-            return it.privKey
+                return it.privKey
+            }
         }
+        return ""
     }
-    return ""
+
+    fun drivePublicKey(address: String): String {
+        val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
+        qlcAccounts.forEach {
+            if (it.address.toLowerCase() == address) {
+                return it.pubKey
+            }
+        }
+        return ""
+    }
 }
 
-private fun drivePublicKey(address: String): String {
-    val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
-    qlcAccounts.forEach {
-        if (it.address.toLowerCase() == address) {
-            return it.pubKey
-        }
-    }
-    return ""
-}
 
 interface ReceiveBack {
     fun recevie(suceess : Boolean)

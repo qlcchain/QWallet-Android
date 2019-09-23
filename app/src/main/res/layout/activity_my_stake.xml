@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
-            android:text="Total Staking Volume (QLC)"
+            android:text="@string/total_staking_volume_qlc"
             android:layout_marginTop="15dp"
             android:textSize="12sp"
             android:textColor="@color/white"
@@ -24,7 +25,7 @@
             android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="23sp"
-            android:text="0.02"
+            android:text="-/-"
             android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,14 +45,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Staking Amount (QLC)"
+                    android:text="@string/staking_amount_qlc"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
                 <TextView
-                    android:id="@+id/tvProfit"
+                    android:id="@+id/tvStakedQlc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100%"
+                    android:text="-/-"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -73,28 +74,34 @@
                     android:id="@+id/tvQlcCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Earnings (QGAS)"
+                    android:text="@string/earnings_qgas"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
                 <TextView
                     android:id="@+id/tvEarnQgas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="360"
+                    android:text="-/-"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:background="@color/color_f2f2f2"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="0px">
-        
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:background="@color/color_f2f2f2"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
     <LinearLayout
         android:id="@+id/newStaking"
         android:background="@color/white"

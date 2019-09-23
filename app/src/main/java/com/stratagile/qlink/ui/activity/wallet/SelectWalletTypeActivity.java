@@ -367,7 +367,8 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
             case R.id.servicePrivacyPolicy:
                 Intent intent = new Intent(this, WebViewActivity.class);
                 intent.putExtra("url", "https://docs.google.com/document/d/1yTr1EDXmOclDuSt4o0RRUc0fVjJU3zPREK97C1RmYdI/edit?usp=sharing");
-                intent.putExtra("title", R.string.service_agreement);
+//                intent.putExtra("url", "https://accounts.google.com/o/oauth2/auth?client_id=873428561545-aui4v5nvn6b1dtodnthmmg5q1ci0vski.apps.googleusercontent.com&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&response_type=code&scope=https%3A%2F%2Fmail.google.com%2F%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email");
+                intent.putExtra("title", getString(R.string.service_agreement));
                 startActivity(intent);
                 break;
             default:

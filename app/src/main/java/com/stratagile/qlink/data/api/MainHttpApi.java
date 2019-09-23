@@ -67,6 +67,7 @@ import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.stake.UnLock;
 
 import java.util.Map;
 
@@ -481,6 +482,10 @@ public interface MainHttpApi {
     @POST(MainAPI.url_pairs)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TradePair> getPairs(@Body RequestBody map);
+
+    @POST(MainAPI.url_contact_unlock)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<UnLock> unLock(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

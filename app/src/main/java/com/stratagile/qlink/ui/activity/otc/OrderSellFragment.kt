@@ -37,10 +37,7 @@ import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.otc.TradePair
-import com.stratagile.qlink.utils.EosUtil
-import com.stratagile.qlink.utils.MoneyValueFilter
-import com.stratagile.qlink.utils.OtcUtils
-import com.stratagile.qlink.utils.UserUtils
+import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_otc_neo_chain_pay.*
@@ -217,6 +214,10 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 }
                 AllWallet.WalletType.EosWallet -> {
                 }
+            }
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+                KotlinConvertJavaUtils.needVerify(activity!!)
+                return@setOnClickListener
             }
             showConfirmSellDialog()
             if (OtcUtils.parseChain(selectedPair!!.tradeTokenChain) == AllWallet.WalletType.QlcWallet && OtcUtils.parseChain(selectedPair!!.payTokenChain) == AllWallet.WalletType.EthWallet) {

@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.stake.presenter
 import android.support.annotation.NonNull
+import com.socks.library.KLog
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.ui.activity.stake.contract.TokenMintageContract
 import com.stratagile.qlink.ui.activity.stake.TokenMintageFragment
@@ -8,6 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import java.util.HashMap
 
 /**
  * @author hzp
@@ -33,5 +35,17 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Toke
         if (!mCompositeDisposable.isDisposed) {
             mCompositeDisposable.dispose()
         }
+    }
+
+    fun getNeoWalletDetail(map: HashMap<String, String>, address: String) {
+        val disposable = httpAPIWrapper.getNeoWalletInfo(map)
+                .subscribe({ baseBack ->
+                    mView.setNeoDetail(baseBack)
+//                    getUtxo(address)
+                }, { }, {
+                    //onComplete
+                    KLog.i("onComplete")
+                })
+        mCompositeDisposable.add(disposable)
     }
 }

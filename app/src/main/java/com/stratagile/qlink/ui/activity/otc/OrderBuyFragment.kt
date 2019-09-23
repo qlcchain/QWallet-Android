@@ -46,12 +46,14 @@ import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
 import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
 import kotlinx.android.synthetic.main.fragment_order_buy.ivReceiveChain
 import kotlinx.android.synthetic.main.fragment_order_buy.llBuyToken
+import kotlinx.android.synthetic.main.fragment_order_buy.llSelectReceiveWallet
 import kotlinx.android.synthetic.main.fragment_order_buy.llSellToken
 import kotlinx.android.synthetic.main.fragment_order_buy.sellingToken
 import kotlinx.android.synthetic.main.fragment_order_buy.sellinngTokenQuantity
 import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
 import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletAddess
 import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletName
+import kotlinx.android.synthetic.main.fragment_order_sell.*
 import neoutils.Neoutils
 import qlc.mng.AccountMng
 import qlc.mng.WalletMng
@@ -140,6 +142,10 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+                KotlinConvertJavaUtils.needVerify(activity!!)
+                return@setOnClickListener
+            }
             var map = mutableMapOf<String, String>()
             map.put("account", ConstantValue.currentUser.account)
             map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
@@ -188,17 +194,17 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
         tvReceiveWalletAddess.setOnClickListener {
             showEnterQlcWalletDialog()
         }
-        var qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
-        if (qlcAccounList.size > 0) {
-            qlcAccounList.forEach {
-                if (it.isCurrent()) {
-                    receiveQgasWallet = it
-                    tvReceiveWalletName.text = it.accountName
-                    tvReceiveWalletAddess.text = it.address
-                    return@forEach
-                }
-            }
-        }
+//        var qlcAccounList = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+//        if (qlcAccounList.size > 0) {
+//            qlcAccounList.forEach {
+//                if (it.isCurrent()) {
+//                    receiveQgasWallet = it
+//                    tvReceiveWalletName.text = it.accountName
+//                    tvReceiveWalletAddess.text = it.address
+//                    return@forEach
+//                }
+//            }
+//        }
         llSellToken.setOnClickListener {
             startActivityForResult(Intent(activity, SelectCurrencyActivity::class.java), selectPair)
         }

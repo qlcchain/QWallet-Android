@@ -219,7 +219,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         tvPayToken.text = orderList.payToken
         tvUnitPriceTip.text = getString(R.string.unit_price) + "(" + orderList.payToken + ")"
         tvVolumeAmount.text = getString(R.string.volume_amount_qgas) + "(" + orderList.tradeToken + ")"
-        tvVolumeSetting.text = getString(R.string.volume_settings) + "(" + orderList.tradeToken + ")"
+        tvVolumeSetting.text = getString(R.string.limits) + "(" + orderList.tradeToken + ")"
 
         tvUnitPrice.text = BigDecimal.valueOf(orderList.unitPrice).stripTrailingZeros().toPlainString()
         tvAmount.text= BigDecimal.valueOf(orderList.totalAmount).stripTrailingZeros().toPlainString()

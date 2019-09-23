@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jaeger.library.StatusBarUtil;
+import com.socks.library.KLog;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
@@ -103,9 +104,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
             configuration.locale = Locale.ENGLISH;
             Locale.setDefault(Locale.ENGLISH);
+            KLog.i("设置为英文");
         } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 1){
             configuration.locale = Locale.CHINESE;
             Locale.setDefault(Locale.CHINESE);
+            KLog.i("设置为中文");
         }
         getResources().updateConfiguration(configuration, displayMetrics);
         if (isUpdate) {

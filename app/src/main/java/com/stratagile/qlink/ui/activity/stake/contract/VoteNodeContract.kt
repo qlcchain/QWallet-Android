@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.stake.contract
 
+import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -19,6 +20,8 @@ interface VoteNodeContract {
          *
          */
         fun closeProgressDialog()
+
+        fun setNeoDetail(neoWalletInfo : NeoWalletInfo)
     }
 
     interface VoteNodeContractPresenter : BasePresenter {

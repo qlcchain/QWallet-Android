@@ -69,6 +69,7 @@ import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.stake.UnLock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +100,7 @@ import static com.stratagile.qlink.data.api.API.url_app_version_info;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
+import static com.stratagile.qlink.data.api.API.url_contact_unlock;
 import static com.stratagile.qlink.data.api.API.url_create_eos_account;
 import static com.stratagile.qlink.data.api.API.url_create_eos_need_info;
 import static com.stratagile.qlink.data.api.API.url_entrust_cancel_order;
@@ -552,6 +554,10 @@ public interface HttpApi {
     @POST(url_pairs)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TradePair> getPairs(@Body RequestBody map);
+
+    @POST(url_contact_unlock)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<UnLock> unLock(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart
