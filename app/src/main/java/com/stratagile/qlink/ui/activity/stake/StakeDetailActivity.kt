@@ -257,7 +257,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
             unLockQLc(neoWallet!!.publicKey)
         } else {
             runOnUiThread {
-                toast(getString(R.string.stake_neo_wallet_not_found))
+                toast(getString(R.string.stake_neo_wallet_not_found, address))
                 closeProgressDialog()
             }
 
