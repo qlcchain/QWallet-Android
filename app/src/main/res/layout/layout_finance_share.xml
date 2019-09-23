@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/x30"
-        android:text="@string/invite_friends_to_get_more"
+        android:text="@string/make_more"
         android:textColor="@color/color_29282a"
         android:textSize="18sp" />
 
@@ -23,7 +23,7 @@
         android:layout_marginTop="@dimen/x30"
         android:layout_toRightOf="@id/tv1"
         android:layout_marginLeft="@dimen/x6"
-        android:text="@string/rewards"
+        android:text="QGAS"
         android:textColor="@color/mainColor"
         android:textSize="18sp" />
 

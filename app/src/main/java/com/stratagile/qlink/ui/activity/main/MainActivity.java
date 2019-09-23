@@ -1,7 +1,6 @@
 package com.stratagile.qlink.ui.activity.main;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
@@ -9,8 +8,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -58,7 +56,6 @@ import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
-import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
@@ -82,6 +79,7 @@ import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
+import com.stratagile.qlink.ui.activity.topup.TopUpFragment;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
@@ -103,7 +101,6 @@ import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
-import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.NoScrollViewPager;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
@@ -400,10 +397,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
-                    return new MarketFragment();
+                    return new TopUpFragment();
                 } else if (position == 1) {
-                    return new AllWalletFragment();
+                    return new MarketFragment();
                 } else if (position == 2) {
+                    return new AllWalletFragment();
+                } else if (position == 3) {
                     return new MyFragment();
                 } else {
                     return new MyFragment();
@@ -412,13 +411,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             @Override
             public int getCount() {
-                return 3;
+                return 4;
             }
         });
         //设置BottomNavigationMenuView的字体
         bottomNavigation.enableAnimation(false);
         bottomNavigation.enableShiftingMode(false);
         bottomNavigation.enableItemShiftingMode(false);
+        bottomNavigation.enableAnimation(false);
         viewPager.setOffscreenPageLimit(4);
 //        bottomNavigation.setTextSize(12);
 //        bottomNavigation.setIconSizeAt(0, 25f, 20.8f);
@@ -434,6 +434,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     case R.id.item_sms:
                         item.setIcon(R.mipmap.finance_h);
                         setVpnPage();
+                        break;
+                    case R.id.item_topup:
+                        item.setIcon(R.mipmap.topup_h);
+                        setTopupPage();
                         break;
                     case R.id.item_all_wallet:
                         item.setIcon(R.mipmap.wallet_h);
@@ -574,6 +578,29 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        Account.INSTANCE.fromWIF(walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0)).getWif());
     }
 
+    private void setTopupPage() {
+        financeCome.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
+        }
+        viewPager.setCurrentItem(0, false);
+        tvTitle.setVisibility(View.VISIBLE);
+        segmentControlView.setVisibility(View.GONE);
+        ivWallet.setVisibility(View.GONE);
+        tvTitle.setText(R.string.top_up);
+        ivQRCode.setVisibility(View.GONE);
+        tvTitle.setTextColor(getResources().getColor(R.color.white));
+        statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        ivAvater.setVisibility(View.VISIBLE);
+        Glide.with(this)
+                .load(R.mipmap.add_j)
+                .into(ivWallet);
+        Glide.with(this)
+                .load(R.mipmap.icon_protfolio_more)
+                .into(ivAvater);
+    }
+
     /**
      * 设置为vpn界面
      */
@@ -582,7 +609,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
         }
-        viewPager.setCurrentItem(0, false);
+        viewPager.setCurrentItem(1, false);
         tvTitle.setVisibility(View.GONE);
         segmentControlView.setVisibility(View.VISIBLE);
         ivWallet.setVisibility(View.VISIBLE);
@@ -620,7 +647,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
             }
-            viewPager.setCurrentItem(1, false);
+            viewPager.setCurrentItem(2, false);
             ivQRCode.setVisibility(View.VISIBLE);
             statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
             rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -652,7 +679,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
         ivQRCode.setVisibility(View.GONE);
-        viewPager.setCurrentItem(2, false);
+        viewPager.setCurrentItem(3, false);
         statusBar.setBackgroundColor(getResources().getColor(R.color.white));
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.me);

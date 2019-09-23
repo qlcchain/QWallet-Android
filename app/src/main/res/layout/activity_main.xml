@@ -138,7 +138,7 @@
             android:layout_height="46dp"
             android:layout_alignParentBottom="true">
 
-            <com.stratagile.qlink.view.BottomNavigationViewEx
+            <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

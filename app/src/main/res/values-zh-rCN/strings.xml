@@ -966,4 +966,6 @@
     <string name="revoke_failed">赎回失败，请重试</string>
     <string name="revoke_failed1">赎回进行中</string>
     <string name="stake_neo_wallet_not_found">抵押的neo钱包 %1$s 未找到</string>
+    <string name="top_up">Top-up</string>
+    <string name="make_more">赚取更多</string>
 </resources>

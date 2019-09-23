@@ -1531,4 +1531,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="to_pay">To Pay</string>
     <string name="to_receive">To Receive</string>
     <string name="stake_neo_wallet_not_found">The wallet of %1$s is none。</string>
+    <string name="top_up">Top-up</string>
+    <string name="make_more">make more</string>
 </resources>

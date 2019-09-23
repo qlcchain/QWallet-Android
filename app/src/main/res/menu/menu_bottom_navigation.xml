@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/item_topup"
+        android:icon="@mipmap/topup_h"
+        android:title="@string/top_up" />
+    <item
         android:id="@+id/item_sms"
         android:icon="@mipmap/finance_n"
         android:title="@string/finance" />
