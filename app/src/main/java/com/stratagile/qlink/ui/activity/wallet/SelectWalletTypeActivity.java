@@ -209,17 +209,6 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
             }
         }
         String seed = QlcUtil.generateSeed().toLowerCase();
-//        int index = -1;
-//        List<QLCAccount> mainQlcAccount = AppConfig.getInstance().getDaoSession().getQLCAccountDao().queryBuilder().where(QLCAccountDao.Properties.IsAccountSeed.eq(true)).list();
-//        if (mainQlcAccount.size() > 0) {
-//            for (int i = 0; i < mainQlcAccount.size(); i++) {
-//                if (mainQlcAccount.get(i).getSeed() != null && !mainQlcAccount.get(i).getSeed().equals("") && mainQlcAccount.get(i).getIsAccountSeed()) {
-//                    seed = mainQlcAccount.get(i).getSeed();
-//                    index = i;
-//                }
-//            }
-//        }
-
         try {
             JSONObject jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0);
             String priKey = jsonObject.getString("privKey");
@@ -248,7 +237,6 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
             e.printStackTrace();
         }
 
-//        String seed = "68740dc90101252e60d70dad82f356a03e4b54816789f9c5bd6f031a34da5812";
     }
 
     @Override

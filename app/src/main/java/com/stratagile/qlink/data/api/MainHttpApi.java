@@ -68,6 +68,9 @@ import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.TopupOrder;
+import com.stratagile.qlink.entity.topup.TopupOrderList;
+import com.stratagile.qlink.entity.topup.TopupProduct;
 
 import java.util.Map;
 
@@ -85,6 +88,7 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 import static com.stratagile.qlink.data.api.API.url_pairs;
+import static com.stratagile.qlink.data.api.API.url_topup_productlist;
 
 
 /**
@@ -486,6 +490,18 @@ public interface MainHttpApi {
     @POST(MainAPI.url_contact_unlock)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<UnLock> unLock(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_productlist)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupProduct> getTopupProductList(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrderList> getTopupOrderList(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

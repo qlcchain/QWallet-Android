@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
+        android:textStyle="bold"
         android:layout_marginTop="@dimen/x30"
         android:text="@string/make_more"
         android:textColor="@color/color_29282a"

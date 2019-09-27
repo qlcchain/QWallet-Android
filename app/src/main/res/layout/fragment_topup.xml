@@ -35,10 +35,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="33sp"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="13dp"
-                    android:text="发送充值到"
+                    android:text="@string/send_replenishment_to"
                     android:textColor="@color/color_29282a" />
 
                 <TextView
@@ -46,21 +47,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:textStyle="bold"
                     android:layout_marginLeft="12dp"
                     android:textSize="15sp"
-                    android:text="输入手机号码或从联系人中选择："
+                    android:text="@string/enter_your_phone_number_or_select_from_your_contacts"
                     android:textColor="@color/color_29282a" />
 
-                <EditText
-                    android:id="@+id/joinNow"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x77"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginTop="@dimen/x30"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/mobile_bg"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="23dp"
                     android:layout_marginRight="12dp"
-                    android:background="@null"
-                    android:textColor="@color/white" />
+                    android:layout_height="42dp">
+                    <TextView
+                        android:id="@+id/etMobile"
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_height="27dp"
+                        android:textSize="19sp"
+                        android:textColorHint="#B3CEFF"
+                        android:hint="+86 100 0000 0000"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:background="@null"
+                        android:textColor="@color/white" />
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_marginRight="12dp"
+                        android:src="@mipmap/contacts"
+                        android:layout_height="21dp"/>
+                </LinearLayout>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -101,9 +121,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="@dimen/x1"
                 android:orientation="horizontal"
-                android:layout_height="@dimen/x92">
+                android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:includeFontPadding="false"
@@ -112,8 +133,8 @@
                     android:textStyle="bold"
                     android:layout_marginLeft="15dp"
                     android:textSize="15sp"
-                    android:text="运营商套餐"
-                    android:layout_height="@dimen/x92" />
+                    android:text="@string/operator_package"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 

@@ -1,8 +1,10 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
@@ -12,6 +14,8 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerWebViewComponent;
 import com.stratagile.qlink.ui.activity.main.contract.WebViewContract;
 import com.stratagile.qlink.ui.activity.main.module.WebViewModule;
 import com.stratagile.qlink.ui.activity.main.presenter.WebViewPresenter;
+
+import java.net.URLDecoder;
 
 import javax.inject.Inject;
 
@@ -66,6 +70,24 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
         webView.loadUrl(getIntent().getStringExtra("url"));
 //        webView.loadUrl("https://www.baidu.com");
         KLog.i(getIntent().getStringExtra("url"));
+//        webView.setWebViewClient(new WebViewClient(){
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                webView.loadUrl(url);
+//                return true;
+//            }
+//
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                super.onPageStarted(view, url, favicon);
+//            }
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//                KLog.i(url);
+//            }
+//        });
     }
 
     @Override

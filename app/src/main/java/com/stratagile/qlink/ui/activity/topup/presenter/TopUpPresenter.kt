@@ -34,4 +34,14 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
             mCompositeDisposable.dispose()
         }
     }
+
+    fun getProductList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getTopupProductList(map).subscribe({
+            mView.setProductList(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
 }

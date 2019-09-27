@@ -132,17 +132,15 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
     /**
      * Rationale支持，这里自定义对话框。
      */
-    private RationaleListener rationaleListener = (requestCode, rationale) -> {
-        AlertDialog.newBuilder(mActivity)
-                .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
-                .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
-                .setPositiveButton(AppConfig.getInstance().getResources().getString(R.string.Agree), (dialog, which) -> {
-                    rationale.resume();
-                })
-                .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.Reject), (dialog, which) -> {
-                    rationale.cancel();
-                }).show();
-    };
+    private RationaleListener rationaleListener = (requestCode, rationale) -> AlertDialog.newBuilder(mActivity)
+            .setTitle(AppConfig.getInstance().getResources().getString(R.string.Permission_Requeset))
+            .setMessage(AppConfig.getInstance().getResources().getString(R.string.We_Need_Some_Permission_to_continue))
+            .setPositiveButton(AppConfig.getInstance().getResources().getString(R.string.Agree), (dialog, which) -> {
+                rationale.resume();
+            })
+            .setNegativeButton(AppConfig.getInstance().getResources().getString(R.string.Reject), (dialog, which) -> {
+                rationale.cancel();
+            }).show();
 
     @Override
     public void getPermission() {

@@ -25,6 +25,7 @@ public class ConstantValue {
 
     public static boolean thisVersionShouldShowGuest = true;
     public static String P2PID = "p2pid";
+    public static String topUpP2pId = "topUpP2pId";
     public static String Language = "language";
     public static boolean isConnectToP2p = false;
     public static WifiInfo connectedWifiInfo;

@@ -48,6 +48,7 @@ import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.QrEntity;
+import com.stratagile.qlink.entity.SwitchToOtc;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
@@ -80,6 +81,7 @@ import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment;
+import com.stratagile.qlink.ui.activity.topup.TopupOrderListActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
@@ -690,6 +692,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 .into(ivWallet);
     }
 
+
+
     /**
      * 判断是否支持指纹解锁
      *
@@ -770,6 +774,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             bottomNavigation.setSelectedItemId(R.id.item_sms);
             setVpnPage();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void switchToOtc(SwitchToOtc switchToOtc) {
+        bottomNavigation.setSelectedItemId(R.id.item_sms);
+        setVpnPage();
     }
 
     @Override
@@ -863,6 +873,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), getString(R.string.receivable_address), "qlc", 4);
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     }
+                } else if (bottomNavigation.getSelectedItemId() == R.id.item_topup) {
+                    Intent intent1 = new Intent(this, TopupOrderListActivity.class);
+                    startActivity(intent1);
                 }
                 break;
             case R.id.rlWallet:

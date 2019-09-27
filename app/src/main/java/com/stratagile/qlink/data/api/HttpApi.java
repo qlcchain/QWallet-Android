@@ -70,6 +70,9 @@ import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.TopupOrder;
+import com.stratagile.qlink.entity.topup.TopupOrderList;
+import com.stratagile.qlink.entity.topup.TopupProduct;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,6 +136,9 @@ import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
+import static com.stratagile.qlink.data.api.API.url_topup_order;
+import static com.stratagile.qlink.data.api.API.url_topup_order_list;
+import static com.stratagile.qlink.data.api.API.url_topup_productlist;
 import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
@@ -558,6 +564,18 @@ public interface HttpApi {
     @POST(url_contact_unlock)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<UnLock> unLock(@Body RequestBody map);
+
+    @POST(url_topup_productlist)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupProduct> getTopupProductList(@Body RequestBody map);
+
+    @POST(url_topup_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
+
+    @POST(url_topup_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrderList> getTopupOrderList(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart
