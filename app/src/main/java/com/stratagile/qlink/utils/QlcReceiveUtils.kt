@@ -155,6 +155,8 @@ object QlcReceiveUtils {
                         if (result.getString("result") != null && !"".equals(result.getString("result"))) {
                             sendBack.send(result.getString("result"))
                             return@responseString
+                        } else {
+                            sendBack.send("")
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()

@@ -27,6 +27,7 @@ import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
+import android.webkit.WebView;
 
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -165,6 +166,13 @@ public class AppConfig extends MultiDexApplication {
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
         updateNotificationChannels();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            String processName = getProcessName(this);
+            if (!"com.stratagile.qwallet".equals(processName)){//判断不等于默认进程名称
+                WebView.setDataDirectorySuffix(processName);}
+        }
+        new WebView(this).destroy();
         //初始化btc钱包
 //        org.bitcoinj.core.Context.enableStrictMode();
 //        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
@@ -172,6 +180,18 @@ public class AppConfig extends MultiDexApplication {
 //        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
     }
+
+    public  String getProcessName(Context context) {
+        if (context == null) return null;
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == android.os.Process.myPid()) {
+                return processInfo.processName;
+            }
+        }
+        return null;
+    }
+
 
     private void setMode() {
         if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {

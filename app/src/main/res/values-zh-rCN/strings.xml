@@ -456,7 +456,7 @@
     <string name="get_the_code">获取验证码</string>
     <string name="finance">理财</string>
     <string name="My_Portfolio">我的理财</string>
-    <string name="Join_NOW">马上行动</string>
+    <string name="Join_NOW">抵押 QLC</string>
     <string name="qlc_daily_gain_program">QLC 日日盈</string>
     <string name="annual_percentage_rate">年化收益率</string>
     <string name="highly_recommend">热门推荐</string>
@@ -646,6 +646,7 @@
     <string name="no_enough_usdt">没有足够的usdt</string>
     <string name="no_enough">没有足够的</string>
     <string name="payment_wallet">付款钱包</string>
+    <string name="payment">付款</string>
     <string name="select_a_eth_wallet_to_send_usdt">选择一个ETH钱包发送USDT</string>
     <string name="select_a_eth_wallet">选择一个ETH钱包</string>
     <string name="memo">备注</string>
@@ -985,7 +986,7 @@
     <string name="payment_amount">支付金额</string>
     <string name="slow_charging">话费慢充</string>
     <string name="qgas_is_not_in_the_accounts">QGAS未到账</string>
-    <string name="qgas_paid_not_in_the_telephone_fee">QGAS已支付, 未支付话费</string>
+    <string name="qgas_paid_not_in_the_telephone_fee">待支付</string>
     <string name="recharge">待发货</string>
     <string name="recharge_success">充值成功</string>
     <string name="failure_to_pay">话费充值失败</string>

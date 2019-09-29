@@ -22,8 +22,8 @@ class TopupAbleAdapter(array: ArrayList<TopupProduct.ProductListBean>) : BaseQui
             //英文
             helper.setText(R.id.explain, item.explainEn)
             helper.setText(R.id.description, item.descriptionEn)
-            helper.setGone(R.id.rmbCn, false)
-            helper.setGone(R.id.rmbEn, true)
+            helper.setGone(R.id.rmbCn, true)
+            helper.setGone(R.id.rmbEn, false)
             helper.setText(R.id.tvOperator, item.countryEn + item.provinceEn + item.ispEn)
         } else {
             helper.setGone(R.id.rmbCn, true)

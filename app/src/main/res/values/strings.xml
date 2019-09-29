@@ -1063,7 +1063,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="verification_code">Verification Code</string>
     <string name="get_the_code">Get the Code</string>
     <string name="My_Portfolio">My Portfolio</string>
-    <string name="Join_NOW">Act now</string>
+    <string name="Join_NOW">Stake QLC</string>
     <string name="qlc_daily_gain_program">QLC Daily Gain Program</string>
     <string name="annual_percentage_rate">Annual Percentage Rate</string>
     <string name="highly_recommend">Highly Recommend</string>
@@ -1248,6 +1248,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="no_enough_usdt">Not enough usdt</string>
     <string name="no_enough">Not enough</string>
     <string name="payment_wallet">Payment Wallet</string>
+    <string name="payment">Payment</string>
     <string name="select_a_eth_wallet_to_send_usdt">Select a ETH wallet to send USDT</string>
     <string name="select_a_eth_wallet">Select a ETH wallet</string>
     <string name="send_to">Send to</string>
@@ -1532,12 +1533,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="to_receive">To Receive</string>
     <string name="stake_neo_wallet_not_found">The wallet of %1$s is none。</string>
     <string name="top_up">Top-up</string>
-    <string name="make_more">make more</string>
+    <string name="make_more">Get more</string>
     <string name="send_replenishment_to">Top up this number</string>
     <string name="enter_your_phone_number_or_select_from_your_contacts">Enter a phone number or select a contact to quickly view available packages.</string>
     <string name="operator_package">Carrier mobile plan</string>
     <string name="check_out_your_exclusive_offer">Check out your exclusive offer</string>
-    <string name="discount">off</string>
+    <string name="discount">Off</string>
     <string name="recharge_phone_bill">Phone top up</string>
     <string name="enter_a_phone_number_or_select_a_contact_to_quickly_view_available_packages">Enter a phone number or select a contact to quickly view available packages.</string>
     <string name="look_at_the_products_on_sale">View your exclusive offers</string>

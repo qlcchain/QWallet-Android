@@ -1,7 +1,12 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.webkit.URLUtil;
+import android.webkit.WebBackForwardList;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,8 +19,11 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerWebViewComponent;
 import com.stratagile.qlink.ui.activity.main.contract.WebViewContract;
 import com.stratagile.qlink.ui.activity.main.module.WebViewModule;
 import com.stratagile.qlink.ui.activity.main.presenter.WebViewPresenter;
+import com.stratagile.qlink.utils.WXH5PayHandler;
 
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -70,25 +78,10 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
         webView.loadUrl(getIntent().getStringExtra("url"));
 //        webView.loadUrl("https://www.baidu.com");
         KLog.i(getIntent().getStringExtra("url"));
-//        webView.setWebViewClient(new WebViewClient(){
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                webView.loadUrl(url);
-//                return true;
-//            }
-//
-//            @Override
-//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//                super.onPageStarted(view, url, favicon);
-//            }
-//
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
-//                KLog.i(url);
-//            }
-//        });
+        webView.setWebViewClient(new XWebViewClient());
     }
+
+
 
     @Override
     protected void setupActivityComponent() {
@@ -114,5 +107,92 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
     public void closeProgressDialog() {
         progressDialog.hide();
     }
+
+    public class XWebViewClient extends WebViewClient {
+
+        private WXH5PayHandler mWXH5PayHandler;
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            KLog.i(url);
+            if (TextUtils.isEmpty(url)) {
+                return true;
+            }
+
+            Uri uri = null;
+            try {
+                uri = Uri.parse(url);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (uri == null) {
+                return true;
+            }
+
+            if (!URLUtil.isNetworkUrl(url)) {
+                //  处理微信h5支付2
+                if (mWXH5PayHandler != null && mWXH5PayHandler.isWXLaunchUrl(url)) {
+                    mWXH5PayHandler.launchWX(view, url);
+                } else {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        view.getContext().startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return true;
+            }
+
+            if (WXH5PayHandler.isWXH5Pay(url)) {
+                // 处理微信h5支付1
+                mWXH5PayHandler = new WXH5PayHandler();
+                return mWXH5PayHandler.pay(url);
+            } else if (mWXH5PayHandler != null) {
+                // 处理微信h5支付3
+                if (mWXH5PayHandler.isRedirectUrl(url)) {
+                    boolean result = mWXH5PayHandler.redirect();
+                    mWXH5PayHandler = null;
+                    return result;
+                }
+                mWXH5PayHandler = null;
+            }
+
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            if (WXH5PayHandler.isWXH5Pay(url)) {
+                webView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }, 2000);
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // back history
+        int index = -1; // -1表示回退history上一页
+        String url;
+        WebBackForwardList history = webView.copyBackForwardList();
+        while (webView.canGoBackOrForward(index)) {
+            url = history.getItemAtIndex(history.getCurrentIndex() + index).getUrl();
+            if (URLUtil.isNetworkUrl(url) && !WXH5PayHandler.isWXH5Pay(url)) {
+                webView.goBackOrForward(index);
+                return;
+            }
+            index--;
+        }
+        super.onBackPressed();
+    }
+
+
 
 }

@@ -22,6 +22,7 @@ import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.SwitchToOtc
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupProduct
+import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopupQlcPayComponent
 import com.stratagile.qlink.ui.activity.topup.contract.TopupQlcPayContract
@@ -56,10 +57,11 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         closeProgressDialog()
         //mm_1000001_949caa0a0d8b4f2c81dd1750e8e867de_2148498a37484faf96c9717ba56bd809
         var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
-        setResult(Activity.RESULT_OK)
-        finish()
+//        var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=0&mobile=${intent.getStringExtra("phoneNumber")}"
+        val intent = Intent(this, WebViewActivity::class.java)
+        intent.putExtra("url", url)
+        intent.putExtra("title", getString(R.string.payment))
+        startActivityForResult(intent, 10)
     }
 
     @Inject
@@ -199,6 +201,11 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                 thread {
                     getWalletBalance()
                 }
+            }
+            10 -> {
+                startActivity(Intent(this, TopupOrderListActivity::class.java))
+                setResult(Activity.RESULT_OK)
+                finish()
             }
         }
     }

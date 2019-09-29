@@ -90,12 +90,12 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
                 startActivity(Intent(activity, AccountActivity::class.java))
                 return@OnItemClickListener
             }
-            if (entrustOrderListAdapter.data[position].tradeToken.equals("QGAS") && entrustOrderListAdapter.data[position].totalAmount > 1000) {
-                if ("KYC_SUCCESS" != ConstantValue.currentUser.vstatus) {
-                    KotlinConvertJavaUtils.needVerify(activity!!)
-                    return@OnItemClickListener
-                }
-            }
+//            if (entrustOrderListAdapter.data[position].tradeToken.equals("QGAS") && entrustOrderListAdapter.data[position].totalAmount > 1000) {
+//                if ("KYC_SUCCESS" != ConstantValue.currentUser.vstatus) {
+//                    KotlinConvertJavaUtils.needVerify(activity!!)
+//                    return@OnItemClickListener
+//                }
+//            }
             if (entrustOrderListAdapter.data[position].type.equals(ConstantValue.orderTypeSell)) {
                 startActivityForResult(Intent(activity, BuyQgasActivity::class.java).putExtra("order", entrustOrderListAdapter.data[position]), 0)
             } else {
