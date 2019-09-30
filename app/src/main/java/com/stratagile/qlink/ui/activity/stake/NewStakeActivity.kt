@@ -169,6 +169,10 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
             }
         }
         ViewPagerHelper.bind(indicator, viewPager)
+
+        if (intent.hasExtra("txid")) {
+            stakeViewModel.txidMutableLiveData.postValue("txid")
+        }
     }
 
     override fun setupActivityComponent() {

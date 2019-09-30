@@ -7,4 +7,6 @@ import com.stratagile.qlink.entity.stake.LockResult;
 
 public class NewStakeViewModel extends ViewModel {
     public MutableLiveData<LockResult> lockResult = new MutableLiveData<>();
+
+    public MutableLiveData<String> txidMutableLiveData = new MutableLiveData<>();
 }

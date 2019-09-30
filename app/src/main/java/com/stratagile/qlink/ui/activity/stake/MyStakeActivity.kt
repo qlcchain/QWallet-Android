@@ -1,8 +1,14 @@
 package com.stratagile.qlink.ui.activity.stake
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.LayoutInflaterCompat
+import android.support.v4.view.LayoutInflaterFactory
+import android.util.AttributeSet
+import android.view.*
+import android.widget.TextView
 import com.alibaba.fastjson.JSONArray
 import com.google.gson.Gson
 import com.socks.library.KLog
@@ -18,6 +24,7 @@ import com.stratagile.qlink.ui.activity.stake.module.MyStakeModule
 import com.stratagile.qlink.ui.activity.stake.presenter.MyStakePresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.stake.MyStakeAdapter
+import com.stratagile.qlink.utils.LogUtil
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper
 import kotlinx.android.synthetic.main.activity_my_stake.*
 import kotlinx.android.synthetic.main.activity_my_stake.recyclerView
@@ -46,11 +53,45 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         drawableBg = R.drawable.main_bg_shape
+        LayoutInflaterCompat.setFactory(LayoutInflater.from(this), LayoutInflaterFactory { parent, name, context, attrs ->
+            if (name == "com.android.internal.view.menu.IconMenuItemView" || name == "com.android.internal.view.menu.ActionMenuItemView" || name == "android.support.v7.view.menu.ActionMenuItemView") {
+                try {
+                    val view = layoutInflater.createView(name, null, attrs)
+                    if (view is TextView) {
+                        view.setTextColor(resources.getColor(R.color.white))
+                        view.isAllCaps = false
+                    }
+                    return@LayoutInflaterFactory view
+                } catch (e: InflateException) {
+                    e.printStackTrace()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+
+            }
+            null
+        })
         super.onCreate(savedInstanceState)
     }
 
     override fun initView() {
         setContentView(R.layout.activity_my_stake)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.txid, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.enterTxid -> {
+                startActivityForResult(Intent(this, NewStakeActivity::class.java).putExtra("txid", "txid"), 1)
+            }
+            else -> {
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun initData() {

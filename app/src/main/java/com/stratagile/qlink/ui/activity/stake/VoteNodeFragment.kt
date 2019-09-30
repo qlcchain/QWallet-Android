@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -33,6 +34,7 @@ import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
@@ -42,15 +44,13 @@ import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.db.Wallet
+import com.stratagile.qlink.db.WalletDao
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.MyAsset
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
-import com.stratagile.qlink.entity.stake.LockResult
-import com.stratagile.qlink.entity.stake.NeoBlock
-import com.stratagile.qlink.entity.stake.NeoTransactionInfo
-import com.stratagile.qlink.entity.stake.StakeType
+import com.stratagile.qlink.entity.stake.*
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.utils.LocalWalletUtil
 import com.stratagile.qlink.utils.OtcUtils
@@ -63,6 +63,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringEscapeUtils
 import org.greenrobot.eventbus.EventBus
+import org.spongycastle.crypto.tls.ContentType.alert
 import qlc.bean.StateBlock
 import qlc.mng.AccountMng
 import qlc.mng.BlockMng
@@ -72,6 +73,7 @@ import qlc.network.QlcException
 import qlc.utils.Constants
 import qlc.utils.Helper
 import qlc.utils.WorkUtil
+import java.math.BigDecimal
 import java.net.URLEncoder
 import java.util.*
 import kotlin.concurrent.thread
@@ -124,6 +126,12 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                 getNep5Txid(it)
             }
         })
+        stakeViewModel.txidMutableLiveData.observe(this, Observer {
+            showEnterTxIdDialog()
+        })
+        ivVote.setOnClickListener {
+            showEnterTxIdDialog()
+        }
         invoke.setOnClickListener {
             if (neoWallet == null) {
                 return@setOnClickListener
@@ -248,6 +256,128 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                         getNep5Txid(lockResult)
                     }
                     KLog.i(error.localizedMessage)
+                }
+            }
+        }
+    }
+
+    fun showEnterTxIdDialog() {
+        //
+        val view = View.inflate(activity!!, R.layout.dialog_input_txid_layout, null)
+        val etContent = view.findViewById<View>(R.id.etContent) as EditText//输入内容
+        val tvCancel = view.findViewById<TextView>(R.id.tvCancel)//取消按钮
+        val tvOk = view.findViewById<TextView>(R.id.tvOk)
+        //取消或确定按钮监听事件处l
+        val sweetAlertDialog = SweetAlertDialog(activity!!)
+        val window = sweetAlertDialog.window
+        window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        sweetAlertDialog.setView(view)
+        sweetAlertDialog.show()
+        tvCancel.setOnClickListener {
+            sweetAlertDialog.cancel()
+        }
+        tvOk.setOnClickListener {
+            //            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//            cm.primaryClip = ClipData.newPlainText("", etContent.text.toString().trim())
+            sweetAlertDialog.cancel()
+            try {
+                checkTxid(etContent.text.toString().trim())
+            } catch (e : Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    fun checkTxid(txid :String) {
+        showProgressDialog()
+        thread {
+            try {
+                val client = QlcClient("https://nep5.qlcchain.online")
+                val params = JSONArray()
+                params.add(txid)
+                var result = client.call("ledger_pledgeInfoByTransactionID", params)
+                KLog.i(result.toJSONString())
+                var pledgeInfo = Gson().fromJson(result.toJSONString(), PledgeInfo::class.java)
+                if (pledgeInfo.result == null) {
+                    recoverStake(txid)
+                } else {
+                    runOnUiThread {
+                        closeProgressDialog()
+                        toast("this txid is pledged")
+                    }
+                }
+            } catch (e : Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    closeProgressDialog()
+                    toast("get txid info error")
+                }
+            }
+        }
+    }
+
+    fun recoverStake(txid : String) {
+        thread {
+            try {
+                val client = QlcClient("https://nep5.qlcchain.online")
+                val params = JSONArray()
+                params.add(txid)
+                var result = client.call("nep5_getLockInfo", params)
+                KLog.i(result.toJSONString())
+                var lockInfo = Gson().fromJson(result.toJSONString(), LockInfo::class.java)
+
+                if (lockInfo.result.isState) {
+                    var lockResult = LockResult()
+                    var stakeType = StakeType(0)
+                    lockResult.stakeType = stakeType
+                    lockResult.stakeType.fromNeoAddress = lockInfo.result.neoAddress
+                    lockResult.stakeType.toAddress = lockInfo.result.multiSigAddress
+                    lockResult.stakeType.qlcchainAddress = lockInfo.result.qlcAddress
+                    lockResult.txid = txid
+                    var oneDay = 60*60*24
+                    var lockDays = (lockInfo.result.unLockTimestamp - lockInfo.result.lockTimestamp) / oneDay
+
+                    lockResult.stakeType.stakeQLcAmount = lockInfo.result.amount.toBigDecimal().divide(10.toBigDecimal().pow(8), 8,  BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                    var neoList = AppConfig.instance.daoSession.walletDao.loadAll()
+                    neoList.forEach {
+                        if (it.address.equals(lockResult.stakeType.fromNeoAddress)) {
+                            neoWallet = it
+                            if (neoWallet!!.privateKey.toLowerCase().equals(neoWallet!!.publicKey.toLowerCase())) {
+
+                                Account.fromWIF(neoWallet!!.wif)
+                                neoWallet!!.publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
+                                AppConfig.instance.daoSession.walletDao.update(neoWallet)
+                            }
+                        }
+                    }
+
+                    if (neoWallet == null) {
+                        runOnUiThread {
+                            closeProgressDialog()
+                            toast("neo wallet not found")
+                        }
+                    } else {
+                        lockResult.stakeType.neoPriKey = neoWallet!!.privateKey
+                        lockResult.stakeType.neoPubKey = neoWallet!!.publicKey
+                        prePareBenefitPledge(lockResult = lockResult)
+                        runOnUiThread {
+                            closeProgressDialog()
+                            showStakingPup()
+                        }
+                    }
+
+                } else {
+                    runOnUiThread {
+                        closeProgressDialog()
+                        toast("txid is unlock")
+                    }
+                }
+            } catch (e : Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    closeProgressDialog()
+                    toast("get lockInfo error")
                 }
             }
         }
