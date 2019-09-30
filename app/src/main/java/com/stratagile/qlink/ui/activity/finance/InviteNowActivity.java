@@ -17,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerInviteNowComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteNowContract;
 import com.stratagile.qlink.ui.activity.finance.module.InviteNowModule;
@@ -73,12 +75,16 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
     @Override
     protected void initData() {
         setTitle(getString(R.string.invite_now));
-        content = "https://dibaqu.com/WinCash";
-        Bitmap bitmap = RxQRCode.builder(content).
-                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
-                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
-                codeSide(800).
-                into(ivQRCode);
+//        content = "https://dibaqu.com/WinCash";
+//        Bitmap bitmap = RxQRCode.builder(content).
+//                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
+//                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
+//                codeSide(800).
+//                into(ivQRCode);
+        Glide.with(this)
+                .load(R.mipmap.qwallet_qrcode)
+                .apply(AppConfig.getInstance().optionsAppeal)
+                .into(ivQRCode);
         inviteCode.setText(ConstantValue.currentUser.getInviteCode() + "");
         inviteCode.setOnClickListener(new View.OnClickListener() {
             @Override

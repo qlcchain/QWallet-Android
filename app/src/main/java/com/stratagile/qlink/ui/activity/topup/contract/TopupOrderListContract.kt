@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
+import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
@@ -22,6 +23,8 @@ interface TopupOrderListContract {
         fun closeProgressDialog()
 
         fun setOrderList(topupOrderList: TopupOrderList, page : Int)
+
+        fun cancelOrderSuccess(topupOrder: TopupOrder, position : Int)
     }
 
     interface TopupOrderListContractPresenter : BasePresenter {

@@ -43,4 +43,14 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
             mView.closeProgressDialog()
         }))
     }
+
+    fun cancelOrder(map: MutableMap<String, String>, position : Int) {
+        mCompositeDisposable.add(httpAPIWrapper.topupCancelOrder(map).subscribe({
+            mView.cancelOrderSuccess(it, position)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
 }

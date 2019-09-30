@@ -20,6 +20,10 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
         helper.setText(R.id.price, item.originalPrice.toString())
         helper.setText(R.id.payQgas, item.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + "QGAS")
         helper.setText(R.id.payPrice, item.discountPrice.toString())
+        helper.setGone(R.id.cancelOrder, false)
+        helper.setGone(R.id.payOrder, false)
+        helper.setVisible(R.id.orderState, true)
+        helper.addOnClickListener(R.id.cancelOrder)
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {
             //英文
             helper.setText(R.id.opreator, item.productCountryEn + item.productIspEn + "-" + item.productNameEn)
@@ -32,6 +36,9 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
             "QGAS_PAID" -> {
+                helper.setGone(R.id.cancelOrder, true)
+                helper.setGone(R.id.payOrder, true)
+                helper.setGone(R.id.orderState, false)
                 helper.setText(R.id.orderState, mContext.getString(R.string.qgas_paid_not_in_the_telephone_fee))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
@@ -56,5 +63,6 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
         }
+        helper.setVisible(R.id.payIntroduce, true)
     }
 }

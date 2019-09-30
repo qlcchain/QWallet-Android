@@ -1551,12 +1551,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="payment_amount">Payment amount</string>
     <string name="slow_charging">Slow top-up</string>
     <string name="qgas_is_not_in_the_accounts">Your QGAS is on its way!</string>
-    <string name="qgas_paid_not_in_the_telephone_fee">Pay your FIAT outstanding balance</string>
-    <string name="recharge">Your top-up is in progress...</string>
+    <string name="qgas_paid_not_in_the_telephone_fee">Unpaid</string>
+    <string name="recharge">In progress</string>
     <string name="recharge_success">Recharge success</string>
     <string name="failure_to_pay">Top-up failure</string>
     <string name="qgas_resolution_failure">Confirmation failed on the Blockchain</string>
-    <string name="qgas_has_been_returned">Top-up failure, QGAS has been returned</string>
+    <string name="qgas_has_been_returned">QGAS has been returned</string>
     <string name="order_list">Order list</string>
     <string name="you_do_not_have_qlcwallet_create_immediately">You don‘t have a QLC wallet yet\n Create one</string>
     <string name="send_qgas_error">send QGAS error</string>
@@ -1564,4 +1564,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="balance_insufficient_to_purchase_qgas_on_otc_pages">Insufficient balance\n purchase QGAS</string>
     <string name="buy_topup">BUY</string>
     <string name="choose_a_counntry_and_a_region">Choose a country and a region</string>
+    <string name="are_you_sure_want_to_cancel_the_order">Are you sure you want to cancel the order?</string>
+    <string name="immediate_payment">Pay Now</string>
+    <string name="cancellation_of_order">Cancel the Order</string>
+    <string name="qgas_will_be_returned_to_the_payment_address">QGAS will be returned to the payment address</string>
 </resources>

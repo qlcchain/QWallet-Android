@@ -215,7 +215,7 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                     walletWinq.setName("NEO-Wallet " + (wallets.size() + 1));
                                 }
                                 walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()));
+                                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()).toLowerCase());
                                 walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
                                 walletWinq.setIsCurrent(true);
                                 AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);

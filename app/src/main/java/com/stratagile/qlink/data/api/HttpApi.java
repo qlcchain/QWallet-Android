@@ -127,6 +127,7 @@ import static com.stratagile.qlink.data.api.API.url_get_account_resource;
 import static com.stratagile.qlink.data.api.API.url_get_server_time;
 import static com.stratagile.qlink.data.api.API.url_got_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_key_account;
+import static com.stratagile.qlink.data.api.API.url_log_save;
 import static com.stratagile.qlink.data.api.API.url_main_address;
 import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
@@ -136,6 +137,7 @@ import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_token_price;
+import static com.stratagile.qlink.data.api.API.url_topup_cancel_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order_list;
 import static com.stratagile.qlink.data.api.API.url_topup_productlist;
@@ -576,6 +578,14 @@ public interface HttpApi {
     @POST(url_topup_order_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrderList> getTopupOrderList(@Body RequestBody map);
+
+    @POST(url_topup_cancel_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupCancelOrder(@Body RequestBody map);
+
+    @POST(url_log_save)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> saveLog(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart

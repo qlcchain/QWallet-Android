@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import com.google.gson.Gson
+import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.DSBridge.JsApi
@@ -30,6 +31,7 @@ import com.stratagile.qlink.ui.activity.stake.presenter.NewStakePresenter
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.ToastUtil
 import com.stratagile.qlink.utils.UIUtils
+import com.stratagile.qlink.utils.getLine
 import kotlinx.android.synthetic.main.activity_my_stake.*
 import kotlinx.android.synthetic.main.activity_new_stake.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -96,8 +98,12 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
         webview.callHandler("staking.contractLock", arrayOf<Any>(stakeType.neoPriKey, stakeType.fromNeoAddress, stakeType.toAddress, stakeType.qlcchainAddress, stakeType.stakeQLcAmount, stakeType.stakeQlcDays), OnReturnValue<JSONObject> { retValue ->
             KLog.i("lock result= " + retValue!!)
             var lockResult = Gson().fromJson(retValue.toString(), LockResult::class.java)
-            lockResult.stakeType = stakeType
-            stakeViewModel.lockResult.postValue(lockResult)
+            if (lockResult.txid == null) {
+                AppConfig.instance.saveLog("stake", "voteNode lockQlc" + getLine(), Gson().toJson(lockResult))
+            } else {
+                lockResult.stakeType = stakeType
+                stakeViewModel.lockResult.postValue(lockResult)
+            }
         })
     }
     override fun initData() {

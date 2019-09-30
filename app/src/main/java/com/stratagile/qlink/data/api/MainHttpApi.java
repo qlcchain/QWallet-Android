@@ -503,6 +503,14 @@ public interface MainHttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrderList> getTopupOrderList(@Body RequestBody map);
 
+    @POST(MainAPI.url_topup_cancel_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupCancelOrder(@Body RequestBody map);
+
+    @POST(MainAPI.url_log_save)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> saveLog(@Body RequestBody map);
+
     @POST(MainAPI.url_trade_appeal)
     @Multipart
     Observable<TradeOrderDetail> generateAppeal(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part("tradeOrderId") RequestBody tradeOrderId, @Part("reason") RequestBody reason, @Part MultipartBody.Part photo1, @Part MultipartBody.Part photo2, @Part MultipartBody.Part photo3, @Part MultipartBody.Part photo4);

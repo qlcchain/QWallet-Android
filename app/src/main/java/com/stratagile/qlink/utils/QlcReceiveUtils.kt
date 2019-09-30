@@ -113,7 +113,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
 }
 
 object QlcReceiveUtils {
-    fun sendQGas(qlcAccount: QLCAccount, receiveAddress : String, amount : String, message : String, sendBack: SendBack) {
+    fun sendQGas(qlcAccount: QLCAccount, receiveAddress : String, amount : String, message : String, isRemotePow: Boolean = false, sendBack: SendBack) {
         try {
             val qlcClient = QlcClient(ConstantValue.qlcNode)
             val rpc = LedgerRpc(qlcClient)
@@ -126,7 +126,9 @@ object QlcReceiveUtils {
             params.add(Pair("root", root))
             var standaloneCoroutine = launch {
                 KLog.i("协程启动")
-                delay(30000)
+                if (!isRemotePow) {
+                    delay(30000)
+                }
                 bendi = false
                 KLog.i("走远程work逻辑, root为：" + root)
                 var request = "http://pow1.qlcchain.org/work".httpGet(params)
@@ -166,32 +168,34 @@ object QlcReceiveUtils {
                 KLog.i(aaaa)
                 return@launch
             }
-            var work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(stateBlock)))
-            standaloneCoroutine.cancel()
-            try {
-                if (!bendi) {
-                    return
-                }
-                KLog.i("走本地work逻辑")
-                stateBlock.work = work
-                var hash = BlockMng.getHash(stateBlock)
-                var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(qlcAccount.address).substring(0, 64)))
-                val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(qlcAccount.address)))
-                if (!signCheck) {
-                    KLog.i("签名验证失败")
+            if (!isRemotePow) {
+                var work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(stateBlock)))
+                standaloneCoroutine.cancel()
+                try {
+                    if (!bendi) {
+                        return
+                    }
+                    KLog.i("走本地work逻辑")
+                    stateBlock.work = work
+                    var hash = BlockMng.getHash(stateBlock)
+                    var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(qlcAccount.address).substring(0, 64)))
+                    val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(qlcAccount.address)))
+                    if (!signCheck) {
+                        KLog.i("签名验证失败")
+                        sendBack.send("")
+                        return
+                    }
+                    stateBlock.setSignature(Helper.byteToHexString(signature))
+                    aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
+                    var result = rpc.process(aaaa)
+                    KLog.i(result.toJSONString())
+                    if (result.getString("result") != null && !"".equals(result.getString("result"))) {
+                        sendBack.send(result.getString("result"))
+                    }
+                } catch (e: Exception) {
                     sendBack.send("")
-                    return
+                    e.printStackTrace()
                 }
-                stateBlock.setSignature(Helper.byteToHexString(signature))
-                aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
-                var result = rpc.process(aaaa)
-                KLog.i(result.toJSONString())
-                if (result.getString("result") != null && !"".equals(result.getString("result"))) {
-                    sendBack.send(result.getString("result"))
-                }
-            } catch (e: Exception) {
-                sendBack.send("")
-                e.printStackTrace()
             }
         } catch (e : Exception) {
             sendBack.send("")

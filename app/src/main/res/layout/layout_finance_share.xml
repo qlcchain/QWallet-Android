@@ -34,7 +34,7 @@
         android:layout_below="@+id/tv1"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/x23"
-        android:background="@color/mainColor"
+        android:background="@drawable/main_color_bt_bg"
         android:drawableRight="@mipmap/enter_n"
         android:gravity="center"
         android:paddingLeft="@dimen/x20"

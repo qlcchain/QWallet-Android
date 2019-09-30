@@ -27,12 +27,14 @@ import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 //import com.facebook.FacebookSdk;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
@@ -43,7 +45,9 @@ import com.stratagile.qlink.db.DaoMaster;
 import com.stratagile.qlink.db.DaoSession;
 import com.stratagile.qlink.db.MySQLiteOpenHelper;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.CurrencyBean;
+import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
@@ -54,9 +58,12 @@ import com.stratagile.qlink.utils.NickUtil;
 import com.stratagile.qlink.utils.NotificationUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.AppFilePath;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxDataTool;
+import com.vondear.rxtools.RxDeviceTool;
+import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxTool;
 
 import org.bitcoinj.kits.WalletAppKit;
@@ -66,6 +73,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -73,6 +81,9 @@ import java.util.Locale;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 //import com.tencent.bugly.crashreport.CrashReport;
 
@@ -91,7 +102,7 @@ public class AppConfig extends MultiDexApplication {
 
     private PackageInfo info;
     public Application deviceStorage;
-//    public FirebaseRemoteConfig remoteConfig;
+    public FirebaseRemoteConfig remoteConfig;
     public Handler handler;
 
     public WalletAppKit walletAppKit;
@@ -170,9 +181,11 @@ public class AppConfig extends MultiDexApplication {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             String processName = getProcessName(this);
             if (!"com.stratagile.qwallet".equals(processName)){//判断不等于默认进程名称
-                WebView.setDataDirectorySuffix(processName);}
+                WebView.setDataDirectorySuffix(processName);
+            } else {
+                new WebView(this).destroy();
+            }
         }
-        new WebView(this).destroy();
         //初始化btc钱包
 //        org.bitcoinj.core.Context.enableStrictMode();
 //        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
@@ -190,6 +203,37 @@ public class AppConfig extends MultiDexApplication {
             }
         }
         return null;
+    }
+
+    public void saveLog(String mode, String operation, String log) {
+        HashMap<String, String> infoMap = new HashMap<>();
+        infoMap.put("appName", "QWallet");
+        infoMap.put("version", VersionUtil.getAppVersionCode(this) + "");
+        infoMap.put("os", "Android");
+        infoMap.put("deviceModel", RxDeviceTool.getBuildMANUFACTURER() + " " + RxDeviceTool.getBuildBrandModel());
+        infoMap.put("mode", mode);
+        infoMap.put("operation", operation);
+        infoMap.put("happenDate", (System.currentTimeMillis() / 1000) + "");
+        infoMap.put("log", log);
+        mAppComponent.getHttpApiWrapper().saveLog(infoMap).subscribe(new Consumer<BaseBack>() {
+            @Override
+            public void accept(BaseBack baseBack) throws Exception {
+                //isSuccesse
+                KLog.i("onSuccesse");
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                KLog.i("onError");
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+                KLog.i("onComplete");
+            }
+        });
     }
 
 

@@ -110,7 +110,7 @@
         android:layout_height="57dp">
         <TextView
             android:layout_width="331dp"
-            android:background="@color/mainColor"
+            android:background="@drawable/main_color_bt_bg"
             android:gravity="center"
             android:text="@string/invoke_new_staking"
             android:textColor="@color/white"

@@ -164,7 +164,7 @@
         <TextView
             android:id="@+id/tvInivteNow"
             android:layout_width="match_parent"
-            android:background="@color/mainColor"
+            android:background="@drawable/main_color_bt_bg"
             android:layout_marginLeft="@dimen/x30"
             android:gravity="center"
             android:textColor="@color/white"

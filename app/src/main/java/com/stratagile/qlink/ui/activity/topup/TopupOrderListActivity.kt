@@ -4,12 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import com.pawegio.kandroid.alert
+import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopupOrderListComponent
@@ -20,7 +23,9 @@ import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupOrderListAdapter
 import com.stratagile.qlink.utils.SpUtil
 import com.stratagile.qlink.utils.UIUtils
+import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import kotlinx.android.synthetic.main.activity_topup_order_list.*
+import kotlinx.android.synthetic.main.activity_topup_order_list.recyclerView
 import java.util.ArrayList
 
 import javax.inject.Inject;
@@ -33,6 +38,12 @@ import javax.inject.Inject;
  */
 
 class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
+    override fun cancelOrderSuccess(topupOrder: TopupOrder, position: Int) {
+        closeProgressDialog()
+        topupOrderListAdapter.data[position].status = topupOrder.order.status
+        toast(getString(R.string.qgas_will_be_returned_to_the_payment_address))
+        topupOrderListAdapter.notifyItemChanged(position)
+    }
 
     override fun setOrderList(topupOrderList: TopupOrderList, page: Int) {
         if (page == 1) {
@@ -90,6 +101,13 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
             mPresenter.getOderList(map, currentPage)
 
         }, recyclerView)
+        topupOrderListAdapter.setOnItemChildClickListener { adapter, view, position ->
+            when(view.id) {
+                R.id.cancelOrder -> {
+                    showCancelDialog(position)
+                }
+            }
+        }
         refreshLayout.setOnRefreshListener {
             currentPage = 1
             refreshLayout.isRefreshing = false
@@ -127,6 +145,26 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             paymentOk = true
         }
+    }
+
+    fun showCancelDialog(position : Int) {
+        alert(getString(R.string.are_you_sure_want_to_cancel_the_order)) {
+            negativeButton (getString(R.string.cancel)) { dismiss() }
+            positiveButton(getString(R.string.confirm)) {
+                cancelOrder(position)
+            }
+        }.show()
+    }
+
+    fun cancelOrder(position : Int) {
+        showProgressDialog()
+        var map = hashMapOf<String, String>()
+        if (ConstantValue.currentUser != null) {
+            map["account"] = ConstantValue.currentUser.account
+        }
+        map["p2pId"] = SpUtil.getString(this, ConstantValue.topUpP2pId, "")
+        map["orderId"] = topupOrderListAdapter.data[position].id
+        mPresenter.cancelOrder(map, position)
     }
 
     override fun onResume() {

@@ -38,6 +38,7 @@ import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.BaseResult
+import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.db.Wallet
@@ -45,6 +46,7 @@ import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.MyAsset
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
+import com.stratagile.qlink.entity.eventbus.ChangeWallet
 import com.stratagile.qlink.entity.stake.LockResult
 import com.stratagile.qlink.entity.stake.NeoBlock
 import com.stratagile.qlink.entity.stake.NeoTransactionInfo
@@ -53,11 +55,13 @@ import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.utils.LocalWalletUtil
 import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.QlcReceiveUtils
+import com.stratagile.qlink.utils.getLine
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import kotlinx.android.synthetic.main.fragment_vote_node.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.apache.commons.lang3.StringEscapeUtils
 import org.greenrobot.eventbus.EventBus
 import qlc.bean.StateBlock
 import qlc.mng.AccountMng
@@ -68,6 +72,7 @@ import qlc.network.QlcException
 import qlc.utils.Constants
 import qlc.utils.Helper
 import qlc.utils.WorkUtil
+import java.net.URLEncoder
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -150,7 +155,6 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
             var fromAddress = neoWallet!!.address
             var qlcchainAddress = qlcWallet!!.address
             var neoPubKey = neoWallet!!.publicKey
-
             var stakeType = StakeType(0)
             stakeType.fromNeoAddress = fromAddress
             stakeType.neoPriKey = priKey
@@ -315,6 +319,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
 
         val result = client.call("ledger_process", params)
         println(result)
+        if (result.getString("result") == null) {
+            AppConfig.instance.saveLog("stake", "voteNode process" + getLine(), URLEncoder.encode(result.toJSONString() + Gson().toJson(lockResult.stateBlock), "UTF-8"))
+        }
         runOnUiThread {
             sweetAlertDialog?.dismissWithAnimation()
             launch {
@@ -331,6 +338,26 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
             when (requestCode) {
                 AllWallet.WalletType.NeoWallet.ordinal -> {
                     neoWallet = data!!.getParcelableExtra("wallet")
+                    if (neoWallet!!.privateKey.toLowerCase().equals(neoWallet!!.publicKey.toLowerCase())) {
+                        var list = AppConfig.instance.daoSession.walletDao.loadAll()
+                        var hasSelectNeo = false
+                        list.forEach {
+                            if (it.isCurrent) {
+                                hasSelectNeo = true
+                                it.isCurrent = false
+                                AppConfig.instance.daoSession.walletDao.update(it)
+                            }
+                        }
+                        Account.fromWIF(neoWallet!!.wif)
+                        neoWallet!!.publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
+                        if (hasSelectNeo) {
+                            neoWallet!!.isCurrent = true
+                            EventBus.getDefault().post(ChangeWallet())
+                        }
+                        AppConfig.instance.daoSession.walletDao.update(neoWallet)
+                    }
+
+
                     tvNeoWalletName.text = neoWallet!!.name
                     tvNeoWalletAddess.text = neoWallet!!.address
                     val infoMap = HashMap<String, String>()

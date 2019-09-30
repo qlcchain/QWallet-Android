@@ -41,7 +41,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
 
     @Inject
     internal lateinit var mPresenter: MyStakePresenter
-    lateinit var qlcWallet : QLCAccount
+    lateinit var qlcWallet: QLCAccount
     lateinit var myStakeAdapter: MyStakeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +52,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
     override fun initView() {
         setContentView(R.layout.activity_my_stake)
     }
+
     override fun initData() {
         title.text = getString(R.string.my_stakeings)
         qlcWallet = AppConfig.instance.daoSession.qlcAccountDao.loadAll().filter { it.isCurrent() }[0]
@@ -78,15 +79,16 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
                         setStakedQlcAmount()
                     }
                 }
-            } catch (e : java.lang.Exception) {
+            } catch (e: java.lang.Exception) {
 
             }
         }
         myStakeAdapter.setOnLoadMoreListener({ getMoreStake() }, recyclerView)
         recyclerView.adapter = myStakeAdapter
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
-        try {
-            thread {
+
+        thread {
+            try {
                 refreshLayout.isRefreshing = true
                 val client = QlcClient("https://nep5.qlcchain.online")
                 val params = JSONArray()
@@ -102,10 +104,11 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
                     myStakeAdapter.setNewData(myStakeList.result)
                     setStakedQlcAmount()
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e : java.lang.Exception) {
-
         }
+
         myStakeAdapter.setOnItemClickListener { adapter, view, position ->
             startActivityForResult(Intent(this, StakeDetailActivity::class.java).putExtra("stake", myStakeAdapter.data[position]), 1)
         }
@@ -155,22 +158,23 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
                     setStakedQlcAmount()
                 }
             }
-        } catch (ex : java.lang.Exception) {
+        } catch (ex: java.lang.Exception) {
 
         }
     }
 
     override fun setupActivityComponent() {
-       DaggerMyStakeComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .myStakeModule(MyStakeModule(this))
-               .build()
-               .inject(this)
+        DaggerMyStakeComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .myStakeModule(MyStakeModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: MyStakeContract.MyStakeContractPresenter) {
-            mPresenter = presenter as MyStakePresenter
-        }
+        mPresenter = presenter as MyStakePresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()

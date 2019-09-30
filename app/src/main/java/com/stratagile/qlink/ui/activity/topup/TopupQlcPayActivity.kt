@@ -129,7 +129,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
 //                generateTopupOrder("87a1b1f69770623d644c2d617851e66d88dacfe4c070d205a3669b92b4f55a0a")
 //            }
             thread {
-                QlcReceiveUtils.sendQGas(qlcAccount!!, ConstantValue.mainAddressData.qlcchian.address, tvAmountQgas.text.toString(), "", object : SendBack {
+                QlcReceiveUtils.sendQGas(qlcAccount!!, ConstantValue.mainAddressData.qlcchian.address, tvAmountQgas.text.toString(), "", true, object : SendBack {
                     override fun send(suceess: String) {
                         if ("".equals(suceess)) {
                             runOnUiThread {

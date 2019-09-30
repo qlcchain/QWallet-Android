@@ -973,6 +973,22 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<TopupOrder> topupCancelOrder(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.topupCancelOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.topupCancelOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> saveLog(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.saveLog(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.saveLog(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */

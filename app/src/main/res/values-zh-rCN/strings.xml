@@ -991,7 +991,7 @@
     <string name="recharge_success">充值成功</string>
     <string name="failure_to_pay">话费充值失败</string>
     <string name="qgas_resolution_failure">链确认失败</string>
-    <string name="qgas_has_been_returned">话费充值失败, 已退回QGAS</string>
+    <string name="qgas_has_been_returned">已退回QGAS</string>
     <string name="order_list">订单列表</string>
     <string name="you_do_not_have_qlcwallet_create_immediately">您还没有 QLC 钱包 立即创建</string>
     <string name="send_qgas_error">发送QGAS错误</string>
@@ -999,4 +999,8 @@
     <string name="balance_insufficient_to_purchase_qgas_on_otc_pages">余额不足\n到OTC页面购买QGAS</string>
     <string name="buy_topup">购买</string>
     <string name="choose_a_counntry_and_a_region">选择国家和地区</string>
+    <string name="are_you_sure_want_to_cancel_the_order">确定取消订单吗?</string>
+    <string name="immediate_payment">立即支付</string>
+    <string name="cancellation_of_order">取消订单</string>
+    <string name="qgas_will_be_returned_to_the_payment_address">QGAS将退回至付款钱包</string>
 </resources>

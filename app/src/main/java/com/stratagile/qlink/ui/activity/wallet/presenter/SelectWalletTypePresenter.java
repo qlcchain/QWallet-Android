@@ -226,7 +226,7 @@ public class SelectWalletTypePresenter implements SelectWalletTypeContract.Selec
                 walletWinq.setAddress(wallet.getAddress());
                 walletWinq.setWif(wallet.getWIF());
                 walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
+                walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()).toLowerCase());
                 walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
                 walletWinq.setIsCurrent(true);
                 if (wallets.size() < 9) {
