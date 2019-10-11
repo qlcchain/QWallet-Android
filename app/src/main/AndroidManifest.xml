@@ -248,6 +248,8 @@
         <activity android:name=".ui.activity.topup.SelectAreaActivity" />
         <activity android:name=".ui.activity.topup.TopupQlcPayActivity" />
         <activity android:name=".ui.activity.topup.TopupOrderListActivity" />
+        <activity android:name=".ui.activity.reward.MyClaimActivity" />
+        <activity android:name=".ui.activity.reward.ClaimRewardActivity" />
 
 
         <meta-data

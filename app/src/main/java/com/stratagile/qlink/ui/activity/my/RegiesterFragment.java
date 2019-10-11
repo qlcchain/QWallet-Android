@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
@@ -74,6 +75,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     EditText etInviteCode;
     @BindView(R.id.checkBox)
     SmoothCheckBox checkBox;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Nullable
     @Override
@@ -119,6 +121,12 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     public void registerSuccess(VcodeLogin register) {
         closeProgressDialog();
         if (register.getCode().equals("0")) {
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "register");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "register");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "register");
+            mFirebaseAnalytics.logEvent("register", bundle);
             closeProgressDialog();
             ToastUtil.displayShortToast(getString(R.string.register_success));
             UserAccount userAccount = new UserAccount();

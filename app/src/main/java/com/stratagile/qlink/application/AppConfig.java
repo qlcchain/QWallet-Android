@@ -34,7 +34,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 //import com.facebook.FacebookSdk;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+//import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
@@ -102,7 +102,7 @@ public class AppConfig extends MultiDexApplication {
 
     private PackageInfo info;
     public Application deviceStorage;
-    public FirebaseRemoteConfig remoteConfig;
+//    public FirebaseRemoteConfig remoteConfig;
     public Handler handler;
 
     public WalletAppKit walletAppKit;
@@ -192,6 +192,9 @@ public class AppConfig extends MultiDexApplication {
 //        KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
 //        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
+//        adb shell setprop debug.firebase.analytics.app <com.stratagile.qwallet>
+//        adb shell setprop debug.firebase.analytics.app com.stratagile.qwallet
+        // adb shell setprop debug.firebase.analytics.app .none.
     }
 
     public  String getProcessName(Context context) {

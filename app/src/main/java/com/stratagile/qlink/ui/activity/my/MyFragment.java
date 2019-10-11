@@ -18,14 +18,15 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.UserInfo;
-import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardTotal;
+import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
@@ -34,8 +35,6 @@ import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
 import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
-import com.stratagile.qlink.ui.activity.otc.OrderDetailActivity;
-import com.stratagile.qlink.ui.activity.qlc.QlcTestActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.view.MyItemView;
@@ -53,7 +52,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wendu.jsbdemo.MainActivity;
 
 /**
  * @author hzp
@@ -87,6 +85,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     boolean isLogin = false;
     @BindView(R.id.testView)
     View testView;
+    @BindView(R.id.claimQlc)
+    MyItemView claimQlc;
     private MainViewModel viewModel;
 
     @Nullable
@@ -179,6 +179,21 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
             }
         }
+        claimQlc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLogin) {
+                    if (ConstantValue.currentUser.getBindDate() == null || "".equals(ConstantValue.currentUser.getBindDate())) {
+                        viewModel.isBind.postValue(false);
+                    } else {
+                        claimQlc.setDotViewVisible(View.INVISIBLE);
+                        startActivity(new Intent(getActivity(), MyClaimActivity.class));
+                    }
+                } else {
+                    startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
+                }
+            }
+        });
     }
 
     @Override
@@ -242,6 +257,23 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         }
     }
 
+    private void getCanClaimTotal() {
+        HashMap<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("type", "REGISTER");
+        infoMap.put("status", "NEW");
+        mPresenter.getCanClaimTotal(infoMap);
+    }
+
+    private void getCanInviteClaimTotal() {
+        HashMap<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("status", "NO_AWARD");
+        mPresenter.getCanInviteClaimTotal(infoMap);
+    }
+
     @Override
     public void showProgressDialog() {
         progressDialog.show();
@@ -254,15 +286,41 @@ public class MyFragment extends BaseFragment implements MyContract.View {
 
     @Override
     public void setUsrInfo(UserInfo usrInfo) {
+        if (usrInfo.getData().getBindDate() == null || "".equals(usrInfo.getData().getBindDate())) {
+            viewModel.isBind.postValue(false);
+        } else {
+            getCanClaimTotal();
+        }
         KLog.i("更新呢用户信息");
         ConstantValue.currentUser.setHoldingPhoto(usrInfo.getData().getHoldingPhoto());
         ConstantValue.currentUser.setFacePhoto(usrInfo.getData().getFacePhoto());
+        ConstantValue.currentUser.setTotalInvite(usrInfo.getData().getTotalInvite());
         ConstantValue.currentUser.setVstatus(usrInfo.getData().getVStatus());
+        ConstantValue.currentUser.setBindDate(usrInfo.getData().getBindDate());
         ConstantValue.currentUser.setInviteCode(usrInfo.getData().getNumber());
         ConstantValue.currentUser.setAvatar(usrInfo.getData().getHead());
         ConstantValue.currentUser.setUserName(usrInfo.getData().getNickname());
         ConstantValue.currentUser.setUserId(usrInfo.getData().getId());
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+    }
+
+    @Override
+    public void setCanClaimTotal(RewardTotal rewardTotal) {
+        getCanInviteClaimTotal();
+        if (rewardTotal.getRewardTotal() != 0) {
+            claimQlc.setDotViewVisible(View.VISIBLE);
+        } else {
+            claimQlc.setDotViewVisible(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void setCanInviteClaimTotal(InviteTotal rewardTotal) {
+        if (!"0".equals(rewardTotal.getInviteTotal())) {
+            shareFriend.setDotViewVisible(View.VISIBLE);
+        } else {
+            shareFriend.setDotViewVisible(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -298,6 +356,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 break;
             case R.id.shareFriend:
                 if (isLogin) {
+                    shareFriend.setDotViewVisible(View.INVISIBLE);
                     startActivity(new Intent(getActivity(), InviteActivity.class));
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);

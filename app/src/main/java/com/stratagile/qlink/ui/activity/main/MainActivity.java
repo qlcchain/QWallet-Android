@@ -21,6 +21,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +62,7 @@ import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.guideview.Component;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
@@ -90,6 +92,7 @@ import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.ui.adapter.TradePairDecoration;
 import com.stratagile.qlink.ui.adapter.otc.TradePairAdapter;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
@@ -99,6 +102,7 @@ import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
+import com.stratagile.qlink.utils.TimeUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
@@ -116,6 +120,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.Inflater;
 
 import javax.inject.Inject;
 
@@ -200,6 +205,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     public static MainActivity mainActivity;
 
+
     //    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
     private LocationManager locationManager;
 
@@ -212,6 +218,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     protected void onCreate(Bundle savedInstanceState) {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
         needFront = true;
         super.onCreate(savedInstanceState);
         mainActivity = this;
@@ -300,6 +311,45 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
+    private void getStakeQlcCount() {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("dictType", "winq_reward_qlc_amount");
+        mPresenter.qurryDict(infoMap);
+    }
+
+    private SweetAlertDialog sweetAlertDialog;
+
+    public void showCanClaimPop(String qlcCount) {
+        View view  = getLayoutInflater().inflate(R.layout.alert_can_claim, null, false);
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView qlc = view.findViewById(R.id.qlc);
+        qlc.setText(qlcCount);
+        TextView tvOpreate = view.findViewById(R.id.tvOpreate);
+        tvOpreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.dismissWithAnimation();
+                bindQlcWallet();
+            }
+        });
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.dismissWithAnimation();
+            }
+        });
+        sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+    }
+
+    private void bindQlcWallet() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("account", ConstantValue.currentUser.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        mPresenter.bindQlcWallet(map);
+    }
+
 
     @Override
     public void onGetFreeNumBack(int num) {
@@ -337,6 +387,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 KotlinConvertJavaUtils.INSTANCE.showNewVersionDialog(this, lastVersion);
             }
         }
+    }
+
+    @Override
+    public void bindSuccess() {
+        ConstantValue.currentUser.setBindDate(TimeUtil.getTime());
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+    }
+
+    @Override
+    public void setStakeQlc(Dict dict) {
+        showCanClaimPop(dict.getData().getValue());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -384,6 +445,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
             mPresenter.zsFreeNum(infoMap1);
         }
+        viewModel.isBind.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (!aBoolean) {
+                    viewPager.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getStakeQlcCount();
+                        }
+                    }, 200);
+                }
+            }
+        });
         segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -432,21 +506,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 resetToDefaultIcon();
+                Bundle bundle = new Bundle();
                 switch (item.getItemId()) {
                     case R.id.item_sms:
                         item.setIcon(R.mipmap.finance_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("finance", bundle);
                         setVpnPage();
                         break;
                     case R.id.item_topup:
                         item.setIcon(R.mipmap.topup_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("topup", bundle);
                         setTopupPage();
                         break;
                     case R.id.item_all_wallet:
                         item.setIcon(R.mipmap.wallet_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("wallet", bundle);
                         setAllWalletPage();
                         break;
                     case R.id.item_settings:
                         item.setIcon(R.mipmap.settings_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("me", bundle);
                         setSettingsPage();
                         break;
                     default:

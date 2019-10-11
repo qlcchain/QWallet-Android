@@ -4,6 +4,7 @@ import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.ImportWalletResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
+import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
@@ -39,6 +40,10 @@ public interface MainContract {
         void onGetShowActBack(int isShow);
 
         void setLastVersion(AppVersion appVersion);
+
+        void bindSuccess();
+
+        void setStakeQlc(Dict dict);
     }
 
     interface MainContractPresenter extends BasePresenter {

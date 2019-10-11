@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
+import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -366,7 +367,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                     val nodeResponse = gson.fromJson<NeoTransactionInfo>(data, object : TypeToken<NeoTransactionInfo>() {}.type)
                     KLog.i(nodeResponse.toString())
                     if (nodeResponse.errors == null && nodeResponse.block_hash != null) {
-                        benefitPledge()
+                        getLockInfo()
                     } else {
                         launch {
                             delay(3000)
@@ -385,17 +386,92 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
         }
     }
 
-    fun prePareBenefitPledge() {
+    fun getLockInfo() {
+        thread {
+            try {
+                val client = QlcClient("https://nep5.qlcchain.online")
+                val params = JSONArray()
+                params.add(myStake.nep5TxId)
+                var result = client.call("nep5_getLockInfo", params)
+                KLog.i(result.toJSONString())
+                var lockInfo = Gson().fromJson(result.toJSONString(), LockInfo::class.java)
+
+                if (lockInfo.result.isState) {
+                    var lockResult = LockResult()
+                    var stakeType = StakeType(0)
+                    lockResult.stakeType = stakeType
+                    lockResult.stakeType.fromNeoAddress = lockInfo.result.neoAddress
+                    lockResult.stakeType.toAddress = lockInfo.result.multiSigAddress
+                    lockResult.stakeType.qlcchainAddress = lockInfo.result.qlcAddress
+                    lockResult.txid = myStake.nep5TxId
+                    var oneDay = 60*60*24
+                    var lockDays = (lockInfo.result.unLockTimestamp - lockInfo.result.lockTimestamp) / oneDay
+
+                    lockResult.stakeType.stakeQLcAmount = lockInfo.result.amount.toBigDecimal().divide(10.toBigDecimal().pow(8), 8,  BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                    var neoList = AppConfig.instance.daoSession.walletDao.loadAll()
+                    neoList.forEach {
+                        if (it.address.equals(lockResult.stakeType.fromNeoAddress)) {
+                            neoWallet = it
+                            if (neoWallet!!.privateKey.toLowerCase().equals(neoWallet!!.publicKey.toLowerCase())) {
+
+                                Account.fromWIF(neoWallet!!.wif)
+                                neoWallet!!.publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
+                                AppConfig.instance.daoSession.walletDao.update(neoWallet)
+                            }
+                        }
+                    }
+
+                    if (neoWallet == null) {
+                        com.pawegio.kandroid.runOnUiThread {
+                            closeProgressDialog()
+                            toast("neo wallet not found")
+                        }
+                    } else {
+                        var qlcWallets = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+                        var hasQlcWallet = false
+                        qlcWallets.forEach {
+                            if (it.address.equals(lockResult.stakeType.qlcchainAddress)) {
+                                hasQlcWallet = true
+                            }
+                        }
+                        if (hasQlcWallet) {
+                            lockResult.stakeType.neoPriKey = neoWallet!!.privateKey
+                            lockResult.stakeType.neoPubKey = neoWallet!!.publicKey
+                            prePareBenefitPledge(lockResult = lockResult)
+                        } else {
+                            com.pawegio.kandroid.runOnUiThread {
+                                closeProgressDialog()
+                                toast("qlc wallet not found")
+                            }
+                        }
+                    }
+                } else {
+                    com.pawegio.kandroid.runOnUiThread {
+                        closeProgressDialog()
+                        toast("txid is unlock")
+                    }
+                }
+            } catch (e : Exception) {
+                e.printStackTrace()
+                com.pawegio.kandroid.runOnUiThread {
+                    closeProgressDialog()
+                    toast("get lockInfo error")
+                }
+            }
+        }
+    }
+
+    fun prePareBenefitPledge(lockResult: LockResult) {
         val client = QlcClient("https://nep5.qlcchain.online")
         val params = JSONArray()
         val paramOne = JSONObject()
         paramOne["beneficial"] = myStake.beneficial
-        paramOne["amount"] = 10.toBigDecimal().multiply(10.toBigDecimal().pow(8)).stripTrailingZeros().toPlainString()
+        paramOne["amount"] = myStake.amount
         paramOne["pType"] = "vote"
         params.add(paramOne)
         val paramTwo = JSONObject()
-        paramTwo["multiSigAddress"] = "AQ4SCrvgeU5AzfhL4QVvy2FC2TPqUgJLBd"
-        paramTwo["publicKey"] = "030A21D4F076F8098A7AD738FC60BB3EDD8FA069E3EA3421CDC4BECA739A1B4E5F"
+        paramTwo["multiSigAddress"] = lockResult.stakeType.toAddress
+        paramTwo["publicKey"] = lockResult.stakeType.neoPubKey
         paramTwo["lockTxId"] = myStake.nep5TxId
         params.add(paramTwo)
         val result = client.call("nep5_prePareBenefitPledge", params)

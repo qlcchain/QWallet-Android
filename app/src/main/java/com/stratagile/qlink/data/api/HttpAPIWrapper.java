@@ -71,6 +71,11 @@ import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.reward.ClaimQgas;
+import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardList;
+import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
@@ -989,6 +994,62 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<Dict> qurryDict(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.qurryDict(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.qurryDict(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<RewardTotal> getRewardTotal(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getRewardTotal(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getRewardTotal(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<InviteTotal> getInviteAmount(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getInviteAmount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getInviteAmount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<BaseBack> bindQlcWallet(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.bindQlcWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.bindQlcWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<RewardList> getRewardList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getRewardList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getRewardList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<ClaimQgas> claimQgas(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.claimQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.claimQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<ClaimQgas> claimInviteQgas(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.claimInviteQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.claimInviteQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -1188,12 +1249,12 @@ public class HttpAPIWrapper {
         //SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)
         if (false) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(1000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(3000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(1000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

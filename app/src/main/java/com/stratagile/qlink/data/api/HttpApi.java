@@ -1,7 +1,6 @@
 package com.stratagile.qlink.data.api;
 
 
-import com.github.mikephil.charting.data.BaseEntry;
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
 import com.stratagile.qlink.entity.AppVersion;
@@ -41,7 +40,6 @@ import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
-import com.stratagile.qlink.entity.ServerTime;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
@@ -69,13 +67,16 @@ import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.reward.ClaimQgas;
+import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardList;
+import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -102,6 +103,7 @@ import static com.stratagile.qlink.data.api.API.ulr_user_sign_up;
 import static com.stratagile.qlink.data.api.API.url_app_version_info;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
+import static com.stratagile.qlink.data.api.API.url_bind_qlcchain_wallet;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.API.url_contact_unlock;
 import static com.stratagile.qlink.data.api.API.url_create_eos_account;
@@ -124,8 +126,8 @@ import static com.stratagile.qlink.data.api.API.url_financial_product_order;
 import static com.stratagile.qlink.data.api.API.url_financial_redeem;
 import static com.stratagile.qlink.data.api.API.url_freeConnection;
 import static com.stratagile.qlink.data.api.API.url_get_account_resource;
-import static com.stratagile.qlink.data.api.API.url_get_server_time;
 import static com.stratagile.qlink.data.api.API.url_got_winq_gas;
+import static com.stratagile.qlink.data.api.API.url_inivte_amount;
 import static com.stratagile.qlink.data.api.API.url_key_account;
 import static com.stratagile.qlink.data.api.API.url_log_save;
 import static com.stratagile.qlink.data.api.API.url_main_address;
@@ -134,8 +136,11 @@ import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
 import static com.stratagile.qlink.data.api.API.url_pairs;
 import static com.stratagile.qlink.data.api.API.url_queryFreeRecords;
 import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
-import static com.stratagile.qlink.data.api.API.url_race_times;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
+import static com.stratagile.qlink.data.api.API.url_reward_claim_invite;
+import static com.stratagile.qlink.data.api.API.url_reward_claims;
+import static com.stratagile.qlink.data.api.API.url_reward_tatal;
+import static com.stratagile.qlink.data.api.API.url_sys_dict;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_topup_cancel_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order;
@@ -165,7 +170,7 @@ import static com.stratagile.qlink.data.api.API.url_vcode_sign_in_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.API.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.API.url_zs_free_num;
-import static com.stratagile.qlink.data.api.API.user_update_avatar;
+import static com.stratagile.qlink.data.api.MainAPI.url_reward_list;
 
 /**
  * Created by hu on 2017/5/16.
@@ -586,6 +591,34 @@ public interface HttpApi {
     @POST(url_log_save)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> saveLog(@Body RequestBody map);
+
+    @POST(url_sys_dict)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Dict> qurryDict(@Body RequestBody map);
+
+    @POST(url_reward_tatal)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardTotal> getRewardTotal(@Body RequestBody map);
+
+    @POST(url_inivte_amount)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<InviteTotal> getInviteAmount(@Body RequestBody map);
+
+    @POST(url_bind_qlcchain_wallet)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> bindQlcWallet(@Body RequestBody map);
+
+    @POST(url_reward_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardList> getRewardList(@Body RequestBody map);
+
+    @POST(url_reward_claims)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimQgas(@Body RequestBody map);
+
+    @POST(url_reward_claim_invite)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimInviteQgas(@Body RequestBody map);
 
     @POST(url_trade_appeal)
     @Multipart

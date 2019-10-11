@@ -19,8 +19,16 @@ import com.stratagile.qlink.utils.UserUtils;
 import java.util.List;
 
 public class InvitedAdapter extends BaseQuickAdapter<InviteList.Top5Bean, BaseViewHolder> {
+
+    private float oneFriendReward;
+
     public InvitedAdapter(@Nullable List<InviteList.Top5Bean> data) {
         super(R.layout.item_invited_list, data);
+    }
+
+    public InvitedAdapter(@Nullable List<InviteList.Top5Bean> data, float oneFriendReward) {
+        this(data);
+        this.oneFriendReward = oneFriendReward;
     }
 
 
@@ -28,7 +36,7 @@ public class InvitedAdapter extends BaseQuickAdapter<InviteList.Top5Bean, BaseVi
     protected void convert(BaseViewHolder helper, InviteList.Top5Bean item) {
         helper.setText(R.id.userName, AccountUtil.setUserNickName(item.getName()));
         helper.setText(R.id.tvRank, item.getSequence() + "");
-        helper.setText(R.id.invitePersons, mContext.getString(R.string.invited_) + " " + item.getTotalInvite() + " " +  mContext.getString(R.string.friends));
+        helper.setText(R.id.invitePersons, item.getTotalInvite() * oneFriendReward + " QGAS");
         Glide.with(mContext)
                 .load(MainAPI.MainBASE_URL + item.getHead())
                 .apply(AppConfig.getInstance().options)

@@ -2,6 +2,8 @@ package com.stratagile.qlink.ui.activity.my.contract;
 
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 /**
@@ -23,6 +25,10 @@ public interface MyContract {
         void closeProgressDialog();
 
         void setUsrInfo(UserInfo vcodeLogin);
+
+        void setCanClaimTotal(RewardTotal rewardTotal);
+
+        void setCanInviteClaimTotal(InviteTotal rewardTotal);
     }
 
     interface MyContractPresenter extends BasePresenter {

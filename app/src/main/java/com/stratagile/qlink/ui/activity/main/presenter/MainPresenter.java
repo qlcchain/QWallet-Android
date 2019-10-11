@@ -21,6 +21,7 @@ import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
+import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -45,6 +46,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -327,6 +329,16 @@ public class MainPresenter implements MainContract.MainContractPresenter {
         });
     }
 
+    public void bindQlcWallet(HashMap<String, String> map) {
+        httpAPIWrapper.bindQlcWallet(map).subscribe(new HttpObserver<BaseBack>() {
+            @Override
+            public void onNext(BaseBack baseBack) {
+                ToastUtil.displayShortToast("bind success");
+                mView.bindSuccess();
+            }
+        });
+    }
+
     public void zsFreeNum(Map map) {
 
     }
@@ -341,7 +353,27 @@ public class MainPresenter implements MainContract.MainContractPresenter {
         });
     }
 
-    public void getShowAct() {
+    public void qurryDict(Map map) {
+        httpAPIWrapper.qurryDict(map).subscribe(new Observer<Dict>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onNext(Dict appVersion) {
+                mView.setStakeQlc(appVersion);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

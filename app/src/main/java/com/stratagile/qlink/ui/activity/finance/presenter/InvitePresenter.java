@@ -5,6 +5,9 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.InviteList;
+import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteContract;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 
@@ -57,6 +60,113 @@ public class InvitePresenter implements InviteContract.InviteContractPresenter{
                         //isSuccesse
                         //mView.closeProgressDialog();
                         mView.setData(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getCanClaimTotal(Map map) {
+        Disposable disposable = httpAPIWrapper.getInviteAmount(map)
+                .subscribe(new Consumer<InviteTotal>() {
+                    @Override
+                    public void accept(InviteTotal user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.setCanClaimTotal(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+    public void getClaimedTotal(Map map) {
+        Disposable disposable = httpAPIWrapper.getInviteAmount(map)
+                .subscribe(new Consumer<InviteTotal>() {
+                    @Override
+                    public void accept(InviteTotal user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.setClaimedTotal(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getAtlistInviteFriend(Map map) {
+        Disposable disposable = httpAPIWrapper.qurryDict(map)
+                .subscribe(new Consumer<Dict>() {
+                    @Override
+                    public void accept(Dict user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.setAtlistInviteFriend(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getOneFriendReward(Map map) {
+        Disposable disposable = httpAPIWrapper.qurryDict(map)
+                .subscribe(new Consumer<Dict>() {
+                    @Override
+                    public void accept(Dict user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.setOneFriendReward(user);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

@@ -18,6 +18,7 @@ public class MyItemView extends LinearLayout {
     private TextView titleText;
     private TextView titleRightText;
     private ImageView ivNext;
+    private View dotView;
 
     public MyItemView(Context context) {
         super(context);
@@ -40,6 +41,7 @@ public class MyItemView extends LinearLayout {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_myitemview, this, true);
         icon = view.findViewById(R.id.icon);
         titleText = view.findViewById(R.id.title);
+        dotView = view.findViewById(R.id.dotView);
         titleRightText = view.findViewById(R.id.righttitle);
         ivNext = view.findViewById(R.id.ivNext);
 //        icon.getLayoutParams().width = (int) (context.getResources().getDimension(R.dimen.x30));
@@ -56,6 +58,9 @@ public class MyItemView extends LinearLayout {
         if (d != null) {
             icon.setImageDrawable(d);
         }
+    }
+    public void setDotViewVisible(int visibility) {
+        dotView.setVisibility(visibility);
     }
     public void setIcon(CharSequence text) {
 

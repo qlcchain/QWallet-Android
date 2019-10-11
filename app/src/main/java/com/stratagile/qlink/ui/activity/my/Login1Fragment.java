@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -74,6 +75,8 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     TextView tvLogin;
     @BindView(R.id.tvForgetPassword)
     TextView tvForgetPassword;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Nullable
     @Override
@@ -289,6 +292,12 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     public void loginSuccess(Register register) {
         closeProgressDialog();
         ToastUtil.displayShortToast(getString(R.string.Login_success));
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "login");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "login");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "login");
+        mFirebaseAnalytics.logEvent("login", bundle);
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         if (userAccounts.size() > 0) {
             for (UserAccount userAccount : userAccounts) {
@@ -320,7 +329,9 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         userAccount.setPubKey(register.getData());
         userAccount.setAccount(register.getAccount());
         userAccount.setAvatar(register.getHead());
+        userAccount.setBindDate(register.getBindDate());
         userAccount.setInviteCode(register.getNumber());
+        userAccount.setTotalInvite(register.getTotalInvite());
         userAccount.setEmail(register.getEmail());
         userAccount.setPhone(register.getPhone());
         userAccount.setUserName(register.getNickname());

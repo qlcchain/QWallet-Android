@@ -30,12 +30,15 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         public final static Property InviteCode = new Property(5, String.class, "inviteCode", false, "INVITE_CODE");
         public final static Property UserName = new Property(6, String.class, "userName", false, "USER_NAME");
         public final static Property Avatar = new Property(7, String.class, "avatar", false, "AVATAR");
-        public final static Property Phone = new Property(8, String.class, "phone", false, "PHONE");
-        public final static Property UserId = new Property(9, String.class, "userId", false, "USER_ID");
-        public final static Property Email = new Property(10, String.class, "email", false, "EMAIL");
-        public final static Property Vstatus = new Property(11, String.class, "vstatus", false, "VSTATUS");
-        public final static Property FacePhoto = new Property(12, String.class, "facePhoto", false, "FACE_PHOTO");
-        public final static Property HoldingPhoto = new Property(13, String.class, "holdingPhoto", false, "HOLDING_PHOTO");
+        public final static Property Test = new Property(8, String.class, "test", false, "TEST");
+        public final static Property BindDate = new Property(9, String.class, "bindDate", false, "BIND_DATE");
+        public final static Property Phone = new Property(10, String.class, "phone", false, "PHONE");
+        public final static Property UserId = new Property(11, String.class, "userId", false, "USER_ID");
+        public final static Property Email = new Property(12, String.class, "email", false, "EMAIL");
+        public final static Property Vstatus = new Property(13, String.class, "vstatus", false, "VSTATUS");
+        public final static Property FacePhoto = new Property(14, String.class, "facePhoto", false, "FACE_PHOTO");
+        public final static Property TotalInvite = new Property(15, int.class, "totalInvite", false, "TOTAL_INVITE");
+        public final static Property HoldingPhoto = new Property(16, String.class, "holdingPhoto", false, "HOLDING_PHOTO");
     }
 
 
@@ -59,12 +62,15 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
                 "\"INVITE_CODE\" TEXT," + // 5: inviteCode
                 "\"USER_NAME\" TEXT," + // 6: userName
                 "\"AVATAR\" TEXT," + // 7: avatar
-                "\"PHONE\" TEXT," + // 8: phone
-                "\"USER_ID\" TEXT," + // 9: userId
-                "\"EMAIL\" TEXT," + // 10: email
-                "\"VSTATUS\" TEXT," + // 11: vstatus
-                "\"FACE_PHOTO\" TEXT," + // 12: facePhoto
-                "\"HOLDING_PHOTO\" TEXT);"); // 13: holdingPhoto
+                "\"TEST\" TEXT," + // 8: test
+                "\"BIND_DATE\" TEXT," + // 9: bindDate
+                "\"PHONE\" TEXT," + // 10: phone
+                "\"USER_ID\" TEXT," + // 11: userId
+                "\"EMAIL\" TEXT," + // 12: email
+                "\"VSTATUS\" TEXT," + // 13: vstatus
+                "\"FACE_PHOTO\" TEXT," + // 14: facePhoto
+                "\"TOTAL_INVITE\" INTEGER NOT NULL ," + // 15: totalInvite
+                "\"HOLDING_PHOTO\" TEXT);"); // 16: holdingPhoto
     }
 
     /** Drops the underlying database table. */
@@ -113,34 +119,45 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             stmt.bindString(8, avatar);
         }
  
+        String test = entity.getTest();
+        if (test != null) {
+            stmt.bindString(9, test);
+        }
+ 
+        String bindDate = entity.getBindDate();
+        if (bindDate != null) {
+            stmt.bindString(10, bindDate);
+        }
+ 
         String phone = entity.getPhone();
         if (phone != null) {
-            stmt.bindString(9, phone);
+            stmt.bindString(11, phone);
         }
  
         String userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindString(10, userId);
+            stmt.bindString(12, userId);
         }
  
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(11, email);
+            stmt.bindString(13, email);
         }
  
         String vstatus = entity.getVstatus();
         if (vstatus != null) {
-            stmt.bindString(12, vstatus);
+            stmt.bindString(14, vstatus);
         }
  
         String facePhoto = entity.getFacePhoto();
         if (facePhoto != null) {
-            stmt.bindString(13, facePhoto);
+            stmt.bindString(15, facePhoto);
         }
+        stmt.bindLong(16, entity.getTotalInvite());
  
         String holdingPhoto = entity.getHoldingPhoto();
         if (holdingPhoto != null) {
-            stmt.bindString(14, holdingPhoto);
+            stmt.bindString(17, holdingPhoto);
         }
     }
 
@@ -184,34 +201,45 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             stmt.bindString(8, avatar);
         }
  
+        String test = entity.getTest();
+        if (test != null) {
+            stmt.bindString(9, test);
+        }
+ 
+        String bindDate = entity.getBindDate();
+        if (bindDate != null) {
+            stmt.bindString(10, bindDate);
+        }
+ 
         String phone = entity.getPhone();
         if (phone != null) {
-            stmt.bindString(9, phone);
+            stmt.bindString(11, phone);
         }
  
         String userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindString(10, userId);
+            stmt.bindString(12, userId);
         }
  
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(11, email);
+            stmt.bindString(13, email);
         }
  
         String vstatus = entity.getVstatus();
         if (vstatus != null) {
-            stmt.bindString(12, vstatus);
+            stmt.bindString(14, vstatus);
         }
  
         String facePhoto = entity.getFacePhoto();
         if (facePhoto != null) {
-            stmt.bindString(13, facePhoto);
+            stmt.bindString(15, facePhoto);
         }
+        stmt.bindLong(16, entity.getTotalInvite());
  
         String holdingPhoto = entity.getHoldingPhoto();
         if (holdingPhoto != null) {
-            stmt.bindString(14, holdingPhoto);
+            stmt.bindString(17, holdingPhoto);
         }
     }
 
@@ -231,12 +259,15 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // inviteCode
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // userName
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // avatar
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // phone
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // userId
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // email
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // vstatus
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // facePhoto
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // holdingPhoto
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // test
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // bindDate
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // phone
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // userId
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // email
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // vstatus
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // facePhoto
+            cursor.getInt(offset + 15), // totalInvite
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16) // holdingPhoto
         );
         return entity;
     }
@@ -251,12 +282,15 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         entity.setInviteCode(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setUserName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setAvatar(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setPhone(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setUserId(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setEmail(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setVstatus(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setFacePhoto(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setHoldingPhoto(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setTest(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setBindDate(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setPhone(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setUserId(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setEmail(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setVstatus(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setFacePhoto(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setTotalInvite(cursor.getInt(offset + 15));
+        entity.setHoldingPhoto(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
      }
     
     @Override

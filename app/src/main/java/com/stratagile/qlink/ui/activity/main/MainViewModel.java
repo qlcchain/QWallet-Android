@@ -35,4 +35,6 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<UserAccount> currentUserAccount = new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<TradePair.PairsListBean>> pairsLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> isBind = new MutableLiveData<>();
 }

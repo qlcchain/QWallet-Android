@@ -129,9 +129,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         stakeViewModel.txidMutableLiveData.observe(this, Observer {
             showEnterTxIdDialog()
         })
-        ivVote.setOnClickListener {
-            showEnterTxIdDialog()
-        }
+//        ivVote.setOnClickListener {
+//            showEnterTxIdDialog()
+//        }
         invoke.setOnClickListener {
             if (neoWallet == null) {
                 return@setOnClickListener
@@ -290,6 +290,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
 
 
     fun checkTxid(txid :String) {
+        if ("".equals(txid.trim())) {
+            return
+        }
         showProgressDialog()
         thread {
             try {
@@ -299,7 +302,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                 var result = client.call("ledger_pledgeInfoByTransactionID", params)
                 KLog.i(result.toJSONString())
                 var pledgeInfo = Gson().fromJson(result.toJSONString(), PledgeInfo::class.java)
-                if (pledgeInfo.result == null) {
+                if (pledgeInfo.result == null || pledgeInfo.error != null) {
                     recoverStake(txid)
                 } else {
                     runOnUiThread {
@@ -317,6 +320,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         }
     }
 
+    /**
+     * 抵押未成功的处理
+     */
     fun recoverStake(txid : String) {
         thread {
             try {
@@ -358,15 +364,28 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                             toast("neo wallet not found")
                         }
                     } else {
-                        lockResult.stakeType.neoPriKey = neoWallet!!.privateKey
-                        lockResult.stakeType.neoPubKey = neoWallet!!.publicKey
-                        prePareBenefitPledge(lockResult = lockResult)
-                        runOnUiThread {
-                            closeProgressDialog()
-                            showStakingPup()
+                        var qlcWallets = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+                        var hasQlcWallet = false
+                        qlcWallets.forEach {
+                            if (it.address.equals(lockResult.stakeType.qlcchainAddress)) {
+                                hasQlcWallet = true
+                            }
+                        }
+                        if (hasQlcWallet) {
+                            lockResult.stakeType.neoPriKey = neoWallet!!.privateKey
+                            lockResult.stakeType.neoPubKey = neoWallet!!.publicKey
+                            prePareBenefitPledge(lockResult = lockResult)
+                            runOnUiThread {
+                                closeProgressDialog()
+                                showStakingPup()
+                            }
+                        } else {
+                            runOnUiThread {
+                                closeProgressDialog()
+                                toast("qlc wallet not found")
+                            }
                         }
                     }
-
                 } else {
                     runOnUiThread {
                         closeProgressDialog()

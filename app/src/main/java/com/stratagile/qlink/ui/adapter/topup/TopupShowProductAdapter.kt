@@ -14,12 +14,13 @@ import com.stratagile.qlink.view.SmoothCheckBox
 
 class TopupShowProductAdapter(array: ArrayList<TopupProduct.ProductListBean>) : BaseQuickAdapter<TopupProduct.ProductListBean, BaseViewHolder>(R.layout.item_topup_show_product, array) {
     override fun convert(helper: BaseViewHolder, item: TopupProduct.ProductListBean) {
-        helper.setText(R.id.tvDiscount, (item.discount * 10).toString())
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {
             //英文
             helper.setText(R.id.tvOperator, item.countryEn + item.province + item.ispEn)
+            helper.setText(R.id.tvDiscount, (100 - item.discount * 100).toBigDecimal().stripTrailingZeros().toPlainString() + "%")
         } else {
             helper.setText(R.id.tvOperator, item.country + item.province + item.isp)
+            helper.setText(R.id.tvDiscount, (item.discount * 10).toString())
         }
     }
 }

@@ -26,6 +26,7 @@ import qlc.mng.WalletMng
 import qlc.network.QlcClient
 import qlc.network.QlcException
 import qlc.rpc.impl.LedgerRpc
+import qlc.utils.Constants
 import qlc.utils.Helper
 import qlc.utils.WorkUtil
 import java.math.BigDecimal
@@ -33,12 +34,27 @@ import java.math.BigDecimal
 fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount, rpc : LedgerRpc, receiveBack: ReceiveBack){
     KLog.i("开始接收")
     val sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
-    KLog.i(sendBlock)
     var isBendi = true
     //QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()
     val receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, qlcAccount.address, null)
     val aaaa = JSONArray()
     var stateBlock = Gson().fromJson<StateBlock>(receiveBlockJson.toJSONString(), StateBlock::class.java)
+    if (Constants.BLOCK_TYPE_CONTRACTREWARD.equals(stateBlock.type) || Constants.LINNK_TYPE_AIRDORP.equals(stateBlock.type)) {
+        KLog.i("走不要算work的逻辑")
+        try {
+            aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
+            KLog.i("接收传过去的参数：" + aaaa)
+            var result = rpc.process(aaaa)
+            KLog.i(result.toJSONString())
+            if (result.getString("result") != null && !"".equals(result.getString("result"))) {
+                receiveBack.recevie(true)
+                return
+            }
+        } catch (e : Exception) {
+
+        }
+        return
+    }
     var root = BlockMng.getRoot(stateBlock)
     var params = mutableListOf<Pair<String, String>>()
     params.add(Pair("root", root))

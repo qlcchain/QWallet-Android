@@ -24,7 +24,27 @@ public class VcodeLogin extends BaseBack<String> {
     private String vstatus;
     private String nickname;
     private String id;
+    private String bindDate;
+
+    public String getBindDate() {
+        return bindDate;
+    }
+
+    public void setBindDate(String bindDate) {
+        this.bindDate = bindDate;
+    }
+
     private String account;
+    private int totalInvite;
+
+    public int getTotalInvite() {
+        return totalInvite;
+    }
+
+    public void setTotalInvite(int totalInvite) {
+        this.totalInvite = totalInvite;
+    }
+
     private String email;
     private String holdingPhoto;
     private String number;

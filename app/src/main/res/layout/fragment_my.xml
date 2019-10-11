@@ -59,6 +59,15 @@
 
     </com.stratagile.qlink.view.MyItemView>
     <com.stratagile.qlink.view.MyItemView
+        android:id="@+id/claimQlc"
+        android:layout_width="match_parent"
+        app:showNextmy="true"
+        app:srcmy="@mipmap/icon_earn_detail"
+        app:textmy="@string/earning_detail"
+        android:layout_height="54dp">
+
+    </com.stratagile.qlink.view.MyItemView>
+    <com.stratagile.qlink.view.MyItemView
         android:id="@+id/shareFriend"
         android:layout_width="match_parent"
         app:showNextmy="true"

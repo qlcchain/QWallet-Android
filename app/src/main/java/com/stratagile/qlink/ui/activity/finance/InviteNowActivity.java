@@ -22,13 +22,12 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerInviteNowComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteNowContract;
 import com.stratagile.qlink.ui.activity.finance.module.InviteNowModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.InviteNowPresenter;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.vondear.rxtools.view.RxQRCode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,6 +74,13 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
     @Override
     protected void initData() {
         setTitle(getString(R.string.invite_now));
+
+        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+            //英文
+            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_en));
+        } else {
+            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
+        }
 //        content = "https://dibaqu.com/WinCash";
 //        Bitmap bitmap = RxQRCode.builder(content).
 //                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).

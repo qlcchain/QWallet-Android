@@ -3,9 +3,12 @@ import android.support.annotation.NonNull;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -68,34 +71,46 @@ public class MyPresenter implements MyContract.MyContractPresenter{
         }));
     }
 
-//    @Override
-//    public void getUser(HashMap map) {
-//        //mView.showProgressDialog();
-//        Disposable disposable = httpAPIWrapper.getUser(map)
-//                .subscribe(new Consumer<User>() {
-//                    @Override
-//                    public void accept(User user) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                        mView.setText(user);
-//                      //mView.closeProgressDialog();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                      //mView.closeProgressDialog();
-//                      //ToastUtil.show(mFragment.getActivity(), mFragment.getString(R.string.loading_failed_1));
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
-//    }
+
+    public void getCanClaimTotal(HashMap<String, String> map) {
+        mCompositeDisposable.add(httpAPIWrapper.getRewardTotal(map).subscribe(new Consumer<RewardTotal>() {
+            @Override
+            public void accept(RewardTotal rewardTotal) throws Exception {
+                mView.setCanClaimTotal(rewardTotal);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
+    }
+    public void getCanInviteClaimTotal(Map<String, String> map) {
+        mCompositeDisposable.add(httpAPIWrapper.getInviteAmount(map).subscribe(new Consumer<InviteTotal>() {
+            @Override
+            public void accept(InviteTotal rewardTotal) throws Exception {
+                mView.setCanInviteClaimTotal(rewardTotal);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
+    }
+
 }
