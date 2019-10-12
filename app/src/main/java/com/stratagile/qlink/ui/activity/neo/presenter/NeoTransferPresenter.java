@@ -195,23 +195,6 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
 
     @Override
     public void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress, String remark) {
-//        Neow3j neow3j = Neow3j.build(new HttpService("https://node2.neocompiler.io"));
-//        Account acct = Account.fromWIF("KzviPYuqHtQvw4T6vkbxJGnyoRGo1yYULAAn6WbTLwpQboHEkXcW").build();
-//        try {
-//            acct.updateAssetBalances(neow3j);
-//            RawTransactionOutput output = new RawTransactionOutput(tokenInfo.getTokenAddress(), amount, toAddress);
-//            AssetTransfer transfer = new AssetTransfer.Builder(neow3j)
-//                    .account(acct)
-//                    .output(output)
-//                    .networkFee(new BigDecimal("0.00000001"))
-//                    .build()
-//                    .sign()
-//                    .send();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ErrorResponseException e) {
-//            e.printStackTrace();
-//        }
         if (assets == null) {
             ToastUtil.displayShortToast("please wait");
             mView.showProgressDialog();

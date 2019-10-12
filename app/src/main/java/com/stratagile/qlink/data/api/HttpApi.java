@@ -170,7 +170,6 @@ import static com.stratagile.qlink.data.api.API.url_vcode_sign_in_code;
 import static com.stratagile.qlink.data.api.API.url_vcode_signup_code;
 import static com.stratagile.qlink.data.api.API.url_wallet_transaction_report;
 import static com.stratagile.qlink.data.api.API.url_zs_free_num;
-import static com.stratagile.qlink.data.api.MainAPI.url_reward_list;
 
 /**
  * Created by hu on 2017/5/16.
@@ -608,7 +607,7 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> bindQlcWallet(@Body RequestBody map);
 
-    @POST(url_reward_list)
+    @POST(API.url_reward_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<RewardList> getRewardList(@Body RequestBody map);
 

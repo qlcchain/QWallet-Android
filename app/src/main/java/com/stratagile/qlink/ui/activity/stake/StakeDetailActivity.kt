@@ -339,7 +339,8 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                 stateBlock.setSignature(Helper.byteToHexString(signature))
                 processWithdraw(stateBlock, unLock)
             } else {
-
+                KLog.i("work出错、、、")
+                benefitWithdraw(unLock)
             }
         }
     }

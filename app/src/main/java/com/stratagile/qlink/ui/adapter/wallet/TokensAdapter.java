@@ -80,7 +80,7 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                 }
             }
         } else if (item.getWalletType() == AllWallet.WalletType.NeoWallet) {
-            helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()) + "");
+            helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()).stripTrailingZeros().toPlainString());
             ImageView imageView = helper.getView(R.id.ivTokenAvatar);
             KLog.i(item.getTokenImgName());
             if (item.isMainNetToken()) {

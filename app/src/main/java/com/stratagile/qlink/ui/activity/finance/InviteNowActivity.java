@@ -147,7 +147,7 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
             out.close();
             Uri uri;
             if (Build.VERSION.SDK_INT >= 24) {
-                uri = FileProvider.getUriForFile(this, "com.stratagile.qlink.dapp.fileprovider", f);
+                uri = FileProvider.getUriForFile(this, "com.stratagile.qwallet.fileprovider", f);
             } else {
                 uri = Uri.fromFile(f);
             }

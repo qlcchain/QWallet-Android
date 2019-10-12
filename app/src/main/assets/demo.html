@@ -7,21 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
     <!--require dsbridge init js-->
-    <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
-    <script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
+	<script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>
 </head>
 <body>
 
-<script>
-		// constants
-		const NEO_HASH = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b';
-		const GAS_HASH = '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7';
-
+	<script>
 		// smart contract script hash
 		const smartContractScript = '3078aa0e095defba3f00e0af12810187ecfb586a';
 		const apiProvider = new Neon.api.neoscan.instance("MainNet");
-
+	
 		// multisig
 		dsBridge.registerAsyn("staking", {
 			tag: "staking",
@@ -40,11 +36,11 @@
 			},
 			// lock
 			contractLock:function (privateKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime, responseCallback) {
-
+			
 				const account = new Neon.wallet.Account(privateKey);
-
+	
 				const amountWithDecimals = new BigNumber(qlcAmount).multipliedBy(100000000);
-
+				
 				const invoke = {
 					scriptHash: smartContractScript, // Scripthash for the contract
 					operation: 'lock', // name of operation to perform.
@@ -54,10 +50,10 @@
 						Neon.sc.ContractParam.byteArray(Neon.u.str2hexstring(qlcchainAddress), 'string'), // qlc address
 						Neon.sc.ContractParam.integer(amountWithDecimals.toNumber()), // qlc amount // check integer limit for big numbers !! should be 2,147,483,647 that's max 21 qlc ?
 						Neon.sc.ContractParam.integer(lockTime), // lock time
-					]
+					] 
 				}
 				//console.log(invoke);
-
+				
 				const script = Neon.sc.createScript(invoke);
 				//console.log("\n\n--- API Provider RPC Endpoint ---");
 				//console.log(script);
@@ -83,7 +79,7 @@
 			},
 			// signature
 			signature:function (unsignedRawTx, privateKey, responseCallback) {
-
+				
 				const signature = Neon.wallet.sign(unsignedRawTx, privateKey);
 
 				const result = {
@@ -92,60 +88,46 @@
 				responseCallback(result);
 			},
 			// send
-			send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, responseCallback) {
-
+			send:function (fromAddress, toAddress, assetHash, amount, wif, responseCallback) {
+				
 				const account = new Neon.wallet.Account(wif);
-
-				// NEO or GAS send
-				if (assetHash == NEO_HASH || assetHash == GAS_HASH) {
-					let intent = null;
-					if (assetHash == NEO_HASH)
-						intent = Neon.api.makeIntent({ NEO: new BigNumber(amount).toNumber() }, toAddress);
-					else
-						intent = Neon.api.makeIntent({ GAS: new BigNumber(amount).toNumber() }, toAddress);
-
-					const config = {
-						api: apiProvider, // The network to perform the action, MainNet or TestNet.
-						account: account, // This is the address which the assets come from.
-						intents: intent // This is where you want to send assets to.
-					};
-					const returnAsset = Neon.sendAsset(config)
-					.then(config => {
-						responseCallback(config.response);
-					})
-					.catch(config => {
-						responseCallback(config);
-					});
-				}
-
-				// nep5 asset send
+				
+				const contractScriptHash = assetHash;
+				let numOfDecimals = 8;
+				
+				//const numOfDecimals = this.tokenList[token].networks[1].decimals;
 				const amtToSend = new BigNumber(amount).toFixed();
 				const network = 'MainNet';
 				const additionalInvocationGas = 0;
 				const additionalIntents = [];
 
 				// We have to adjust the amount to send because this function bumps it up by 8 decimals places according to Fixed8 rules. For NEP5 tokens of 8 decimals places, no adjustments is needed.
-				const generator = Neon.nep5.abi.transfer(
-					assetHash,
-					account.address,
-					toAddress,
-					new Neon.u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
+				const generator = nep5.abi.transfer(
+				  contractScriptHash,
+				  account.address,
+				  toAddress,
+				  new u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
 				);
 
+				//console.log("\n\n--- Amount:  ---")
+				//console.log(amtToSend);
 				const builder = generator();
+				//console.log(builder);
 				const script = builder.str;
+				//console.log("\n\n--- Invocation Script ---");
+				//console.log(script);
 				const gas = additionalInvocationGas;
 				const intent = additionalIntents;
 
 				const config = {
-					api: apiProvider, // The API Provider that we rely on for balance and rpc information
-					account: account, // The sending Account
-					intents: intent, // Additional intents to move assets
-					script: script, // The Smart Contract invocation script
-					gas: gas // Additional GAS for invocation.
+				  api: apiProvider, // The API Provider that we rely on for balance and rpc information
+				  account: account, // The sending Account
+				  intents: intent, // Additional intents to move assets
+				  script: script, // The Smart Contract invocation script
+				  gas: gas // Additional GAS for invocation.
 				};
 
-				const returnToken = Neon.api.doInvoke(config)
+				const returnToken = await Neon.api.doInvoke(config)
 				.then(config => {
 					responseCallback(config.response);
 				})

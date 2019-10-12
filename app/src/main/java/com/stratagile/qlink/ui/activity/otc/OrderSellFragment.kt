@@ -23,9 +23,11 @@ import com.stratagile.qlink.ui.activity.otc.presenter.OrderSellPresenter
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import com.google.gson.Gson
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
+import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.EosAccount
@@ -35,6 +37,7 @@ import com.stratagile.qlink.db.Wallet
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.NeoWalletInfo
+import com.stratagile.qlink.entity.SendNep5TokenBack
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.otc.TradePair
 import com.stratagile.qlink.utils.*
@@ -47,7 +50,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
+import org.json.JSONObject
 import qlc.mng.AccountMng
+import wendu.dsbridge.DWebView
+import wendu.dsbridge.OnReturnValue
 import java.math.BigDecimal
 import java.util.HashMap
 import kotlin.concurrent.thread
@@ -355,7 +361,10 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                             }
                             return@thread
                         }
-                        mPresenter.sendNep5Token(sendNeoWallet!!.address, etAmount.text.toString(), ConstantValue.mainAddressData.neo.address, tradeTokenInfo!!, getString(R.string.sell) + " " + selectedPair!!.tradeToken, map)
+                        runOnUiThread {
+                            testTransfer(map, sendNeoWallet!!.address)
+                        }
+//                        mPresenter.sendNep5Token(sendNeoWallet!!.address, etAmount.text.toString(), ConstantValue.mainAddressData.neo.address, tradeTokenInfo!!, getString(R.string.sell) + " " + selectedPair!!.tradeToken, map)
                     }
                     AllWallet.WalletType.QlcWallet -> {
                         mPresenter.sendQgas(etAmount.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
@@ -363,6 +372,25 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 }
             }
         }
+    }
+
+    private var webview: DWebView? = null
+    private fun testTransfer(map : HashMap<String, String>, address : String) {
+        webview = DWebView(activity!!)
+        webview!!.loadUrl("file:///android_asset/contract.html")
+        //fromAddress, toAddress, assetHash, amount, wif, responseCallback
+        val arrays = arrayOfNulls<Any>(6)
+        arrays[0] = sendNeoWallet!!.address
+        arrays[1] = ConstantValue.mainAddressData.neo.address
+        arrays[2] = tradeTokenInfo!!.asset_hash
+        arrays[3] = etAmount.text.toString()
+        arrays[4] = 8
+        arrays[5] = Account.getWallet()!!.wif
+        webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
+            KLog.i("call succeed,return value is " + retValue!!)
+            var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
+            mPresenter.generateEntrustSellOrder(nep5SendBack.txid, address, map)
+        })
     }
 
 

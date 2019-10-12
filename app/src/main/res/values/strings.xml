@@ -1125,7 +1125,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="forget_pwd">Forget Password</string>
     <string name="password_at_least_6_chars">Password (at least 6 chars)</string>
     <string name="repeat_the_password">Repeat the Password</string>
-    <string name="invitation_code_optional">Invitation Code (Optional)</string>
+    <string name="invitation_code_optional">Referral Code (Optional)</string>
     <string name="please_agree_to_the_service_agreement">Please agree to the service agreement.</string>
     <string name="leastamount">LeastAmount</string>
     <string name="Succeeded">success</string>

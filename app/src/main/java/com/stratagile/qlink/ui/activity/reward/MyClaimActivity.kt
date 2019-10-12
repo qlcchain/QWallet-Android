@@ -14,6 +14,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.entity.reward.RewardList
 import com.stratagile.qlink.entity.reward.RewardTotal
+import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.reward.component.DaggerMyClaimComponent
 import com.stratagile.qlink.ui.activity.reward.contract.MyClaimContract
 import com.stratagile.qlink.ui.activity.reward.module.MyClaimModule
@@ -139,7 +140,10 @@ class MyClaimActivity : BaseActivity(), MyClaimContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.claimQlc -> {
-
+                var qlcIntent = Intent(this, WebViewActivity::class.java)
+                qlcIntent.putExtra("url", "https://explorer.qlcchain.org")
+                qlcIntent.putExtra("title", "QLCChain")
+                startActivity(qlcIntent)
             }
             else -> {
             }

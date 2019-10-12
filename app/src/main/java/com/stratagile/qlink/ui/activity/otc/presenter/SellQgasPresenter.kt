@@ -340,7 +340,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         val disposable = httpAPIWrapper.getNeoWalletInfo(map)
                 .subscribe({ baseBack ->
                     mView.setNeoDetail(baseBack)
-                    getUtxo(address)
+//                    getUtxo(address)
                 }, { }, {
                     //onComplete
                     KLog.i("onComplete")

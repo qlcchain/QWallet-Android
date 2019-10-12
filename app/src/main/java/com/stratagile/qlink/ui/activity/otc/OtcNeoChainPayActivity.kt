@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.gson.Gson
 import com.pawegio.kandroid.toast
+import com.socks.library.KLog
+import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -15,7 +18,9 @@ import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.Wallet
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.NeoWalletInfo
+import com.stratagile.qlink.entity.SendNep5TokenBack
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
+import com.stratagile.qlink.entity.stake.MultSign
 import com.stratagile.qlink.ui.activity.otc.component.DaggerOtcNeoChainPayComponent
 import com.stratagile.qlink.ui.activity.otc.contract.OtcNeoChainPayContract
 import com.stratagile.qlink.ui.activity.otc.module.OtcNeoChainPayModule
@@ -26,6 +31,9 @@ import kotlinx.android.synthetic.main.activity_otc_neo_chain_pay.tvReceiveAddres
 import kotlinx.android.synthetic.main.activity_otc_neo_chain_pay.tvSend
 import kotlinx.android.synthetic.main.activity_usdt_pay.*
 import org.greenrobot.eventbus.EventBus
+import org.json.JSONObject
+import wendu.dsbridge.DWebView
+import wendu.dsbridge.OnReturnValue
 import java.util.HashMap
 
 import javax.inject.Inject;
@@ -93,10 +101,10 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
             if (neoWallet == null) {
                 return@setOnClickListener
             }
-            if (gasTokenInfo == null || gasTokenInfo!!.amount < 0.00000001) {
-                toast(getString(R.string.no_enough) + " GAS")
-                return@setOnClickListener
-            }
+//            if (gasTokenInfo == null || gasTokenInfo!!.amount < 0.00000001) {
+//                toast(getString(R.string.no_enough) + " GAS")
+//                return@setOnClickListener
+//            }
             if (neoWalletInfo == null || intent.getStringExtra("usdt").toDouble() > payTokenAmount) {
                 toast(getString(R.string.no_enough) + " " + intent.getStringExtra("payToken"))
                 return@setOnClickListener
@@ -134,11 +142,31 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
         tvOk.setOnClickListener {
             sweetAlertDialog.cancel()
             showProgressDialog()
+            testTransfer()
             //sendNep5Token(address : String, amount : String, toAddress : String, dataBean : NeoWalletInfo.DataBean.BalanceBean, remark : String, tradeOrderId: String)
-            thread {
-                mPresenter.sendNep5Token(neoWallet!!.address, intent.getStringExtra("usdt"), intent.getStringExtra("receiveAddress"), payTokenInfo!!, etNeoTokenSendMemo.toString(), intent.getStringExtra("tradeOrderId"))
-            }
+//            thread {
+//                mPresenter.sendNep5Token(neoWallet!!.address, intent.getStringExtra("usdt"), intent.getStringExtra("receiveAddress"), payTokenInfo!!, etNeoTokenSendMemo.toString(), intent.getStringExtra("tradeOrderId"))
+//            }
         }
+    }
+
+    private var webview: DWebView? = null
+    private fun testTransfer() {
+        webview = DWebView(this)
+        webview!!.loadUrl("file:///android_asset/contract.html")
+        //fromAddress, toAddress, assetHash, amount, wif, responseCallback
+        val arrays = arrayOfNulls<Any>(6)
+        arrays[0] = neoWallet!!.address
+        arrays[1] = intent.getStringExtra("receiveAddress")
+        arrays[2] = payTokenInfo!!.asset_hash
+        arrays[3] = intent.getStringExtra("usdt")
+        arrays[4] = 8
+        arrays[5] = Account.getWallet()!!.wif
+        webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
+            KLog.i("call succeed,return value is " + retValue!!)
+            var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
+            mPresenter.markAsPaid(nep5SendBack.txid, intent.getStringExtra("tradeOrderId"))
+        })
     }
 
     var neoWallet : Wallet? = null

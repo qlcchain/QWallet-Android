@@ -57,7 +57,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: OtcN
                     //isSuccesse
 //                    getNeoTokensInfo(baseBack)
                     mView.setNeoDetail(baseBack)
-                    getUtxo(address)
+//                    getUtxo(address)
                 }, { }, {
                     //onComplete
                     KLog.i("onComplete")

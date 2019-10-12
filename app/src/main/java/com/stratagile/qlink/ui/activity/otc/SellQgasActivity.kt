@@ -9,7 +9,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.gson.Gson
 import com.pawegio.kandroid.toast
+import com.socks.library.KLog
+import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -47,7 +50,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
+import org.json.JSONObject
 import qlc.mng.AccountMng
+import wendu.dsbridge.DWebView
+import wendu.dsbridge.OnReturnValue
 import java.math.BigDecimal
 import java.util.HashMap
 
@@ -619,7 +625,10 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                             }
                             return@thread
                         }
-                        mPresenter.sendNep5Token(sendNeoWallet!!.address, etQgas.text.toString(), ConstantValue.mainAddressData.neo.address, tradeTokenInfo!!, getString(R.string.sell) + " " + entrustOrderInfo.order!!.tradeToken, map)
+                        runOnUiThread {
+                            testTransfer(map, sendNeoWallet!!.address)
+                        }
+//                        mPresenter.sendNep5Token(sendNeoWallet!!.address, etQgas.text.toString(), ConstantValue.mainAddressData.neo.address, tradeTokenInfo!!, getString(R.string.sell) + " " + entrustOrderInfo.order!!.tradeToken, map)
                     }
                     AllWallet.WalletType.QlcWallet -> {
                         mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
@@ -628,6 +637,26 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             }
         }
     }
+
+    private var webview: DWebView? = null
+    private fun testTransfer(map : HashMap<String, String>, address : String) {
+        webview = DWebView(this)
+        webview!!.loadUrl("file:///android_asset/contract.html")
+        //fromAddress, toAddress, assetHash, amount, wif, responseCallback
+        val arrays = arrayOfNulls<Any>(6)
+        arrays[0] = sendNeoWallet!!.address
+        arrays[1] = ConstantValue.mainAddressData.neo.address
+        arrays[2] = tradeTokenInfo!!.asset_hash
+        arrays[3] = etAmount.text.toString()
+        arrays[4] = 8
+        arrays[5] = Account.getWallet()!!.wif
+        webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
+            KLog.i("call succeed,return value is " + retValue!!)
+            var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
+            mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
+        })
+    }
+
 
 
     fun showEnterEthWalletDialog() {
