@@ -24,7 +24,10 @@ import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.otc.TradeOrderAppealListAdapter
 import com.stratagile.qlink.ui.adapter.otc.TradeOrderListAdapter
 import com.stratagile.qlink.utils.AccountUtil
+import kotlinx.android.synthetic.main.fragment_posted.*
 import kotlinx.android.synthetic.main.fragment_process.*
+import kotlinx.android.synthetic.main.fragment_process.recyclerView
+import kotlinx.android.synthetic.main.fragment_process.refreshLayout
 import java.util.HashMap
 
 /**
@@ -71,6 +74,9 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivity(Intent(activity, AppealDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
         }
+        tradeOrderListAdapter.setOnLoadMoreListener({
+            getTradeOrderList()
+        }, recyclerView)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setOnRefreshListener {
             currentPage = 0
@@ -90,7 +96,7 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
         map["token"] = AccountUtil.getUserToken()
         map["page"] = currentPage.toString() + ""
         map["status"] = "appealed"
-        map["size"] = "5"
+        map["size"] = "10"
         map["entrustOrderId"] = ""
         mPresenter.getTradeOrderList(map)
     }

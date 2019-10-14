@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
@@ -21,12 +22,14 @@ import com.stratagile.qlink.ui.activity.topup.module.TopupOrderListModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupOrderListPresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupOrderListAdapter
+import com.stratagile.qlink.utils.FileUtil
 import com.stratagile.qlink.utils.SpUtil
 import com.stratagile.qlink.utils.UIUtils
 import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import kotlinx.android.synthetic.main.activity_topup_order_list.*
 import kotlinx.android.synthetic.main.activity_topup_order_list.recyclerView
-import java.util.ArrayList
+import java.io.File
+import java.util.*
 
 import javax.inject.Inject;
 
@@ -84,7 +87,31 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         if (ConstantValue.currentUser != null) {
             map["account"] = ConstantValue.currentUser.account
         }
-        map["p2pId"] = SpUtil.getString(this, ConstantValue.topUpP2pId, "")
+        var topUpP2pId = SpUtil.getString(this, ConstantValue.topUpP2pId, "")
+        if ("".equals(topUpP2pId)) {
+            var saveP2pId = FileUtil.readData("/Qwallet/p2pId.txt")
+            if ("".equals(saveP2pId)) {
+                val uuid = UUID.randomUUID()
+                var p2pId = ""
+                p2pId += uuid.toString().replace("-", "")
+                topUpP2pId = p2pId
+                SpUtil.putString(this, ConstantValue.topUpP2pId, p2pId)
+
+                val file = File(Environment.getExternalStorageDirectory().toString() + "/Qwallet/p2pId.txt")
+                if (file.exists()) {
+                    FileUtil.savaData("/Qwallet/p2pId.txt", topUpP2pId)
+                } else {
+                    file.createNewFile()
+                    FileUtil.savaData("/Qwallet/p2pId.txt", topUpP2pId)
+                }
+
+            } else {
+                topUpP2pId = saveP2pId
+                SpUtil.putString(this, ConstantValue.topUpP2pId, topUpP2pId)
+            }
+        }
+
+        map["p2pId"] = topUpP2pId
         map["page"] = currentPage.toString()
         map["size"] = "20"
         mPresenter.getOderList(map, currentPage)

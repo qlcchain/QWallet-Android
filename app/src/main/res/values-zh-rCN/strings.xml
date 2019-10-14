@@ -501,7 +501,7 @@
     <string name="redeemed">已赎回</string>
     <string name="buy">买入</string>
     <string name="view_my_earnings">立即查看我的财富</string>
-    <string name="crypto_wallet">我的钱包</string>
+    <string name="crypto_wallet">加密钱包</string>
     <string name="join_the_community">加入社群</string>
     <string name="contact_us">联络我们</string>
     <string name="settings">设置</string>
@@ -1030,4 +1030,5 @@
     <string name="free_qlc_lending_for_staking">免费借得抵押金</string>
     <string name="claim_entitled_qgas_earnings_everyday">每日免费赚QGAS收益</string>
     <string name="receive_now">立即领取</string>
+    <string name="bind_success">绑定成功</string>
 </resources>

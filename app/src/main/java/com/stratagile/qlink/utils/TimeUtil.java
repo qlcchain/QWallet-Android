@@ -54,6 +54,10 @@ public class TimeUtil {
         return sdr.format(new Date(timestamp));
     }
     public static String getOrderTime(long timestamp) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        return sdr.format(new Date(timestamp));
+    }
+    public static String getStakeTime(long timestamp) {
         timestamp = timestamp * 1000;
         SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         return sdr.format(new Date(timestamp));

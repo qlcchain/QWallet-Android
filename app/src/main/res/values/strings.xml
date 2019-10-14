@@ -1595,4 +1595,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="free_qlc_lending_for_staking">Free QLC lending for staking</string>
     <string name="claim_entitled_qgas_earnings_everyday">Claim entitled QGAS earnings everyday</string>
     <string name="receive_now">Receive Now</string>
+    <string name="bind_success">bind success</string>
 </resources>

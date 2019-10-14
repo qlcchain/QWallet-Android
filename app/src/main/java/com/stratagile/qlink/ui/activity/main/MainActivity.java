@@ -391,6 +391,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void bindSuccess() {
+        ToastUtil.displayShortToast(getString(R.string.bind_success));
         ConstantValue.currentUser.setBindDate(TimeUtil.getTime());
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
     }

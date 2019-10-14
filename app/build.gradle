@@ -39,7 +39,7 @@ android {
         debug {
             minifyEnabled false
             buildConfigField "boolean", "LOG_DEBUG", "true"
-//            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.debug
             jniDebuggable true
         }
         release {
@@ -81,6 +81,7 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
 
+
     greendao {
         schemaVersion 70//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
@@ -98,6 +99,7 @@ android {
     }
     buildToolsVersion '28.0.3'
 }
+
 
 repositories {
     mavenCentral()

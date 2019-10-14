@@ -83,6 +83,9 @@ class CompleteFragment : BaseFragment(), CompleteContract.View {
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivity(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
         }
+        tradeOrderListAdapter.setOnLoadMoreListener({
+            getTradeOrderList()
+        }, recyclerView)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = false
@@ -107,7 +110,7 @@ class CompleteFragment : BaseFragment(), CompleteContract.View {
         map["token"] = AccountUtil.getUserToken()
         map["page"] = currentPage.toString() + ""
         map["status"] = "completed"
-        map["size"] = "5"
+        map["size"] = "10"
         map["entrustOrderId"] = ""
         mPresenter.getTradeOrderList(map)
     }

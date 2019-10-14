@@ -28,7 +28,7 @@ class MyStakeAdapter(arrayList : ArrayList<MyStakeList.ResultBean>) : BaseQuickA
             }
 
             "PledgeDone" -> {
-                helper.setText(R.id.tvStakeStatus, TimeUtil.getOrderTime(item.pledgeTime))
+                helper.setText(R.id.tvStakeStatus, TimeUtil.getStakeTime(item.pledgeTime))
                 helper.setTextColor(R.id.tvStakeStatus, mContext.resources.getColor(R.color.color_29282a))
                 if (item.qgas == 0L) {
                     helper.setText(R.id.tvEarns, "0")

@@ -333,7 +333,6 @@ public class MainPresenter implements MainContract.MainContractPresenter {
         httpAPIWrapper.bindQlcWallet(map).subscribe(new HttpObserver<BaseBack>() {
             @Override
             public void onNext(BaseBack baseBack) {
-                ToastUtil.displayShortToast("bind success");
                 mView.bindSuccess();
             }
         });

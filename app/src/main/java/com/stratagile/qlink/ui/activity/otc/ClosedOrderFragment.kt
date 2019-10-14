@@ -71,6 +71,9 @@ class ClosedOrderFragment : BaseFragment(), CloasedOrderContract.View {
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivity(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))
         }
+        tradeOrderListAdapter.setOnLoadMoreListener({
+            getTradeOrderList()
+        }, recyclerView)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setOnRefreshListener {
             currentPage = 0
@@ -90,7 +93,7 @@ class ClosedOrderFragment : BaseFragment(), CloasedOrderContract.View {
         map["token"] = AccountUtil.getUserToken()
         map["page"] = currentPage.toString() + ""
         map["status"] = "closed"
-        map["size"] = "5"
+        map["size"] = "10"
         map["entrustOrderId"] = ""
         mPresenter.getTradeOrderList(map)
     }
