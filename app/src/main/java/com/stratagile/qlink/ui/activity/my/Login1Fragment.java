@@ -332,7 +332,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         userAccount.setEmail(register.getEmail());
         userAccount.setPhone(register.getPhone());
         userAccount.setUserName(register.getNickname());
-        userAccount.setIsLogin(true);
+        userAccount.setIsLogin(false);
         ConstantValue.currentUser = userAccount;
         AppConfig.getInstance().getDaoSession().getUserAccountDao().insert(userAccount);
         login();

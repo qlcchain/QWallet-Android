@@ -64,7 +64,6 @@ public class Login1Presenter implements Login1Contract.Login1ContractPresenter{
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         mView.closeProgressDialog();
-                        mView.loginError("登录错误1" + throwable.toString());
                         KLog.e(throwable.getMessage());
                         throwable.printStackTrace();
                     }
@@ -74,7 +73,6 @@ public class Login1Presenter implements Login1Contract.Login1ContractPresenter{
                         //onComplete
                         KLog.i("onComplete");
                         mView.closeProgressDialog();
-                        mView.loginError("登录错误2");
                     }
                 });
         mCompositeDisposable.add(disposable);
