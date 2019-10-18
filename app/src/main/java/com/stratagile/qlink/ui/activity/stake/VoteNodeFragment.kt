@@ -191,10 +191,12 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         etStakeDays.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if ("".equals(p0!!.toString())) {
+                    invoke.background = resources.getDrawable(R.drawable.unable_bt_bg)
+                    invoke.isEnabled = false
                     return
                 }
                 if (p0!!.toString().toInt() >= 10) {
-                    if (etStakeQlcAmount.text.toString().trim().toInt() >= 1 && neoWallet != null && qlcWallet != null) {
+                    if (!"".equals(etStakeQlcAmount.text.toString().trim()) && etStakeQlcAmount.text.toString().trim().toInt() >= 1 && neoWallet != null && qlcWallet != null) {
                         invoke.background = resources.getDrawable(R.drawable.main_color_bt_bg)
                         invoke.isEnabled = true
                     } else {
@@ -212,6 +214,31 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
+        })
+        etStakeQlcAmount.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if ("".equals(s!!.toString())) {
+                    invoke.background = resources.getDrawable(R.drawable.unable_bt_bg)
+                    invoke.isEnabled = false
+                    return
+                }
+                if (!"".equals(etStakeDays.text.toString().trim()) && etStakeDays.text.toString().trim().toInt() >= 10 && neoWallet != null && qlcWallet != null) {
+                    invoke.background = resources.getDrawable(R.drawable.main_color_bt_bg)
+                    invoke.isEnabled = true
+                } else {
+                    invoke.background = resources.getDrawable(R.drawable.unable_bt_bg)
+                    invoke.isEnabled = false
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
         })
     }
 
@@ -244,7 +271,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     KLog.i(nodeResponse.toString())
                     if (nodeResponse.errors == null && nodeResponse.block_hash != null) {
                         prePareBenefitPledge(lockResult = lockResult)
-                    }  else {
+                    } else {
                         launch {
                             delay(3000)
                             getNep5Txid(lockResult)
@@ -282,14 +309,14 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
             sweetAlertDialog.cancel()
             try {
                 checkTxid(etContent.text.toString().trim())
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
 
-    fun checkTxid(txid :String) {
+    fun checkTxid(txid: String) {
         if ("".equals(txid.trim())) {
             return
         }
@@ -310,7 +337,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                         toast("this txid is pledged")
                     }
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
                     closeProgressDialog()
@@ -323,7 +350,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     /**
      * 抵押未成功的处理
      */
-    fun recoverStake(txid : String) {
+    fun recoverStake(txid: String) {
         thread {
             try {
                 val client = QlcClient("https://nep5.qlcchain.online")
@@ -341,10 +368,10 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     lockResult.stakeType.toAddress = lockInfo.result.multiSigAddress
                     lockResult.stakeType.qlcchainAddress = lockInfo.result.qlcAddress
                     lockResult.txid = txid
-                    var oneDay = 60*60*24
+                    var oneDay = 60 * 60 * 24
                     var lockDays = (lockInfo.result.unLockTimestamp - lockInfo.result.lockTimestamp) / oneDay
 
-                    lockResult.stakeType.stakeQLcAmount = lockInfo.result.amount.toBigDecimal().divide(10.toBigDecimal().pow(8), 8,  BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                    lockResult.stakeType.stakeQLcAmount = lockInfo.result.amount.toBigDecimal().divide(10.toBigDecimal().pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
                     var neoList = AppConfig.instance.daoSession.walletDao.loadAll()
                     neoList.forEach {
                         if (it.address.equals(lockResult.stakeType.fromNeoAddress)) {
@@ -392,7 +419,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                         toast("txid is unlock")
                     }
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
                     closeProgressDialog()

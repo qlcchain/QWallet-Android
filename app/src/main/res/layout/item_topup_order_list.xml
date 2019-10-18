@@ -156,40 +156,146 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:visibility="gone"
-                android:id="@+id/cancelOrder"
-                android:layout_width="wrap_content"
-                android:text="@string/cancellation_of_order"
-                android:textColor="@color/color_999"
-                android:background="@drawable/bt_999_bg"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textSize="13sp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/payOrder"
-                android:layout_width="wrap_content"
-                android:text="@string/immediate_payment"
-                android:background="@drawable/bt_ff3669_bg"
-                android:layout_marginLeft="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textColor="@color/color_ff3669"
-                android:textSize="13sp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                android:layout_height="wrap_content"/>
-
-            <TextView
                 android:id="@+id/orderState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/x4"
                 android:textColor="@color/color_808080"
                 android:textSize="13sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:id="@+id/llVoucher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textColor="@color/color_1e1e24"
+                android:text="链上充值凭证"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txid"
+                android:layout_width="wrap_content"
+                android:ellipsize="middle"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:drawableRight="@mipmap/icon_enter1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x4"
+                android:textColor="@color/color_808080"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/orderOpreate"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="12dp"
+                android:background="@color/color_f2f2f2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/x20"
+                android:layout_marginRight="@dimen/x20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/cancelOrder"
+                    android:layout_width="wrap_content"
+                    android:text="@string/cancellation_of_order"
+                    android:textColor="@color/color_999"
+                    android:background="@drawable/bt_999_bg"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:textSize="13sp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/payOrder"
+                    android:layout_width="wrap_content"
+                    android:text="@string/immediate_payment"
+                    android:background="@drawable/bt_ff3669_bg"
+                    android:layout_marginLeft="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/color_ff3669"
+                    android:textSize="13sp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/voucherDetail"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="12dp"
+                android:background="@color/color_f2f2f2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/x20"
+                android:layout_marginRight="@dimen/x20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:textColor="@color/color_1e1e24"
+                    android:text="凭证详情"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/background_reim"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/icon_enter1"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

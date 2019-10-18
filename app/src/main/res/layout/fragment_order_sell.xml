@@ -301,7 +301,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
+            android:layout_height="1dp"
             android:layout_marginLeft="@dimen/x30"
             android:background="@color/color_f2f2f2"/>
 
@@ -372,7 +372,7 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
+            android:layout_height="1dp"
             android:layout_marginTop="@dimen/x10"
             android:layout_marginLeft="@dimen/x30"
             android:background="@color/color_f2f2f2"/>

@@ -81,6 +81,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         topupOrderListAdapter = TopupOrderListAdapter(ArrayList())
         topupOrderListAdapter.setEnableLoadMore(true)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, this)))
+        refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
         recyclerView.adapter = topupOrderListAdapter
         currentPage = 1
         var map = hashMapOf<String, String>()
@@ -133,6 +134,15 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
                 R.id.cancelOrder -> {
                     showCancelDialog(position)
                 }
+                R.id.llVoucher -> {
+                    val intent1 = Intent()
+                    intent1.action = "android.intent.action.VIEW"
+                    intent1.data = Uri.parse("https://explorer.qlcchain.org/transaction/" + topupOrderListAdapter.data[position].txid)
+                    startActivity(intent1)
+                }
+                R.id.voucherDetail -> {
+                    startActivity(Intent(this, VoucherDetailActivity::class.java).putExtra("orderBean", topupOrderListAdapter.data[position]))
+                }
             }
         }
         refreshLayout.setOnRefreshListener {
@@ -152,10 +162,9 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
             if ("QGAS_PAID".equals(topupOrderListAdapter.data[position].status)) {
                 var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=${topupOrderListAdapter.data[position].originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${topupOrderListAdapter.data[position].phoneNumber}"
 //                var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=0&mobile=${topupOrderListAdapter.data[position].phoneNumber}"
-                KLog.i(url)
-//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-//                startActivity(intent)
 
+
+                KLog.i(url)
                 paymentOk = false
                 val intent = Intent(this, WebViewActivity::class.java)
                 intent.putExtra("url", url)

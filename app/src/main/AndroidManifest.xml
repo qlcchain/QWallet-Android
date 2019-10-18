@@ -250,6 +250,7 @@
         <activity android:name=".ui.activity.topup.TopupOrderListActivity" />
         <activity android:name=".ui.activity.reward.MyClaimActivity" />
         <activity android:name=".ui.activity.reward.ClaimRewardActivity" />
+        <activity android:name=".ui.activity.topup.VoucherDetailActivity" />
 
 
         <meta-data

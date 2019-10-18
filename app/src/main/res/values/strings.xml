@@ -1596,4 +1596,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="claim_entitled_qgas_earnings_everyday">Claim entitled QGAS earnings everyday</string>
     <string name="receive_now">Receive Now</string>
     <string name="bind_success">bind success</string>
+    <string name="user_data_error">user data error</string>
 </resources>

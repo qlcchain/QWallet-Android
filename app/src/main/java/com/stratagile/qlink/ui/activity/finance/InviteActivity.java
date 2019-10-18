@@ -118,21 +118,25 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
                 ToastUtil.displayShortToast(getString(R.string.copy_success));
             }
         });
-        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
-            //英文
-            ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_en));
-        } else {
-            ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_ch));
-        }
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
     protected void initData() {
         setTitle(getString(R.string.share_with_friends));
-        tvIniviteCode.setText(ConstantValue.currentUser.getInviteCode());
-        getOneFriendReward();
+        if (ConstantValue.currentUser != null) {
+            tvIniviteCode.setText(ConstantValue.currentUser.getInviteCode());
+            if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+                //英文
+                ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_en));
+            } else {
+                ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_ch));
+            }
+            getOneFriendReward();
+        } else {
+            ToastUtil.displayShortToast(getString(R.string.user_data_error));
+        }
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
 
         tvInivteNow.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,8 @@
 package com.stratagile.qlink.entity.topup;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.stratagile.qlink.entity.BaseBack;
 
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
         this.orderList = orderList;
     }
 
-    public static class OrderListBean {
+    public static class OrderListBean implements Parcelable {
 
         /**
          * productIspEn : 移动
@@ -49,12 +52,57 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
         private String userId;
         private String productName;
         private String number;
+        private String txid;
         private double qgasAmount;
         private String productProvinceEn;
         private String areaCode;
         private String phoneNumber;
         private String orderTime;
         private String productNameEn;
+
+        protected OrderListBean(Parcel in) {
+            productIspEn = in.readString();
+            originalPrice = in.readDouble();
+            discountPrice = in.readDouble();
+            productCountryEn = in.readString();
+            productIsp = in.readString();
+            type = in.readString();
+            userId = in.readString();
+            productName = in.readString();
+            number = in.readString();
+            txid = in.readString();
+            qgasAmount = in.readDouble();
+            productProvinceEn = in.readString();
+            areaCode = in.readString();
+            phoneNumber = in.readString();
+            orderTime = in.readString();
+            productNameEn = in.readString();
+            productCountry = in.readString();
+            id = in.readString();
+            productProvince = in.readString();
+            status = in.readString();
+        }
+
+        public static final Creator<OrderListBean> CREATOR = new Creator<OrderListBean>() {
+            @Override
+            public OrderListBean createFromParcel(Parcel in) {
+                return new OrderListBean(in);
+            }
+
+            @Override
+            public OrderListBean[] newArray(int size) {
+                return new OrderListBean[size];
+            }
+        };
+
+        public String getTxid() {
+            return txid;
+        }
+
+        public void setTxid(String txid) {
+            this.txid = txid;
+        }
+
         private String productCountry;
         private String id;
         private String productProvince;
@@ -210,6 +258,35 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(productIspEn);
+            dest.writeDouble(originalPrice);
+            dest.writeDouble(discountPrice);
+            dest.writeString(productCountryEn);
+            dest.writeString(productIsp);
+            dest.writeString(type);
+            dest.writeString(userId);
+            dest.writeString(productName);
+            dest.writeString(number);
+            dest.writeString(txid);
+            dest.writeDouble(qgasAmount);
+            dest.writeString(productProvinceEn);
+            dest.writeString(areaCode);
+            dest.writeString(phoneNumber);
+            dest.writeString(orderTime);
+            dest.writeString(productNameEn);
+            dest.writeString(productCountry);
+            dest.writeString(id);
+            dest.writeString(productProvince);
+            dest.writeString(status);
         }
     }
 }

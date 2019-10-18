@@ -26,6 +26,7 @@ import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardTotal;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;

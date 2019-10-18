@@ -36,11 +36,12 @@ public final class RequestBodyInterceptor implements Interceptor {
 
         Request.Builder orgRequestBuilder = orgRequest
                 .newBuilder();
+//                .header("User-Agent", "android")
+//                .header("user-Agent", "android");
 //                .header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEwOTksImlzcyI6Imh0dHA6Ly9jaGluYS5pbndlY3J5cHRvLmNvbTo0NDMxL3YyL2xvZ2luIiwiaWF0IjoxNTI0NjQyOTAwLCJleHAiOjE1MjUyNDc3MDAsIm5iZiI6MTUyNDY0MjkwMCwianRpIjoiSTdsemdRcXBBVEdudmFIayJ9.GIQyWMZe5pQ5N7I2YGJecnNVrInYe73oqVQJlEyD4x4")
 //                .header("neo-asset-id", "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b")
 //                .header("neo-gas-asset-id", "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7");
         //请求定制：添加请求头
-//                .header("APIKEY", Constant.API_KEY);
         if (orgRequest.body() == null) {
             return chain.proceed(orgRequest);
         }

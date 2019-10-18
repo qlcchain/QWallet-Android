@@ -24,6 +24,7 @@ import com.stratagile.qlink.ui.activity.my.contract.RegiesterContract;
 import com.stratagile.qlink.ui.activity.my.module.RegiesterModule;
 import com.stratagile.qlink.ui.activity.my.presenter.RegiesterPresenter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -121,12 +122,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     public void registerSuccess(VcodeLogin register) {
         closeProgressDialog();
         if (register.getCode().equals("0")) {
-            mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "register");
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "register");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "register");
-            mFirebaseAnalytics.logEvent("register", bundle);
+            FireBaseUtils.logEvent(getActivity(), FireBaseUtils.eventRegiester);
             closeProgressDialog();
             ToastUtil.displayShortToast(getString(R.string.register_success));
             UserAccount userAccount = new UserAccount();

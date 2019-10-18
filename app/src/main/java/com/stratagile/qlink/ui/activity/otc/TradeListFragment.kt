@@ -60,6 +60,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
 
     var currentOrderType = ConstantValue.orderTypeSell
     var currentPage = 0
+    var tradeToken = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_trade_list, null)
         ButterKnife.bind(this, view)
@@ -70,9 +71,12 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         KLog.i("------>>>>重建fragment。。。" + arguments!!["tradeToken"])
+        tradeToken = arguments!!["tradeToken"] as String
+        KLog.i("tradeToken------>>> " + tradeToken)
         entrustOrderListAdapter = EntrustOrderListAdapter(ArrayList())
         entrustOrderListAdapter.setEnableLoadMore(true)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(activity!!.resources.getDimension(R.dimen.x20).toInt()))
+        refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
         recyclerView.setAdapter(entrustOrderListAdapter)
         currentOrderType = ConstantValue.orderTypeSell
         viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -157,14 +161,15 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         currentPage++
         refreshLayout.setRefreshing(false)
         var map = HashMap<String, String>()
-        map.put("userId", "");
+        map.put("userId", "")
         map.put("type", currentOrderType)
         map.put("page", currentPage.toString())
         map.put("size", "5")
         var pairsId = arrayListOf<String>()
         var pairsIds = ""
+        KLog.i("tradeToken--->> " + tradeToken)
         viewModel!!.pairsLiveData.value!!.forEach {
-            if (it.tradeToken.equals(arguments!!["tradeToken"]) && it.isSelect) {
+            if (it.tradeToken.equals(tradeToken) && it.isSelect) {
                 pairsId.add(it.id)
                 pairsIds += it.id + ","
             }

@@ -27,6 +27,7 @@ import com.stratagile.qlink.ui.activity.my.contract.Login1Contract;
 import com.stratagile.qlink.ui.activity.my.module.Login1Module;
 import com.stratagile.qlink.ui.activity.my.presenter.Login1Presenter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -289,12 +290,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     public void loginSuccess(Register register) {
         closeProgressDialog();
         ToastUtil.displayShortToast(getString(R.string.Login_success));
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "login");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "login");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "login");
-        mFirebaseAnalytics.logEvent("login", bundle);
+        FireBaseUtils.logEvent(getActivity(), FireBaseUtils.eventLogin);
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         if (userAccounts.size() > 0) {
             for (UserAccount userAccount : userAccounts) {

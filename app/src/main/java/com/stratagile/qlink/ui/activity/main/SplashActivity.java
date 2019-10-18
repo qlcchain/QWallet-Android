@@ -20,6 +20,7 @@ import com.stratagile.qlink.ui.activity.main.contract.SplashContract;
 import com.stratagile.qlink.ui.activity.main.module.SplashModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SplashPresenter;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.SpUtil;
@@ -64,10 +65,11 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     protected void initData() {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "startApp");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "startApp");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "startApp");
-        mFirebaseAnalytics.logEvent("startApp", bundle);
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "startApp");
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "startApp");
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "startApp");
+//        mFirebaseAnalytics.logEvent("startApp", bundle);
+        FireBaseUtils.logEvent(this, FireBaseUtils.eventStartApp);
         SpUtil.putLong(AppConfig.getInstance(),ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
         mPresenter.getLastVersion();
         mPresenter.getPermission();

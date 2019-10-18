@@ -59,6 +59,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
         topupShowProductAdapter = TopupShowProductAdapter(arrayListOf())
         recyclerView.adapter = topupShowProductAdapter
+        refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
         recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, activity!!)))
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
             if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {

@@ -76,6 +76,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
 
     override fun initView() {
         setContentView(R.layout.activity_my_stake)
+        refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -96,15 +97,26 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
 
     override fun initData() {
         title.text = getString(R.string.my_stakeings)
-        qlcWallet = AppConfig.instance.daoSession.qlcAccountDao.loadAll().filter { it.isCurrent() }[0]
+        var hasWallet = false
+        var wallets = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+        wallets.forEach {
+            if (it.isCurrent()) {
+                qlcWallet = it
+                hasWallet = true
+            }
+        }
+        if (!hasWallet) {
+            qlcWallet = wallets[0]
+        }
         newStaking.setOnClickListener {
             startActivityForResult(Intent(this, NewStakeActivity::class.java), 1)
         }
         myStakeAdapter = MyStakeAdapter(arrayListOf())
         myStakeAdapter.setEnableLoadMore(true)
         refreshLayout.setOnRefreshListener {
-            try {
-                thread {
+
+            thread {
+                try {
                     val client = QlcClient("https://nep5.qlcchain.online")
                     val params = JSONArray()
                     params.add(qlcWallet.address)
@@ -119,9 +131,9 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
                         myStakeAdapter.setNewData(myStakeList.result)
                         setStakedQlcAmount()
                     }
-                }
-            } catch (e: java.lang.Exception) {
+                } catch (e: java.lang.Exception) {
 
+                }
             }
         }
         myStakeAdapter.setOnLoadMoreListener({ getMoreStake() }, recyclerView)

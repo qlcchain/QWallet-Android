@@ -1031,4 +1031,5 @@
     <string name="claim_entitled_qgas_earnings_everyday">每日免费赚QGAS收益</string>
     <string name="receive_now">立即领取</string>
     <string name="bind_success">绑定成功</string>
+    <string name="user_data_error">用户数据错误</string>
 </resources>
