@@ -41,6 +41,8 @@ import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.DaoMaster;
 import com.stratagile.qlink.db.DaoSession;
 import com.stratagile.qlink.db.MySQLiteOpenHelper;
@@ -130,6 +132,12 @@ public class AppConfig extends MultiDexApplication {
             .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
+    public RequestOptions optionsTopup = new RequestOptions()
+            .centerCrop()
+            .placeholder(R.mipmap.guangdong_mobile)
+            .error(R.mipmap.guangdong_mobile)
+            .priority(Priority.HIGH);
+
     public RequestOptions optionsMainColor = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
@@ -208,6 +216,14 @@ public class AppConfig extends MultiDexApplication {
         return null;
     }
 
+    public String getBaseUrl() {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return MainAPI.MainBASE_URL;
+        } else {
+            return API.BASE_URL;
+        }
+    }
+
     public void saveLog(String mode, String operation, String log) {
         HashMap<String, String> infoMap = new HashMap<>();
         infoMap.put("appName", "QWallet");
@@ -241,11 +257,12 @@ public class AppConfig extends MultiDexApplication {
 
 
     private void setMode() {
-        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
-            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
-        } else {
-            ConstantValue.qlcNode = "http://47.103.40.20:19735";
-        }
+        ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+//        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
+//            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+//        } else {
+//            ConstantValue.qlcNode = "http://47.103.40.20:19735";
+//        }
     }
 
     private void updateNotificationChannels() {

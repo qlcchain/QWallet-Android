@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.telecom.Call
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pawegio.kandroid.alert
@@ -19,6 +20,7 @@ import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.SwitchToOtc
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupProduct
@@ -36,6 +38,8 @@ import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import kotlinx.android.synthetic.main.activity_topup_qlc_pay.*
 import org.greenrobot.eventbus.EventBus
+import retrofit2.http.GET
+import retrofit2.http.Url
 import java.io.File
 import java.lang.Error
 import java.math.BigDecimal
@@ -56,7 +60,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     override fun createTopupOrderSuccess(topupOrder: TopupOrder) {
         closeProgressDialog()
         //mm_1000001_949caa0a0d8b4f2c81dd1750e8e867de_2148498a37484faf96c9717ba56bd809
-        var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
+        var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
 //        var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=0&mobile=${intent.getStringExtra("phoneNumber")}"
         val intent = Intent(this, WebViewActivity::class.java)
         intent.putExtra("url", url)

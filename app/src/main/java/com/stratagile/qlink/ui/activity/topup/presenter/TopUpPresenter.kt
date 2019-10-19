@@ -1,6 +1,9 @@
 package com.stratagile.qlink.ui.activity.topup.presenter
 import android.support.annotation.NonNull
+import com.socks.library.KLog
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.entity.InviteList
+import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.topup.contract.TopUpContract
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment
 import javax.inject.Inject
@@ -43,5 +46,41 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }, {
             mView.closeProgressDialog()
         }))
+    }
+
+    fun getInivteRank(map: Map<*, *>) {
+        val disposable = httpAPIWrapper.getInivteTop5(map)
+                .subscribe({ user ->
+                    //isSuccesse
+                    //mView.closeProgressDialog();
+                    mView.setInviteRank(user)
+                }, { throwable ->
+                    //onError
+                    throwable.printStackTrace()
+                    //mView.closeProgressDialog();
+                    //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                }, {
+                    //onComplete
+                    KLog.i("onComplete")
+                })
+        mCompositeDisposable.add(disposable)
+    }
+
+    fun getOneFriendReward(map: Map<String, String>) {
+        val disposable = httpAPIWrapper.qurryDict(map)
+                .subscribe(Consumer<Dict> { user ->
+                    //isSuccesse
+                    //mView.closeProgressDialog();
+                    mView.setOneFriendReward(user)
+                }, Consumer<Throwable> { throwable ->
+                    //onError
+                    throwable.printStackTrace()
+                    //mView.closeProgressDialog();
+                    //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                }, Action {
+                    //onComplete
+                    KLog.i("onComplete")
+                })
+        mCompositeDisposable.add(disposable)
     }
 }

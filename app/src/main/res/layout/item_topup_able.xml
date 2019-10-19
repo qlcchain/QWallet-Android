@@ -20,7 +20,7 @@
             android:layout_weight="1"
             android:layout_marginTop="15dp"
             android:textColor="@color/white"
-            android:text="中国移动通信"
+            android:text="-/-"
             android:textSize="19sp"
             android:layout_marginLeft="15dp"
             android:layout_height="wrap_content" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/white"
-            android:text="广东移动"
+            android:text="-/-"
             android:textSize="13sp"
             android:layout_marginLeft="15dp"
             android:layout_height="wrap_content" />

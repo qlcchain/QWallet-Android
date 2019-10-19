@@ -57,6 +57,7 @@ import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
+import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
@@ -462,10 +463,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (i == R.id.button21) {
-                    viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
+                if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
+                    EventBus.getDefault().post(new GetPairs());
                 } else {
-                    viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+                    if (i == R.id.button21) {
+                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
+                    } else {
+                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+                    }
                 }
             }
         });

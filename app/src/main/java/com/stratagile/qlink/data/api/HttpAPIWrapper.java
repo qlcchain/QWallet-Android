@@ -609,11 +609,12 @@ public class HttpAPIWrapper {
         }
     }
 
+    //这个接口都用主网的，不用测试网的
     public Observable<ClaimData> neoGasClaim(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
             return wrapper(mMainHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
-            return wrapper(mHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mMainHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

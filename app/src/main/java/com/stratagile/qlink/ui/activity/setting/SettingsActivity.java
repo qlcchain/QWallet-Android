@@ -21,6 +21,7 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.MyAsset;
+import com.stratagile.qlink.entity.eventbus.Logout;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.ui.activity.main.SplashActivity;
@@ -270,6 +271,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                         userAccount.setIsLogin(false);
                         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(userAccount);
                         ConstantValue.currentUser = null;
+                        EventBus.getDefault().post(new Logout());
                         setResult(1);
                         finish();
                         ToastUtil.displayShortToast(getString(R.string.logout_success));

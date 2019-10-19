@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.webkit.WebSettings
+import androidx.work.impl.Scheduler
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
@@ -13,6 +15,10 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.data.api.API
+import com.stratagile.qlink.data.api.HttpInfoInterceptor
+import com.stratagile.qlink.data.api.RequestBodyInterceptor
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
@@ -25,13 +31,26 @@ import com.stratagile.qlink.ui.adapter.topup.TopupOrderListAdapter
 import com.stratagile.qlink.utils.FileUtil
 import com.stratagile.qlink.utils.SpUtil
 import com.stratagile.qlink.utils.UIUtils
+import com.stratagile.qlink.utils.XWebViewClient
+import com.stratagile.topup.PayService
+import com.stratagile.topup.TopupInterceptor
+import com.stratagile.topup.TopupRequestInterceptor
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import kotlinx.android.synthetic.main.activity_topup_order_list.*
 import kotlinx.android.synthetic.main.activity_topup_order_list.recyclerView
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.http.GET
+import retrofit2.http.Url
 import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 import javax.inject.Inject;
+import kotlin.concurrent.thread
 
 /**
  * @author hzp
@@ -130,7 +149,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
 
         }, recyclerView)
         topupOrderListAdapter.setOnItemChildClickListener { adapter, view, position ->
-            when(view.id) {
+            when (view.id) {
                 R.id.cancelOrder -> {
                     showCancelDialog(position)
                 }
@@ -160,10 +179,8 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         }
         topupOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             if ("QGAS_PAID".equals(topupOrderListAdapter.data[position].status)) {
-                var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=${topupOrderListAdapter.data[position].originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${topupOrderListAdapter.data[position].phoneNumber}"
-//                var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=0&mobile=${topupOrderListAdapter.data[position].phoneNumber}"
-
-
+                var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?mobile=${topupOrderListAdapter.data[position].phoneNumber}&uid=1000001&sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=${topupOrderListAdapter.data[position].originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}"
+////                var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=0&mobile=${topupOrderListAdapter.data[position].phoneNumber}"
                 KLog.i(url)
                 paymentOk = false
                 val intent = Intent(this, WebViewActivity::class.java)
@@ -173,7 +190,6 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
             }
         }
     }
-
     var paymentOk = false;
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -183,16 +199,16 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         }
     }
 
-    fun showCancelDialog(position : Int) {
+    fun showCancelDialog(position: Int) {
         alert(getString(R.string.are_you_sure_want_to_cancel_the_order)) {
-            negativeButton (getString(R.string.cancel)) { dismiss() }
+            negativeButton(getString(R.string.cancel)) { dismiss() }
             positiveButton(getString(R.string.confirm)) {
                 cancelOrder(position)
             }
         }.show()
     }
 
-    fun cancelOrder(position : Int) {
+    fun cancelOrder(position: Int) {
         showProgressDialog()
         var map = hashMapOf<String, String>()
         if (ConstantValue.currentUser != null) {

@@ -29,6 +29,7 @@ import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EntrustOrderList;
+import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
@@ -54,6 +55,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -98,6 +101,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         View view = inflater.inflate(R.layout.fragment_market1, null);
         ButterKnife.bind(this, view);
         Bundle mBundle = getArguments();
+        EventBus.getDefault().register(this);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         viewModel.pairsLiveData.observe(this, new Observer<ArrayList<TradePair.PairsListBean>>() {
             @Override
@@ -159,6 +163,17 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getPairs(GetPairs getPairs) {
+        monitorPairs();
     }
 
     private void monitorPairs() {

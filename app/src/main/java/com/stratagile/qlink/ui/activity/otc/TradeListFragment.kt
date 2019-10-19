@@ -26,12 +26,14 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.UserAccount
 import com.stratagile.qlink.entity.EntrustOrderList
+import com.stratagile.qlink.entity.eventbus.GetPairs
 import com.stratagile.qlink.ui.activity.main.MainViewModel
 import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils
 import kotlinx.android.synthetic.main.fragment_trade_list.*
+import org.greenrobot.eventbus.EventBus
 import java.util.ArrayList
 
 /**
@@ -81,12 +83,16 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         currentOrderType = ConstantValue.orderTypeSell
         viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         viewModel!!.currentEntrustOrderType.observe(this, Observer<String> { s ->
+            currentPage = 0
+            KLog.i("------>>>>" + arguments!!["tradeToken"])
+            currentOrderType = s!!
+            entrustOrderListAdapter.setNewData(ArrayList())
             if (isVisibleToUser) {
-                currentPage = 0
-                KLog.i("------>>>>" + arguments!!["tradeToken"])
-                currentOrderType = s!!
-                entrustOrderListAdapter.setNewData(ArrayList())
-                getOrderList()
+                if ("".equals(tradeToken)) {
+                    EventBus.getDefault().post(GetPairs())
+                } else {
+                    getOrderList()
+                }
             }
         })
         entrustOrderListAdapter.setOnItemClickListener(BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
