@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.my;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -45,14 +50,17 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * @author hzp
@@ -197,6 +205,16 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         });
     }
 
+    private void bindPush(UserAccount userAccount) {
+        Map map = new HashMap<String, String>();
+        map.put("account", userAccount.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        map.put("appOs", "Android");
+        map.put("pushPlatform", "JIGUANG");
+        map.put("pushId", JPushInterface.getRegistrationID(getActivity()));
+        mPresenter.bindPush(map);
+    }
+
     @Override
     protected void setupFragmentComponent() {
         DaggerMyComponent
@@ -287,6 +305,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
 
     @Override
     public void setUsrInfo(UserInfo usrInfo) {
+        bindPush(ConstantValue.currentUser);
+
         if (usrInfo.getData().getBindDate() == null || "".equals(usrInfo.getData().getBindDate())) {
             viewModel.isBind.postValue(false);
         } else {
@@ -322,6 +342,17 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         } else {
             shareFriend.setDotViewVisible(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void bindPushBack() {
+        Set<String> tags = new HashSet<>();
+        tags.add(ConstantValue.userAll);
+        if (!"".equals(ConstantValue.currentUser.getBindDate())) {
+            tags.add(ConstantValue.userLend);
+        }
+        ConstantValue.jpushOpreateCount++;
+        JPushInterface.setTags(getActivity(), ConstantValue.jpushOpreateCount, tags);
     }
 
     @Override

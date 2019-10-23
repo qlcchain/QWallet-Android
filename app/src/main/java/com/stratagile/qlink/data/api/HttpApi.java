@@ -103,6 +103,7 @@ import static com.stratagile.qlink.data.api.API.ulr_user_sign_up;
 import static com.stratagile.qlink.data.api.API.url_app_version_info;
 import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
+import static com.stratagile.qlink.data.api.API.url_bind_push;
 import static com.stratagile.qlink.data.api.API.url_bind_qlcchain_wallet;
 import static com.stratagile.qlink.data.api.API.url_bnb_2_qlc;
 import static com.stratagile.qlink.data.api.API.url_contact_unlock;
@@ -160,6 +161,7 @@ import static com.stratagile.qlink.data.api.API.url_user_change_nickname;
 import static com.stratagile.qlink.data.api.API.url_user_change_password;
 import static com.stratagile.qlink.data.api.API.url_user_invite;
 import static com.stratagile.qlink.data.api.API.url_user_invite_ranking;
+import static com.stratagile.qlink.data.api.API.url_user_logout;
 import static com.stratagile.qlink.data.api.API.url_user_rich_list;
 import static com.stratagile.qlink.data.api.API.url_user_sign_in;
 import static com.stratagile.qlink.data.api.API.url_user_signin_code;
@@ -618,6 +620,16 @@ public interface HttpApi {
     @POST(url_reward_claim_invite)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ClaimQgas> claimInviteQgas(@Body RequestBody map);
+
+    @POST(url_bind_push)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> bindPush(@Body RequestBody map);
+
+    @POST(url_user_logout)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> userLogout(@Body RequestBody map);
+
+
 
     @POST(url_trade_appeal)
     @Multipart

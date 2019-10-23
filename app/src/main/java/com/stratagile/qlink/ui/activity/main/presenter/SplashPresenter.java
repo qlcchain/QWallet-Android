@@ -185,7 +185,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
 //            LocalAssetsUtils.updateGreanDaoFromLocal();
             // 权限申请成功回调。
             if (requestCode == 101) {
-//                qlinkcom.init();
+                qlinkcom.init();
                 permissionState = 0;
                 if (timeOver) {
                     if (jumpToGuest) {

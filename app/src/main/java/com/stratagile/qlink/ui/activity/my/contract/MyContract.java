@@ -29,6 +29,8 @@ public interface MyContract {
         void setCanClaimTotal(RewardTotal rewardTotal);
 
         void setCanInviteClaimTotal(InviteTotal rewardTotal);
+
+        void bindPushBack();
     }
 
     interface MyContractPresenter extends BasePresenter {

@@ -175,6 +175,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             });
             return;
         }
+        chart.setVisibility(View.VISIBLE);
         ArrayList<Entry> values = new ArrayList<>();
         for (int i = 0; i < data.getData().size(); i++) {
             long now = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(data.getData().get(i).get(0)));

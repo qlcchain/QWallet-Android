@@ -36,8 +36,10 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -45,6 +47,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -141,6 +144,16 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         isVCodeLogin = true;
         llVcode.setVisibility(View.VISIBLE);
         return true;
+    }
+
+    private void bindPush(UserAccount userAccount) {
+        Map map = new HashMap<String, String>();
+        map.put("account", userAccount.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        map.put("appOs", "Android");
+        map.put("pushPlatform", "JIGUANG");
+        map.put("pushId", JPushInterface.getRegistrationID(getActivity()));
+        mPresenter.bindPush(map);
     }
 
 
@@ -307,6 +320,15 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 }
             }
         }
+        Set<String> tags = new HashSet<>();
+        tags.add(ConstantValue.userAll);
+        if (!"".equals(ConstantValue.currentUser.getBindDate())) {
+            tags.add(ConstantValue.userLend);
+        }
+        ConstantValue.jpushOpreateCount++;
+        JPushInterface.setTags(getActivity(), ConstantValue.jpushOpreateCount, tags);
+
+        bindPush(ConstantValue.currentUser);
         EventBus.getDefault().post(new LoginSuccess());
         getActivity().finish();
     }

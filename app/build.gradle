@@ -26,6 +26,12 @@ android {
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
         }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "0b552b82816c33ceda8a8d16", //JPush 上注册的包名对应的 Appkey.
+//                JPUSH_APPKEY : "75f163203819cc97f4ba16b8", //测试
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     // 取消掉系统对.9图片的检查
     aaptOptions.cruncherEnabled = false
@@ -276,6 +282,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
     implementation 'com.google.guava:guava:28.1-jre'
+
+    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
 
 
 }

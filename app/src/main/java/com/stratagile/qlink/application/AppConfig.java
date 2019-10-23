@@ -30,6 +30,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.webkit.WebView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -84,6 +86,7 @@ import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
@@ -161,6 +164,11 @@ public class AppConfig extends MultiDexApplication {
 
     }
 
+    private void initJpush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -179,13 +187,14 @@ public class AppConfig extends MultiDexApplication {
         NickUtil.initUserNickName(this);
         initDbUpdate();
         initResumeListener();
-        initMiPush();
+//        initMiPush();
         setMode();
+        initJpush();
         setLanguage(false);
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
         updateNotificationChannels();
-
+        initGlide();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             String processName = getProcessName(this);
             if (!"com.stratagile.qwallet".equals(processName)){//判断不等于默认进程名称
@@ -203,6 +212,12 @@ public class AppConfig extends MultiDexApplication {
 //        adb shell setprop debug.firebase.analytics.app <com.stratagile.qwallet>
 //        adb shell setprop debug.firebase.analytics.app com.stratagile.qwallet
         // adb shell setprop debug.firebase.analytics.app .none.
+    }
+
+    private void initGlide() {
+        GlideBuilder glideBuilder = new GlideBuilder();
+        glideBuilder.setLogLevel(Log.ERROR);
+        Glide.init(this, glideBuilder);
     }
 
     public  String getProcessName(Context context) {

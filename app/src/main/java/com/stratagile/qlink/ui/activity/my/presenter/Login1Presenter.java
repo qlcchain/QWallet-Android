@@ -131,4 +131,25 @@ public class Login1Presenter implements Login1Contract.Login1ContractPresenter{
         mCompositeDisposable.add(disposable);
     }
 
+    public void bindPush(Map map) {
+        mCompositeDisposable.add(httpAPIWrapper.bindPush(map).subscribe(new Consumer<BaseBack>() {
+            @Override
+            public void accept(BaseBack user) throws Exception {
+                //isSuccesse
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
+    }
+
 }

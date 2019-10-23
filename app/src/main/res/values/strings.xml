@@ -1055,7 +1055,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
 
     <string name="success">success</string>
     <string name="me">Me</string>
-    <string name="finance">Finance</string>
+    <string name="finance">Trades</string>
     <string name="email">Email</string>
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>
@@ -1549,7 +1549,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="telephone_bill">Phone top up</string>
     <string name="recharge_number">Top-up number</string>
     <string name="payment_amount">Payment amount</string>
-    <string name="slow_charging">Slow top-up</string>
+    <string name="slow_charging">Top-up</string>
     <string name="qgas_is_not_in_the_accounts">Your QGAS is on its way!</string>
     <string name="qgas_paid_not_in_the_telephone_fee">Unpaid</string>
     <string name="recharge">In progress</string>
@@ -1597,4 +1597,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="receive_now">Receive Now</string>
     <string name="bind_success">bind success</string>
     <string name="user_data_error">user data error</string>
+    <string name="free_qlc_lending">Free QLC Lending</string>
 </resources>

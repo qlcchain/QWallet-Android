@@ -17,7 +17,7 @@ class RewardListAdapter(arrayList : ArrayList<RewardList.RewardListBean>) : Base
         } else {
             helper.setVisible(R.id.viewLine, true)
         }
-        helper.setText(R.id.tvTime, item.rewardDate)
+        helper.setText(R.id.tvTime, TimeUtil.timeConvert(item.rewardDate))
         helper.setText(R.id.tvRewardEarn, "+" + item.rewardAmount + " QGAS")
     }
 }

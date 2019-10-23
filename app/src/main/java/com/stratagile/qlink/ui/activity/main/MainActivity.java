@@ -118,8 +118,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.zip.Inflater;
 
@@ -128,6 +130,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import qlc.utils.Helper;
 
@@ -392,9 +395,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void bindSuccess() {
-        ToastUtil.displayShortToast(getString(R.string.bind_success));
         ConstantValue.currentUser.setBindDate(TimeUtil.getTime());
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+        Set<String> tags = new HashSet<>();
+        tags.add(ConstantValue.userAll);
+        if (!"".equals(ConstantValue.currentUser.getBindDate())) {
+            tags.add(ConstantValue.userLend);
+        }
+        ConstantValue.jpushOpreateCount++;
+        JPushInterface.setTags(this, ConstantValue.jpushOpreateCount, tags);
+        ToastUtil.displayShortToast(getString(R.string.bind_success));
     }
 
     @Override
@@ -724,6 +734,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Glide.with(this)
                 .load(R.mipmap.icon_protfolio_more)
                 .into(ivAvater);
+        if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
+            EventBus.getDefault().post(new GetPairs());
+        }
     }
 
     private void setAllWalletPage() {

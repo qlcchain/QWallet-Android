@@ -1,91 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@color/color_f2f2f2"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical">
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/main_bg_shape"
-        android:gravity="center_horizontal"
         android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="@string/total_staking_volume_qlc"
-            android:layout_marginTop="15dp"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tvStakeVol"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/white"
-            android:textSize="23sp"
-            android:text="-/-"
-            android:layout_height="wrap_content" />
-        <LinearLayout
+
+        <View
+            android:id="@+id/view1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="12dp"
-            android:orientation="horizontal">
+            android:background="@drawable/main_bg_shape"
+            android:layout_height="130dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_below="@+id/view1"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="90dp"/>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
 
+            android:layout_height="wrap_content">
             <LinearLayout
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/staking_amount_qlc"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:text="@string/total_staking_volume_qlc"
+                    android:layout_marginTop="15dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_29282a"
+                    android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/tvStakedQlc"
+                    android:id="@+id/tvStakeVol"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="23sp"
                     android:text="-/-"
-                    android:textColor="@color/white"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="@dimen/x2"
-                android:layout_height="@dimen/x88"
-                android:background="@color/color_f2f2f2" />
-
-            <LinearLayout
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:id="@+id/tvQlcCount"
-                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/earnings_qgas"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/staking_amount_qlc"
+                            android:textColor="@color/color_29282a"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvStakedQlc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-/-"
+                            android:textColor="@color/color_29282a"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/x2"
+                        android:layout_height="@dimen/x88"
+                        android:background="@color/color_f2f2f2" />
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tvQlcCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/earnings_qgas"
+                            android:textColor="@color/color_29282a"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvEarnQgas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-/-"
+                            android:textColor="@color/color_29282a"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
                 <TextView
-                    android:id="@+id/tvEarnQgas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-/-"
+                    android:id="@+id/newStaking"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/main_color_bt_bg"
+                    android:gravity="center"
+                    android:text="@string/invoke_new_staking"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="15sp"
+                    android:layout_height="38dp" />
+
             </LinearLayout>
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llQlcLendFree"
+        android:layout_width="match_parent"
+        android:background="@drawable/bg_white_6dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
+        android:layout_marginRight="15dp"
+        android:layout_height="48dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/free_lending" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginLeft="15dp"
+            android:text="@string/free_qlc_lending"
+            android:textColor="@color/color_29282a"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/details"
+            android:textColor="@color/color_808080"
+            android:layout_marginRight="15dp"
+            android:textSize="12sp"
+            android:drawableRight="@mipmap/icon_enter1"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
@@ -102,19 +175,4 @@
 
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
-    <LinearLayout
-        android:id="@+id/newStaking"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="57dp">
-        <TextView
-            android:layout_width="331dp"
-            android:background="@drawable/main_color_bt_bg"
-            android:gravity="center"
-            android:text="@string/invoke_new_staking"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:layout_height="38dp" />
-    </LinearLayout>
 </LinearLayout>

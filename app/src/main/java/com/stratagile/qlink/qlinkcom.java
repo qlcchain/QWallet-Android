@@ -101,18 +101,18 @@ public class qlinkcom {
                     btcFile.mkdir();
                 }
                 String path = dataFile.getPath() + "/";
-                try {
-                    if (qlinkcom.GetP2PConnectionStatus() <= 0) {
-                        KLog.i("test_开始连接");
-                        CreatedP2PNetwork(path);
-                    }else {
-                        EventBus.getDefault().post(new MyStatus(qlinkcom.GetP2PConnectionStatus()));
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                KLog.i("CreatedP2PNetwork方法退出了。。。。。。。。。。。。。");
+//                try {
+//                    if (qlinkcom.GetP2PConnectionStatus() <= 0) {
+//                        KLog.i("test_开始连接");
+//                        CreatedP2PNetwork(path);
+//                    }else {
+//                        EventBus.getDefault().post(new MyStatus(qlinkcom.GetP2PConnectionStatus()));
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                KLog.i("CreatedP2PNetwork方法退出了。。。。。。。。。。。。。");
             }
         }).start();
     }

@@ -11,11 +11,12 @@ import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.topup.Area
 import com.stratagile.qlink.utils.SpUtil
+import com.stratagile.qlink.utils.TimeUtil
 import com.stratagile.qlink.view.SmoothCheckBox
 
 class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : BaseQuickAdapter<TopupOrderList.OrderListBean, BaseViewHolder>(R.layout.item_topup_order_list, array) {
     override fun convert(helper: BaseViewHolder, item: TopupOrderList.OrderListBean) {
-        helper.setText(R.id.tvOrderTime, item.orderTime)
+        helper.setText(R.id.tvOrderTime, TimeUtil.timeConvert(item.orderTime))
         helper.setText(R.id.phoneNumber, item.areaCode + item.phoneNumber)
         helper.setText(R.id.price, item.originalPrice.toString())
         helper.setText(R.id.txid, item.txid)
@@ -28,9 +29,9 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
         helper.addOnClickListener(R.id.voucherDetail)
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {
             //英文
-            helper.setText(R.id.opreator, item.productCountryEn + item.productIspEn + "-" + item.productNameEn)
+            helper.setText(R.id.opreator, item.productCountryEn + item.productProvinceEn + item.productIspEn + "-" + item.productNameEn)
         } else {
-            helper.setText(R.id.opreator, item.productCountry + item.productIsp + "-" + item.productName)
+            helper.setText(R.id.opreator, item.productCountry + item.productProvince + item.productIsp + "-" + item.productName)
         }
         when(item.status) {
             "NEW" -> {

@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -89,7 +90,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
             cm.primaryClip = mClipData
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
-        tvOrderTime.text = tradeOrderDetail.order.orderTime
+        tvOrderTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.orderTime)
         if (mTradeOrderDetail.order.buyerId.equals(ConstantValue.currentUser.userId)) {
             //我买
             tvOtherUser.text = getString(R.string.seller)
@@ -207,7 +208,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.visibility = View.GONE
                     tvOpreate3.visibility = View.VISIBLE
                     llOrderPayTime.visibility = View.VISIBLE
-                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
                     viewLine.visibility = View.GONE
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
@@ -227,7 +228,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         }
                     }
                     tvOpreate3.setOnClickListener {
-                        var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
+                        var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
@@ -251,7 +252,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.visibility = View.GONE
                     tvOpreate3.visibility = View.VISIBLE
                     llOrderPayTime.visibility = View.VISIBLE
-                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
                     viewLine.visibility = View.GONE
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
@@ -271,7 +272,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         }
                     }
                     tvOpreate3.setOnClickListener {
-                        var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
+                        var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
@@ -319,13 +320,13 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     viewLine.visibility = View.GONE
 
                     llOrderPayTime.visibility = View.VISIBLE
-                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
 
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
 
                     llOrderSuccessTime.visibility = View.VISIBLE
-                    tvOrderSuccessTime.text = tradeOrderDetail.order.sellerConfirmDate
+                    tvOrderSuccessTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.sellerConfirmDate)
 
                     llPayAddress.visibility = View.VISIBLE
                     tvPayAddressTip.text = getString(R.string.send_to)
@@ -387,7 +388,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.visibility = View.GONE
                     tvOpreate3.visibility = View.GONE
                     viewLine.visibility = View.GONE
-                    var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
                     remainTime = tradeOrderExistTime - remainTime
                     if (remainTime > 0) {
                         mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
@@ -430,7 +431,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.text = tradeOrderDetail.order.txid
 
                     llOrderPayTime.visibility = View.VISIBLE
-                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
 
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -451,7 +452,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         }
                     }
                     tvOpreate2.setOnClickListener {
-                        var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
+                        var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
@@ -490,7 +491,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.text = tradeOrderDetail.order.txid
 
                     llOrderPayTime.visibility = View.VISIBLE
-                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
 
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -511,7 +512,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                         }
                     }
                     tvOpreate2.setOnClickListener {
-                        var remainTime = (System.currentTimeMillis() - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
+                        var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.buyerConfirmDate)) / 1000
                         remainTime = tradeOrderExistTime - remainTime
                         if (remainTime > 0) {
                             alert(getString(R.string.please_be_patiently_it_hasnot_been_30_minutes)) {
@@ -560,13 +561,13 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     viewLine.visibility = View.GONE
 
                     llOrderPayTime.visibility = View.VISIBLE
-                    tvOrderPayTime.text = tradeOrderDetail.order.buyerConfirmDate
+                    tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
 
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
 
                     llOrderSuccessTime.visibility = View.VISIBLE
-                    tvOrderSuccessTime.text = tradeOrderDetail.order.sellerConfirmDate
+                    tvOrderSuccessTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.sellerConfirmDate)
 
                     llPayAddress.visibility = View.VISIBLE
                     tvPayAddressTip.text = getString(R.string.send_to)

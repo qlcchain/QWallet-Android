@@ -27,7 +27,7 @@ import javax.inject.Inject;
 
 /**
  * @author hzp
- * @Package com.stratagile.qlink.ui.activity.claim
+ * @Package com.stratagile.qlink.ui.activity.claim.MyClaimActivity
  * @Description: $description
  * @date 2019/10/09 11:57:31
  */

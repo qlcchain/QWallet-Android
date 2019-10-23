@@ -103,6 +103,17 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         Bundle mBundle = getArguments();
         EventBus.getDefault().register(this);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+
+        String local = FileUtil.getStrDataFromFile(new File(Environment.getExternalStorageDirectory() + "/Qwallet/tradePair.json"));
+        Gson gson = new Gson();
+        if (!"".equals(local)) {
+            ArrayList<TradePair.PairsListBean> localPair = gson.fromJson(local, new TypeToken<ArrayList<TradePair.PairsListBean >>() {}.getType());
+            for (TradePair.PairsListBean pairsListBean1 : localPair) {
+                pairsListBean1.setSelect(true);
+            }
+            viewModel.pairsLiveData.postValue(localPair);
+        }
+
         viewModel.pairsLiveData.observe(this, new Observer<ArrayList<TradePair.PairsListBean>>() {
             @Override
             public void onChanged(@Nullable ArrayList<TradePair.PairsListBean> pairsListBeans) {
@@ -227,7 +238,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                 EventBus.getDefault().post(new StartFilter());
             }
         });
-        monitorPairs();
+        mPresenter.getPairs();
     }
 
     public void getPairs() {
@@ -288,6 +299,8 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                     pairsListBeans.get(i).setSelect(true);
                 }
             }
+            String saveData = new Gson().toJson(pairsListBeans);
+            FileUtil.savaData("/Qwallet/tradePair.json", saveData);
         }
         viewModel.pairsLiveData.postValue(pairsListBeans);
     }

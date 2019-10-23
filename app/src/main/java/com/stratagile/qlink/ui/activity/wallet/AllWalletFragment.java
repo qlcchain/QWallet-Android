@@ -476,7 +476,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     }
                 }
                 if (!hasSelectedWallet) {
-                    if (ethWallets.size() == 0 && neoWallets.size() == 0 && eosAccounts.size() == 0 && eosAccounts.size() == 0) {
+                    if (ethWallets.size() == 0 && neoWallets.size() == 0 && eosAccounts.size() == 0 && qlcAccounts.size() == 0) {
                         startActivityForResult(new Intent(getActivity(), SelectWalletTypeActivity.class), 2);
                     }
                     if (ethWallets.size() != 0) {
@@ -492,6 +492,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     } else if (eosAccounts.size() != 0) {
                         eosAccounts.get(0).setIsCurrent(true);
                         AppConfig.getInstance().getDaoSession().getEosAccountDao().update(eosAccounts.get(0));
+                        initData();
+                    } else if (qlcAccounts.size() != 0) {
+                        qlcAccounts.get(0).setIsCurrent(true);
+                        AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(qlcAccounts.get(0));
                         initData();
                     }
                 }

@@ -16,8 +16,10 @@ import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.stake.MyStakeList
+import com.stratagile.qlink.ui.activity.reward.MyClaimActivity
 import com.stratagile.qlink.ui.activity.stake.component.DaggerMyStakeComponent
 import com.stratagile.qlink.ui.activity.stake.contract.MyStakeContract
 import com.stratagile.qlink.ui.activity.stake.module.MyStakeModule
@@ -164,6 +166,14 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
 
         myStakeAdapter.setOnItemClickListener { adapter, view, position ->
             startActivityForResult(Intent(this, StakeDetailActivity::class.java).putExtra("stake", myStakeAdapter.data[position]), 1)
+        }
+        if (ConstantValue.currentUser != null && !"".equals(ConstantValue.currentUser.bindDate) ) {
+            llQlcLendFree.visibility = View.VISIBLE
+            llQlcLendFree.setOnClickListener {
+                startActivity(Intent(this, MyClaimActivity::class.java))
+            }
+        } else {
+            llQlcLendFree.visibility = View.GONE
         }
     }
 

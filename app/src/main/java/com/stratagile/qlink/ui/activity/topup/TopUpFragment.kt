@@ -60,16 +60,15 @@ import java.util.HashMap
 
 class TopUpFragment : BaseFragment(), TopUpContract.View {
     override fun setOneFriendReward(dict: Dict) {
-        getInviteRank()
-        oneFirendClaimQgas = dict.data.value.toFloat()
-    }
-
-    override fun setInviteRank(inviteList: InviteList) {
-
         var map = mutableMapOf<String, String>()
         map.put("page", "1")
         map.put("size", "20")
         mPresenter.getProductList(map)
+
+        oneFirendClaimQgas = dict.data.value.toFloat()
+    }
+
+    override fun setInviteRank(inviteList: InviteList) {
 
         val invitedAdapter = InvitedAdapter(inviteList.top5, oneFirendClaimQgas)
         recyclerViewInvite.adapter = invitedAdapter
@@ -77,6 +76,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     override fun setProductList(topupProduct: TopupProduct) {
         topupShowProductAdapter.setNewData(topupProduct.productList)
+        getInviteRank()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -106,7 +106,6 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             if (it != null) {
                 tvIniviteCode.text = ConstantValue.currentUser.inviteCode
                 llReferralCode.visibility = View.VISIBLE
-                getOneFriendReward()
                 tvInivteNow.setOnClickListener {
                     startActivity(Intent(activity, InviteNowActivity::class.java))
                 }
@@ -119,6 +118,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                     cm!!.primaryClip = mClipData
                     ToastUtil.displayShortToast(getString(R.string.copy_success))
                 }
+                getOneFriendReward()
             } else {
                 llReferralCode.visibility = View.GONE
             }
@@ -135,6 +135,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
         recyclerViewInvite.setHasFixedSize(true)
         recyclerViewInvite.isNestedScrollingEnabled = false
+        getOneFriendReward()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
             if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
                 activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
@@ -166,29 +167,6 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         super.onDestroy()
     }
 
-    internal inner class ViewAdapter : PagerAdapter() {
-        override fun getCount(): Int {
-            return 1
-        }
-
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view === `object`
-        }
-
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            container.removeView(viewList[position])
-        }
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            container.addView(viewList[position])
-            viewList[position].setOnClickListener(View.OnClickListener {
-                startActivity(Intent(activity, MyStakeActivity::class.java))
-            })
-            return viewList[position]
-        }
-    }
-
-
     override fun setupFragmentComponent() {
         DaggerTopUpComponent
                 .builder()
@@ -199,10 +177,12 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     }
 
     fun getInviteRank() {
-        val infoMap = HashMap<String, String>()
-        infoMap["account"] = ConstantValue.currentUser.account
-        infoMap["token"] = AccountUtil.getUserToken()
-        mPresenter.getInivteRank(infoMap)
+        if (ConstantValue.currentUser != null) {
+            val infoMap = HashMap<String, String>()
+            infoMap["account"] = ConstantValue.currentUser.account
+            infoMap["token"] = AccountUtil.getUserToken()
+            mPresenter.getInivteRank(infoMap)
+        }
     }
 
     /**

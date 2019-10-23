@@ -37,6 +37,9 @@ public class ConstantValue {
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
 
+    public static String userAll = "all";
+    public static String userLend = "debit";
+    public static int jpushOpreateCount = 1;
     //测试 http://47.103.40.20:19735
     //正式 http://wrpc.qlcchain.org:9735
 
