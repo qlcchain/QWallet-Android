@@ -67,6 +67,9 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivityForResult(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id), 0)
         }
+        tradeOrderListAdapter.setOnLoadMoreListener({
+            getTradeOrderList()
+        }, recyclerView)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setOnRefreshListener {
             currentPage = 0
@@ -94,7 +97,7 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
         map["token"] = AccountUtil.getUserToken()
         map["page"] = currentPage.toString() + ""
         map["status"] = "processing"
-        map["size"] = "5"
+        map["size"] = "10"
         map["entrustOrderId"] = ""
         mPresenter.getTradeOrderList(map)
     }

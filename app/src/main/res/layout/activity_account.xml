@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/x100"
         android:background="@color/white"
         android:layout_height="wrap_content">
         <net.lucode.hackware.magicindicator.MagicIndicator

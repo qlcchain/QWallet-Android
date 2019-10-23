@@ -37,7 +37,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:text="@string/Amount_of_NEO"
-                            android:fontFamily="@font/roboto_regular_q"
                             android:textSize="8sp"
                             android:textColor="#a8a6ae"
                             android:layout_width="wrap_content"
@@ -61,7 +60,6 @@
                                     android:maxWidth="100dp"
                                     android:minWidth="80dp"
                                     android:textColor="#333"
-                                    android:fontFamily="@font/roboto_regular_q"
                                     android:text=""
                                     />
                                 <View
@@ -73,7 +71,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/MAX"
-                                    android:fontFamily="@font/roboto_regular_q"
                                     android:textSize="8sp"
                                     android:textColor="#a8a6ae"
                                     android:layout_marginRight="@dimen/x40"
@@ -94,7 +91,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:text="@string/Amount_of_QLC"
-                            android:fontFamily="@font/roboto_regular_q"
                             android:textSize="8sp"
                             android:textColor="#a8a6ae"
                             android:layout_width="wrap_content"
@@ -119,7 +115,6 @@
                                     android:singleLine="true"
                                     android:minWidth="80dp"
                                     android:textColor="#333"
-                                    android:fontFamily="@font/roboto_regular_q"
                                     android:text=""
                                     />
                                 <View
@@ -151,7 +146,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:textSize="8sp"
                         android:textColor="#a8a6ae"
                         android:text="@string/Current_exchange_rate"
@@ -159,7 +153,6 @@
                     <TextView
                         android:id="@+id/tv_rate"
                         android:layout_width="wrap_content"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:textSize="8sp"
                         android:textColor="#a8a6ae"
                         android:layout_height="wrap_content"
@@ -181,7 +174,6 @@
                 android:layout_weight="1"
                 style="?android:attr/borderlessButtonStyle"
                 android:text="@string/back"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/cancal_button_bg"
                 android:textColor="@color/white"
                 android:layout_height="@dimen/dp_43" />
@@ -192,7 +184,6 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:text="@string/buy_now"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/comfirm_button_bg"
                 android:textColor="@color/main_color"
                 android:layout_height="@dimen/dp_43" />

@@ -15,7 +15,6 @@
       android:layout_width="wrap_content"
       android:text="@string/get_into_wallet_detail"
       android:layout_marginRight="@dimen/x60"
-      android:fontFamily="@font/vagroundedbt"
       android:gravity="right"
       android:textSize="17sp"
       android:textColor="@color/white"

@@ -21,7 +21,6 @@
             android:textSize="16sp"
             android:layout_marginTop="@dimen/x40"
             android:textColor="@color/white"
-            android:fontFamily="@font/vagroun_q"
             />
 
         <ImageView
@@ -39,7 +38,6 @@
             android:layout_marginTop="@dimen/x40"
             android:textSize="16sp"
             android:textColor="@color/white"
-            android:fontFamily="@font/vagroun_q"
             />
 
         <ImageView
@@ -77,7 +75,6 @@
                     android:maxLength="20"
                     android:ellipsize="end"
                     android:textColor="#3fffffff"
-                    android:fontFamily="@font/roboto_regular_q"
                     android:text="@string/VPN_NAME"
                     />
                 <TextView
@@ -112,7 +109,6 @@
             android:layout_marginTop="@dimen/x40"
             android:textSize="14sp"
             android:textColor="@color/white"
-            android:fontFamily="@font/roboto_regular_q"
             />
 
         <View
@@ -126,7 +122,6 @@
             android:layout_marginLeft="@dimen/x36"
             android:layout_marginRight="@dimen/x36"
             android:textSize="12sp"
-            android:fontFamily="@font/vagroun_q"
             android:background="@drawable/comfirm_button_bg"
             android:text="@string/continue_to_my_wallet"
             android:layout_marginTop="@dimen/x60"
@@ -142,7 +137,6 @@
             android:text="@string/update_my_registration_info"
             android:paddingLeft="@dimen/dp_16"
             android:textSize="12sp"
-            android:fontFamily="@font/vagroun_q"
             android:layout_marginTop="@dimen/x20"
             android:drawableLeft="@mipmap/icon_back1"
             android:layout_marginLeft="@dimen/x36"

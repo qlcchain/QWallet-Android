@@ -34,6 +34,24 @@ public class UserInfo extends BaseBack<UserInfo.DataBean> {
         private String id;
         private String account;
         private String email;
+        private String bindDate;
+
+        public String getvStatus() {
+            return vStatus;
+        }
+
+        public void setvStatus(String vStatus) {
+            this.vStatus = vStatus;
+        }
+
+        public String getBindDate() {
+            return bindDate;
+        }
+
+        public void setBindDate(String bindDate) {
+            this.bindDate = bindDate;
+        }
+
         private int otcTimes;
         private String holdingPhoto;
 

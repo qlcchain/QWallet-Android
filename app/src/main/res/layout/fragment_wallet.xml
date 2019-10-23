@@ -36,7 +36,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/vagroun_q"
                     android:text="@string/my_wallet"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
@@ -83,7 +82,6 @@
                         android:paddingRight="@dimen/x7"
                         android:layout_marginBottom="@dimen/x7"
                         android:layout_marginTop="@dimen/x14"
-                        android:fontFamily="@font/vagroun_q"
                         android:text="NEO"
                         android:textColor="#ffffff"
                         android:textSize="10sp" />
@@ -92,7 +90,6 @@
                         android:id="@+id/tv_neo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text="0"
                         android:textStyle="bold"
                         android:textColor="@color/white"
@@ -103,7 +100,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/x8"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text="1 NEO = 253.98 QLC"
                         android:textColor="#8f74ac"
                         android:textSize="8sp" />
@@ -118,7 +114,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="24H CHANGE"
                             android:textColor="@color/white"
                             android:textSize="8sp" />
@@ -134,7 +129,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_4"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="55.34"
                             android:textColor="@color/white"
                             android:textSize="8sp" />
@@ -169,7 +163,6 @@
                         android:paddingRight="@dimen/x7"
                         android:layout_marginBottom="@dimen/x7"
                         android:layout_marginTop="@dimen/x14"
-                        android:fontFamily="@font/vagroun_q"
                         android:text="QLC"
                         android:textColor="#ffffff"
                         android:textSize="10sp" />
@@ -181,7 +174,6 @@
                         android:textStyle="bold"
                         android:layout_centerHorizontal="true"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:lines="1"
                         android:text="0"
                         android:textColor="@color/white"
@@ -194,7 +186,6 @@
                         android:layout_centerHorizontal="true"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/x8"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text="1 QLC = 0.00005 NEO"
                         android:textColor="#8f74ac"
                         android:textSize="8sp" />
@@ -211,7 +202,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="24H CHANGE"
                             android:textColor="@color/white"
                             android:textSize="8sp" />
@@ -229,7 +219,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_4"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="55.34"
                             android:textColor="@color/white"
                             android:textSize="8sp" />
@@ -254,7 +243,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/x14"
-                        android:fontFamily="@font/vagroun_q"
                         android:text="BNB"
                         android:letterSpacing="0.1"
                         android:background="@drawable/wallet_asset_bg"
@@ -271,7 +259,6 @@
                         android:layout_width="wrap_content"
                         android:textStyle="bold"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="25sp" />
@@ -281,7 +268,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/x8"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:text="1 BNB = 94.49 QLC"
                         android:textColor="#8f74ac"
                         android:textSize="8sp" />
@@ -296,7 +282,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="24H CHANGE"
                             android:textColor="@color/white"
                             android:textSize="8sp" />
@@ -312,7 +297,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_4"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="55.34"
                             android:textColor="@color/white"
                             android:textSize="8sp" />

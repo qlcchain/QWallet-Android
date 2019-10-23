@@ -94,11 +94,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
         }))
     }
 
-    fun transferUsdt(walletAddress: String, toAddress: String, amount: String, price: Int, tradeOrderId: String) {
+    fun transferUsdt(walletAddress: String, toAddress: String, amount: String, price: Int, tradeOrderId: String, contractAddress: String) {
 //        generateTransaction(walletAddress, "0xdac17f958d2ee523a2206206994597c13d831ec7", toAddress, derivePrivateKey(walletAddress)!!, amount, 6000, price, 6)
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, "0xdac17f958d2ee523a2206206994597c13d831ec7", toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, contractAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
         })
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())

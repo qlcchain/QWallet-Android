@@ -14,7 +14,6 @@
   <TextView
       android:layout_width="wrap_content"
       android:text="@string/qlc_will_be_in_your_wallet"
-      android:fontFamily="@font/vagroundedbt"
       android:gravity="right"
       android:textSize="17sp"
       android:textColor="@color/white"

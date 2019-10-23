@@ -101,18 +101,18 @@ public class qlinkcom {
                     btcFile.mkdir();
                 }
                 String path = dataFile.getPath() + "/";
-                try {
-                    if (qlinkcom.GetP2PConnectionStatus() <= 0) {
-                        KLog.i("test_开始连接");
-                        CreatedP2PNetwork(path);
-                    }else {
-                        EventBus.getDefault().post(new MyStatus(qlinkcom.GetP2PConnectionStatus()));
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                KLog.i("CreatedP2PNetwork方法退出了。。。。。。。。。。。。。");
+//                try {
+//                    if (qlinkcom.GetP2PConnectionStatus() <= 0) {
+//                        KLog.i("test_开始连接");
+//                        CreatedP2PNetwork(path);
+//                    }else {
+//                        EventBus.getDefault().post(new MyStatus(qlinkcom.GetP2PConnectionStatus()));
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                KLog.i("CreatedP2PNetwork方法退出了。。。。。。。。。。。。。");
             }
         }).start();
     }
@@ -442,10 +442,10 @@ public class qlinkcom {
      * @param friendNumber 好友编号
      */
     public void CallFriendMessageProcess(String message, String friendNumber) {
-        KLog.i("好友传过来的消息为:" + message);
-        LogUtil.addLog("收到的消息为：" + message, getClass().getSimpleName());
-//        KLog.i("好友的编号为:" + friendNumber);
-        Qsdk.getInstance().handlerFriendMessage(message, friendNumber);
+//        KLog.i("好友传过来的消息为:" + message);
+//        LogUtil.addLog("收到的消息为：" + message, getClass().getSimpleName());
+////        KLog.i("好友的编号为:" + friendNumber);
+//        Qsdk.getInstance().handlerFriendMessage(message, friendNumber);
     }
 
     public void ShowNativeLog(String message) {

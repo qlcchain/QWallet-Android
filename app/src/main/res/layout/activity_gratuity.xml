@@ -22,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x33"
-        android:fontFamily="@font/vagroun_q"
         android:gravity="center"
         android:text="@string/TIP_THE_OWNER"
         android:textColor="@color/white"
@@ -40,7 +39,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x40"
-        android:fontFamily="@font/vagroun_q"
         android:gravity="center"
         android:text="@string/Would_you_like_to_tip_the_owner_How_much"
         android:textColor="@color/white"
@@ -165,7 +163,6 @@
             android:layout_height="@dimen/dp_43"
             android:layout_weight="1"
             android:background="@drawable/cancal_button_bg"
-            android:fontFamily="@font/vagroun_q"
             android:text="@string/no_thanks"
             android:textColor="@color/white" />
 
@@ -176,7 +173,6 @@
             android:layout_marginLeft="@dimen/dp_6"
             android:layout_weight="1"
             android:background="@drawable/aler_left_bt_bg"
-            android:fontFamily="@font/vagroun_q"
             android:text="@string/yes_send_tip"
             android:textColor="@color/mainColor" />
     </LinearLayout>

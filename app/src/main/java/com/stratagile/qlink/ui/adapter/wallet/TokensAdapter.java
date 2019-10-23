@@ -44,6 +44,11 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                     }
                     BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
                     double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    if (f1 == 0) {
+                        helper.setText(R.id.tvTokenMoney, "");
+                    } else {
+                        helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                    }
                     helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
                 } else {
                     helper.setText(R.id.tvTokenMoney, "- -");
@@ -64,14 +69,18 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                     }
                     BigDecimal b = new BigDecimal(Double.parseDouble(value) * item.getTokenPrice());
                     double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                    if (f1 == 0) {
+                        helper.setText(R.id.tvTokenMoney, "");
+                    } else {
+                        helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                    }
                 } else {
                     helper.setText(R.id.tvTokenMoney, "- -");
                     imageView.setVisibility(View.INVISIBLE);
                 }
             }
         } else if (item.getWalletType() == AllWallet.WalletType.NeoWallet) {
-            helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()) + "");
+            helper.setText(R.id.tvTokenValue, BigDecimal.valueOf(item.getTokenValue()).stripTrailingZeros().toPlainString());
             ImageView imageView = helper.getView(R.id.ivTokenAvatar);
             KLog.i(item.getTokenImgName());
             if (item.isMainNetToken()) {
@@ -83,7 +92,11 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                 }
                 BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
                 double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                if (f1 == 0) {
+                    helper.setText(R.id.tvTokenMoney, "");
+                } else {
+                    helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                }
             } else {
                 helper.setText(R.id.tvTokenMoney, "- -");
                 imageView.setVisibility(View.INVISIBLE);
@@ -100,7 +113,11 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                 }
                 BigDecimal b = new BigDecimal(new Double((item.getTokenValue() * item.getTokenPrice())).toString());
                 double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                if (f1 == 0) {
+                    helper.setText(R.id.tvTokenMoney, "");
+                } else {
+                    helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                }
             } else {
                 helper.setText(R.id.tvTokenMoney, "- -");
                 imageView.setVisibility(View.INVISIBLE);
@@ -117,7 +134,11 @@ public class TokensAdapter extends BaseQuickAdapter<TokenInfo, BaseViewHolder> {
                 }
                 BigDecimal b = new BigDecimal(new Double((BigDecimal.valueOf(item.getTokenValue()).divide(BigDecimal.TEN.pow(item.getTokenDecimals()), item.getTokenDecimals(), BigDecimal.ROUND_HALF_DOWN).doubleValue() * item.getTokenPrice())).toString());
                 double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                if (f1 == 0) {
+                    helper.setText(R.id.tvTokenMoney, "");
+                } else {
+                    helper.setText(R.id.tvTokenMoney, ConstantValue.currencyBean.getCurrencyImg() + " " + f1);
+                }
             } else {
                 helper.setText(R.id.tvTokenMoney, "- -");
                 imageView.setVisibility(View.INVISIBLE);

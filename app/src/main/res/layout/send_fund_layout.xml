@@ -67,7 +67,6 @@
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:letterSpacing="0.1"
-                                android:fontFamily="@font/roboto_regular_q"
                                 android:layout_marginLeft="@dimen/x10"
                                 android:layout_height="wrap_content"
                                 android:text="@string/PASTE_ADDRESS"
@@ -90,7 +89,6 @@
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:letterSpacing="0.1"
-                                android:fontFamily="@font/roboto_regular_q"
                                 android:layout_marginLeft="@dimen/x10"
                                 android:layout_height="wrap_content"
                                 android:text="@string/SCAN_QR_CODE"
@@ -111,7 +109,6 @@
                     android:textSize="8sp"
                     android:layout_marginTop="@dimen/x20"
                     android:text="@string/Amount_to_send"
-                    android:fontFamily="@font/roboto_regular_q"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x40"
                     android:layout_height="wrap_content"
@@ -140,7 +137,6 @@
                             android:maxWidth="100dp"
                             android:minWidth="80dp"
                             android:textColor="#333"
-                            android:fontFamily="@font/roboto_regular_q"
                             android:text=""
                             />
                         <View
@@ -153,7 +149,6 @@
                             android:layout_height="wrap_content"
                             android:text="@string/MAX"
                             android:padding="9sp"
-                            android:fontFamily="@font/roboto_regular_q"
                             android:textSize="8sp"
                             android:textColor="#a8a6ae"
                             android:layout_marginRight="@dimen/x40"
@@ -218,7 +213,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/You_must_hold_at_least_1_drop_of_GAS_in_order_to_send_NEP_5_tokens"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:textSize="@dimen/sp7"
                         android:textColor="#a8a6ae"
                         />
@@ -238,7 +232,6 @@
                 android:layout_weight="1"
                 style="?android:attr/borderlessButtonStyle"
                 android:text="@string/back"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/aler_left_bt_bg"
                 android:textColor="@color/white"
                 android:layout_height="@dimen/dp_43" />
@@ -249,7 +242,6 @@
                 android:text="@string/send_now"
                 android:layout_marginLeft="@dimen/dp_10"
                 style="?android:attr/borderlessButtonStyle"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/comfirm_button_bg"
                 android:textColor="@color/main_color"
                 android:layout_height="@dimen/dp_43" />

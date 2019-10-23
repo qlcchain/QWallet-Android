@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="12dp"
+    app:cardCornerRadius="6dp"
+    app:cardBackgroundColor="@color/transparent"
+    app:cardElevation="3dp"
+    android:layout_marginRight="16dp"
+    android:layout_height="182dp">
+    <ImageView
+        android:id="@+id/ivBack"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/llParent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvOperator"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:text="-/-"
+            android:textSize="19sp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvAreaOperator"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:text="-/-"
+            android:textSize="13sp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/check_out_your_exclusive_offer"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/discount_bg"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvDiscount"
+                android:textSize="29sp"
+                android:text="100"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="4dp"
+                android:layout_alignBottom="@+id/tvDiscount"
+                android:layout_toRightOf="@+id/tvDiscount"
+                android:text="@string/discount"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/recharge_phone_bill"
+                android:layout_marginLeft="2dp"
+                android:textColor="#87BCEB"
+                android:layout_below="@+id/tvDiscount"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

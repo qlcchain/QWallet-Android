@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
+
     private ArrayList<OrderListBean> orderList;
 
     public ArrayList<OrderListBean> getOrderList() {
@@ -20,52 +21,67 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
     public static class OrderListBean implements Parcelable {
 
         /**
-         * unitPrice : 0.001
+         * unitPrice : 1.0
          * minAmount : 1.0
-         * lockingAmount : 3.0
-         * type : BUY
+         * lockingAmount : 1.0
+         * type : SELL
+         * userId : 61be9c09c0784827af303005f983c705
+         * tradeTokenChain : NEO_CHAIN
          * completeAmount : 0.0
-         * head : /data/dapp/head/cd67f44e4b8a428e8660356e9463e693.jpg
-         * number : 20190726124722241514
-         * totalAmount : 100.0
-         * orderTime : 2019-07-26 12:47:23
-         * nickname : hzp
-         * id : df164590b0d64b849c0f1dc5d8a62e49
-         * maxAmount : 10.0
-         * otcTimes : 8
+         * head :
+         * number : 20190823212742197841
+         * totalAmount : 2.0
+         * orderTime : 2019-08-23 21:27:42
+         * nickname : ios_test
+         * payTokenChain : QLC_CHAIN
+         * tradeToken : QLC
+         * id : 38013bdf37f84c4fad8e688dd186bb39
+         * maxAmount : 2.0
+         * otcTimes : 0
          * status : NORMAL
+         * payToken : QGAS
          */
 
         private double unitPrice;
         private double minAmount;
         private double lockingAmount;
         private String type;
+        private String userId;
+        private String tradeTokenChain;
         private double completeAmount;
         private String head;
         private String number;
         private double totalAmount;
         private String orderTime;
         private String nickname;
+        private String payTokenChain;
+        private String tradeToken;
         private String id;
         private double maxAmount;
         private int otcTimes;
         private String status;
+        private String payToken;
 
         protected OrderListBean(Parcel in) {
             unitPrice = in.readDouble();
             minAmount = in.readDouble();
             lockingAmount = in.readDouble();
             type = in.readString();
+            userId = in.readString();
+            tradeTokenChain = in.readString();
             completeAmount = in.readDouble();
             head = in.readString();
             number = in.readString();
             totalAmount = in.readDouble();
             orderTime = in.readString();
             nickname = in.readString();
+            payTokenChain = in.readString();
+            tradeToken = in.readString();
             id = in.readString();
             maxAmount = in.readDouble();
             otcTimes = in.readInt();
             status = in.readString();
+            payToken = in.readString();
         }
 
         public static final Creator<OrderListBean> CREATOR = new Creator<OrderListBean>() {
@@ -110,6 +126,22 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getTradeTokenChain() {
+            return tradeTokenChain;
+        }
+
+        public void setTradeTokenChain(String tradeTokenChain) {
+            this.tradeTokenChain = tradeTokenChain;
         }
 
         public double getCompleteAmount() {
@@ -160,6 +192,22 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.nickname = nickname;
         }
 
+        public String getPayTokenChain() {
+            return payTokenChain;
+        }
+
+        public void setPayTokenChain(String payTokenChain) {
+            this.payTokenChain = payTokenChain;
+        }
+
+        public String getTradeToken() {
+            return tradeToken;
+        }
+
+        public void setTradeToken(String tradeToken) {
+            this.tradeToken = tradeToken;
+        }
+
         public String getId() {
             return id;
         }
@@ -192,6 +240,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.status = status;
         }
 
+        public String getPayToken() {
+            return payToken;
+        }
+
+        public void setPayToken(String payToken) {
+            this.payToken = payToken;
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -203,16 +259,21 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             parcel.writeDouble(minAmount);
             parcel.writeDouble(lockingAmount);
             parcel.writeString(type);
+            parcel.writeString(userId);
+            parcel.writeString(tradeTokenChain);
             parcel.writeDouble(completeAmount);
             parcel.writeString(head);
             parcel.writeString(number);
             parcel.writeDouble(totalAmount);
             parcel.writeString(orderTime);
             parcel.writeString(nickname);
+            parcel.writeString(payTokenChain);
+            parcel.writeString(tradeToken);
             parcel.writeString(id);
             parcel.writeDouble(maxAmount);
             parcel.writeInt(otcTimes);
             parcel.writeString(status);
+            parcel.writeString(payToken);
         }
     }
 }

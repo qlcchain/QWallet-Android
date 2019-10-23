@@ -24,7 +24,6 @@
         android:layout_marginLeft="@dimen/dp_30"
         android:layout_marginRight="@dimen/dp_30"
         android:textColor="@color/color_333"
-        android:fontFamily="@font/roboto_regular_q"
         android:layout_marginTop="@dimen/x43"
         android:layout_height="wrap_content"
         android:minHeight="60dp"
@@ -36,8 +35,21 @@
         android:gravity="center"
         android:src="@mipmap/icon_fingerprint_normal"
         android:layout_marginTop="@dimen/x40"
-        android:layout_marginBottom="@dimen/x54"
         />
+    <TextView
+        android:id="@+id/reTry"
+        android:layout_width="wrap_content"
+        android:text="@string/re_try"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@drawable/main_color_bt_bg"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -65,7 +77,6 @@
             android:id="@+id/btn_right"
             android:layout_width="match_parent"
             android:visibility="gone"
-            android:fontFamily="@font/vagroun_q"
             style="?android:attr/borderlessButtonStyle"
             android:layout_height="match_parent"
             android:background="@color/main_color"

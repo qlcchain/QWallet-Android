@@ -17,98 +17,98 @@
             android:layout_height="wrap_content"
             app:elevation="0px">
 
-            <android.support.constraint.ConstraintLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x300"
-                android:background="@color/mainColor"
-                app:layout_scrollFlags="scroll|snap">
+            <!--<android.support.constraint.ConstraintLayout-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/x300"-->
+                <!--android:background="@color/mainColor"-->
+                <!--app:layout_scrollFlags="scroll|snap">-->
 
-                <TextView
-                    android:id="@+id/tv1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:layout_marginTop="@dimen/x20"
-                    android:text="TOTAL"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--<TextView-->
+                    <!--android:id="@+id/tv1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/x15"-->
+                    <!--android:layout_marginTop="@dimen/x20"-->
+                    <!--android:text="TOTAL"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/tvWalletMoney"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv1" />
+                <!--<TextView-->
+                    <!--android:id="@+id/tvWalletMoney"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/x15"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:ellipsize="end"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="30sp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/tv1" />-->
 
-                <TextView
-                    android:id="@+id/tv2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:text="WINQ GAS"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvWalletMoney"
-                    app:layout_goneMarginTop="@dimen/x10" />
+                <!--<TextView-->
+                    <!--android:id="@+id/tv2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/x15"-->
+                    <!--android:text="WINQ GAS"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/tvWalletMoney"-->
+                    <!--app:layout_goneMarginTop="@dimen/x10" />-->
 
-                <ImageView
-                    android:id="@+id/ivClaim"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/claim"
-                    android:layout_marginLeft="@dimen/x10"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv2"
-                    app:layout_constraintStart_toEndOf="@+id/tv2"
-                    app:layout_constraintTop_toTopOf="@+id/tv2" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/ivClaim"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@mipmap/claim"-->
+                    <!--android:layout_marginLeft="@dimen/x10"-->
+                    <!--app:layout_constraintBottom_toBottomOf="@+id/tv2"-->
+                    <!--app:layout_constraintStart_toEndOf="@+id/tv2"-->
+                    <!--app:layout_constraintTop_toTopOf="@+id/tv2" />-->
 
 
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv2">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/linearLayout2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/x15"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/tv2">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/x15"
-                        android:src="@mipmap/icon_winq_gas" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginRight="@dimen/x15"-->
+                        <!--android:src="@mipmap/icon_winq_gas" />-->
 
-                    <TextView
-                        android:id="@+id/tvWalletGas"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:includeFontPadding="false"
-                        android:text="0.00"
-                        android:textColor="@color/white"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:id="@+id/tvWalletGas"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:singleLine="true"-->
+                        <!--android:ellipsize="end"-->
+                        <!--android:includeFontPadding="false"-->
+                        <!--android:text="0.00"-->
+                        <!--android:textColor="@color/white"-->
+                        <!--android:textSize="30sp"-->
+                        <!--android:textStyle="bold" />-->
+                <!--</LinearLayout>-->
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginRight="@dimen/x20"
-                    android:src="@mipmap/enter_n"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:layout_marginRight="@dimen/x20"-->
+                    <!--android:src="@mipmap/enter_n"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintRight_toRightOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -118,7 +118,7 @@
                 <View
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x125"
+                    android:layout_height="62dp"
                     android:background="@color/mainColor" />
 
                 <View
@@ -126,7 +126,7 @@
                     android:layout_below="@+id/view1"
                     android:layout_width="match_parent"
                     android:background="@color/white"
-                    android:layout_height="@dimen/x125" />
+                    android:layout_height="62dp" />
                 <!--76.5-->
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView"
@@ -214,22 +214,24 @@
                 </android.support.v7.widget.CardView>
                 <LinearLayout
                     android:id="@+id/llGetGas"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:background="@color/white"
                     android:layout_below="@+id/view2"
-                    android:layout_height="@dimen/x123">
+                    android:layout_height="48dp">
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:orientation="horizontal"
-                        android:layout_marginLeft="@dimen/x54"
-                        android:layout_height="@dimen/x119">
+                        android:layout_marginLeft="22dp"
+                        android:layout_height="46dp">
 
                         <ImageView
                             android:id="@+id/ivTokenAvatar"
-                            android:layout_width="@dimen/x45"
+                            android:layout_width="23dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
                             android:src="@mipmap/gas"
-                            android:layout_height="@dimen/x45"
+                            android:layout_height="23dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -238,10 +240,9 @@
                             android:layout_width="wrap_content"
                             android:textSize="15sp"
                             android:text="0.0000001"
-                            android:layout_marginTop="@dimen/x10"
                             android:textColor="@color/color_29282a"
                             app:layout_constraintStart_toEndOf="@+id/ivTokenAvatar"
-                            android:layout_marginLeft="@dimen/x40"
+                            android:layout_marginLeft="22dp"
                             app:layout_constraintTop_toTopOf="parent"
                             android:layout_height="wrap_content" />
 
@@ -249,7 +250,7 @@
                             android:id="@+id/tvGasIntroduce"
                             app:layout_constraintTop_toBottomOf="@+id/tvGasValue"
                             app:layout_constraintStart_toEndOf="@+id/ivTokenAvatar"
-                            android:layout_marginLeft="@dimen/x40"
+                            android:layout_marginLeft="22dp"
                             android:text="@string/estimated_gas"
                             app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_width="wrap_content"
@@ -257,9 +258,9 @@
 
                         <TextView
                             android:id="@+id/tvClaim"
-                            android:layout_width="@dimen/x120"
-                            android:layout_height="@dimen/x40"
-                            android:layout_marginRight="@dimen/x54"
+                            android:layout_width="60dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="27dp"
                             android:textColor="@color/white"
                             android:text="@string/sync"
                             android:includeFontPadding="false"
@@ -272,11 +273,101 @@
                     </android.support.constraint.ConstraintLayout>
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/x4"
+                        android:layout_height="2dp"
                         android:background="#eff1f5"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/llResouces"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/view2"
+                    android:layout_height="48dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="22dp"
+                        android:layout_height="46dp">
+
+                        <ImageView
+                            android:layout_width="23dp"
+                            android:src="@mipmap/resources_h"
+                            android:layout_height="23dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="15sp"
+                            android:text="@string/resources"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_29282a"
+                            android:layout_marginLeft="22dp"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0px"
+                            android:layout_height="1px"
+                            android:layout_weight="1"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:src="@mipmap/icon_back_4"
+                            android:layout_marginRight="27dp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#eff1f5"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llStake"
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/view2"
+                    android:layout_height="48dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="22dp"
+                        android:layout_height="46dp">
+
+                        <ImageView
+                            android:layout_width="23dp"
+                            android:src="@mipmap/mining_node"
+                            android:layout_height="23dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="15sp"
+                            android:text="@string/my_stakeings"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_29282a"
+                            android:layout_marginLeft="22dp"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0px"
+                            android:layout_height="1px"
+                            android:layout_weight="1"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:src="@mipmap/icon_back_4"
+                            android:layout_marginRight="27dp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#eff1f5"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llStake"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:orientation="vertical"
@@ -291,13 +382,13 @@
 
                         <ImageView
                             android:layout_width="@dimen/x45"
-                            android:src="@mipmap/resources_h"
+                            android:src="@mipmap/icons_stakeing"
                             android:layout_height="@dimen/x45" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:textSize="15sp"
-                            android:text="@string/resources"
+                            android:text="@string/my_stakeings"
                             android:textStyle="bold"
                             android:textColor="@color/color_29282a"
                             android:layout_marginLeft="@dimen/x38"

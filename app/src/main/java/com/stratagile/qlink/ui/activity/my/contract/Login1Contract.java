@@ -29,6 +29,8 @@ public interface Login1Contract {
         void vCodeLoginSuccess(VcodeLogin register);
 
         void getLoginVCodeSuccess();
+
+        void loginError(String s);
     }
 
     interface Login1ContractPresenter extends BasePresenter {

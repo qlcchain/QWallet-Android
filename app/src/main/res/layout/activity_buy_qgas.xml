@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/tvUnitPriceTip"
         android:layout_width="wrap_content"
         android:text="@string/unit_price_usdt"
         android:layout_gravity="center_horizontal"
@@ -26,6 +27,7 @@
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/x40"
+        android:paddingBottom="10dp"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -35,6 +37,7 @@
             android:orientation="vertical"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tvVolumeAmount"
                 android:layout_width="wrap_content"
                 android:text="@string/volume_amount_qgas"
                 android:textColor="@color/color_808080"
@@ -59,8 +62,9 @@
             android:gravity="center_horizontal"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tvVolumeSetting"
                 android:layout_width="wrap_content"
-                android:text="@string/volume_settings_qgas"
+                android:text="@string/limits"
                 android:textColor="@color/color_808080"
                 android:textSize="12sp"
                 android:layout_height="wrap_content" />
@@ -73,10 +77,13 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f2f2f2"/>
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/account_payable"
+        android:text="@string/buying_amount"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -84,6 +91,48 @@
         android:layout_marginTop="@dimen/x21"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/x92">
+        <EditText
+            android:id="@+id/etQgas"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:hint="@string/max"
+            android:inputType="numberDecimal"
+            android:background="@null"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvTradeToken"
+            android:text="QGAS"
+            android:layout_marginRight="@dimen/x31"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="@string/to_pay"
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/x30"
+        android:textColor="@color/color_29282a"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/x21"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -102,6 +151,7 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/tvPayToken"
             android:text="USDT"
             android:layout_marginRight="@dimen/x31"
             android:layout_width="wrap_content"
@@ -109,46 +159,14 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x30"
-        android:background="@color/color_f2f2f2"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/x30"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_height="@dimen/x92">
-        <EditText
-            android:id="@+id/etQgas"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:hint="@string/max"
-            android:inputType="number"
-            android:background="@null"
-            android:textColor="@color/color_29282a"
-            android:textSize="16sp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="QGAS"
-            android:layout_marginRight="@dimen/x31"
-            android:layout_width="wrap_content"
-            android:textColor="@color/color_29282a"
-            android:textSize="16sp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x30"
+        android:layout_height="20dp"
         android:background="@color/color_f2f2f2"/>
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/go_qlc_address_to_receive_qgas"
+        android:text="@string/send_to"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/x30"
         android:textColor="@color/color_29282a"
@@ -165,7 +183,7 @@
         android:layout_height="@dimen/x138">
 
         <ImageView
-            android:id="@+id/iv_country"
+            android:id="@+id/ivReceiveChain"
             android:layout_width="@dimen/x88"
             android:src="@mipmap/icons_qlc_wallet"
             android:layout_marginLeft="@dimen/x30"
@@ -177,12 +195,14 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/select_a_qlc_wallet_to_receive_qgas"
+                android:text="@string/select_a_wallet_to_receive_token"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_29282a"
+                android:maxEms="12"
+                android:ellipsize="end"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
-                android:id="@+id/tvQLCWalletName"
+                android:id="@+id/tvReceiveWalletName"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -191,11 +211,11 @@
                 android:layout_marginTop="@dimen/x10"
                 android:maxEms="10"
                 android:ellipsize="middle"
-                android:text="@string/input_qlc_wallet_address"
+                android:text="@string/input_wallet_address"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/x30"
                 android:maxWidth="@dimen/x400"
-                android:id="@+id/tvQLCWalletAddess"
+                android:id="@+id/tvReceiveWalletAddess"
                 />
         </LinearLayout>
 
@@ -221,6 +241,7 @@
         android:background="@color/color_f2f2f2"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvCreateWallet"
         android:layout_width="match_parent"
         android:text="@string/create_one_now"

@@ -1,169 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="match_parent"
-    tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
-
-    <TextView
-        android:id="@+id/status_bar"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:gravity="center"
-        android:textColor="@color/color_333"
-        android:textSize="9sp"
-        android:background="@drawable/navigation_shape" />
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/rl1"
         android:layout_width="match_parent"
-        android:layout_below="@+id/status_bar"
-        android:background="@color/mainColor"
-        android:layout_height="42dp">
-        <ImageView
-            android:id="@+id/iv_avater"
-            android:layout_width="50dp"
-            android:transitionName="avater"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/icon_protfolio_more"
-            android:layout_height="23dp" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
+
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/roboto_regular"
-            android:text="@string/wallet"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/ivQRCode"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"
-            android:layout_toLeftOf="@+id/rlWallet"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/icons_scan_qrcode_n"
-            />
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@drawable/navigation_shape"
+            android:gravity="center"
+            android:textColor="@color/color_333"
+            android:textSize="9sp" />
 
         <RelativeLayout
-            android:id="@+id/rlWallet"
-            android:layout_width="50dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_height="30dp">
+            android:id="@+id/rl1"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_below="@+id/status_bar"
+            android:background="@color/mainColor">
 
             <ImageView
-                android:id="@+id/iv_wallet"
+                android:id="@+id/iv_avater"
+                android:layout_width="50dp"
+                android:layout_height="23dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_protfolio_more"
+                android:transitionName="avater" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/wallet"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/ivQRCode"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
-                android:layout_centerInParent="true"
-                android:layout_marginRight="12dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/rlWallet"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_free"
+                android:src="@mipmap/icons_scan_qrcode_n"
                 android:visibility="invisible" />
+
+            <RelativeLayout
+                android:id="@+id/rlWallet"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/iv_wallet"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="12dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/icon_free"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+            <info.hoang8f.android.segmented.SegmentedGroup
+                android:id="@+id/segmentControlView"
+                android:layout_width="wrap_content"
+                android:layout_height="29dp"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                app:sc_border_width="1dp"
+                app:sc_checked_text_color="@color/mainColor"
+                app:sc_corner_radius="4dp"
+                app:sc_tint_color="@color/white">
+
+                <RadioButton
+                    android:id="@+id/button21"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/buy"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/button22"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sell"
+                    android:textSize="12sp" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
         </RelativeLayout>
 
-        <info.hoang8f.android.segmented.SegmentedGroup
-            android:id="@+id/segmentControlView"
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            app:sc_border_width="1dp"
-            app:sc_checked_text_color="@color/mainColor"
-            app:sc_tint_color="@color/white"
-            app:sc_corner_radius="4dp"
-            android:layout_centerInParent="true"
-            android:layout_height="29dp">
-            <RadioButton
-                android:id="@+id/button21"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buy"
-                style="@style/RadioButton"
-                android:textSize="12sp"
-                />
-
-            <RadioButton
-                android:id="@+id/button22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sell"
-                style="@style/RadioButton"
-                android:textSize="12sp"
-                />
-        </info.hoang8f.android.segmented.SegmentedGroup>
-
-
-    </RelativeLayout>
-
-    <com.stratagile.qlink.view.NoScrollViewPager
-        android:layout_below="@+id/rl1"
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_above="@+id/rl2"
-        android:layout_height="match_parent">
-
-    </com.stratagile.qlink.view.NoScrollViewPager>
-
-    <ImageView
-        android:id="@+id/financeCome"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_above="@+id/xxx"
-        android:scaleType="fitXY"
-        android:src="@mipmap/finance_soon"
-        android:layout_height="match_parent" />
-    <View
-        android:id="@+id/xxx"
-        android:layout_width="match_parent"
-        android:layout_above="@+id/rl2"
-        android:layout_height="@dimen/x1"
-        android:background="@color/color_29282a_40"/>
-
-    <RelativeLayout
-        android:id="@+id/rl2"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="46dp">
-        <com.stratagile.qlink.view.BottomNavigationViewEx
-            android:id="@+id/bottom_navigation"
+        <com.stratagile.qlink.view.NoScrollViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:background="@color/white"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            app:itemIconTint="@drawable/bottom_navigation_selector"
-            app:itemTextColor="@drawable/bottom_navigation_selector"
-            app:menu="@menu/menu_bottom_navigation" />
+            android:layout_above="@+id/rl2"
+            android:layout_below="@+id/rl1">
+
+        </com.stratagile.qlink.view.NoScrollViewPager>
+
+        <ImageView
+            android:id="@+id/financeCome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/xxx"
+            android:scaleType="fitXY"
+            android:src="@mipmap/finance_soon"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/xxx"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_above="@+id/rl2"
+            android:background="@color/color_29282a_40" />
+
+        <RelativeLayout
+            android:id="@+id/rl2"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true">
+
+            <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"
+                app:itemIconTint="@drawable/bottom_navigation_selector"
+                app:itemTextColor="@drawable/bottom_navigation_selector"
+                app:menu="@menu/menu_bottom_navigation" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/view_vpn"
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:id="@+id/view_all_wallet"
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:id="@+id/view_wallet"
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/drawerlayout_side_tv"
+        android:layout_width="273dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/trading_pairs"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewTradePair"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="match_parent">
-            <View
-                android:id="@+id/view_vpn"
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-            <View
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-            <View
-                android:id="@+id/view_all_wallet"
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-            <View
-                android:id="@+id/view_wallet"
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:layout_height="38dp">
+            <TextView
+                android:id="@+id/tvReset"
+                android:layout_width="98dp"
+                android:background="@drawable/maincolor_stroke_bg"
+                android:gravity="center"
+                android:textColor="@color/mainColor"
+                android:textSize="15sp"
+                android:layout_marginRight="6dp"
+                android:text="@string/reset"
+                android:layout_height="38dp" />
+            <TextView
+                android:id="@+id/tvConfirm"
+                android:layout_width="98dp"
+                android:background="@drawable/word_cup_maincolor_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_marginRight="6dp"
+                android:text="@string/confirm"
+                android:layout_height="38dp" />
         </LinearLayout>
-    </RelativeLayout>
-</RelativeLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

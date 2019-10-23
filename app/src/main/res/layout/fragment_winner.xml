@@ -10,7 +10,6 @@
         android:shadowColor="#ffffff"
         android:shadowRadius="5"
         android:textStyle="bold"
-        android:fontFamily="@font/vagroundedbt"
         android:textSize="20sp"
         android:shadowDx="0"
         android:gravity="center"

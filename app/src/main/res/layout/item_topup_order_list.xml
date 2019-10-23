@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="@dimen/x20"
+    android:layout_marginLeft="@dimen/x20"
+    app:cardCornerRadius="@dimen/x10"
+    app:cardElevation="@dimen/x10"
+    android:layout_marginRight="@dimen/x20"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x90"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20">
+
+            <TextView
+                android:id="@+id/opreator"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/color_1e1e24"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvOrderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x20"
+                android:textColor="@color/color_808080"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x40"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/recharge_number"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/phoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_808080"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x40"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/recharge_phone_bill"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_808080"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x40"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/payment_amount"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/payPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90"
+                android:layout_marginLeft="@dimen/x12"
+                android:textColor="@color/color_1e1e24"
+                android:textSize="13sp" />
+            <View
+                android:layout_width="1dp"
+                android:background="#979797"
+                android:layout_marginLeft="5dp"
+                android:layout_height="13dp"/>
+            <TextView
+                android:id="@+id/payQgas"
+                android:layout_width="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="1dp"
+                android:text="5"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x5"
+                android:textColor="@color/color_808080"
+                android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/payIntroduce"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textColor="@color/color_1e1e24"
+                android:text="@string/slow_charging"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/orderState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x4"
+                android:textColor="@color/color_808080"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_f2f2f2"/>
+        <LinearLayout
+            android:id="@+id/llVoucher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textColor="@color/color_1e1e24"
+                android:text="链上充值凭证"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txid"
+                android:layout_width="wrap_content"
+                android:ellipsize="middle"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:drawableRight="@mipmap/icon_enter1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x4"
+                android:textColor="@color/color_808080"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/orderOpreate"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="12dp"
+                android:background="@color/color_f2f2f2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/x20"
+                android:layout_marginRight="@dimen/x20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/cancelOrder"
+                    android:layout_width="wrap_content"
+                    android:text="@string/cancellation_of_order"
+                    android:textColor="@color/color_999"
+                    android:background="@drawable/bt_999_bg"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:textSize="13sp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/payOrder"
+                    android:layout_width="wrap_content"
+                    android:text="@string/immediate_payment"
+                    android:background="@drawable/bt_ff3669_bg"
+                    android:layout_marginLeft="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/color_ff3669"
+                    android:textSize="13sp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/voucherDetail"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="12dp"
+                android:background="@color/color_f2f2f2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/x20"
+                android:layout_marginRight="@dimen/x20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:textColor="@color/color_1e1e24"
+                    android:text="凭证详情"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/background_reim"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/icon_enter1"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

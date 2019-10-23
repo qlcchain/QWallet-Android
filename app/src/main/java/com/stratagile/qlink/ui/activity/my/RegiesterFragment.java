@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
@@ -23,6 +24,7 @@ import com.stratagile.qlink.ui.activity.my.contract.RegiesterContract;
 import com.stratagile.qlink.ui.activity.my.module.RegiesterModule;
 import com.stratagile.qlink.ui.activity.my.presenter.RegiesterPresenter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -74,6 +76,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     EditText etInviteCode;
     @BindView(R.id.checkBox)
     SmoothCheckBox checkBox;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Nullable
     @Override
@@ -119,6 +122,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     public void registerSuccess(VcodeLogin register) {
         closeProgressDialog();
         if (register.getCode().equals("0")) {
+            FireBaseUtils.logEvent(getActivity(), FireBaseUtils.eventRegiester);
             closeProgressDialog();
             ToastUtil.displayShortToast(getString(R.string.register_success));
             UserAccount userAccount = new UserAccount();
@@ -128,7 +132,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
             userAccount.setUserName(register.getNickname());
             userAccount.setPhone(register.getPhone());
             userAccount.setAvatar(register.getHead());
-            userAccount.setInviteCode(register.getId());
+            userAccount.setInviteCode(register.getNumber());
             userAccount.setPassword(MD5Util.getStringMD5(password));
             userAccount.setIsLogin(true);
             AppConfig.getInstance().getDaoSession().getUserAccountDao().insert(userAccount);

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    app:layout_constraintLeft_toRightOf="parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/paymentWallet"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/receive_from"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/x50"
+        android:textColor="@color/color_7f7f7f"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/llSelectQlcWallet"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/x10"
+        app:layout_constraintTop_toBottomOf="@+id/paymentWallet"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x138">
+
+        <ImageView
+            android:id="@+id/iv_country"
+            android:layout_width="@dimen/x88"
+            android:src="@mipmap/icons_qlc_wallet"
+            android:layout_height="@dimen/x88" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/select_a_qlc_wallet_to_send_out_qgas"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:id="@+id/tvQlcWalletName"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a_40"
+                android:layout_marginTop="@dimen/x10"
+                android:maxEms="10"
+                android:ellipsize="middle"
+                android:text="@string/select_a_qlc_wallet"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:maxWidth="@dimen/x400"
+                android:id="@+id/tvQlcWalletAddess"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:padding="@dimen/x15"
+            android:id="@+id/walletMore"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_width="@dimen/x60"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/icon_enter1"
+            android:layout_height="@dimen/x60" />
+    </LinearLayout>
+    <View
+        android:id="@+id/view1"
+        app:layout_constraintTop_toBottomOf="@+id/llSelectQlcWallet"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_29282a_40"/>
+
+    <LinearLayout
+        android:id="@+id/llusdt"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/view1"
+        android:layout_marginTop="@dimen/x20"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:text="QGAS"
+            android:textColor="@color/color_29282a"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvQGASBalance"
+            android:layout_width="wrap_content"
+            android:textColor="@color/mainColor"
+            android:text="Balance: -/- QLC"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAmountQgas"
+        android:layout_width="wrap_content"
+        android:text="-/-"
+        android:textSize="16sp"
+        android:textColor="@color/color_29282a"
+        app:layout_constraintLeft_toLeftOf="@+id/llusdt"
+        app:layout_constraintTop_toBottomOf="@+id/llusdt"
+        android:layout_marginTop="@dimen/x13"
+        android:layout_height="wrap_content" />
+
+
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        app:layout_constraintTop_toBottomOf="@+id/tvAmountQgas"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/tvSendTo"
+        android:layout_width="wrap_content"
+        android:text="@string/send_to"
+        android:textSize="16sp"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        android:layout_marginTop="@dimen/x13"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvReceiveAddress"
+        android:layout_width="match_parent"
+        android:textSize="16sp"
+        android:textColor="@color/color_29282a"
+        app:layout_constraintTop_toBottomOf="@+id/tvSendTo"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        app:layout_constraintTop_toBottomOf="@+id/tvReceiveAddress"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/Memo"
+        android:text="@string/memo"
+        android:textColor="@color/color_29282a_40"
+        app:layout_constraintLeft_toLeftOf="@+id/llSelectQlcWallet"
+        app:layout_constraintTop_toBottomOf="@+id/view5"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etEthTokenSendMemo"
+        app:layout_constraintTop_toBottomOf="@+id/Memo"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/x10"
+        android:textSize="15sp"
+        android:textColor="@color/color_29282a"
+        android:hint="if any"
+        android:background="@null"
+        android:layout_height="wrap_content" />
+
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        app:layout_constraintTop_toBottomOf="@+id/etEthTokenSendMemo"
+        android:layout_height="@dimen/x1"
+        android:layout_marginTop="@dimen/x25"
+        android:background="@color/color_29282a_40"/>
+
+    <TextView
+        android:id="@+id/tvSend"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        android:layout_marginTop="@dimen/x300"
+        android:layout_marginLeft="@dimen/x45"
+        android:text="@string/send"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/x45"
+        android:background="@drawable/main_color_bt_bg"
+        android:layout_height="@dimen/x94" />
+</android.support.constraint.ConstraintLayout>

@@ -27,22 +27,31 @@ import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.webkit.WebView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 //import com.facebook.FacebookSdk;
+//import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.data.api.API;
+import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.DaoMaster;
 import com.stratagile.qlink.db.DaoSession;
 import com.stratagile.qlink.db.MySQLiteOpenHelper;
 import com.stratagile.qlink.db.VpnEntity;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.CurrencyBean;
+import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
@@ -53,9 +62,12 @@ import com.stratagile.qlink.utils.NickUtil;
 import com.stratagile.qlink.utils.NotificationUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.AppFilePath;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxDataTool;
+import com.vondear.rxtools.RxDeviceTool;
+import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxTool;
 
 import org.bitcoinj.kits.WalletAppKit;
@@ -65,6 +77,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,6 +85,10 @@ import java.util.Locale;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
+import cn.jpush.android.api.JPushInterface;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 //import com.tencent.bugly.crashreport.CrashReport;
 
@@ -118,6 +135,12 @@ public class AppConfig extends MultiDexApplication {
             .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
+    public RequestOptions optionsTopup = new RequestOptions()
+            .centerCrop()
+            .placeholder(R.mipmap.guangdong_mobile)
+            .error(R.mipmap.guangdong_mobile)
+            .priority(Priority.HIGH);
+
     public RequestOptions optionsMainColor = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
@@ -141,6 +164,11 @@ public class AppConfig extends MultiDexApplication {
 
     }
 
+    private void initJpush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -159,26 +187,97 @@ public class AppConfig extends MultiDexApplication {
         NickUtil.initUserNickName(this);
         initDbUpdate();
         initResumeListener();
-        initMiPush();
+//        initMiPush();
         setMode();
+        initJpush();
         setLanguage(false);
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
         updateNotificationChannels();
+        initGlide();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            String processName = getProcessName(this);
+            if (!"com.stratagile.qwallet".equals(processName)){//判断不等于默认进程名称
+                WebView.setDataDirectorySuffix(processName);
+            } else {
+                new WebView(this).destroy();
+            }
+        }
         //初始化btc钱包
-        org.bitcoinj.core.Context.enableStrictMode();
-        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
-        KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
+//        org.bitcoinj.core.Context.enableStrictMode();
+//        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
+//        KLog.i(org.bitcoinj.core.Context.get().getFeePerKb().toFriendlyString());
 //        BitUtil.getWalletKit(this);
 //        remoteConfig = FirebaseRemoteConfig.getInstance();
+//        adb shell setprop debug.firebase.analytics.app <com.stratagile.qwallet>
+//        adb shell setprop debug.firebase.analytics.app com.stratagile.qwallet
+        // adb shell setprop debug.firebase.analytics.app .none.
     }
 
-    private void setMode() {
-        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
-            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
-        } else {
-            ConstantValue.qlcNode = "http://47.103.40.20:19735";
+    private void initGlide() {
+        GlideBuilder glideBuilder = new GlideBuilder();
+        glideBuilder.setLogLevel(Log.ERROR);
+        Glide.init(this, glideBuilder);
+    }
+
+    public  String getProcessName(Context context) {
+        if (context == null) return null;
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == android.os.Process.myPid()) {
+                return processInfo.processName;
+            }
         }
+        return null;
+    }
+
+    public String getBaseUrl() {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return MainAPI.MainBASE_URL;
+        } else {
+            return API.BASE_URL;
+        }
+    }
+
+    public void saveLog(String mode, String operation, String log) {
+        HashMap<String, String> infoMap = new HashMap<>();
+        infoMap.put("appName", "QWallet");
+        infoMap.put("version", VersionUtil.getAppVersionCode(this) + "");
+        infoMap.put("os", "Android");
+        infoMap.put("deviceModel", RxDeviceTool.getBuildMANUFACTURER() + " " + RxDeviceTool.getBuildBrandModel());
+        infoMap.put("mode", mode);
+        infoMap.put("operation", operation);
+        infoMap.put("happenDate", (System.currentTimeMillis() / 1000) + "");
+        infoMap.put("log", log);
+        mAppComponent.getHttpApiWrapper().saveLog(infoMap).subscribe(new Consumer<BaseBack>() {
+            @Override
+            public void accept(BaseBack baseBack) throws Exception {
+                //isSuccesse
+                KLog.i("onSuccesse");
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                KLog.i("onError");
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+                KLog.i("onComplete");
+            }
+        });
+    }
+
+
+    private void setMode() {
+        ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+//        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
+//            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+//        } else {
+//            ConstantValue.qlcNode = "http://47.103.40.20:19735";
+//        }
     }
 
     private void updateNotificationChannels() {

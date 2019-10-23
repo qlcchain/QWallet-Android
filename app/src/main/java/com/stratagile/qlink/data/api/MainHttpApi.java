@@ -3,6 +3,7 @@ package com.stratagile.qlink.data.api;
 
 import com.stratagile.qlink.entity.Active;
 import com.stratagile.qlink.entity.ActiveList;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
@@ -65,6 +66,16 @@ import com.stratagile.qlink.entity.otc.GenerageTradeOrder;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.entity.otc.TradeOrderDetail;
 import com.stratagile.qlink.entity.otc.TradeOrderList;
+import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.reward.ClaimQgas;
+import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardList;
+import com.stratagile.qlink.entity.reward.RewardTotal;
+import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.TopupOrder;
+import com.stratagile.qlink.entity.topup.TopupOrderList;
+import com.stratagile.qlink.entity.topup.TopupProduct;
 
 import java.util.Map;
 
@@ -80,6 +91,12 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+
+import static com.stratagile.qlink.data.api.API.url_bind_qlcchain_wallet;
+import static com.stratagile.qlink.data.api.API.url_pairs;
+import static com.stratagile.qlink.data.api.API.url_reward_claims;
+import static com.stratagile.qlink.data.api.API.url_reward_tatal;
+import static com.stratagile.qlink.data.api.API.url_topup_productlist;
 
 
 /**
@@ -469,6 +486,74 @@ public interface MainHttpApi {
     @POST(MainAPI.url_user_userinfo)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<UserInfo> getUserInfo(@Body RequestBody map);
+
+    @POST(MainAPI.url_app_version_info)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<AppVersion> getAppLastVersion(@Body RequestBody map);
+
+    @POST(MainAPI.url_pairs)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradePair> getPairs(@Body RequestBody map);
+
+    @POST(MainAPI.url_contact_unlock)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<UnLock> unLock(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_productlist)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupProduct> getTopupProductList(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_order_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrderList> getTopupOrderList(@Body RequestBody map);
+
+    @POST(MainAPI.url_topup_cancel_order)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupCancelOrder(@Body RequestBody map);
+
+    @POST(MainAPI.url_log_save)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> saveLog(@Body RequestBody map);
+
+    @POST(MainAPI.url_sys_dict)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Dict> qurryDict(@Body RequestBody map);
+
+    @POST(MainAPI.url_reward_tatal)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardTotal> getRewardTotal(@Body RequestBody map);
+
+    @POST(MainAPI.url_inivte_amount)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<InviteTotal> getInviteAmount(@Body RequestBody map);
+
+    @POST(MainAPI.url_bind_qlcchain_wallet)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> bindQlcWallet(@Body RequestBody map);
+
+    @POST(MainAPI.url_reward_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardList> getRewardList(@Body RequestBody map);
+
+    @POST(MainAPI.url_reward_claims)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimQgas(@Body RequestBody map);
+
+    @POST(MainAPI.url_reward_claim_invite)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimInviteQgas(@Body RequestBody map);
+
+    @POST(MainAPI.url_bind_push)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> bindPush(@Body RequestBody map);
+
+    @POST(MainAPI.url_user_logout)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> userLogout(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

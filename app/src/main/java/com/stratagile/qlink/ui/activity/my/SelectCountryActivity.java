@@ -62,37 +62,37 @@ public class SelectCountryActivity extends BaseActivity implements SelectCountry
     List<SideBean> sideBeans;
     @Override
     protected void initData() {
-        setTitle("国家地区");
-        String areaJson = "";
-        areaJson = FileUtil.getJson(AppConfig.getInstance(), "area.json");
-        Area area = new Gson().fromJson(areaJson, Area.class);
-        sideBeans = area.getCountry();
-        for (SideBean sideBean : sideBeans) {
-            sideBean.setIndexTag(sideBean.getName().substring(0, 1));
-        }
-        sideBeans = Account.INSTANCE.sort(sideBeans);
-        sideAdapter = new SideAdapter(sideBeans);
-        recyclerView.setAdapter(sideAdapter);
-        String indexStr = "";
-        for (SideBean sideBean : sideBeans) {
-            if (!indexStr.contains(sideBean.getIndexTag())) {
-                indexStr  = indexStr + sideBean.getIndexTag();
-            }
-        }
-        sideBar.setIndexStr(indexStr);
-        sideBar.setIndexChangeListener(new SideBar.indexChangeListener() {
-            @Override
-            public void indexChanged(String tag) {
-                if (TextUtils.isEmpty(tag) || sideBeans.size() <= 0) return;
-                for (int i = 0; i < sideBeans.size(); i++) {
-                    if (tag.equals(sideBeans.get(i).getIndexTag())) {
-                        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(i, 0);
-//                        layoutManager.scrollToPosition(i);
-                        return;
-                    }
-                }
-            }
-        });
+//        setTitle("国家地区");
+//        String areaJson = "";
+//        areaJson = FileUtil.getJson(AppConfig.getInstance(), "area.json");
+//        Area area = new Gson().fromJson(areaJson, Area.class);
+//        sideBeans = area.getCountry();
+//        for (SideBean sideBean : sideBeans) {
+//            sideBean.setIndexTag(sideBean.getName().substring(0, 1));
+//        }
+//        sideBeans = Account.INSTANCE.sort(sideBeans);
+//        sideAdapter = new SideAdapter(sideBeans);
+//        recyclerView.setAdapter(sideAdapter);
+//        String indexStr = "";
+//        for (SideBean sideBean : sideBeans) {
+//            if (!indexStr.contains(sideBean.getIndexTag())) {
+//                indexStr  = indexStr + sideBean.getIndexTag();
+//            }
+//        }
+//        sideBar.setIndexStr(indexStr);
+//        sideBar.setIndexChangeListener(new SideBar.indexChangeListener() {
+//            @Override
+//            public void indexChanged(String tag) {
+//                if (TextUtils.isEmpty(tag) || sideBeans.size() <= 0) return;
+//                for (int i = 0; i < sideBeans.size(); i++) {
+//                    if (tag.equals(sideBeans.get(i).getIndexTag())) {
+//                        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(i, 0);
+////                        layoutManager.scrollToPosition(i);
+//                        return;
+//                    }
+//                }
+//            }
+//        });
     }
 
     @Override

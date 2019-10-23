@@ -1,8 +1,12 @@
 package com.stratagile.qlink.ui.activity.setting.presenter;
 import android.support.annotation.NonNull;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
+import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.setting.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
+
+import java.util.Map;
+
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -41,34 +45,27 @@ public class SettingsPresenter implements SettingsContract.SettingsContractPrese
         }
     }
 
-//    @Override
-//    public void getUser(HashMap map) {
-//        //mView.showProgressDialog();
-//        Disposable disposable = httpAPIWrapper.getUser(map)
-//                .subscribe(new Consumer<User>() {
-//                    @Override
-//                    public void accept(User user) throws Exception {
-//                        //isSuccesse
-//                        KLog.i("onSuccesse");
-//                        mView.setText(user);
-//                      //mView.closeProgressDialog();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        //onError
-//                        KLog.i("onError");
-//                        throwable.printStackTrace();
-//                      //mView.closeProgressDialog();
-//                      //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        //onComplete
-//                        KLog.i("onComplete");
-//                    }
-//                });
-//        mCompositeDisposable.add(disposable);
-//    }
+    public void logout(Map map) {
+        mCompositeDisposable.add(httpAPIWrapper.userLogout(map).subscribe(new Consumer<BaseBack>() {
+            @Override
+            public void accept(BaseBack user) throws Exception {
+                //isSuccesse
+                mView.logoutSuccess();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
+    }
+
+
 }

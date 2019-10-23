@@ -55,9 +55,10 @@ class AppealDetailActivity : BaseActivity(), AppealDetailContract.View {
         }
 
         tvNickName.text = AccountUtil.setUserNickName(tradeOrderDetail.order.nickname)
-        tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " QGAS"
-        tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " USDT"
-        tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " USDT"
+        tvQgasAmount.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.qgasAmount).stripTrailingZeros().toPlainString() + " " + tradeOrderDetail.order.tradeToken
+        tvAmountUsdt.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.usdtAmount).stripTrailingZeros().toPlainString() + " " + tradeOrderDetail.order.payToken
+        tvUnitPrice.text = "" + BigDecimal.valueOf(tradeOrderDetail.order.unitPrice).stripTrailingZeros().toPlainString() + " " + tradeOrderDetail.order.payToken
+        tvCoin.text = tradeOrderDetail.order.tradeToken
         tvAmountUsdt.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val mClipData = ClipData.newPlainText("Label", tvAmountUsdt.text.toString())

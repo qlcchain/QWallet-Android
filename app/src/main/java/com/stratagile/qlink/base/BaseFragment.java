@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ public abstract class BaseFragment extends Fragment {
 	 */
 	protected View rootView;
 
+
+	private boolean viewCreated = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,12 @@ public abstract class BaseFragment extends Fragment {
 	 */
 	protected void initView(LayoutInflater inflater, ViewGroup container) {
 
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		viewCreated = true;
+		super.onViewCreated(view, savedInstanceState);
 	}
 
 	@Override
@@ -106,12 +115,15 @@ public abstract class BaseFragment extends Fragment {
 	/** 是否已经加载过初始数据, 在页面初始数据加载成功之后请置为false */
 	protected boolean isLoaded = false;
 
+	protected boolean isVisibleToUser = false;
+
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
-		if(this != null){
+		this.isVisibleToUser = isVisibleToUser;
+		if(this != null ){
 			super.setUserVisibleHint(isVisibleToUser);
 			if (isVisibleToUser) {
-				if(!isLoaded){
+				if(!isLoaded && viewCreated){
 					initDataFromNet();
 					isLoaded = true;
 				}

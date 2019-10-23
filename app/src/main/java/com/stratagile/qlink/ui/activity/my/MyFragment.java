@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.my;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,19 +14,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.UserInfo;
-import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardTotal;
+import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
@@ -34,8 +41,6 @@ import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
 import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
-import com.stratagile.qlink.ui.activity.otc.OrderDetailActivity;
-import com.stratagile.qlink.ui.activity.qlc.QlcTestActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.view.MyItemView;
@@ -45,14 +50,17 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * @author hzp
@@ -86,6 +94,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     boolean isLogin = false;
     @BindView(R.id.testView)
     View testView;
+    @BindView(R.id.claimQlc)
+    MyItemView claimQlc;
     private MainViewModel viewModel;
 
     @Nullable
@@ -178,6 +188,31 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
             }
         }
+        claimQlc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLogin) {
+                    if (ConstantValue.currentUser.getBindDate() == null || "".equals(ConstantValue.currentUser.getBindDate())) {
+                        viewModel.isBind.postValue(false);
+                    } else {
+                        claimQlc.setDotViewVisible(View.INVISIBLE);
+                        startActivity(new Intent(getActivity(), MyClaimActivity.class));
+                    }
+                } else {
+                    startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
+                }
+            }
+        });
+    }
+
+    private void bindPush(UserAccount userAccount) {
+        Map map = new HashMap<String, String>();
+        map.put("account", userAccount.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        map.put("appOs", "Android");
+        map.put("pushPlatform", "JIGUANG");
+        map.put("pushId", JPushInterface.getRegistrationID(getActivity()));
+        mPresenter.bindPush(map);
     }
 
     @Override
@@ -241,6 +276,23 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         }
     }
 
+    private void getCanClaimTotal() {
+        HashMap<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("type", "REGISTER");
+        infoMap.put("status", "NEW");
+        mPresenter.getCanClaimTotal(infoMap);
+    }
+
+    private void getCanInviteClaimTotal() {
+        HashMap<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("status", "NO_AWARD");
+        mPresenter.getCanInviteClaimTotal(infoMap);
+    }
+
     @Override
     public void showProgressDialog() {
         progressDialog.show();
@@ -252,15 +304,55 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     }
 
     @Override
-    public void setUsrInfo(UserInfo vcodeLogin) {
+    public void setUsrInfo(UserInfo usrInfo) {
+        bindPush(ConstantValue.currentUser);
+
+        if (usrInfo.getData().getBindDate() == null || "".equals(usrInfo.getData().getBindDate())) {
+            viewModel.isBind.postValue(false);
+        } else {
+            getCanClaimTotal();
+        }
         KLog.i("更新呢用户信息");
-        ConstantValue.currentUser.setHoldingPhoto(vcodeLogin.getData().getHoldingPhoto());
-        ConstantValue.currentUser.setFacePhoto(vcodeLogin.getData().getFacePhoto());
-        ConstantValue.currentUser.setVstatus(vcodeLogin.getData().getVStatus());
-        ConstantValue.currentUser.setAvatar(vcodeLogin.getData().getHead());
-        ConstantValue.currentUser.setUserName(vcodeLogin.getData().getNickname());
-        ConstantValue.currentUser.setUserId(vcodeLogin.getData().getId());
+        ConstantValue.currentUser.setHoldingPhoto(usrInfo.getData().getHoldingPhoto());
+        ConstantValue.currentUser.setFacePhoto(usrInfo.getData().getFacePhoto());
+        ConstantValue.currentUser.setTotalInvite(usrInfo.getData().getTotalInvite());
+        ConstantValue.currentUser.setVstatus(usrInfo.getData().getVStatus());
+        ConstantValue.currentUser.setBindDate(usrInfo.getData().getBindDate());
+        ConstantValue.currentUser.setInviteCode(usrInfo.getData().getNumber());
+        ConstantValue.currentUser.setAvatar(usrInfo.getData().getHead());
+        ConstantValue.currentUser.setUserName(usrInfo.getData().getNickname());
+        ConstantValue.currentUser.setUserId(usrInfo.getData().getId());
         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+    }
+
+    @Override
+    public void setCanClaimTotal(RewardTotal rewardTotal) {
+        getCanInviteClaimTotal();
+        if (rewardTotal.getRewardTotal() != 0) {
+            claimQlc.setDotViewVisible(View.VISIBLE);
+        } else {
+            claimQlc.setDotViewVisible(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void setCanInviteClaimTotal(InviteTotal rewardTotal) {
+        if (!"0".equals(rewardTotal.getInviteTotal())) {
+            shareFriend.setDotViewVisible(View.VISIBLE);
+        } else {
+            shareFriend.setDotViewVisible(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void bindPushBack() {
+        Set<String> tags = new HashSet<>();
+        tags.add(ConstantValue.userAll);
+        if (!"".equals(ConstantValue.currentUser.getBindDate())) {
+            tags.add(ConstantValue.userLend);
+        }
+        ConstantValue.jpushOpreateCount++;
+        JPushInterface.setTags(getActivity(), ConstantValue.jpushOpreateCount, tags);
     }
 
     @Override
@@ -296,6 +388,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 break;
             case R.id.shareFriend:
                 if (isLogin) {
+                    shareFriend.setDotViewVisible(View.INVISIBLE);
                     startActivity(new Intent(getActivity(), InviteActivity.class));
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
@@ -310,7 +403,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
                 break;
             case R.id.testView:
-//                startActivityForResult(new Intent(getActivity(), OrderDetailActivity.class), 0);
+                startActivityForResult(new Intent(getActivity(), TestActivity.class), 0);
                 break;
             default:
                 break;

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.socks.library.KLog
+import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -50,6 +51,13 @@ class OtcChooseWalletActivity : BaseActivity(), OtcChooseWalletContract.View {
                 val neoWallets = AppConfig.getInstance().daoSession.walletDao.loadAll()
                 if (neoWallets.size != 0) {
                     for (i in neoWallets.indices) {
+
+                        if (neoWallets[i].privateKey.equals(neoWallets[i].publicKey, ignoreCase = true)) {
+                            Account.fromWIF(neoWallets[i].wif)
+                            neoWallets[i].publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
+                            AppConfig.getInstance().daoSession.walletDao.update(neoWallets[i])
+                        }
+
                         val allWallet = AllWallet()
                         allWallet.wallet = neoWallets[i]
                         allWallet.walletAddress = neoWallets[i].address
@@ -125,6 +133,18 @@ class OtcChooseWalletActivity : BaseActivity(), OtcChooseWalletContract.View {
                 AllWallet.WalletType.QlcWallet.ordinal -> {
                    var returnItent  = Intent()
                     returnItent.putExtra("wallet", downCheckAdapter.data[position].qlcAccount)
+                    setResult(Activity.RESULT_OK, returnItent)
+                    finish()
+                }
+                AllWallet.WalletType.NeoWallet.ordinal -> {
+                   var returnItent  = Intent()
+                    returnItent.putExtra("wallet", downCheckAdapter.data[position].wallet)
+                    setResult(Activity.RESULT_OK, returnItent)
+                    finish()
+                }
+                AllWallet.WalletType.EosWallet.ordinal -> {
+                   var returnItent  = Intent()
+                    returnItent.putExtra("wallet", downCheckAdapter.data[position].eosAccount)
                     setResult(Activity.RESULT_OK, returnItent)
                     finish()
                 }

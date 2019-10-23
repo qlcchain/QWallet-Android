@@ -1,6 +1,7 @@
 package com.stratagile.qlink.application;
 
 import android.app.Application;
+import android.webkit.WebSettings;
 
 import com.google.gson.Gson;
 import com.stratagile.qlink.constant.ConstantValue;
@@ -15,6 +16,7 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.data.api.HttpApi;
 import com.stratagile.qlink.utils.SpUtil;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -22,7 +24,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -49,8 +54,19 @@ public final class APIModule {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(API.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(API.IO_TIMEOUT, TimeUnit.MILLISECONDS)
-                .addInterceptor(new RequestBodyInterceptor());
-        builder.addInterceptor(new HttpInfoInterceptor());
+                .addInterceptor(new RequestBodyInterceptor())
+                .addInterceptor(new HttpInfoInterceptor());
+        builder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request()
+                        .newBuilder()
+                        .removeHeader("User-Agent")//移除旧的
+                        .addHeader("User-Agent", WebSettings.getDefaultUserAgent(AppConfig.getInstance()))//添加真正的头部
+                        .build();
+                return chain.proceed(request);
+            }
+        });
         return builder.build();
     }
 

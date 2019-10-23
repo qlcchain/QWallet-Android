@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.stratagile.qlink">
 
+    <permission
+        android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,6 +29,7 @@
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <permission android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
     <uses-permission android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <uses-feature
         android:name="android.software.leanback"
@@ -60,7 +70,6 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-        <service android:name=".service.ClientVpnService"/>
         <activity android:name=".ui.activity.main.MainActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan|stateHidden"
@@ -212,7 +221,8 @@
         <activity android:name=".ui.activity.qlc.QlcMnemonicShowActivity" />
         <activity android:name=".ui.activity.qlc.QlcMnemonicbackupActivity" />
         <activity android:name=".ui.activity.my.VerificationActivity" />
-        <activity android:name=".ui.activity.otc.NewOrderActivity" />
+        <activity android:name=".ui.activity.otc.NewOrderActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
         <activity android:name=".ui.activity.otc.BuyQgasActivity" />
         <activity android:name=".ui.activity.otc.SellQgasActivity" />
         <activity android:name=".ui.activity.otc.OrderDetailActivity" />
@@ -224,6 +234,32 @@
         <activity android:name=".ui.activity.otc.AppealSubmittedActivity" />
         <activity android:name=".ui.activity.otc.OtcChooseWalletActivity" />
         <activity android:name=".ui.activity.otc.UsdtPayActivity" />
+        <activity android:name=".ui.activity.stake.MyStakeActivity" />
+        <activity android:name=".ui.activity.stake.NewStakeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            />
+        <activity android:name=".ui.activity.stake.StakeDetailActivity" />
+        <activity android:name=".ui.activity.stake.StakeExplainActivity" />
+        <activity android:name=".ui.activity.stake.QlcPayActivity" />
+        <activity android:name=".ui.activity.otc.SelectCurrencyActivity" />
+        <activity android:name=".ui.activity.otc.OtcNeoChainPayActivity" />
+        <activity android:name=".ui.activity.otc.OtcQlcChainPayActivity" />
+        <activity android:name="wendu.jsbdemo.MainActivity" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name="wendu.jsbdemo.WrokWithFlyioTestActivity" />
+        <activity android:name="wendu.jsbdemo.JavascriptCallNativeActivity" />
+        <activity android:name="wendu.jsbdemo.CallJavascriptActivity" />
+        <activity android:name=".ui.activity.topup.QurryMobileActivity" />
+        <activity android:name=".ui.activity.topup.SelectAreaActivity" />
+        <activity android:name=".ui.activity.topup.TopupQlcPayActivity" />
+        <activity android:name=".ui.activity.topup.TopupOrderListActivity" />
+        <activity android:name=".ui.activity.reward.MyClaimActivity" />
+        <activity android:name=".ui.activity.reward.ClaimRewardActivity" />
+        <activity android:name=".ui.activity.topup.VoucherDetailActivity" />
 
 
         <meta-data
@@ -231,9 +267,9 @@
             android:value="@string/google_map_key" />
         <meta-data android:name="android.max_aspect"
             android:value="2.5"/>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+<!--        <meta-data-->
+<!--            android:name="preloaded_fonts"-->
+<!--            android:resource="@array/preloaded_fonts" />-->
         <meta-data
             android:name="design_width_in_dp"
             android:value="360"/>
@@ -288,6 +324,25 @@
         </receiver>
 
 
+
+        <service android:name="com.stratagile.qlink.service.JpushService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.stratagile.qlink.reciver.JpushReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+                <category android:name="com.stratagile.qlink" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

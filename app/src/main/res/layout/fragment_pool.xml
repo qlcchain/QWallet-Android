@@ -14,7 +14,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:fontFamily="@font/vagroundedbt"
             android:text="@string/up_to"
             android:textSize="20sp"
             android:textColor="@color/white"
@@ -27,7 +26,6 @@
             android:shadowColor="#ffffff"
             android:shadowRadius="5"
             android:textStyle="bold"
-            android:fontFamily="@font/vagroundedbt"
             android:textSize="30sp"
             android:shadowDx="0"
             android:shadowDy="0"
@@ -38,7 +36,6 @@
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:textSize="20sp"
-            android:fontFamily="@font/vagroundedbt"
             android:text="@string/qlc"
             android:textAllCaps="true"
             android:textColor="@color/white"
@@ -49,7 +46,6 @@
         android:layout_width="wrap_content"
         android:textColor="@color/white"
         android:textSize="14sp"
-        android:fontFamily="@font/roboto_regular"
         android:layout_height="wrap_content"
         android:text="MainNet WINQ GAS Prize Pool" />
         <com.stratagile.qlink.view.TimeView

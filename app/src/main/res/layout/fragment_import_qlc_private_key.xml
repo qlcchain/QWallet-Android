@@ -78,7 +78,6 @@
         android:layout_marginRight="@dimen/x45"
         android:layout_marginTop="@dimen/x150"
         android:background="@drawable/change_wallet"
-        android:fontFamily="@font/roboto_regular"
         android:text="Start Importing"
         android:textAllCaps="false"
         android:textColor="@color/white" />

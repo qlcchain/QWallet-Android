@@ -33,7 +33,6 @@
             android:layout_marginTop="@dimen/x30"
             android:layout_width="wrap_content"
             android:letterSpacing="0.1"
-            android:fontFamily="@font/vagroun_q"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/x50"
             android:textColor="@color/color_333"

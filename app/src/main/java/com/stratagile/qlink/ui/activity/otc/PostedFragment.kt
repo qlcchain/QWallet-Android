@@ -65,6 +65,9 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         entrustOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivityForResult(Intent(activity, OrderDetailActivity::class.java).putExtra("order", entrustOrderListAdapter.data[position]).putExtra("position", position), 0)
         }
+        entrustOrderListAdapter.setOnLoadMoreListener({
+            getOrderList()
+        }, recyclerView)
         currentPage = 0
         getOrderList()
         refreshLayout.setRefreshing(false)
@@ -93,7 +96,7 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         map["userId"] = ConstantValue.currentUser.userId
         map["type"] = ""
         map["page"] = currentPage.toString() + ""
-        map["size"] = "5"
+        map["size"] = "10"
         mPresenter.getOrderList(map)
     }
 

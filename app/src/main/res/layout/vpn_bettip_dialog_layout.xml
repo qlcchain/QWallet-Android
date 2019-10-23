@@ -16,7 +16,6 @@
         android:gravity="center"
         android:paddingTop="@dimen/x45"
         android:paddingBottom="@dimen/x45"
-        android:fontFamily="@font/vagroun_q"
         />
 
     <TextView
@@ -26,7 +25,6 @@
         android:layout_marginLeft="@dimen/x77"
         android:layout_marginRight="@dimen/x77"
         android:textColor="@color/color_333"
-        android:fontFamily="@font/roboto_regular_q"
         android:layout_marginTop="@dimen/x40"
         android:layout_marginBottom="@dimen/x40"
         android:layout_height="wrap_content"
@@ -59,7 +57,6 @@
             android:id="@+id/btn_right"
             android:layout_width="match_parent"
             android:textColor="@color/mainColor"
-            android:fontFamily="@font/vagroun_q"
             android:layout_height="match_parent"
             android:background="@drawable/comfirm_button_bg"
             android:layout_weight="1"

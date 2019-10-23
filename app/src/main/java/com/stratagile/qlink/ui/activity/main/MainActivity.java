@@ -1,66 +1,69 @@
 package com.stratagile.qlink.ui.activity.main;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
-import com.stratagile.qlink.constant.BroadCastAction;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
-import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.QrEntity;
+import com.stratagile.qlink.entity.SwitchToOtc;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.ChangeWalletNeedRefesh;
 import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
-import com.stratagile.qlink.entity.eventbus.DisconnectVpn;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
+import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
-import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
+import com.stratagile.qlink.entity.eventbus.StartFilter;
+import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.guideview.Component;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
@@ -71,25 +74,26 @@ import com.stratagile.qlink.guideview.compnonet.EnterVpnComponent;
 import com.stratagile.qlink.guideview.compnonet.EnterWalletComponent;
 import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.Qsdk;
-import com.stratagile.qlink.ui.activity.finance.MyProductActivity;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
-import com.stratagile.qlink.ui.activity.my.VerificationActivity;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
+import com.stratagile.qlink.ui.activity.topup.TopUpFragment;
+import com.stratagile.qlink.ui.activity.topup.TopupOrderListActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
-import com.stratagile.qlink.ui.activity.wallet.ProfilePictureActivity;
 import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
-import com.stratagile.qlink.ui.activity.wallet.WalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
+import com.stratagile.qlink.ui.adapter.TradePairDecoration;
+import com.stratagile.qlink.ui.adapter.otc.TradePairAdapter;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
@@ -99,11 +103,11 @@ import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.QlinkUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
+import com.stratagile.qlink.utils.TimeUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
-import com.stratagile.qlink.view.BottomNavigationViewEx;
 import com.stratagile.qlink.view.NoScrollViewPager;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
@@ -114,15 +118,19 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.zip.Inflater;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import qlc.utils.Helper;
 
@@ -149,7 +157,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     ImageView ivAvater;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-//    @BindView(R.id.tv_free)
+    //    @BindView(R.id.tv_free)
 //    TextView tvFree;
     @BindView(R.id.iv_wallet)
     ImageView ivWallet;
@@ -177,6 +185,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     View xxx;
     @BindView(R.id.view_all_wallet)
     View viewAllWallet;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.recyclerViewTradePair)
+    RecyclerView recyclerViewTradePair;
+    @BindView(R.id.tvReset)
+    TextView tvReset;
+    @BindView(R.id.tvConfirm)
+    TextView tvConfirm;
+    @BindView(R.id.drawerlayout_side_tv)
+    LinearLayout drawerlayoutSideTv;
     private FirebaseAnalytics mFirebaseAnalytics;
     private MainViewModel viewModel;
 
@@ -191,7 +209,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     public static MainActivity mainActivity;
 
-//    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
+
+    //    DisconnectVpnSuccessBroadReceiver disconnectVpnSuccessBroadReceiver = new DisconnectVpnSuccessBroadReceiver();
     private LocationManager locationManager;
 
     private MyStatus myStatusFlag;
@@ -203,6 +222,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     protected void onCreate(Bundle savedInstanceState) {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
         needFront = true;
         super.onCreate(savedInstanceState);
         mainActivity = this;
@@ -223,14 +247,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             }
         });
-        //AppEventsLogger logger = AppEventsLogger.newLogger(this);
-        //logger.logEvent("MainActivity");
+        recyclerViewTradePair.addItemDecoration(new TradePairDecoration(10));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showVpnGuide(ShowGuide showGuide) {
         if (showGuide.getNumber() == 3) {
 //            showGuideViewVpnFragment();
+        }
+    }
+
+    TradePairAdapter tradePairAdapter;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void startFilter(StartFilter startFilter) {
+        recyclerViewTradePair.setLayoutManager(new GridLayoutManager(this, 2));
+        ArrayList<TradePair.PairsListBean> arrayList = new ArrayList<>();
+        try {
+            for (int i = 0; i < viewModel.pairsLiveData.getValue().size(); i++) {
+                arrayList.add(viewModel.pairsLiveData.getValue().get(i).clone());
+            }
+            tradePairAdapter = new TradePairAdapter(arrayList);
+            recyclerViewTradePair.setAdapter(tradePairAdapter);
+            drawerLayout.openDrawer(GravityCompat.END);
+            tradePairAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    tradePairAdapter.getData().get(position).setSelect(!tradePairAdapter.getData().get(position).isSelect());
+                    tradePairAdapter.notifyItemChanged(position);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -267,6 +315,45 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
+    private void getStakeQlcCount() {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("dictType", "winq_reward_qlc_amount");
+        mPresenter.qurryDict(infoMap);
+    }
+
+    private SweetAlertDialog sweetAlertDialog;
+
+    public void showCanClaimPop(String qlcCount) {
+        View view  = getLayoutInflater().inflate(R.layout.alert_can_claim, null, false);
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView qlc = view.findViewById(R.id.qlc);
+        qlc.setText(qlcCount);
+        TextView tvOpreate = view.findViewById(R.id.tvOpreate);
+        tvOpreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.dismissWithAnimation();
+                bindQlcWallet();
+            }
+        });
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.dismissWithAnimation();
+            }
+        });
+        sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+    }
+
+    private void bindQlcWallet() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("account", ConstantValue.currentUser.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        mPresenter.bindQlcWallet(map);
+    }
+
 
     @Override
     public void onGetFreeNumBack(int num) {
@@ -290,6 +377,39 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //                    .into(ivWallet);
 //            ivWallet.setVisibility(View.VISIBLE);
 //        }
+    }
+
+    @Override
+    public void setLastVersion(AppVersion appVersion) {
+        String[] version = appVersion.getData().getVersion_number().split("#");
+        int lastVersion = Integer.valueOf(version[0]);
+        int ignoreVersion = SpUtil.getInt(this, ConstantValue.ignoreVersion, 310);
+        int currentVersion = VersionUtil.getAppVersionCode(this);
+        KLog.i("currentVersion= " + currentVersion);
+        if (lastVersion > currentVersion) {
+            if (lastVersion > ignoreVersion) {
+                KotlinConvertJavaUtils.INSTANCE.showNewVersionDialog(this, lastVersion);
+            }
+        }
+    }
+
+    @Override
+    public void bindSuccess() {
+        ConstantValue.currentUser.setBindDate(TimeUtil.getTime());
+        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(ConstantValue.currentUser);
+        Set<String> tags = new HashSet<>();
+        tags.add(ConstantValue.userAll);
+        if (!"".equals(ConstantValue.currentUser.getBindDate())) {
+            tags.add(ConstantValue.userLend);
+        }
+        ConstantValue.jpushOpreateCount++;
+        JPushInterface.setTags(this, ConstantValue.jpushOpreateCount, tags);
+        ToastUtil.displayShortToast(getString(R.string.bind_success));
+    }
+
+    @Override
+    public void setStakeQlc(Dict dict) {
+        showCanClaimPop(dict.getData().getValue());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -330,57 +450,51 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         LocalWalletUtil.initGreenDaoFromLocal();
         mPresenter.getTox();
 //        getLocation();
-
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         if (!SpUtil.getString(this, ConstantValue.P2PID, "").equals("")) {
             Map<String, String> infoMap1 = new HashMap<>();
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
             mPresenter.zsFreeNum(infoMap1);
         }
-        segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        viewModel.isBind.observe(this, new Observer<Boolean>() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (i == R.id.button21) {
-                    viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
-                } else {
-                    viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (!aBoolean) {
+                    viewPager.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getStakeQlcCount();
+                        }
+                    }, 200);
                 }
             }
         });
-//        qlinkcom.getP2PConnnectStatus(new P2PCallBack() {
-//            @Override
-//            public void onResult(String result) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        SpUtil.putString(MainActivity.this, ConstantValue.P2PID, result);
-//                        EventBus.getDefault().post(new P2pBack());
-//                        String p2pId = result;
-//                        String saveResult = FileUtil.saveP2pId2Local(result);
-//                        KLog.i("上次的p2pId" + saveResult);
-//                        if ("".equals(saveResult)) {
-//
-//                        } else {
-//                            showp2pIdChangeDialog(result, saveResult);
-//                        }
-//                        if (SpUtil.getString(MainActivity.this, ConstantValue.myAvatarPath, "").equals("")) {
-//                            Map<String, String> infoMap = new HashMap<>();
-//                            infoMap.put("p2pId", p2pId);
-//                            mPresenter.userAvatar(infoMap);
-//                        }
-//                    }
-//                });
-//            }
-//        });
+        segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
+                    EventBus.getDefault().post(new GetPairs());
+                } else {
+                    if (i == R.id.button21) {
+                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
+                    } else {
+                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+                    }
+                }
+            }
+        });
         LogUtil.addLog(SystemUtil.getDeviceBrand() + "  " + SystemUtil.getSystemModel() + "   " + SystemUtil.getSystemVersion() + "   " + VersionUtil.getAppVersionName(this), getClass().getSimpleName());
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
-                    return new MarketFragment();
+                    return new TopUpFragment();
                 } else if (position == 1) {
-                    return new AllWalletFragment();
+                    return new MarketFragment();
                 } else if (position == 2) {
+                    return new AllWalletFragment();
+                } else if (position == 3) {
                     return new MyFragment();
                 } else {
                     return new MyFragment();
@@ -389,13 +503,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             @Override
             public int getCount() {
-                return 3;
+                return 4;
             }
         });
         //设置BottomNavigationMenuView的字体
         bottomNavigation.enableAnimation(false);
         bottomNavigation.enableShiftingMode(false);
         bottomNavigation.enableItemShiftingMode(false);
+        bottomNavigation.enableAnimation(false);
         viewPager.setOffscreenPageLimit(4);
 //        bottomNavigation.setTextSize(12);
 //        bottomNavigation.setIconSizeAt(0, 25f, 20.8f);
@@ -407,17 +522,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 resetToDefaultIcon();
+                Bundle bundle = new Bundle();
                 switch (item.getItemId()) {
                     case R.id.item_sms:
                         item.setIcon(R.mipmap.finance_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("finance", bundle);
                         setVpnPage();
+                        break;
+                    case R.id.item_topup:
+                        item.setIcon(R.mipmap.topup_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("topup", bundle);
+                        setTopupPage();
                         break;
                     case R.id.item_all_wallet:
                         item.setIcon(R.mipmap.wallet_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("wallet", bundle);
                         setAllWalletPage();
                         break;
                     case R.id.item_settings:
                         item.setIcon(R.mipmap.settings_h);
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
+//                        mFirebaseAnalytics.logEvent("me", bundle);
                         setSettingsPage();
                         break;
                     default:
@@ -433,7 +569,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
 //        startService(new Intent(this, ClientConnectedWifiRecordService.class));
         /**
-         * @see WalletFragment#refreshNeo(NeoRefrash)
          */
 //        EventBus.getDefault().post(new NeoRefrash());
         //创建neo钱包。为唯一对象，每次在使用的钱包只有一个。
@@ -453,12 +588,32 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         button21.toggle();
 
-//        ivWallet.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                showGuideViewEnterWallet();
-//            }
-//        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mPresenter.getLastAppVersion();
+            }
+        }).start();
+        viewModel.pairsLiveData.observe(this, new Observer<ArrayList<TradePair.PairsListBean>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<TradePair.PairsListBean> pairsListBeans) {
+                ArrayList<String> titles = new ArrayList<>();
+                for (int i = 0; i < viewModel.pairsLiveData.getValue().size(); i++) {
+                    if (!titles.contains(viewModel.pairsLiveData.getValue().get(i).getTradeToken()) && viewModel.pairsLiveData.getValue().get(i).isSelect()) {
+                        titles.add(viewModel.pairsLiveData.getValue().get(i).getTradeToken());
+                    }
+                }
+                if (titles.size() == 0) {
+                    titles.add(viewModel.pairsLiveData.getValue().get(0).getTradeToken());
+                }
+
+            }
+        });
     }
 
     private void showp2pIdChangeDialog(String currentP2pId, String lastP2pId) {
@@ -532,6 +687,29 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        Account.INSTANCE.fromWIF(walletList.get(SpUtil.getInt(this, ConstantValue.currentWallet, 0)).getWif());
     }
 
+    private void setTopupPage() {
+        financeCome.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
+        }
+        viewPager.setCurrentItem(0, false);
+        tvTitle.setVisibility(View.VISIBLE);
+        segmentControlView.setVisibility(View.GONE);
+        ivWallet.setVisibility(View.GONE);
+        tvTitle.setText(R.string.top_up);
+        ivQRCode.setVisibility(View.GONE);
+        tvTitle.setTextColor(getResources().getColor(R.color.white));
+        statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        ivAvater.setVisibility(View.VISIBLE);
+        Glide.with(this)
+                .load(R.mipmap.add_j)
+                .into(ivWallet);
+        Glide.with(this)
+                .load(R.mipmap.icon_protfolio_more)
+                .into(ivAvater);
+    }
+
     /**
      * 设置为vpn界面
      */
@@ -540,7 +718,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
         }
-        viewPager.setCurrentItem(0, false);
+        viewPager.setCurrentItem(1, false);
         tvTitle.setVisibility(View.GONE);
         segmentControlView.setVisibility(View.VISIBLE);
         ivWallet.setVisibility(View.VISIBLE);
@@ -556,6 +734,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Glide.with(this)
                 .load(R.mipmap.icon_protfolio_more)
                 .into(ivAvater);
+        if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
+            EventBus.getDefault().post(new GetPairs());
+        }
     }
 
     private void setAllWalletPage() {
@@ -578,7 +759,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
             }
-            viewPager.setCurrentItem(1, false);
+            viewPager.setCurrentItem(2, false);
             ivQRCode.setVisibility(View.VISIBLE);
             statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
             rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -610,7 +791,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
         ivQRCode.setVisibility(View.GONE);
-        viewPager.setCurrentItem(2, false);
+        viewPager.setCurrentItem(3, false);
         statusBar.setBackgroundColor(getResources().getColor(R.color.white));
         rl1.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText(R.string.me);
@@ -620,6 +801,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 .load(R.mipmap.icon_set1)
                 .into(ivWallet);
     }
+
+
 
     /**
      * 判断是否支持指纹解锁
@@ -683,6 +866,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
+            return;
+        }
         if (DoubleClickHelper.isDoubleClick()) {
             finish();
         } else {
@@ -697,6 +884,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             bottomNavigation.setSelectedItemId(R.id.item_sms);
             setVpnPage();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void switchToOtc(SwitchToOtc switchToOtc) {
+        bottomNavigation.setSelectedItemId(R.id.item_sms);
+        setVpnPage();
     }
 
     @Override
@@ -763,97 +956,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         progressDialog.hide();
     }
 
-//    @Override
-//    public void getPermissionSuccess() {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 1000, mLocationListener);
-//            return;
-//        }
-//    }
-
-//    //获取是否已打开自身GPS
-//    public boolean isGpsEnable() {
-//        String providers = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-//
-//        if (providers != null && providers.contains(LocationManager.GPS_PROVIDER)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
-//    private void getLocation() {
-//        if (!isGpsEnable()) {
-//            Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//            startActivity(callGPSSettingIntent);
-//        }
-//        // 获取位置管理服务
-//        String serviceName = Context.LOCATION_SERVICE;
-//        locationManager = (LocationManager) this.getSystemService(serviceName);
-//        // 查找到服务信息
-////        Criteria criteria = new Criteria();
-////        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
-////        criteria.setAltitudeRequired(false);
-////        criteria.setBearingRequired(false);
-////        criteria.setCostAllowed(true);
-////        criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-////        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-////        Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
-////        updateToNewLocation(location);
-//        // 设置监听*器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
-//        mPresenter.getLocation();
-//    }
-
-    LocationListener mLocationListener = new LocationListener() {
-        @TargetApi(17)
-        @Override
-        public void onLocationChanged(Location mlocal) {
-            if (mlocal == null) {
-                return;
-            }
-            String strResult = "getAccuracy:" + mlocal.getAccuracy() + "\r\n"
-                    + "getAltitude:" + mlocal.getAltitude() + "\r\n"
-                    + "getBearing:" + mlocal.getBearing() + "\r\n"
-                    + "getElapsedRealtimeNanos:" + String.valueOf(mlocal.getElapsedRealtimeNanos()) + "\r\n"
-                    + "getLatitude:" + mlocal.getLatitude() + "\r\n"
-                    + "getLongitude:" + mlocal.getLongitude() + "\r\n"
-                    + "getProvider:" + mlocal.getProvider() + "\r\n"
-                    + "getSpeed:" + mlocal.getSpeed() + "\r\n"
-                    + "getTime:" + mlocal.getTime() + "\r\n";
-            KLog.i(strResult);
-            ConstantValue.mLatitude = (float) mlocal.getLatitude();
-            ConstantValue.mLongitude = (float) mlocal.getLongitude();
-            Map<String, String> map = new HashMap<>();
-            map.put("latlng", mlocal.getLatitude() + "," + mlocal.getLongitude());
-            map.put("language", "en_us");
-            map.put("sensor", "false");
-            mPresenter.latlngParseCountry(map);
-        }
-
-        @Override
-        public void onProviderDisabled(String arg0) {
-        }
-
-        @Override
-        public void onProviderEnabled(String arg0) {
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int event, Bundle extras) {
-        }
-    };
-
-    private void updateToNewLocation(Location location) {
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-        } else {
-
-        }
-    }
-
     @SuppressLint("RestrictedApi")
-    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode})
+    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode, R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
@@ -862,13 +966,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-//                    if (ConstantValue.currentUser.getVstatus().equals("NOT_UPLOAD")) {
-//                        startActivity(new Intent(this, VerificationActivity.class));
-//                        return;
-//                    } else if (!ConstantValue.currentUser.getVstatus().equals("KYC_SUCCESS")) {
-//                        ToastUtil.displayShortToast(getString(R.string.kyc_not_success));
-//                        return;
-//                    }
+
                     Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
                     startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
@@ -885,6 +983,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), getString(R.string.receivable_address), "qlc", 4);
                         startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
                     }
+                } else if (bottomNavigation.getSelectedItemId() == R.id.item_topup) {
+                    Intent intent1 = new Intent(this, TopupOrderListActivity.class);
+                    startActivity(intent1);
                 }
                 break;
             case R.id.rlWallet:
@@ -897,10 +998,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
-                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
-                        return;
-                    }
+//                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+//                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
+//                        return;
+//                    }
                     startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
                     return;
                 }
@@ -922,6 +1023,34 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 break;
             case R.id.ivQRCode:
                 startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
+                break;
+            case R.id.drawerlayout_side_tv:
+                break;
+            case R.id.tvReset:
+                for (int i = 0; i < tradePairAdapter.getData().size(); i++) {
+                    tradePairAdapter.getData().get(i).setSelect(false);
+                }
+                tradePairAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tvConfirm:
+                boolean hasSelectedTradePair = false;
+                ArrayList<TradePair.PairsListBean> pairsListBeans = new ArrayList<>();
+                for (int i = 0; i < tradePairAdapter.getData().size(); i++) {
+                    if (tradePairAdapter.getData().get(i).isSelect()) {
+                        hasSelectedTradePair = true;
+                        pairsListBeans.add(tradePairAdapter.getData().get(i));
+                    }
+                }
+                if (hasSelectedTradePair) {
+                    viewModel.pairsLiveData.postValue((ArrayList<TradePair.PairsListBean>) tradePairAdapter.getData());
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                    if (pairsListBeans.size() > 0) {
+                        String saveData = new Gson().toJson(pairsListBeans);
+                        FileUtil.savaData("/Qwallet/tradePair.json", saveData);
+                    }
+                 } else {
+                    ToastUtil.displayShortToast(getString(R.string.choose_at_least_one_trading_pair));
+                }
                 break;
             default:
                 break;

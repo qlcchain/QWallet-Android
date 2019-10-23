@@ -175,6 +175,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             });
             return;
         }
+        chart.setVisibility(View.VISIBLE);
         ArrayList<Entry> values = new ArrayList<>();
         for (int i = 0; i < data.getData().size(); i++) {
             long now = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(data.getData().get(i).get(0)));
@@ -229,7 +230,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
             infoMap.put("address", tokenInfo.getWalletAddress());
             infoMap.put("page", 1);
             mPresenter.getNeoWalletTransaction(infoMap);
-            tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()) + "");
+            tvTokenValue.setText(BigDecimal.valueOf(tokenInfo.getTokenValue()).stripTrailingZeros().toPlainString());
         } else if (tokenInfo.getWalletType() == AllWallet.WalletType.EosWallet) {
             infoMap.put("account", tokenInfo.getWalletAddress());
             infoMap.put("symbol", tokenInfo.getTokenSymol());

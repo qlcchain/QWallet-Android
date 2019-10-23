@@ -37,7 +37,6 @@
             android:layout_marginLeft="@dimen/dp_30"
             android:layout_marginRight="@dimen/dp_30"
             android:layout_marginTop="@dimen/dp_10"
-            android:fontFamily="@font/vagroundedbt"
             android:gravity="center"
             android:minHeight="60dp"
             android:text="@string/Please_disconnect_the_current_one_first"
@@ -58,7 +57,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="@font/vagroun_q"
                 android:background="@drawable/aler_left_bt_bg"
                 android:text="@string/no"
                 android:textColor="@color/white" />
@@ -74,7 +72,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/main_color_bt_bg"
-                android:fontFamily="@font/vagroun_q"
                 android:text="@string/yes"
                 android:textColor="@color/white" />
         </LinearLayout>

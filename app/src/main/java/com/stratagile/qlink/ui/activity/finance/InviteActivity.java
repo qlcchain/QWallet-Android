@@ -4,44 +4,34 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.API;
-import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.InviteList;
+import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.finance.component.DaggerInviteComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteContract;
 import com.stratagile.qlink.ui.activity.finance.module.InviteModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.InvitePresenter;
+import com.stratagile.qlink.ui.activity.reward.ClaimRewardActivity;
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
-import com.stratagile.qlink.utils.LanguageUtil;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.view.ScaleCircleNavigator;
 
-import net.lucode.hackware.magicindicator.MagicIndicator;
-import net.lucode.hackware.magicindicator.ViewPagerHelper;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -62,28 +52,48 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
     InvitePresenter mPresenter;
     @BindView(R.id.tvIniviteCode)
     TextView tvIniviteCode;
-    @BindView(R.id.tvRank)
-    TextView tvRank;
-    @BindView(R.id.userAvatar)
-    ImageView userAvatar;
-    @BindView(R.id.userName)
-    TextView userName;
-    @BindView(R.id.inivtePersons)
-    TextView inivtePersons;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
     @BindView(R.id.llContent)
     LinearLayout llContent;
+    @BindView(R.id.llCopy)
+    LinearLayout llCopy;
+    @BindView(R.id.ivTitle)
+    ImageView ivTitle;
+    @BindView(R.id.dot1)
+    ImageView dot1;
+    @BindView(R.id.base1)
+    View base1;
+    @BindView(R.id.dot2)
+    ImageView dot2;
+    @BindView(R.id.base2)
+    View base2;
+    @BindView(R.id.dot3)
+    ImageView dot3;
     @BindView(R.id.tvInivteNow)
     TextView tvInivteNow;
     @BindView(R.id.llbottom)
     LinearLayout llbottom;
-    @BindView(R.id.indicator)
-    MagicIndicator indicator;
-    @BindView(R.id.llCopy)
-    LinearLayout llCopy;
+    @BindView(R.id.toClaim)
+    TextView toClaim;
+    @BindView(R.id.tvCanClaimQGAS)
+    TextView tvCanClaimQGAS;
+    @BindView(R.id.tvClaimNow)
+    TextView tvClaimNow;
+    @BindView(R.id.rlInvited)
+    RelativeLayout rlInvited;
+    @BindView(R.id.tvInviteCount)
+    TextView tvInviteCount;
+    @BindView(R.id.tvClaimedQgas)
+    TextView tvClaimedQgas;
+    @BindView(R.id.tv1FreindQgas)
+    TextView tv1FreindQgas;
+    @BindView(R.id.tv2FreindQgas)
+    TextView tv2FreindQgas;
+    @BindView(R.id.tvAtlistFriend)
+    TextView tvAtlistFriend;
+
+    private int atLeastInviteFirend = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,22 +118,95 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
                 ToastUtil.displayShortToast(getString(R.string.copy_success));
             }
         });
+    }
+
+    @Override
+    protected void initData() {
+        setTitle(getString(R.string.share_with_friends));
+        if (ConstantValue.currentUser != null) {
+            tvIniviteCode.setText(ConstantValue.currentUser.getInviteCode());
+            if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+                //英文
+                ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_en));
+            } else {
+                ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_ch));
+            }
+            getOneFriendReward();
+        } else {
+            ToastUtil.displayShortToast(getString(R.string.user_data_error));
+        }
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
+
         tvInivteNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(InviteActivity.this, InviteNowActivity.class));
             }
         });
+        tvClaimNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (canClaimFriendTotal == 0) {
+                    ToastUtil.displayShortToast(getString(R.string.no_qgas_can_claim));
+                } else {
+                    if (canClaimFriendTotal < atLeastInviteFirend) {
+                        ToastUtil.displayShortToast(getString(R.string.not_enough_friends_were_invited));
+                    } else {
+                        claimQgas();
+                    }
+                }
+            }
+        });
+    }
+
+    private void claimQgas() {
+        Intent claimIntent = new Intent(this, ClaimRewardActivity.class);
+        claimIntent.putExtra("total", canClaimFriendTotal * oneFirendClaimQgas + "");
+        claimIntent.putExtra("claimType", "invite");
+        startActivityForResult(claimIntent, 1);
     }
 
     @Override
-    protected void initData() {
-        setTitle(getString(R.string.share_with_friends));
-        tvIniviteCode.setText(ConstantValue.currentUser.getInviteCode());
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            getCanClaimTotal();
+        }
+    }
+
+    /**
+     * 获取能获取奖励的最少邀请好友数
+     */
+    private void getAtlistInviteFriend() {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("dictType", "winq_invite_user_amount");
+        mPresenter.getAtlistInviteFriend(infoMap);
+    }
+
+    /**
+     * 获取邀请到一个好友的奖励数
+     */
+    private void getOneFriendReward() {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("dictType", "winq_invite_reward_amount");
+        mPresenter.getOneFriendReward(infoMap);
+    }
+
+    private void getCanClaimTotal() {
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("account", ConstantValue.currentUser.getAccount());
         infoMap.put("token", AccountUtil.getUserToken());
-        mPresenter.getInivteRank(infoMap);
+        infoMap.put("status", "NO_AWARD");
+        mPresenter.getCanClaimTotal(infoMap);
+    }
+
+    private void getClaimedTotal() {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("status", "AWARDED");
+        mPresenter.getClaimedTotal(infoMap);
     }
 
     @Override
@@ -141,65 +224,6 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
         mPresenter = (InvitePresenter) presenter;
     }
 
-    class ViewAdapter extends PagerAdapter {
-        public ViewAdapter(List<InviteList.GuanggaoListBean> views) {
-            this.guanggaoListBeans = views;
-            viewList = new ArrayList<>();
-        }
-
-        private List<InviteList.GuanggaoListBean> guanggaoListBeans;
-
-        private List<View> viewList;
-
-        @Override
-        public int getCount() {
-            return guanggaoListBeans.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView(viewList.get(position));
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            ImageView imageView = new ImageView(InviteActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            if (LanguageUtil.isCN(InviteActivity.this)) {
-                Glide.with(InviteActivity.this)
-                        .load(MainAPI.MainBASE_URL + guanggaoListBeans.get(position).getImgPath())
-                        .into(imageView);
-            } else {
-                Glide.with(InviteActivity.this)
-                        .load(MainAPI.MainBASE_URL + guanggaoListBeans.get(position).getImgPathEn())
-                        .into(imageView);
-            }
-            container.addView(imageView);
-            viewList.add(imageView);
-
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!"".equals(guanggaoListBeans.get(position).getUrl())) {
-                        Intent intent = new Intent();
-                        intent.setAction("android.intent.action.VIEW");
-                        Uri content_url = Uri.parse(guanggaoListBeans.get(position).getUrl());
-                        intent.setData(content_url);
-                        startActivity(intent);
-                    }
-                }
-            });
-            return imageView;
-        }
-    }
-
     @Override
     public void showProgressDialog() {
         progressDialog.show();
@@ -212,35 +236,49 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
 
     @Override
     public void setData(InviteList inviteList) {
-        userName.setText(inviteList.getMyInfo().getName());
-        inivtePersons.setText(getString(R.string.invited_) + " " + inviteList.getMyInfo().getTotalInvite() + " " +  getString(R.string.friends));
-        tvRank.setText(inviteList.getMyInfo().getMyRanking() + "");
-        InvitedAdapter invitedAdapter = new InvitedAdapter(inviteList.getTop5());
-        invitedAdapter.addFooterView(getLayoutInflater().inflate(R.layout.invite_list_footview_layout, null, false));
+        getAtlistInviteFriend();
+        InvitedAdapter invitedAdapter = new InvitedAdapter(inviteList.getTop5(), oneFirendClaimQgas);
         recyclerView.setAdapter(invitedAdapter);
-        invitedAdapter.getFooterLayout().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(InviteActivity.this, MyRankingActivity.class));
-            }
-        });
-        Glide.with(this)
-                .load(MainAPI.MainBASE_URL + inviteList.getMyInfo().getHead())
-                .apply(AppConfig.getInstance().options)
-                .into(userAvatar);
-        viewPager.setAdapter(new ViewAdapter(inviteList.getGuanggaoList()));
-        ScaleCircleNavigator scaleCircleNavigator = new ScaleCircleNavigator(this);
-        scaleCircleNavigator.setCircleCount(inviteList.getGuanggaoList().size());
-        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY);
-        scaleCircleNavigator.setSelectedCircleColor(getResources().getColor(R.color.mainColor));
-        scaleCircleNavigator.setCircleClickListener(new ScaleCircleNavigator.OnCircleClickListener() {
-            @Override
-            public void onClick(int index) {
-                viewPager.setCurrentItem(index);
-            }
-        });
-        indicator.setNavigator(scaleCircleNavigator);
-        ViewPagerHelper.bind(indicator, viewPager);
+    }
+
+    private float oneFirendClaimQgas = 0;
+
+    private int canClaimFriendTotal = 0;
+
+    private int allInvitedFriend = 0;
+
+    @Override
+    public void setCanClaimTotal(InviteTotal inviteTotal) {
+        canClaimFriendTotal = Integer.parseInt(inviteTotal.getInviteTotal());
+        tvCanClaimQGAS.setText(canClaimFriendTotal * oneFirendClaimQgas + "");
+        getClaimedTotal();
+    }
+
+    @Override
+    public void setClaimedTotal(InviteTotal inviteTotal) {
+        allInvitedFriend = canClaimFriendTotal + Integer.parseInt(inviteTotal.getInviteTotal());
+        tvInviteCount.setText(getString(R.string.friend_referred, allInvitedFriend + " "));
+        tvClaimedQgas.setText(getString(R.string.i_have_claimed, Integer.parseInt(inviteTotal.getInviteTotal()) * oneFirendClaimQgas + ""));
+    }
+
+    @Override
+    public void setAtlistInviteFriend(Dict dict) {
+        atLeastInviteFirend = Integer.parseInt(dict.getData().getValue());
+        tvAtlistFriend.setText(getString(R.string.you_can_claim_the_reward_when_successfully_invited_more_than_2_friends, dict.getData().getValue() + ""));
+        getCanClaimTotal();
+    }
+
+    @Override
+    public void setOneFriendReward(Dict dict) {
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        mPresenter.getInivteRank(infoMap);
+
+        oneFirendClaimQgas = Float.parseFloat(dict.getData().getValue());
+
+        tv1FreindQgas.setText(getString(R.string.get_x_qgas, dict.getData().getValue() + ""));
+        tv2FreindQgas.setText(getString(R.string.get_x_qgas, Double.parseDouble(dict.getData().getValue())*2 + ""));
     }
 
 }

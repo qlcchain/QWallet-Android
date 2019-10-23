@@ -12,7 +12,6 @@
         android:textSize="@dimen/sp11"
         android:letterSpacing="0.1"
         android:gravity="center"
-        android:fontFamily="@font/vagroun_q"
         android:text="@string/MANAGE_YOUR_WALLETS"
         android:background="@drawable/tablayout_background"
         />
@@ -69,7 +68,6 @@
                         android:layout_width="match_parent"
                         android:text="@string/COPY_ADDRESS"
                         android:gravity="center"
-                        android:fontFamily="@font/vagroun_q"
                         android:background="@drawable/copy_address_bg"
                         android:textColor="@color/white"
                         android:layout_height="@dimen/dp_43" />
@@ -135,7 +133,6 @@
                             android:textColor="@color/color_333"
                             android:text="@string/VIEW_QR_CODE"
                             android:letterSpacing="0.1"
-                            android:fontFamily="@font/vagroun_q"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -185,7 +182,6 @@
                             android:textColor="@color/color_333"
                             android:text="@string/VIEW_QR_CODE"
                             android:letterSpacing="0.1"
-                            android:fontFamily="@font/vagroun_q"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -204,7 +200,6 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="@string/export_keys"
-            android:fontFamily="@font/vagroun_q"
             android:background="@drawable/export_key"
             android:textColor="@color/white"
             android:layout_height="@dimen/dp_43" />
@@ -214,7 +209,6 @@
             android:layout_weight="1"
             android:text="@string/change_wallet"
             android:layout_marginLeft="@dimen/dp_10"
-            android:fontFamily="@font/vagroun_q"
             android:background="@drawable/change_wallet"
             android:textColor="@color/white"
             android:layout_height="@dimen/dp_43" />

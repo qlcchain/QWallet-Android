@@ -65,7 +65,7 @@ public class AccountActivity extends BaseActivity implements AccountContract.Vie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        needFront = true;
+        mainColor = R.color.white;
         super.onCreate(savedInstanceState);
     }
 

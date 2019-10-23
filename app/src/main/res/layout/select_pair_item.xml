@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="47dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tvTradePair"
+        android:gravity="center_vertical"
+        android:textSize="13sp"
+        android:paddingLeft="15dp"
+        android:textColor="@color/color_29282a"
+        android:layout_width="match_parent"
+        android:layout_height="46dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_f2f2f2"
+        android:layout_marginLeft="15dp"/>
+</LinearLayout>

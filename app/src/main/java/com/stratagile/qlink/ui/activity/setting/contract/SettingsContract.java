@@ -19,6 +19,8 @@ public interface SettingsContract {
          *
          */
         void closeProgressDialog();
+
+        void logoutSuccess();
     }
 
     interface SettingsContractPresenter extends BasePresenter {

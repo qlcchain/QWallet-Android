@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':libsodiumconfidant'
 include ':RxTools-library'
 include ':neoutils'
 include ':library'

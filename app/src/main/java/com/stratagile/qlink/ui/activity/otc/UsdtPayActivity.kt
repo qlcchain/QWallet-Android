@@ -63,13 +63,16 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
             toast(getString(R.string.no_enough_eth))
         }
         ethWalletInfo.data.tokens.forEach {
-            if ("USDT".equals(it.tokenInfo.symbol)) {
+            if (intent.getStringExtra("payToken").equals(it.tokenInfo.symbol)) {
                 usdtCount = it.balance / Math.pow(10.0, it.tokenInfo.decimals.toDouble())
-                tvUsdtBalance.text = getString(R.string.balance) + ": $usdtCount USDT"
+                tvUsdtBalance.text = getString(R.string.balance) + ": $usdtCount ${it.tokenInfo.symbol}"
+                payTokenBean = it
                 return@forEach
             }
         }
     }
+
+    var payTokenBean : EthWalletInfo.DataBean.TokensBean? = null
 
     override fun setEthPrice(tokenPrice: TokenPrice) {
         ethPrice = tokenPrice.data[0].price
@@ -115,12 +118,12 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
     }
 
     override fun initData() {
-        title.text = getString(R.string.send_usdt)
+        title.text = getString(R.string.send) + " " + intent.getStringExtra("payToken")
         llOpen.setOnClickListener {
             toggleCost()
         }
-        tvUsdtBalance.text = getString(R.string.balance) + ": -/- USDT"
-        etEthTokenSendMemo.setText(getString(R.string.buy_qgas) + "( " + intent.getStringExtra("orderNumber") + " )")
+        tvUsdtBalance.text = getString(R.string.balance) + ": -/-"
+        etEthTokenSendMemo.setText(getString(R.string.buy) + intent.getStringExtra("tradeToken") + "( " + intent.getStringExtra("orderNumber") + " )")
         mPresenter.getEthPrice()
         tvReceiveAddress.text = intent.getStringExtra("receiveAddress")
         tvAmountUsdt.text = intent.getStringExtra("usdt")
@@ -180,11 +183,11 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         }
         tvSend.setOnClickListener {
             if (usdtAmount > usdtCount) {
-                toast(getString(R.string.no_enough_usdt))
+                toast(getString(R.string.no_enough) + " " + intent.getStringExtra("payToken"))
                 return@setOnClickListener
             }
             if (gasEth.toDouble() > ethCount) {
-                toast(getString(R.string.no_enough_usdt))
+                toast(getString(R.string.no_enough) + " eth")
                 return@setOnClickListener
             }
             showConfirmSendUsdtDialog()
@@ -196,6 +199,8 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         val view = View.inflate(this, R.layout.dialog_send_usdt_layout, null)
         val tvOk = view.findViewById<TextView>(R.id.tvOk)
         val ivClose = view.findViewById<ImageView>(R.id.ivClose)
+        val ivSendChain = view.findViewById<ImageView>(R.id.ivSendChain)
+        ivSendChain.setImageResource(R.mipmap.icons_eth_wallet)
         val tvEthWalletName1 = view.findViewById<TextView>(R.id.tvEthWalletName1)
         val tvEthWalletAddess1 = view.findViewById<TextView>(R.id.tvEthWalletAddess1)
         val tvEthAmount1 = view.findViewById<TextView>(R.id.tvEthAmount1)
@@ -204,7 +209,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvEthWalletName1.text = ethWallet!!.name
         tvEthWalletAddess1.text = ethWallet!!.address
         tvMemo.text = etEthTokenSendMemo.text.toString()
-        tvEthAmount1.text = tvAmountUsdt.text.toString().trim() + " USDT"
+        tvEthAmount1.text = tvAmountUsdt.text.toString().trim() + " " + intent.getStringExtra("payToken")
         tvMainQgasAddress.text = tvReceiveAddress.text.toString()
         //取消或确定按钮监听事件处l
         val sweetAlertDialog = SweetAlertDialog(this)
@@ -218,7 +223,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvOk.setOnClickListener {
             sweetAlertDialog.cancel()
             showProgressDialog()
-            mPresenter.transferUsdt(ethWallet!!.address, tvReceiveAddress.text.toString(), usdtAmount.toString(), gasPrice, intent.getStringExtra("tradeOrderId"))
+            mPresenter.transferUsdt(ethWallet!!.address, tvReceiveAddress.text.toString(), usdtAmount.toString(), gasPrice, intent.getStringExtra("tradeOrderId"), payTokenBean!!.tokenInfo.address)
         }
     }
 

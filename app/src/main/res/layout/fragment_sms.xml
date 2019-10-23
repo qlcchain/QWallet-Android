@@ -79,7 +79,6 @@
                 android:textSize="12sp"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_regular_q"
                 android:text="@string/vpn_list"
                 android:textColor="@color/color_999" />
             <View

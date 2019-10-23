@@ -13,6 +13,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.FreeNum;
 import com.stratagile.qlink.entity.GoogleResult;
@@ -20,6 +21,7 @@ import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
+import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -44,6 +46,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -326,23 +329,50 @@ public class MainPresenter implements MainContract.MainContractPresenter {
         });
     }
 
-    public void zsFreeNum(Map map) {
-        httpAPIWrapper.zsFreeNum(map)
-                .subscribe(new HttpObserver<FreeNum>() {
-                    @Override
-                    public void onNext(FreeNum baseBack) {
-                        mView.onGetFreeNumBack(baseBack.getData().getFreeNum());
-                    }
-                });
+    public void bindQlcWallet(HashMap<String, String> map) {
+        httpAPIWrapper.bindQlcWallet(map).subscribe(new HttpObserver<BaseBack>() {
+            @Override
+            public void onNext(BaseBack baseBack) {
+                mView.bindSuccess();
+            }
+        });
     }
 
-    public void getShowAct() {
-        httpAPIWrapper.getShowAct(new HashMap<String, Object>())
-                .subscribe(new HttpObserver<ShowAct>() {
-                    @Override
-                    public void onNext(ShowAct baseBack) {
-                        mView.onGetShowActBack(baseBack.getData().getIsShow());
-                    }
-                });
+    public void zsFreeNum(Map map) {
+
+    }
+
+    public void getLastAppVersion() {
+        httpAPIWrapper.getAppLastVersion(new HashMap()).subscribe(new HttpObserver<AppVersion>() {
+            @Override
+            public void onNext(AppVersion mainAddress) {
+                mView.setLastVersion(mainAddress);
+                onComplete();
+            }
+        });
+    }
+
+    public void qurryDict(Map map) {
+        httpAPIWrapper.qurryDict(map).subscribe(new Observer<Dict>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Dict appVersion) {
+                mView.setStakeQlc(appVersion);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

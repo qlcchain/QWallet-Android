@@ -39,7 +39,7 @@
                     android:layout_height="@dimen/x90">
 
                     <ImageView
-                        android:id="@+id/iv_country"
+                        android:id="@+id/ivSendChain"
                         android:layout_width="@dimen/x88"
                         android:src="@mipmap/icons_qlc_wallet"
                         android:layout_height="@dimen/x88" />
@@ -75,7 +75,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Send to"
+                    android:text="@string/send_to"
                     android:layout_marginTop="@dimen/x40"
                     android:paddingLeft="@dimen/x30"
                     android:textColor="@color/color_808080"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Amount"
+                    android:text="@string/amount_"
                     android:paddingLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/x40"
                     android:textColor="@color/color_808080"
@@ -109,14 +109,16 @@
                     android:textSize="16sp"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
-                    android:text="Memo"
+                    android:text="@string/memo"
                     android:paddingLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/x40"
                     android:textColor="@color/color_808080"
                     android:textSize="16sp"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tvMemo"
                     android:layout_width="wrap_content"
                     android:paddingLeft="@dimen/x30"

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -26,6 +27,7 @@ import com.stratagile.qlink.ui.activity.my.contract.Login1Contract;
 import com.stratagile.qlink.ui.activity.my.module.Login1Module;
 import com.stratagile.qlink.ui.activity.my.presenter.Login1Presenter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.MD5Util;
 import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -34,8 +36,10 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -43,6 +47,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -75,6 +80,8 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     @BindView(R.id.tvForgetPassword)
     TextView tvForgetPassword;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,11 +109,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
             }
         });
         if (ConstantValue.lastLoginOut != null) {
-            if (ConstantValue.lastLoginOut.getEmail() == null || "".equals(ConstantValue.lastLoginOut.getEmail())) {
-                etAccount.setText(ConstantValue.lastLoginOut.getPhone());
-            } else {
-                etAccount.setText(ConstantValue.lastLoginOut.getEmail());
-            }
+            etAccount.setText(ConstantValue.lastLoginOut.getAccount());
             etAccount.setSelection(etAccount.getText().length());
         }
         return view;
@@ -125,7 +128,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 if (userAccount.getPhone() == null) {
                     userAccount.setPhone("");
                 }
-                if ((account.equals(userAccount.getEmail()) || account.equals(userAccount.getPhone())) && userAccount.getPubKey() != null && !"".equals(userAccount.getPubKey())) {
+                if ((account.toLowerCase().equals(userAccount.getAccount().toLowerCase()) || account.toLowerCase().equals(userAccount.getEmail().toLowerCase()) || account.equals(userAccount.getPhone())) && userAccount.getPubKey() != null && !"".equals(userAccount.getPubKey())) {
                     //账号密码登录
                     isVCodeLogin = false;
                     llVcode.setVisibility(View.GONE);
@@ -141,6 +144,16 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         isVCodeLogin = true;
         llVcode.setVisibility(View.VISIBLE);
         return true;
+    }
+
+    private void bindPush(UserAccount userAccount) {
+        Map map = new HashMap<String, String>();
+        map.put("account", userAccount.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        map.put("appOs", "Android");
+        map.put("pushPlatform", "JIGUANG");
+        map.put("pushId", JPushInterface.getRegistrationID(getActivity()));
+        mPresenter.bindPush(map);
     }
 
 
@@ -255,14 +268,14 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     private void getLoginVcode() {
         showProgressDialog();
         Map map = new HashMap<String, String>();
-        map.put("account", etAccount.getText().toString().trim());
+        map.put("account", etAccount.getText().toString().trim().toLowerCase());
         mPresenter.getSignInVcode(map);
     }
 
     private void vCodeLogin() {
         showProgressDialog();
         Map map = new HashMap<String, String>();
-        map.put("account", etAccount.getText().toString().trim());
+        map.put("account", etAccount.getText().toString().trim().toLowerCase());
         map.put("code", etVcode.getText().toString().trim());
         mPresenter.vCodeLogin(map);
     }
@@ -270,16 +283,17 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     private void login() {
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         for (UserAccount userAccount : userAccounts) {
-            if (userAccount.getAccount().equals(etAccount.getText().toString().trim())) {
+            if (userAccount.getAccount().toLowerCase().equals(etAccount.getText().toString().trim().toLowerCase())) {
                 showProgressDialog();
                 Map map = new HashMap<String, String>();
-                map.put("account", account);
+                map.put("account", account.toLowerCase());
                 String orgin = Calendar.getInstance().getTimeInMillis() + "," + MD5Util.getStringMD5(password);
                 KLog.i("加密前的原始：" + orgin);
                 String token = RSAEncrypt.encrypt(orgin, userAccount.getPubKey());
                 KLog.i("加密后：" + token);
                 map.put("token", token);
                 mPresenter.login(map);
+                break;
             }
         }
     }
@@ -289,10 +303,11 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     public void loginSuccess(Register register) {
         closeProgressDialog();
         ToastUtil.displayShortToast(getString(R.string.Login_success));
+        FireBaseUtils.logEvent(getActivity(), FireBaseUtils.eventLogin);
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         if (userAccounts.size() > 0) {
             for (UserAccount userAccount : userAccounts) {
-                if (userAccount.getAccount().equals(account) && userAccount.getPubKey() != null && !"".equals(userAccount.getPubKey())) {
+                if (userAccount.getAccount().toLowerCase().equals(account.toLowerCase()) && userAccount.getPubKey() != null && !"".equals(userAccount.getPubKey())) {
                     //账号密码登录
                     userAccount.setIsLogin(true);
                     userAccount.setPassword(MD5Util.getStringMD5(password));
@@ -305,12 +320,22 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 }
             }
         }
+        Set<String> tags = new HashSet<>();
+        tags.add(ConstantValue.userAll);
+        if (!"".equals(ConstantValue.currentUser.getBindDate())) {
+            tags.add(ConstantValue.userLend);
+        }
+        ConstantValue.jpushOpreateCount++;
+        JPushInterface.setTags(getActivity(), ConstantValue.jpushOpreateCount, tags);
+
+        bindPush(ConstantValue.currentUser);
         EventBus.getDefault().post(new LoginSuccess());
         getActivity().finish();
     }
 
     @Override
     public void vCodeLoginSuccess(VcodeLogin register) {
+        KLog.i("登录成功返回");
         UserAccount userAccount = new UserAccount();
         userAccount.setAccount(account);
         userAccount.setUserId(register.getId());
@@ -318,13 +343,14 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
         userAccount.setFacePhoto(register.getFacePhoto());
         userAccount.setHoldingPhoto(register.getHoldingPhoto());
         userAccount.setPubKey(register.getData());
-        userAccount.setAccount(register.getAccount());
         userAccount.setAvatar(register.getHead());
+        userAccount.setBindDate(register.getBindDate());
         userAccount.setInviteCode(register.getNumber());
+        userAccount.setTotalInvite(register.getTotalInvite());
         userAccount.setEmail(register.getEmail());
         userAccount.setPhone(register.getPhone());
         userAccount.setUserName(register.getNickname());
-        userAccount.setIsLogin(true);
+        userAccount.setIsLogin(false);
         ConstantValue.currentUser = userAccount;
         AppConfig.getInstance().getDaoSession().getUserAccountDao().insert(userAccount);
         login();
@@ -334,5 +360,10 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     public void getLoginVCodeSuccess() {
         ToastUtil.displayShortToast("The verification code has been sent successfully.");
         startVCodeCountDown();
+    }
+
+    @Override
+    public void loginError(String s) {
+        ToastUtil.displayShortToast(s);
     }
 }

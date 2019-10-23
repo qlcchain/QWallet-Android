@@ -41,7 +41,6 @@
                             android:gravity="center"
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="@string/VPN_INFORMATION"
                             android:background="@color/f6f6f6"
                             />
@@ -144,7 +143,6 @@
                                     android:textColor="@color/color_333"
                                     android:textSize="@dimen/sp9"
                                     android:layout_marginLeft="@dimen/x22"
-                                    android:fontFamily="@font/roboto_regular_q"
                                     android:text="@string/Your_Bet"
                                     />
                                 <LinearLayout
@@ -162,7 +160,6 @@
                                         android:inputType="number"
                                         android:maxLength="10"
                                         android:text="1"
-                                        android:fontFamily="@font/roboto_regular_q"
                                         android:layout_height="wrap_content" />
 
                                     <Spinner
@@ -171,7 +168,6 @@
                                         android:layout_height="wrap_content"
                                         android:entries="@array/coin_list"
 
-                                        android:fontFamily="@font/roboto_regular_q"
                                         android:text="QLC"
                                         android:textColor="@color/color_333"
                                         android:textSize="@dimen/sp14" />
@@ -189,7 +185,6 @@
                                     android:textColor="@color/color_333"
                                     android:textSize="@dimen/sp9"
                                     android:layout_marginLeft="@dimen/x22"
-                                    android:fontFamily="@font/roboto_regular_q"
                                     android:text="@string/Asset_Tranfer"
                                     />
                                 <LinearLayout
@@ -205,7 +200,6 @@
                                         android:paddingLeft="@dimen/x22"
                                         android:textColor="@color/color_333"
                                         android:textSize="@dimen/sp14"
-                                        android:fontFamily="@font/roboto_regular_q"
 
                                         android:layout_height="wrap_content" />
                                     <TextView
@@ -214,7 +208,6 @@
                                         android:textColor="@color/color_333"
                                         android:paddingLeft="@dimen/x12"
                                         android:textSize="@dimen/sp14"
-                                        android:fontFamily="@font/roboto_regular_q"
 
                                         android:text="QLC"
                                         />
@@ -239,7 +232,6 @@
                             android:gravity="center"
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="@string/VPN_CONFIGURATION_PROFILE"
                             android:background="@color/f6f6f6"
                             />
@@ -324,7 +316,6 @@
                                             android:textSize="12sp"
                                             android:textStyle="bold"
                                             android:letterSpacing="0"
-                                            android:fontFamily="@font/roboto_regular_q"
                                             android:layout_marginLeft="@dimen/x10"
                                             android:layout_height="wrap_content"
                                             android:text="@string/PASTE_ADDRESS"
@@ -348,7 +339,6 @@
                                             android:textSize="12sp"
                                             android:textStyle="bold"
                                             android:letterSpacing="0"
-                                            android:fontFamily="@font/roboto_regular_q"
                                             android:layout_marginLeft="@dimen/x10"
                                             android:layout_height="wrap_content"
                                             android:text="@string/SCAN_QR_CODE"
@@ -523,7 +513,6 @@
                             android:letterSpacing="0.1"
                             android:visibility="gone"
                             android:textSize="@dimen/sp11"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="@string/USERNAME_AND_PASSWORD_OPTIONAL"
                             android:background="@color/mainColor"
                             />
@@ -609,7 +598,6 @@
                             android:visibility="gone"
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="@string/DEVICE_BANDWIDTH"
                             android:background="@color/mainColor"
                             />
@@ -644,7 +632,6 @@
                             android:letterSpacing="0.1"
                             android:textSize="@dimen/sp11"
                             android:gravity="center"
-                            android:fontFamily="@font/vagroun_q"
                             android:text="@string/connection_limit_price_settings"
                             android:background="@color/f6f6f6"
                             />
@@ -736,7 +723,6 @@
                     android:text="@string/cancel"
                     android:visibility="gone"
                     style="?android:attr/borderlessButtonStyle"
-                    android:fontFamily="@font/vagroundedbt"
                     android:background="@drawable/aler_left_bt_bg"
                     android:textColor="@color/white"
                     android:layout_weight="2"
@@ -746,7 +732,6 @@
                     android:layout_width="0dp"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_weight="2"
-                    android:fontFamily="@font/vagroundedbt"
                     style="?android:attr/borderlessButtonStyle"
                     android:background="@color/regedit"
                     android:text="@string/Register"

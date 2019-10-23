@@ -29,7 +29,6 @@
                 android:layout_marginLeft="@dimen/x20"
                 android:layout_toRightOf="@+id/image"
                 android:textSize="10sp"
-                android:fontFamily="@font/roboto_regular_q"
                 android:text="@string/Your_Registed_Assets"
                 android:layout_height="wrap_content" />
 
@@ -38,7 +37,6 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/earn"
                 android:textSize="10sp"
-                android:fontFamily="@font/roboto_regular_q"
                 android:text="@string/Value"
                 android:layout_marginRight="@dimen/x80"
                 />
@@ -50,7 +48,6 @@
                 android:layout_marginRight="@dimen/x80"
                 android:gravity="center"
                 android:textSize="10sp"
-                android:fontFamily="@font/roboto_regular_q"
                 android:text="@string/Earnings"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -79,7 +76,6 @@
                     android:text="@string/You_have_no_registered_assets"
                     android:textColor="#333"
                     android:textSize="17sp"
-                    android:fontFamily="@font/roboto_regular_q"
                     />
             </LinearLayout>
         </RelativeLayout>

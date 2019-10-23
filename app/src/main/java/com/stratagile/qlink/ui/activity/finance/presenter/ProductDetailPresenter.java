@@ -229,20 +229,20 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
         map.put("addressTo", toAddress);
         map.put("symbol", balanceBean.getAsset_symbol());
         map.put("amount", amount);
-        TransactionApi.getInstance().buyQLCProduct(null, map, Account.INSTANCE.getWallet(), balanceBean.getAsset_hash(), fromAddress, toAddress, Double.parseDouble(amount), "", new SendBackWithTxId() {
-
-            @Override
-            public void onSuccess(String txid) {
-                KLog.i(txid);
-                sendBackWithTxId.onSuccess(txid);
-            }
-
-            @Override
-            public void onFailure() {
-                sendBackWithTxId.onFailure();
-                mView.closeProgressDialog();
-            }
-        });
+//        TransactionApi.getInstance().buyQLCProduct(null, map, Account.INSTANCE.getWallet(), balanceBean.getAsset_hash(), fromAddress, toAddress, Double.parseDouble(amount), "", new SendBackWithTxId() {
+//
+//            @Override
+//            public void onSuccess(String txid) {
+//                KLog.i(txid);
+//                sendBackWithTxId.onSuccess(txid);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//                sendBackWithTxId.onFailure();
+//                mView.closeProgressDialog();
+//            }
+//        });
     }
 
 }

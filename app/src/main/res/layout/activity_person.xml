@@ -26,11 +26,11 @@
             android:src="@mipmap/icon_user_default"
             android:layout_height="@dimen/x60" />
         <ImageView
-            android:layout_width="@dimen/x18"
+            android:layout_width="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_height="@dimen/x30" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="15dp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -61,11 +61,11 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <ImageView
-            android:layout_width="@dimen/x18"
+            android:layout_width="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_height="@dimen/x30" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="15dp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -131,11 +131,11 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <ImageView
-            android:layout_width="@dimen/x18"
+            android:layout_width="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_height="@dimen/x30" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="15dp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -166,11 +166,11 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <ImageView
-            android:layout_width="@dimen/x18"
+            android:layout_width="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_height="@dimen/x30" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="15dp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -201,11 +201,11 @@
             android:textSize="16sp"
             android:layout_height="wrap_content" />
         <ImageView
-            android:layout_width="@dimen/x18"
+            android:layout_width="15dp"
             android:src="@mipmap/icon_enter1"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_marginRight="@dimen/x30"
-            android:layout_height="@dimen/x30" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="15dp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"

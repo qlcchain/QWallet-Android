@@ -31,6 +31,13 @@
             android:layout_marginLeft="8dp"
             />
         <View
+            android:visibility="gone"
+            android:id="@+id/dotView"
+            android:layout_width="8dp"
+            android:background="@drawable/dot_red"
+            android:layout_marginLeft="10dp"
+            android:layout_height="8dp"/>
+        <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

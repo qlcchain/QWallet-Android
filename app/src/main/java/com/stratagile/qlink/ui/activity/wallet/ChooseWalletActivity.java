@@ -90,6 +90,11 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
         List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
         if (neoWallets.size() != 0) {
             for (int i = 0; i < neoWallets.size(); i++) {
+                if (neoWallets.get(i).getPrivateKey().equalsIgnoreCase(neoWallets.get(i).getPublicKey())) {
+                    Account.INSTANCE.fromWIF(neoWallets.get(i).getWif());
+                    neoWallets.get(i).setPublicKey(Account.INSTANCE.byteArray2String(Account.INSTANCE.getWallet().getPublicKey()).toLowerCase());
+                    AppConfig.getInstance().getDaoSession().getWalletDao().update(neoWallets.get(i));
+                }
                 AllWallet allWallet = new AllWallet();
                 allWallet.setWallet(neoWallets.get(i));
                 allWallet.setWalletAddress(neoWallets.get(i).getAddress());

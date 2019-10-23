@@ -22,6 +22,19 @@ public class UserAccount {
     private String userName;
     //用户头像路径
     private String avatar;
+
+    private String test;
+
+    private String bindDate;
+
+    public int getTotalInvite() {
+        return totalInvite;
+    }
+
+    public void setTotalInvite(int totalInvite) {
+        this.totalInvite = totalInvite;
+    }
+
     //手机号码
     private String phone;
 
@@ -35,13 +48,16 @@ public class UserAccount {
     //正面照
     private String facePhoto;
 
+    private int totalInvite;
+
     //手持身份证照
     private String holdingPhoto;
-    @Generated(hash = 2091771549)
+    @Generated(hash = 431800730)
     public UserAccount(Long id, String account, String password, String pubKey,
             boolean isLogin, String inviteCode, String userName, String avatar,
-            String phone, String userId, String email, String vstatus,
-            String facePhoto, String holdingPhoto) {
+            String test, String bindDate, String phone, String userId, String email,
+            String vstatus, String facePhoto, int totalInvite,
+            String holdingPhoto) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -50,13 +66,17 @@ public class UserAccount {
         this.inviteCode = inviteCode;
         this.userName = userName;
         this.avatar = avatar;
+        this.test = test;
+        this.bindDate = bindDate;
         this.phone = phone;
         this.userId = userId;
         this.email = email;
         this.vstatus = vstatus;
         this.facePhoto = facePhoto;
+        this.totalInvite = totalInvite;
         this.holdingPhoto = holdingPhoto;
     }
+
     @Generated(hash = 1029142458)
     public UserAccount() {
     }
@@ -143,5 +163,21 @@ public class UserAccount {
     }
     public void setHoldingPhoto(String holdingPhoto) {
         this.holdingPhoto = holdingPhoto;
+    }
+
+    public String getTest() {
+        return this.test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public String getBindDate() {
+        return this.bindDate;
+    }
+
+    public void setBindDate(String bindDate) {
+        this.bindDate = bindDate;
     }
 }

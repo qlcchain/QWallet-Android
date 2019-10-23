@@ -9,6 +9,6 @@ mylibrary
 .externalNativeBuild
 /.externalNativeBuild
 qlink.jks
-
+test.txt
 /app/src/main/java/com/stratagile/qlink/constant/MainConstant.java
 app/noovpn3/release/

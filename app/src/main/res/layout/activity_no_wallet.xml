@@ -26,7 +26,6 @@
             android:layout_marginTop="@dimen/x45"
             android:includeFontPadding="false"
             android:textColor="@color/white"
-            android:fontFamily="@font/vagroun_q"
             />
 
         <ImageView
@@ -45,7 +44,6 @@
             android:includeFontPadding="false"
             android:layout_marginTop="@dimen/x65"
             android:textSize="15sp"
-            android:fontFamily="@font/roboto_regular_q"
             android:layout_height="wrap_content"
             android:text="@string/Whoops_You_have_no_wallet_yet"
             android:textColor="@color/white"
@@ -57,7 +55,6 @@
             android:layout_marginLeft="@dimen/x138"
             android:layout_marginRight="@dimen/x138"
             android:text="@string/create_new_wallet"
-            android:fontFamily="@font/vagroun_q"
             android:layout_marginTop="39dp"
             android:background="@drawable/comfirm_button_bg"
             android:textColor="@color/mainColor"
@@ -68,7 +65,6 @@
             android:layout_marginLeft="@dimen/x138"
             android:layout_marginRight="@dimen/x138"
             android:text="@string/enter_private_key"
-            android:fontFamily="@font/vagroun_q"
             android:layout_marginTop="@dimen/x44"
             android:background="@drawable/comfirm_button_bg"
             android:textColor="@color/mainColor"
@@ -79,7 +75,6 @@
             android:layout_marginLeft="@dimen/x138"
             android:layout_marginRight="@dimen/x138"
             android:text="@string/scan_private_key_qr"
-            android:fontFamily="@font/vagroun_q"
             android:layout_marginTop="@dimen/x44"
             android:background="@drawable/comfirm_button_bg"
             android:textColor="@color/mainColor"
@@ -90,7 +85,6 @@
             android:layout_marginLeft="@dimen/x138"
             android:layout_marginRight="@dimen/x138"
             android:text="@string/do_it_later"
-            android:fontFamily="@font/vagroun_q"
             android:layout_marginTop="@dimen/x44"
             android:background="@drawable/cancal_button_bg"
             android:textColor="@color/white"
@@ -106,7 +100,6 @@
 
         <TextView
             android:id="@+id/tv_tip_two"
-            android:fontFamily="@font/roboto_regular_q"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

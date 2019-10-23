@@ -1,179 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:background="@color/color_f8f9fb"
     android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:id="@+id/view2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="227dp"
+            android:background="@color/mainColor" />
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x440"
-        android:background="@color/mainColor" />
-
-    <TextView
-        android:id="@+id/tvChoose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x12"
-        android:text="@string/choose_a_wallet_type"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChoose"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/x31"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginLeft="@dimen/x38"
-        android:layout_marginRight="@dimen/x38"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/llQlc"
-            android:layout_width="0px"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivQlc"
-                android:layout_width="@dimen/x138"
-                android:src="@mipmap/qlc_wallet_unselected"
-                android:layout_height="@dimen/x138" />
-            <TextView
-                android:id="@+id/tvQlc"
-                android:layout_width="wrap_content"
-                android:text="QLC Chain"
-                android:textColor="@color/select_wallet_type_clolor"
-                android:layout_marginTop="@dimen/x19"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llEth"
-            android:layout_width="0px"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivEth"
-                android:layout_width="@dimen/x138"
-                android:src="@mipmap/eth_wallet_unselected"
-                android:layout_height="@dimen/x138" />
-            <TextView
-                android:id="@+id/tvEth"
-                android:layout_width="wrap_content"
-                android:text="Ethereum"
-                android:textColor="@color/select_wallet_type_clolor"
-                android:layout_marginTop="@dimen/x19"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/llEos"
-            android:layout_width="0px"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivEos"
-                android:src="@mipmap/eos_wallet_unselected"
-                android:layout_width="@dimen/x138"
-                android:layout_height="@dimen/x138" />
-            <TextView
-                android:id="@+id/tvEos"
-                android:layout_width="wrap_content"
-                android:text="EOS"
-                android:textColor="@color/select_wallet_type_clolor"
-                android:layout_marginTop="@dimen/x19"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/llNeo"
-            android:layout_width="0px"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivNeo"
-                android:src="@mipmap/neo_wallet_unselected"
-                android:layout_width="@dimen/x138"
-                android:layout_height="@dimen/x138" />
-            <TextView
-                android:id="@+id/tvNeo"
-                android:layout_width="wrap_content"
-                android:text="NEO"
-                android:textColor="@color/select_wallet_type_clolor"
-                android:layout_marginTop="@dimen/x19"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btCreate"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_43"
-        android:layout_marginLeft="@dimen/x44"
-        android:layout_marginRight="@dimen/x44"
-        android:layout_marginTop="@dimen/x330"
-        android:background="@drawable/change_wallet"
-        android:fontFamily="@font/roboto_regular"
-        android:text="@string/create"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
-    <Button
-        android:id="@+id/btImport"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_43"
-        android:layout_marginLeft="@dimen/x44"
-        android:layout_marginRight="@dimen/x44"
-        android:layout_marginTop="@dimen/x40"
-        android:background="@drawable/bt_white_bg"
-        android:fontFamily="@font/roboto_regular"
-        android:text="@string/import2"
-        android:textAllCaps="false"
-        android:textColor="@color/mainColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btCreate" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/btImport"
-        android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/x45"
-        android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/x40"
-        android:layout_height="wrap_content">
-        <com.stratagile.qlink.view.SmoothCheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="@dimen/x40"
-            android:layout_marginRight="@dimen/x12"
-            app:color_unchecked_stroke="@color/mainColor"
-            app:color_unchecked="@color/white"
-            app:color_checked="@color/mainColor"
-            app:stroke_width="@dimen/x4"
-            android:layout_height="@dimen/x40"/>
         <TextView
+            android:id="@+id/tvChoose"
             android:layout_width="wrap_content"
-            android:text="@string/agree_on"
-            android:textSize="12sp"
-            android:layout_marginRight="@dimen/x8"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/servicePrivacyPolicy"
-            android:layout_width="wrap_content"
-            android:textSize="12sp"
-            android:text="@string/terms_of_service_and_privacy_policy"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/choose_a_wallet_type"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvChoose"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="33dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/llQlc"
+                android:layout_width="0px"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivQlc"
+                    android:layout_width="69dp"
+                    android:src="@mipmap/qlc_wallet_unselected"
+                    android:layout_height="69dp" />
+                <TextView
+                    android:id="@+id/tvQlc"
+                    android:layout_width="wrap_content"
+                    android:text="QLC Chain"
+                    android:textColor="@color/select_wallet_type_clolor"
+                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEth"
+                android:layout_width="0px"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivEth"
+                    android:layout_width="69dp"
+                    android:src="@mipmap/eth_wallet_unselected"
+                    android:layout_height="69dp" />
+                <TextView
+                    android:id="@+id/tvEth"
+                    android:layout_width="wrap_content"
+                    android:text="Ethereum"
+                    android:textColor="@color/select_wallet_type_clolor"
+                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llEos"
+                android:layout_width="0px"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivEos"
+                    android:src="@mipmap/eos_wallet_unselected"
+                    android:layout_width="69dp"
+                    android:layout_height="69dp" />
+                <TextView
+                    android:id="@+id/tvEos"
+                    android:layout_width="wrap_content"
+                    android:text="EOS"
+                    android:textColor="@color/select_wallet_type_clolor"
+                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llNeo"
+                android:layout_width="0px"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivNeo"
+                    android:src="@mipmap/neo_wallet_unselected"
+                    android:layout_width="69dp"
+                    android:layout_height="69dp" />
+                <TextView
+                    android:id="@+id/tvNeo"
+                    android:layout_width="wrap_content"
+                    android:text="NEO"
+                    android:textColor="@color/select_wallet_type_clolor"
+                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btCreate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_43"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="69dp"
+            android:background="@drawable/change_wallet"
+            android:text="@string/create"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+        <Button
+            android:id="@+id/btImport"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_43"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bt_white_bg"
+            android:text="@string/import2"
+            android:textAllCaps="false"
             android:textColor="@color/mainColor"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btCreate" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/btImport"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content">
+            <com.stratagile.qlink.view.SmoothCheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="15dp"
+                android:layout_marginRight="15dp"
+                app:color_unchecked_stroke="@color/mainColor"
+                app:color_unchecked="@color/white"
+                app:color_checked="@color/mainColor"
+                app:stroke_width="2dp"
+                android:layout_height="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/agree_on"
+                android:textSize="12sp"
+                android:layout_marginRight="4dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/servicePrivacyPolicy"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/terms_of_service_and_privacy_policy"
+                android:textColor="@color/mainColor"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

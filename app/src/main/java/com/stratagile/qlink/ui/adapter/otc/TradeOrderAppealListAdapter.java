@@ -26,34 +26,15 @@ public class TradeOrderAppealListAdapter extends BaseQuickAdapter<TradeOrderList
 
     @Override
     protected void convert(BaseViewHolder helper, TradeOrderList.OrderListBean item) {
+        helper.setText(R.id.tvPayToken, item.getPayToken());
         if (item.getBuyerId().equals(ConstantValue.currentUser.getUserId())) {
             //我买单
-            helper.setText(R.id.tvOrderType, R.string.buy_qgas);
+            helper.setText(R.id.tvOrderType, mContext.getString(R.string.buy) + " " + item.getTradeToken());
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.mainColor));
 
         } else {
-            helper.setText(R.id.tvOrderType, R.string.sell_qgas);
+            helper.setText(R.id.tvOrderType, mContext.getString(R.string.sell) + " " + item.getTradeToken());
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.color_ff3669));
-//            switch (item.getStatus()) {
-//                case "QGAS_TO_PLATFORM":
-//                    helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
-//                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
-//                    break;
-//                case "USDT_PAID":
-//                    helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
-//                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
-//                    break;
-//                case "OVERTIME":
-//                    helper.setText(R.id.tvOrderState, R.string.overtime);
-//                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
-//                    break;
-//                case "QGAS_PAID":
-//                    helper.setText(R.id.tvOrderState, R.string.completed);
-//                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_01b5ab));
-//                    break;
-//                default:
-//                    break;
-//            }
         }
         switch (item.getAppealStatus()) {
             case "YES":

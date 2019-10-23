@@ -43,7 +43,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_6"
                         android:text="QLC"
-                        android:fontFamily="@font/roboto_regular_q"
                         android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 
@@ -98,13 +97,11 @@
                     android:textColor="@color/mainColor"
                     android:textSize="13sp"
                     android:layout_marginTop="@dimen/dp_6"
-                    android:fontFamily="@font/roboto_regular_q"
                     android:layout_height="wrap_content"
                     />
                 <TextView
                     android:id="@+id/desc"
                     android:textColor="@color/mainColor"
-                    android:fontFamily="@font/roboto_regular_q"
                     android:textSize="8sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

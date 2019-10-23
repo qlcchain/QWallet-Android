@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x100"
                 android:background="@drawable/navigation_shape"
-                android:fontFamily="@font/vagroun_q"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/CHECKING_VPN_CONFIGURATION"
@@ -178,7 +177,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/aler_left_bt_bg"
-                    android:fontFamily="@font/vagroun_q"
                     android:text="@string/cancel"
                     android:textColor="@color/white" />
 
@@ -192,7 +190,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/cancal_button_bg"
-                    android:fontFamily="@font/vagroun_q"
                     android:text="@string/pleasewait"
                     android:textColor="@color/white" />
             </LinearLayout>

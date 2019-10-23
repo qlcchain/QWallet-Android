@@ -14,7 +14,6 @@
             android:layout_width="wrap_content"
             android:gravity="center"
             android:textSize="8sp"
-            android:fontFamily="@font/roboto_regular_q"
             android:layout_marginLeft="@dimen/dp_30"
             android:text="@string/Registrations_Sharing_Purchases"
             android:layout_height="wrap_content" />
@@ -24,7 +23,6 @@
             android:layout_marginRight="@dimen/dp_30"
             android:gravity="center"
             android:textSize="8sp"
-            android:fontFamily="@font/roboto_regular_q"
             android:text="@string/Cost_Earnings"
             android:layout_height="wrap_content" />
     </RelativeLayout>

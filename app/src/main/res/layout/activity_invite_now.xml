@@ -47,7 +47,7 @@
             <TextView
                 android:id="@+id/inviteCode"
                 android:layout_width="wrap_content"
-                android:textColor="@color/mainColor"
+                android:textColor="#F8E71C"
                 android:textSize="14sp"
                 android:text="1223344"
                 android:layout_height="wrap_content" />

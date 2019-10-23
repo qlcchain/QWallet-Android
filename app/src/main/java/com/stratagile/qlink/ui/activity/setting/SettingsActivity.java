@@ -21,6 +21,7 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.MyAsset;
+import com.stratagile.qlink.entity.eventbus.Logout;
 import com.stratagile.qlink.entity.eventbus.NeoRefrash;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.ui.activity.main.SplashActivity;
@@ -30,6 +31,7 @@ import com.stratagile.qlink.ui.activity.setting.contract.SettingsContract;
 import com.stratagile.qlink.ui.activity.setting.module.SettingsModule;
 import com.stratagile.qlink.ui.activity.setting.presenter.SettingsPresenter;
 import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -38,13 +40,16 @@ import com.stratagile.qlink.utils.VpnUtil;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * @author hzp
@@ -259,22 +264,29 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         progressDialog.hide();
     }
 
+    @Override
+    public void logoutSuccess() {
+        closeProgressDialog();
+        ConstantValue.lastLoginOut = ConstantValue.currentUser;
+        List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
+        for (UserAccount userAccount : userAccounts) {
+            if (userAccount.getIsLogin()) {
+                userAccount.setIsLogin(false);
+                AppConfig.getInstance().getDaoSession().getUserAccountDao().update(userAccount);
+                ConstantValue.currentUser = null;
+                EventBus.getDefault().post(new Logout());
+                setResult(1);
+                finish();
+                ToastUtil.displayShortToast(getString(R.string.logout_success));
+            }
+        }
+    }
+
     @OnClick({R.id.llLoginOut, R.id.resetPassword, R.id.selectUnit, R.id.language})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llLoginOut:
-                ConstantValue.lastLoginOut = ConstantValue.currentUser;
-                List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
-                for (UserAccount userAccount : userAccounts) {
-                    if (userAccount.getIsLogin()) {
-                        userAccount.setIsLogin(false);
-                        AppConfig.getInstance().getDaoSession().getUserAccountDao().update(userAccount);
-                        ConstantValue.currentUser = null;
-                        setResult(1);
-                        finish();
-                        ToastUtil.displayShortToast(getString(R.string.logout_success));
-                    }
-                }
+                logout();
                 break;
             case R.id.resetPassword:
                 Intent intent = new Intent(this, RetrievePasswordActivity.class);
@@ -290,5 +302,13 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
             default:
                 break;
         }
+    }
+
+    private void logout() {
+        showProgressDialog();
+        Map map = new HashMap<String, String>();
+        map.put("account", ConstantValue.currentUser.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        mPresenter.logout(map);
     }
 }

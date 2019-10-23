@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/color_f2f2f2"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="58dp"
+            android:src="@mipmap/confidant"
+            android:layout_marginTop="23dp"
+            android:layout_height="58dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FOR Confidant"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp" />
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/prove_your_ownership_and_unlock_the_staking"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/enter_your_e_mail_address_used_to_purchase_your_confidant_station_click_on_send_confirmation_code_and_check_your_inbox_you_will_receive_a_security_code_that_will_prove_you_re_the_owner"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_height="1dp"
+            android:background="@color/color_f2f2f2"
+            android:layout_marginTop="14dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="46dp">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="@string/your_email"
+                android:textSize="15sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="46dp">
+            <EditText
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:hint="@string/your_e_mail_used_to_place_the_order"
+                android:background="@null"
+                android:textSize="15sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:text="@string/code_sent_check_your_inbox_spam_folder"
+            android:textSize="12sp"
+            android:textColor="@color/color_d0021b"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
+            android:paddingBottom="11dp"
+            android:paddingTop="4dp"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="46dp">
+            <TextView
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:text="@string/security_code"
+                android:textSize="15sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvVerification"
+                android:layout_width="wrap_content"
+                android:textColor="@color/mainColor"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="13sp"
+                android:text="@string/send_security_code"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="46dp">
+            <EditText
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:hint="@string/security_code_sent_to_your_email"
+                android:background="@null"
+                android:textSize="15sp"
+                android:textColor="@color/color_29282a"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/invoke"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
+                android:layout_marginRight="15dp"
+                android:text="@string/invoke"
+                android:background="@drawable/unable_bt_bg"
+                android:layout_height="47dp" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

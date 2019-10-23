@@ -73,7 +73,6 @@
                 android:id="@+id/tv_country"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_regular_q"
                 android:text=""
                 android:textColor="@color/color_a8a6a6"
                 android:textSize="11sp" />
@@ -95,7 +94,6 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:layout_marginLeft="@dimen/x5"
-                    android:fontFamily="@font/roboto_regular_q"
                     android:textColor="@color/color_333"
                     android:textSize="13sp" />
                 <ImageView
@@ -109,7 +107,6 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:layout_marginLeft="@dimen/x5"
-                    android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/color_333"
                     android:textSize="13sp" />
             </LinearLayout>

@@ -363,10 +363,10 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
                     transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
                     transactionInfo.setShowAddress(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
                 } else if ("ContractSend".equals(accountHistory.getResult().get(i).getType())) {
-                    transactionInfo.setFrom(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                    transactionInfo.setFrom(account);
                     transactionInfo.setTo(accountHistory.getResult().get(i).getAddress());
                     transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));
-                    transactionInfo.setShowAddress(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getLink())));
+                    transactionInfo.setShowAddress(accountHistory.getResult().get(i).getAddress());
                 }else if ("Send".equals(accountHistory.getResult().get(i).getType())) {
                     transactionInfo.setFrom(accountHistory.getResult().get(i).getAddress());
                     transactionInfo.setTransationHash(AccountMng.publicKeyToAddress(Helper.hexStringToBytes(accountHistory.getResult().get(i).getHash())));

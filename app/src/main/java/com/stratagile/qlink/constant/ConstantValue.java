@@ -25,6 +25,7 @@ public class ConstantValue {
 
     public static boolean thisVersionShouldShowGuest = true;
     public static String P2PID = "p2pid";
+    public static String topUpP2pId = "topUpP2pId";
     public static String Language = "language";
     public static boolean isConnectToP2p = false;
     public static WifiInfo connectedWifiInfo;
@@ -36,6 +37,9 @@ public class ConstantValue {
     public static Balance mBalance;
     public static boolean isLoadingImg = false;
 
+    public static String userAll = "all";
+    public static String userLend = "debit";
+    public static int jpushOpreateCount = 1;
     //测试 http://47.103.40.20:19735
     //正式 http://wrpc.qlcchain.org:9735
 
@@ -255,4 +259,6 @@ public class ConstantValue {
 
     public static final String orderTypeBuy = "BUY";
     public static final String orderTypeSell = "SELL";
+
+    public static final String ignoreVersion = "ignoreVersion";
 }
