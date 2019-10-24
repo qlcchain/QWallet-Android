@@ -48,8 +48,6 @@ public class TopupProduct extends BaseBack<TopupProduct.ProductListBean> {
         private String country;
         private String descriptionEn;
         private String isp;
-        private String description;
-        private double discount;
 
         protected ProductListBean(Parcel in) {
             countryEn = in.readString();
@@ -57,6 +55,7 @@ public class TopupProduct extends BaseBack<TopupProduct.ProductListBean> {
             country = in.readString();
             descriptionEn = in.readString();
             isp = in.readString();
+            stock = in.readInt();
             description = in.readString();
             discount = in.readDouble();
             qgasDiscount = in.readDouble();
@@ -84,6 +83,19 @@ public class TopupProduct extends BaseBack<TopupProduct.ProductListBean> {
                 return new ProductListBean[size];
             }
         };
+
+        public int getStock() {
+            return stock;
+        }
+
+        public void setStock(int stock) {
+            this.stock = stock;
+        }
+
+        private int stock;
+        private String description;
+        private double discount;
+
 
         public double getQgasDiscount() {
             return qgasDiscount;
@@ -262,6 +274,7 @@ public class TopupProduct extends BaseBack<TopupProduct.ProductListBean> {
             dest.writeString(country);
             dest.writeString(descriptionEn);
             dest.writeString(isp);
+            dest.writeInt(stock);
             dest.writeString(description);
             dest.writeDouble(discount);
             dest.writeDouble(qgasDiscount);

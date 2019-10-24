@@ -86,6 +86,14 @@
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"/>
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/payTokenRecyclerView"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="match_parent"

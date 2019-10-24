@@ -87,4 +87,34 @@
         </RelativeLayout>
 
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/noProduct"
+        android:background="@drawable/bg_white_50_6dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="22dp"
+            android:paddingRight="6dp"
+            android:background="@drawable/bg_topup_come_soon"
+            android:layout_alignParentRight="true"
+            android:textSize="13sp"
+            android:text="@string/coming_soon_next_month"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/sold_out_topup"
+            android:background="@drawable/bg_black_30_20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="3dp"
+            android:textSize="13sp"
+            android:textColor="@color/color_e6e6e6"
+            android:paddingBottom="3dp"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

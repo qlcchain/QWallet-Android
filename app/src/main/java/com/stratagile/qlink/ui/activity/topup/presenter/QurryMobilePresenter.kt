@@ -44,4 +44,14 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Qurr
         }))
     }
 
+    fun getPayToken() {
+        mCompositeDisposable.add(httpAPIWrapper.payToken(hashMapOf<String, String>()).subscribe({
+            mView.setPayTokenAdapter(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
 }

@@ -22,6 +22,7 @@ import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.SwitchToOtc
+import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
@@ -72,6 +73,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     internal lateinit var mPresenter: TopupQlcPayPresenter
     var qgasCount = BigDecimal.ZERO
     lateinit var product : TopupProduct.ProductListBean
+    lateinit var payToken :PayToken.PayTokenListBean
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -85,8 +87,10 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     override fun initData() {
         title.text = getString(R.string.payment_wallet)
         product = intent.getParcelableExtra("product")
+        payToken = intent.getParcelableExtra("payToken")
+        payToken1.text = payToken.symbol
         tvReceiveAddress.text = ConstantValue.mainAddressData.qlcchian.address
-        tvAmountQgas.text = product.price.toBigDecimal().multiply((product.qgasDiscount.toBigDecimal())).stripTrailingZeros().toPlainString()
+        tvAmountQgas.text = product.price.toBigDecimal().multiply((product.qgasDiscount.toBigDecimal())).divide(payToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
         llSelectQlcWallet.setOnClickListener {
             var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
             intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
@@ -102,7 +106,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                     qlcAccount = it
                     tvQlcWalletName.text = qlcAccount!!.accountName
                     tvQlcWalletAddess.text = qlcAccount!!.address
-                    tvQGASBalance.text = getString(R.string.balance) + ": -/- QGAS"
+                    tvQGASBalance.text = getString(R.string.balance) + ": -/- ${payToken.symbol}"
                     thread {
                         getWalletBalance()
                     }
@@ -114,7 +118,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                 return@setOnClickListener
             }
             if (tvAmountQgas.text.toString().toBigDecimal() > qgasCount) {
-                alert(getString(R.string.balance_insufficient_to_purchase_qgas_on_otc_pages)) {
+                alert(getString(R.string.balance_insufficient_to_purchase_qgas_on_otc_pages, payToken.symbol)) {
                     negativeButton (getString(R.string.cancel)) {
                         dismiss()
                         setResult(Activity.RESULT_OK)
@@ -137,7 +141,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                     override fun send(suceess: String) {
                         if ("".equals(suceess)) {
                             runOnUiThread {
-                                toast(getString(R.string.send_qgas_error))
+                                toast(getString(R.string.send_qgas_error, payToken.symbol))
                                 closeProgressDialog()
                             }
                         } else {
@@ -189,6 +193,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         map["phoneNumber"] = intent.getStringExtra("phoneNumber")
         map["amount"] = product.price.toString()
         map["txid"] = txid
+        map["payTokenId"] = payToken.id
         mPresenter.createTopupOrder(map)
     }
 
@@ -198,12 +203,15 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             AllWallet.WalletType.QlcWallet.ordinal -> {
-                qlcAccount = data!!.getParcelableExtra<QLCAccount>("wallet")
-                tvQlcWalletName.text = qlcAccount!!.accountName
-                tvQlcWalletAddess.text = qlcAccount!!.address
-                tvQGASBalance.text = getString(R.string.balance) + ": -/- QGAS"
-                thread {
-                    getWalletBalance()
+                if (resultCode == Activity.RESULT_OK) {
+                    qlcAccount = data!!.getParcelableExtra<QLCAccount>("wallet")
+                    tvQlcWalletName.text = qlcAccount!!.accountName
+                    tvQlcWalletAddess.text = qlcAccount!!.address
+                    tvQGASBalance.text = getString(R.string.balance) + ": -/- ${payToken.symbol}"
+                    qgasCount = BigDecimal.ZERO
+                    thread {
+                        getWalletBalance()
+                    }
                 }
             }
             10 -> {
@@ -219,35 +227,24 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             override fun onBack(baseResult: ArrayList<QlcTokenbalance>?, error: Error?) {
                 if (error == null) {
                     KLog.i("发射2")
-                    if (baseResult!!.filter { it.symbol.equals("QGAS") }.size > 0) {
-                        qgasCount = baseResult!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN)
+                    if (baseResult!!.filter { it.symbol.equals(payToken.symbol) }.size > 0) {
+                        qgasCount = baseResult!!.filter { it.symbol.equals(payToken.symbol) }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN)
                         runOnUiThread {
-                            tvQGASBalance.text = getString(R.string.balance) + ": ${qgasCount.stripTrailingZeros()} QGAS"
+                            tvQGASBalance.text = getString(R.string.balance) + ": ${qgasCount.stripTrailingZeros().toPlainString()} ${payToken.symbol}"
                         }
-//                        if (baseResult!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-//                            QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "SELL QGAS", object : SendBack {
-//                                override fun send(suceess: String) {
-//                                    if ("".equals(suceess)) {
-//                                        mView.generateSellQgasOrderFailed("send qgas error")
-//                                        it.onComplete()
-//                                    } else {
-//                                        KLog.i(suceess)
-//                                        it.onNext(suceess)
-//                                        it.onComplete()
-//                                    }
-//                                }
-//
-//                            })
-//                        } else {
-//                            toast(getString(R.string.not_enough) + "QGAS")
-//                        }
+                    } else {
+                        runOnUiThread {
+                            tvQGASBalance.text = getString(R.string.balance) + ": -/- ${payToken.symbol}"
+                        }
+                        qgasCount = BigDecimal.ZERO
+                        toast(getString(R.string.not_enough) + " ${payToken.symbol}")
                     }
                 } else {
                     runOnUiThread {
-                        tvQGASBalance.text = getString(R.string.balance) + ": -/- QGAS"
+                        tvQGASBalance.text = getString(R.string.balance) + ": -/- ${payToken.symbol}"
                     }
                     qgasCount = BigDecimal.ZERO
-                    toast(getString(R.string.not_enough) + " QGAS")
+                    toast(getString(R.string.not_enough) + " ${payToken.symbol}")
                 }
             }
         })

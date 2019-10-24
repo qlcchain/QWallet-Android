@@ -73,6 +73,7 @@ import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.PayToken;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
@@ -554,6 +555,10 @@ public interface MainHttpApi {
     @POST(MainAPI.url_user_logout)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> userLogout(@Body RequestBody map);
+
+    @POST(MainAPI.url_pay_token)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<PayToken> payToken(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

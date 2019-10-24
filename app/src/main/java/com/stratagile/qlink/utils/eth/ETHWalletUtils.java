@@ -423,7 +423,7 @@ public class ETHWalletUtils {
         return privateKey;
     }
     /**
-     * 导出明文私钥
+     * 导出明文公钥
      *
      * @param walletId 钱包Id
      * @param pwd      钱包密码

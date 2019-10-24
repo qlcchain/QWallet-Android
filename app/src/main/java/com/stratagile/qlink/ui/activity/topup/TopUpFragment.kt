@@ -137,19 +137,24 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         recyclerViewInvite.isNestedScrollingEnabled = false
         getOneFriendReward()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
-            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
-                activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
-                    negativeButton (getString(R.string.cancel)) { dismiss() }
-                    positiveButton(getString(R.string.create)) { startActivity(Intent(context, SelectWalletTypeActivity::class.java)) }
-                }.show()
-            } else {
+//            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
+//                activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
+//                    negativeButton(getString(R.string.cancel)) { dismiss() }
+//                    positiveButton(getString(R.string.create)) { startActivity(Intent(context, SelectWalletTypeActivity::class.java)) }
+//                }.show()
+//            } else {
+//                if (topupShowProductAdapter.data[position].stock != 0) {
+//                    startActivity(Intent(activity!!, QurryMobileActivity::class.java))
+//                }
+//            }
+            if (topupShowProductAdapter.data[position].stock != 0) {
                 startActivity(Intent(activity!!, QurryMobileActivity::class.java))
             }
         }
         etMobile.setOnClickListener {
             if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
                 activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
-                    negativeButton (getString(R.string.cancel)) { dismiss() }
+                    negativeButton(getString(R.string.cancel)) { dismiss() }
                     positiveButton(getString(R.string.create)) { startActivity(Intent(context, SelectWalletTypeActivity::class.java)) }
                 }.show()
                 return@setOnClickListener

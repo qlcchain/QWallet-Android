@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
+import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
@@ -22,6 +23,8 @@ interface QurryMobileContract {
         fun closeProgressDialog()
 
         fun setProductList(topupProduct: TopupProduct)
+
+        fun setPayTokenAdapter(payToken: PayToken)
     }
 
     interface QurryMobileContractPresenter : BasePresenter {

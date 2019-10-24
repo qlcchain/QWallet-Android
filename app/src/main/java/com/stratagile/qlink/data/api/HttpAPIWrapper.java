@@ -77,6 +77,7 @@ import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.PayToken;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
@@ -1066,6 +1067,14 @@ public class HttpAPIWrapper {
             return wrapper(mMainHttpAPI.userLogout(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.userLogout(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<PayToken> payToken(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.payToken(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.payToken(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

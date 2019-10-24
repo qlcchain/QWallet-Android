@@ -20,7 +20,7 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
         helper.setText(R.id.phoneNumber, item.areaCode + item.phoneNumber)
         helper.setText(R.id.price, item.originalPrice.toString())
         helper.setText(R.id.txid, item.txid)
-        helper.setText(R.id.payQgas, item.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + "QGAS")
+        helper.setText(R.id.payQgas, item.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + item.symbol)
         helper.setText(R.id.payPrice, item.discountPrice.toString())
         helper.setGone(R.id.orderOpreate, false)
         helper.setGone(R.id.voucherDetail, false)
@@ -35,7 +35,7 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
         }
         when(item.status) {
             "NEW" -> {
-                helper.setText(R.id.orderState, mContext.getString(R.string.qgas_is_not_in_the_accounts))
+                helper.setText(R.id.orderState, mContext.getString(R.string.qgas_is_not_in_the_accounts, item.symbol))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
             "QGAS_PAID" -> {
@@ -61,7 +61,7 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
             "QGAS_RETURNED" -> {
-                helper.setText(R.id.orderState, mContext.getString(R.string.qgas_has_been_returned))
+                helper.setText(R.id.orderState, mContext.getString(R.string.qgas_has_been_returned, item.symbol))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
         }

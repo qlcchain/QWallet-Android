@@ -173,12 +173,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
 
     @Override
     public void transactionEth(TokenInfo tokenInfo, String toAddress, String amount, int limit, int price) {
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext(generateTransactionEth(tokenInfo.getWalletAddress(), toAddress, derivePrivateKey(tokenInfo.getWalletAddress()), amount, limit, price));
-            }
-        }).subscribeOn(Schedulers.io())
+        Observable.create((ObservableOnSubscribe<String>) emitter -> emitter.onNext(generateTransactionEth(tokenInfo.getWalletAddress(), toAddress, derivePrivateKey(tokenInfo.getWalletAddress()), amount, limit, price))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override

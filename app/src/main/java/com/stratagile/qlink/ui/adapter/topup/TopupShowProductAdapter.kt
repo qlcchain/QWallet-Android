@@ -37,5 +37,10 @@ class TopupShowProductAdapter(array: ArrayList<TopupProduct.ProductListBean>) : 
             helper.setText(R.id.tvDiscount, (item.discount * 10).toString())
             helper.setText(R.id.tvAreaOperator, item.name)
         }
+        if (item.stock == 0) {
+            helper.setGone(R.id.noProduct, true)
+        } else {
+            helper.setGone(R.id.noProduct, false)
+        }
     }
 }

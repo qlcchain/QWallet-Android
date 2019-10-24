@@ -7,6 +7,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.pawegio.kandroid.alert
@@ -17,6 +19,8 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.AllWallet
+import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.qlinkcom
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
@@ -26,6 +30,8 @@ import com.stratagile.qlink.ui.activity.topup.module.QurryMobileModule
 import com.stratagile.qlink.ui.activity.topup.presenter.QurryMobilePresenter
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
+import com.stratagile.qlink.ui.adapter.topup.PayTokenAdapter
+import com.stratagile.qlink.ui.adapter.topup.PayTokenDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupAbleAdapter
 import com.stratagile.qlink.utils.*
 import com.yanzhenjie.alertdialog.AlertDialog
@@ -36,6 +42,7 @@ import com.yanzhenjie.permission.RationaleListener
 import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import kotlinx.android.synthetic.main.activity_qurry_mobile.recyclerView
 import kotlinx.android.synthetic.main.fragment_trade_list.*
+import java.math.BigDecimal
 import java.util.*
 
 import javax.inject.Inject;
@@ -52,6 +59,13 @@ import javax.inject.Inject;
  */
 
 class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
+    override fun setPayTokenAdapter(payToken: PayToken) {
+        payToken.payTokenList[0].isSelected = true
+        selectedPayToken = payToken.payTokenList[0]
+        payTokenAdapter.setNewData(payToken.payTokenList)
+        topupAbleAdapter!!.payToken = selectedPayToken
+    }
+
     override fun setProductList(topupProduct: TopupProduct) {
         var productList = arrayListOf<TopupProduct.ProductListBean>()
         if (topupProduct.productList.size == 0) {
@@ -85,6 +99,8 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     @Inject
     internal lateinit var mPresenter: QurryMobilePresenter
     var topupAbleAdapter : TopupAbleAdapter? = null
+    lateinit var selectedPayToken : PayToken.PayTokenListBean
+    lateinit var payTokenAdapter: PayTokenAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -93,32 +109,85 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     override fun initView() {
         setContentView(R.layout.activity_qurry_mobile)
         tvArea.setOnClickListener {
-            startActivityForResult(Intent(this, SelectAreaActivity::class.java), 1)
+            startActivityForResult(Intent(this, SelectAreaActivity::class.java), 10)
         }
         topupAbleAdapter = TopupAbleAdapter(arrayListOf())
         recyclerView.adapter = topupAbleAdapter
         topupAbleAdapter!!.setOnItemClickListener { adapter, view, position ->
             var price = topupAbleAdapter!!.data[position].price.toString()
             var dsicountPrice = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
-            var qgasCount = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal()).stripTrailingZeros().toPlainString()
-            alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, price, qgasCount, dsicountPrice)) {
+            var qgasCount = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal()).divide(selectedPayToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+            alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, price, qgasCount, selectedPayToken.symbol, dsicountPrice)) {
                 negativeButton (getString(R.string.cancel)) { dismiss() }
                 positiveButton(getString(R.string.buy_topup)) {
-                    val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
-                    intent1.putExtra("product", topupAbleAdapter!!.data[position])
-                    intent1.putExtra("areaCode", tvArea.text.toString())
-                    intent1.putExtra("phoneNumber", etContact.text.toString())
-                    startActivityForResult(intent1, 3)
+                    when(OtcUtils.parseChain(selectedPayToken.chain)) {
+                        AllWallet.WalletType.QlcWallet -> {
+                            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                                val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
+                                intent1.putExtra("product", topupAbleAdapter!!.data[position])
+                                intent1.putExtra("payToken", selectedPayToken)
+                                intent1.putExtra("areaCode", tvArea.text.toString())
+                                intent1.putExtra("phoneNumber", etContact.text.toString())
+                                startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+                            } else {
+                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC")) {
+                                    negativeButton(getString(R.string.cancel)) { dismiss() }
+                                    positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                                }.show()
+                            }
+                        }
+                        AllWallet.WalletType.EthWallet -> {
+                            if (AppConfig.instance.daoSession.ethWalletDao.loadAll().size != 0) {
+                                val intent1 = Intent(this@QurryMobileActivity, TopupEthPayActivity::class.java)
+                                intent1.putExtra("product", topupAbleAdapter!!.data[position])
+                                intent1.putExtra("payToken", selectedPayToken)
+                                intent1.putExtra("areaCode", tvArea.text.toString())
+                                intent1.putExtra("phoneNumber", etContact.text.toString())
+                                startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
+                            } else {
+                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "ETH")) {
+                                    negativeButton(getString(R.string.cancel)) { dismiss() }
+                                    positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                                }.show()
+                            }
+                        }
+                        AllWallet.WalletType.NeoWallet -> {
+                            val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
+                            intent1.putExtra("product", topupAbleAdapter!!.data[position])
+                            intent1.putExtra("payToken", selectedPayToken)
+                            intent1.putExtra("areaCode", tvArea.text.toString())
+                            intent1.putExtra("phoneNumber", etContact.text.toString())
+                            startActivityForResult(intent1, AllWallet.WalletType.NeoWallet.ordinal)
+                        }
+                    }
                 }
             }.show()
         }
-        recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, this)))
+        payTokenRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        payTokenAdapter = PayTokenAdapter(arrayListOf())
+        payTokenRecyclerView.adapter = payTokenAdapter
+        payTokenRecyclerView.addItemDecoration(PayTokenDecoration(UIUtils.dip2px(12f, this)))
+        recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(5f, this)))
         ivContact.setOnClickListener {
             getContactPermission()
         }
         qurryMobile.setOnClickListener {
             getProductList()
         }
+        payTokenAdapter.setOnItemClickListener { adapter, view, position ->
+            payTokenAdapter.data.forEach {
+                it.isSelected = false
+            }
+            payTokenAdapter.data[position].isSelected = true
+            selectedPayToken = payTokenAdapter.data[position]
+            payTokenAdapter.notifyDataSetChanged()
+            reSetProduct()
+        }
+    }
+
+    fun reSetProduct() {
+        topupAbleAdapter!!.payToken = selectedPayToken
+        topupAbleAdapter!!.notifyDataSetChanged()
     }
 
     fun getProductList() {
@@ -145,10 +214,10 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 10 && resultCode == Activity.RESULT_OK) {
             tvArea.text = "+" + data!!.getStringExtra("area")
         }
-        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 20 && resultCode == Activity.RESULT_OK) {
             var contactData = data!!.getData()
             var c = managedQuery(contactData, null, null, null, null)
             if (c.moveToFirst()) {
@@ -180,7 +249,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 getProductList()
             }
         }
-        if (requestCode == 3 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == AllWallet.WalletType.QlcWallet.ordinal && resultCode == Activity.RESULT_OK) {
             finish()
         }
     }
@@ -215,7 +284,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 ////                }
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = ContactsContract.Contacts.CONTENT_TYPE
-                startActivityForResult(intent, 2)
+                startActivityForResult(intent, 20)
             }
         }
 
@@ -230,6 +299,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     override fun initData() {
         title.text = getString(R.string.enter_mobile_phone_number)
+        mPresenter.getPayToken()
         etContact.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 getProductList()

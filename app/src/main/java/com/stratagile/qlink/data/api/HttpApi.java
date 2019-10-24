@@ -73,6 +73,7 @@ import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.PayToken;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
@@ -135,6 +136,7 @@ import static com.stratagile.qlink.data.api.API.url_main_address;
 import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
 import static com.stratagile.qlink.data.api.API.url_pairs;
+import static com.stratagile.qlink.data.api.API.url_pay_token;
 import static com.stratagile.qlink.data.api.API.url_queryFreeRecords;
 import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
@@ -628,6 +630,10 @@ public interface HttpApi {
     @POST(url_user_logout)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> userLogout(@Body RequestBody map);
+
+    @POST(url_pay_token)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<PayToken> payToken(@Body RequestBody map);
 
 
 

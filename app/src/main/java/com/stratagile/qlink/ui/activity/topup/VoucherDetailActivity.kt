@@ -12,6 +12,7 @@ import com.stratagile.qlink.ui.activity.topup.component.DaggerVoucherDetailCompo
 import com.stratagile.qlink.ui.activity.topup.contract.VoucherDetailContract
 import com.stratagile.qlink.ui.activity.topup.module.VoucherDetailModule
 import com.stratagile.qlink.ui.activity.topup.presenter.VoucherDetailPresenter
+import com.stratagile.qlink.utils.OtcUtils
 import kotlinx.android.synthetic.main.activity_voucher_detail.*
 
 import javax.inject.Inject;
@@ -40,14 +41,11 @@ class VoucherDetailActivity : BaseActivity(), VoucherDetailContract.View {
         title.text = "凭证详情"
         orderBean = intent.getParcelableExtra("orderBean")
         payer.text = orderBean.phoneNumber
-        payCount.text = orderBean.discountPrice.toBigDecimal().stripTrailingZeros().toPlainString() + "元+" + orderBean.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + "QGAS"
+        payCount.text = orderBean.discountPrice.toBigDecimal().stripTrailingZeros().toPlainString() + "元+" + orderBean.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + orderBean.symbol
         time.text = orderBean.orderTime
         txid.text = orderBean.txid
         txid.setOnClickListener {
-            val intent1 = Intent()
-            intent1.action = "android.intent.action.VIEW"
-            intent1.data = Uri.parse("https://explorer.qlcchain.org/transaction/" + orderBean.txid)
-            startActivity(intent1)
+            OtcUtils.gotoBlockBrowser(this, orderBean.chain, orderBean.txid)
         }
     }
 

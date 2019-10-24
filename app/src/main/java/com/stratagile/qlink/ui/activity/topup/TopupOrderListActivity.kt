@@ -28,10 +28,7 @@ import com.stratagile.qlink.ui.activity.topup.module.TopupOrderListModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupOrderListPresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupOrderListAdapter
-import com.stratagile.qlink.utils.FileUtil
-import com.stratagile.qlink.utils.SpUtil
-import com.stratagile.qlink.utils.UIUtils
-import com.stratagile.qlink.utils.XWebViewClient
+import com.stratagile.qlink.utils.*
 import com.stratagile.topup.PayService
 import com.stratagile.topup.TopupInterceptor
 import com.stratagile.topup.TopupRequestInterceptor
@@ -154,10 +151,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
                     showCancelDialog(position)
                 }
                 R.id.llVoucher -> {
-                    val intent1 = Intent()
-                    intent1.action = "android.intent.action.VIEW"
-                    intent1.data = Uri.parse("https://explorer.qlcchain.org/transaction/" + topupOrderListAdapter.data[position].txid)
-                    startActivity(intent1)
+                    OtcUtils.gotoBlockBrowser(this, topupOrderListAdapter.data[position].chain, topupOrderListAdapter.data[position].txid)
                 }
                 R.id.voucherDetail -> {
                     startActivity(Intent(this, VoucherDetailActivity::class.java).putExtra("orderBean", topupOrderListAdapter.data[position]))
