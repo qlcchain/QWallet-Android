@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
@@ -28,7 +31,9 @@ import com.stratagile.qlink.ui.activity.topup.module.TopupEthPayModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupEthPayPresenter
 import com.stratagile.qlink.utils.FileUtil
 import com.stratagile.qlink.utils.SpUtil
+import com.stratagile.qlink.utils.SpringAnimationUtil
 import com.stratagile.qlink.utils.ToastUtil
+import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_topup_eth_pay.*
 import org.greenrobot.eventbus.EventBus
 import org.web3j.utils.Convert
@@ -47,19 +52,46 @@ import kotlin.concurrent.thread
  */
 
 class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
+    override fun createTopupOrderError() {
+        sweetAlertDialog.dismissWithAnimation()
+    }
+
+    override fun setMainAddress() {
+        tvReceiveAddress.text = ConstantValue.mainAddressData.eth.address
+    }
+
     override fun createTopupOrderSuccess(topupOrder: TopupOrder) {
-        closeProgressDialog()
-        var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
-//        var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=0&mobile=${intent.getStringExtra("phoneNumber")}"
-        val intent = Intent(this, WebViewActivity::class.java)
-        intent.putExtra("url", url)
-        intent.putExtra("title", getString(R.string.payment))
-        startActivityForResult(intent, 10)
+        ivLoad2.setImageResource(R.mipmap.background_success)
+        tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
+        tvVoucher.text = getString(R.string.blockchain_inoice_created)
+
+        showChangeAnimation(ivLoad2)
+        tvSend.postDelayed({
+            sweetAlertDialog.dismissWithAnimation()
+        }, 1000)
+        tvSend.postDelayed({
+            if ("NEW".equals(topupOrder.order.status, true)) {
+                startActivity(Intent(this, TopupOrderListActivity::class.java))
+                setResult(Activity.RESULT_OK)
+                finish()
+            } else {
+                var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
+                val intent = Intent(this, WebViewActivity::class.java)
+                intent.putExtra("url", url)
+                intent.putExtra("title", getString(R.string.payment))
+                startActivityForResult(intent, 10)
+            }
+        }, 1500)
     }
 
     override fun sendPayTokenSuccess(txid: String) {
-        closeProgressDialog()
-        showProgressDialog()
+        tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
+        tvVoucher.text = getString(R.string.to_create_blockchain_invoice)
+
+        ivLoad1.setImageResource(R.mipmap.background_success)
+        showChangeAnimation(ivLoad1)
+        ivLoad2.setImageResource(R.mipmap.background_load)
+        showChangeAnimation(ivLoad2)
         generateTopupOrder(txid)
     }
 
@@ -139,6 +171,14 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
     private var gasEth: String? = null
 
     var payTokenBalance = BigDecimal.ZERO
+
+    lateinit var animationView : View
+    lateinit var ivLoad1 : ImageView
+    lateinit var ivLoad2 : ImageView
+    lateinit var tvPaying : TextView
+    lateinit var tvVoucher : TextView
+    lateinit var sweetAlertDialog : SweetAlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -153,12 +193,27 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
         product = intent.getParcelableExtra("product")
         payToken = intent.getParcelableExtra("payToken")
         payTokenSymbol.text = payToken.symbol
+        animationView = layoutInflater.inflate(R.layout.alert_show_otc_pay_animation, null, false)
+        ivLoad1 = animationView.findViewById<ImageView>(R.id.ivLoad1)
+        ivLoad2 = animationView.findViewById<ImageView>(R.id.ivLoad2)
+        tvPaying = animationView.findViewById<TextView>(R.id.tvPaying)
+        tvVoucher = animationView.findViewById<TextView>(R.id.tvVoucher)
+        sweetAlertDialog = SweetAlertDialog(this)
+        sweetAlertDialog.setView(animationView)
+
+
         val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
         val f = gas.multiply(BigDecimal(gasLimit))
         gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
-
-        tvReceiveAddress.text = ConstantValue.mainAddressData.eth.address
+        if (ConstantValue.mainAddressData != null) {
+            tvReceiveAddress.text = ConstantValue.mainAddressData.eth.address
+        } else {
+            mPresenter.getMainAddress()
+        }
         tvAmountQgas.text = product.price.toBigDecimal().multiply((product.qgasDiscount.toBigDecimal())).divide(payToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+        var discountPrice = (product.price.toBigDecimal()*(1.toBigDecimal()-product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
+        etEthTokenSendMemo.setText(getString(R.string.topup_200_deduct_10_from_10_qgas, product.price.toString(), discountPrice, tvAmountQgas.text.toString(), payToken.symbol))
+
         llSelectQlcWallet.setOnClickListener {
             var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
             intent1.putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal)
@@ -205,8 +260,29 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
         }
     }
 
+    fun showPayAnimation() {
+        tvPaying.text = getString(R.string.transferring_qgas, payToken.symbol)
+        tvVoucher.text = getString(R.string.creating_blockchain_invoice)
+        var tvWalletName = animationView.findViewById<TextView>(R.id.tvWalletName)
+        tvWalletName.text = ethAccount!!.name
+
+        var tvWalletAddess = animationView.findViewById<TextView>(R.id.tvWalletAddess)
+        tvWalletAddess.text = ethAccount!!.address
+
+        val ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
+        ivChain.setImageResource(R.mipmap.icons_qlc_wallet)
+
+        sweetAlertDialog.show()
+        showChangeAnimation(ivLoad1)
+    }
+
+    fun showChangeAnimation(view1: View) {
+        SpringAnimationUtil.startScaleSpringViewAnimation(view1)
+    }
+
+
     fun sendPayToken() {
-        showProgressDialog()
+        showPayAnimation()
         mPresenter.transaction(ethAccount.address, payToken.hash, payToken.decimal, tvReceiveAddress.getText().toString(), tvAmountQgas.text.toString(), gasLimit, gasPrice)
     }
 

@@ -50,6 +50,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         closeProgressDialog()
         toast(getString(R.string.success))
         setResult(Activity.RESULT_OK)
+        startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
         finish()
     }
 
@@ -125,6 +126,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvUsdtBalance.text = getString(R.string.balance) + ": -/-"
         etEthTokenSendMemo.setText(getString(R.string.buy) + intent.getStringExtra("tradeToken") + "( " + intent.getStringExtra("orderNumber") + " )")
         mPresenter.getEthPrice()
+        tvPayTokenSymbol.text = intent.getStringExtra("payToken")
         tvReceiveAddress.text = intent.getStringExtra("receiveAddress")
         tvAmountUsdt.text = intent.getStringExtra("usdt")
         usdtAmount = intent.getStringExtra("usdt").toDouble()
@@ -223,7 +225,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvOk.setOnClickListener {
             sweetAlertDialog.cancel()
             showProgressDialog()
-            mPresenter.transferUsdt(ethWallet!!.address, tvReceiveAddress.text.toString(), usdtAmount.toString(), gasPrice, intent.getStringExtra("tradeOrderId"), payTokenBean!!.tokenInfo.address)
+            mPresenter.transferUsdt(ethWallet!!.address, tvReceiveAddress.text.toString(), usdtAmount.toString(), gasPrice, intent.getStringExtra("tradeOrderId"), payTokenBean!!)
         }
     }
 

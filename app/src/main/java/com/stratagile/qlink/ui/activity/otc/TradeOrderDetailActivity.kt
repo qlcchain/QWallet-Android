@@ -199,6 +199,69 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                                 .subscribe();
                     }
                 }
+                "TXID_ERROR" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderState1.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
+                    tvOpreate1.visibility = View.VISIBLE
+                    tvOpreate2.visibility = View.VISIBLE
+                    tvOpreate3.visibility = View.VISIBLE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.primaryClip = mClipData
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, tradeOrderDetail.order.payToken + " Receivable Address", tradeOrderDetail.order.payToken.toLowerCase(), OtcUtils.parseChain(tradeOrderDetail.order.payTokenChain).ordinal)
+                        val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+                        intent.putExtra("tradeToken", tradeOrderDetail.order.tradeToken)
+                        intent.putExtra("usdt", tradeOrderDetail.order.usdtAmount.toString())
+                        intent.putExtra("payToken", tradeOrderDetail.order.payToken)
+                        intent.putExtra("payTokenChain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("chain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("receiveAddress", tradeOrderDetail.order.usdtToAddress)
+                        intent.putExtra("tradeOrderId", tradeOrderId)
+                        intent.putExtra("orderNumber", tradeOrderDetail.order.number.toString())
+                        intent.putExtra("qrentity", qrEntity)
+                        startActivityForResult(intent, 0)
+                    }
+                    tvOpreate2.setOnClickListener {
+                        showEnterTxIdDialog()
+                    }
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    remainTime = tradeOrderExistTime - remainTime
+                    if (remainTime > 0) {
+                        mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext {
+                                    var fen = (remainTime - it) / 60
+                                    var miao = (remainTime - it) % 60
+                                    if (fen > 0) {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + fen + " : " + miao + "分钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    } else {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + miao + "秒钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    }
+                                }
+                                .doOnComplete {
+                                    getTradeOrderDetail()
+                                }
+                                .subscribe();
+                    }
+                }
                 "USDT_PAID" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.buyer_has_comfirmed_the_payment)
@@ -380,6 +443,43 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     }
                 }
                 "QGAS_TO_PLATFORM" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                    tvOrderState.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderState1.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    remainTime = tradeOrderExistTime - remainTime
+                    if (remainTime > 0) {
+                        mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext {
+                                    var fen = (remainTime - it) / 60
+                                    var miao = (remainTime - it) % 60
+                                    if (fen > 0) {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + fen + " : " + miao + "分钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    } else {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + miao + "秒钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    }
+                                }
+                                .doOnComplete {
+                                    getTradeOrderDetail()
+                                }
+                                .subscribe();
+                    }
+                }
+                "TXID_ERROR" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)

@@ -9,6 +9,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.entity.BaseBack
+import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.Raw
 import com.stratagile.qlink.ui.activity.otc.contract.UsdtPayContract
 import com.stratagile.qlink.ui.activity.otc.UsdtPayActivity
@@ -94,11 +95,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
         }))
     }
 
-    fun transferUsdt(walletAddress: String, toAddress: String, amount: String, price: Int, tradeOrderId: String, contractAddress: String) {
+    fun transferUsdt(walletAddress: String, toAddress: String, amount: String, price: Int, tradeOrderId: String, tokenInfo: EthWalletInfo.DataBean.TokensBean) {
 //        generateTransaction(walletAddress, "0xdac17f958d2ee523a2206206994597c13d831ec7", toAddress, derivePrivateKey(walletAddress)!!, amount, 6000, price, 6)
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contractAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, tokenInfo.tokenInfo.address, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, tokenInfo.tokenInfo.decimals.toInt()))
         })
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())

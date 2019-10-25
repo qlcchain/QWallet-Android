@@ -187,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="visible"
                 android:textColor="@color/color_1e1e24"
-                android:text="链上充值凭证"
+                android:text="@string/blockchain_invoice"
                 android:textStyle="bold"
                 android:textSize="15sp" />
 
@@ -284,13 +284,14 @@
                     android:layout_height="wrap_content"
                     android:visibility="visible"
                     android:textColor="@color/color_1e1e24"
-                    android:text="凭证详情"
+                    android:text="@string/invoice_detail"
                     android:textStyle="bold"
                     android:textSize="15sp" />
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/ivInvoiceDetail"
+                    android:layout_width="40dp"
                     android:src="@mipmap/background_reim"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="40dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:src="@mipmap/icon_enter1"

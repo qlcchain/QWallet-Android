@@ -177,11 +177,12 @@
         app:layout_constraintTop_toBottomOf="@+id/Memo"
         android:layout_width="match_parent"
         android:layout_marginRight="@dimen/x30"
+        android:enabled="false"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/x10"
         android:textSize="15sp"
         android:textColor="@color/color_29282a"
-        android:hint="if any"
+        android:hint="@string/topup_200_deduct_10_from_10_qgas"
         android:background="@null"
         android:layout_height="wrap_content" />
 

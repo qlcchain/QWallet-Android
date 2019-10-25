@@ -16,6 +16,7 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.BaseBack
+import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.ui.activity.otc.contract.OrderSellContract
 import com.stratagile.qlink.ui.activity.otc.OrderSellFragment
@@ -136,12 +137,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         mCompositeDisposable.add(disposable)
     }
 
-    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, contactAddress: String, map: MutableMap<String, String>) {
+    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, tokenInfo: EthWalletInfo.DataBean.TokensBean, map: MutableMap<String, String>) {
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contactAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, tokenInfo.tokenInfo.address, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, tokenInfo.tokenInfo.decimals.toInt()))
         })
-                .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

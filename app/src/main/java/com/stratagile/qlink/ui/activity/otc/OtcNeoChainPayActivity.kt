@@ -51,6 +51,7 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
     override fun sendUsdtSuccess(txid: String) {
         closeProgressDialog()
         setResult(Activity.RESULT_OK)
+        startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
         finish()
     }
 

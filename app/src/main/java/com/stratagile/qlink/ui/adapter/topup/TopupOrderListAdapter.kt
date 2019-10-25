@@ -30,8 +30,10 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrderList.OrderListBean>) : Ba
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {
             //英文
             helper.setText(R.id.opreator, item.productCountryEn + item.productProvinceEn + item.productIspEn + "-" + item.productNameEn)
+            helper.setImageResource(R.id.ivInvoiceDetail, R.mipmap.background_reim_en)
         } else {
             helper.setText(R.id.opreator, item.productCountry + item.productProvince + item.productIsp + "-" + item.productName)
+            helper.setImageResource(R.id.ivInvoiceDetail, R.mipmap.background_reim)
         }
         when(item.status) {
             "NEW" -> {

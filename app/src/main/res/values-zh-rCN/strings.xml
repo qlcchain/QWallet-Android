@@ -992,7 +992,7 @@
     <string name="failure_to_pay">话费充值失败</string>
     <string name="qgas_resolution_failure">链确认失败</string>
     <string name="qgas_has_been_returned">已退回%1$s</string>
-    <string name="order_list">订单列表</string>
+    <string name="order_list">我的订单</string>
     <string name="you_do_not_have_qlcwallet_create_immediately">您还没有 %1$s 钱包 立即创建</string>
     <string name="send_qgas_error">发送%1$s错误</string>
     <string name="a_cahrge_of_will_cost_qgas_and_rmb">充值%1$s元话费\n需要支付%2$s%3$s和%4$s元</string>
@@ -1035,4 +1035,21 @@
     <string name="free_qlc_lending">免费QLC抵押金</string>
     <string name="sold_out_topup">本月已售完</string>
     <string name="coming_soon_next_month">次月优惠即将上架</string>
+    <string name="creating_blockchain_invoice">生成链上充值凭证</string>
+    <string name="transferring_qgas">正在支付%1$s</string>
+    <string name="qgas_transferred">成功支付%1$s</string>
+    <string name="to_create_blockchain_invoice">正在生成链上充值凭证</string>
+    <string name="blockchain_inoice_created">成功生成链上充值凭证</string>
+    <string name="invoice_detail">凭证详情</string>
+    <string name="blockchain_invoice">链上充值凭证</string>
+    <string name="invoice_type">凭证抬头</string>
+    <string name="personal">个人</string>
+    <string name="invoice_amount">凭证金额</string>
+    <string name="invoice_date">凭证时间</string>
+    <string name="service_provider">服务提供方</string>
+    <string name="invoice_no">凭证号码</string>
+    <string name="service_description">凭证内容</string>
+    <string name="check_on_blockchain">查看链上充值凭证</string>
+    <string name="top_up_100phone_bill_18825709441">话费慢充-%1$s元手机话费-%2$s</string>
+    <string name="topup_200_deduct_10_from_10_qgas">充值%1$s元话费，%3$s %4$s抵扣%2$s元 </string>
 </resources>

@@ -65,7 +65,7 @@ public class TimeUtil {
     }
 
     public static String getOrderTime(long timestamp) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return sdr.format(new Date(timestamp));
     }
 

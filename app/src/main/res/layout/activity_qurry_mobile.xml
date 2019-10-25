@@ -13,7 +13,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/mobile_bg"
         android:gravity="center_vertical"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="20dp"
         android:layout_height="42dp">
         <TextView
             android:id="@+id/tvArea"
@@ -46,31 +46,33 @@
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="15dp"
         android:textSize="15sp"
         android:textColor="@color/color_808080"
         android:text="@string/enter_a_phone_number_or_select_a_contact_to_quickly_view_available_packages"
-        android:layout_marginRight="12dp"
+        android:layout_marginRight="15dp"
         android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/qurryMobile"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         android:layout_marginRight="15dp"
         android:text="@string/look_at_the_products_on_sale"
         android:background="@drawable/main_color_bt_bg"
         android:layout_height="47dp" />
     <TextView
+        android:id="@+id/tvFound"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="15dp"
         android:textSize="15sp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/color_808080"
         android:text="@string/we_find_that_the_following_operators_can_use_the_recharge_charges_for_the_above_mobile_phone_numbers"
-        android:layout_marginRight="12dp"
+        android:layout_marginRight="15dp"
         android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/noProduct"
@@ -88,8 +90,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/payTokenRecyclerView"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

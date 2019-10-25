@@ -95,6 +95,7 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/tvPayTokenSymbol"
             android:layout_width="0px"
             android:layout_weight="1"
             android:text="USDT"
@@ -177,6 +178,7 @@
         android:layout_width="match_parent"
         android:layout_marginRight="@dimen/x30"
         android:layout_marginLeft="@dimen/x30"
+        android:enabled="false"
         android:layout_marginTop="@dimen/x10"
         android:textSize="15sp"
         android:text="@string/buy_qgas"

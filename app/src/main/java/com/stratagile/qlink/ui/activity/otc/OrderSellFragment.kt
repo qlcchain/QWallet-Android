@@ -205,6 +205,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             }
             when (OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
+
                 }
                 AllWallet.WalletType.EthWallet -> {
                     if (payTokenAmount < etAmount.text.toString().trim().toDouble()) {
@@ -349,7 +350,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             thread {
                 when (OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
                     AllWallet.WalletType.EthWallet -> {
-                        mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etAmount.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
+                        mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etAmount.text.toString().trim(), 6, ethPayTokenBean!!, map)
                     }
                     AllWallet.WalletType.EosWallet -> {
                         mPresenter.sendQgas(etAmount.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)

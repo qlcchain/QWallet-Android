@@ -44,6 +44,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.MainAPI;
+import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AllWallet;
@@ -64,6 +65,7 @@ import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.guideview.Component;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
@@ -412,6 +414,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         showCanClaimPop(dict.getData().getValue());
     }
 
+    @Override
+    public void reCreateToopupSuccess() {
+        handlerTopupTodoList();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetFreeNumBack(FreeCount freeCount) {
 //        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
@@ -614,6 +621,45 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             }
         });
+        bottomNavigation.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handlerTopupTodoList();
+            }
+        }, 5000);
+    }
+
+    private void handlerTopupTodoList() {
+        KLog.i("开始处理充值的待办事项");
+        List<TopupTodoList> topupTodoLists = AppConfig.getInstance().getDaoSession().getTopupTodoListDao().loadAll();
+        if (topupTodoLists == null || topupTodoLists.size() == 0) {
+
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (TopupTodoList topupOrderList : topupTodoLists) {
+                        if (!topupOrderList.getCreated()) {
+                            reCreateTopupOrder(topupOrderList);
+                            return;
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private void reCreateTopupOrder(TopupTodoList topupTodoList) {
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("account", topupTodoList.getAccount());
+        infoMap.put("p2pId", topupTodoList.getP2pId());
+        infoMap.put("productId", topupTodoList.getProductId());
+        infoMap.put("areaCode", topupTodoList.getAreaCode());
+        infoMap.put("phoneNumber", topupTodoList.getPhoneNumber());
+        infoMap.put("amount", topupTodoList.getAmount());
+        infoMap.put("txid", topupTodoList.getTxid());
+        infoMap.put("payTokenId", topupTodoList.getPayTokenId());
+        mPresenter.reCreateTopupOrder(infoMap, topupTodoList);
     }
 
     private void showp2pIdChangeDialog(String currentP2pId, String lastP2pId) {

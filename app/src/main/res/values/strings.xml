@@ -1557,7 +1557,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="failure_to_pay">Top-up failure</string>
     <string name="qgas_resolution_failure">Confirmation failed on the Blockchain</string>
     <string name="qgas_has_been_returned">%1$s has been returned</string>
-    <string name="order_list">Order list</string>
+    <string name="order_list">My Orders</string>
     <string name="you_do_not_have_qlcwallet_create_immediately">You don‘t have a %1$s wallet yet\n Create one</string>
     <string name="send_qgas_error">send %1$s error</string>
     <string name="a_cahrge_of_will_cost_qgas_and_rmb">Top-up value ¥ %1$s\n pay %2$s %3$s and ¥ %4$s</string>
@@ -1600,4 +1600,21 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="free_qlc_lending">Free QLC Lending</string>
     <string name="sold_out_topup">Sold Out</string>
     <string name="coming_soon_next_month">Coming soon next month</string>
+    <string name="creating_blockchain_invoice">Creating Blockchain Invoice</string>
+    <string name="transferring_qgas">Transferring %1$s</string>
+    <string name="qgas_transferred">%1$s Transferred</string>
+    <string name="to_create_blockchain_invoice">To Create Blockchain Invoice</string>
+    <string name="blockchain_inoice_created">Blockchain Inoice Created</string>
+    <string name="invoice_detail">Invoice Details</string>
+    <string name="blockchain_invoice">Blockchain Invoice</string>
+    <string name="invoice_type">Invoice Type</string>
+    <string name="personal">Personal</string>
+    <string name="invoice_amount">Invoice Amount</string>
+    <string name="invoice_date">Invoice Date</string>
+    <string name="service_provider">Service Provider</string>
+    <string name="invoice_no">Invoice No</string>
+    <string name="service_description">Service Description</string>
+    <string name="check_on_blockchain">Check on Blockchain</string>
+    <string name="top_up_100phone_bill_18825709441">Top up-¥%1$sPhone bill-%2$s</string>
+    <string name="topup_200_deduct_10_from_10_qgas">Topup ¥%1$s, deduct ¥%2$s from %3$s %4$s</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.stratagile.qlink.ui.activity.topup.presenter
 import android.support.annotation.NonNull
+import com.socks.library.KLog
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.TopupTodoList
 import com.stratagile.qlink.ui.activity.topup.contract.TopupQlcPayContract
 import com.stratagile.qlink.ui.activity.topup.TopupQlcPayActivity
 import javax.inject.Inject
@@ -8,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import java.util.HashMap
 
 /**
  * @author hzp
@@ -28,6 +32,20 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
 
     }
 
+    fun getMainAddress() {
+        mCompositeDisposable.add(httpAPIWrapper.getMainAddress(HashMap<String, String>()).subscribe({
+            KLog.i("onSuccesse")
+            ConstantValue.mainAddress = it.data.neo.address
+            ConstantValue.ethMainAddress = it.data.eth.address
+            ConstantValue.mainAddressData = it.data
+            mView.setMainAddress()
+        }, {
+
+        }, {
+
+        }))
+    }
+
     override fun unsubscribe() {
         if (!mCompositeDisposable.isDisposed) {
             mCompositeDisposable.dispose()
@@ -38,9 +56,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
         mCompositeDisposable.add(httpAPIWrapper.topupCreateOrder(map).subscribe({
             mView.createTopupOrderSuccess(it)
         }, {
-            mView.closeProgressDialog()
+            mView.createTopupOrderError()
+            TopupTodoList.createTodoList(map)
         }, {
-            mView.closeProgressDialog()
+            mView.createTopupOrderError()
+            TopupTodoList.createTodoList(map)
         }))
     }
 }

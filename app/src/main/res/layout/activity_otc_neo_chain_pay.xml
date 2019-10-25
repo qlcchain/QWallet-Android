@@ -179,6 +179,7 @@
         android:layout_marginRight="@dimen/x30"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/x10"
+        android:enabled="false"
         android:textSize="15sp"
         android:text="@string/buy_qgas"
         android:textColor="@color/color_29282a"

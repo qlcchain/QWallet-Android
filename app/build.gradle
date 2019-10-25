@@ -87,9 +87,8 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
 
-
     greendao {
-        schemaVersion 70//数据库版本号
+        schemaVersion 71//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -285,6 +284,8 @@ dependencies {
 
     implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
+
+    implementation 'com.android.support:support-dynamic-animation:28.0.0'
 
 
 }

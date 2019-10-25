@@ -27,6 +27,9 @@ interface TopupEthPayContract {
         fun sendPayTokenSuccess(txid : String)
 
         fun createTopupOrderSuccess(topupOrder: TopupOrder)
+        fun createTopupOrderError()
+
+        fun setMainAddress()
     }
 
     interface TopupEthPayContractPresenter : BasePresenter {

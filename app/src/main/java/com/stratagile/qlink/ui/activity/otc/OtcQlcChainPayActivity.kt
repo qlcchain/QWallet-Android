@@ -48,6 +48,7 @@ class OtcQlcChainPayActivity : BaseActivity(), OtcQlcChainPayContract.View {
         runOnUiThread {
             closeProgressDialog()
             setResult(Activity.RESULT_OK)
+            startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
             finish()
         }
     }

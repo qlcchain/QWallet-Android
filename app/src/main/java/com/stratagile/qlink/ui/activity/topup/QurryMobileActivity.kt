@@ -60,6 +60,7 @@ import javax.inject.Inject;
 
 class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     override fun setPayTokenAdapter(payToken: PayToken) {
+        payTokenRecyclerView.visibility = View.GONE
         payToken.payTokenList[0].isSelected = true
         selectedPayToken = payToken.payTokenList[0]
         payTokenAdapter.setNewData(payToken.payTokenList)
@@ -70,6 +71,12 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         var productList = arrayListOf<TopupProduct.ProductListBean>()
         if (topupProduct.productList.size == 0) {
             noProduct.visibility = View.VISIBLE
+            tvFound.visibility = View.GONE
+            payTokenRecyclerView.visibility = View.GONE
+        } else {
+            payTokenRecyclerView.visibility = View.VISIBLE
+            noProduct.visibility = View.GONE
+            tvFound.visibility = View.VISIBLE
         }
         topupProduct.productList.forEach { itss ->
             itss.amountOfMoney.split(",").forEach {
@@ -130,7 +137,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                                 intent1.putExtra("phoneNumber", etContact.text.toString())
                                 startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
                             } else {
-                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC")) {
+                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
                                     negativeButton(getString(R.string.cancel)) { dismiss() }
                                     positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
                                 }.show()
@@ -145,7 +152,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                                 intent1.putExtra("phoneNumber", etContact.text.toString())
                                 startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
                             } else {
-                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "ETH")) {
+                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "ETH Chain")) {
                                     negativeButton(getString(R.string.cancel)) { dismiss() }
                                     positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
                                 }.show()
@@ -192,6 +199,8 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     fun getProductList() {
         noProduct.visibility = View.GONE
+        tvFound.visibility = View.GONE
+        payTokenRecyclerView.visibility = View.GONE
         topupAbleAdapter!!.setNewData(arrayListOf())
         if ("+86".equals(tvArea.text.toString().trim())) {
             if (!AccountUtil.isTelephone(etContact.text.toString().trim())) {
@@ -250,6 +259,12 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             }
         }
         if (requestCode == AllWallet.WalletType.QlcWallet.ordinal && resultCode == Activity.RESULT_OK) {
+            finish()
+        }
+        if (requestCode == AllWallet.WalletType.EthWallet.ordinal && resultCode == Activity.RESULT_OK) {
+            finish()
+        }
+        if (requestCode == AllWallet.WalletType.NeoWallet.ordinal && resultCode == Activity.RESULT_OK) {
             finish()
         }
     }

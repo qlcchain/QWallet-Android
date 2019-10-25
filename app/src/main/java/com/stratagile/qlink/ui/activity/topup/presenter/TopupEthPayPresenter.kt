@@ -5,8 +5,10 @@ import com.socks.library.KLog
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.EthWallet
+import com.stratagile.qlink.db.TopupTodoList
 import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.TokenInfo
 import com.stratagile.qlink.ui.activity.eth.presenter.EthTransferPresenter.baseToSubunit
@@ -68,13 +70,29 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
         }
     }
 
+    fun getMainAddress() {
+        mCompositeDisposable.add(httpAPIWrapper.getMainAddress(HashMap<String, String>()).subscribe({
+            KLog.i("onSuccesse")
+            ConstantValue.mainAddress = it.data.neo.address
+            ConstantValue.ethMainAddress = it.data.eth.address
+            ConstantValue.mainAddressData = it.data
+            mView.setMainAddress()
+        }, {
+
+        }, {
+
+        }))
+    }
+
     fun createTopupOrder(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.topupCreateOrder(map).subscribe({
             mView.createTopupOrderSuccess(it)
         }, {
             mView.closeProgressDialog()
+            TopupTodoList.createTodoList(map)
         }, {
             mView.closeProgressDialog()
+            TopupTodoList.createTodoList(map)
         }))
     }
 

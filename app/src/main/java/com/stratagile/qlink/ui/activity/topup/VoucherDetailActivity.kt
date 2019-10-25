@@ -7,12 +7,15 @@ import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.topup.component.DaggerVoucherDetailComponent
 import com.stratagile.qlink.ui.activity.topup.contract.VoucherDetailContract
 import com.stratagile.qlink.ui.activity.topup.module.VoucherDetailModule
 import com.stratagile.qlink.ui.activity.topup.presenter.VoucherDetailPresenter
 import com.stratagile.qlink.utils.OtcUtils
+import com.stratagile.qlink.utils.SpUtil
+import com.stratagile.qlink.utils.TimeUtil
 import kotlinx.android.synthetic.main.activity_voucher_detail.*
 
 import javax.inject.Inject;
@@ -38,11 +41,18 @@ class VoucherDetailActivity : BaseActivity(), VoucherDetailContract.View {
         setContentView(R.layout.activity_voucher_detail)
     }
     override fun initData() {
-        title.text = "凭证详情"
+        title.text = getString(R.string.invoice_detail)
         orderBean = intent.getParcelableExtra("orderBean")
-        payer.text = orderBean.phoneNumber
-        payCount.text = orderBean.discountPrice.toBigDecimal().stripTrailingZeros().toPlainString() + "元+" + orderBean.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + orderBean.symbol
-        time.text = orderBean.orderTime
+        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+            //英文
+            payCount.text = "¥" + orderBean.discountPrice.toBigDecimal().stripTrailingZeros().toPlainString() + "+" + orderBean.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + orderBean.symbol
+        } else {
+            payCount.text = orderBean.discountPrice.toBigDecimal().stripTrailingZeros().toPlainString() + "元+" + orderBean.qgasAmount.toBigDecimal().stripTrailingZeros().toPlainString() + orderBean.symbol
+        }
+
+        orderNumber.text = orderBean.number.substring(8, orderBean.number.length)
+        time.text = TimeUtil.timeConvert(orderBean.orderTime)
+        orderDetail.text = getString(R.string.top_up_100phone_bill_18825709441, orderBean.originalPrice.toString(), orderBean.phoneNumber)
         txid.text = orderBean.txid
         txid.setOnClickListener {
             OtcUtils.gotoBlockBrowser(this, orderBean.chain, orderBean.txid)

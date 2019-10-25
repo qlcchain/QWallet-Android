@@ -13,6 +13,7 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.FreeNum;
@@ -22,6 +23,7 @@ import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
 import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -325,6 +327,31 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                 infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
                 userAvatar(infoMap);
                 onComplete();
+            }
+        });
+    }
+
+    public void reCreateTopupOrder(Map map, TopupTodoList topupTodoList) {
+        httpAPIWrapper.topupCreateOrder(map).subscribe(new Observer<TopupOrder>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(TopupOrder topupOrder) {
+                AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }
