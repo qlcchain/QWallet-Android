@@ -508,6 +508,10 @@ public interface MainHttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
 
+    @POST(MainAPI.url_topup_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupOrderConfirm(@Body RequestBody map);
+
     @POST(MainAPI.url_topup_order_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrderList> getTopupOrderList(@Body RequestBody map);

@@ -41,16 +41,37 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs{
+        debug{
+            def properties = new Properties()
+            def inputStream = project.rootProject.file('local.properties').newDataInputStream()
+            properties.load( inputStream )
+            storeFile file(rootProject.getRootDir().getAbsolutePath()+"/app/qlink.jks");
+            storePassword properties.getProperty('DEBUG_KEYSTORE_PASSWORD')
+            keyAlias properties.getProperty('DEBUG_KEY_ALIAS')
+            keyPassword properties.getProperty('DEBUG_KEY_PASSWORD')
+        }
+        release{
+            def properties = new Properties()
+            def inputStream = project.rootProject.file('local.properties').newDataInputStream()
+            properties.load( inputStream )
+            storeFile file(rootProject.getRootDir().getAbsolutePath()+"/app/qlink.jks");
+            storePassword properties.getProperty('RELEASE_KEYSTORE_PASSWORD')
+            keyAlias properties.getProperty('RELEASE_KEY_ALIAS')
+            keyPassword properties.getProperty('RELEASE_KEY_PASSWORD')
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
             buildConfigField "boolean", "LOG_DEBUG", "true"
-//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
             jniDebuggable true
         }
         release {
             minifyEnabled false
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             buildConfigField "boolean", "LOG_DEBUG", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -28,7 +28,7 @@ interface TopupEthPayContract {
 
         fun createTopupOrderSuccess(topupOrder: TopupOrder)
         fun createTopupOrderError()
-
+        fun topupOrderStatus(topupOrder: TopupOrder)
         fun setMainAddress()
     }
 

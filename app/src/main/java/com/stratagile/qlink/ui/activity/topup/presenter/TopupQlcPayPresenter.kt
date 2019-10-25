@@ -4,6 +4,7 @@ import com.socks.library.KLog
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.TopupTodoList
+import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.topup.contract.TopupQlcPayContract
 import com.stratagile.qlink.ui.activity.topup.TopupQlcPayActivity
 import javax.inject.Inject
@@ -61,6 +62,22 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
         }, {
             mView.createTopupOrderError()
             TopupTodoList.createTodoList(map)
+        }))
+    }
+
+    fun topupOrderConfirm(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.topupOrderConfirm(map).subscribe({
+            mView.topupOrderStatus(it)
+        }, {
+            var topupOrder = TopupOrder()
+            topupOrder.order.id = map["orderId"]
+            topupOrder.order.status = "NEW"
+            mView.topupOrderStatus(topupOrder)
+        }, {
+            var topupOrder = TopupOrder()
+            topupOrder.order.id = map["orderId"]
+            topupOrder.order.status = "NEW"
+            mView.topupOrderStatus(topupOrder)
         }))
     }
 }

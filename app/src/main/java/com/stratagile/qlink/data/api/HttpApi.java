@@ -147,6 +147,7 @@ import static com.stratagile.qlink.data.api.API.url_sys_dict;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_topup_cancel_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order;
+import static com.stratagile.qlink.data.api.API.url_topup_order_confirm;
 import static com.stratagile.qlink.data.api.API.url_topup_order_list;
 import static com.stratagile.qlink.data.api.API.url_topup_productlist;
 import static com.stratagile.qlink.data.api.API.url_trade_appeal;
@@ -582,6 +583,10 @@ public interface HttpApi {
     @POST(url_topup_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
+
+    @POST(url_topup_order_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupOrderConfirm(@Body RequestBody map);
 
     @POST(url_topup_order_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})

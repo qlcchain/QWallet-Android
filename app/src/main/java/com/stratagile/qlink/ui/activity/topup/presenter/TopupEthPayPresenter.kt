@@ -11,6 +11,7 @@ import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.TopupTodoList
 import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.TokenInfo
+import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.eth.presenter.EthTransferPresenter.baseToSubunit
 import com.stratagile.qlink.ui.activity.topup.contract.TopupEthPayContract
 import com.stratagile.qlink.ui.activity.topup.TopupEthPayActivity
@@ -93,6 +94,22 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
         }, {
             mView.closeProgressDialog()
             TopupTodoList.createTodoList(map)
+        }))
+    }
+
+    fun topupOrderConfirm(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.topupOrderConfirm(map).subscribe({
+            mView.topupOrderStatus(it)
+        }, {
+            var topupOrder = TopupOrder()
+            topupOrder.order.id = map["orderId"]
+            topupOrder.order.status = "NEW"
+            mView.topupOrderStatus(topupOrder)
+        }, {
+            var topupOrder = TopupOrder()
+            topupOrder.order.id = map["orderId"]
+            topupOrder.order.status = "NEW"
+            mView.topupOrderStatus(topupOrder)
         }))
     }
 

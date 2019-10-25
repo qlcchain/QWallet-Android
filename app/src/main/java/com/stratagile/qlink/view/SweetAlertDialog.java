@@ -1,11 +1,14 @@
 package com.stratagile.qlink.view;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -35,6 +38,15 @@ public class SweetAlertDialog extends Dialog {
     private String mConfirmText;
     private Drawable mCustomImgDrawable;
     private boolean mCloseFromCancel;
+    private OnBackListener onBackListener;
+
+    public OnBackListener getOnBackListener() {
+        return onBackListener;
+    }
+
+    public void setOnBackListener(OnBackListener onBackListener) {
+        this.onBackListener = onBackListener;
+    }
 
     public static final int NORMAL_TYPE = 0;
     public static final int ERROR_TYPE = 1;
@@ -84,6 +96,19 @@ public class SweetAlertDialog extends Dialog {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && !event.isCanceled()) {
+            if (onBackListener != null) {
+                onBackListener.onBack();
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -130,6 +155,10 @@ public class SweetAlertDialog extends Dialog {
                 }
             }
         }, 60);
+    }
+
+    public interface OnBackListener {
+        void onBack();
     }
 
 }

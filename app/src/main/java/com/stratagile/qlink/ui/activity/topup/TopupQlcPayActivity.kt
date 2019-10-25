@@ -62,6 +62,51 @@ import kotlin.concurrent.thread
  */
 
 class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
+
+    override fun topupOrderStatus(topupOrder: TopupOrder) {
+        if (isFinish) {
+            return
+        }
+        if (!"QGAS_PAID".equals(topupOrder.order.status, true)) {
+            thread {
+                Thread.sleep(5000)
+                var map = hashMapOf<String, String>()
+                map["orderId"] = topupOrder.order.id
+                mPresenter.topupOrderConfirm(map)
+            }
+        } else {
+            ivLoad2.setImageResource(R.mipmap.background_success)
+            tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
+            tvVoucher.text = getString(R.string.blockchain_inoice_created)
+            showChangeAnimation(ivLoad2)
+
+            tvSend.postDelayed({
+                sweetAlertDialog.dismissWithAnimation()
+            }, 1000)
+            tvSend.postDelayed({
+                var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
+                val intent = Intent(this, WebViewActivity::class.java)
+                intent.putExtra("url", url)
+                intent.putExtra("title", getString(R.string.payment))
+                startActivityForResult(intent, 10)
+            }, 1500)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (sweetAlertDialog.isShowing) {
+            sweetAlertDialog.dismissWithAnimation()
+            if (isCreatedOrder) {
+                isFinish = true
+                startActivity(Intent(this, TopupOrderListActivity::class.java))
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun createTopupOrderError() {
         sweetAlertDialog.dismissWithAnimation()
     }
@@ -71,27 +116,26 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     }
 
     override fun createTopupOrderSuccess(topupOrder: TopupOrder) {
-        ivLoad2.setImageResource(R.mipmap.background_success)
-        tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
-        tvVoucher.text = getString(R.string.blockchain_inoice_created)
-
-        showChangeAnimation(ivLoad2)
-        tvSend.postDelayed({
-            sweetAlertDialog.dismissWithAnimation()
-        }, 1000)
-        tvSend.postDelayed({
-            if ("NEW".equals(topupOrder.order.status, true)) {
-                startActivity(Intent(this, TopupOrderListActivity::class.java))
-                setResult(Activity.RESULT_OK)
-                finish()
-            } else {
+        isCreatedOrder = true
+        if (!"QGAS_PAID".equals(topupOrder.order.status, true)) {
+            thread {
+                Thread.sleep(5000)
+                var map = hashMapOf<String, String>()
+                map["orderId"] = topupOrder.order.id
+                mPresenter.topupOrderConfirm(map)
+            }
+        } else {
+            tvSend.postDelayed({
+                sweetAlertDialog.dismissWithAnimation()
+            }, 1000)
+            tvSend.postDelayed({
                 var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
                 val intent = Intent(this, WebViewActivity::class.java)
                 intent.putExtra("url", url)
                 intent.putExtra("title", getString(R.string.payment))
                 startActivityForResult(intent, 10)
-            }
-        }, 1500)
+            }, 1500)
+        }
     }
 
     @Inject
@@ -100,13 +144,16 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     lateinit var product: TopupProduct.ProductListBean
     lateinit var payToken: PayToken.PayTokenListBean
 
-    lateinit var animationView :View
-    lateinit var ivLoad1 :ImageView
-    lateinit var ivLoad2 :ImageView
-    lateinit var tvPaying : TextView
-    lateinit var tvVoucher : TextView
+    lateinit var animationView: View
+    lateinit var ivLoad1: ImageView
+    lateinit var ivLoad2: ImageView
+    lateinit var ivChain: ImageView
+    lateinit var tvPaying: TextView
+    lateinit var tvVoucher: TextView
+    var isCreatedOrder = false
+    var isFinish = false
 
-    lateinit var sweetAlertDialog : SweetAlertDialog
+    lateinit var sweetAlertDialog: SweetAlertDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -126,10 +173,15 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         animationView = layoutInflater.inflate(R.layout.alert_show_otc_pay_animation, null, false)
         ivLoad1 = animationView.findViewById<ImageView>(R.id.ivLoad1)
         ivLoad2 = animationView.findViewById<ImageView>(R.id.ivLoad2)
+        ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
+        ivChain.setImageResource(R.mipmap.icons_eth_wallet)
         tvPaying = animationView.findViewById<TextView>(R.id.tvPaying)
         tvVoucher = animationView.findViewById<TextView>(R.id.tvVoucher)
         sweetAlertDialog = SweetAlertDialog(this)
         sweetAlertDialog.setView(animationView)
+        sweetAlertDialog.setOnBackListener {
+            onBackPressed()
+        }
 
         if (ConstantValue.mainAddress != null) {
             tvReceiveAddress.text = ConstantValue.mainAddressData.qlcchian.address
@@ -145,7 +197,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
         }
 
-        var discountPrice = (product.price.toBigDecimal()*(1.toBigDecimal()-product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
+        var discountPrice = (product.price.toBigDecimal() * (1.toBigDecimal() - product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
         etEthTokenSendMemo.setText(getString(R.string.topup_200_deduct_10_from_10_qgas, product.price.toString(), discountPrice, tvAmountQgas.text.toString(), payToken.symbol))
 
         var qlcAccounts = AppConfig.instance.daoSession.qlcAccountDao.loadAll()

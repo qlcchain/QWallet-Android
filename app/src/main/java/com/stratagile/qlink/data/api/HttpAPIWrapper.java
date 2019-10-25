@@ -974,6 +974,14 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<TopupOrder> topupOrderConfirm(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.topupOrderConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.topupOrderConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     public Observable<TopupOrderList> getTopupOrderList(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
             return wrapper(mMainHttpAPI.getTopupOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
