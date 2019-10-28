@@ -43,6 +43,7 @@ import com.stratagile.qlink.ui.activity.my.module.MyModule;
 import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.view.MyItemView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -350,6 +351,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         tags.add(ConstantValue.userAll);
         if (!"".equals(ConstantValue.currentUser.getBindDate())) {
             tags.add(ConstantValue.userLend);
+        }
+        if ("Meizu16th".equals(SystemUtil.getDeviceBrand() + SystemUtil.getSystemModel())) {
+            KLog.i("添加测试tag");
+            tags.add("qwallet_test");
         }
         ConstantValue.jpushOpreateCount++;
         JPushInterface.setTags(getActivity(), ConstantValue.jpushOpreateCount, tags);

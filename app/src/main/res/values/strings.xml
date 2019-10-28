@@ -1251,7 +1251,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="payment">Payment</string>
     <string name="select_a_eth_wallet_to_send_usdt">Select a ETH wallet to send USDT</string>
     <string name="select_a_eth_wallet">Select a ETH wallet</string>
-    <string name="send_to">Send to</string>
+    <string name="send_to">Receiving Wallet</string>
     <string name="memo">Memo</string>
     <string name="miner_cost">Miner cost</string>
     <string name="slow">Slow</string>
@@ -1470,7 +1470,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="selling_quantity">Selling Quantity</string>
     <string name="buying">Buying</string>
     <string name="buying_quantity">Buying Quantity</string>
-    <string name="receive_from">Receive from</string>
+    <string name="receive_from">Payment Wallet</string>
     <string name="select_currency">Select Currency</string>
     <string name="wating_for_the_public_chain_confirm_the_transaction">Transaction Pending</string>
     <string name="please_wait_patiently">Please wait patiently.</string>

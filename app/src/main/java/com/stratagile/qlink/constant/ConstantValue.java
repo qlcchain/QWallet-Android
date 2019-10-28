@@ -62,6 +62,8 @@ public class ConstantValue {
 
     public static UserAccount lastLoginOut;
 
+    public static String EXTRA_BUNDLE = "bundle";
+
     /**
      * eth的bnb契约地址
      */

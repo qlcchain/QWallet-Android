@@ -183,7 +183,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             onBackPressed()
         }
 
-        if (ConstantValue.mainAddress != null) {
+        if (ConstantValue.mainAddressData != null) {
             tvReceiveAddress.text = ConstantValue.mainAddressData.qlcchian.address
         } else {
             mPresenter.getMainAddress()

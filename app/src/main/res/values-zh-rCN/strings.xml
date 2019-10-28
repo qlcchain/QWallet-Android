@@ -897,7 +897,7 @@
     <string name="buying">买入</string>
     <string name="buying_quantity">买入数量</string>
     <string name="receive_from">付款钱包</string>
-    <string name="send_to">收币地址</string>
+    <string name="send_to">收币钱包</string>
     <string name="select_currency">选择交易对</string>
     <string name="illegal_send_address">非法发送地址</string>
     <string name="wating_for_the_public_chain_confirm_the_transaction">等待公共链确认交易</string>

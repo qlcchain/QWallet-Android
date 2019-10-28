@@ -173,9 +173,9 @@ public class AppConfig extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         FileUtil.removeAllImageAvater(this);
-//        AppEventsLogger.activateApp(this);
         instance = this;
         KLog.init(BuildConfig.LOG_DEBUG);
+        KLog.i("app启动！！！");
         CrashReport.initCrashReport(this, "2d19fdd0a6", BuildConfig.LOG_DEBUG);
         setupApplicationComponent();
         setDatabase();

@@ -85,6 +85,7 @@ import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
+import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment;
 import com.stratagile.qlink.ui.activity.topup.TopupOrderListActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
@@ -112,6 +113,7 @@ import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.NoScrollViewPager;
 import com.stratagile.qlink.view.SweetAlertDialog;
+import com.vondear.rxtools.RxTool;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -404,6 +406,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (!"".equals(ConstantValue.currentUser.getBindDate())) {
             tags.add(ConstantValue.userLend);
         }
+        if ("Meizu16th".equals(SystemUtil.getDeviceBrand() + SystemUtil.getSystemModel())) {
+            KLog.i("添加测试tag");
+            tags.add("qwallet_test");
+        }
         ConstantValue.jpushOpreateCount++;
         JPushInterface.setTags(this, ConstantValue.jpushOpreateCount, tags);
         ToastUtil.displayShortToast(getString(R.string.bind_success));
@@ -621,12 +627,28 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             }
         });
-        bottomNavigation.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handlerTopupTodoList();
+        bottomNavigation.postDelayed(() -> handlerTopupTodoList(), 5000);
+
+        bottomNavigation.postDelayed(() -> {
+            Bundle bundle = getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE);
+            if(bundle != null){
+                String debit = bundle.getString("skip");
+                if (debit != null && !"".equals(debit)) {
+                    switch (debit) {
+                        case "debit":
+                            Intent i = new Intent(this, MyClaimActivity.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
+                            break;
+                        case "":
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
-        }, 5000);
+        }, 2500);
+
     }
 
     private void handlerTopupTodoList() {
