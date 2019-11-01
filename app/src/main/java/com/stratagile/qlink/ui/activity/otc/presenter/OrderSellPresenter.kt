@@ -13,6 +13,7 @@ import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.EntrustTodo
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.BaseBack
@@ -45,7 +46,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -129,10 +129,12 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mView.generateSellQgasOrderSuccess()
         }, {
             mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
         }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
         })
         mCompositeDisposable.add(disposable)
     }
@@ -174,7 +176,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {
@@ -284,8 +286,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mView.generateSellQgasOrderSuccess()
         }, {
             mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
         }, {
             mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
         }))
     }
 

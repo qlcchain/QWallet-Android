@@ -5,6 +5,7 @@ import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.BuySellBuyTodo
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.ui.activity.otc.contract.OtcQlcChainPayContract
 import com.stratagile.qlink.ui.activity.otc.OtcQlcChainPayActivity
@@ -93,8 +94,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: OtcQ
                         mView.sendTokenSuccess(suceess)
                     }, {
                         mView.closeProgressDialog()
+                        BuySellBuyTodo.createBuySellBuyTodo(map)
                     }, {
                         mView.closeProgressDialog()
+                        BuySellBuyTodo.createBuySellBuyTodo(map)
                     })
                 }
             }

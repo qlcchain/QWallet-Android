@@ -635,7 +635,7 @@
     <string name="order_status">订单状态</string>
     <string name="detail">订单详情</string>
     <string name="the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes">如果30分钟内没有进一步确认，订单将自动关闭。</string>
-    <string name="the_system_will_verify_the_transction_id_you_filled">系统将验证您填写的以太坊交易ID。</string>
+    <string name="the_system_will_verify_the_transction_id_you_filled">系统将验证您填写的交易ID。</string>
     <string name="the_order_closed_by_the_system">订单由系统关闭</string>
     <string name="the_order_closed_by_the_buyer">订单由买家关闭</string>
     <string name="buyers_erc20_address">买家的ERC20地址</string>
@@ -920,7 +920,7 @@
     <string name="not_succeed_continue_to_invoke">抵押未成功, 继续抵押</string>
     <string name="withdraw_complete">提取完成</string>
     <string name="not_successed">抵押未成功</string>
-    <string name="staking_amount_qlc">抵押数量 (QLC)</string>
+    <string name="staking_amount_qlc">我的抵押量 (QLC)</string>
     <string name="voting_earnings_qgas">投票收益 (QGAS)</string>
     <string name="mining_earnings_qgas">挖矿收益 (QGAS)</string>
     <string name="option_to_revoke_on">可赎回时间</string>
@@ -933,7 +933,7 @@
     <string name="amount_stake_detail">抵押数量</string>
     <string name="earnings">收益</string>
     <string name="total_staking_volume_qlc">总抵押数 (QLC)</string>
-    <string name="earnings_qgas">收益 (QGAS)</string>
+    <string name="earnings_qgas">累计收益 (QGAS)</string>
     <string name="the_minimum_period_is_10_days">最少抵押10天</string>
     <string name="the_minimum_period_is_180_days">最少抵押180天</string>
     <string name="the_minimum_stake_amount_is_5000000_qlc">最少抵押 5000000 QLC</string>
@@ -1052,4 +1052,10 @@
     <string name="check_on_blockchain">查看链上充值凭证</string>
     <string name="top_up_100phone_bill_18825709441">话费慢充-%1$s元手机话费-%2$s</string>
     <string name="topup_200_deduct_10_from_10_qgas">充值%1$s元话费，%3$s %4$s抵扣%2$s元 </string>
+    <string name="backup_now">现在备份</string>
+    <string name="if_your_lose_your_mobile_devices_you_could_use_your_private_key_or_mnemonic_phrase_to_recover_your_wallet">如果应用删除、手机丢失等情况，则可以使用私钥或助记词来恢复钱包。</string>
+    <string name="please_back_up_your_private_key_mnemonic_phrase_now">请立即备份您的私钥/助记词。</string>
+    <string name="security_reminders">安全提醒</string>
+    <string name="total_earnings_qgas">总收益 (QGAS)</string>
+    <string name="free_qlc_lending_my_stake">免费抵押量 (QLC)</string>
 </resources>

@@ -80,10 +80,10 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
         if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
             //英文
             llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_en));
-            content = "https://qwallet.network/en";
+            content = "https://fir.im/qlc1";
         } else {
             llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
-            content = "https://qwallet.network/cn";
+            content = "https://fir.im/qlc1";
         }
         Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("ic_launcher", "mipmap", getPackageName()));
         ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(content, ivQRCode, logo);

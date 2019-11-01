@@ -92,7 +92,7 @@
 				responseCallback(result);
 			},
 			// send
-			send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, responseCallback) {
+			send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, memo, responseCallback) {
 
 				const account = new Neon.wallet.Account(wif);
 
@@ -109,7 +109,7 @@
 						account: account, // This is the address which the assets come from.
 						intents: intent // This is where you want to send assets to.
 					};
-					const returnAsset = Neon.sendAsset(config)
+					const returnAsset = Neon.api.sendAsset(config)
 					.then(config => {
 						responseCallback(config.response);
 					})
@@ -123,6 +123,7 @@
 				const network = 'MainNet';
 				const additionalInvocationGas = 0;
 				const additionalIntents = [];
+				const remark = memo;
 
 				// We have to adjust the amount to send because this function bumps it up by 8 decimals places according to Fixed8 rules. For NEP5 tokens of 8 decimals places, no adjustments is needed.
 				const generator = Neon.nep5.abi.transfer(

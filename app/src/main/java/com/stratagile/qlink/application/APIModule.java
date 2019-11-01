@@ -4,6 +4,7 @@ import android.app.Application;
 import android.webkit.WebSettings;
 
 import com.google.gson.Gson;
+import com.socks.library.KLog;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpInfoInterceptor;
 import com.stratagile.qlink.data.api.MainAPI;
@@ -14,7 +15,11 @@ import com.stratagile.qlink.data.qualifier.Remote;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.data.api.HttpApi;
+import com.stratagile.qlink.entity.Auth;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.SystemUtil;
+import com.stratagile.qlink.utils.VersionUtil;
+import com.vondear.rxtools.RxDeviceTool;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -59,10 +64,23 @@ public final class APIModule {
         builder.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
+                Auth auth = new Auth();
+                String uuid = "";
+                String meid = RxDeviceTool.getDeviceIdIMEI(AppConfig.getInstance());
+                if ("".equals(meid)) {
+                    uuid = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
+                } else {
+                    uuid = meid;
+                }
+                auth.setAppBuild(VersionUtil.getAppVersionCode(AppConfig.instance) + "");
+                auth.setAgent(WebSettings.getDefaultUserAgent(AppConfig.getInstance()));
+                auth.setUuid(uuid);
+                auth.setPlatform("Android");
+                auth.setAppVersion(VersionUtil.getAppVersionName(AppConfig.instance));
                 Request request = chain.request()
                         .newBuilder()
                         .removeHeader("User-Agent")//移除旧的
-                        .addHeader("User-Agent", WebSettings.getDefaultUserAgent(AppConfig.getInstance()))//添加真正的头部
+                        .addHeader("User-Agent", new Gson().toJson(auth))//添加真正的头部
                         .build();
                 return chain.proceed(request);
             }

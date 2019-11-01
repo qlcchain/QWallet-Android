@@ -250,31 +250,32 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
     private fun generateSendBlock() {
         thread {
             var bendi = true
-            accountInfo!!.tokens.forEach {
-                if (it.tokenName.equals(tokenInfo!!.tokenName)) {
-                    if (BigDecimal.valueOf(it.balance.toDouble()) >= BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals).multiply(BigDecimal(etQlcTokenSendValue.text.toString().trim()))) {
-                        val qlcClient = QlcClient(ConstantValue.qlcNode)
-                        val rpc = LedgerRpc(qlcClient)
-                        var jsonObject = TransactionMng.sendBlock(qlcClient, tokenInfo!!.walletAddress, tokenInfo!!.tokenSymol, etQlcTokenSendAddress.text.toString().trim(), BigDecimal(etQlcTokenSendValue.text.toString().trim()).multiply(BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals)).toBigInteger(), null, null, if (!"".equals(etEthTokenSendMemo.text.toString().trim())) {
-                            getMemoHash(Helper.byteToHexString(etEthTokenSendMemo.text.toString().trim().toByteArray()))
-                        } else {
-                            null
-                        }, null)
-                        var aaaa = JSONArray()
-                        var stateBlock = Gson().fromJson<StateBlock>(jsonObject.toJSONString(), StateBlock::class.java)
-                        var root = BlockMng.getRoot(stateBlock)
-                        var params = mutableListOf<Pair<String, String>>()
-                        params.add(Pair("root", root))
-                        standaloneCoroutine = launch {
-                            KLog.i("协程启动")
-                            delay(30000)
-                            bendi = false
-                            KLog.i("走远程work逻辑, root为：" + root)
-                            var request = "http://pow1.qlcchain.org/work".httpGet(params)
-                            request.responseString { _, _, result ->
-                                KLog.i("远程work返回、、")
-                                val (data, error) = result
-                                try {
+            try {
+                accountInfo!!.tokens.forEach {
+                    if (it.tokenName.equals(tokenInfo!!.tokenName)) {
+                        if (BigDecimal.valueOf(it.balance.toDouble()) >= BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals).multiply(BigDecimal(etQlcTokenSendValue.text.toString().trim()))) {
+                            val qlcClient = QlcClient(ConstantValue.qlcNode)
+                            val rpc = LedgerRpc(qlcClient)
+                            var jsonObject = TransactionMng.sendBlock(qlcClient, tokenInfo!!.walletAddress, tokenInfo!!.tokenSymol, etQlcTokenSendAddress.text.toString().trim(), BigDecimal(etQlcTokenSendValue.text.toString().trim()).multiply(BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals)).toBigInteger(), null, null, if (!"".equals(etEthTokenSendMemo.text.toString().trim())) {
+                                getMemoHash(Helper.byteToHexString(etEthTokenSendMemo.text.toString().trim().toByteArray()))
+                            } else {
+                                null
+                            }, null)
+                            var aaaa = JSONArray()
+                            var stateBlock = Gson().fromJson<StateBlock>(jsonObject.toJSONString(), StateBlock::class.java)
+                            var root = BlockMng.getRoot(stateBlock)
+                            var params = mutableListOf<Pair<String, String>>()
+                            params.add(Pair("root", root))
+                            standaloneCoroutine = launch {
+                                KLog.i("协程启动")
+                                delay(30000)
+                                bendi = false
+                                KLog.i("走远程work逻辑, root为：" + root)
+                                var request = "http://pow1.qlcchain.org/work".httpGet(params)
+                                request.responseString { _, _, result ->
+                                    KLog.i("远程work返回、、")
+                                    val (data, error) = result
+
                                     if (error == null) {
                                         stateBlock.work = data
                                         var hash = BlockMng.getHash(stateBlock)
@@ -302,47 +303,48 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                                         return@responseString
                                     }
                                     closeProgressDialog()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
-                            }
-                            KLog.i(aaaa)
-                            return@launch
-                        }
-                        var work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(stateBlock)))
-                        standaloneCoroutine.cancel()
-                        try {
-                            if (!bendi) {
-                                return@thread
-                            }
-                            KLog.i("走本地work逻辑")
-                            stateBlock.work = work
-                            var hash = BlockMng.getHash(stateBlock)
-                            var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(tokenInfo!!.walletAddress).substring(0, 64)))
-                            val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(tokenInfo!!.walletAddress)))
-                            if (!signCheck) {
-                                KLog.i("签名验证失败")
-                                return@thread
-                            }
-                            stateBlock.setSignature(Helper.byteToHexString(signature))
-                            aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
-                            var result = rpc.process(aaaa)
-                            KLog.i(result.toJSONString())
-                            if (result.getString("result") != null && !"".equals(result.getString("result"))) {
-                                runOnUiThread {
-                                    toast("success")
-                                }
-                                EventBus.getDefault().post(ChangeWallet())
-                                setResult(Activity.RESULT_OK)
-                                finish()
-                            }
-                            closeProgressDialog()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
 
+                                }
+                                KLog.i(aaaa)
+                                return@launch
+                            }
+                            var work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(stateBlock)))
+                            standaloneCoroutine.cancel()
+                            try {
+                                if (!bendi) {
+                                    return@thread
+                                }
+                                KLog.i("走本地work逻辑")
+                                stateBlock.work = work
+                                var hash = BlockMng.getHash(stateBlock)
+                                var signature = WalletMng.sign(hash, Helper.hexStringToBytes(drivePrivateKey(tokenInfo!!.walletAddress).substring(0, 64)))
+                                val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(drivePublicKey(tokenInfo!!.walletAddress)))
+                                if (!signCheck) {
+                                    KLog.i("签名验证失败")
+                                    return@thread
+                                }
+                                stateBlock.setSignature(Helper.byteToHexString(signature))
+                                aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
+                                var result = rpc.process(aaaa)
+                                KLog.i(result.toJSONString())
+                                if (result.getString("result") != null && !"".equals(result.getString("result"))) {
+                                    runOnUiThread {
+                                        toast("success")
+                                    }
+                                    EventBus.getDefault().post(ChangeWallet())
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                }
+                                closeProgressDialog()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

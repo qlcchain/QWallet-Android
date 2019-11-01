@@ -299,9 +299,9 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                     pairsListBeans.get(i).setSelect(true);
                 }
             }
-            String saveData = new Gson().toJson(pairsListBeans);
-            FileUtil.savaData("/Qwallet/tradePair.json", saveData);
         }
+        String saveData = new Gson().toJson(pairsListBeans);
+        FileUtil.savaData("/Qwallet/tradePair.json", saveData);
         viewModel.pairsLiveData.postValue(pairsListBeans);
     }
 

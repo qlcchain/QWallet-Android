@@ -13,6 +13,7 @@ import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.BuySellSellTodo
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.NeoWalletInfo
@@ -41,7 +42,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -148,10 +148,12 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             //isSuccesse
             mView.closeProgressDialog()
             mView.generateBuyQgasOrderSuccess()
+            BuySellSellTodo.createBuySellSellTodo(map)
         }, { mView.closeProgressDialog() }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
+            BuySellSellTodo.createBuySellSellTodo(map)
         })
         mCompositeDisposable.add(disposable)
     }
@@ -176,6 +178,21 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         return txid
     }
 
+//    var map = mutableMapOf<String, String>()
+//    map.put("account", ConstantValue.currentUser.account)
+//    map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
+//    map["pairsId"] = selectedPair!!.id
+//    map.put("type", ConstantValue.orderTypeBuy)
+//    map.put("unitPrice", etUnitPrice.text.toString().trim())
+//    map.put("totalAmount", etAmount.text.toString().trim())
+//    map.put("minAmount", etMinAmount.text.toString().trim())
+//    map.put("maxAmount", etMaxAmount.text.toString().trim())
+//    map.put("qgasAddress",tvReceiveWalletAddess.text.toString().trim())
+////            map.put("usdtAddress", "")
+////            map.put("fromAddress", "")
+//    map.put("txid", "")
+//    mPresenter.generateBuyQgasOrder(map)
+
     fun generateTradeSellOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
         map.put("fromAddress", fromAddress)
         map.put("txid", getTxidByHex(txid))
@@ -183,9 +200,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             mView.closeProgressDialog()
             mView.generateBuyQgasOrderSuccess()
         }, {
-
+            BuySellSellTodo.createBuySellSellTodo(map)
         }, {
-
+            BuySellSellTodo.createBuySellSellTodo(map)
         }))
     }
 
@@ -250,7 +267,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {

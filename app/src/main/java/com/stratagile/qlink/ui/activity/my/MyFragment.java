@@ -188,6 +188,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     mPresenter.getUserInfo(map);
                 }
             }
+//            if (ConstantValue.currentUser == null) {
+//                viewModel.noUserLogin.postValue("xxx");
+//            }
         }
         claimQlc.setOnClickListener(new View.OnClickListener() {
             @Override

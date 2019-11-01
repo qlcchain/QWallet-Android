@@ -18,6 +18,8 @@ import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.reward.Dict
+import com.stratagile.qlink.entity.reward.RewardTotal
 import com.stratagile.qlink.entity.stake.MyStakeList
 import com.stratagile.qlink.ui.activity.reward.MyClaimActivity
 import com.stratagile.qlink.ui.activity.stake.component.DaggerMyStakeComponent
@@ -26,6 +28,7 @@ import com.stratagile.qlink.ui.activity.stake.module.MyStakeModule
 import com.stratagile.qlink.ui.activity.stake.presenter.MyStakePresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.stake.MyStakeAdapter
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.LogUtil
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper
 import kotlinx.android.synthetic.main.activity_my_stake.*
@@ -47,11 +50,25 @@ import kotlin.concurrent.thread
  */
 
 class MyStakeActivity : BaseActivity(), MyStakeContract.View {
+    override fun setClaimedTotal(rewardTotal1: RewardTotal) {
+        rewardTotal = rewardTotal1.rewardTotal.toBigDecimal()
+        tvFreeEarnQgas.text = rewardTotal.stripTrailingZeros().toPlainString()
+        setStakedQlcAmount()
+    }
+
+    override fun setRewardQlcAmount(dict: Dict) {
+        rewardQlcAmount = dict.data.value.toBigDecimal()
+        tvFreeStakedQlc.text = rewardQlcAmount.stripTrailingZeros().toPlainString()
+        getClaimedTotal()
+    }
 
     @Inject
     internal lateinit var mPresenter: MyStakePresenter
     lateinit var qlcWallet: QLCAccount
     lateinit var myStakeAdapter: MyStakeAdapter
+    var rewardTotal = BigDecimal.ZERO
+    var rewardQlcAmount = BigDecimal.ZERO
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         drawableBg = R.drawable.main_bg_shape
@@ -115,6 +132,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         }
         myStakeAdapter = MyStakeAdapter(arrayListOf())
         myStakeAdapter.setEnableLoadMore(true)
+        getRewardQlcAmount()
         refreshLayout.setOnRefreshListener {
 
             thread {
@@ -177,6 +195,21 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         }
     }
 
+    fun getRewardQlcAmount() {
+        var map = hashMapOf<String, String>()
+        map["dictType"] = "winq_reward_qlc_amount"
+        mPresenter.rewardQlcAmount(map)
+    }
+
+    fun getClaimedTotal() {
+        var map = hashMapOf<String, String>()
+        map["account"] = ConstantValue.currentUser.account
+        map["token"] = AccountUtil.getUserToken()
+        map["type"] = "REGISTER"
+        map["status"] = "SUCCESS"
+        mPresenter.getClaimedTotal(map)
+    }
+
     fun setStakedQlcAmount() {
         var stakedQlc = 0L
         var earnQgas = 0L
@@ -186,9 +219,11 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
             }
             earnQgas += it.qgas
         }
-        tvStakeVol.text = stakedQlc.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+        tvStakeVol.text = (stakedQlc.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP) + rewardQlcAmount).stripTrailingZeros().toPlainString()
         tvStakedQlc.text = stakedQlc.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
-        tvEarnQgas.text = earnQgas.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+        tvEarnQgas.text = (earnQgas.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString()
+
+        tvTotalEarnVol.text = (earnQgas.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP) + rewardTotal).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

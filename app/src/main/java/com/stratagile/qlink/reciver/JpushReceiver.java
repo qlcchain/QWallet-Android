@@ -10,6 +10,7 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.entity.PushExtra;
 import com.stratagile.qlink.jiguang.TagAliasOperatorHelper;
+import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.ui.activity.main.TestActivity;
 import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.utils.SystemUtil;
@@ -35,13 +36,34 @@ public class JpushReceiver extends JPushMessageReceiver {
         KLog.i("[onNotifyMessageOpened] " + message);
         if (message.notificationExtras != null && !"".equals(message.notificationExtras)) {
             KLog.i(message.notificationExtras);
+            if ("{}".equals(message.notificationExtras)) {
+                if (SystemUtil.isAppaLive(context, "com.stratagile.qwallet")) {
+                    Bundle bundle = new Bundle();
+                    Intent i = new Intent();
+                    i.setClass(context, MainActivity.class);
+                    bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
+                    bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
+                    i.putExtras(bundle);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(i);
+                } else {
+                    Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage("com.stratagile.qwallet");
+                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    Bundle args = new Bundle();
+                    args.putString("skip", "debit");
+                    launchIntent.putExtra(ConstantValue.EXTRA_BUNDLE, args);
+                    context.startActivity(launchIntent);
+                }
+                return;
+            }
             PushExtra pushExtra = new Gson().fromJson(message.notificationExtras, PushExtra.class);
             try {
                 if (SystemUtil.isAppaLive(context, "com.stratagile.qwallet")) {
+                    Bundle bundle = new Bundle();
+                    Intent i = new Intent();
                     switch (pushExtra.getSkip()) {
                         case "debit":
-                            Intent i = new Intent(context, MyClaimActivity.class);
-                            Bundle bundle = new Bundle();
+                            i.setClass(context, MyClaimActivity.class);
                             bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
                             bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
                             i.putExtras(bundle);
@@ -49,6 +71,12 @@ public class JpushReceiver extends JPushMessageReceiver {
                             context.startActivity(i);
                             break;
                         case "":
+                            i.setClass(context, MainActivity.class);
+                            bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
+                            bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
+                            i.putExtras(bundle);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            context.startActivity(i);
                             break;
                         default:
                             break;

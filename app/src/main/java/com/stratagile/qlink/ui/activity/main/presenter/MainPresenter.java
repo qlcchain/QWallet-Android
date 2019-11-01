@@ -16,6 +16,9 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.db.BuySellBuyTodo;
+import com.stratagile.qlink.db.BuySellSellTodo;
+import com.stratagile.qlink.db.EntrustTodo;
 import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.BaseBack;
@@ -360,6 +363,80 @@ public class MainPresenter implements MainContract.MainContractPresenter {
             @Override
             public void onNext(TopupOrder topupOrder) {
                 AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    public void reCreateBuySellSellOrder(Map map, BuySellSellTodo buySellSellTodo) {
+        httpAPIWrapper.generateTradeSellOrder(map).subscribe(new Observer<BaseBack>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseBack topupOrder) {
+                AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    public void reCreateBuySellBuyOrder(Map map, BuySellBuyTodo buySellBuyTodo) {
+        httpAPIWrapper.tradeBuyerConfirm(map).subscribe(new Observer<BaseBack>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseBack topupOrder) {
+                AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+    public void reCreateEntrustOrder(Map map, EntrustTodo entrustTodo) {
+        httpAPIWrapper.generateBuyQgasOrder(map).subscribe(new Observer<BaseBack>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseBack topupOrder) {
+                AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
                 mView.reCreateToopupSuccess();
             }
 

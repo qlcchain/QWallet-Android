@@ -156,13 +156,14 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
         webview = DWebView(this)
         webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(6)
+        val arrays = arrayOfNulls<Any>(7)
         arrays[0] = neoWallet!!.address
         arrays[1] = intent.getStringExtra("receiveAddress")
         arrays[2] = payTokenInfo!!.asset_hash
         arrays[3] = intent.getStringExtra("usdt")
         arrays[4] = 8
         arrays[5] = Account.getWallet()!!.wif
+        arrays[6] = "xxx"
         webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)

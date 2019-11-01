@@ -10,6 +10,7 @@ import java.util.List;
 
 public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
 
+
     private ArrayList<PayTokenListBean> payTokenList;
 
     public ArrayList<PayTokenListBean> getPayTokenList() {
@@ -21,37 +22,16 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
     }
 
     public static class PayTokenListBean implements Parcelable {
-        /**
-         * symbol : OKB
-         * chain : ETH_CHAIN
-         * price : 1.0
-         * id : 01d821143cee4ced80e1rt6b30fdc123
-         * hash : 0x75231f58b43240c9718dd58b4967c5114342a86c
-         */
-
-        private String symbol;
-        private String chain;
-        private double price;
-        private int decimal;
-        private String id;
-
-
-        public int getDecimal() {
-            return decimal;
-        }
-
-        public void setDecimal(int decimal) {
-            this.decimal = decimal;
-        }
-
         protected PayTokenListBean(Parcel in) {
             symbol = in.readString();
             chain = in.readString();
             price = in.readDouble();
-            decimal = in.readInt();
             id = in.readString();
-            selected = in.readByte() != 0;
+            logo_png = in.readString();
+            decimal = in.readInt();
             hash = in.readString();
+            logo_webp = in.readString();
+            selected = in.readByte() != 0;
         }
 
         public static final Creator<PayTokenListBean> CREATOR = new Creator<PayTokenListBean>() {
@@ -65,17 +45,6 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
                 return new PayTokenListBean[size];
             }
         };
-
-        public boolean isSelected() {
-            return selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-        }
-
-        private boolean selected;
-        private String hash;
 
         public String getSymbol() {
             return symbol;
@@ -109,6 +78,22 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
             this.id = id;
         }
 
+        public String getLogo_png() {
+            return logo_png;
+        }
+
+        public void setLogo_png(String logo_png) {
+            this.logo_png = logo_png;
+        }
+
+        public int getDecimal() {
+            return decimal;
+        }
+
+        public void setDecimal(int decimal) {
+            this.decimal = decimal;
+        }
+
         public String getHash() {
             return hash;
         }
@@ -116,6 +101,44 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
         public void setHash(String hash) {
             this.hash = hash;
         }
+
+        public String getLogo_webp() {
+            return logo_webp;
+        }
+
+        public void setLogo_webp(String logo_webp) {
+            this.logo_webp = logo_webp;
+        }
+
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
+        /**
+         * symbol : QGAS
+         * chain : QLC_CHAIN
+         * price : 1.0
+         * id : 0bba9abd1b9d4eea9c1b5032a0d5257f
+         * logo_png :
+         * decimal : 8
+         * hash : ea842234e4dc5b17c33b35f99b5b86111a3af0bd8e4a8822602b866711de6d81
+         * logo_webp :
+         */
+
+        private String symbol;
+        private String chain;
+        private double price;
+        private String id;
+        private String logo_png;
+        private int decimal;
+        private String hash;
+        private String logo_webp;
+        private boolean selected;
+
 
         @Override
         public int describeContents() {
@@ -127,10 +150,12 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
             dest.writeString(symbol);
             dest.writeString(chain);
             dest.writeDouble(price);
-            dest.writeInt(decimal);
             dest.writeString(id);
-            dest.writeByte((byte) (selected ? 1 : 0));
+            dest.writeString(logo_png);
+            dest.writeInt(decimal);
             dest.writeString(hash);
+            dest.writeString(logo_webp);
+            dest.writeByte((byte) (selected ? 1 : 0));
         }
     }
 }

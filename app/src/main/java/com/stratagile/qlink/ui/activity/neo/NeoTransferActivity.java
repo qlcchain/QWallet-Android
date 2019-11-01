@@ -327,8 +327,9 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                     return;
                 }
                 if (tokenInfo.getTokenSymol().toLowerCase().equals("neo") || tokenInfo.getTokenSymol().toLowerCase().equals("gas")) {
-                    showProgressDialog();
-                    mPresenter.sendNeo(etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), tokenInfo);
+//                    showProgressDialog();
+//                    mPresenter.sendNeo(etNeoTokenSendValue.getText().toString(), etNeoTokenSendAddress.getText().toString(), tokenInfo);
+                    testTransfer();
                 } else {
                     testTransfer();
 //                    if (gasTokenInfo == null) {
@@ -357,13 +358,14 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         webview = new DWebView(this);
         webview.loadUrl("file:///android_asset/contract.html");
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        Object[] arrays = new Object[6];
+        Object[] arrays = new Object[7];
         arrays[0] = tokenInfo.getWalletAddress();
         arrays[1] = etNeoTokenSendAddress.getText().toString();
         arrays[2] = tokenInfo.getTokenAddress();
         arrays[3] = etNeoTokenSendValue.getText().toString();
         arrays[4] = parseDecimal(tokenInfo.getTokenSymol()).getNetworks().get_$1().getDecimals();
         arrays[5] = Account.INSTANCE.getWallet().getWIF();
+        arrays[6] = "hahaha";
         webview.callHandler("staking.send", arrays, (new OnReturnValue() {
             // $FF: synthetic method
             // $FF: bridge method

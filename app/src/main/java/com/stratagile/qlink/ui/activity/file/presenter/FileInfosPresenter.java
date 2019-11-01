@@ -23,7 +23,6 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rx.functions.Action1;
 
 /**
  * @author hzp

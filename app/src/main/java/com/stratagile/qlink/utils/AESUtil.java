@@ -1,6 +1,5 @@
 package com.stratagile.qlink.utils;
 
-import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.spongycastle.util.encoders.Hex;
 
 import java.io.IOException;
@@ -161,7 +160,7 @@ public class AESUtil {
         try {
 
             //使用BouncyCastle 的DES加密
-            Security.addProvider(new BouncyCastleProvider());
+//            Security.addProvider(new BouncyCastleProvider());
 
             //生成Key
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES", "BC");

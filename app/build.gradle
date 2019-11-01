@@ -20,7 +20,7 @@ android {
         targetSdkVersion 28
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.2.8"
+        versionName "2.2.9"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -39,6 +39,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     signingConfigs{
@@ -109,7 +113,7 @@ android {
     }
 
     greendao {
-        schemaVersion 71//数据库版本号
+        schemaVersion 72//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -236,7 +240,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 
-    implementation 'org.web3j:core:3.3.1-android'
+//    implementation 'org.web3j:core:3.3.1-android'
+    implementation 'org.web3j:core:4.2.0-android'
 
     //    implementation('com.facebook.android:facebook-android-sdk:[4,5)') {
 

@@ -1490,7 +1490,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="not_succeed_continue_to_invoke">Not succeed, continue to invoke</string>
     <string name="withdraw_complete">Withdraw Complete</string>
     <string name="not_successed">Not Succeed</string>
-    <string name="staking_amount_qlc">Staking Amount (QLC)</string>
+    <string name="staking_amount_qlc">My Stakings Amount (QLC)</string>
     <string name="voting_earnings_qgas">Voting Earnings (QGAS)</string>
     <string name="mining_earnings_qgas">Mining Earnings (QGAS)</string>
     <string name="option_to_revoke_on">Option to Revoke on</string>
@@ -1617,4 +1617,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="check_on_blockchain">Check on Blockchain</string>
     <string name="top_up_100phone_bill_18825709441">Top up-¥%1$sPhone bill-%2$s</string>
     <string name="topup_200_deduct_10_from_10_qgas">Topup ¥%1$s, deduct ¥%2$s from %3$s %4$s</string>
+    <string name="backup_now">Backup Now</string>
+    <string name="if_your_lose_your_mobile_devices_you_could_use_your_private_key_or_mnemonic_phrase_to_recover_your_wallet">If your lose your mobile devices, you could use your private key or mnemonic phrase to recover your wallet.</string>
+    <string name="please_back_up_your_private_key_mnemonic_phrase_now">Please back up your Private Key/Mnemonic Phrase now.</string>
+    <string name="security_reminders">Security Reminders</string>
+    <string name="total_earnings_qgas">Total Earnings (QGAS)</string>
+    <string name="free_qlc_lending_my_stake">Free QLC Lending</string>
 </resources>

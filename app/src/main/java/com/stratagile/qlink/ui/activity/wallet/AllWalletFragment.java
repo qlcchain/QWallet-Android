@@ -13,12 +13,12 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -27,7 +27,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlc.QLCAPI;
-import com.stratagile.qlc.utils.QlcUtil;
 import com.stratagile.qlc.entity.QlcTokenbalance;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -51,11 +50,17 @@ import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.eos.EosActivationActivity;
 import com.stratagile.qlink.ui.activity.eos.EosResourceManagementActivity;
 import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
+import com.stratagile.qlink.ui.activity.eth.EthMnemonicShowActivity;
 import com.stratagile.qlink.ui.activity.eth.EthTransferActivity;
+import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.WalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
+import com.stratagile.qlink.ui.activity.neo.NeoWalletInfoActivity;
+import com.stratagile.qlink.ui.activity.neo.WalletCreatedActivity;
+import com.stratagile.qlink.ui.activity.qlc.QlcMnemonicShowActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
+import com.stratagile.qlink.ui.activity.qlc.QlcWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
@@ -76,7 +81,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,12 +94,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import neoutils.Neoutils;
 import qlc.bean.Pending;
-import qlc.bean.StateBlock;
 import qlc.mng.AccountMng;
 import qlc.mng.LedgerMng;
-import qlc.mng.TransactionMng;
 import qlc.network.QlcClient;
-import qlc.network.QlcException;
 import qlc.rpc.impl.LedgerRpc;
 import qlc.utils.Helper;
 
@@ -145,6 +146,20 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     LinearLayout llResouces;
     @BindView(R.id.llStake)
     LinearLayout llStake;
+    @BindView(R.id.view1)
+    View view1;
+    @BindView(R.id.view2)
+    View view2;
+    @BindView(R.id.ivTokenAvatar)
+    ImageView ivTokenAvatar;
+    @BindView(R.id.tvGasIntroduce)
+    TextView tvGasIntroduce;
+    @BindView(R.id.tvBackUpNow)
+    TextView tvBackUpNow;
+    @BindView(R.id.llBackUp)
+    LinearLayout llBackUp;
+    @BindView(R.id.main_content)
+    RelativeLayout mainContent;
 
     private double walletAsset;
 
@@ -154,6 +169,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     private AllWallet currentSelectWallet;
 
     private MainViewModel viewModel;
+
+    private Wallet selectedNeoWallet;
+    private EthWallet selectedEthWallet;
+    private QLCAccount selectedQlcWallet;
+
+    private final int START_ACTIVITY_BACKUP = 2;
 
     @Nullable
     @Override
@@ -339,11 +360,43 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     walletAsset += Double.parseDouble(value) * tokenInfos.get(i).getTokenPrice();
                     if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EthWallet) {
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eth_wallet));
+                        if (!selectedEthWallet.getIsBackup()) {
+                            if (selectedEthWallet.getMnemonic() != null && !"".equals(selectedEthWallet.getMnemonic())) {
+                                llBackUp.setVisibility(View.VISIBLE);
+                                tvBackUpNow.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        KLog.i("点击");
+                                        startActivityForResult(new Intent(getActivity(), EthMnemonicShowActivity.class).putExtra("wallet", selectedEthWallet), START_ACTIVITY_BACKUP);
+                                    }
+                                });
+                            }
+                        }
                     } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.NeoWallet) {
+                        if (!selectedNeoWallet.getIsBackup()) {
+                            llBackUp.setVisibility(View.VISIBLE);
+                            tvBackUpNow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    KLog.i("点击");
+                                    startActivityForResult(new Intent(getActivity(), NeoWalletInfoActivity.class).putExtra("wallet", selectedNeoWallet), START_ACTIVITY_BACKUP);
+                                }
+                            });
+                        }
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_neo_wallet));
                     } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EosWallet) {
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
                     } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.QlcWallet) {
+                        if (!selectedQlcWallet.getIsBackUp()) {
+                            llBackUp.setVisibility(View.VISIBLE);
+                            tvBackUpNow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    KLog.i("点击");
+                                    startActivityForResult(new Intent(getActivity(), QlcMnemonicShowActivity.class).putExtra("wallet", selectedQlcWallet), START_ACTIVITY_BACKUP);
+                                }
+                            });
+                        }
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
                     }
                 }
@@ -429,6 +482,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     private void initData() {
         hasSelectedWallet = false;
+        llBackUp.setVisibility(View.GONE);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -446,6 +500,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 for (int i = 0; i < ethWallets.size(); i++) {
                     if (ethWallets.get(i).getIsCurrent()) {
                         hasSelectedWallet = true;
+                        selectedEthWallet = ethWallets.get(i);
                         getEthToken(ethWallets.get(i));
                     }
                 }
@@ -455,6 +510,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         if (neoWallets.get(i).getIsCurrent()) {
                             hasSelectedWallet = true;
                             KLog.i("生成neo钱包的结果为：" + Account.INSTANCE.fromWIF(neoWallets.get(i).getWif()));
+                            selectedNeoWallet = neoWallets.get(i);
                             getNeoToken(neoWallets.get(i));
                         }
                     }
@@ -472,6 +528,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 for (QLCAccount wallet : qlcAccounts) {
                     if (wallet.getIsCurrent()) {
                         hasSelectedWallet = true;
+                        selectedQlcWallet = wallet;
                         getQlcToken(wallet);
                     }
                 }
@@ -499,8 +556,32 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         initData();
                     }
                 }
+                if (qlcAccounts.size() != 0 && ethWallets.size() == 0 && neoWallets.size() == 0) {
+                    autoGenerateWallet();
+                }
             }
         }).start();
+    }
+
+    /**
+     * 自动生成钱包逻辑
+     */
+    private void autoGenerateWallet() {
+        EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
+        ethWallet.setIsCurrent(false);
+        AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
+
+        Account.INSTANCE.createNewWallet();
+        neoutils.Wallet wallet = Account.INSTANCE.getWallet();
+        Wallet walletWinq = new Wallet();
+        walletWinq.setAddress(wallet.getAddress());
+        walletWinq.setWif(wallet.getWIF());
+        walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
+        walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()).toLowerCase());
+        walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
+        walletWinq.setIsCurrent(false);
+        walletWinq.setName("NEO-Wallet 01");
+        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
     }
 
     @Override
@@ -621,9 +702,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     e.printStackTrace();
                 }
             }
-        }).
-
-                start();
+        }). start();
 
     }
 

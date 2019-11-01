@@ -329,7 +329,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginLeft="@dimen/x30"
             android:layout_marginTop="@dimen/x21"
             android:text="@string/payment_wallet"
@@ -341,7 +340,6 @@
         <LinearLayout
             android:id="@+id/llSelectSendWallet"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_height="@dimen/x138">
@@ -393,7 +391,11 @@
                 android:src="@mipmap/icon_enter1"
                 android:layout_height="15dp" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/color_f2f2f2" />
         <TextView
             android:id="@+id/tvCreateWallet"
             android:layout_width="match_parent"

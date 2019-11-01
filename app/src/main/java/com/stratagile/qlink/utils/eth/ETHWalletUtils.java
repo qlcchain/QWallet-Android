@@ -408,6 +408,7 @@ public class ETHWalletUtils {
     public static String derivePrivateKey(long walletId) {
         EthWallet ethWallet = AppConfig.getInstance().getDaoSession().getEthWalletDao().load(walletId);
         String pwd = decrypt(ethWallet.getPassword());
+        KLog.i(pwd);
         Credentials credentials;
         ECKeyPair keypair;
         String privateKey = null;

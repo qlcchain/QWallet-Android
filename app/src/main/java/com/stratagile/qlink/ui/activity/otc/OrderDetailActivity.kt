@@ -72,6 +72,16 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
                     tvOrderStateTip.text = ""
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                 }
+                "TXID_ERROR" -> {
+                    tvOrderState.text = getString(R.string.active)
+                    tvOrderStateTip.text = ""
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                }
+                "OVERTIME" -> {
+                    tvOrderState.text = getString(R.string.active)
+                    tvOrderStateTip.text = ""
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                }
                 "PENDING" -> {
                     tvOrderState.text = getString(R.string.pending)
                     tvOrderStateTip.text = ""
@@ -89,6 +99,8 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
                 "CANCEL" -> {
                     tvOrderState.text = getString(R.string.revoked)
                     tvOrderStateTip.text = getString(R.string.revoke)
+                    llOpreate.visibility = View.GONE
+                    tvOpreate.visibility = View.GONE
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_808080))
                 }
                 else -> {
@@ -103,6 +115,16 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
             tvDealQgasAmounnt.setTextColor(resources.getColor(R.color.color_ff3669))
             when (entrustOrderInfo.order.status) {
                 "NORMAL" -> {
+                    tvOrderState.text = getString(R.string.active)
+                    tvOrderStateTip.text = ""
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                }
+                "OVERTIME" -> {
+                    tvOrderState.text = getString(R.string.active)
+                    tvOrderStateTip.text = ""
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                }
+                "TXID_ERROR" -> {
                     tvOrderState.text = getString(R.string.active)
                     tvOrderStateTip.text = ""
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))

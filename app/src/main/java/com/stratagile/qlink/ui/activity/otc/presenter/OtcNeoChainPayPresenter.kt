@@ -10,6 +10,7 @@ import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.BuySellBuyTodo
 import com.stratagile.qlink.entity.AssetsWarpper
 import com.stratagile.qlink.entity.NeoTransfer
 import com.stratagile.qlink.entity.NeoWalletInfo
@@ -101,8 +102,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: OtcN
             mView.sendUsdtSuccess(txid)
         }, {
             mView.closeProgressDialog()
+            BuySellBuyTodo.createBuySellBuyTodo(map)
         }, {
             mView.closeProgressDialog()
+            BuySellBuyTodo.createBuySellBuyTodo(map)
         })
     }
 

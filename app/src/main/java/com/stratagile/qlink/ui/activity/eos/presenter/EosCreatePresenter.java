@@ -22,7 +22,6 @@ import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -274,7 +273,7 @@ public class EosCreatePresenter implements EosCreateContract.EosCreateContractPr
     }
 
     private String generateTransactionEth(String fromAddress, String toAddress, String privateKey, String amount, int limit, int price) {
-        final Web3j web3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
         try {
             return testEthTransaction(web3j, fromAddress, privateKey, toAddress, amount, limit, price);
         } catch (Exception e) {

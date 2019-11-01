@@ -125,8 +125,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
     }
 
     override fun generateBuyQgasOrderSuccess() {
-        toast("success")
+        toast(getString(R.string.success))
         closeProgressDialog()
+        startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
         finish()
     }
 
@@ -643,18 +644,24 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         webview = DWebView(this)
         webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(6)
+        val arrays = arrayOfNulls<Any>(7)
         arrays[0] = sendNeoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = tradeTokenInfo!!.asset_hash
         arrays[3] = etAmount.text.toString()
         arrays[4] = 8
         arrays[5] = Account.getWallet()!!.wif
-        webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
-            KLog.i("call succeed,return value is " + retValue!!)
-            var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-            mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
-        })
+        arrays[6] = "xxx"
+        try {
+            webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
+                KLog.i("call succeed,return value is " + retValue!!)
+                var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
+                mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
+            })
+        } catch (e : Exception) {
+            toast(getString(R.string.send_qgas_error, tradeTokenInfo!!.asset_symbol))
+            e.printStackTrace()
+        }
     }
 
 

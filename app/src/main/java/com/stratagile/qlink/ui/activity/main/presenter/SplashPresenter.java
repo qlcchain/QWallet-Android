@@ -1,10 +1,12 @@
 package com.stratagile.qlink.ui.activity.main.presenter;
 import android.Manifest;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.qlinkcom;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.VersionUtil;
@@ -15,12 +17,15 @@ import com.stratagile.qlink.ui.activity.main.contract.SplashContract;
 import com.stratagile.qlink.ui.activity.main.SplashActivity;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.vondear.rxtools.RxDeviceTool;
 import com.yanzhenjie.alertdialog.AlertDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.RationaleListener;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -148,6 +153,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
                 .requestCode(101)
                 .permission(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
                 .rationale(rationaleListener)
@@ -187,6 +193,44 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
             if (requestCode == 101) {
                 qlinkcom.init();
                 permissionState = 0;
+                try {
+                    KLog.i(RxDeviceTool.getDeviceIdIMEI(AppConfig.getInstance()));
+                    String topUpP2pId = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
+                    if ("".equals(topUpP2pId)) {
+                        String saveP2pId = FileUtil.readData("/Qwallet/p2pId.txt");
+                        if ("".equals(saveP2pId)) {
+                            UUID uuid = UUID.randomUUID();
+                            String p2pId = "";
+                            p2pId += uuid.toString().replace("-", "");
+                            topUpP2pId = p2pId;
+                            SpUtil.putString(AppConfig.getInstance(), ConstantValue.topUpP2pId, p2pId);
+
+                            File file = new File(Environment.getExternalStorageDirectory().toString() + "/Qwallet/p2pId.txt");
+                            if (file.exists()) {
+                                FileUtil.savaData("/Qwallet/p2pId.txt", topUpP2pId);
+                            } else {
+                                file.createNewFile();
+                                FileUtil.savaData("/Qwallet/p2pId.txt", topUpP2pId);
+                            }
+
+                        } else {
+                            topUpP2pId = saveP2pId;
+                            SpUtil.putString(AppConfig.getInstance(), ConstantValue.topUpP2pId, topUpP2pId);
+                        }
+                    }
+                } catch (Exception e) {
+                    if (timeOver) {
+                        if (jumpToGuest) {
+                            mView.jumpToGuest();
+                            return;
+                        }
+                        if (jump == JUMPTOMAIN) {
+                            mView.loginSuccees();
+                        } else if (jump == JUMPTOLOGIN) {
+                            mView.jumpToLogin();
+                        }
+                    }
+                }
                 if (timeOver) {
                     if (jumpToGuest) {
                         mView.jumpToGuest();

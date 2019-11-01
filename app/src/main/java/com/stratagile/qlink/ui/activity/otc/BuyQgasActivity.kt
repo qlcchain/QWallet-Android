@@ -91,6 +91,9 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
     var maxUsdt = BigDecimal.ZERO
     var maxQgas = BigDecimal.ZERO
 
+    val sendTokenType = 0
+    val receiveTokenType = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white;
         super.onCreate(savedInstanceState)
@@ -121,7 +124,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         map.put("entrustOrderId", orderList.id)
         mPresenter.getEntrustOrderDetail(map)
 
-        when(OtcUtils.parseChain(orderList.tradeTokenChain)) {
+        when (OtcUtils.parseChain(orderList.tradeTokenChain)) {
             AllWallet.WalletType.QlcWallet -> {
                 ivReceiveChain.setImageResource(R.mipmap.icons_qlc_wallet)
             }
@@ -133,6 +136,20 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             }
             AllWallet.WalletType.EosWallet -> {
                 ivReceiveChain.setImageResource(R.mipmap.icons_eos_wallet)
+            }
+        }
+        when (OtcUtils.parseChain(orderList.payTokenChain)) {
+            AllWallet.WalletType.QlcWallet -> {
+                ivSendChain.setImageResource(R.mipmap.icons_qlc_wallet)
+            }
+            AllWallet.WalletType.EthWallet -> {
+                ivSendChain.setImageResource(R.mipmap.icons_eth_wallet)
+            }
+            AllWallet.WalletType.NeoWallet -> {
+                ivSendChain.setImageResource(R.mipmap.icons_neo_wallet)
+            }
+            AllWallet.WalletType.EosWallet -> {
+                ivSendChain.setImageResource(R.mipmap.icons_eos_wallet)
             }
         }
 
@@ -156,7 +173,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             if ("".equals(tvReceiveWalletAddess)) {
                 return@setOnClickListener
             }
-            when(OtcUtils.parseChain(orderList.tradeTokenChain)) {
+            when (OtcUtils.parseChain(orderList.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
@@ -268,68 +285,134 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
 
 
         llSelectQlcWallet.setOnClickListener {
-            when(OtcUtils.parseChain(orderList.tradeTokenChain)) {
+            when (OtcUtils.parseChain(orderList.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
                     intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
                     intent1.putExtra("select", true)
-                    startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+                    startActivityForResult(intent1, receiveTokenType)
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
                 }
                 AllWallet.WalletType.EthWallet -> {
                     var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
                     intent1.putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal)
                     intent1.putExtra("select", true)
-                    startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
+                    startActivityForResult(intent1, receiveTokenType)
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
                 }
                 AllWallet.WalletType.NeoWallet -> {
                     var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
                     intent1.putExtra("walletType", AllWallet.WalletType.NeoWallet.ordinal)
                     intent1.putExtra("select", true)
-                    startActivityForResult(intent1, AllWallet.WalletType.NeoWallet.ordinal)
+                    startActivityForResult(intent1, receiveTokenType)
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
                 }
                 AllWallet.WalletType.EosWallet -> {
                     var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
                     intent1.putExtra("walletType", AllWallet.WalletType.EosWallet.ordinal)
                     intent1.putExtra("select", true)
-                    startActivityForResult(intent1, AllWallet.WalletType.EosWallet.ordinal)
+                    startActivityForResult(intent1, receiveTokenType)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+            }
+        }
+        llSelectSendWallet.setOnClickListener {
+            when (OtcUtils.parseChain(orderList.payTokenChain)) {
+                AllWallet.WalletType.QlcWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, sendTokenType)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+                AllWallet.WalletType.EthWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, sendTokenType)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.NeoWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, sendTokenType)
+                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+                }
+                AllWallet.WalletType.EosWallet -> {
+                    var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+                    intent1.putExtra("walletType", AllWallet.WalletType.EosWallet.ordinal)
+                    intent1.putExtra("select", true)
+                    startActivityForResult(intent1, sendTokenType)
                     overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
                 }
             }
         }
     }
 
-    var receiveQlcWallet : QLCAccount? = null
+    var receiveQlcWallet: QLCAccount? = null
     var receiveEthWallet: EthWallet? = null
     var receiveEosWallet: EosAccount? = null
     var receiveNeoWallet: Wallet? = null
+
+    var sendQlcWallet : QLCAccount? = null
+    var sendEthWallet : EthWallet? = null
+    var sendEosWallet : EosAccount? = null
+    var sendNeoWallet : Wallet? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                AllWallet.WalletType.QlcWallet.ordinal -> {
-                    receiveQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
-                    tvReceiveWalletName.text = receiveQlcWallet!!.accountName
-                    tvReceiveWalletAddess.text = receiveQlcWallet!!.address
+                receiveTokenType -> {
+                    when (OtcUtils.parseChain(orderList.tradeTokenChain).ordinal) {
+                        AllWallet.WalletType.QlcWallet.ordinal -> {
+                            receiveQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
+                            tvReceiveWalletName.text = receiveQlcWallet!!.accountName
+                            tvReceiveWalletAddess.text = receiveQlcWallet!!.address
+                        }
+                        AllWallet.WalletType.EthWallet.ordinal -> {
+                            receiveEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
+                            tvReceiveWalletName.text = receiveEthWallet!!.name
+                            tvReceiveWalletAddess.text = receiveEthWallet!!.address
+                        }
+                        AllWallet.WalletType.NeoWallet.ordinal -> {
+                            receiveNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
+                            tvReceiveWalletName.text = receiveNeoWallet!!.name
+                            tvReceiveWalletAddess.text = receiveNeoWallet!!.address
+                        }
+                        AllWallet.WalletType.EosWallet.ordinal -> {
+                            receiveEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
+                            tvReceiveWalletName.text = receiveEosWallet!!.accountName
+                            tvReceiveWalletAddess.text = receiveEosWallet!!.accountName
+                        }
+                    }
                 }
-                AllWallet.WalletType.EthWallet.ordinal -> {
-                    receiveEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
-                    tvReceiveWalletName.text = receiveEthWallet!!.name
-                    tvReceiveWalletAddess.text = receiveEthWallet!!.address
+                sendTokenType -> {
+                    when (OtcUtils.parseChain(orderList.payTokenChain).ordinal) {
+                        AllWallet.WalletType.QlcWallet.ordinal -> {
+                            sendQlcWallet = data!!.getParcelableExtra<QLCAccount>("wallet")
+                            tvSendWalletName.text = sendQlcWallet!!.accountName
+                            tvSendWalletAddess.text = sendQlcWallet!!.address
+                        }
+                        AllWallet.WalletType.EthWallet.ordinal -> {
+                            sendEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
+                            tvSendWalletName.text = sendEthWallet!!.name
+                            tvSendWalletAddess.text = sendEthWallet!!.address
+                        }
+                        AllWallet.WalletType.NeoWallet.ordinal -> {
+                            sendNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
+                            tvSendWalletName.text = sendNeoWallet!!.name
+                            tvSendWalletAddess.text = sendNeoWallet!!.address
+                        }
+                        AllWallet.WalletType.EosWallet.ordinal -> {
+                            sendEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
+                            tvSendWalletName.text = sendEosWallet!!.accountName
+                            tvSendWalletAddess.text = sendEosWallet!!.accountName
+                        }
+                    }
                 }
-                AllWallet.WalletType.NeoWallet.ordinal -> {
-                    receiveNeoWallet = data!!.getParcelableExtra<Wallet>("wallet")
-                    tvReceiveWalletName.text = receiveNeoWallet!!.name
-                    tvReceiveWalletAddess.text = receiveNeoWallet!!.address
-                }
-                AllWallet.WalletType.EosWallet.ordinal -> {
-                    receiveEosWallet = data!!.getParcelableExtra<EosAccount>("wallet")
-                    tvReceiveWalletName.text = receiveEosWallet!!.accountName
-                    tvReceiveWalletAddess.text = receiveEosWallet!!.accountName
-                }
+
             }
         }
     }

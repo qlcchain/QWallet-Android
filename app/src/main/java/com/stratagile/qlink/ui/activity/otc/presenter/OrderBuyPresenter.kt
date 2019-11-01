@@ -7,8 +7,10 @@ import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.EntrustTodo
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.newwinq.Product
 import com.stratagile.qlink.ui.activity.otc.contract.OrderBuyContract
 import com.stratagile.qlink.ui.activity.otc.OrderBuyFragment
@@ -33,7 +35,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -141,10 +142,25 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         mCompositeDisposable.add(disposable)
     }
 
-    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, contactAddress: String, map: MutableMap<String, String>) {
+    fun generateEntrustBuyOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
+        map.put("fromAddress", fromAddress)
+        map.put("txid", getTxidByHex(txid))
+        mCompositeDisposable.add(httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
+            mView.closeProgressDialog()
+            mView.generateBuyQgasOrderSuccess()
+        }, {
+            mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
+        }, {
+            mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
+        }))
+    }
+
+    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, tokenInfo: EthWalletInfo.DataBean.TokensBean, map: MutableMap<String, String>) {
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contactAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, tokenInfo.tokenInfo.address, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, tokenInfo.tokenInfo.decimals.toInt()))
         })
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -154,14 +170,16 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
-//                        generateEntrustSellOrder(it, walletAddress, map)
+                        generateEntrustBuyOrder(it, walletAddress, map)
                         KLog.i("transaction Hash: $it")
                     }
                 }, {
                     mView.closeProgressDialog()
+                    EntrustTodo.createEntrustTodo(map)
                 }, {
                     KLog.i("complete")
                     mView.closeProgressDialog()
+                    EntrustTodo.createEntrustTodo(map)
                 })
         mCompositeDisposable.add(disposable)
     }
@@ -179,7 +197,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {

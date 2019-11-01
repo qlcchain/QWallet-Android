@@ -44,6 +44,9 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.MainAPI;
+import com.stratagile.qlink.db.BuySellBuyTodo;
+import com.stratagile.qlink.db.BuySellSellTodo;
+import com.stratagile.qlink.db.EntrustTodo;
 import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
@@ -655,7 +658,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         KLog.i("开始处理充值的待办事项");
         List<TopupTodoList> topupTodoLists = AppConfig.getInstance().getDaoSession().getTopupTodoListDao().loadAll();
         if (topupTodoLists == null || topupTodoLists.size() == 0) {
-
+            handlerOtcEntrustTodo();
         } else {
             new Thread(new Runnable() {
                 @Override
@@ -669,6 +672,108 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 }
             }).start();
         }
+    }
+
+    private void handlerOtcEntrustTodo() {
+        List<EntrustTodo> entrustTodos = AppConfig.getInstance().getDaoSession().getEntrustTodoDao().loadAll();
+        if (entrustTodos == null || entrustTodos.size() == 0) {
+            handlerBuySellBuyTodoOrder();
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (EntrustTodo entrustTodo : entrustTodos) {
+                        reCreateEntrustOrder(entrustTodo);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private void handlerBuySellBuyTodoOrder() {
+        List<BuySellBuyTodo> buySellBuyTodos = AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().loadAll();
+        if (buySellBuyTodos == null || buySellBuyTodos.size() == 0) {
+            handlerBuySellSellTodoOrder();
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (BuySellBuyTodo entrustTodo : buySellBuyTodos) {
+                        reCreateBuySellBuyOrder(entrustTodo);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private void handlerBuySellSellTodoOrder() {
+        List<BuySellSellTodo> buySellSellTodos = AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().loadAll();
+        if (buySellSellTodos == null || buySellSellTodos.size() == 0) {
+
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (BuySellSellTodo buySellSellTodo : buySellSellTodos) {
+                        reCreateBuySellSellOrder(buySellSellTodo);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    /**
+     * 重新生成买卖卖单
+     * @param buySellSellTodo
+     */
+    private void reCreateBuySellSellOrder(BuySellSellTodo buySellSellTodo) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("account", buySellSellTodo.getAccount());
+        map.put("token", buySellSellTodo.getToken());
+        map.put("entrustOrderId", buySellSellTodo.getEntrustOrderId());
+        map.put("usdtAmount", buySellSellTodo.getUsdtAmount());
+        map.put("usdtToAddress", buySellSellTodo.getUsdtToAddress());
+        map.put("qgasAmount", buySellSellTodo.getQgasAmount());
+        map.put("fromAddress", buySellSellTodo.getFromAddress());
+        map.put("txid", buySellSellTodo.getTxid());
+        mPresenter.reCreateBuySellSellOrder(map, buySellSellTodo);
+    }
+
+    /**
+     * 重新生成买卖买单
+     * @param buySellBuyTodo
+     */
+    private void reCreateBuySellBuyOrder(BuySellBuyTodo buySellBuyTodo) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("account", buySellBuyTodo.getAccount());
+        map.put("token", buySellBuyTodo.getToken());
+        map.put("tradeOrderId", buySellBuyTodo.getTradeOrderId());
+        map.put("txid", buySellBuyTodo.getTxid());
+        mPresenter.reCreateBuySellBuyOrder(map, buySellBuyTodo);
+    }
+
+    private void reCreateEntrustOrder(EntrustTodo entrustTodo) {
+        if (entrustTodo.getTxid() == null || "".equals(entrustTodo.getTxid())) {
+            AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
+            return;
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("account", entrustTodo.getAccount());
+        map.put("token", entrustTodo.getToken());
+        if (ConstantValue.currentUser != null) {
+            map.put("token", AccountUtil.getUserToken());
+        }
+        map.put("pairsId", entrustTodo.getPairsId());
+        map.put("type", entrustTodo.getType());
+        map.put("unitPrice", entrustTodo.getUnitPrice());
+        map.put("totalAmount", entrustTodo.getTotalAmount());
+        map.put("minAmount", entrustTodo.getMinAmount());
+        map.put("maxAmount", entrustTodo.getMaxAmount());
+        map.put("qgasAddress", entrustTodo.getQgasAddress());
+        map.put("usdtAddress", entrustTodo.getUsdtAddress());
+        map.put("fromAddress", entrustTodo.getFromAddress());
+        map.put("txid", entrustTodo.getTxid());
+        mPresenter.reCreateEntrustOrder(map, entrustTodo);
     }
 
     private void reCreateTopupOrder(TopupTodoList topupTodoList) {
@@ -804,6 +909,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 .into(ivAvater);
         if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
             EventBus.getDefault().post(new GetPairs());
+        }
+        if (ConstantValue.currentUser == null) {
+            viewModel.noUserLogin.postValue("noUser");
         }
     }
 
