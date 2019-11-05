@@ -1623,4 +1623,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="security_reminders">Security Reminders</string>
     <string name="total_earnings_qgas">Total Earnings (QGAS)</string>
     <string name="free_qlc_lending_my_stake">Free QLC Lending</string>
+    <string name="transaction_parsing_failed">Transaction parsing failed</string>
 </resources>

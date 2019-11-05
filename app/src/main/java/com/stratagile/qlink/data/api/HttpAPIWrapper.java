@@ -1290,7 +1290,6 @@ public class HttpAPIWrapper {
             map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
-            KLog.i(SystemUtil.getIMEI(AppConfig.getInstance()));
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(1000).nextInt()) + "");

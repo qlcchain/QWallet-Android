@@ -64,6 +64,7 @@ import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
+import com.stratagile.qlink.entity.eventbus.ShowBind;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
@@ -84,6 +85,7 @@ import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
+import com.stratagile.qlink.ui.activity.my.Login1Fragment;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
@@ -323,12 +325,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private void getStakeQlcCount() {
-        Map<String, String> infoMap = new HashMap<>();
-        infoMap.put("dictType", "winq_reward_qlc_amount");
-        mPresenter.qurryDict(infoMap);
+        viewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> infoMap = new HashMap<>();
+                infoMap.put("dictType", "winq_reward_qlc_amount");
+                mPresenter.qurryDict(infoMap);
+            }
+        }, 200);
     }
 
     private SweetAlertDialog sweetAlertDialog;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showBind(ShowBind showBind) {
+        showCanClaimPop(freeQlcStake);
+    }
 
     public void showCanClaimPop(String qlcCount) {
         View view  = getLayoutInflater().inflate(R.layout.alert_can_claim, null, false);
@@ -340,7 +352,20 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             @Override
             public void onClick(View v) {
                 sweetAlertDialog.dismissWithAnimation();
-                bindQlcWallet();
+                if (ConstantValue.currentUser == null) {
+                    viewPager.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                        }
+                    }, 200);
+                }
+                if (ConstantValue.currentUser != null && ConstantValue.currentUser.getBindDate() != null) {
+
+                }
+                if (ConstantValue.currentUser != null && ("".equals(ConstantValue.currentUser.getBindDate()) || ConstantValue.currentUser.getBindDate() == null)) {
+                    bindQlcWallet();
+                }
             }
         });
         ivClose.setOnClickListener(new View.OnClickListener() {
@@ -420,9 +445,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void setStakeQlc(Dict dict) {
-        showCanClaimPop(dict.getData().getValue());
+        if (ConstantValue.currentUser == null || ConstantValue.currentUser.getBindDate() == null || "".equals(ConstantValue.currentUser.getBindDate())) {
+            viewPager.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showCanClaimPop(dict.getData().getValue());
+                    freeQlcStake = dict.getData().getValue();
+                }
+            }, 200);
+        }
     }
 
+    private String freeQlcStake = "1500";
     @Override
     public void reCreateToopupSuccess() {
         handlerTopupTodoList();
@@ -473,19 +507,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             infoMap1.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
             mPresenter.zsFreeNum(infoMap1);
         }
-        viewModel.isBind.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (!aBoolean) {
-                    viewPager.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getStakeQlcCount();
-                        }
-                    }, 200);
-                }
-            }
-        });
+        getStakeQlcCount();
+
         segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -578,7 +601,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 return true;
             }
         });
-        bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+        bottomNavigation.setSelectedItemId(R.id.item_topup);
 //        setVpnPage();
 //        IntentFilter intent = new IntentFilter();
 //        intent.addAction(BroadCastAction.disconnectVpnSuccess);
@@ -727,6 +750,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
      * @param buySellSellTodo
      */
     private void reCreateBuySellSellOrder(BuySellSellTodo buySellSellTodo) {
+        if (buySellSellTodo.getTxid() == null || "".equals(buySellSellTodo.getTxid())) {
+            AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+            return;
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("account", buySellSellTodo.getAccount());
         map.put("token", buySellSellTodo.getToken());
@@ -744,6 +771,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
      * @param buySellBuyTodo
      */
     private void reCreateBuySellBuyOrder(BuySellBuyTodo buySellBuyTodo) {
+        if (buySellBuyTodo.getTxid() == null || "".equals(buySellBuyTodo.getTxid())) {
+            AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+            return;
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("account", buySellBuyTodo.getAccount());
         map.put("token", buySellBuyTodo.getToken());

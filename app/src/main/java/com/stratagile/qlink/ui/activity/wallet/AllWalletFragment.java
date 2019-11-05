@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlc.QLCAPI;
 import com.stratagile.qlc.entity.QlcTokenbalance;
+import com.stratagile.qlc.utils.QlcUtil;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -97,6 +98,8 @@ import qlc.bean.Pending;
 import qlc.mng.AccountMng;
 import qlc.mng.LedgerMng;
 import qlc.network.QlcClient;
+import qlc.network.QlcException;
+import qlc.rpc.AccountRpc;
 import qlc.rpc.impl.LedgerRpc;
 import qlc.utils.Helper;
 
@@ -534,7 +537,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 }
                 if (!hasSelectedWallet) {
                     if (ethWallets.size() == 0 && neoWallets.size() == 0 && eosAccounts.size() == 0 && qlcAccounts.size() == 0) {
-                        startActivityForResult(new Intent(getActivity(), SelectWalletTypeActivity.class), 2);
+                        autoGenerateWallet();
                     }
                     if (ethWallets.size() != 0) {
                         ethWallets.get(0).setCurrent(true);
@@ -556,9 +559,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         initData();
                     }
                 }
-                if (qlcAccounts.size() != 0 && ethWallets.size() == 0 && neoWallets.size() == 0) {
-                    autoGenerateWallet();
-                }
             }
         }).start();
     }
@@ -567,6 +567,34 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
      * 自动生成钱包逻辑
      */
     private void autoGenerateWallet() {
+        String seed = QlcUtil.generateSeed().toLowerCase();
+        try {
+            JSONObject jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0);
+            String priKey = jsonObject.getString("privKey");
+            String pubKey = jsonObject.getString("pubKey");
+            KLog.i(jsonObject.toJSONString());
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(seed);
+            String mnemonics = AccountRpc.seedToMnemonics(jsonArray);
+            KLog.i(mnemonics);
+            String address =  QlcUtil.publicToAddress(pubKey).toLowerCase();
+            QLCAccount qlcAccount = new QLCAccount();
+            qlcAccount.setPrivKey(priKey.toLowerCase());
+            qlcAccount.setPubKey(pubKey);
+            qlcAccount.setAddress(address);
+            qlcAccount.setMnemonic(mnemonics);
+            qlcAccount.setIsCurrent(true);
+            qlcAccount.setAccountName(QLCAPI.Companion.getQlcWalletName());
+            qlcAccount.setSeed(seed);
+            qlcAccount.setIsAccountSeed(true);
+            qlcAccount.setWalletIndex(0);
+            AppConfig.instance.getDaoSession().getQLCAccountDao().insert(qlcAccount);
+        } catch (QlcException e) {
+            closeProgressDialog();
+            e.printStackTrace();
+        }
+
+
         EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
         ethWallet.setIsCurrent(false);
         AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
@@ -582,6 +610,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         walletWinq.setIsCurrent(false);
         walletWinq.setName("NEO-Wallet 01");
         AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+        initData();
     }
 
     @Override

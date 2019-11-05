@@ -28,6 +28,7 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
+import com.stratagile.qlink.entity.eventbus.ShowBind;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardTotal;
@@ -198,7 +199,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 if (isLogin) {
                     if (ConstantValue.currentUser.getBindDate() == null || "".equals(ConstantValue.currentUser.getBindDate())) {
                         viewModel.isBind.postValue(false);
+                        EventBus.getDefault().post(new ShowBind());
                     } else {
+                        viewModel.isBind.postValue(true);
                         claimQlc.setDotViewVisible(View.INVISIBLE);
                         startActivity(new Intent(getActivity(), MyClaimActivity.class));
                     }
@@ -314,6 +317,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         if (usrInfo.getData().getBindDate() == null || "".equals(usrInfo.getData().getBindDate())) {
             viewModel.isBind.postValue(false);
         } else {
+            viewModel.isBind.postValue(true);
             getCanClaimTotal();
         }
         KLog.i("更新呢用户信息");

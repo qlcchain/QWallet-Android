@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import com.pawegio.kandroid.alert
@@ -33,6 +35,7 @@ import com.stratagile.qlink.utils.FileUtil
 import com.stratagile.qlink.utils.SpUtil
 import com.stratagile.qlink.utils.SpringAnimationUtil
 import com.stratagile.qlink.utils.ToastUtil
+import com.stratagile.qlink.view.SmoothCheckBox
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_topup_eth_pay.*
 import kotlinx.android.synthetic.main.activity_topup_eth_pay.etEthTokenSendMemo
@@ -77,8 +80,35 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
             ivLoad2.setImageResource(R.mipmap.background_success)
             tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
             tvVoucher.text = getString(R.string.blockchain_inoice_created)
-            showChangeAnimation(ivLoad2)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
 
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            showChangeAnimation(ivLoad2)
             tvSend.postDelayed({
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
@@ -113,11 +143,39 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
             ivLoad2.setImageResource(R.mipmap.background_success)
             tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
             tvVoucher.text = getString(R.string.blockchain_inoice_created)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
 
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
             showChangeAnimation(ivLoad2)
             tvSend.postDelayed({
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
+
             tvSend.postDelayed({
                 var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${intent.getStringExtra("phoneNumber")}"
                 val intent = Intent(this, WebViewActivity::class.java)
@@ -130,12 +188,38 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
 
     override fun sendPayTokenSuccess(txid: String) {
         tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
-        tvVoucher.text = getString(R.string.to_create_blockchain_invoice)
+        ivLoad1.clearAnimation()
+        sa1.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
 
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+
+            }
+
+        })
+        saHalf.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
         ivLoad1.setImageResource(R.mipmap.background_success)
         showChangeAnimation(ivLoad1)
-        ivLoad2.setImageResource(R.mipmap.background_load)
-        showChangeAnimation(ivLoad2)
+        showViewAnimation(view2)
+
         thread {
             Thread.sleep(5000)
             generateTopupOrder(txid)
@@ -225,9 +309,13 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
     lateinit var ivChain : ImageView
     lateinit var tvPaying : TextView
     lateinit var tvVoucher : TextView
+    lateinit var view2 :View
     var isCreatedOrder = false
     var isFinish = false
     lateinit var sweetAlertDialog : SweetAlertDialog
+
+    lateinit var saHalf : ScaleAnimation
+    lateinit var sa1 : ScaleAnimation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
@@ -263,12 +351,21 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
         ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
         tvPaying = animationView.findViewById<TextView>(R.id.tvPaying)
         tvVoucher = animationView.findViewById<TextView>(R.id.tvVoucher)
+        view2 = animationView.findViewById(R.id.view2)
         ivChain.setImageResource(R.mipmap.icons_eth_wallet)
         sweetAlertDialog = SweetAlertDialog(this)
         sweetAlertDialog.setView(animationView)
         sweetAlertDialog.setOnBackListener {
             onBackPressed()
         }
+
+        saHalf = ScaleAnimation(1f, 0.5f, 1f, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        saHalf.setDuration(400)
+
+        sa1 = ScaleAnimation(0.5f, 1f, 0.5f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        sa1.setDuration(1000)
+
+
 
         val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
         val f = gas.multiply(BigDecimal(gasLimit))
@@ -322,26 +419,181 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
             }
             if (ethCount.toDouble() >= gasEth!!.toDouble()) {
                 sendPayToken()
+//                testAnimation()
             } else {
                 ToastUtil.displayShortToast(getString(R.string.not_enough) + " eth")
             }
         }
     }
 
-    fun showPayAnimation() {
+    fun testAnimation() {
         tvPaying.text = getString(R.string.transferring_qgas, payToken.symbol)
         tvVoucher.text = getString(R.string.creating_blockchain_invoice)
+        ivLoad1.visibility = View.VISIBLE
+        view2.visibility = View.INVISIBLE
+        ivLoad1.setImageResource(R.mipmap.background_load)
+        ivLoad2.setImageResource(R.mipmap.background_no)
         var tvWalletName = animationView.findViewById<TextView>(R.id.tvWalletName)
         tvWalletName.text = ethAccount!!.name
-
+        scaleAnimationTo1(ivLoad1)
         var tvWalletAddess = animationView.findViewById<TextView>(R.id.tvWalletAddess)
         tvWalletAddess.text = ethAccount!!.address
 
         val ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
         ivChain.setImageResource(R.mipmap.icons_eth_wallet)
-
         sweetAlertDialog.show()
-        showChangeAnimation(ivLoad1)
+
+        ivLoad1.postDelayed({
+            //链转账成功
+            tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
+            ivLoad1.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            ivLoad1.setImageResource(R.mipmap.background_success)
+            showChangeAnimation(ivLoad1)
+            showViewAnimation(view2)
+
+        }, 5000)
+
+        ivLoad1.postDelayed({
+            ivLoad2.setImageResource(R.mipmap.background_success)
+            tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
+            tvVoucher.text = getString(R.string.blockchain_inoice_created)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            showChangeAnimation(ivLoad2)
+            tvSend.postDelayed({
+                sweetAlertDialog.dismissWithAnimation()
+            }, 1000)
+        }, 10000)
+
+    }
+
+    fun showViewAnimation(view1: View) {
+        var viewSa = ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0f);
+        viewSa.setDuration(1000)
+        viewSa.setAnimationListener(object : Animation.AnimationListener{
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                view1.visibility = View.VISIBLE
+                ivLoad2.setImageResource(R.mipmap.background_load)
+                tvVoucher.text = getString(R.string.to_create_blockchain_invoice)
+                showChangeAnimation(ivLoad2)
+                ivLoad2.postDelayed({
+                    scaleAnimationTo1(ivLoad2)
+                }, 300)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+
+            }
+        })
+        view1.startAnimation(viewSa)
+    }
+
+    fun scaleAnimationTo1(imageView: ImageView) {
+        sa1.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                scaleAnimationToHalf(imageView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        imageView.startAnimation(sa1)
+    }
+    fun scaleAnimationToHalf(imageView: ImageView) {
+        saHalf.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                scaleAnimationTo1(imageView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        imageView.startAnimation(saHalf)
+    }
+
+    fun showPayAnimation() {
+        tvPaying.text = getString(R.string.transferring_qgas, payToken.symbol)
+        tvVoucher.text = getString(R.string.creating_blockchain_invoice)
+        ivLoad1.visibility = View.VISIBLE
+        view2.visibility = View.INVISIBLE
+        ivLoad1.setImageResource(R.mipmap.background_load)
+        ivLoad2.setImageResource(R.mipmap.background_no)
+        var tvWalletName = animationView.findViewById<TextView>(R.id.tvWalletName)
+        tvWalletName.text = ethAccount!!.name
+        scaleAnimationTo1(ivLoad1)
+        var tvWalletAddess = animationView.findViewById<TextView>(R.id.tvWalletAddess)
+        tvWalletAddess.text = ethAccount!!.address
+
+        val ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
+        ivChain.setImageResource(R.mipmap.icons_eth_wallet)
+        sweetAlertDialog.show()
     }
 
     fun showChangeAnimation(view1: View) {

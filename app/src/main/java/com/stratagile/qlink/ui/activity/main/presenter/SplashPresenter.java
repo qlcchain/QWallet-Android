@@ -153,7 +153,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
                 .requestCode(101)
                 .permission(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_PHONE_STATE,
+//                        Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
                 .rationale(rationaleListener)

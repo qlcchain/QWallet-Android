@@ -1,4 +1,5 @@
 package com.stratagile.qlink.ui.activity.otc.presenter
+
 import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
@@ -148,8 +149,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             //isSuccesse
             mView.closeProgressDialog()
             mView.generateBuyQgasOrderSuccess()
+        }, {
+            mView.closeProgressDialog()
             BuySellSellTodo.createBuySellSellTodo(map)
-        }, { mView.closeProgressDialog() }, {
+        }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
@@ -158,7 +161,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         mCompositeDisposable.add(disposable)
     }
 
-    fun getTxidByHex(txid : String): String {
+    fun getTxidByHex(txid: String): String {
         if (StringUtils.isBlank(txid)) {
             return txid
         }
@@ -167,7 +170,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             var addCount = 63 - txid.length
             if (addCount > 0) {
                 for (i in 0..addCount) {
-                    addStr+= "0"
+                    addStr += "0"
                 }
             }
             return addStr + txid
@@ -177,21 +180,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
 
         return txid
     }
-
-//    var map = mutableMapOf<String, String>()
-//    map.put("account", ConstantValue.currentUser.account)
-//    map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
-//    map["pairsId"] = selectedPair!!.id
-//    map.put("type", ConstantValue.orderTypeBuy)
-//    map.put("unitPrice", etUnitPrice.text.toString().trim())
-//    map.put("totalAmount", etAmount.text.toString().trim())
-//    map.put("minAmount", etMinAmount.text.toString().trim())
-//    map.put("maxAmount", etMaxAmount.text.toString().trim())
-//    map.put("qgasAddress",tvReceiveWalletAddess.text.toString().trim())
-////            map.put("usdtAddress", "")
-////            map.put("fromAddress", "")
-//    map.put("txid", "")
-//    mPresenter.generateBuyQgasOrder(map)
 
     fun generateTradeSellOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
         map.put("fromAddress", fromAddress)
@@ -238,7 +226,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    if ("".equals(it)) {
+                    if (it == null || "".equals(it)) {
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
@@ -348,9 +336,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         }
 
     }
-
-
-
 
 
     fun getNeoWalletDetail(map: HashMap<String, String>, address: String) {

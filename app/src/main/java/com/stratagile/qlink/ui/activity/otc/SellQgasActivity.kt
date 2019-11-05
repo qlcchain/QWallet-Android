@@ -656,7 +656,11 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
                 KLog.i("call succeed,return value is " + retValue!!)
                 var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-                mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
+                if (nep5SendBack != null) {
+                    mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
+                } else {
+                    toast(getString(R.string.send_qgas_error, tradeTokenInfo!!.asset_symbol))
+                }
             })
         } catch (e : Exception) {
             toast(getString(R.string.send_qgas_error, tradeTokenInfo!!.asset_symbol))

@@ -201,8 +201,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                 }
                 "TXID_ERROR" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
-                    tvOrderState.text = getString(R.string.wait_buyer_payment1)
-                    tvOrderState1.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderState.text = getString(R.string.transaction_parsing_failed)
+                    tvOrderState1.text = getString(R.string.transaction_parsing_failed)
                     tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
                     tvOpreate1.visibility = View.VISIBLE
                     tvOpreate2.visibility = View.VISIBLE
@@ -313,8 +313,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderStateTip.text = ""
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
-                    tvOpreate3.visibility = View.VISIBLE
-                    llOrderPayTime.visibility = View.VISIBLE
+                    tvOpreate3.visibility = View.GONE
+                    llOrderPayTime.visibility = View.GONE
                     tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
                     viewLine.visibility = View.GONE
                     llTxId.visibility = View.VISIBLE
@@ -392,7 +392,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.sellerConfirmDate)
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.send_to)
+                    tvPayAddressTip.text = getString(R.string.receive_from)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
                 }
@@ -481,8 +481,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                 }
                 "TXID_ERROR" -> {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
-                    tvOrderState.text = getString(R.string.wait_buyer_payment1)
-                    tvOrderState1.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderState.text = getString(R.string.transaction_parsing_failed)
+                    tvOrderState1.text = getString(R.string.transaction_parsing_failed)
                     tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
@@ -579,8 +579,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.text = getString(R.string.appeal)
                     tvOpreate3.text = getString(R.string.i_have_received)
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.send_to)
-                    tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
+                    tvPayAddressTip.text = getString(R.string.receive_from)
+                    tvPayAddress.text = tradeOrderDetail.order.qgasFromAddress
                     tvPayAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
@@ -590,7 +590,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
 
-                    llOrderPayTime.visibility = View.VISIBLE
+                    llOrderPayTime.visibility = View.GONE
                     tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
 
                     tvTxId.setOnClickListener {
@@ -670,8 +670,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.sellerConfirmDate)
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.send_to)
-                    tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
+                    tvPayAddressTip.text = getString(R.string.receive_from)
+                    tvPayAddress.text = tradeOrderDetail.order.qgasFromAddress
 
                 }
             }

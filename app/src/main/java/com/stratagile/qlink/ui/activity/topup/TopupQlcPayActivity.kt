@@ -10,6 +10,8 @@ import android.support.animation.SpringAnimation
 import android.support.animation.SpringForce
 import android.telecom.Call
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
@@ -40,7 +42,16 @@ import com.stratagile.qlink.ui.activity.topup.presenter.TopupQlcPayPresenter
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
+import kotlinx.android.synthetic.main.activity_topup_eth_pay.*
 import kotlinx.android.synthetic.main.activity_topup_qlc_pay.*
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.etEthTokenSendMemo
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.llSelectQlcWallet
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.tvAmountQgas
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.tvQGASBalance
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.tvQlcWalletAddess
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.tvQlcWalletName
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.tvReceiveAddress
+import kotlinx.android.synthetic.main.activity_topup_qlc_pay.tvSend
 import org.greenrobot.eventbus.EventBus
 import retrofit2.http.GET
 import retrofit2.http.Url
@@ -78,8 +89,35 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             ivLoad2.setImageResource(R.mipmap.background_success)
             tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
             tvVoucher.text = getString(R.string.blockchain_inoice_created)
-            showChangeAnimation(ivLoad2)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
 
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            showChangeAnimation(ivLoad2)
             tvSend.postDelayed({
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
@@ -125,6 +163,38 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                 mPresenter.topupOrderConfirm(map)
             }
         } else {
+            ivLoad2.setImageResource(R.mipmap.background_success)
+            tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
+            tvVoucher.text = getString(R.string.blockchain_inoice_created)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            showChangeAnimation(ivLoad2)
             tvSend.postDelayed({
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
@@ -144,12 +214,16 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     lateinit var product: TopupProduct.ProductListBean
     lateinit var payToken: PayToken.PayTokenListBean
 
+    lateinit var saHalf : ScaleAnimation
+    lateinit var sa1 : ScaleAnimation
+
     lateinit var animationView: View
     lateinit var ivLoad1: ImageView
     lateinit var ivLoad2: ImageView
     lateinit var ivChain: ImageView
     lateinit var tvPaying: TextView
     lateinit var tvVoucher: TextView
+    lateinit var view2 :View
     var isCreatedOrder = false
     var isFinish = false
 
@@ -177,11 +251,18 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         ivChain.setImageResource(R.mipmap.icons_eth_wallet)
         tvPaying = animationView.findViewById<TextView>(R.id.tvPaying)
         tvVoucher = animationView.findViewById<TextView>(R.id.tvVoucher)
+        view2 = animationView.findViewById(R.id.view2)
         sweetAlertDialog = SweetAlertDialog(this)
         sweetAlertDialog.setView(animationView)
         sweetAlertDialog.setOnBackListener {
             onBackPressed()
         }
+
+        saHalf = ScaleAnimation(1f, 0.5f, 1f, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        saHalf.setDuration(400)
+
+        sa1 = ScaleAnimation(0.5f, 1f, 0.5f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        sa1.setDuration(1000)
 
         if (ConstantValue.mainAddressData != null) {
             tvReceiveAddress.text = ConstantValue.mainAddressData.qlcchian.address
@@ -245,12 +326,37 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                         } else {
                             runOnUiThread {
                                 tvPaying.text = getString(R.string.qgas_transferred, payToken.symbol)
-                                tvVoucher.text = getString(R.string.to_create_blockchain_invoice)
+                                ivLoad1.clearAnimation()
+                                sa1.setAnimationListener(object : Animation.AnimationListener {
+                                    override fun onAnimationRepeat(animation: Animation?) {
 
+                                    }
+
+                                    override fun onAnimationEnd(animation: Animation?) {
+
+                                    }
+
+                                    override fun onAnimationStart(animation: Animation?) {
+
+                                    }
+
+                                })
+                                saHalf.setAnimationListener(object : Animation.AnimationListener {
+                                    override fun onAnimationRepeat(animation: Animation?) {
+
+                                    }
+
+                                    override fun onAnimationEnd(animation: Animation?) {
+
+                                    }
+
+                                    override fun onAnimationStart(animation: Animation?) {
+                                    }
+
+                                })
                                 ivLoad1.setImageResource(R.mipmap.background_success)
                                 showChangeAnimation(ivLoad1)
-                                ivLoad2.setImageResource(R.mipmap.background_load)
-                                showChangeAnimation(ivLoad2)
+                                showViewAnimation(view2)
                             }
                             KLog.i(suceess)
                             Thread.sleep(5000)
@@ -308,17 +414,77 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
     fun showPayAnimation() {
         tvPaying.text = getString(R.string.transferring_qgas, payToken.symbol)
         tvVoucher.text = getString(R.string.creating_blockchain_invoice)
+        ivLoad1.visibility = View.VISIBLE
+        view2.visibility = View.INVISIBLE
+        ivLoad1.setImageResource(R.mipmap.background_load)
+        ivLoad2.setImageResource(R.mipmap.background_no)
         var tvWalletName = animationView.findViewById<TextView>(R.id.tvWalletName)
         tvWalletName.text = qlcAccount!!.accountName
-
+        scaleAnimationTo1(ivLoad1)
         var tvWalletAddess = animationView.findViewById<TextView>(R.id.tvWalletAddess)
         tvWalletAddess.text = qlcAccount!!.address
 
         val ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
-        ivChain.setImageResource(R.mipmap.icons_qlc_wallet)
-
+        ivChain.setImageResource(R.mipmap.icons_eth_wallet)
         sweetAlertDialog.show()
-        showChangeAnimation(ivLoad1)
+    }
+
+    fun showViewAnimation(view1: View) {
+        var viewSa = ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0f);
+        viewSa.setDuration(1000)
+        viewSa.setAnimationListener(object : Animation.AnimationListener{
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                view1.visibility = View.VISIBLE
+                ivLoad2.setImageResource(R.mipmap.background_load)
+                tvVoucher.text = getString(R.string.to_create_blockchain_invoice)
+                showChangeAnimation(ivLoad2)
+                ivLoad2.postDelayed({
+                    scaleAnimationTo1(ivLoad2)
+                }, 300)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+
+            }
+        })
+        view1.startAnimation(viewSa)
+    }
+
+    fun scaleAnimationTo1(imageView: ImageView) {
+        sa1.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                scaleAnimationToHalf(imageView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        imageView.startAnimation(sa1)
+    }
+    fun scaleAnimationToHalf(imageView: ImageView) {
+        saHalf.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                scaleAnimationTo1(imageView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        imageView.startAnimation(saHalf)
     }
 
     fun showChangeAnimation(view1: View) {

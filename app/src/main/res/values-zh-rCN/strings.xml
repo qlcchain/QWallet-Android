@@ -1058,4 +1058,5 @@
     <string name="security_reminders">安全提醒</string>
     <string name="total_earnings_qgas">总收益 (QGAS)</string>
     <string name="free_qlc_lending_my_stake">免费抵押量 (QLC)</string>
+    <string name="transaction_parsing_failed">交易解析失败</string>
 </resources>

@@ -101,11 +101,15 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
             mView.topupOrderStatus(it)
         }, {
             var topupOrder = TopupOrder()
+            var orderBean = TopupOrder.OrderBean()
+            topupOrder.order = orderBean
             topupOrder.order.id = map["orderId"]
             topupOrder.order.status = "NEW"
             mView.topupOrderStatus(topupOrder)
         }, {
             var topupOrder = TopupOrder()
+            var orderBean = TopupOrder.OrderBean()
+            topupOrder.order = orderBean
             topupOrder.order.id = map["orderId"]
             topupOrder.order.status = "NEW"
             mView.topupOrderStatus(topupOrder)

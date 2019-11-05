@@ -94,6 +94,17 @@
             app:layout_constraintRight_toRightOf="@+id/guideLine"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/view2"
+            android:visibility="gone"
+            android:layout_width="1dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/mainColor"
+            app:layout_constraintLeft_toLeftOf="@+id/guideLine"
+            app:layout_constraintRight_toRightOf="@+id/guideLine"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/ivLoad2"
             android:layout_width="20dp"
