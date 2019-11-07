@@ -126,6 +126,15 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     loginUser = userAccount;
                     ConstantValue.currentUser = userAccount;
                     viewModel.currentUserAccount.postValue(userAccount);
+
+                    if (userAccount.getBindDate() == null || "".equals(userAccount.getBindDate())) {
+                        viewModel.isBind.postValue(false);
+                        EventBus.getDefault().post(new ShowBind());
+                    } else {
+                        viewModel.isBind.postValue(true);
+                        getCanClaimTotal();
+                    }
+
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {

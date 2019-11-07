@@ -961,7 +961,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
             startActivityForResult(intent, 1);
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-            bottomNavigation.setSelectedItemId(R.id.item_sms);
+            bottomNavigation.setSelectedItemId(R.id.item_topup);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体

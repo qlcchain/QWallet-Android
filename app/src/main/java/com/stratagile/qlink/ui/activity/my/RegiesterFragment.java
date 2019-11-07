@@ -131,6 +131,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
             userAccount.setPubKey(register.getData());
             userAccount.setUserName(register.getNickname());
             userAccount.setPhone(register.getPhone());
+            userAccount.setBindDate(register.getBindDate());
             userAccount.setAvatar(register.getHead());
             userAccount.setInviteCode(register.getNumber());
             userAccount.setPassword(MD5Util.getStringMD5(password));

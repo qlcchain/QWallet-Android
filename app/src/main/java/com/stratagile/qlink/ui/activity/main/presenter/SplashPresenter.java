@@ -189,12 +189,11 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
         @Override
         public void onSucceed(int requestCode, List<String> grantedPermissions) {
 //            LocalAssetsUtils.updateGreanDaoFromLocal();
-            // 权限申请成功回调。
+            KLog.i("权限申请成功回调。");
             if (requestCode == 101) {
                 qlinkcom.init();
                 permissionState = 0;
                 try {
-                    KLog.i(RxDeviceTool.getDeviceIdIMEI(AppConfig.getInstance()));
                     String topUpP2pId = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
                     if ("".equals(topUpP2pId)) {
                         String saveP2pId = FileUtil.readData("/Qwallet/p2pId.txt");

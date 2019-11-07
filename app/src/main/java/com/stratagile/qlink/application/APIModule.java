@@ -66,19 +66,13 @@ public final class APIModule {
             public Response intercept(Chain chain) throws IOException {
                 Auth auth = new Auth();
                 String uuid = "";
-//                String meid = RxDeviceTool.getDeviceIdIMEI(AppConfig.getInstance());
-//                if ("".equals(meid)) {
-//                    uuid = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
-//                } else {
-//                    uuid = meid;
-//                }
-
                 uuid = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
                 auth.setAppBuild(VersionUtil.getAppVersionCode(AppConfig.instance) + "");
                 auth.setAgent(WebSettings.getDefaultUserAgent(AppConfig.getInstance()));
                 auth.setUuid(uuid);
                 auth.setPlatform("Android");
                 auth.setAppVersion(VersionUtil.getAppVersionName(AppConfig.instance));
+                KLog.i(auth.toString());
                 Request request = chain.request()
                         .newBuilder()
                         .removeHeader("User-Agent")//移除旧的

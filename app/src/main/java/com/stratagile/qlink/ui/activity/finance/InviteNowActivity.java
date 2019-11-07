@@ -77,17 +77,19 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
     @Override
     protected void initData() {
         setTitle(getString(R.string.invite_now));
-        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
-            //英文
-            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_en));
-            content = "https://fir.im/qlc1";
-        } else {
-            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
-            content = "https://fir.im/qlc1";
-        }
-        Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("ic_launcher", "mipmap", getPackageName()));
-        ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(content, ivQRCode, logo);
-        createEnglishQRCode.execute();
+//        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+//            //英文
+//            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_en));
+//            content = "https://fir.im/qlc1";
+//        } else {
+//            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
+//            content = "https://fir.im/qlc1";
+//        }
+//        Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("ic_launcher", "mipmap", getPackageName()));
+//        ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(content, ivQRCode, logo);
+//        createEnglishQRCode.execute();
+
+
 //        Bitmap bitmap = RxQRCode.builder(content).
 //                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
 //                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
@@ -95,10 +97,10 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
 //                into(ivQRCode);
 
 
-//        Glide.with(this)
-//                .load(R.mipmap.qwallet_qrcode)
-//                .apply(AppConfig.getInstance().optionsAppeal)
-//                .into(ivQRCode);
+        Glide.with(this)
+                .load(R.mipmap.qwallet_qrcode)
+                .apply(AppConfig.getInstance().optionsAppeal)
+                .into(ivQRCode);
         inviteCode.setText(ConstantValue.currentUser.getInviteCode() + "");
         inviteCode.setOnClickListener(new View.OnClickListener() {
             @Override

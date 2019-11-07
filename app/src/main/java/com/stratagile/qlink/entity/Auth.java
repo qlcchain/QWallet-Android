@@ -10,6 +10,17 @@ public class Auth {
         return appBuild;
     }
 
+    @Override
+    public String toString() {
+        return "Auth{" +
+                "agent='" + agent + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", platform='" + platform + '\'' +
+                ", appBuild='" + appBuild + '\'' +
+                ", appVersion='" + appVersion + '\'' +
+                '}';
+    }
+
     public void setAppBuild(String appBuild) {
         this.appBuild = appBuild;
     }
