@@ -153,7 +153,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser  && viewModel != null && !currentOrderType.equals(viewModel!!.currentEntrustOrderType.value)) {
+        if (isVisibleToUser  && viewModel != null && !currentOrderType.equals(viewModel!!.currentEntrustOrderType.value) && viewModel!!.currentEntrustOrderType.value != null) {
             currentOrderType = viewModel!!.currentEntrustOrderType.value!!
             refreshLayout.isRefreshing = true
             currentPage = 0

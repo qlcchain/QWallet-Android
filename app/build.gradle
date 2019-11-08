@@ -20,7 +20,7 @@ android {
         targetSdkVersion 28
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.3.0"
+        versionName "2.3.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -308,8 +308,10 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
     implementation 'com.google.guava:guava:28.1-jre'
 
-    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
+//    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
+//    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
+    implementation files('libs/jcore-android-2.1.6-google_play.jar')
+    implementation files('libs/jpush-android-3.3.9-google_play.jar')
 
     implementation 'com.android.support:support-dynamic-animation:28.0.0'
 
