@@ -4,14 +4,17 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.pawegio.kandroid.alert
+import com.pawegio.kandroid.inputManager
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
@@ -34,6 +37,7 @@ import com.stratagile.qlink.ui.adapter.topup.PayTokenAdapter
 import com.stratagile.qlink.ui.adapter.topup.PayTokenDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupAbleAdapter
 import com.stratagile.qlink.utils.*
+import com.vondear.rxtools.RxKeyboardTool
 import com.yanzhenjie.alertdialog.AlertDialog
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.PermissionListener
@@ -46,9 +50,6 @@ import java.math.BigDecimal
 import java.util.*
 
 import javax.inject.Inject;
-
-
-
 
 
 /**
@@ -105,8 +106,8 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     @Inject
     internal lateinit var mPresenter: QurryMobilePresenter
-    var topupAbleAdapter : TopupAbleAdapter? = null
-    lateinit var selectedPayToken : PayToken.PayTokenListBean
+    var topupAbleAdapter: TopupAbleAdapter? = null
+    lateinit var selectedPayToken: PayToken.PayTokenListBean
     lateinit var payTokenAdapter: PayTokenAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
@@ -116,8 +117,11 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     override fun initView() {
         setContentView(R.layout.activity_qurry_mobile)
         tvArea.setOnClickListener {
+            val inputmanger = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputmanger.hideSoftInputFromWindow(etContact.getWindowToken(), 0)
             startActivityForResult(Intent(this, SelectAreaActivity::class.java), 10)
         }
+
         topupAbleAdapter = TopupAbleAdapter(arrayListOf())
         recyclerView.adapter = topupAbleAdapter
         topupAbleAdapter!!.setOnItemClickListener { adapter, view, position ->
@@ -125,9 +129,9 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             var dsicountPrice = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
             var qgasCount = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal()).divide(selectedPayToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
             alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, price, qgasCount, selectedPayToken.symbol, dsicountPrice)) {
-                negativeButton (getString(R.string.cancel)) { dismiss() }
+                negativeButton(getString(R.string.cancel)) { dismiss() }
                 positiveButton(getString(R.string.buy_topup)) {
-                    when(OtcUtils.parseChain(selectedPayToken.chain)) {
+                    when (OtcUtils.parseChain(selectedPayToken.chain)) {
                         AllWallet.WalletType.QlcWallet -> {
                             if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
                                 val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
@@ -197,28 +201,50 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         topupAbleAdapter!!.notifyDataSetChanged()
     }
 
+    @Override
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.getItemId() == android.R.id.home) {
+            val inputmanger = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputmanger.hideSoftInputFromWindow(etContact.getWindowToken(), 0)
+            finish()
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun getProductList() {
         noProduct.visibility = View.GONE
         tvFound.visibility = View.GONE
         payTokenRecyclerView.visibility = View.GONE
         topupAbleAdapter!!.setNewData(arrayListOf())
         if ("+86".equals(tvArea.text.toString().trim())) {
+            if ("".equals(etContact.text.toString().trim())) {
+                return
+            }
             if (!AccountUtil.isTelephone(etContact.text.toString().trim())) {
                 toast(getString(R.string.please_enter_correct_mobbile_number))
                 return
             }
         } else {
             if ("".equals(etContact.text.toString().trim())) {
+                return
+            }
+            if ("".equals(etContact.text.toString().trim())) {
                 toast(getString(R.string.please_enter_correct_mobbile_number))
                 return
             }
         }
-        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(tvArea.getWindowToken(),0)
+        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(tvArea.getWindowToken(), 0)
         var map = mutableMapOf<String, String>()
         map.put("phoneNumber", etContact.text.toString().trim())
         map.put("page", "1")
         map.put("size", "20")
         mPresenter.getProductList(map)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -275,7 +301,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 .permission(
                         Manifest.permission.READ_CONTACTS
                 )
-                .rationale(object : RationaleListener{
+                .rationale(object : RationaleListener {
                     override fun showRequestPermissionRationale(requestCode: Int, rationale: Rationale) {
                         AlertDialog.newBuilder(this@QurryMobileActivity)
                                 .setTitle(AppConfig.getInstance().resources.getString(R.string.Permission_Requeset))
@@ -323,16 +349,17 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     }
 
     override fun setupActivityComponent() {
-       DaggerQurryMobileComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .qurryMobileModule(QurryMobileModule(this))
-               .build()
-               .inject(this)
+        DaggerQurryMobileComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .qurryMobileModule(QurryMobileModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: QurryMobileContract.QurryMobileContractPresenter) {
-            mPresenter = presenter as QurryMobilePresenter
-        }
+        mPresenter = presenter as QurryMobilePresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()

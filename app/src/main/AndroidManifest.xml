@@ -6,6 +6,7 @@
     <permission
         android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -21,15 +22,19 @@
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <permission android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
+
+    <permission
+        android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <permission
         android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE"
@@ -45,109 +50,138 @@
     <application
         android:name=".application.AppConfig"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:appCategory="productivity"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
-        tools:ignore="UnusedAttribute"
-        tools:replace="android:allowBackup"
+        android:banner="@mipmap/ic_launcher"
         android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme.Base"
-        android:banner="@mipmap/ic_launcher">
-        <activity android:name=".ui.activity.main.SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait"
+        tools:ignore="UnusedAttribute"
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".ui.activity.main.SplashActivity"
             android:configChanges="locale"
             android:label="@string/app_name"
-            >
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <!--协议部分，随便设置-->
-                <data android:scheme="xl" android:host="winq" android:path="/openWinq" android:port="8888"/>
+                <data
+                    android:host="winq"
+                    android:path="/openWinq"
+                    android:port="8888"
+                    android:scheme="xl" />
                 <!--下面这几行也必须得设置-->
-                <category android:name="android.intent.category.DEFAULT"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.main.MainActivity"
+        <activity
+            android:name=".ui.activity.main.MainActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"
-            tools:ignore="ExportedActivity"
-            android:screenOrientation="portrait">
+            tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.wallet.WalletDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.NoWalletActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.neo.WalletCreatedActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.FreeConnectActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.main.GuestActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.CreateWalletPasswordActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.VerifyWalletPasswordActivity"
+        <activity
+            android:name=".ui.activity.wallet.WalletDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.NoWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.neo.WalletCreatedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.FreeConnectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.main.GuestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.CreateWalletPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.VerifyWalletPasswordActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <!--android:windowSoftInputMode="stateVisible|adjustResize"-->
-        <activity android:name=".ui.activity.wallet.ProfilePictureActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.TransactionRecordActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.ImportWalletActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.QrCodeDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.ScanQrCodeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.ChangeWalletActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.wallet.GratuityActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.main.LogActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.main.WebViewActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.eth.EthWalletActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.eth.BnbToQlcActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.eth.ImportEthWalletActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.im.ConversationActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+        <activity
+            android:name=".ui.activity.wallet.ProfilePictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.TransactionRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.ImportWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.QrCodeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.ScanQrCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.ChangeWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.GratuityActivity"
             android:screenOrientation="portrait"
-            />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".ui.activity.main.LogActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.main.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.EthWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.BnbToQlcActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.ImportEthWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.im.ConversationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <provider
             android:name=".utils.MyFileProvider"
@@ -166,156 +200,326 @@
             android:grantUriPermissions="true"
             tools:ignore="ExportedContentProvider" />
 
-        <activity android:name=".ui.activity.file.FileChooseActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.setting.SettingsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.setting.SelectLanguageActivityActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.rank.RuleActivity" />
-        <activity android:name=".ui.activity.wallet.SelectWalletTypeActivity" />
-        <activity android:name=".ui.activity.eth.EthWalletCreatedActivity" />
-        <activity android:name=".ui.activity.eth.EthMnemonicbackupActivity" />
-        <activity android:name=".ui.activity.eth.EthMnemonicShowActivity" />
-        <activity android:name=".ui.activity.wallet.AllWalletTokenActivity" />
-        <activity android:name=".ui.activity.eth.WalletDetailActivity" />
-        <activity android:name=".ui.activity.setting.CurrencyUnitActivity" />
-        <activity android:name=".ui.activity.wallet.EthTransactionRecordActivity" />
-        <activity android:name=".ui.activity.wallet.WalletQRCodeActivity" />
-        <activity android:name=".ui.activity.eth.EthTransferActivity" />
-        <activity android:name=".ui.activity.neo.NeoWalletInfoActivity" />
-        <activity android:name=".ui.activity.wallet.ChooseWalletActivity" />
-        <activity android:name=".ui.activity.wallet.ExportEthKeyStoreActivity" />
-        <activity android:name=".ui.activity.neo.NeoTransferActivity" />
-        <activity android:name=".ui.activity.wallet.ChangePasswordActivity" />
-        <activity android:name=".ui.activity.eos.EosImportActivity" />
-        <activity android:name=".ui.activity.eos.EosTransferActivity" />
-        <activity android:name=".ui.activity.otc.AddTokenActivity" />
-        <activity android:name=".ui.activity.eos.EosResourceManagementActivity" />
+        <activity
+            android:name=".ui.activity.file.FileChooseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.setting.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.setting.SelectLanguageActivityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.rank.RuleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.SelectWalletTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.EthWalletCreatedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.EthMnemonicbackupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.EthMnemonicShowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.AllWalletTokenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.WalletDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.setting.CurrencyUnitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.EthTransactionRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.WalletQRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eth.EthTransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.neo.NeoWalletInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.ChooseWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.ExportEthKeyStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.neo.NeoTransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.wallet.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eos.EosImportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eos.EosTransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.AddTokenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eos.EosResourceManagementActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.activity.eos.EosBuyCpuAndNetActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+        <activity
+            android:name=".ui.activity.eos.EosBuyCpuAndNetActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.eos.EosBuyRamActivity" />
-        <activity android:name=".ui.activity.eos.EosCreateActivity" />
-        <activity android:name=".ui.activity.eos.EosActivationActivity" />
-        <activity android:name=".ui.activity.main.TestActivity" />
-        <activity android:name=".ui.activity.my.AccountActivity" />
-        <activity android:name=".ui.activity.my.RetrievePasswordActivity" />
-        <activity android:name=".ui.activity.my.SelectCountryActivity" />
-        <activity android:name=".ui.activity.finance.ProductDetailActivity" />
-        <activity android:name=".ui.activity.finance.MyProductActivity" />
-        <activity android:name=".ui.activity.my.PersonActivity" />
-        <activity android:name=".ui.activity.my.LoginActivity" />
-        <activity android:name=".ui.activity.my.RegisgerActivity" />
-        <activity android:name=".ui.activity.finance.InviteActivity" />
-        <activity android:name=".ui.activity.finance.MyRankingActivity" />
-        <activity android:name=".ui.activity.finance.EarnRankActivity" />
-        <activity android:name=".ui.activity.finance.HistoryRecordActivity" />
-        <activity android:name=".ui.activity.finance.JoinCommunityActivity" />
-        <activity android:name=".ui.activity.my.ForgetPasswordActivity" />
-        <activity android:name=".ui.activity.main.EditInputActivity" />
-        <activity android:name=".ui.activity.finance.InviteNowActivity" />
-        <activity android:name=".ui.activity.qlc.QlcTestActivity" />
-        <activity android:name=".ui.activity.qlc.QlcWalletCreatedActivity" />
-        <activity android:name=".ui.activity.qlc.BackupQlcWalletActivity" />
-        <activity android:name=".ui.activity.qlc.QlcTransferActivity" />
-        <activity android:name=".ui.activity.qlc.ImportQlcActivity" />
-        <activity android:name=".ui.activity.qlc.QlcMnemonicShowActivity" />
-        <activity android:name=".ui.activity.qlc.QlcMnemonicbackupActivity" />
-        <activity android:name=".ui.activity.my.VerificationActivity" />
-        <activity android:name=".ui.activity.otc.NewOrderActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-        <activity android:name=".ui.activity.otc.BuyQgasActivity" />
-        <activity android:name=".ui.activity.otc.SellQgasActivity" />
-        <activity android:name=".ui.activity.otc.OrderDetailActivity" />
-        <activity android:name=".ui.activity.otc.OtcOrderRecordActivity" />
-        <activity android:name=".ui.activity.otc.TradeOrderDetailActivity" />
-        <activity android:name=".ui.activity.otc.UsdtReceiveAddressActivity" />
-        <activity android:name=".ui.activity.otc.AppealActivity" />
-        <activity android:name=".ui.activity.otc.AppealDetailActivity" />
-        <activity android:name=".ui.activity.otc.AppealSubmittedActivity" />
-        <activity android:name=".ui.activity.otc.OtcChooseWalletActivity" />
-        <activity android:name=".ui.activity.otc.UsdtPayActivity" />
-        <activity android:name=".ui.activity.stake.MyStakeActivity" />
-        <activity android:name=".ui.activity.stake.NewStakeActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            />
-        <activity android:name=".ui.activity.stake.StakeDetailActivity" />
-        <activity android:name=".ui.activity.stake.StakeExplainActivity" />
-        <activity android:name=".ui.activity.stake.QlcPayActivity" />
-        <activity android:name=".ui.activity.otc.SelectCurrencyActivity" />
-        <activity android:name=".ui.activity.otc.OtcNeoChainPayActivity" />
-        <activity android:name=".ui.activity.otc.OtcQlcChainPayActivity" />
-        <activity android:name="wendu.jsbdemo.MainActivity" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.activity.eos.EosBuyRamActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eos.EosCreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.eos.EosActivationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.main.TestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.AccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.RetrievePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.SelectCountryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.ProductDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.MyProductActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.PersonActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.RegisgerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.InviteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.MyRankingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.EarnRankActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.HistoryRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.JoinCommunityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.main.EditInputActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.finance.InviteNowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.QlcTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.QlcWalletCreatedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.BackupQlcWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.QlcTransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.ImportQlcActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.QlcMnemonicShowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.qlc.QlcMnemonicbackupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.VerificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.NewOrderActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.otc.BuyQgasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.SellQgasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.OrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.OtcOrderRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.TradeOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.UsdtReceiveAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.AppealActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.AppealDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.AppealSubmittedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.OtcChooseWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.UsdtPayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.stake.MyStakeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.stake.NewStakeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.stake.StakeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.stake.StakeExplainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.stake.QlcPayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.SelectCurrencyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.OtcNeoChainPayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.otc.OtcQlcChainPayActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="wendu.jsbdemo.MainActivity">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
-        <activity android:name="wendu.jsbdemo.WrokWithFlyioTestActivity" />
-        <activity android:name="wendu.jsbdemo.JavascriptCallNativeActivity" />
-        <activity android:name="wendu.jsbdemo.CallJavascriptActivity" />
-        <activity android:name=".ui.activity.topup.QurryMobileActivity" />
-        <activity android:name=".ui.activity.topup.SelectAreaActivity" />
-        <activity android:name=".ui.activity.topup.TopupQlcPayActivity" />
-        <activity android:name=".ui.activity.topup.TopupOrderListActivity" />
-        <activity android:name=".ui.activity.reward.MyClaimActivity" />
-        <activity android:name=".ui.activity.reward.ClaimRewardActivity" />
-        <activity android:name=".ui.activity.topup.VoucherDetailActivity" />
-        <activity android:name=".ui.activity.topup.TopupEthPayActivity" />
+        <activity
+            android:name="wendu.jsbdemo.WrokWithFlyioTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="wendu.jsbdemo.JavascriptCallNativeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="wendu.jsbdemo.CallJavascriptActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.QurryMobileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.SelectAreaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupQlcPayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupOrderListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.reward.MyClaimActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.reward.ClaimRewardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.VoucherDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupEthPayActivity"
+            android:screenOrientation="portrait" />
 
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_key" />
-        <meta-data android:name="android.max_aspect"
-            android:value="2.5"/>
-<!--        <meta-data-->
-<!--            android:name="preloaded_fonts"-->
-<!--            android:resource="@array/preloaded_fonts" />-->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.5" />
+        <!--        <meta-data-->
+        <!--            android:name="preloaded_fonts"-->
+        <!--            android:resource="@array/preloaded_fonts" />-->
         <meta-data
             android:name="design_width_in_dp"
-            android:value="360"/>
+            android:value="360" />
         <meta-data
             android:name="design_height_in_dp"
-            android:value="650"/>
+            android:value="650" />
 
-        <service android:enabled="true" android:process=":pushservice"
-            android:name="com.xiaomi.push.service.XMPushService"/>
+        <service
+            android:name="com.xiaomi.push.service.XMPushService"
+            android:enabled="true"
+            android:process=":pushservice" />
 
-        <service android:name="com.xiaomi.push.service.XMJobService"
+        <service
+            android:name="com.xiaomi.push.service.XMJobService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:process=":pushservice" />
 
-        <service android:enabled="true"
-            android:exported="true"
-            android:name="com.xiaomi.mipush.sdk.PushMessageHandler" />
+        <service
+            android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
+            android:enabled="true"
+            android:exported="true" />
 
-        <service android:enabled="true"
-            android:name="com.xiaomi.mipush.sdk.MessageHandleService" />
+        <service
+            android:name="com.xiaomi.mipush.sdk.MessageHandleService"
+            android:enabled="true" />
 
-        <receiver android:exported="true"
-            android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver" >
+        <receiver
+            android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
-        <receiver android:exported="false" android:process=":pushservice"
-            android:name="com.xiaomi.push.service.receivers.PingReceiver" >
+        <receiver
+            android:name="com.xiaomi.push.service.receivers.PingReceiver"
+            android:exported="false"
+            android:process=":pushservice">
             <intent-filter>
                 <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
         </receiver>
 
         <receiver
-            android:exported="true"
-            android:name="com.stratagile.qlink.reciver.WinqMessageReceiver">
+            android:name="com.stratagile.qlink.reciver.WinqMessageReceiver"
+            android:exported="true">
             <!--这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名-->
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
@@ -329,8 +533,8 @@
         </receiver>
 
 
-
-        <service android:name="com.stratagile.qlink.service.JpushService"
+        <service
+            android:name="com.stratagile.qlink.service.JpushService"
             android:enabled="true"
             android:exported="false"
             android:process=":pushcore">
@@ -341,10 +545,10 @@
 
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <category android:name="com.stratagile.qwallet"/>
+                <category android:name="com.stratagile.qwallet" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -354,25 +558,25 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
 
         <provider
-            android:authorities="com.stratagile.qwallet.DataProvider"
             android:name="cn.jpush.android.service.DataProvider"
-            android:exported="true"
-            />
+            android:authorities="com.stratagile.qwallet.DataProvider"
+            android:exported="true" />
         <provider
-            android:authorities="com.stratagile.qwallet.DownloadProvider"
             android:name="cn.jpush.android.service.DownloadProvider"
-            android:exported="true"
-            />
+            android:authorities="com.stratagile.qwallet.DownloadProvider"
+            android:exported="true" />
+
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
         <receiver
             android:name="com.stratagile.qlink.reciver.JpushReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
                 <category android:name="com.stratagile.qwallet" />
@@ -394,16 +598,22 @@
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            tools:node="replace"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar"
+            tools:node="replace">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.stratagile.qwallet" />
             </intent-filter>
         </activity>
-        <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
-        <meta-data android:name="JPUSH_APPKEY" android:value="0b552b82816c33ceda8a8d16" /> <!--  </>值来自开发者平台取得的AppKey-->
+
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="0b552b82816c33ceda8a8d16" /> <!--  </>值来自开发者平台取得的AppKey-->
     </application>
 
 </manifest>

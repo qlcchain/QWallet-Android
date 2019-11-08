@@ -593,12 +593,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             closeProgressDialog();
             e.printStackTrace();
         }
-
-
-        EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
-        ethWallet.setIsCurrent(false);
-        AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
-
         Account.INSTANCE.createNewWallet();
         neoutils.Wallet wallet = Account.INSTANCE.getWallet();
         Wallet walletWinq = new Wallet();
@@ -610,6 +604,16 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         walletWinq.setIsCurrent(false);
         walletWinq.setName("NEO-Wallet 01");
         AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+
+        try {
+            EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
+            ethWallet.setIsCurrent(false);
+            AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         initData();
     }
 
