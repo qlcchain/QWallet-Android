@@ -52,6 +52,7 @@ import com.stratagile.qlink.utils.ToastUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -133,16 +134,18 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
 //        x.setAxisLineColor(getResources().getColor(R.color.mainColor));
 //        x.setAxisMaximum(12);
 //        x.setAxisMinimum(4);
-        x.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-//                KLog.i((long)value + 25000000);
-                long millis = TimeUnit.MINUTES.toMillis((long) value + 25000000);
-//                KLog.i(millis);
-                return TimeUtil.getTransactionHistoryTime(millis);
-//                return value + "";
-            }
-        });
+
+
+//        x.setValueFormatter(new IAxisValueFormatter() {
+//            @Override
+//            public String getFormattedValue(float value, AxisBase axis) {
+////                KLog.i((long)value + 25000000);
+//                long millis = TimeUnit.MINUTES.toMillis((long) value + 25000000);
+////                KLog.i(millis);
+//                return TimeUtil.getTransactionHistoryTime(millis);
+////                return value + "";
+//            }
+//        });
 
         YAxis y = chart.getAxisRight();
         y.setLabelCount(6, false);
@@ -188,7 +191,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
         // create a dataset and give it a type
         set1 = new LineDataSet(values, "");
 
-        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set1.setMode(LineDataSet.Mode.LINEAR);
         set1.setCubicIntensity(0.2f);
         set1.setDrawFilled(true);
         set1.setDrawCircles(false);
@@ -207,9 +210,21 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
         });
         // create a data object with the data sets
         LineData data1 = new LineData(set1);
+        chart.animateY(2000);
         data1.setValueTextSize(9f);
         data1.setDrawValues(false);
         chart.setData(data1);
+
+        List<ILineDataSet> sets = chart.getData()
+                .getDataSets();
+
+        for (ILineDataSet iSet : sets) {
+
+            LineDataSet set = (LineDataSet) iSet;
+            set.setDrawFilled(true);
+            set.setMode(LineDataSet.Mode.LINEAR);
+        }
+        chart.invalidate();
     }
 
     @Override

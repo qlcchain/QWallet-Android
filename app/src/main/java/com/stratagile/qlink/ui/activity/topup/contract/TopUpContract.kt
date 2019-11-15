@@ -1,6 +1,8 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
 import com.stratagile.qlink.entity.InviteList
+import com.stratagile.qlink.entity.KLine
+import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.base.BasePresenter
@@ -28,6 +30,11 @@ interface TopUpContract {
         fun setInviteRank(inviteList: InviteList)
 
         fun setOneFriendReward(dict: Dict)
+
+        fun setChartData(data: KLine)
+
+
+        fun setQlcPrice(tokenPrice: TokenPrice)
     }
 
     interface TopUpContractPresenter : BasePresenter {

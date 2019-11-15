@@ -1579,6 +1579,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="copy_invite_code">(Copy)</string>
     <string name="refer_now">Refer NOW</string>
     <string name="i_have_claimed">I have claimed %1$s QGAS</string>
+    <string name="i_have_claimed_qlc">I have claimed %1$s QLC</string>
     <string name="friend_referred">%1$s friends referred</string>
     <string name="you_can_claim_the_reward_when_successfully_invited_more_than_2_friends">You can claim the reward when successfully invited more than %1$s friends.</string>
     <string name="get_x_qgas">Get %1$s QGAS</string>
@@ -1624,4 +1625,26 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="total_earnings_qgas">Total Earnings (QGAS)</string>
     <string name="free_qlc_lending_my_stake">Free QLC Lending</string>
     <string name="transaction_parsing_failed">Transaction parsing failed</string>
+    <string name="sheet_minig">Sheet mining</string>
+    <string name="daily_qgas_trade_mining_pool_up_to">Daily QGAS Trade Mining Pool up to</string>
+    <string name="trade_now">Trade NOW</string>
+    <string name="my_mining_rewards">My Mining Rewards</string>
+    <string name="mining_rewards_details"><![CDATA[Mining Rewards Details>>]]></string>
+    <string name="_3000_qgas_traded">%1$ss QLC traded</string>
+    <string name="my_orders_factor_market_orders_factor_my_qlc_mining_shares_factor">My orders factor/ Market orders factor = My QLC mining shares factor</string>
+    <string name="trade_mining_pool_my_qlc_mining_shares_factor_my_qlc_mining_rewards">Trade mining pool*My QLC mining shares factor = My QLC mining rewards</string>
+    <string name="how_many_qlc_tokens_can_i_mine"><![CDATA[How many QLC tokens can I mine? >>]]></string>
+    <string name="trade_mining_ranking">Trade Mining Ranking</string>
+    <string name="qgas_trade_mining_pool_up_to">QGAS Trade Mining Pool up to</string>
+    <string name="mined_qlc_redeem_every_day">Mined QLC Redeem \nEvery Day</string>
+    <string name="more_details_mining">More Details</string>
+    <string name="_1h">1H</string>
+    <string name="_1d">1D</string>
+    <string name="_1w">1W</string>
+    <string name="_1m">1M</string>
+    <string name="minning_rewards_details_title">Mining Rewards Details</string>
+    <string name="daily_mining_rewards">Daily Mining Rewards</string>
+    <string name="trade_mining">Trade Mining</string>
+    <string name="no_order_is_placed">No order is placed</string>
+    <string name="new_order_mining">New Order</string>
 </resources>

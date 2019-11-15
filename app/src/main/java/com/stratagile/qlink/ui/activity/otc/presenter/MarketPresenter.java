@@ -6,6 +6,7 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.NeoWalletInfo;
+import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.ui.activity.otc.contract.MarketContract;
@@ -59,6 +60,28 @@ public class MarketPresenter implements MarketContract.MarketContractPresenter{
                     public void accept(TradePair baseBack) throws Exception {
                         //isSuccesse
                         mView.setRemoteTradePairs(baseBack.getPairsList());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getMiningList() {
+        Disposable disposable = httpAPIWrapper.miningList(new HashMap<String, String>())
+                .subscribe(new Consumer<MiningAct>() {
+                    @Override
+                    public void accept(MiningAct miningAct) throws Exception {
+                        //isSuccesse
+                        mView.setMiningAct(miningAct);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

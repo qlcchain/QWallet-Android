@@ -1136,13 +1136,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public void setViewPager(ChangeViewpager changeViewpager) {
         switch (changeViewpager.getPosition()) {
             case 0:
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
+                bottomNavigation.setSelectedItemId(R.id.item_topup);
                 break;
             case 1:
-                bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+                bottomNavigation.setSelectedItemId(R.id.item_sms);
                 break;
             case 2:
-                bottomNavigation.setSelectedItemId(R.id.item_settings);
+                bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
                 break;
             case 3:
                 bottomNavigation.setSelectedItemId(R.id.item_settings);

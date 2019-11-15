@@ -13,14 +13,14 @@ checkstyle {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.3.1"
+        versionName "2.3.2"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -284,7 +284,7 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:1.13.0'
     implementation 'com.github.consenlabs:token-core-android:v0.1'
     //    implementation project(':MPChartLib')
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation files('libs/BASE64Encoder.jar')
 
     //imtoken

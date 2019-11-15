@@ -1014,6 +1014,7 @@
     <string name="copy_invite_code">(点击复制)</string>
     <string name="refer_now">立即邀请</string>
     <string name="i_have_claimed">已领取奖励：%1$s QGAS</string>
+    <string name="i_have_claimed_qlc">已领取奖励：%1$s QLC</string>
     <string name="friend_referred">已邀请%1$s人</string>
     <string name="you_can_claim_the_reward_when_successfully_invited_more_than_2_friends">邀请好友满%1$s位可立即领取</string>
     <string name="get_x_qgas">获得 %1$s QGAS</string>
@@ -1059,4 +1060,26 @@
     <string name="total_earnings_qgas">总收益 (QGAS)</string>
     <string name="free_qlc_lending_my_stake">免费抵押量 (QLC)</string>
     <string name="transaction_parsing_failed">交易解析失败</string>
+    <string name="sheet_minig">挂单挖矿</string>
+    <string name="daily_qgas_trade_mining_pool_up_to">QGAS挂单挖矿，挂单即可瓜分每日最多</string>
+    <string name="trade_now">现在交易</string>
+    <string name="my_mining_rewards">我的奖金</string>
+    <string name="mining_rewards_details"><![CDATA[每日结算详情>>]]></string>
+    <string name="_3000_qgas_traded">已成交%1$s QLC</string>
+    <string name="my_orders_factor_market_orders_factor_my_qlc_mining_shares_factor">我的订单系数/市场订单系数=我的奖金系数</string>
+    <string name="trade_mining_pool_my_qlc_mining_shares_factor_my_qlc_mining_rewards">奖金池*我的奖金系数=得到的QLC</string>
+    <string name="how_many_qlc_tokens_can_i_mine"><![CDATA[我能挖多少QLC >>]]></string>
+    <string name="trade_mining_ranking">挂单挖矿排名</string>
+    <string name="qgas_trade_mining_pool_up_to">挂单挖矿瓜分最高</string>
+    <string name="mined_qlc_redeem_every_day">每日挂单挖矿得奖励，\n每日结算</string>
+    <string name="more_details_mining">了解详情</string>
+    <string name="_1h">小时</string>
+    <string name="_1d">天</string>
+    <string name="_1w">周</string>
+    <string name="_1m">月</string>
+    <string name="minning_rewards_details_title">每日结算详情</string>
+    <string name="daily_mining_rewards">挂单挖矿瓜分奖金</string>
+    <string name="trade_mining">挂单挖矿</string>
+    <string name="no_order_is_placed">您还没有挂单挖矿</string>
+    <string name="new_order_mining">去挂单</string>
 </resources>

@@ -1,63 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rlInvite"
     android:layout_width="match_parent"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="6dp"
-    app:cardElevation="6dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp"
-    android:layout_height="@dimen/x175"
-    android:layout_marginBottom="10dp"
-    android:background="@color/white">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="@dimen/x175">
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x30"
-            android:textStyle="bold"
-            android:layout_marginTop="@dimen/x30"
-            android:text="@string/make_more"
-            android:textColor="@color/color_29282a"
-            android:textSize="18sp" />
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/x30"
+        android:text="@string/make_more"
+        android:textColor="@color/color_29282a"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x30"
-            android:layout_toRightOf="@id/tv1"
-            android:layout_marginLeft="@dimen/x6"
-            android:text="QGAS"
-            android:textColor="@color/mainColor"
-            android:textSize="18sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x6"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_toRightOf="@id/tv1"
+        android:text="QGAS"
+        android:textColor="@color/mainColor"
+        android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv1"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginTop="@dimen/x23"
-            android:background="@drawable/main_color_bt_bg"
-            android:drawableRight="@mipmap/enter_n"
-            android:gravity="center"
-            android:paddingLeft="@dimen/x20"
-            android:text="@string/Join_NOW"
-            android:textColor="@color/white"
-            android:textSize="10sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv1"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/x23"
+        android:background="@drawable/main_color_bt_bg"
+        android:drawableRight="@mipmap/enter_n"
+        android:gravity="center"
+        android:paddingLeft="@dimen/x20"
+        android:text="@string/Join_NOW"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 
-        <ImageView
-            android:layout_width="@dimen/x173"
-            android:layout_height="@dimen/x150"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/invite_friend" />
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+    <ImageView
+        android:layout_width="@dimen/x173"
+        android:layout_height="@dimen/x150"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x30"
+        android:src="@mipmap/invite_friend" />
+</RelativeLayout>

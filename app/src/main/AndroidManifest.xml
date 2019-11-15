@@ -607,6 +607,9 @@
                 <category android:name="com.stratagile.qwallet" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.mining.MiningInviteActivity" />
+        <activity android:name=".ui.activity.mining.MiningDailyDetailActivity" />
+        <activity android:name=".ui.activity.mining.MiningRewardActivity" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

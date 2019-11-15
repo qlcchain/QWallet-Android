@@ -57,6 +57,10 @@ import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
 import com.stratagile.qlink.entity.finance.HistoryRecord;
 import com.stratagile.qlink.entity.finance.MyRanking;
+import com.stratagile.qlink.entity.mining.MiningIndex;
+import com.stratagile.qlink.entity.mining.MiningRank;
+import com.stratagile.qlink.entity.mining.MiningRewardList;
+import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
@@ -93,11 +97,12 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
-import static com.stratagile.qlink.data.api.API.url_bind_qlcchain_wallet;
-import static com.stratagile.qlink.data.api.API.url_pairs;
-import static com.stratagile.qlink.data.api.API.url_reward_claims;
-import static com.stratagile.qlink.data.api.API.url_reward_tatal;
-import static com.stratagile.qlink.data.api.API.url_topup_productlist;
+import static com.stratagile.qlink.data.api.MainAPI.url_mining_claim;
+import static com.stratagile.qlink.data.api.MainAPI.url_mining_list;
+import static com.stratagile.qlink.data.api.MainAPI.url_mining_reward_list;
+import static com.stratagile.qlink.data.api.MainAPI.url_mining_reward_rank;
+import static com.stratagile.qlink.data.api.MainAPI.url_mining_reward_total;
+import static com.stratagile.qlink.data.api.MainAPI.url_trade_mining_index;
 
 
 /**
@@ -563,6 +568,30 @@ public interface MainHttpApi {
     @POST(MainAPI.url_pay_token)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<PayToken> payToken(@Body RequestBody map);
+
+    @POST(url_mining_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningAct> miningList(@Body RequestBody map);
+
+    @POST(url_mining_reward_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningRewardList> getMiningRewardList(@Body RequestBody map);
+
+    @POST(url_mining_reward_rank)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningRank> getMiningRewardRankList(@Body RequestBody map);
+
+    @POST(url_trade_mining_index)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningIndex> getTradeMiningIndex(@Body RequestBody map);
+
+    @POST(url_mining_claim)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimQlc(@Body RequestBody map);
+
+    @POST(url_mining_reward_total)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardTotal> getMiningRewardTotal(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

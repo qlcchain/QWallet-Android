@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.otc.contract;
 
 import com.stratagile.qlink.entity.EntrustOrderList;
+import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
@@ -26,6 +27,8 @@ public interface MarketContract {
         void closeProgressDialog();
 
         void setRemoteTradePairs(ArrayList<TradePair.PairsListBean> pairsListBeans);
+
+        void setMiningAct(MiningAct miningAct);
     }
 
     interface MarketContractPresenter extends BasePresenter {

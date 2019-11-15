@@ -115,6 +115,7 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             KLog.i(url);
+            title.setText(view.getTitle());
             if (TextUtils.isEmpty(url)) {
                 return true;
             }

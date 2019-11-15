@@ -57,6 +57,10 @@ import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
 import com.stratagile.qlink.entity.finance.HistoryRecord;
 import com.stratagile.qlink.entity.finance.MyRanking;
+import com.stratagile.qlink.entity.mining.MiningIndex;
+import com.stratagile.qlink.entity.mining.MiningRank;
+import com.stratagile.qlink.entity.mining.MiningRewardList;
+import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
@@ -133,6 +137,11 @@ import static com.stratagile.qlink.data.api.API.url_inivte_amount;
 import static com.stratagile.qlink.data.api.API.url_key_account;
 import static com.stratagile.qlink.data.api.API.url_log_save;
 import static com.stratagile.qlink.data.api.API.url_main_address;
+import static com.stratagile.qlink.data.api.API.url_mining_claim;
+import static com.stratagile.qlink.data.api.API.url_mining_list;
+import static com.stratagile.qlink.data.api.API.url_mining_reward_list;
+import static com.stratagile.qlink.data.api.API.url_mining_reward_rank;
+import static com.stratagile.qlink.data.api.API.url_mining_reward_total;
 import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
 import static com.stratagile.qlink.data.api.API.url_pairs;
@@ -154,6 +163,7 @@ import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
 import static com.stratagile.qlink.data.api.API.url_trade_cancel;
+import static com.stratagile.qlink.data.api.API.url_trade_mining_index;
 import static com.stratagile.qlink.data.api.API.url_trade_order_info;
 import static com.stratagile.qlink.data.api.API.url_trade_order_list;
 import static com.stratagile.qlink.data.api.API.url_trade_sell_order;
@@ -639,6 +649,30 @@ public interface HttpApi {
     @POST(url_pay_token)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<PayToken> payToken(@Body RequestBody map);
+
+    @POST(url_mining_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningAct> miningList(@Body RequestBody map);
+
+    @POST(url_mining_reward_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningRewardList> getMiningRewardList(@Body RequestBody map);
+
+    @POST(url_mining_reward_rank)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningRank> getMiningRewardRankList(@Body RequestBody map);
+
+    @POST(url_trade_mining_index)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningIndex> getTradeMiningIndex(@Body RequestBody map);
+
+    @POST(url_mining_claim)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimQlc(@Body RequestBody map);
+
+    @POST(url_mining_reward_total)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardTotal> getMiningRewardTotal(@Body RequestBody map);
 
 
 

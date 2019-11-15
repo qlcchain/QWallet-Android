@@ -64,6 +64,8 @@ public class ConstantValue {
 
     public static String EXTRA_BUNDLE = "bundle";
 
+    public static String isShowMiningAct = "isShowMiningAct";
+
     /**
      * eth的bnb契约地址
      */

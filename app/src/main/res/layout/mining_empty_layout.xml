@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_loading"
+    android:layout_width="match_parent"
+    android:background="@color/f6f6f6"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="104dp"
+        android:src="@mipmap/background_list"
+        android:layout_height="87dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:textColor="#9496A1"
+        android:textSize="15sp"
+        android:text="@string/no_order_is_placed"/>
+
+    <TextView
+        android:id="@+id/tvNewOrder"
+        android:layout_width="115dp"
+        android:text="@string/new_order_mining"
+        android:background="@drawable/bg_mining_no_reward"
+        android:layout_marginTop="23dp"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:textColor="@color/color_1e1e24"
+        android:layout_height="28dp"/>
+</LinearLayout>

@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,8 +32,11 @@ import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
+import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.otc.TradePair;
+import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
+import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.my.Login1Fragment;
 import com.stratagile.qlink.ui.activity.my.RegiesterFragment;
@@ -43,7 +47,9 @@ import com.stratagile.qlink.ui.activity.otc.presenter.MarketPresenter;
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.view.SweetAlertDialog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -59,7 +65,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -227,6 +236,65 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                 });
     }
 
+    private boolean isGetMiningList = false;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getMiningList();
+        }
+    }
+
+    private void getMiningList() {
+        if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isShowMiningAct, false)) {
+            mPresenter.getMiningList();
+            if (!isGetMiningList) {
+                isGetMiningList = true;
+            }
+        }
+    }
+
+    private SweetAlertDialog sweetAlertDialog;
+    private void showMiningAct(MiningAct miningAct) {
+        View view  = getLayoutInflater().inflate(R.layout.alert_mining, null, false);
+        ImageView ivClose = view.findViewById(R.id.ivClose);
+        TextView qlc = view.findViewById(R.id.qlc);
+        qlc.setText(BigDecimal.valueOf(miningAct.getList().get(0).getTotalRewardAmount()).stripTrailingZeros().toPlainString());
+        TextView tvOpreate = view.findViewById(R.id.tvOpreate);
+        tvOpreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.dismissWithAnimation();
+                if (ConstantValue.currentUser == null) {
+                    viewPager.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(getActivity(), AccountActivity.class));
+                        }
+                    }, 200);
+                } else {
+                    viewPager.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(getActivity(), MiningInviteActivity.class));
+                        }
+                    }, 200);
+                }
+
+            }
+        });
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sweetAlertDialog.dismissWithAnimation();
+            }
+        });
+        sweetAlertDialog = new SweetAlertDialog(getActivity());
+        sweetAlertDialog.setView(view);
+        sweetAlertDialog.show();
+        SpUtil.putBoolean(AppConfig.getInstance(), ConstantValue.isShowMiningAct, true);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -303,6 +371,12 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         String saveData = new Gson().toJson(pairsListBeans);
         FileUtil.savaData("/Qwallet/tradePair.json", saveData);
         viewModel.pairsLiveData.postValue(pairsListBeans);
+    }
+
+    @Override
+    public void setMiningAct(MiningAct miningAct) {
+        KLog.i("显示。。。");
+        showMiningAct(miningAct);
     }
 
     @Override

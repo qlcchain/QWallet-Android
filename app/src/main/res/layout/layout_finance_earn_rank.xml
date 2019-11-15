@@ -7,43 +7,48 @@
     android:layout_marginBottom="@dimen/x20"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/x30"
-        android:text="@string/earnings_ranking"
-        android:textColor="@color/color_29282a"
-        android:textSize="18sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x30"
-        android:layout_toRightOf="@id/tv1"
-        android:textColor="@color/mainColor"
-        android:textSize="18sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv1"
-        android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/x23"
-        android:background="@color/mainColor"
-        android:drawableRight="@mipmap/enter_n"
-        android:gravity="center"
-        android:paddingLeft="@dimen/x20"
-        android:text="@string/Join_NOW"
-        android:textColor="@color/white"
-        android:textSize="10sp" />
-
     <ImageView
         android:layout_width="@dimen/x173"
         android:layout_height="@dimen/x150"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/x30"
-        android:src="@mipmap/finance_rank" />
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/bitmap_a" />
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/daily_qgas_trade_mining_pool_up_to"
+        android:textColor="@color/color_29282a"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tvQlc"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/tv1"
+        android:text="10000QLC!"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/mainColor"
+        android:textSize="17sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvQlc"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@drawable/main_color_bt_bg"
+        android:drawableRight="@mipmap/enter_n"
+        android:gravity="center"
+        android:paddingLeft="@dimen/x20"
+        android:text="@string/more_details"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
 </RelativeLayout>

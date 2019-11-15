@@ -66,12 +66,22 @@ public final class APIModule {
             public Response intercept(Chain chain) throws IOException {
                 Auth auth = new Auth();
                 String uuid = "";
-                uuid = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
-                auth.setAppBuild(VersionUtil.getAppVersionCode(AppConfig.instance) + "");
+                String serieaId = RxDeviceTool.getSerialNumberNew();
+//                String meid = RxDeviceTool.getAndroidId(AppConfig.getInstance());
+//                if ("".equals(serieaId)) {
+//                    if ("".equals(meid)) {
+//                        uuid = SpUtil.getString(AppConfig.getInstance(), ConstantValue.topUpP2pId, "");
+//                    } else {
+//                        uuid = meid;
+//                    }
+//                } else {
+//                    uuid = serieaId;
+//                }
                 auth.setAgent(WebSettings.getDefaultUserAgent(AppConfig.getInstance()));
-                auth.setUuid(uuid);
+                auth.setUuid(serieaId);
                 auth.setPlatform("Android");
                 auth.setAppVersion(VersionUtil.getAppVersionName(AppConfig.instance));
+                auth.setAppBuild(VersionUtil.getAppVersionCode(AppConfig.instance) + "");
                 KLog.i(auth.toString());
                 Request request = chain.request()
                         .newBuilder()
