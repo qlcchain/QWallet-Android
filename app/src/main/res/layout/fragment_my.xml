@@ -78,6 +78,7 @@
     </com.stratagile.qlink.view.MyItemView>
 
     <com.stratagile.qlink.view.MyItemView
+        android:visibility="gone"
         android:id="@+id/mining"
         android:layout_width="match_parent"
         app:showNextmy="true"

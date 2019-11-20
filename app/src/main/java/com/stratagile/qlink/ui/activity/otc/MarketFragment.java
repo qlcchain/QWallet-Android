@@ -31,6 +31,7 @@ import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.eventbus.GetPairs;
+import com.stratagile.qlink.entity.eventbus.ShowMiningAct;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.otc.TradePair;
@@ -181,6 +182,12 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                 ViewPagerHelper.bind(indicator, viewPager);
             }
         });
+        viewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.getMiningList();
+            }
+        }, 1000);
 
         return view;
     }
@@ -247,11 +254,9 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     }
 
     private void getMiningList() {
-        if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isShowMiningAct, false)) {
+        if (!isGetMiningList) {
             mPresenter.getMiningList();
-            if (!isGetMiningList) {
-                isGetMiningList = true;
-            }
+            isGetMiningList = true;
         }
     }
 
@@ -376,7 +381,14 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     @Override
     public void setMiningAct(MiningAct miningAct) {
         KLog.i("显示。。。");
-        showMiningAct(miningAct);
+        if (miningAct.getList().size() > 0) {
+            String currentMiningActId = SpUtil.getString(getActivity(), ConstantValue.currentMiningActId, "");
+            if (!miningAct.getList().get(0).getId().equals(currentMiningActId) && isVisibleToUser) {
+                SpUtil.putString(getActivity(), ConstantValue.currentMiningActId, miningAct.getList().get(0).getId());
+                showMiningAct(miningAct);
+            }
+            EventBus.getDefault().post(new ShowMiningAct(true, miningAct.getList().get(0).getTotalRewardAmount() + ""));
+        }
     }
 
     @Override

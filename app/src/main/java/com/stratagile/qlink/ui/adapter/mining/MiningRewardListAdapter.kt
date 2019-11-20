@@ -18,6 +18,6 @@ class MiningRewardListAdapter(arrayList : ArrayList<MiningRewardList.ListBean>) 
             helper.setVisible(R.id.viewLine, true)
         }
         helper.setText(R.id.tvTime, TimeUtil.timeConvert(item.rewardDate))
-        helper.setText(R.id.tvRewardEarn, "+" + item.rewardAmount + " QLC")
+        helper.setText(R.id.tvRewardEarn, "+" + item.rewardAmount.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC")
     }
 }

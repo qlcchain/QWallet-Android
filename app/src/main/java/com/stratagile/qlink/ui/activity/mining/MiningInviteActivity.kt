@@ -35,13 +35,14 @@ import javax.inject.Inject;
 
 class MiningInviteActivity : BaseActivity(), MiningInviteContract.View {
     override fun setRewardRank(miningRank: MiningIndex) {
-        val miningRankAdapter = MiningRankAdapter(miningRank.rewardRankings)
-        recyclerView.adapter = miningRankAdapter
         canClaimCount = miningRank.noAwardTotal.toBigDecimal().stripTrailingZeros().toPlainString()
         tvCanClaimQGAS.text = miningRank.noAwardTotal.toBigDecimal().stripTrailingZeros().toPlainString()
         tvClaimedQgas.text = getString(R.string.i_have_claimed_qlc, miningRank.awardedTotal.toBigDecimal().stripTrailingZeros().toPlainString())
         tvInviteCount.text = getString(R.string._3000_qgas_traded, miningRank.totalFinish.toBigDecimal().stripTrailingZeros().toPlainString())
         tvActQlcAmount.text = miningRank.totalRewardAmount.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC"
+
+        val miningRankAdapter = MiningRankAdapter(miningRank.rewardRankings)
+        recyclerView.adapter = miningRankAdapter
     }
 
     @Inject
@@ -64,7 +65,10 @@ class MiningInviteActivity : BaseActivity(), MiningInviteContract.View {
             intent.putExtra("title", "QLC")
             startActivity(intent)
         }
-
+        tvCanClaimQGAS.text = "0"
+        tvClaimedQgas.text = getString(R.string.i_have_claimed_qlc, "0")
+        tvInviteCount.text = getString(R.string._3000_qgas_traded, "0")
+        tvActQlcAmount.text = "0" + " QLC"
     }
 
     override fun initData() {

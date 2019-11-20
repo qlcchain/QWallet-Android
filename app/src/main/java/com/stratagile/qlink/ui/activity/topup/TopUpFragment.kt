@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseFragment
@@ -48,6 +49,7 @@ import com.stratagile.qlink.entity.KLine
 import com.stratagile.qlink.entity.TokenInfo
 import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.eventbus.Logout
+import com.stratagile.qlink.entity.eventbus.ShowMiningAct
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
@@ -123,6 +125,28 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         llReferralCode.visibility = View.GONE
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun setMiningAct(showMiningAct: ShowMiningAct) {
+        viewList.clear()
+        if (showMiningAct.isShow) {
+            viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
+            var miningView = layoutInflater.inflate(R.layout.layout_finance_earn_rank, null, false)
+            miningView.findViewById<TextView>(R.id.tvQlc).text = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+            viewList.add(miningView)
+        } else {
+            viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
+        }
+        val viewAdapter = ViewAdapter()
+        viewPager.adapter = viewAdapter
+        val scaleCircleNavigator = ScaleCircleNavigator(activity)
+        scaleCircleNavigator.setCircleCount(viewList.size)
+        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
+        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
+        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
+        indicator.navigator = scaleCircleNavigator
+        ViewPagerHelper.bind(indicator, viewPager)
+    }
+
     @Inject
     lateinit internal var mPresenter: TopUpPresenter
     private var oneFirendClaimQgas = 0f
@@ -141,11 +165,10 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
-        viewList.add(layoutInflater.inflate(R.layout.layout_finance_earn_rank, null, false))
         val viewAdapter = ViewAdapter()
         viewPager.adapter = viewAdapter
         val scaleCircleNavigator = ScaleCircleNavigator(activity)
-        scaleCircleNavigator.setCircleCount(2)
+        scaleCircleNavigator.setCircleCount(viewList.size)
         scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
         scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
         scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }

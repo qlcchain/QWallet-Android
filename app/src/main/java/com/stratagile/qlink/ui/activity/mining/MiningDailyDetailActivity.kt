@@ -86,7 +86,7 @@ class MiningDailyDetailActivity : BaseActivity(), MiningDailyDetailContract.View
         map["size"] = "10"
         map["tradeMiningId"] = ""
 //        map["status"] = "AWARDED"
-        map["status"] = "NO_AWARD"
+//        map["status"] = "NO_AWARD"
         mPresenter.getMiningRewardList(map, currentPage)
     }
 

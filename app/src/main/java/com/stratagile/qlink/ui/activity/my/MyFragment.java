@@ -24,6 +24,7 @@ import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.ShowBind;
+import com.stratagile.qlink.entity.eventbus.ShowMiningAct;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.InviteTotal;
@@ -149,6 +150,11 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showMiningAct(ShowMiningAct showMiningAct) {
+        mining.setVisibility(showMiningAct.isShow()? View.VISIBLE : View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
