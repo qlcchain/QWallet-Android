@@ -1647,4 +1647,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="trade_mining">Trade Mining</string>
     <string name="no_order_is_placed">No order is placed</string>
     <string name="new_order_mining">New Order</string>
+    <string name="refer_friends">Refer Friends</string>
 </resources>

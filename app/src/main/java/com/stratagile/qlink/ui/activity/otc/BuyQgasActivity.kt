@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
@@ -28,16 +29,30 @@ import com.stratagile.qlink.ui.activity.otc.contract.BuyQgasContract
 import com.stratagile.qlink.ui.activity.otc.module.BuyQgasModule
 import com.stratagile.qlink.ui.activity.otc.presenter.BuyQgasPresenter
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
-import com.stratagile.qlink.utils.AccountUtil
-import com.stratagile.qlink.utils.EosUtil
-import com.stratagile.qlink.utils.OtcUtils
+import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_buy_qgas.*
+import kotlinx.android.synthetic.main.activity_buy_qgas.etQgas
+import kotlinx.android.synthetic.main.activity_buy_qgas.etUsdt
+import kotlinx.android.synthetic.main.activity_buy_qgas.ivReceiveChain
+import kotlinx.android.synthetic.main.activity_buy_qgas.ivSendChain
 import kotlinx.android.synthetic.main.activity_buy_qgas.llSelectQlcWallet
+import kotlinx.android.synthetic.main.activity_buy_qgas.llSelectSendWallet
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvAmount
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvNext
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvPayToken
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvQgasVolume
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvReceiveWalletAddess
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvReceiveWalletName
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvSendWalletAddess
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvSendWalletName
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvTradeToken
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvUnitPrice
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvUnitPriceTip
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvVolumeAmount
+import kotlinx.android.synthetic.main.activity_buy_qgas.tvVolumeSetting
+import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import neoutils.Neoutils
 import qlc.mng.AccountMng
 import java.math.BigDecimal
@@ -173,6 +188,12 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
             if ("".equals(tvReceiveWalletAddess)) {
                 return@setOnClickListener
             }
+
+            if (etQgas.text.toString().toBigDecimal() >= 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+                KotlinConvertJavaUtils.needVerify(this)
+                return@setOnClickListener
+            }
+
             when (OtcUtils.parseChain(orderList.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
@@ -253,6 +274,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
 
             }
         })
+        etQgas.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
         etQgas.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (etQgas.hasFocus()) {
@@ -261,9 +283,9 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                     } else {
                         if (etQgas.text.toString().toBigDecimal() > maxQgas) {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
-                            etQgas.setText(maxQgas.stripTrailingZeros().toString())
+                            etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).stripTrailingZeros().toPlainString())
+                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {

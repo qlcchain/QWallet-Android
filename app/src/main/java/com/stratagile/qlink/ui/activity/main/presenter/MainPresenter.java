@@ -33,6 +33,7 @@ import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
+import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -368,12 +369,30 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-
+                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount());
             }
 
             @Override
             public void onComplete() {
+                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount());
+            }
+        });
+    }
 
+    private void sysbackUp(String txid, String type, String chain, String tokenName, String amount) {
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("type", type);
+        infoMap.put("chain", chain);
+        infoMap.put("tokenName", tokenName);
+        infoMap.put("amount", amount);
+        infoMap.put("platform", "Android");
+        infoMap.put("txid", txid);
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(new HttpObserver<BaseBack>() {
+            @Override
+            public void onNext(BaseBack baseBack) {
+                onComplete();
             }
         });
     }
@@ -393,12 +412,12 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-
+                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "");
             }
 
             @Override
             public void onComplete() {
-
+                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "");
             }
         });
     }
@@ -418,12 +437,12 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-
+                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "");
             }
 
             @Override
             public void onComplete() {
-
+                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "");
             }
         });
     }
@@ -442,12 +461,12 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-
+                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "");
             }
 
             @Override
             public void onComplete() {
-
+                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "");
             }
         });
     }

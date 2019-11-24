@@ -7,6 +7,7 @@ import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.NeoCallBack
@@ -17,9 +18,11 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.BuySellSellTodo
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.ui.activity.otc.contract.SellQgasContract
 import com.stratagile.qlink.ui.activity.otc.SellQgasActivity
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
 import com.stratagile.qlink.utils.ToastUtil
@@ -151,14 +154,37 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             mView.generateBuyQgasOrderSuccess()
         }, {
             mView.closeProgressDialog()
-            BuySellSellTodo.createBuySellSellTodo(map)
+            if (map["txid"] != null) {
+                BuySellSellTodo.createBuySellSellTodo(map)
+                sysbackUp(map["txid"]!!, "TRADE_ORDER", "", "", "")
+            }
         }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
-            BuySellSellTodo.createBuySellSellTodo(map)
+            if (map["txid"] != null) {
+                BuySellSellTodo.createBuySellSellTodo(map)
+                sysbackUp(map["txid"]!!, "TRADE_ORDER", "", "", "")
+            }
         })
         mCompositeDisposable.add(disposable)
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+            }
+        })
     }
 
     fun getTxidByHex(txid: String): String {
@@ -189,8 +215,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             mView.generateBuyQgasOrderSuccess()
         }, {
             BuySellSellTodo.createBuySellSellTodo(map)
+            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }, {
             BuySellSellTodo.createBuySellSellTodo(map)
+            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }))
     }
 

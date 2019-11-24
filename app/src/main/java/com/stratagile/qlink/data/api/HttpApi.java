@@ -152,6 +152,7 @@ import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_reward_claim_invite;
 import static com.stratagile.qlink.data.api.API.url_reward_claims;
 import static com.stratagile.qlink.data.api.API.url_reward_tatal;
+import static com.stratagile.qlink.data.api.API.url_sys_bbackup;
 import static com.stratagile.qlink.data.api.API.url_sys_dict;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_topup_cancel_order;
@@ -673,6 +674,10 @@ public interface HttpApi {
     @POST(url_mining_reward_total)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<RewardTotal> getMiningRewardTotal(@Body RequestBody map);
+
+    @POST(url_sys_bbackup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> sysBackUp(@Body RequestBody map);
 
 
 

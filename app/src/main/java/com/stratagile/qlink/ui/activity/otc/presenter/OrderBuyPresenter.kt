@@ -5,15 +5,19 @@ import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.EntrustTodo
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.newwinq.Product
 import com.stratagile.qlink.ui.activity.otc.contract.OrderBuyContract
 import com.stratagile.qlink.ui.activity.otc.OrderBuyFragment
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
 import com.stratagile.qlink.utils.ToastUtil
@@ -151,10 +155,29 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         }, {
             mView.closeProgressDialog()
             EntrustTodo.createEntrustTodo(map)
+            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
         }, {
             mView.closeProgressDialog()
             EntrustTodo.createEntrustTodo(map)
+            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
         }))
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+            }
+        })
     }
 
     fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, tokenInfo: EthWalletInfo.DataBean.TokensBean, map: MutableMap<String, String>) {
@@ -175,11 +198,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                     }
                 }, {
                     mView.closeProgressDialog()
-                    EntrustTodo.createEntrustTodo(map)
+//                    EntrustTodo.createEntrustTodo(map)
                 }, {
                     KLog.i("complete")
                     mView.closeProgressDialog()
-                    EntrustTodo.createEntrustTodo(map)
+//                    EntrustTodo.createEntrustTodo(map)
                 })
         mCompositeDisposable.add(disposable)
     }

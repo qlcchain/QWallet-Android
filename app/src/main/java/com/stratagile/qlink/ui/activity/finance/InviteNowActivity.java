@@ -77,14 +77,12 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
     @Override
     protected void initData() {
         setTitle(getString(R.string.invite_now));
-//        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
-//            //英文
-//            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_en));
-//            content = "https://fir.im/qlc1";
-//        } else {
-//            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
-//            content = "https://fir.im/qlc1";
-//        }
+        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+            //英文
+            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_en));
+        } else {
+            llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
+        }
 //        Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("ic_launcher", "mipmap", getPackageName()));
 //        ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(content, ivQRCode, logo);
 //        createEnglishQRCode.execute();

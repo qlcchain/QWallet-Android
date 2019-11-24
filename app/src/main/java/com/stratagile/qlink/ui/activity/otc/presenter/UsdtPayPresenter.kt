@@ -4,6 +4,7 @@ import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
@@ -133,9 +134,28 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
         }, {
             mView.closeProgressDialog()
             BuySellBuyTodo.createBuySellBuyTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
         }, {
             mView.closeProgressDialog()
             BuySellBuyTodo.createBuySellBuyTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
+        })
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+            }
         })
     }
 

@@ -43,6 +43,8 @@ public class ConstantValue {
     //测试 http://47.103.40.20:19735
     //正式 http://wrpc.qlcchain.org:9735
 
+    public static String miningQLC = "";
+
 
 
     public static String qlcNode = "http://wrpc.qlcchain.org:9735";

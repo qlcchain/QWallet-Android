@@ -148,88 +148,103 @@
                 app:itemTextColor="@drawable/bottom_navigation_selector"
                 app:menu="@menu/menu_bottom_navigation" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <View
-                    android:id="@+id/view_vpn"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <View
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <View
-                    android:id="@+id/view_all_wallet"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <View
-                    android:id="@+id/view_wallet"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-            </LinearLayout>
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <RelativeLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/viewDot"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/dot_red"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/drawerlayout_side_tv"
         android:layout_width="273dp"
-        android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
-            android:text="@string/trading_pairs"
-            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_height="wrap_content" />
+            android:layout_marginTop="30dp"
+            android:text="@string/trading_pairs" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewTradePair"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp">
 
         </android.support.v7.widget.RecyclerView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
+            android:layout_height="38dp"
             android:layout_marginBottom="15dp"
-            android:layout_height="38dp">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/tvReset"
                 android:layout_width="98dp"
+                android:layout_height="38dp"
+                android:layout_marginRight="6dp"
                 android:background="@drawable/maincolor_stroke_bg"
                 android:gravity="center"
-                android:textColor="@color/mainColor"
-                android:textSize="15sp"
-                android:layout_marginRight="6dp"
                 android:text="@string/reset"
-                android:layout_height="38dp" />
+                android:textColor="@color/mainColor"
+                android:textSize="15sp" />
+
             <TextView
                 android:id="@+id/tvConfirm"
                 android:layout_width="98dp"
+                android:layout_height="38dp"
+                android:layout_marginRight="6dp"
                 android:background="@drawable/word_cup_maincolor_bg"
                 android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:layout_marginRight="6dp"
                 android:text="@string/confirm"
-                android:layout_height="38dp" />
+                android:textColor="@color/white"
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 

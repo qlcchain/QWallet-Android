@@ -3,10 +3,12 @@ import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.QlcTokenbalance
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.BuySellBuyTodo
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.ui.activity.otc.contract.OtcQlcChainPayContract
 import com.stratagile.qlink.ui.activity.otc.OtcQlcChainPayActivity
 import com.stratagile.qlink.utils.AccountUtil
@@ -95,13 +97,32 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: OtcQ
                     }, {
                         mView.closeProgressDialog()
                         BuySellBuyTodo.createBuySellBuyTodo(map)
+                        sysbackUp(getTxidByHex(suceess), "TRADE_ORDER", "", "", "")
                     }, {
                         mView.closeProgressDialog()
                         BuySellBuyTodo.createBuySellBuyTodo(map)
+                        sysbackUp(getTxidByHex(suceess), "TRADE_ORDER", "", "", "")
                     })
                 }
             }
 
+        })
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+            }
         })
     }
 }

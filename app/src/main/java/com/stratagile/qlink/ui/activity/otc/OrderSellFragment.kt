@@ -49,7 +49,27 @@ import kotlinx.android.synthetic.main.activity_otc_neo_chain_pay.*
 import kotlinx.android.synthetic.main.activity_otc_neo_chain_pay.tvPayTokenBalance
 import kotlinx.android.synthetic.main.activity_otc_qlc_chain_pay.*
 import kotlinx.android.synthetic.main.activity_usdt_pay.*
+import kotlinx.android.synthetic.main.fragment_order_buy.*
 import kotlinx.android.synthetic.main.fragment_order_sell.*
+import kotlinx.android.synthetic.main.fragment_order_sell.buyingToken
+import kotlinx.android.synthetic.main.fragment_order_sell.buyingTokenPrice
+import kotlinx.android.synthetic.main.fragment_order_sell.etAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etMaxAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etMinAmount
+import kotlinx.android.synthetic.main.fragment_order_sell.etUnitPrice
+import kotlinx.android.synthetic.main.fragment_order_sell.ivReceiveChain
+import kotlinx.android.synthetic.main.fragment_order_sell.ivSendChain
+import kotlinx.android.synthetic.main.fragment_order_sell.llBuyToken
+import kotlinx.android.synthetic.main.fragment_order_sell.llSelectReceiveWallet
+import kotlinx.android.synthetic.main.fragment_order_sell.llSelectSendWallet
+import kotlinx.android.synthetic.main.fragment_order_sell.llSellToken
+import kotlinx.android.synthetic.main.fragment_order_sell.sellingToken
+import kotlinx.android.synthetic.main.fragment_order_sell.sellinngTokenQuantity
+import kotlinx.android.synthetic.main.fragment_order_sell.tvNext
+import kotlinx.android.synthetic.main.fragment_order_sell.tvReceiveWalletAddess
+import kotlinx.android.synthetic.main.fragment_order_sell.tvReceiveWalletName
+import kotlinx.android.synthetic.main.fragment_order_sell.tvSendWalletAddess
+import kotlinx.android.synthetic.main.fragment_order_sell.tvSendWalletName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import neoutils.Neoutils
@@ -234,7 +254,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast(getString(R.string.not_enough) + " ${selectedPair!!.tradeToken}")
                 return@setOnClickListener
             }
-            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() >= 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(activity!!)
                 return@setOnClickListener
             }
@@ -255,7 +275,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             activity!!.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
 //            showSpinnerPopWindow()
         }
-
+        etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
         etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(3))
         etUnitPrice.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

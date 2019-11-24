@@ -48,7 +48,17 @@ import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
+import kotlinx.android.synthetic.main.activity_buy_qgas.*
 import kotlinx.android.synthetic.main.fragment_order_buy.*
+import kotlinx.android.synthetic.main.fragment_order_buy.ivReceiveChain
+import kotlinx.android.synthetic.main.fragment_order_buy.ivSendChain
+import kotlinx.android.synthetic.main.fragment_order_buy.llSelectSendWallet
+import kotlinx.android.synthetic.main.fragment_order_buy.tvCreateWallet
+import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
+import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletAddess
+import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletName
+import kotlinx.android.synthetic.main.fragment_order_buy.tvSendWalletAddess
+import kotlinx.android.synthetic.main.fragment_order_buy.tvSendWalletName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import neoutils.Neoutils
@@ -185,7 +195,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            payTokenAmount = etAmount.text.toString().trim().toBigDecimal().multiply(etUnitPrice.text.toString().trim().toBigDecimal()).stripTrailingZeros().toPlainString().toDouble()
+            payTokenAmount = etAmount.text.toString().trim().toBigDecimal().multiply(etUnitPrice.text.toString().trim().toBigDecimal()).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString().toDouble()
             when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
@@ -246,7 +256,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() >= 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(activity!!)
                 return@setOnClickListener
             }
@@ -254,6 +264,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             showConfirmSellDialog()
 
         }
+        etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
         etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(3))
         etUnitPrice.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

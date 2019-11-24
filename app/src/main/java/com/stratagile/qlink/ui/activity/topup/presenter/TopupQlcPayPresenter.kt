@@ -1,12 +1,15 @@
 package com.stratagile.qlink.ui.activity.topup.presenter
 import android.support.annotation.NonNull
 import com.socks.library.KLog
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.TopupTodoList
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.topup.contract.TopupQlcPayContract
 import com.stratagile.qlink.ui.activity.topup.TopupQlcPayActivity
+import com.stratagile.qlink.utils.AccountUtil
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -59,11 +62,32 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
         }, {
             mView.createTopupOrderError()
             TopupTodoList.createTodoList(map)
+            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
         }, {
             mView.createTopupOrderError()
             TopupTodoList.createTodoList(map)
+            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
         }))
     }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+            }
+        })
+    }
+
+
 
     fun topupOrderConfirm(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.topupOrderConfirm(map).subscribe({

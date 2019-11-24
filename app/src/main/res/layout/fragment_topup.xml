@@ -226,26 +226,25 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_height="@dimen/x175"
+                    android:layout_height="87dp"
                     android:layout_marginBottom="10dp"
                     android:background="@color/white">
                     <RelativeLayout
                         android:id="@+id/rlInvite"
                         android:layout_width="match_parent"
-                        android:layout_marginBottom="@dimen/x20"
                         app:layout_scrollFlags="scroll"
-                        android:layout_height="@dimen/x175">
+                        android:layout_height="87dp">
                         <android.support.v4.view.ViewPager
                             android:id="@+id/viewPager"
                             android:layout_width="match_parent"
                             android:background="@color/white"
-                            android:layout_height="@dimen/x175">
+                            android:layout_height="87dp">
                         </android.support.v4.view.ViewPager>
                         <net.lucode.hackware.magicindicator.MagicIndicator
                             android:id="@+id/indicator"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="@dimen/x20"
+                            android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/x20" />
                     </RelativeLayout>

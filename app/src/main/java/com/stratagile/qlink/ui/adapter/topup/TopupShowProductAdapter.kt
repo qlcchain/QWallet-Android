@@ -29,13 +29,17 @@ class TopupShowProductAdapter(array: ArrayList<TopupProduct.ProductListBean>) : 
         }
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {
             //英文
-            helper.setText(R.id.tvOperator, item.countryEn + item.province + item.ispEn)
-            helper.setText(R.id.tvAreaOperator, item.nameEn)
+            helper.setText(R.id.tvOperator, item.country + item.province + item.isp)
+            helper.setText(R.id.tvOperatorEn, item.countryEn + item.provinceEn+ item.ispEn)
+            helper.setText(R.id.tvAreaOperator, item.name)
+            helper.setText(R.id.tvAreaOperatorEn, item.nameEn)
             helper.setText(R.id.tvDiscount, (100 - item.discount * 100).toBigDecimal().stripTrailingZeros().toPlainString() + "%")
         } else {
             helper.setText(R.id.tvOperator, item.country + item.province + item.isp)
-            helper.setText(R.id.tvDiscount, (item.discount * 10).toString())
+            helper.setText(R.id.tvOperatorEn, item.countryEn + item.provinceEn+ item.ispEn)
             helper.setText(R.id.tvAreaOperator, item.name)
+            helper.setText(R.id.tvAreaOperatorEn, item.nameEn)
+            helper.setText(R.id.tvDiscount, (item.discount * 10).toString())
         }
         if (item.stock == 0) {
             helper.setGone(R.id.noProduct, true)

@@ -86,6 +86,7 @@ import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
 import com.stratagile.qlink.utils.DigestUtils;
+import com.stratagile.qlink.utils.JUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -1138,6 +1139,14 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<BaseBack> sysBackUp(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.sysBackUp(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.sysBackUp(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -1337,14 +1346,14 @@ public class HttpAPIWrapper {
         //SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)
         if (false) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(1000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random(1000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

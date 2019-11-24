@@ -21,7 +21,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -65,11 +64,11 @@ import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowBind;
+import com.stratagile.qlink.entity.eventbus.ShowDot;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.Dict;
-import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.guideview.Component;
 import com.stratagile.qlink.guideview.Guide;
 import com.stratagile.qlink.guideview.GuideBuilder;
@@ -85,7 +84,6 @@ import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
-import com.stratagile.qlink.ui.activity.my.Login1Fragment;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
@@ -118,7 +116,6 @@ import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.NoScrollViewPager;
 import com.stratagile.qlink.view.SweetAlertDialog;
-import com.vondear.rxtools.RxTool;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -132,7 +129,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.zip.Inflater;
 
 import javax.inject.Inject;
 
@@ -166,14 +162,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     ImageView ivAvater;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    //    @BindView(R.id.tv_free)
-//    TextView tvFree;
     @BindView(R.id.iv_wallet)
     ImageView ivWallet;
-    @BindView(R.id.view_vpn)
-    View viewVpn;
-    @BindView(R.id.view_wallet)
-    View viewWallet;
     @BindView(R.id.rl1)
     RelativeLayout rl1;
     @BindView(R.id.rl2)
@@ -192,8 +182,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     SegmentedGroup segmentControlView;
     @BindView(R.id.xxx)
     View xxx;
-    @BindView(R.id.view_all_wallet)
-    View viewAllWallet;
     @BindView(R.id.drawerLayout)
     DrawerLayout drawerLayout;
     @BindView(R.id.recyclerViewTradePair)
@@ -204,6 +192,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     TextView tvConfirm;
     @BindView(R.id.drawerlayout_side_tv)
     LinearLayout drawerlayoutSideTv;
+
+    @BindView(R.id.viewDot)
+    View viewDot;
     private FirebaseAnalytics mFirebaseAnalytics;
     private MainViewModel viewModel;
 
@@ -241,6 +232,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         mainActivity = this;
         getP2pId();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setDot(ShowDot showDot) {
+        viewDot.setVisibility(showDot.isShow()? View.VISIBLE : View.GONE);
+    }
+
+
 
     @Override
     protected void initView() {
@@ -343,7 +341,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     public void showCanClaimPop(String qlcCount) {
-        View view  = getLayoutInflater().inflate(R.layout.alert_can_claim, null, false);
+        View view = getLayoutInflater().inflate(R.layout.alert_can_claim, null, false);
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView qlc = view.findViewById(R.id.qlc);
         qlc.setText(qlcCount);
@@ -440,7 +438,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         ConstantValue.jpushOpreateCount++;
         JPushInterface.setTags(this, ConstantValue.jpushOpreateCount, tags);
-        ToastUtil.displayShortToast(getString(R.string.bind_success));
+//        showTestDialog();
     }
 
     @Override
@@ -457,6 +455,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private String freeQlcStake = "1500";
+
     @Override
     public void reCreateToopupSuccess() {
         handlerTopupTodoList();
@@ -657,7 +656,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
         bottomNavigation.postDelayed(() -> {
             Bundle bundle = getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE);
-            if(bundle != null){
+            if (bundle != null) {
                 String debit = bundle.getString("skip");
                 if (debit != null && !"".equals(debit)) {
                     switch (debit) {
@@ -747,6 +746,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     /**
      * 重新生成买卖卖单
+     *
      * @param buySellSellTodo
      */
     private void reCreateBuySellSellOrder(BuySellSellTodo buySellSellTodo) {
@@ -754,20 +754,24 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
             return;
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("account", buySellSellTodo.getAccount());
-        map.put("token", buySellSellTodo.getToken());
-        map.put("entrustOrderId", buySellSellTodo.getEntrustOrderId());
-        map.put("usdtAmount", buySellSellTodo.getUsdtAmount());
-        map.put("usdtToAddress", buySellSellTodo.getUsdtToAddress());
-        map.put("qgasAmount", buySellSellTodo.getQgasAmount());
-        map.put("fromAddress", buySellSellTodo.getFromAddress());
-        map.put("txid", buySellSellTodo.getTxid());
-        mPresenter.reCreateBuySellSellOrder(map, buySellSellTodo);
+
+        if (ConstantValue.currentUser != null && ConstantValue.currentUser.getAccount().equals(buySellSellTodo.getAccount())) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("account", buySellSellTodo.getAccount());
+            map.put("token", AccountUtil.getUserToken());
+            map.put("entrustOrderId", buySellSellTodo.getEntrustOrderId());
+            map.put("usdtAmount", buySellSellTodo.getUsdtAmount());
+            map.put("usdtToAddress", buySellSellTodo.getUsdtToAddress());
+            map.put("qgasAmount", buySellSellTodo.getQgasAmount());
+            map.put("fromAddress", buySellSellTodo.getFromAddress());
+            map.put("txid", buySellSellTodo.getTxid());
+            mPresenter.reCreateBuySellSellOrder(map, buySellSellTodo);
+        }
     }
 
     /**
      * 重新生成买卖买单
+     *
      * @param buySellBuyTodo
      */
     private void reCreateBuySellBuyOrder(BuySellBuyTodo buySellBuyTodo) {
@@ -775,12 +779,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
             return;
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("account", buySellBuyTodo.getAccount());
-        map.put("token", buySellBuyTodo.getToken());
-        map.put("tradeOrderId", buySellBuyTodo.getTradeOrderId());
-        map.put("txid", buySellBuyTodo.getTxid());
-        mPresenter.reCreateBuySellBuyOrder(map, buySellBuyTodo);
+        if (ConstantValue.currentUser != null && ConstantValue.currentUser.getAccount().equals(buySellBuyTodo.getAccount())) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("account", buySellBuyTodo.getAccount());
+            map.put("token", AccountUtil.getUserToken());
+            map.put("tradeOrderId", buySellBuyTodo.getTradeOrderId());
+            map.put("txid", buySellBuyTodo.getTxid());
+            mPresenter.reCreateBuySellBuyOrder(map, buySellBuyTodo);
+        }
     }
 
     private void reCreateEntrustOrder(EntrustTodo entrustTodo) {
@@ -788,23 +794,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
             return;
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("account", entrustTodo.getAccount());
-        map.put("token", entrustTodo.getToken());
-        if (ConstantValue.currentUser != null) {
+        if (ConstantValue.currentUser != null && ConstantValue.currentUser.getAccount().equals(entrustTodo.getAccount())) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("account", entrustTodo.getAccount());
             map.put("token", AccountUtil.getUserToken());
+            map.put("pairsId", entrustTodo.getPairsId());
+            map.put("type", entrustTodo.getType());
+            map.put("unitPrice", entrustTodo.getUnitPrice());
+            map.put("totalAmount", entrustTodo.getTotalAmount());
+            map.put("minAmount", entrustTodo.getMinAmount());
+            map.put("maxAmount", entrustTodo.getMaxAmount());
+            map.put("qgasAddress", entrustTodo.getQgasAddress());
+            map.put("usdtAddress", entrustTodo.getUsdtAddress());
+            map.put("fromAddress", entrustTodo.getFromAddress());
+            map.put("txid", entrustTodo.getTxid());
+            mPresenter.reCreateEntrustOrder(map, entrustTodo);
         }
-        map.put("pairsId", entrustTodo.getPairsId());
-        map.put("type", entrustTodo.getType());
-        map.put("unitPrice", entrustTodo.getUnitPrice());
-        map.put("totalAmount", entrustTodo.getTotalAmount());
-        map.put("minAmount", entrustTodo.getMinAmount());
-        map.put("maxAmount", entrustTodo.getMaxAmount());
-        map.put("qgasAddress", entrustTodo.getQgasAddress());
-        map.put("usdtAddress", entrustTodo.getUsdtAddress());
-        map.put("fromAddress", entrustTodo.getFromAddress());
-        map.put("txid", entrustTodo.getTxid());
-        mPresenter.reCreateEntrustOrder(map, entrustTodo);
     }
 
     private void reCreateTopupOrder(TopupTodoList topupTodoList) {
@@ -818,7 +823,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         infoMap.put("txid", topupTodoList.getTxid());
         infoMap.put("payTokenId", topupTodoList.getPayTokenId());
         mPresenter.reCreateTopupOrder(infoMap, topupTodoList);
+
+//        sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount());
     }
+
+//    private void sysbackUp(String txid, String type, String chain, String tokenName, String amount) {
+//        Map<String, Object> infoMap = new HashMap<>();
+//        infoMap.put("account", ConstantValue.currentUser.getAccount());
+//        infoMap.put("token", AccountUtil.getUserToken());
+//        infoMap.put("type", type);
+//        infoMap.put("chain", chain);
+//        infoMap.put("tokenName", tokenName);
+//        infoMap.put("amount", amount);
+//        infoMap.put("platform", "Android");
+//        infoMap.put("txid", txid);
+//
+//    }
 
     private void showp2pIdChangeDialog(String currentP2pId, String lastP2pId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1010,7 +1030,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
 
-
     /**
      * 判断是否支持指纹解锁
      *
@@ -1164,7 +1183,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     @SuppressLint("RestrictedApi")
-    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.view_wallet, R.id.view_vpn, R.id.ivQRCode, R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
+    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.ivQRCode, R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_avater:
@@ -1222,12 +1241,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     startActivity(new Intent(this, LogActivity.class));
                 }
                 break;
-            case R.id.view_wallet:
-                bottomNavigation.setSelectedItemId(R.id.item_settings);
-                break;
-            case R.id.view_vpn:
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
-                break;
             case R.id.ivQRCode:
                 startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
                 break;
@@ -1255,7 +1268,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         String saveData = new Gson().toJson(pairsListBeans);
                         FileUtil.savaData("/Qwallet/tradePair.json", saveData);
                     }
-                 } else {
+                } else {
                     ToastUtil.displayShortToast(getString(R.string.choose_at_least_one_trading_pair));
                 }
                 break;
@@ -1294,23 +1307,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
-//    public class DisconnectVpnSuccessBroadReceiver extends BroadcastReceiver {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            KLog.i("断开vpn成功， 开始更改ui");
-//            if (intent.getAction().equals(BroadCastAction.disconnectVpnSuccess)) {
-//                List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-//                for (VpnEntity vpnEntity : vpnEntityList) {
-//                    if (vpnEntity.getIsConnected()) {
-//                        vpnEntity.setIsConnected(false);
-//                        AppConfig.getInstance().getDaoSession().getVpnEntityDao().update(vpnEntity);
-//                    }
-//                }
-//                EventBus.getDefault().post(new DisconnectVpn());
-//            }
-//        }
-//    }
-
     @Override
     public void onCreatWalletSuccess(ArrayList<Wallet> importWalletResult, int flag) {
         //AppConfig.getInstance().getDaoSession().getWalletDao().insertInTx(importWalletResult);
@@ -1340,141 +1336,4 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
 
     }
-
-    private void showGuideViewRegisteVpn() {
-        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowRegisteVpnGuide, false)) {
-            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowRegisteVpnGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(ivWallet)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setHighTargetPadding((int) getResources().getDimension(R.dimen.x13))
-                    .setHighTargetGraphStyle(Component.CIRCLE)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(false);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-                }
-
-                @Override
-                public void onDismiss() {
-                    EventBus.getDefault().post(new ShowGuide(2));
-                }
-            });
-
-            builder.addComponent(new RegistVpnComponent());
-            Guide guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(this);
-        } else {
-            EventBus.getDefault().post(new ShowGuide(2));
-        }
-    }
-
-    private void showGuideViewEnterSetting() {
-//        org.consenlabs.tokencore.wallet.Wallet wallet = new org.consenlabs.tokencore.wallet.Wallet();
-        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowEnterSettingGuide, false)) {
-            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterSettingGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(ivWallet)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setHighTargetPadding((int) getResources().getDimension(R.dimen.x20))
-                    .setHighTargetGraphStyle(Component.CIRCLE)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(false);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-                }
-
-                @Override
-                public void onDismiss() {
-
-                }
-            });
-
-            builder.addComponent(new EnterSettingComponent());
-            Guide guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(this);
-        }
-    }
-
-    private void showGuideViewEnterWallet() {
-        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowEnterWalletGuide, false)) {
-            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterWalletGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(viewWallet)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setHighTargetPadding(-15)
-                    .setHighTargetGraphStyle(Component.CIRCLE)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(false);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-
-                }
-
-                @Override
-                public void onDismiss() {
-
-                }
-            });
-
-            builder.addComponent(new EnterWalletComponent());
-            Guide guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(this);
-        }
-    }
-
-    private void showGuideViewVpnFragment() {
-        if (!GuideSpUtil.getBoolean(this, GuideConstantValue.isShowEnterVpnGuide, false)) {
-            GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterVpnGuide, true);
-            GuideBuilder builder = new GuideBuilder();
-            builder.setTargetView(viewVpn)
-                    .setAlpha(150)
-                    .setHighTargetCorner(20)
-                    .setHighTargetPadding(-17)
-                    .setHighTargetGraphStyle(Component.CIRCLE)
-                    .setOverlayTarget(false)
-                    .setOutsideTouchable(false);
-            builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-                @Override
-                public void onShown() {
-
-                }
-
-                @Override
-                public void onDismiss() {
-                    EventBus.getDefault().post(new ShowGuide(0));
-                }
-            });
-
-            builder.addComponent(new EnterVpnComponent());
-            Guide guide = builder.createGuide();
-            guide.setShouldCheckLocInWindow(false);
-            guide.show(this);
-        }
-    }
-
-    public void clearGuide() {
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterSettingGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowRegisteVpnGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowVpnListGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowSettingGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowWalletDetailGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowNewWalletGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowChooseCountryGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowConnectVpnGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterWalletGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowEnterVpnGuide, false);
-        GuideSpUtil.putBoolean(this, GuideConstantValue.isShowUnLockGuide, false);
-    }
-
-
 }

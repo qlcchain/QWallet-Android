@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.annotation.Nullable
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
@@ -40,6 +41,7 @@ import com.github.mikephil.charting.formatter.IFillFormatter
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.pawegio.kandroid.alert
+import com.pawegio.kandroid.runOnUiThread
 import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.chart.MyAxisValueFormatter
@@ -59,24 +61,15 @@ import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter
+import com.stratagile.qlink.ui.adapter.topup.ImagesPagerAdapter
 import com.stratagile.qlink.ui.adapter.topup.TopupShowProductAdapter
-import com.stratagile.qlink.utils.AccountUtil
-import com.stratagile.qlink.utils.TimeUtil
-import com.stratagile.qlink.utils.ToastUtil
-import com.stratagile.qlink.utils.UIUtils
+import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.view.ScaleCircleNavigator
 import com.vondear.rxtools.RxDeviceTool
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_person.*
 import kotlinx.android.synthetic.main.fragment_topup.*
-import net.lucode.hackware.magicindicator.ViewPagerHelper
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -93,7 +86,7 @@ import java.util.concurrent.TimeUnit
 
 class TopUpFragment : BaseFragment(), TopUpContract.View {
     override fun setQlcPrice(tokenPrice: TokenPrice) {
-        if("USD".equals(ConstantValue.currencyBean.name)) {
+        if ("USD".equals(ConstantValue.currencyBean.name)) {
             tvQlcPrice.text = "$ " + tokenPrice.data[0].price
         } else {
             tvQlcPrice.text = "¥ " + tokenPrice.data[0].price
@@ -125,18 +118,38 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         llReferralCode.visibility = View.GONE
     }
 
+    private var isStop: Boolean = true
+
+    /**
+     * 第五步: 设置自动播放,每隔PAGER_TIOME秒换一张图片
+     */
+    private fun autoPlayView() {
+        //自动播放图片
+        Thread(Runnable {
+            while (!isStop) {
+                runOnUiThread { viewPager.currentItem = viewPager.currentItem + 1 }
+                SystemClock.sleep(5000)
+            }
+        }).start()
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun setMiningAct(showMiningAct: ShowMiningAct) {
+        if (!isStop) {
+            return
+        }
+        isStop = false
         viewList.clear()
         if (showMiningAct.isShow) {
-            viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
-            var miningView = layoutInflater.inflate(R.layout.layout_finance_earn_rank, null, false)
-            miningView.findViewById<TextView>(R.id.tvQlc).text = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
-            viewList.add(miningView)
+            viewList.add(R.layout.layout_finance_share)
+            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+//            var miningView = layoutInflater.inflate(R.layout.layout_finance_earn_rank, null, false)
+//            miningView.findViewById<TextView>(R.id.tvQlc).text = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+            viewList.add(R.layout.layout_finance_earn_rank)
         } else {
-            viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
+            viewList.add(R.layout.layout_finance_share)
         }
-        val viewAdapter = ViewAdapter()
+        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
         viewPager.adapter = viewAdapter
         val scaleCircleNavigator = ScaleCircleNavigator(activity)
         scaleCircleNavigator.setCircleCount(viewList.size)
@@ -144,14 +157,19 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
         scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
         indicator.navigator = scaleCircleNavigator
-        ViewPagerHelper.bind(indicator, viewPager)
+        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
+
+        if (viewList.size > 1) {
+//            setFirstLocation()
+            autoPlayView()
+        }
     }
 
     @Inject
     lateinit internal var mPresenter: TopUpPresenter
     private var oneFirendClaimQgas = 0f
     private var viewModel: MainViewModel? = null
-    internal var viewList: MutableList<View> = ArrayList()
+    internal var viewList: MutableList<Int> = ArrayList()
     lateinit var topupShowProductAdapter: TopupShowProductAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_topup, null)
@@ -162,10 +180,20 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         return view
     }
 
+    /**
+     * 第四步：设置刚打开app时显示的图片和文字
+     */
+    private fun setFirstLocation() {
+        val m = Integer.MAX_VALUE / 2 % viewList.size
+        val currentPosition = Integer.MAX_VALUE / 2 - m
+        viewPager.currentItem = currentPosition
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewList.add(layoutInflater.inflate(R.layout.layout_finance_share, null, false))
-        val viewAdapter = ViewAdapter()
+        viewList.add(R.layout.layout_finance_share)
+        var viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
         viewPager.adapter = viewAdapter
         val scaleCircleNavigator = ScaleCircleNavigator(activity)
         scaleCircleNavigator.setCircleCount(viewList.size)
@@ -173,7 +201,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
         scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
         indicator.navigator = scaleCircleNavigator
-        ViewPagerHelper.bind(indicator, viewPager)
+        ViewPagerHelper.bind(indicator, viewPager!!, viewList.size)
 
 
         viewModel?.currentUserAccount?.observe(this, Observer {
@@ -208,7 +236,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         recyclerViewInvite.isNestedScrollingEnabled = false
         getOneFriendReward()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
-//            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
+            //            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
 //                activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
 //                    negativeButton(getString(R.string.cancel)) { dismiss() }
 //                    positiveButton(getString(R.string.create)) { startActivity(Intent(context, SelectWalletTypeActivity::class.java)) }
@@ -307,8 +335,8 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         }
     }
 
-    fun setKLineSelectUi(postion : Int) {
-        when(postion) {
+    fun setKLineSelectUi(postion: Int) {
+        when (postion) {
             0 -> {
                 tvHour.setTextColor(resources.getColor(R.color.mainColor))
                 tvDay.setTextColor(resources.getColor(R.color.color_29282a))
@@ -336,7 +364,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         }
     }
 
-    fun getQlcKline(type : String) {
+    fun getQlcKline(type: String) {
         val infoMap1 = HashMap<String, Any>()
         infoMap1.put("symbol", "QLC")
         infoMap1.put("interval", type)
@@ -401,36 +429,37 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     }
 
     override fun onDestroy() {
+        isStop = true
         EventBus.getDefault().unregister(this)
         super.onDestroy()
     }
 
-    internal inner class ViewAdapter : PagerAdapter() {
-        override fun getCount(): Int {
-            return viewList.size
-        }
-
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view === `object`
-        }
-
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            container.removeView(viewList[position])
-        }
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            container.addView(viewList[position])
-            viewList[position].setOnClickListener(View.OnClickListener {
-                if (position == 0) {
-                    startActivity(Intent(activity, MyStakeActivity::class.java))
-                }
-                if (position == 1) {
-                    startActivity(Intent(activity, MiningInviteActivity::class.java))
-                }
-            })
-            return viewList[position]
-        }
-    }
+//    internal inner class ViewAdapter : PagerAdapter() {
+//        override fun getCount(): Int {
+//            return viewList.size
+//        }
+//
+//        override fun isViewFromObject(view: View, `object`: Any): Boolean {
+//            return view === `object`
+//        }
+//
+//        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+//            container.removeView(viewList[position])
+//        }
+//
+//        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+//            container.addView(viewList[position])
+//            viewList[position].setOnClickListener(View.OnClickListener {
+//                if (position == 0) {
+//                    startActivity(Intent(activity, MyStakeActivity::class.java))
+//                }
+//                if (position == 1) {
+//                    startActivity(Intent(activity, MiningInviteActivity::class.java))
+//                }
+//            })
+//            return viewList[position]
+//        }
+//    }
 
 
     override fun setupFragmentComponent() {

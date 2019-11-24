@@ -24,6 +24,7 @@ import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.ShowBind;
+import com.stratagile.qlink.entity.eventbus.ShowDot;
 import com.stratagile.qlink.entity.eventbus.ShowMiningAct;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
@@ -152,6 +153,14 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         }
     }
 
+    private void controllerDot() {
+        if (mining.getDotViewVisible() == View.VISIBLE || claimQlc.getDotViewVisible() == View.VISIBLE || shareFriend.getDotViewVisible() == View.VISIBLE) {
+            EventBus.getDefault().post(new ShowDot(true));
+        } else {
+            EventBus.getDefault().post(new ShowDot(false));
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showMiningAct(ShowMiningAct showMiningAct) {
         mining.setVisibility(showMiningAct.isShow()? View.VISIBLE : View.GONE);
@@ -217,6 +226,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                         viewModel.isBind.postValue(true);
                         claimQlc.setDotViewVisible(View.INVISIBLE);
                         startActivity(new Intent(getActivity(), MyClaimActivity.class));
+                        controllerDot();
                     }
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
@@ -362,6 +372,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         } else {
             claimQlc.setDotViewVisible(View.INVISIBLE);
         }
+        controllerDot();
     }
 
     @Override
@@ -372,6 +383,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
             shareFriend.setDotViewVisible(View.INVISIBLE);
         }
         getMiningRewardTotal();
+        controllerDot();
     }
 
     @Override
@@ -396,6 +408,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         } else {
             mining.setDotViewVisible(View.INVISIBLE);
         }
+        controllerDot();
     }
 
     @Override
@@ -432,6 +445,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
             case R.id.shareFriend:
                 if (isLogin) {
                     shareFriend.setDotViewVisible(View.INVISIBLE);
+                    controllerDot();
                     startActivity(new Intent(getActivity(), InviteActivity.class));
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
@@ -450,6 +464,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 break;
             case R.id.mining:
                 mining.setDotViewVisible(View.INVISIBLE);
+                controllerDot();
                 startActivityForResult(new Intent(getActivity(), MiningInviteActivity.class), 0);
                 break;
             default:

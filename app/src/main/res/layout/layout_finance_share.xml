@@ -3,35 +3,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/x175">
+    android:layout_height="87dp">
 
     <TextView
         android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/x30"
+        android:layout_marginTop="12dp"
         android:text="@string/make_more"
         android:textColor="@color/color_29282a"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x6"
-        android:layout_marginTop="@dimen/x30"
+        android:layout_marginTop="12dp"
         android:layout_toRightOf="@id/tv1"
         android:text="QGAS"
         android:textColor="@color/mainColor"
         android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/tvReferFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv1"
         android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/x23"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/main_color_bt_bg"
+        android:drawableRight="@mipmap/enter_n"
+        android:gravity="center"
+        android:paddingLeft="@dimen/x20"
+        android:text="@string/refer_friends"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/tvStakeQlc"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/tvReferFriend"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv1"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="8dp"
         android:background="@drawable/main_color_bt_bg"
         android:drawableRight="@mipmap/enter_n"
         android:gravity="center"

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
@@ -265,6 +266,12 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             if ("".equals(tvSendWalletAddess)) {
                 return@setOnClickListener
             }
+
+            if (etQgas.text.toString().toBigDecimal() >= 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+                KotlinConvertJavaUtils.needVerify(this)
+                return@setOnClickListener
+            }
+
             when(OtcUtils.parseChain(entrustOrderInfo.order.payTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
@@ -369,6 +376,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
 
             }
         })
+        etQgas.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
         etQgas.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (etQgas.hasFocus()) {
@@ -377,9 +385,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     } else {
                         if (etQgas.text.toString().toBigDecimal() > maxQgas) {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
-                            etQgas.setText(maxQgas.stripTrailingZeros().toString())
+                            etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).stripTrailingZeros().toPlainString())
+                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {

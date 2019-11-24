@@ -102,6 +102,7 @@ import static com.stratagile.qlink.data.api.MainAPI.url_mining_list;
 import static com.stratagile.qlink.data.api.MainAPI.url_mining_reward_list;
 import static com.stratagile.qlink.data.api.MainAPI.url_mining_reward_rank;
 import static com.stratagile.qlink.data.api.MainAPI.url_mining_reward_total;
+import static com.stratagile.qlink.data.api.MainAPI.url_sys_bbackup;
 import static com.stratagile.qlink.data.api.MainAPI.url_trade_mining_index;
 
 
@@ -592,6 +593,10 @@ public interface MainHttpApi {
     @POST(url_mining_reward_total)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<RewardTotal> getMiningRewardTotal(@Body RequestBody map);
+
+    @POST(url_sys_bbackup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> sysBackUp(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

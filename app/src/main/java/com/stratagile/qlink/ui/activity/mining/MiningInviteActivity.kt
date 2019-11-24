@@ -19,6 +19,7 @@ import com.stratagile.qlink.ui.activity.mining.presenter.MiningInvitePresenter
 import com.stratagile.qlink.ui.activity.reward.ClaimRewardActivity
 import com.stratagile.qlink.ui.adapter.mining.MiningRankAdapter
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.FireBaseUtils
 import kotlinx.android.synthetic.main.activity_mining_invite.*
 import kotlinx.android.synthetic.main.activity_mining_invite.recyclerView
 import org.greenrobot.eventbus.EventBus
@@ -73,15 +74,18 @@ class MiningInviteActivity : BaseActivity(), MiningInviteContract.View {
 
     override fun initData() {
         title.text = getString(R.string.sheet_minig)
+        FireBaseUtils.logEvent(this, FireBaseUtils.eventTradesMining)
         tvRewardDetail.setOnClickListener {
             startActivityForResult(Intent(this, MiningDailyDetailActivity::class.java), 2)
         }
         tvTradeNow.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.eventTradeNow)
             EventBus.getDefault().post(ChangeViewpager(1))
             finish()
         }
         getMiningRank()
         tvClaimNow.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.eventClaimQLC)
             if (!"".equals(canClaimCount) || canClaimCount.toBigDecimal() > BigDecimal.ZERO) {
                 val claimIntent = Intent(this, MiningRewardActivity::class.java)
                 claimIntent.putExtra("total", canClaimCount)

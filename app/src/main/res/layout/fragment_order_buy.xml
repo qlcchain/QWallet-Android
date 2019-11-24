@@ -71,7 +71,7 @@
                 android:layout_marginTop="@dimen/x10"
                 android:layout_marginBottom="@dimen/x4"
                 android:background="@null"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textColor="@color/color_29282a"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
