@@ -1648,4 +1648,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="no_order_is_placed">No order is placed</string>
     <string name="new_order_mining">New Order</string>
     <string name="refer_friends">Refer Friends</string>
+    <string name="new_trade_order">New Order</string>
+    <string name="please_pay">Please Pay</string>
+    <string name="wait_seller_pay">Wait for seller pay</string>
 </resources>

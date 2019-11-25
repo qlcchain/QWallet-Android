@@ -16,6 +16,7 @@ import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.BuySellSellTodo
+import com.stratagile.qlink.db.BuySellSellTodoDao
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.BaseBack
@@ -145,13 +146,12 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                 })
             })
         }.concatMap {
-            map.put("fromAddress", qlcAccount.address)
             map.put("txid", it.blockingFirst())
-            httpAPIWrapper.generateTradeSellOrder(map)
+            httpAPIWrapper.tradeSellOrderTxid(map)
         }.subscribe({ baseBack ->
             //isSuccesse
             mView.closeProgressDialog()
-            mView.generateBuyQgasOrderSuccess()
+            mView.tradeOrderTxidSuccess()
         }, {
             mView.closeProgressDialog()
             if (map["txid"] != null) {
@@ -170,6 +170,20 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         mCompositeDisposable.add(disposable)
     }
 
+    fun confirmTradeOrderTxid(txid: String, map: MutableMap<String, String>) {
+        map["txid"] = txid
+        mCompositeDisposable.add(httpAPIWrapper.tradeSellOrderTxid(map).subscribe({
+            mView.closeProgressDialog()
+            mView.tradeOrderTxidSuccess()
+        }, {
+            BuySellSellTodo.createBuySellSellTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
+        }, {
+            BuySellSellTodo.createBuySellSellTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
+        }))
+    }
+
     fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
         val infoMap = java.util.HashMap<String, Any>()
         infoMap["account"] = ConstantValue.currentUser.account
@@ -183,6 +197,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
             override fun onNext(baseBack: BaseBack<*>) {
                 onComplete()
+                var list = AppConfig.instance.daoSession.buySellSellTodoDao.queryBuilder().where(BuySellSellTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.buySellSellTodoDao.delete(list[0])
+                }
             }
         })
     }
@@ -207,18 +225,15 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         return txid
     }
 
-    fun generateTradeSellOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
-        map.put("fromAddress", fromAddress)
-        map.put("txid", getTxidByHex(txid))
+    fun generateTradeSellOrder(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.generateTradeSellOrder(map).subscribe({
-            mView.closeProgressDialog()
-            mView.generateBuyQgasOrderSuccess()
+            mView.generateBuyQgasOrderSuccess(it)
         }, {
             BuySellSellTodo.createBuySellSellTodo(map)
-            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
+//            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }, {
             BuySellSellTodo.createBuySellSellTodo(map)
-            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
+//            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }))
     }
 
@@ -258,7 +273,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
-                        generateTradeSellOrder(it, walletAddress, map)
+                        confirmTradeOrderTxid(it, map)
                         KLog.i("transaction Hash: $it")
                     }
                 }, {
@@ -372,66 +387,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                     mView.setNeoDetail(baseBack)
 //                    getUtxo(address)
                 }, { }, {
-                    //onComplete
-                    KLog.i("onComplete")
-                })
-        mCompositeDisposable.add(disposable)
-    }
-
-    /**
-     * 获取交易id的方法
-     *
-     * @param hex sendrow的参数，一串很长的参数
-     * @return 返回该笔交易的id
-     */
-    private fun getTxid(hex: String): Transaction {
-        val ba: ByteArray
-        ba = ModelUtil.decodeHex(hex)
-        return Transaction(ByteBuffer.wrap(ba))
-    }
-
-    fun sendNep5Token(address: String, amount: String, toAddress: String, dataBean: NeoWalletInfo.DataBean.BalanceBean, remark: String, generateMap: HashMap<String, String>) {
-        val neoNodeRPC = NeoNodeRPC("")
-        neoNodeRPC.sendNEP5Token(assets, Account.getWallet()!!, dataBean.asset_hash, address, toAddress, amount.toDouble(), remark, object : NeoCallBack {
-            override fun NeoTranscationResult(jsonBody: String?) {
-                val tx = getTxid(jsonBody!!)
-                val map = java.util.HashMap<String, String>()
-                map["addressFrom"] = address
-                map["addressTo"] = toAddress
-                map["symbol"] = dataBean.asset_symbol
-                map["amount"] = amount
-                map["tx"] = jsonBody
-                sendRow(tx.getHash().toReverseHexString(), address, map, generateMap)
-            }
-        })
-    }
-
-    fun sendRow(txid: String, address: String, map: HashMap<String, String>, generateMap: HashMap<String, String>) {
-        mCompositeDisposable.add(httpAPIWrapper.neoTokenTransaction(map).subscribe({
-            generateTradeSellOrder(txid, address, generateMap)
-        }, {
-            mView.closeProgressDialog()
-        }, {
-            mView.closeProgressDialog()
-        }))
-    }
-
-    private var assets: UTXOS? = null
-    fun getUtxo(address: String) {
-        val map = java.util.HashMap<String, String>()
-        map["address"] = address
-        val disposable = httpAPIWrapper.getMainUnspentAsset(map)
-                .subscribe({ unspent ->
-                    //isSuccesse
-                    KLog.i("onSuccesse")
-                    val utxos = arrayOfNulls<UTXO>(unspent.data.size)
-                    assets = UTXOS(unspent.data)
-                    //                        assets.copy(unspent.getData());
-                }, { throwable ->
-                    //onError
-                    KLog.i("onError")
-                    throwable.printStackTrace()
-                }, {
                     //onComplete
                     KLog.i("onComplete")
                 })

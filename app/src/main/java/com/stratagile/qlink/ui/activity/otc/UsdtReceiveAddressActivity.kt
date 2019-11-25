@@ -109,7 +109,7 @@ class UsdtReceiveAddressActivity : BaseActivity(), UsdtReceiveAddressContract.Vi
             // 创建普通字符型ClipData
             val mClipData = ClipData.newPlainText("Label", tvWalletAddess.text.toString())
             // 将ClipData内容放到系统剪贴板里。
-            cm.primaryClip = mClipData
+            cm.setPrimaryClip(mClipData)
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
     }

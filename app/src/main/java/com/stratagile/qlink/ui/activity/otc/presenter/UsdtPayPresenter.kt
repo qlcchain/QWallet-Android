@@ -9,6 +9,8 @@ import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.BuySellBuyTodo
+import com.stratagile.qlink.db.BuySellBuyTodoDao
+import com.stratagile.qlink.db.BuySellSellTodoDao
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.EthWalletInfo
@@ -155,6 +157,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
         httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
             override fun onNext(baseBack: BaseBack<*>) {
                 onComplete()
+                var list = AppConfig.instance.daoSession.buySellBuyTodoDao.queryBuilder().where(BuySellBuyTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.buySellBuyTodoDao.delete(list[0])
+                }
             }
         })
     }

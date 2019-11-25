@@ -42,11 +42,7 @@ public class BuySellSellTodo {
         BuySellSellTodo buySellSellTodo = new BuySellSellTodo();
         buySellSellTodo.setAccount(map.get("account"));
         buySellSellTodo.setToken(map.get("token"));
-        buySellSellTodo.setEntrustOrderId(map.get("entrustOrderId"));
-        buySellSellTodo.setUsdtAmount(map.get("usdtAmount"));
-        buySellSellTodo.setUsdtToAddress(map.get("usdtToAddress"));
-        buySellSellTodo.setQgasAmount(map.get("qgasAmount"));
-        buySellSellTodo.setFromAddress(map.get("fromAddress"));
+        buySellSellTodo.setEntrustOrderId(map.get("tradeOrderId"));
         buySellSellTodo.setTxid(map.get("txid"));
         AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().insert(buySellSellTodo);
     }

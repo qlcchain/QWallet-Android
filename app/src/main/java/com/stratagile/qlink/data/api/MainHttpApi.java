@@ -44,6 +44,7 @@ import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
+import com.stratagile.qlink.entity.TradeOrder;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -472,7 +473,11 @@ public interface MainHttpApi {
 
     @POST(MainAPI.url_trade_sell_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> generateTradeSellOrder(@Body RequestBody map);
+    Observable<TradeOrder> generateTradeSellOrder(@Body RequestBody map);
+
+    @POST(MainAPI.url_trade_sell_order_txid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradeOrder> tradeSellOrderTxid(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_seller_confirm)
     @Headers({"Content-Type: application/json","Accept: application/json"})

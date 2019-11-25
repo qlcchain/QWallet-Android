@@ -31,7 +31,9 @@ import com.stratagile.qlink.view.SweetAlertDialog
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import kotlinx.android.synthetic.main.activity_trade_order_detail.*
+import kotlinx.android.synthetic.main.activity_trade_order_detail.tvUnitPrice
 import java.math.BigDecimal
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -49,6 +51,19 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     override fun setServerTime(time: String) {
         sysTime = TimeUtil.timeStamp(time)
         getTradeOrderDetail()
+    }
+
+    override fun tradeOrderTxidSuccess() {
+        toast(getString(R.string.success))
+        closeProgressDialog()
+        initData()
+    }
+
+    override fun generateSellQgasOrderFailed(content: String) {
+        runOnUiThread {
+            closeProgressDialog()
+            toast(content)
+        }
     }
 
     override fun cancelOrderSuccess() {
@@ -81,13 +96,13 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         tvReceiveAddress.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-            cm.primaryClip = mClipData
+            cm.setPrimaryClip(mClipData)
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
         tvAmountUsdt.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val mClipData = ClipData.newPlainText("Label", tvAmountUsdt.text.toString())
-            cm.primaryClip = mClipData
+            cm.setPrimaryClip(mClipData)
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
         tvOrderTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.orderTime)
@@ -113,7 +128,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -148,7 +163,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -211,7 +226,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -278,7 +293,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -322,7 +337,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -396,6 +411,22 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
                 }
+                "NEW" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.new_trade_order)
+                    tvOrderState1.text = getString(R.string.new_trade_order)
+                    tvOrderStateTip.text = getString(R.string.wait_seller_pay)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.setPrimaryClip(mClipData)
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                }
             }
         } else {
             //我卖
@@ -418,7 +449,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -536,7 +567,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -584,7 +615,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvPayAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     llTxId.visibility = View.VISIBLE
@@ -596,7 +627,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -674,8 +705,42 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvPayAddress.text = tradeOrderDetail.order.qgasFromAddress
 
                 }
+                "NEW" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.new_trade_order)
+                    tvOrderState1.text = getString(R.string.new_trade_order)
+                    tvOrderStateTip.text = getString(R.string.please_pay)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.VISIBLE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.setPrimaryClip(mClipData)
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        transferTradeToken()
+                    }
+                    tvOpreate2.setOnClickListener {
+                        showEnterTxIdDialog()
+                    }
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
+                }
             }
         }
+    }
+
+    fun transferTradeToken() {
+        showProgressDialog()
+        var map = hashMapOf<String, String>()
+        map.put("account", ConstantValue.currentUser.account)
+        map.put("token", AccountUtil.getUserToken())
+        map["tradeOrderId"] = tradeOrderId
+        mPresenter.sendQgas(mTradeOrderDetail.order.qgasAmount.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -118,6 +118,13 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         }
     }
 
+    override fun tradeOrderTxidSuccess() {
+        toast(getString(R.string.success))
+        closeProgressDialog()
+        startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
+        finish()
+    }
+
     override fun generateSellQgasOrderFailed(content: String) {
         runOnUiThread {
             closeProgressDialog()
@@ -125,11 +132,33 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         }
     }
 
-    override fun generateBuyQgasOrderSuccess() {
-        toast(getString(R.string.success))
-        closeProgressDialog()
-        startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
-        finish()
+    override fun generateBuyQgasOrderSuccess(tradeOrder: TradeOrder) {
+        var tradeOrderId = tradeOrder.order.id
+        var map = hashMapOf<String, String>()
+        map.put("account", ConstantValue.currentUser.account)
+        map.put("token", AccountUtil.getUserToken())
+        map["tradeOrderId"] = tradeOrderId
+        thread {
+            when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
+                AllWallet.WalletType.EthWallet -> {
+                    mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
+                }
+                AllWallet.WalletType.EosWallet -> {
+                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (tradeTokenInfo == null) {
+                        runOnUiThread {
+                            toast(getString(R.string.pleasewait))
+                        }
+                    }
+                    testTransfer(map, sendNeoWallet!!.address)
+                }
+                AllWallet.WalletType.QlcWallet -> {
+                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+                }
+            }
+        }
     }
 
     override fun generateTradeSellQgasOrderSuccess() {
@@ -619,33 +648,38 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             map.put("usdtAmount", etUsdt.text.toString())
             map["usdtToAddress"] = tvReceiveWalletAddess.text.toString()
             map.put("qgasAmount", etQgas.text.toString())
-            thread {
-                when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
-                    AllWallet.WalletType.EthWallet -> {
-                        mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
-                    }
-                    AllWallet.WalletType.EosWallet -> {
-                        mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
-                    }
-                    AllWallet.WalletType.NeoWallet -> {
-                        if (tradeTokenInfo == null) {
-                            runOnUiThread {
-                                toast(getString(R.string.pleasewait))
-                            }
-                            return@thread
-                        }
+            when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
+                AllWallet.WalletType.EthWallet -> {
+                    map.put("fromAddress", sendEthWallet!!.address)
+//                    mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
+                }
+                AllWallet.WalletType.EosWallet -> {
+//                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (tradeTokenInfo == null) {
                         runOnUiThread {
-                            testTransfer(map, sendNeoWallet!!.address)
+                            toast(getString(R.string.pleasewait))
                         }
-//                        mPresenter.sendNep5Token(sendNeoWallet!!.address, etQgas.text.toString(), ConstantValue.mainAddressData.neo.address, tradeTokenInfo!!, getString(R.string.sell) + " " + entrustOrderInfo.order!!.tradeToken, map)
                     }
-                    AllWallet.WalletType.QlcWallet -> {
-                        mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
-                    }
+                    map.put("fromAddress", sendNeoWallet!!.address)
+//                    testTransfer(map, sendNeoWallet!!.address)
+                }
+                AllWallet.WalletType.QlcWallet -> {
+                    map.put("fromAddress", sendQlcWallet!!.address)
+//                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
                 }
             }
+            mPresenter.generateTradeSellOrder(map)
         }
     }
+
+
+    fun uploadTxid() {
+
+    }
+
+
 
     private var webview: DWebView? = null
     private fun testTransfer(map : HashMap<String, String>, address : String) {
@@ -665,7 +699,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                 KLog.i("call succeed,return value is " + retValue!!)
                 var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
                 if (nep5SendBack != null) {
-                    mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
+                    mPresenter.confirmTradeOrderTxid(nep5SendBack.txid, map)
                 } else {
                     toast(getString(R.string.send_qgas_error, tradeTokenInfo!!.asset_symbol))
                 }

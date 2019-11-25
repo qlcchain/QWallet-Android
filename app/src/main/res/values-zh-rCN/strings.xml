@@ -1083,4 +1083,7 @@
     <string name="no_order_is_placed">您还没有挂单挖矿</string>
     <string name="new_order_mining">去挂单</string>
     <string name="refer_friends">介绍朋友</string>
+    <string name="new_trade_order">新订单</string>
+    <string name="please_pay">请支付</string>
+    <string name="wait_seller_pay">等待卖家支付</string>
 </resources>

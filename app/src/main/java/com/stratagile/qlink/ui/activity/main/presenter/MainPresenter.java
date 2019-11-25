@@ -369,17 +369,27 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount());
+                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount(), new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                    }
+                });
             }
 
             @Override
             public void onComplete() {
-                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount());
+                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount(), new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                    }
+                });
             }
         });
     }
 
-    private void sysbackUp(String txid, String type, String chain, String tokenName, String amount) {
+    private void sysbackUp(String txid, String type, String chain, String tokenName, String amount, OnBackUpSuccess onBackUpSuccess) {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("account", ConstantValue.currentUser.getAccount());
         infoMap.put("token", AccountUtil.getUserToken());
@@ -393,12 +403,17 @@ public class MainPresenter implements MainContract.MainContractPresenter {
             @Override
             public void onNext(BaseBack baseBack) {
                 onComplete();
+                onBackUpSuccess.onSuccess();
             }
         });
     }
 
+    private interface OnBackUpSuccess {
+        void onSuccess();
+    }
+
     public void reCreateBuySellSellOrder(Map map, BuySellSellTodo buySellSellTodo) {
-        httpAPIWrapper.generateTradeSellOrder(map).subscribe(new Observer<BaseBack>() {
+        httpAPIWrapper.tradeSellOrderTxid(map).subscribe(new Observer<BaseBack>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -412,12 +427,22 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "");
+                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+                    }
+                });
             }
 
             @Override
             public void onComplete() {
-                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "");
+                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+                    }
+                });
             }
         });
     }
@@ -437,12 +462,22 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "");
+                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+                    }
+                });
             }
 
             @Override
             public void onComplete() {
-                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "");
+                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+                    }
+                });
             }
         });
     }
@@ -461,12 +496,22 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
             @Override
             public void onError(Throwable e) {
-                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "");
+                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
+                    }
+                });
             }
 
             @Override
             public void onComplete() {
-                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "");
+                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
+                    }
+                });
             }
         });
     }

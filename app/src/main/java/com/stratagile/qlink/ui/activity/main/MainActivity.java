@@ -759,11 +759,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             Map<String, Object> map = new HashMap<>();
             map.put("account", buySellSellTodo.getAccount());
             map.put("token", AccountUtil.getUserToken());
-            map.put("entrustOrderId", buySellSellTodo.getEntrustOrderId());
-            map.put("usdtAmount", buySellSellTodo.getUsdtAmount());
-            map.put("usdtToAddress", buySellSellTodo.getUsdtToAddress());
-            map.put("qgasAmount", buySellSellTodo.getQgasAmount());
-            map.put("fromAddress", buySellSellTodo.getFromAddress());
+            map.put("tradeOrderId", buySellSellTodo.getEntrustOrderId());
             map.put("txid", buySellSellTodo.getTxid());
             mPresenter.reCreateBuySellSellOrder(map, buySellSellTodo);
         }

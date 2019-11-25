@@ -31,6 +31,10 @@ interface TradeOrderDetailContract {
 
         fun setServerTime(time : String)
 
+        fun generateSellQgasOrderFailed(content : String)
+
+        fun tradeOrderTxidSuccess()
+
     }
 
     interface TradeOrderDetailContractPresenter : BasePresenter {

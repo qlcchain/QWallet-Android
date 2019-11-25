@@ -10,10 +10,10 @@
     <LinearLayout
         android:id="@+id/llEmail"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/x40"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_height="@dimen/x94">
+        android:layout_height="47dp">
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
@@ -25,13 +25,13 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
+        android:layout_height="1dp"
         android:background="@color/color_f2f2f2"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_height="@dimen/x94">
+        android:layout_height="47dp">
         <EditText
             android:id="@+id/etVCode"
             android:layout_width="0px"
@@ -46,21 +46,21 @@
             android:layout_width="wrap_content"
             android:text="@string/get_the_code"
             android:gravity="center"
-            android:paddingLeft="@dimen/x20"
-            android:paddingRight="@dimen/x20"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="@color/mainColor"
             android:textSize="16sp"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
+        android:layout_height="1dp"
         android:background="@color/color_f2f2f2"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_height="@dimen/x94">
+        android:layout_height="47dp">
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="0px"
@@ -73,13 +73,13 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
+        android:layout_height="1dp"
         android:background="@color/color_f2f2f2"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_height="@dimen/x94">
+        android:layout_height="47dp">
         <EditText
             android:id="@+id/etRepeatPassword"
             android:layout_width="0px"
@@ -92,13 +92,13 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
+        android:layout_height="1dp"
         android:background="@color/color_f2f2f2"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_height="@dimen/x94">
+        android:layout_height="47dp">
         <EditText
             android:id="@+id/etInviteCode"
             android:layout_width="0px"
@@ -111,39 +111,39 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
+        android:layout_height="1dp"
         android:background="@color/color_f2f2f2"/>
 
     <TextView
         android:id="@+id/tvRegister"
         android:layout_width="match_parent"
         android:textColor="@color/white"
-        android:layout_marginTop="@dimen/x60"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="@string/sign_up"
         android:background="@drawable/main_color_bt_bg"
-        android:layout_height="@dimen/x94" />
+        android:layout_height="47dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="@dimen/x58"
+        android:layout_marginTop="29dp"
         android:layout_height="wrap_content">
         <com.stratagile.qlink.view.SmoothCheckBox
             android:id="@+id/checkBox"
-            android:layout_width="@dimen/x40"
-            android:layout_marginRight="@dimen/x12"
+            android:layout_width="20dp"
+            android:layout_marginRight="6dp"
             app:color_unchecked_stroke="@color/mainColor"
             app:color_unchecked="@color/white"
             app:color_checked="@color/mainColor"
-            app:stroke_width="@dimen/x4"
-            android:layout_height="@dimen/x40"/>
+            app:stroke_width="2dp"
+            android:layout_height="20dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:text="@string/read_and_agree_on_terms_of"
             android:textSize="12sp"
-            android:layout_marginRight="@dimen/x8"
+            android:layout_marginRight="4dp"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/servicePrivacyPolicy"

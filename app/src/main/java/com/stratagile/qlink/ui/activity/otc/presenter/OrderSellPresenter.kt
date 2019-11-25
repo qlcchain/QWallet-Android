@@ -15,9 +15,7 @@ import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
-import com.stratagile.qlink.db.EntrustTodo
-import com.stratagile.qlink.db.EthWallet
-import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.db.*
 import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.NeoWalletInfo
@@ -161,6 +159,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
             override fun onNext(baseBack: BaseBack<*>) {
                 onComplete()
+                var list = AppConfig.instance.daoSession.entrustTodoDao.queryBuilder().where(EntrustTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.entrustTodoDao.delete(list[0])
+                }
             }
         })
     }

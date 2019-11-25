@@ -48,6 +48,7 @@ import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
+import com.stratagile.qlink.entity.TradeOrder;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -883,11 +884,19 @@ public class HttpAPIWrapper {
         }
     }
 
-    public Observable<BaseBack> generateTradeSellOrder(Map map) {
+    public Observable<TradeOrder> generateTradeSellOrder(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
             return wrapper(mMainHttpAPI.generateTradeSellOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.generateTradeSellOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TradeOrder> tradeSellOrderTxid(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.tradeSellOrderTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.tradeSellOrderTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

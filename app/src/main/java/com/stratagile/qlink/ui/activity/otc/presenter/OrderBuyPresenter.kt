@@ -10,6 +10,7 @@ import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.EntrustTodo
+import com.stratagile.qlink.db.EntrustTodoDao
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.BaseBack
@@ -176,6 +177,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
             override fun onNext(baseBack: BaseBack<*>) {
                 onComplete()
+                var list = AppConfig.instance.daoSession.entrustTodoDao.queryBuilder().where(EntrustTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.entrustTodoDao.delete(list[0])
+                }
             }
         })
     }
