@@ -36,6 +36,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
+                case "NEW":
+                    helper.setText(R.id.tvOrderState, R.string.new_trade_order);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
                 case "TXID_ERROR":
                     helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
@@ -74,6 +78,10 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                 case "QGAS_TO_PLATFORM":
                     helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
+                    break;
+                case "NEW":
+                    helper.setText(R.id.tvOrderState, R.string.new_trade_order);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
                 case "TXID_ERROR":
                     helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);

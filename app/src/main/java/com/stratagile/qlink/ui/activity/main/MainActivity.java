@@ -658,12 +658,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             Bundle bundle = getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE);
             if (bundle != null) {
                 String debit = bundle.getString("skip");
+                KLog.i("skip= " + debit);
                 if (debit != null && !"".equals(debit)) {
                     switch (debit) {
                         case "debit":
                             Intent i = new Intent(this, MyClaimActivity.class);
                             i.putExtras(bundle);
                             startActivity(i);
+                            break;
+                        case "trade_order":
+                            Intent i1 = new Intent(this, OtcOrderRecordActivity.class);
+                            i1.putExtras(bundle);
+                            startActivity(i1);
                             break;
                         case "":
                             break;

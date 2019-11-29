@@ -12,6 +12,7 @@ import com.stratagile.qlink.entity.PushExtra;
 import com.stratagile.qlink.jiguang.TagAliasOperatorHelper;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.ui.activity.main.TestActivity;
+import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
 import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.utils.SystemUtil;
 
@@ -70,6 +71,14 @@ public class JpushReceiver extends JPushMessageReceiver {
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             context.startActivity(i);
                             break;
+                        case "trade_order":
+                            i.setClass(context, OtcOrderRecordActivity.class);
+                            bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
+                            bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
+                            i.putExtras(bundle);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            context.startActivity(i);
+                            break;
                         case "":
                             i.setClass(context, MainActivity.class);
                             bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
@@ -82,12 +91,17 @@ public class JpushReceiver extends JPushMessageReceiver {
                             break;
                     }
                 } else {
+                    Bundle args = new Bundle();
+                    Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage("com.stratagile.qwallet");
+                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                     switch (pushExtra.getSkip()) {
                         case "debit":
-                            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage("com.stratagile.qwallet");
-                            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                            Bundle args = new Bundle();
                             args.putString("skip", "debit");
+                            launchIntent.putExtra(ConstantValue.EXTRA_BUNDLE, args);
+                            context.startActivity(launchIntent);
+                            break;
+                        case "trade_order":
+                            args.putString("skip", "trade_order");
                             launchIntent.putExtra(ConstantValue.EXTRA_BUNDLE, args);
                             context.startActivity(launchIntent);
                             break;

@@ -219,9 +219,9 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderState.text = getString(R.string.transaction_parsing_failed)
                     tvOrderState1.text = getString(R.string.transaction_parsing_failed)
                     tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
-                    tvOpreate1.visibility = View.VISIBLE
-                    tvOpreate2.visibility = View.VISIBLE
-                    tvOpreate3.visibility = View.VISIBLE
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
                     viewLine.visibility = View.GONE
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
