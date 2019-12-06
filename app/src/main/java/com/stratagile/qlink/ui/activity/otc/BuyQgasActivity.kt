@@ -228,7 +228,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                 }
             } else {
                 // 最小的数量要大于等于minAmount
-                if (etQgas.text.toString().toInt() < entrustOrderInfo.order.minAmount) {
+                if (etQgas.text.toString().toFloat() < entrustOrderInfo.order.minAmount) {
                     toast(getString(R.string.the_smallest) + entrustOrderInfo.order.tradeToken + getString(R.string.is_otc) + entrustOrderInfo.order.minAmount.toInt())
                     return@setOnClickListener
                 }

@@ -740,7 +740,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         map.put("account", ConstantValue.currentUser.account)
         map.put("token", AccountUtil.getUserToken())
         map["tradeOrderId"] = tradeOrderId
-        mPresenter.sendQgas(mTradeOrderDetail.order.qgasAmount.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+        var message = "otc_trade_sell_" + tradeOrderId
+        mPresenter.sendQgas(mTradeOrderDetail.order.qgasAmount.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

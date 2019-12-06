@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.inputManager
 import com.pawegio.kandroid.toast
@@ -26,6 +28,7 @@ import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.qlinkcom
+import com.stratagile.qlink.topup.Area
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerQurryMobileComponent
 import com.stratagile.qlink.ui.activity.topup.contract.QurryMobileContract
@@ -250,7 +253,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 10 && resultCode == Activity.RESULT_OK) {
-            tvArea.text = "+" + data!!.getStringExtra("area")
+            tvArea.text = data!!.getStringExtra("area")
         }
         if (requestCode == 20 && resultCode == Activity.RESULT_OK) {
             var contactData = data!!.getData()
@@ -279,9 +282,22 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 }
                 KLog.i(name)
                 KLog.i(phoneNumber)
-                etContact.setText(phoneNumber.replace("+86", "").replace(" ", ""))
-                etContact.setSelection(etContact.text.toString().length)
-                getProductList()
+                val area = Gson().fromJson<ArrayList<Area>>(FileUtil.getJson(this, "area.json"), object : TypeToken<ArrayList<Area?>?>() {}.type)
+                var phone = ""
+                area.forEach {
+                    if (phoneNumber.contains(it.code + " ")) {
+                        etContact.setText(phoneNumber.replace(it.code + " ", "").replace(" ", ""))
+                        etContact.setSelection(etContact.text.toString().length)
+                        phone = phoneNumber.replace(it.code + " ", "").replace(" ", "")
+                        getProductList()
+                        return@forEach
+                    }
+                }
+                if ("".equals(phone)) {
+                    etContact.setText(phoneNumber.replace(" ", ""))
+                    etContact.setSelection(etContact.text.toString().length)
+                    getProductList()
+                }
             }
         }
         if (requestCode == AllWallet.WalletType.QlcWallet.ordinal && resultCode == Activity.RESULT_OK) {

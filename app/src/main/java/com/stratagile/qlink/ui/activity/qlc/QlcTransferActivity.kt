@@ -256,11 +256,7 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                         if (BigDecimal.valueOf(it.balance.toDouble()) >= BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals).multiply(BigDecimal(etQlcTokenSendValue.text.toString().trim()))) {
                             val qlcClient = QlcClient(ConstantValue.qlcNode)
                             val rpc = LedgerRpc(qlcClient)
-                            var jsonObject = TransactionMng.sendBlock(qlcClient, tokenInfo!!.walletAddress, tokenInfo!!.tokenSymol, etQlcTokenSendAddress.text.toString().trim(), BigDecimal(etQlcTokenSendValue.text.toString().trim()).multiply(BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals)).toBigInteger(), null, null, if (!"".equals(etEthTokenSendMemo.text.toString().trim())) {
-                                getMemoHash(Helper.byteToHexString(etEthTokenSendMemo.text.toString().trim().toByteArray()))
-                            } else {
-                                null
-                            }, null)
+                            var jsonObject = TransactionMng.sendBlock(qlcClient, tokenInfo!!.walletAddress, tokenInfo!!.tokenSymol, etQlcTokenSendAddress.text.toString().trim(), BigDecimal(etQlcTokenSendValue.text.toString().trim()).multiply(BigDecimal.TEN.pow(tokenInfo!!.tokenDecimals)).toBigInteger(), null, null, null, etEthTokenSendMemo.text.toString().trim(), null)
                             var aaaa = JSONArray()
                             var stateBlock = Gson().fromJson<StateBlock>(jsonObject.toJSONString(), StateBlock::class.java)
                             var root = BlockMng.getRoot(stateBlock)

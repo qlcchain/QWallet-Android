@@ -1,53 +1,38 @@
 package com.stratagile.qlink.topup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Area {
 
-    private ArrayList<AreaBean> area;
+    /**
+     * en : Afghanistan
+     * cn : 阿富汗
+     * code : +93
+     */
 
-    public ArrayList<AreaBean> getArea() {
-        return area;
+    private String en;
+    private String cn;
+    private String code;
+
+    public String getEn() {
+        return en;
     }
 
-    public void setArea(ArrayList<AreaBean> area) {
-        this.area = area;
+    public void setEn(String en) {
+        this.en = en;
     }
 
-    public static class AreaBean {
-        /**
-         * country : 中国
-         * countryEn : China
-         * number : 86
-         */
+    public String getCn() {
+        return cn;
+    }
 
-        private String country;
-        private String countryEn;
-        private String number;
+    public void setCn(String cn) {
+        this.cn = cn;
+    }
 
-        public String getCountry() {
-            return country;
-        }
+    public String getCode() {
+        return code;
+    }
 
-        public void setCountry(String country) {
-            this.country = country;
-        }
-
-        public String getCountryEn() {
-            return countryEn;
-        }
-
-        public void setCountryEn(String countryEn) {
-            this.countryEn = countryEn;
-        }
-
-        public String getNumber() {
-            return number;
-        }
-
-        public void setNumber(String number) {
-            this.number = number;
-        }
+    public void setCode(String code) {
+        this.code = code;
     }
 }

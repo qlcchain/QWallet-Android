@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
-import com.stratagile.qlink.entity.LanguageCountry
+import com.stratagile.qlink.entity.MyAsset
 import com.stratagile.qlink.topup.Area
 import com.stratagile.qlink.ui.activity.topup.component.DaggerSelectAreaComponent
 import com.stratagile.qlink.ui.activity.topup.contract.SelectAreaContract
@@ -17,8 +17,9 @@ import com.stratagile.qlink.ui.activity.topup.presenter.SelectAreaPresenter
 import com.stratagile.qlink.ui.adapter.topup.MobileAreaAdapter
 import com.stratagile.qlink.utils.FileUtil
 import kotlinx.android.synthetic.main.activity_select_area.*
-
-import javax.inject.Inject;
+import java.util.*
+import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * @author hzp
@@ -42,12 +43,12 @@ class SelectAreaActivity : BaseActivity(), SelectAreaContract.View {
     }
     override fun initData() {
         title.text = getString(R.string.choose_a_counntry_and_a_region)
-        val area = Gson().fromJson(FileUtil.getJson(this, "area.json"), Area::class.java)
-        var mobileAreaAdapter = MobileAreaAdapter(area.area)
+        val area = Gson().fromJson<ArrayList<Area>>(FileUtil.getJson(this, "area.json"), object : TypeToken<ArrayList<Area?>?>() {}.type)
+        var mobileAreaAdapter = MobileAreaAdapter(area.filter { it.code.contains("+86") })
         recyclerView.adapter = mobileAreaAdapter
         mobileAreaAdapter.setOnItemClickListener { adapter, view, position ->
             var resultIntent = Intent()
-            resultIntent.putExtra("area", mobileAreaAdapter.data[position].number)
+            resultIntent.putExtra("area", mobileAreaAdapter.data[position].code)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }

@@ -58,7 +58,7 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
         private String closeDate;
         private String head;
         private String number;
-        private int qgasAmount;
+        private float qgasAmount;
         private String buyerConfirmDate;
         private String sellerId;
         private String orderTime;
@@ -179,11 +179,11 @@ public class GenerageTradeOrder extends BaseBack<GenerageTradeOrder.OrderBean> {
             this.number = number;
         }
 
-        public int getQgasAmount() {
+        public float getQgasAmount() {
             return qgasAmount;
         }
 
-        public void setQgasAmount(int qgasAmount) {
+        public void setQgasAmount(float qgasAmount) {
             this.qgasAmount = qgasAmount;
         }
 

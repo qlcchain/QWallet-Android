@@ -248,7 +248,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         ivLoad1 = animationView.findViewById<ImageView>(R.id.ivLoad1)
         ivLoad2 = animationView.findViewById<ImageView>(R.id.ivLoad2)
         ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
-        ivChain.setImageResource(R.mipmap.icons_eth_wallet)
+        ivChain.setImageResource(R.mipmap.icons_qlc_wallet)
         tvPaying = animationView.findViewById<TextView>(R.id.tvPaying)
         tvVoucher = animationView.findViewById<TextView>(R.id.tvVoucher)
         view2 = animationView.findViewById(R.id.view2)
@@ -278,9 +278,10 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
         }
 
-        var discountPrice = (product.price.toBigDecimal() * (1.toBigDecimal() - product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
-        etEthTokenSendMemo.setText(getString(R.string.topup_200_deduct_10_from_10_qgas, product.price.toString(), discountPrice, tvAmountQgas.text.toString(), payToken.symbol))
-
+        var discountPrice = (product.price.toBigDecimal() * (product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
+//        etEthTokenSendMemo.setText(getString(R.string.topup_200_deduct_10_from_10_qgas, product.price.toString(), discountPrice, tvAmountQgas.text.toString(), payToken.symbol))
+        var message = "topup_" + product.id + "_" + discountPrice
+        etEthTokenSendMemo.setText(message)
         var qlcAccounts = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
         if (qlcAccounts.size > 0) {
             qlcAccounts.forEach {
@@ -316,7 +317,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             }
             showPayAnimation()
             thread {
-                QlcReceiveUtils.sendQGas(qlcAccount!!, ConstantValue.mainAddressData.qlcchian.address, tvAmountQgas.text.toString(), "", true, object : SendBack {
+                QlcReceiveUtils.sendQGas(qlcAccount!!, ConstantValue.mainAddressData.qlcchian.address, tvAmountQgas.text.toString(), message, true, object : SendBack {
                     override fun send(suceess: String) {
                         if ("".equals(suceess)) {
                             runOnUiThread {
@@ -424,8 +425,6 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         var tvWalletAddess = animationView.findViewById<TextView>(R.id.tvWalletAddess)
         tvWalletAddess.text = qlcAccount!!.address
 
-        val ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
-        ivChain.setImageResource(R.mipmap.icons_eth_wallet)
         sweetAlertDialog.show()
     }
 

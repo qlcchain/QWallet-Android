@@ -53,7 +53,7 @@ public class TradeOrder extends BaseBack<TradeOrder.OrderBean> {
         private double usdtAmount;
         private String head;
         private String number;
-        private int qgasAmount;
+        private double qgasAmount;
         private String sellerId;
         private String orderTime;
         private String usdtToAddress;
@@ -129,11 +129,11 @@ public class TradeOrder extends BaseBack<TradeOrder.OrderBean> {
             this.number = number;
         }
 
-        public int getQgasAmount() {
+        public double getQgasAmount() {
             return qgasAmount;
         }
 
-        public void setQgasAmount(int qgasAmount) {
+        public void setQgasAmount(double qgasAmount) {
             this.qgasAmount = qgasAmount;
         }
 

@@ -138,13 +138,14 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         map.put("account", ConstantValue.currentUser.account)
         map.put("token", AccountUtil.getUserToken())
         map["tradeOrderId"] = tradeOrderId
+        var message = "otc_trade_sell_" + tradeOrderId
         thread {
             when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
                 AllWallet.WalletType.EthWallet -> {
                     mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
                 }
                 AllWallet.WalletType.EosWallet -> {
-                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
                 }
                 AllWallet.WalletType.NeoWallet -> {
                     if (tradeTokenInfo == null) {
@@ -155,7 +156,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     testTransfer(map, sendNeoWallet!!.address)
                 }
                 AllWallet.WalletType.QlcWallet -> {
-                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
                 }
             }
         }

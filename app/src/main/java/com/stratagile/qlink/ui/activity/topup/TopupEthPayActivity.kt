@@ -439,8 +439,6 @@ class TopupEthPayActivity : BaseActivity(), TopupEthPayContract.View {
         var tvWalletAddess = animationView.findViewById<TextView>(R.id.tvWalletAddess)
         tvWalletAddess.text = ethAccount!!.address
 
-        val ivChain = animationView.findViewById<ImageView>(R.id.ivChain)
-        ivChain.setImageResource(R.mipmap.icons_eth_wallet)
         sweetAlertDialog.show()
 
         ivLoad1.postDelayed({
