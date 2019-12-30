@@ -45,6 +45,8 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
     @BindView(R.id.webView)
     WebView webView;
 
+    private boolean isWxPay = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +136,7 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
             if (!URLUtil.isNetworkUrl(url)) {
                 //  处理微信h5支付2
                 if (mWXH5PayHandler != null && mWXH5PayHandler.isWXLaunchUrl(url)) {
+                    isWxPay = true;
                     mWXH5PayHandler.launchWX(view, url);
                 } else {
                     try {
@@ -167,16 +170,25 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             if (WXH5PayHandler.isWXH5Pay(url)) {
+                isWxPay = true;
                 webView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(WebViewActivity.this, TopupOrderListActivity.class));
                         setResult(RESULT_OK);
                         finish();
                     }
                 }, 2000);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (isWxPay) {
+            startActivity(new Intent(WebViewActivity.this, TopupOrderListActivity.class));
+            setResult(RESULT_OK);
+        }
+        super.onDestroy();
     }
 
     @Override
