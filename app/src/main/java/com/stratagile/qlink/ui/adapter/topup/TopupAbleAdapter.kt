@@ -73,7 +73,7 @@ class TopupAbleAdapter(array: ArrayList<TopupProduct.ProductListBean>) : BaseQui
 
             var zhifufabijine = item.payFiatAmount.toBigDecimal().multiply(item.discount.toBigDecimal())
             var zhifudaibijine = zhifufabijine - dikoubijine
-            var zhifubishuliang = zhifudaibijine.divide(item.payTokenCnyPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+            var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(item.payFiat)){item.payTokenCnyPrice.toBigDecimal()} else {item.payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
 
             helper.setText(R.id.price, zhifubishuliang.stripTrailingZeros().toPlainString())
             helper.setText(R.id.payTokenSymbol, item.payTokenSymbol)

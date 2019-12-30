@@ -1655,19 +1655,20 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="join_now_telegram">Join Now</string>
     <string name="join_us_on_telegram_to_get_the_latest_qgas_news">Join us on Telegram To get the latest QGAS news</string>
     <string name="mobile_plan">Mobile Plan</string>
+
+
+    //2019-12-27//
+    <string name="paytoken_paid">Pay Token Paid</string>
+    <string name="please_select_country">Please Choose Country</string>
+    <string name="please_select_operator">Please Choose Operator</string>
+    <string name="please_select_region">Please Choose Region</string>
+    <string name="please_input_phone_number">Please Input Phone Number</string>
+    <string name="the_product_is_sold_out">The product is sold out</string>
+
     <string name="please_choose">Please choose</string>
     <string name="operator">Operator</string>
     <string name="phone_number">Phone Number</string>
     <string name="region">Region</string>
     <string name="country_code">Country Code</string>
-    <string name="selective_filling">Selective filling</string>
     <string name="optional">Optional</string>
-
-    //2019-12-27//
-    <string name="paytoken_paid">Pay Token Paid</string>
-    <string name="please_select_country">Please Select Country</string>
-    <string name="please_select_operator">Please Select Operator</string>
-    <string name="please_select_region">Please Select Region</string>
-    <string name="please_input_phone_number">Please Input Phone Number</string>
-    <string name="the_product_is_sold_out">The product is sold out</string>
 </resources>

@@ -7,7 +7,7 @@
     app:cardCornerRadius="6dp"
     app:cardBackgroundColor="@color/white"
     app:cardElevation="0dp"
-    android:layout_height="210dp">
+    android:layout_height="214dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
         <LinearLayout
             android:id="@+id/llParent"
             android:layout_below="@+id/ivBack"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content">
@@ -87,7 +87,6 @@
                 android:orientation="horizontal"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvDiscount"

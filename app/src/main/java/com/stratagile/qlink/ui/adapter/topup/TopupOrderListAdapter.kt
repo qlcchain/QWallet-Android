@@ -82,6 +82,13 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrder.OrderBean>) : BaseQuickA
                 helper.setGone(R.id.tvPayNow, true)
                 helper.setText(R.id.orderState, mContext.getString(R.string.qgas_is_not_in_the_accounts, item.symbol))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
+                if (!"".equals(item.txid)) {
+                    helper.setGone(R.id.orderOpreate, false)
+                    helper.setGone(R.id.cancelOrder, false)
+                    helper.setGone(R.id.tvPayNow, false)
+                    helper.setText(R.id.orderState, mContext.getString(R.string.wait_public_chain_confirmation))
+                    helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
+                }
             }
             "QGAS_PAID" -> {
                 helper.setGone(R.id.orderOpreate, true)
@@ -89,6 +96,18 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrder.OrderBean>) : BaseQuickA
                 helper.setGone(R.id.tvPayNow, true)
                 helper.setText(R.id.orderState, mContext.getString(R.string.qgas_paid_not_in_the_telephone_fee))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
+
+                if ("TOKEN".equals(item.payWay)) {
+                    if (item.payTokenInTxid != null && !"".equals(item.payTokenInTxid)) {
+                        helper.setGone(R.id.orderOpreate, false)
+                        helper.setGone(R.id.cancelOrder, false)
+                        helper.setGone(R.id.tvPayNow, false)
+                        helper.setText(R.id.orderState, mContext.getString(R.string.wait_public_chain_confirmation))
+                        helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
+                    }
+                } else {
+
+                }
             }
             "PAY_TOKEN_PAID" -> {
                 helper.setGone(R.id.orderOpreate, true)

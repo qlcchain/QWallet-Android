@@ -785,4 +785,20 @@
     <string name="wait_seller_pay">Tunggu pembayaran dari penjual</string>
     <string name="join_now_telegram">Gabung Sekarang</string>
     <string name="join_us_on_telegram_to_get_the_latest_qgas_news">Bergabunglah dengan kami di Telegram untuk mendapatkan berita QGAS terbaru</string>
+
+
+    <string name="paytoken_paid">Pembayaran Token Dibayar</string>
+    <string name="please_select_country">Silahkan Pilih Negara</string>
+    <string name="please_select_operator">Silahkan Pilih Operator</string>
+    <string name="please_select_region">Silahkan Pilih Wilayah</string>
+    <string name="please_input_phone_number">Silahkan masukkan nomor telepon</string>
+    <string name="the_product_is_sold_out">Produk habis terjual</string>
+
+    <string name="please_choose">Silahkan pilih</string>
+    <string name="operator">Operator</string>
+    <string name="phone_number">Nomor telpon</string>
+    <string name="region">Wilayah</string>
+    <string name="country_code">Kode negara</string>
+    <string name="optional">opsional</string>
+    <string name="mobile_plan">Paket Operator</string>
 </resources>

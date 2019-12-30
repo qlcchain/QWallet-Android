@@ -583,7 +583,7 @@
     <string name="invoice_no">凭证号码</string>
     <string name="service_description">凭证内容</string>
     <string name="check_on_blockchain">查看链上充值凭证</string>
-    <string name="top_up_100phone_bill_18825709441">话费慢充-%1$s元手机话费-%2$s</string>
+    <string name="top_up_100phone_bill_18825709441">话费充值-%1$s元手机话费-%2$s</string>
     <string name="topup_200_deduct_10_from_10_qgas">充值%1$s元话费，%3$s %4$s抵扣%2$s元 </string>
     <string name="backup_now">现在备份</string>
     <string name="if_your_lose_your_mobile_devices_you_could_use_your_private_key_or_mnemonic_phrase_to_recover_your_wallet">如果应用删除、手机丢失等情况，则可以使用私钥或助记词来恢复钱包。</string>
@@ -620,13 +620,13 @@
     <string name="wait_seller_pay">等待卖家支付</string>
     <string name="join_now_telegram">立即加入</string>
     <string name="join_us_on_telegram_to_get_the_latest_qgas_news">加入我们的电报群 获得最新QGAS动态</string>
-    <string name="mobile_plan">手机套餐</string>
+    <string name="mobile_plan">运营商套餐</string>
     <string name="please_choose">请选择</string>
     <string name="operator">运营商</string>
     <string name="phone_number">手机号</string>
     <string name="region">地区</string>
-    <string name="country_code">国家和地区</string>
-    <string name="selective_filling">Selective filling</string>
+
+    <string name="country_code">国家或地区</string>
     <string name="optional">选填</string>
     <string name="please_select_country">请先选择国家</string>
     <string name="please_select_operator">请先选择运营商</string>

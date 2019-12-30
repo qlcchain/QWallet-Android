@@ -136,6 +136,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 bean.payTokenSymbol = itss.payTokenSymbol
                 bean.payFiat = itss.payFiat
                 bean.payTokenCnyPrice = itss.payTokenCnyPrice
+                bean.payTokenUsdPrice = itss.payTokenUsdPrice
 
 
                 productList.add(bean)
@@ -235,7 +236,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
                 var zhifufabijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal())
                 var zhifudaibijine = zhifufabijine - dikoubijine
-                var zhifubishuliang = zhifudaibijine.divide(topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+                var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)){topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal()} else {topupAbleAdapter!!.data[position].payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
 
                 alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol)) {
                     negativeButton(getString(R.string.cancel)) { dismiss() }

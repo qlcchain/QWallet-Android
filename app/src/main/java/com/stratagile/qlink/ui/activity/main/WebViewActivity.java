@@ -19,6 +19,7 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerWebViewComponent;
 import com.stratagile.qlink.ui.activity.main.contract.WebViewContract;
 import com.stratagile.qlink.ui.activity.main.module.WebViewModule;
 import com.stratagile.qlink.ui.activity.main.presenter.WebViewPresenter;
+import com.stratagile.qlink.ui.activity.topup.TopupOrderListActivity;
 import com.stratagile.qlink.utils.WXH5PayHandler;
 
 import java.net.URLDecoder;
@@ -169,6 +170,7 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
                 webView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        startActivity(new Intent(WebViewActivity.this, TopupOrderListActivity.class));
                         setResult(RESULT_OK);
                         finish();
                     }
