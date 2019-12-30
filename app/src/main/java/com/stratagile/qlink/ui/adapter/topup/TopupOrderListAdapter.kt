@@ -110,8 +110,6 @@ class TopupOrderListAdapter(array: ArrayList<TopupOrder.OrderBean>) : BaseQuickA
                 }
             }
             "PAY_TOKEN_PAID" -> {
-                helper.setGone(R.id.orderOpreate, true)
-                helper.setGone(R.id.cancelOrder, true)
                 helper.setText(R.id.orderState, mContext.getString(R.string.paytoken_paid))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }

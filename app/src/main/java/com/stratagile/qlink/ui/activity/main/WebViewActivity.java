@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.webkit.URLUtil;
 import android.webkit.WebBackForwardList;
 import android.webkit.WebSettings;
@@ -15,12 +16,17 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
+import com.stratagile.qlink.entity.eventbus.OnAppResume;
 import com.stratagile.qlink.ui.activity.main.component.DaggerWebViewComponent;
 import com.stratagile.qlink.ui.activity.main.contract.WebViewContract;
 import com.stratagile.qlink.ui.activity.main.module.WebViewModule;
 import com.stratagile.qlink.ui.activity.main.presenter.WebViewPresenter;
 import com.stratagile.qlink.ui.activity.topup.TopupOrderListActivity;
 import com.stratagile.qlink.utils.WXH5PayHandler;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -56,12 +62,16 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
     protected void initView() {
         mainColor = R.color.white;
         setContentView(R.layout.activity_web_view);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     protected void initData() {
+        if (getIntent().getStringExtra("url").contains("https://shop.huagaotx.cn/vendor")) {
+            isWxPay = true;
+        }
         setTitle(getIntent().getStringExtra("title"));
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDefaultFontSize(16);
@@ -174,11 +184,19 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
                 webView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        setResult(RESULT_OK);
-                        finish();
+                        webView.setVisibility(View.INVISIBLE);
+                        //setResult(RESULT_OK);
+                        //finish();
                     }
                 }, 2000);
             }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAppResume(OnAppResume onAppResume) {
+        if (isWxPay) {
+            finish();
         }
     }
 
@@ -188,6 +206,7 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
             startActivity(new Intent(WebViewActivity.this, TopupOrderListActivity.class));
             setResult(RESULT_OK);
         }
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -206,6 +225,9 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
             index--;
         }
         super.onBackPressed();
+        /*if (webView.getUrl().contains("partner_order_list")) {
+            finish();
+        }*/
     }
 
 

@@ -53,6 +53,7 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
+import com.stratagile.qlink.entity.eventbus.OnAppResume;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.utils.FileUtil;
@@ -355,6 +356,7 @@ public class AppConfig extends MultiDexApplication {
             @Override
             public void onBecameForeground() {
                 KLog.i("当前程序切换到前台");
+                EventBus.getDefault().post(new OnAppResume());
             }
 
             @Override

@@ -1112,8 +1112,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public void handleToAppToBack(ForegroundCallBack foregroundCallBack) {
         if (!foregroundCallBack.isForeground()) {
             ConstantValue.isShouldShowVertifyPassword = true;
-            bottomNavigation.setSelectedItemId(R.id.item_sms);
-            setVpnPage();
+            bottomNavigation.setSelectedItemId(R.id.item_topup);
+            setTopupPage();
         }
     }
 

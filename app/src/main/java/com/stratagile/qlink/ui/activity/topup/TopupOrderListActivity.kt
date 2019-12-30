@@ -192,6 +192,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
                             intent.putExtra("url", url)
                             intent.putExtra("title", getString(R.string.payment))
                             startActivityForResult(intent, 1)
+                            finish()
                         }
                     }
                 }
