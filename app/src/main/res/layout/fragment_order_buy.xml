@@ -384,7 +384,6 @@
                 android:layout_height="match_parent"/>
 
             <ImageView
-                android:id="@+id/walletMore"
                 android:layout_marginRight="15dp"
                 android:layout_width="15dp"
                 android:layout_gravity="center_vertical"

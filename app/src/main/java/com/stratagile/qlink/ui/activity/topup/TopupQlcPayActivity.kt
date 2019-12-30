@@ -204,6 +204,8 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
                 intent.putExtra("url", url)
                 intent.putExtra("title", getString(R.string.payment))
                 startActivityForResult(intent, 10)
+                setResult(Activity.RESULT_OK)
+                finish()
             }, 1500)
         }
     }
@@ -269,7 +271,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         } else {
             mPresenter.getMainAddress()
         }
-        tvAmountQgas.text = product.price.toBigDecimal().multiply((product.qgasDiscount.toBigDecimal())).divide(payToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+        tvAmountQgas.text = product.payFiatAmount.toBigDecimal().multiply(product.qgasDiscount.toBigDecimal()).divide(payToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
         llSelectQlcWallet.setOnClickListener {
             var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
             intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
@@ -278,7 +280,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
         }
 
-        var discountPrice = (product.price.toBigDecimal() * (product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
+        var discountPrice = (product.payFiatAmount.toBigDecimal() * (product.discount.toBigDecimal())).stripTrailingZeros().toPlainString()
 //        etEthTokenSendMemo.setText(getString(R.string.topup_200_deduct_10_from_10_qgas, product.price.toString(), discountPrice, tvAmountQgas.text.toString(), payToken.symbol))
         var message = "topup_" + product.id + "_" + discountPrice
         etEthTokenSendMemo.setText(message)
@@ -403,11 +405,10 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
             map["p2pId"] = topUpP2pId
         }
         map["productId"] = product.id
-        map["areaCode"] = intent.getStringExtra("areaCode")
         map["phoneNumber"] = intent.getStringExtra("phoneNumber")
-        map["amount"] = product.price.toString()
+        map["localFiatAmount"] = product.amountOfMoney
         map["txid"] = txid
-        map["payTokenId"] = payToken.id
+        map["deductionTokenId"] = payToken.id
         mPresenter.createTopupOrder(map)
     }
 

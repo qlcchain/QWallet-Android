@@ -80,7 +80,6 @@
         android:contentDescription="@string/app_name"/>
 
     <ImageView
-        android:id="@+id/left_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_mask"
@@ -91,7 +90,6 @@
         android:contentDescription="@string/app_name"/>
 
     <ImageView
-        android:id="@+id/right_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_mask"
@@ -126,7 +124,6 @@
 
         <TextView
 
-            android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
@@ -139,7 +136,6 @@
             android:textColor="#DBD5D5"/>
 
         <TextView
-            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"

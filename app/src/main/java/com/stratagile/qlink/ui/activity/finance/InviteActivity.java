@@ -25,6 +25,7 @@ import com.stratagile.qlink.ui.activity.finance.component.DaggerInviteComponent;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteContract;
 import com.stratagile.qlink.ui.activity.finance.module.InviteModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.InvitePresenter;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.reward.ClaimRewardActivity;
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
@@ -161,10 +162,14 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
     }
 
     private void claimQgas() {
-        Intent claimIntent = new Intent(this, ClaimRewardActivity.class);
-        claimIntent.putExtra("total", canClaimFriendTotal * oneFirendClaimQgas + "");
-        claimIntent.putExtra("claimType", "invite");
-        startActivityForResult(claimIntent, 1);
+        if (ConstantValue.currentUser == null) {
+            startActivity(new Intent(this, AccountActivity.class));
+        } else {
+            Intent claimIntent = new Intent(this, ClaimRewardActivity.class);
+            claimIntent.putExtra("total", canClaimFriendTotal * oneFirendClaimQgas + "");
+            claimIntent.putExtra("claimType", "invite");
+            startActivityForResult(claimIntent, 1);
+        }
     }
 
     @Override

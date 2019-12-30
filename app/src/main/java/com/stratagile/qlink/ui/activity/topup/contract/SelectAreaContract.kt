@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
+import com.stratagile.qlink.entity.topup.CountryList
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -19,6 +20,8 @@ interface SelectAreaContract {
          *
          */
         fun closeProgressDialog()
+
+        fun setCountryList(countryList: CountryList)
     }
 
     interface SelectAreaContractPresenter : BasePresenter {

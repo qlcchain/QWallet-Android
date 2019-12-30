@@ -50,7 +50,7 @@ public class SettingsPresenter implements SettingsContract.SettingsContractPrese
             @Override
             public void accept(BaseBack user) throws Exception {
                 //isSuccesse
-                mView.logoutSuccess();
+//                mView.logoutSuccess();
             }
         }, new Consumer<Throwable>() {
             @Override

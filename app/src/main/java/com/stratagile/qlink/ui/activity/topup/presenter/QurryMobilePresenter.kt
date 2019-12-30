@@ -44,9 +44,52 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Qurr
         }))
     }
 
+    fun getCountryList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getCountryList(map).subscribe({
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
     fun getPayToken() {
         mCompositeDisposable.add(httpAPIWrapper.payToken(hashMapOf<String, String>()).subscribe({
             mView.setPayTokenAdapter(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun createTopupOrder(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.topupCreateOrder(map).subscribe({
+            mView.createTopupOrderSuccess(it)
+        }, {
+            mView.createTopupOrderError()
+//            TopupTodoList.createTodoList(map)
+//            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
+        }, {
+            mView.createTopupOrderError()
+//            TopupTodoList.createTodoList(map)
+//            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
+        }))
+    }
+
+    fun getIspList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getIspList(map).subscribe({
+            mView.setIsp(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun provinceList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.provinceList(map).subscribe({
+            mView.setProvinceList(it)
         }, {
             mView.closeProgressDialog()
         }, {

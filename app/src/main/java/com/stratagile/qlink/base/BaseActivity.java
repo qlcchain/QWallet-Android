@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -70,26 +71,34 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         } else {
             Timber.plant(new Timber.DebugTree());
         }
-        getWindow().setBackgroundDrawable(null);
+        //getWindow().setBackgroundDrawable(null);
         if (mainColor == 0) {
             mainColor = R.color.mainColor;
         }
-        // 经测试在代码里直接声明透明状态栏更有效
-        if (android.os.Build.MANUFACTURER.toUpperCase().equals("MEIZU")) {
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        } else {
-            StatusBarUtil.setTransparent(this);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //设置状态栏黑色字体
-            }
+
+//        if (android.os.Build.MANUFACTURER.toUpperCase().equals("MEIZU")) {
+//            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+//            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+//        } else {
+//            StatusBarUtil.setTransparent(this);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //设置状态栏黑色字体
+//            }
+//        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //设置状态栏黑色字体
         }
+        StatusBarUtil.setTransparent(this);
         initToolbar();
-//        AppConfig.getInstance().mAppActivityManager.addActivity(this);
         setupActivityComponent();
         initView();
         initData();
     }
+
+
 
     /**
      * 设置app的语言
@@ -109,6 +118,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             configuration.locale = Locale.CHINESE;
             Locale.setDefault(Locale.CHINESE);
             KLog.i("设置为中文");
+        } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 2) {
+            configuration.setLocale(new Locale("in", "rID"));
+            //Locale.setDefault(Locale.CHINESE);
+            KLog.i("设置为印度尼西亚");
         }
         getResources().updateConfiguration(configuration, displayMetrics);
         if (isUpdate) {

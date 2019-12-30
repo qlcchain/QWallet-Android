@@ -310,5 +310,6 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         map.put("account", ConstantValue.currentUser.getAccount());
         map.put("token", AccountUtil.getUserToken());
         mPresenter.logout(map);
+        logoutSuccess();
     }
 }

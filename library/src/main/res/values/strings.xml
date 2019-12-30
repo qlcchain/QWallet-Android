@@ -25,7 +25,6 @@
     </string-array>
 
     <!--View-->
-    <string name="view_set_as_the_default_app">Set as the default app</string>
     <string name="view_title">Select</string>
     <string name="view_no_apps_can_open_this_file">No applications can open this file</string>
 

@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
 
-    private ArrayList<OrderListBean> orderList;
+    private ArrayList<TopupOrder.OrderBean> orderList;
 
-    public ArrayList<OrderListBean> getOrderList() {
+    public ArrayList<TopupOrder.OrderBean> getOrderList() {
         return orderList;
     }
 
-    public void setOrderList(ArrayList<OrderListBean> orderList) {
+    public void setOrderList(ArrayList<TopupOrder.OrderBean> orderList) {
         this.orderList = orderList;
     }
 

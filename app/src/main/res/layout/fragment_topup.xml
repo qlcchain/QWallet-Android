@@ -146,7 +146,6 @@
                                 android:text="$0.0212"
                                 android:layout_height="wrap_content"/>
                             <TextView
-                                android:id="@+id/qlcGain"
                                 android:layout_width="wrap_content"
                                 android:text="+0.86%"
                                 android:visibility="gone"
@@ -157,7 +156,6 @@
                                 android:layout_below="@+id/tvQlcPrice"
                                 android:layout_height="wrap_content"/>
                             <TextView
-                                android:id="@+id/qlcTrade"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="12dp"
@@ -264,17 +262,27 @@
                         android:layout_marginLeft="15dp"
                         android:gravity="center"
                         android:includeFontPadding="false"
-                        android:text="@string/operator_package"
+                        android:text="@string/mobile_plan"
                         android:textColor="@color/color_29282a"
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                    android:id="@+id/recyclerViewMobilePlan"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+                    android:layout_height="wrap_content"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 </android.support.v7.widget.RecyclerView>
 

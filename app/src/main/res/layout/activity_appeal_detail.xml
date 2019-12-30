@@ -191,7 +191,6 @@
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/llSendCoinAmount"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/x30"

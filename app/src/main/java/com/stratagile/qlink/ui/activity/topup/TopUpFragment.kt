@@ -13,6 +13,9 @@ import android.os.SystemClock
 import android.support.annotation.Nullable
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +45,7 @@ import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.runOnUiThread
+import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.chart.MyAxisValueFormatter
@@ -53,6 +57,7 @@ import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.eventbus.Logout
 import com.stratagile.qlink.entity.eventbus.ShowMiningAct
 import com.stratagile.qlink.entity.reward.Dict
+import com.stratagile.qlink.entity.topup.CountryList
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.main.MainViewModel
@@ -61,14 +66,12 @@ import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter
+import com.stratagile.qlink.ui.adapter.topup.CountryListAdapter
 import com.stratagile.qlink.ui.adapter.topup.ImagesPagerAdapter
+import com.stratagile.qlink.ui.adapter.topup.PayTokenDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupShowProductAdapter
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.view.ScaleCircleNavigator
-import com.vondear.rxtools.RxDeviceTool
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.activity_person.*
 import kotlinx.android.synthetic.main.fragment_topup.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -97,20 +100,22 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         var map = mutableMapOf<String, String>()
         map.put("page", "1")
         map.put("size", "20")
-        mPresenter.getProductList(map)
+        mPresenter.getProductList(map, true)
 
         oneFirendClaimQgas = dict.data.value.toFloat()
     }
 
     override fun setInviteRank(inviteList: InviteList) {
-
+        mPresenter.getCountryList(hashMapOf())
         val invitedAdapter = InvitedAdapter(inviteList.top5, oneFirendClaimQgas)
         recyclerViewInvite.adapter = invitedAdapter
     }
 
-    override fun setProductList(topupProduct: TopupProduct) {
+    override fun setProductList(topupProduct: TopupProduct, next : Boolean) {
         topupShowProductAdapter.setNewData(topupProduct.productList)
-        getInviteRank()
+        if (next) {
+            getInviteRank()
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -167,6 +172,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     @Inject
     lateinit internal var mPresenter: TopUpPresenter
+    lateinit var countryAdapter: CountryListAdapter
     private var oneFirendClaimQgas = 0f
     private var viewModel: MainViewModel? = null
     internal var viewList: MutableList<Int> = ArrayList()
@@ -203,6 +209,18 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         indicator.navigator = scaleCircleNavigator
         ViewPagerHelper.bind(indicator, viewPager!!, viewList.size)
 
+        recyclerViewMobilePlan.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        recyclerViewMobilePlan.addItemDecoration(PayTokenDecoration(UIUtils.dip2px(4f, activity)))
+        countryAdapter = CountryListAdapter(arrayListOf())
+        recyclerViewMobilePlan.adapter = countryAdapter
+        countryAdapter.setOnItemClickListener { adapter, view, position ->
+            countryAdapter.data.forEach {
+                it.isSelect = false
+            }
+            countryAdapter.data[position].isSelect = true
+            countryAdapter.notifyDataSetChanged()
+            reChangeTaoCan(countryAdapter.data[position])
+        }
 
         viewModel?.currentUserAccount?.observe(this, Observer {
             if (it != null) {
@@ -217,7 +235,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                     // 创建普通字符型ClipData
                     val mClipData = ClipData.newPlainText("Label", tvIniviteCode.text.toString().trim { it <= ' ' })
                     // 将ClipData内容放到系统剪贴板里。
-                    cm!!.primaryClip = mClipData
+                    cm!!.setPrimaryClip(mClipData)
                     ToastUtil.displayShortToast(getString(R.string.copy_success))
                 }
                 getOneFriendReward()
@@ -226,9 +244,10 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             }
         })
         topupShowProductAdapter = TopupShowProductAdapter(arrayListOf())
+        recyclerView.layoutManager = GridLayoutManager(activity, 2)
         recyclerView.adapter = topupShowProductAdapter
         refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
-        recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, activity!!)))
+//        recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, activity!!)))
         recyclerView.setHasFixedSize(true)
         recyclerView.isNestedScrollingEnabled = false
 
@@ -236,18 +255,24 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         recyclerViewInvite.isNestedScrollingEnabled = false
         getOneFriendReward()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
-            //            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
-//                activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
-//                    negativeButton(getString(R.string.cancel)) { dismiss() }
-//                    positiveButton(getString(R.string.create)) { startActivity(Intent(context, SelectWalletTypeActivity::class.java)) }
-//                }.show()
-//            } else {
-//                if (topupShowProductAdapter.data[position].stock != 0) {
-//                    startActivity(Intent(activity!!, QurryMobileActivity::class.java))
-//                }
-//            }
             if (topupShowProductAdapter.data[position].stock != 0) {
-                startActivity(Intent(activity!!, QurryMobileActivity::class.java))
+                countryAdapter.data.forEach {
+                    if (it.isSelect) {
+                        var qurryIntent = Intent(activity!!, QurryMobileActivity::class.java)
+                        qurryIntent.putExtra("area", it.globalRoaming)
+                        qurryIntent.putExtra("country", it.nameEn)
+                        qurryIntent.putExtra("isp", topupShowProductAdapter.data[position].ispEn.trim())
+                        startActivity(qurryIntent)
+                        return@setOnItemClickListener
+                    }
+                }
+                var qurryIntent = Intent(activity!!, QurryMobileActivity::class.java)
+                qurryIntent.putExtra("area", "")
+                qurryIntent.putExtra("country", "")
+                qurryIntent.putExtra("isp", "")
+                startActivity(qurryIntent)
+            } else {
+                toast(getString(R.string.the_product_is_sold_out))
             }
         }
         etMobile.setOnClickListener {
@@ -258,7 +283,11 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 }.show()
                 return@setOnClickListener
             }
-            startActivity(Intent(activity!!, QurryMobileActivity::class.java))
+            var qurryIntent = Intent(activity!!, QurryMobileActivity::class.java)
+            qurryIntent.putExtra("area", "")
+            qurryIntent.putExtra("country", "")
+            qurryIntent.putExtra("isp", "")
+            startActivity(qurryIntent)
         }
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = false
@@ -419,6 +448,18 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         getTokenPrice()
     }
 
+    override fun setCountryList(countryList: CountryList) {
+        countryAdapter.setNewData(countryList.countryList)
+    }
+
+    fun reChangeTaoCan(bean: CountryList.CountryListBean) {
+        var map = mutableMapOf<String, String>()
+        map.put("page", "1")
+        map.put("globalRoaming", bean.globalRoaming)
+        map.put("size", "20")
+        mPresenter.getProductList(map, false)
+    }
+
     private fun getTokenPrice() {
         val infoMap = HashMap<String, Any>()
         val tokens = arrayOfNulls<String>(1)
@@ -433,34 +474,6 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         EventBus.getDefault().unregister(this)
         super.onDestroy()
     }
-
-//    internal inner class ViewAdapter : PagerAdapter() {
-//        override fun getCount(): Int {
-//            return viewList.size
-//        }
-//
-//        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-//            return view === `object`
-//        }
-//
-//        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-//            container.removeView(viewList[position])
-//        }
-//
-//        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-//            container.addView(viewList[position])
-//            viewList[position].setOnClickListener(View.OnClickListener {
-//                if (position == 0) {
-//                    startActivity(Intent(activity, MyStakeActivity::class.java))
-//                }
-//                if (position == 1) {
-//                    startActivity(Intent(activity, MiningInviteActivity::class.java))
-//                }
-//            })
-//            return viewList[position]
-//        }
-//    }
-
 
     override fun setupFragmentComponent() {
         DaggerTopUpComponent

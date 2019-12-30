@@ -4,7 +4,6 @@
     android:layout_height="@dimen/x100"
     android:layout_marginLeft="@dimen/x30"
     android:layout_marginRight="@dimen/x30"
-    android:id="@+id/ll_root"
     android:gravity="center_vertical"
     android:orientation="vertical">
     <LinearLayout

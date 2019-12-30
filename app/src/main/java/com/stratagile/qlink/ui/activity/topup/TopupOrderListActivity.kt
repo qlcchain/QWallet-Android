@@ -18,6 +18,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.API
 import com.stratagile.qlink.data.api.HttpInfoInterceptor
 import com.stratagile.qlink.data.api.RequestBodyInterceptor
+import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
@@ -156,6 +157,44 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
                 R.id.voucherDetail -> {
                     startActivity(Intent(this, VoucherDetailActivity::class.java).putExtra("orderBean", topupOrderListAdapter.data[position]))
                 }
+                R.id.tvPayNow -> {
+                    if ("TOKEN".equals(topupOrderListAdapter.data[position].payWay)) {
+                        if ("".equals(topupOrderListAdapter.data[position].txid)) {
+                            when(OtcUtils.parseChain(topupOrderListAdapter.data[position].chain)) {
+                                AllWallet.WalletType.QlcWallet -> {
+                                    var payIntent = Intent(this, TopupDeductionQlcChainActivity::class.java)
+                                    payIntent.putExtra("order", topupOrderListAdapter.data[position])
+                                    startActivityForResult(payIntent, 1)
+                                }
+                                AllWallet.WalletType.EthWallet -> {
+                                    var payIntent = Intent(this, TopupDeductionEthChainActivity::class.java)
+                                    payIntent.putExtra("order", topupOrderListAdapter.data[position])
+                                    startActivityForResult(payIntent, 1)
+                                }
+                            }
+                        } else {
+                            if ("".equals(topupOrderListAdapter.data[position].payTokenInTxid)) {
+                                when(OtcUtils.parseChain(topupOrderListAdapter.data[position].payTokenChain)) {
+                                    AllWallet.WalletType.NeoWallet -> {
+                                        var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
+                                        payIntent.putExtra("order", topupOrderListAdapter.data[position])
+                                        startActivityForResult(payIntent, 1)
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if ("QGAS_PAID".equals(topupOrderListAdapter.data[position].status)) {
+                            var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?mobile=${topupOrderListAdapter.data[position].phoneNumber}&uid=1000001&sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=${topupOrderListAdapter.data[position].originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}"
+                            KLog.i(url)
+                            paymentOk = false
+                            val intent = Intent(this, WebViewActivity::class.java)
+                            intent.putExtra("url", url)
+                            intent.putExtra("title", getString(R.string.payment))
+                            startActivityForResult(intent, 1)
+                        }
+                    }
+                }
             }
         }
         refreshLayout.setOnRefreshListener {
@@ -171,18 +210,6 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
             map["size"] = "20"
             mPresenter.getOderList(map, currentPage)
         }
-        topupOrderListAdapter.setOnItemClickListener { adapter, view, position ->
-            if ("QGAS_PAID".equals(topupOrderListAdapter.data[position].status)) {
-                var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?mobile=${topupOrderListAdapter.data[position].phoneNumber}&uid=1000001&sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=${topupOrderListAdapter.data[position].originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}"
-////                var url = "https://shop.huagaotx.cn/wap/charge_v3.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrderListAdapter.data[position].userId}_${topupOrderListAdapter.data[position].id}&package=0&mobile=${topupOrderListAdapter.data[position].phoneNumber}"
-                KLog.i(url)
-                paymentOk = false
-                val intent = Intent(this, WebViewActivity::class.java)
-                intent.putExtra("url", url)
-                intent.putExtra("title", getString(R.string.payment))
-                startActivityForResult(intent, 1)
-            }
-        }
     }
     var paymentOk = false;
 
@@ -190,6 +217,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             paymentOk = true
+            finish()
         }
     }
 

@@ -184,32 +184,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
                     }
                 })
 
-//        Observable.create(ObservableOnSubscribe<String> { emitter -> emitter.onNext(generateTransaction(walletAddress, tokenAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, limit, price, tokenDecimal))
-//        }).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(object : Observer<String> {
-//                    override fun onSubscribe(d: Disposable) {
-//
-//                    }
-//
-//                    override fun onNext(s: String) {
-//                        mView.closeProgressDialog()
-//                        if ("" == s) {
-//                            ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
-//                        } else {
-//                            mView.sendPayTokenSuccess(s)
-//                        }
-//                        KLog.i("transaction Hash: $s")
-//                    }
-//
-//                    override fun onError(e: Throwable) {
-//
-//                    }
-//
-//                    override fun onComplete() {
-//
-//                    }
-//                })
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {

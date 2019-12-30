@@ -15,6 +15,7 @@ import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.entity.reward.RewardList
 import com.stratagile.qlink.entity.reward.RewardTotal
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
+import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.reward.component.DaggerMyClaimComponent
 import com.stratagile.qlink.ui.activity.reward.contract.MyClaimContract
 import com.stratagile.qlink.ui.activity.reward.module.MyClaimModule
@@ -73,6 +74,10 @@ class MyClaimActivity : BaseActivity(), MyClaimContract.View {
         setContentView(R.layout.activity_my_claim)
     }
     override fun initData() {
+        if (ConstantValue.currentUser == null) {
+            startActivity(Intent(this, AccountActivity::class.java))
+            finish()
+        }
         title.text = getString(R.string.earning_detail)
         rewardListAdapter = RewardListAdapter(arrayListOf())
         recyclerView.adapter = rewardListAdapter

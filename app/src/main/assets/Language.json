@@ -10,6 +10,10 @@
         {
           "name": "Chinese",
           "localLanguage": "简体中文"
+        },
+        {
+          "name": "印度尼西亚",
+          "localLanguage": "Bahasa Indonesia"
         }
       ]
     }

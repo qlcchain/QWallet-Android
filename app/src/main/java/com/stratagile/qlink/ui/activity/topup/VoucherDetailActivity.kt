@@ -8,6 +8,7 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.topup.component.DaggerVoucherDetailComponent
 import com.stratagile.qlink.ui.activity.topup.contract.VoucherDetailContract
@@ -31,7 +32,7 @@ class VoucherDetailActivity : BaseActivity(), VoucherDetailContract.View {
 
     @Inject
     internal lateinit var mPresenter: VoucherDetailPresenter
-    lateinit var orderBean : TopupOrderList.OrderListBean
+    lateinit var orderBean : TopupOrder.OrderBean
     override fun onCreate(savedInstanceState: Bundle?) {
         drawableBg = R.drawable.main_bg_shape
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class VoucherDetailActivity : BaseActivity(), VoucherDetailContract.View {
 
         orderNumber.text = orderBean.number.substring(8, orderBean.number.length)
         time.text = TimeUtil.timeConvert(orderBean.orderTime)
-        orderDetail.text = getString(R.string.top_up_100phone_bill_18825709441, orderBean.originalPrice.toString(), orderBean.phoneNumber)
+        orderDetail.text = getString(R.string.top_up_100phone_bill_18825709441, (orderBean.localFiatMoney.toString() + orderBean.localFiat), orderBean.phoneNumber)
         txid.text = orderBean.txid
         txid.setOnClickListener {
             OtcUtils.gotoBlockBrowser(this, orderBean.chain, orderBean.txid)

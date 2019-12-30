@@ -1,109 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="160dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="10dp"
-    android:layout_marginLeft="12dp"
     app:cardCornerRadius="6dp"
-    app:cardBackgroundColor="@color/transparent"
-    app:cardElevation="3dp"
-    android:layout_marginRight="16dp"
-    android:layout_height="187dp">
-    <ImageView
-        android:id="@+id/ivBack"
-        android:scaleType="centerCrop"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="0dp"
+    android:layout_height="210dp">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <LinearLayout
-        android:id="@+id/llParent"
-        android:layout_width="match_parent"
-        android:background="@mipmap/guangdong_mobile"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tvOperator"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="13dp"
-            android:textColor="@color/white"
-            android:text="-/-"
-            android:textSize="15sp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tvOperatorEn"
-            android:layout_width="wrap_content"
-            android:textColor="@color/white"
-            android:text="-/-"
-            android:textSize="13sp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tvAreaOperator"
-            android:layout_width="wrap_content"
-            android:textColor="@color/white"
-            android:text="-/-"
-            android:textSize="13sp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tvAreaOperatorEn"
-            android:layout_width="wrap_content"
-            android:textColor="@color/white"
-            android:text="-/-"
-            android:textSize="12sp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/ivBack"
+            android:scaleType="centerCrop"
+            android:layout_width="160dp"
+            android:layout_height="132dp"/>
 
         <TextView
+            android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
-            android:text="@string/check_out_your_exclusive_offer"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/discount_bg"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:background="@drawable/bg_location"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="CHINA"
+            android:paddingLeft="4dp"
+            android:gravity="center_vertical"
+            android:drawablePadding="4dp"
+            android:paddingRight="4dp"
+            android:drawableLeft="@mipmap/location"
             android:textColor="@color/white"
-            android:textSize="13sp"
-            android:layout_height="wrap_content"/>
-
-        <RelativeLayout
+            android:textSize="10sp"
+            android:layout_height="15dp"/>
+        <LinearLayout
+            android:id="@+id/llParent"
+            android:layout_below="@+id/ivBack"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvDiscount"
-                android:textSize="29sp"
-                android:text="100"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/white"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="4dp"
-                android:layout_alignBottom="@+id/tvDiscount"
-                android:layout_toRightOf="@+id/tvDiscount"
-                android:text="@string/discount"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="@string/recharge_phone_bill"
-                android:layout_marginLeft="2dp"
-                android:textSize="13sp"
-                android:textColor="#87BCEB"
-                android:layout_below="@+id/tvDiscount"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvOperator"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:text="-/-"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvAreaOperator"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/tvOperatorEn"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:text="-/-"-->
+<!--                android:textSize="13sp"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_height="wrap_content" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/tvAreaOperatorEn"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:text="-/-"-->
+<!--                android:textSize="12sp"-->
+<!--                android:layout_marginLeft="15dp"-->
+<!--                android:layout_height="wrap_content" />-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvDiscount"
+                    android:textSize="19sp"
+                    android:text="100"
+                    android:textColor="@color/color_ff3669"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/color_ff3669"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_alignBottom="@+id/tvDiscount"
+                    android:layout_toRightOf="@+id/tvDiscount"
+                    android:text="@string/discount"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/recharge_phone_bill"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/color_108ee9"
+                    android:layout_below="@+id/tvDiscount"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/noProduct"
         android:background="@drawable/bg_white_50_6dp"
@@ -113,6 +127,7 @@
             android:layout_width="wrap_content"
             android:textColor="@color/white"
             android:paddingTop="5dp"
+            android:visibility="gone"
             android:paddingBottom="5dp"
             android:paddingLeft="22dp"
             android:paddingRight="6dp"

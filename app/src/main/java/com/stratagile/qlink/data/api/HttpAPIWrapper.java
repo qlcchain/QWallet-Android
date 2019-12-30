@@ -82,6 +82,8 @@ import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.CountryList;
+import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
@@ -1153,6 +1155,46 @@ public class HttpAPIWrapper {
             return wrapper(mMainHttpAPI.sysBackUp(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.sysBackUp(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<CountryList> getCountryList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getCountryList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getCountryList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<IspList> getIspList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getIspList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getIspList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<IspList> provinceList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.provinceList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.provinceList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TopupOrder> saveDeductionTokenTxid(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.saveDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.saveDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TopupOrder> savePayTokenTxid(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

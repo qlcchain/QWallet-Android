@@ -14,6 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import org.web3j.abi.datatypes.Bool
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -43,15 +44,26 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }
     }
 
-    fun getProductList(map: MutableMap<String, String>) {
+    fun getProductList(map: MutableMap<String, String>, next : Boolean) {
         mCompositeDisposable.add(httpAPIWrapper.getTopupProductList(map).subscribe({
-            mView.setProductList(it)
+            mView.setProductList(it, next)
         }, {
             mView.closeProgressDialog()
         }, {
             mView.closeProgressDialog()
         }))
     }
+
+    fun getCountryList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getCountryList(map).subscribe({
+            mView.setCountryList(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
 
     fun getToeknPrice(map: HashMap<*, *>) {
         val disposable = httpAPIWrapper.getTokenPrice(map)

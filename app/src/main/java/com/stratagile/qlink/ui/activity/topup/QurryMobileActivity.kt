@@ -7,11 +7,15 @@ import android.content.Intent
 import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.ContactsContract
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -25,7 +29,9 @@ import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.AllWallet
+import com.stratagile.qlink.entity.topup.IspList
 import com.stratagile.qlink.entity.topup.PayToken
+import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.qlinkcom
 import com.stratagile.qlink.topup.Area
@@ -40,6 +46,7 @@ import com.stratagile.qlink.ui.adapter.topup.PayTokenAdapter
 import com.stratagile.qlink.ui.adapter.topup.PayTokenDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupAbleAdapter
 import com.stratagile.qlink.utils.*
+import com.stratagile.qlink.view.CustomPopWindow
 import com.vondear.rxtools.RxKeyboardTool
 import com.yanzhenjie.alertdialog.AlertDialog
 import com.yanzhenjie.permission.AndPermission
@@ -47,8 +54,7 @@ import com.yanzhenjie.permission.PermissionListener
 import com.yanzhenjie.permission.Rationale
 import com.yanzhenjie.permission.RationaleListener
 import kotlinx.android.synthetic.main.activity_qurry_mobile.*
-import kotlinx.android.synthetic.main.activity_qurry_mobile.recyclerView
-import kotlinx.android.synthetic.main.fragment_trade_list.*
+import java.io.File
 import java.math.BigDecimal
 import java.util.*
 
@@ -71,7 +77,28 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         topupAbleAdapter!!.payToken = selectedPayToken
     }
 
+    override fun createTopupOrderError() {
+        closeProgressDialog()
+    }
+
+    override fun createTopupOrderSuccess(topupOrder: TopupOrder) {
+        closeProgressDialog()
+        when (OtcUtils.parseChain(selectedPayToken.chain)) {
+            AllWallet.WalletType.QlcWallet -> {
+                val intent1 = Intent(this@QurryMobileActivity, TopupDeductionQlcChainActivity::class.java)
+                intent1.putExtra("order", topupOrder.order)
+                startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+            }
+            AllWallet.WalletType.EthWallet -> {
+                val intent1 = Intent(this@QurryMobileActivity, TopupDeductionEthChainActivity::class.java)
+                intent1.putExtra("order", topupOrder.order)
+                startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+            }
+        }
+    }
+
     override fun setProductList(topupProduct: TopupProduct) {
+        mPresenter.getCountryList(hashMapOf())
         var productList = arrayListOf<TopupProduct.ProductListBean>()
         if (topupProduct.productList.size == 0) {
             noProduct.visibility = View.VISIBLE
@@ -83,15 +110,17 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             tvFound.visibility = View.VISIBLE
         }
         topupProduct.productList.forEach { itss ->
-            itss.amountOfMoney.split(",").forEach {
+            var payFiatAmountList = itss.payFiatAmount.split(",")
+            itss.amountOfMoney.split(",").forEachIndexed { index, it ->
                 var bean = TopupProduct.ProductListBean()
-                bean.price = it.toInt()
+                bean.amountOfMoney = it
+                bean.payFiatAmount = payFiatAmountList[index]
                 bean.country = itss.country
                 bean.province = itss.province
                 bean.isp = itss.isp
                 bean.name = itss.name
+                bean.nameEn = itss.nameEn
                 bean.discount = itss.discount
-                bean.amountOfMoney = itss.amountOfMoney
                 bean.id = itss.id
                 bean.qgasDiscount = itss.qgasDiscount
                 bean.ispEn = itss.ispEn
@@ -101,6 +130,14 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 bean.description = itss.description
                 bean.explainEn = itss.explainEn
                 bean.explain = itss.explain
+
+                bean.localFiat = itss.localFiat
+                bean.payWay = itss.payWay
+                bean.payTokenSymbol = itss.payTokenSymbol
+                bean.payFiat = itss.payFiat
+                bean.payTokenCnyPrice = itss.payTokenCnyPrice
+
+
                 productList.add(bean)
             }
         }
@@ -119,7 +156,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     override fun initView() {
         setContentView(R.layout.activity_qurry_mobile)
-        tvArea.setOnClickListener {
+        llSelectCountry.setOnClickListener {
             val inputmanger = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputmanger.hideSoftInputFromWindow(etContact.getWindowToken(), 0)
             startActivityForResult(Intent(this, SelectAreaActivity::class.java), 10)
@@ -128,65 +165,147 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         topupAbleAdapter = TopupAbleAdapter(arrayListOf())
         recyclerView.adapter = topupAbleAdapter
         topupAbleAdapter!!.setOnItemClickListener { adapter, view, position ->
-            var price = topupAbleAdapter!!.data[position].price.toString()
-            var dsicountPrice = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
-            var qgasCount = topupAbleAdapter!!.data[position].price.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal()).divide(selectedPayToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
-            alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, price, qgasCount, selectedPayToken.symbol, dsicountPrice)) {
-                negativeButton(getString(R.string.cancel)) { dismiss() }
-                positiveButton(getString(R.string.buy_topup)) {
-                    when (OtcUtils.parseChain(selectedPayToken.chain)) {
-                        AllWallet.WalletType.QlcWallet -> {
-                            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+            if ("".equals(etContact.text.toString().trim())) {
+                toast(getString(R.string.please_enter_correct_mobbile_number))
+                return@setOnItemClickListener
+            }
+            if ("FIAT".equals(topupAbleAdapter!!.data[position].payWay)) {
+                var price = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
+                var dsicountPrice = topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
+                var deductionTokenAmount = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal()).divide(selectedPayToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, topupAbleAdapter!!.data[position].amountOfMoney.toString(), deductionTokenAmount, selectedPayToken.symbol, price)) {
+                    negativeButton(getString(R.string.cancel)) { dismiss() }
+                    positiveButton(getString(R.string.buy_topup)) {
+                        when (OtcUtils.parseChain(selectedPayToken.chain)) {
+                            AllWallet.WalletType.QlcWallet -> {
+                                if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                                    generateTopupOrder(topupAbleAdapter!!.data[position])
+
+//                                    val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
+//                                    intent1.putExtra("product", topupAbleAdapter!!.data[position])
+//                                    intent1.putExtra("payToken", selectedPayToken)
+//                                    intent1.putExtra("areaCode", tvArea.text.toString())
+//                                    intent1.putExtra("phoneNumber", etContact.text.toString())
+//                                    startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
+                                } else {
+                                    alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
+                                        negativeButton(getString(R.string.cancel)) { dismiss() }
+                                        positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                                    }.show()
+                                }
+                            }
+                            AllWallet.WalletType.EthWallet -> {
+                                if (AppConfig.instance.daoSession.ethWalletDao.loadAll().size != 0) {
+                                    generateTopupOrder(topupAbleAdapter!!.data[position])
+
+//                                    val intent1 = Intent(this@QurryMobileActivity, TopupEthPayActivity::class.java)
+//                                    intent1.putExtra("product", topupAbleAdapter!!.data[position])
+//                                    intent1.putExtra("payToken", selectedPayToken)
+//                                    intent1.putExtra("areaCode", tvArea.text.toString())
+//                                    intent1.putExtra("phoneNumber", etContact.text.toString())
+//                                    startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
+                                } else {
+                                    alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "ETH Chain")) {
+                                        negativeButton(getString(R.string.cancel)) { dismiss() }
+                                        positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                                    }.show()
+                                }
+                            }
+                            AllWallet.WalletType.NeoWallet -> {
                                 val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
                                 intent1.putExtra("product", topupAbleAdapter!!.data[position])
                                 intent1.putExtra("payToken", selectedPayToken)
                                 intent1.putExtra("areaCode", tvArea.text.toString())
                                 intent1.putExtra("phoneNumber", etContact.text.toString())
-                                startActivityForResult(intent1, AllWallet.WalletType.QlcWallet.ordinal)
-                            } else {
-                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
-                                    negativeButton(getString(R.string.cancel)) { dismiss() }
-                                    positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
-                                }.show()
+                                startActivityForResult(intent1, AllWallet.WalletType.NeoWallet.ordinal)
                             }
-                        }
-                        AllWallet.WalletType.EthWallet -> {
-                            if (AppConfig.instance.daoSession.ethWalletDao.loadAll().size != 0) {
-                                val intent1 = Intent(this@QurryMobileActivity, TopupEthPayActivity::class.java)
-                                intent1.putExtra("product", topupAbleAdapter!!.data[position])
-                                intent1.putExtra("payToken", selectedPayToken)
-                                intent1.putExtra("areaCode", tvArea.text.toString())
-                                intent1.putExtra("phoneNumber", etContact.text.toString())
-                                startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
-                            } else {
-                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "ETH Chain")) {
-                                    negativeButton(getString(R.string.cancel)) { dismiss() }
-                                    positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
-                                }.show()
-                            }
-                        }
-                        AllWallet.WalletType.NeoWallet -> {
-                            val intent1 = Intent(this@QurryMobileActivity, TopupQlcPayActivity::class.java)
-                            intent1.putExtra("product", topupAbleAdapter!!.data[position])
-                            intent1.putExtra("payToken", selectedPayToken)
-                            intent1.putExtra("areaCode", tvArea.text.toString())
-                            intent1.putExtra("phoneNumber", etContact.text.toString())
-                            startActivityForResult(intent1, AllWallet.WalletType.NeoWallet.ordinal)
                         }
                     }
+                }.show()
+            } else {
+
+                var deductionTokenPrice = 0.toDouble()
+                if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)) {
+                    deductionTokenPrice = selectedPayToken.price
+                } else if ("USD".equals(topupAbleAdapter!!.data[position].payFiat)){
+                    deductionTokenPrice = selectedPayToken.usdPrice
                 }
-            }.show()
+
+                var dikoubijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal())
+                var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+                var zhifufabijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal())
+                var zhifudaibijine = zhifufabijine - dikoubijine
+                var zhifubishuliang = zhifudaibijine.divide(topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+
+                alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol)) {
+                    negativeButton(getString(R.string.cancel)) { dismiss() }
+                    positiveButton(getString(R.string.buy_topup)) {
+                        if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                            generateTopupOrder(topupAbleAdapter!!.data[position])
+                        } else {
+                            alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
+                                negativeButton(getString(R.string.cancel)) { dismiss() }
+                                positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                            }.show()
+                        }
+                    }
+                }.show()
+
+            }
         }
-        payTokenRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         payTokenAdapter = PayTokenAdapter(arrayListOf())
         payTokenRecyclerView.adapter = payTokenAdapter
+        payTokenRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         payTokenRecyclerView.addItemDecoration(PayTokenDecoration(UIUtils.dip2px(12f, this)))
         recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(5f, this)))
         ivContact.setOnClickListener {
             getContactPermission()
         }
         qurryMobile.setOnClickListener {
+//            if ("".equals(countryName)) {
+//                toast(getString(R.string.please_select_country))
+//                return@setOnClickListener
+//            }
+//            if ("".equals(etContact.text.toString().trim())) {
+//                toast(getString(R.string.please_input_phone_number))
+//                return@setOnClickListener
+//            }
+//            if ("+86".equals(country)) {
+//                if (!AccountUtil.isTelephone(etContact.text.toString().trim())) {
+//                    toast(getString(R.string.please_input_phone_number))
+//                }
+//                return@setOnClickListener
+//            }
+//            if ("".equals(isp)) {
+//                toast(getString(R.string.please_select_operator))
+//                return@setOnClickListener
+//            }
             getProductList()
+        }
+        llSelectOperator.setOnClickListener {
+            if ("".equals(countryName)) {
+                toast(getString(R.string.please_select_country))
+                return@setOnClickListener
+            }
+            getOperator(country)
+//            var ispIntent = Intent(this, SelectOperatorActivity::class.java)
+//            ispIntent.putExtra("area", country)
+//            startActivityForResult(ispIntent, 11)
+        }
+        llRegion.setOnClickListener {
+            if ("".equals(countryName)) {
+                toast(getString(R.string.please_select_country))
+                return@setOnClickListener
+            }
+            if ("".equals(isp)) {
+                toast(getString(R.string.please_select_operator))
+                return@setOnClickListener
+            }
+            provinceList()
+//            var regionIntent = Intent(this, SelectRegionActivity::class.java)
+//            regionIntent.putExtra("area", country)
+//            regionIntent.putExtra("isp", isp)
+//            startActivityForResult(regionIntent, 12)
         }
         payTokenAdapter.setOnItemClickListener { adapter, view, position ->
             payTokenAdapter.data.forEach {
@@ -197,6 +316,82 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             payTokenAdapter.notifyDataSetChanged()
             reSetProduct()
         }
+    }
+
+    fun provinceList() {
+        var map = mutableMapOf<String, String>()
+        map.put("globalRoaming", country)
+        map.put("isp", isp)
+        mPresenter.provinceList(map)
+    }
+
+    fun getOperator(globalRoaming : String) {
+        var map = mutableMapOf<String, String>()
+        map.put("globalRoaming", globalRoaming)
+        mPresenter.getIspList(map)
+    }
+
+    override fun setIsp(ispList: IspList) {
+        PopWindowUtil.showSharePopWindow(this, tvArea, ispList.ispList, object : PopWindowUtil.OnItemSelectListener{
+            override fun onSelect(content: String) {
+                if (!"".equals(content)) {
+                    tvIsp.text = content
+                    isp = content
+                }
+            }
+
+        })
+    }
+    override fun setProvinceList(ispList: IspList) {
+        PopWindowUtil.showSharePopWindow(this, tvArea, ispList.ispList, object : PopWindowUtil.OnItemSelectListener{
+            override fun onSelect(content: String) {
+                if (!"".equals(content)) {
+                    tvRegion.text = content
+                    region = content
+                }
+            }
+
+        })
+    }
+
+    fun generateTopupOrder(product: TopupProduct.ProductListBean) {
+        showProgressDialog()
+        var map = hashMapOf<String, String>()
+        var topUpP2pId = SpUtil.getString(this, ConstantValue.topUpP2pId, "")
+        if ("".equals(topUpP2pId)) {
+            var saveP2pId = FileUtil.readData("/Qwallet/p2pId.txt")
+            if ("".equals(saveP2pId)) {
+                val uuid = UUID.randomUUID()
+                var p2pId = ""
+                p2pId += uuid.toString().replace("-", "")
+                topUpP2pId = p2pId
+                SpUtil.putString(this, ConstantValue.topUpP2pId, p2pId)
+
+                val file = File(Environment.getExternalStorageDirectory().toString() + "/Qwallet/p2pId.txt")
+                if (file.exists()) {
+                    FileUtil.savaData("/Qwallet/p2pId.txt", topUpP2pId)
+                } else {
+                    file.createNewFile()
+                    FileUtil.savaData("/Qwallet/p2pId.txt", topUpP2pId)
+                }
+
+            } else {
+                topUpP2pId = saveP2pId
+                SpUtil.putString(this, ConstantValue.topUpP2pId, topUpP2pId)
+            }
+        }
+        KLog.i("p2pId为：" + topUpP2pId)
+        if (ConstantValue.currentUser != null) {
+            map["account"] = ConstantValue.currentUser.account
+            map["p2pId"] = topUpP2pId
+        } else {
+            map["p2pId"] = topUpP2pId
+        }
+        map["productId"] = product.id
+        map["localFiatAmount"] = product.amountOfMoney
+        map["phoneNumber"] = etContact.text.toString()
+        map["deductionTokenId"] = selectedPayToken.id
+        mPresenter.createTopupOrder(map)
     }
 
     fun reSetProduct() {
@@ -221,26 +416,28 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         tvFound.visibility = View.GONE
         payTokenRecyclerView.visibility = View.GONE
         topupAbleAdapter!!.setNewData(arrayListOf())
-        if ("+86".equals(tvArea.text.toString().trim())) {
-            if ("".equals(etContact.text.toString().trim())) {
-                return
-            }
-            if (!AccountUtil.isTelephone(etContact.text.toString().trim())) {
-                toast(getString(R.string.please_enter_correct_mobbile_number))
-                return
-            }
-        } else {
-            if ("".equals(etContact.text.toString().trim())) {
-                return
-            }
-            if ("".equals(etContact.text.toString().trim())) {
-                toast(getString(R.string.please_enter_correct_mobbile_number))
-                return
-            }
-        }
+//        if ("+86".equals(tvArea.text.toString().trim())) {
+//            if ("".equals(etContact.text.toString().trim())) {
+//                return
+//            }
+//            if (!AccountUtil.isTelephone(etContact.text.toString().trim())) {
+//                toast(getString(R.string.please_enter_correct_mobbile_number))
+//                return
+//            }
+//        } else {
+//            if ("".equals(etContact.text.toString().trim())) {
+//                toast(getString(R.string.please_enter_correct_mobbile_number))
+//                return
+//            }
+//        }
         (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(tvArea.getWindowToken(), 0)
         var map = mutableMapOf<String, String>()
         map.put("phoneNumber", etContact.text.toString().trim())
+
+        map.put("globalRoaming", country)
+        map.put("isp", isp)
+        map.put("province", region)
+
         map.put("page", "1")
         map.put("size", "20")
         mPresenter.getProductList(map)
@@ -250,10 +447,30 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         super.onDestroy()
     }
 
+    var country = ""
+    var countryName = ""
+    var isp = ""
+    var region = ""
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 10 && resultCode == Activity.RESULT_OK) {
             tvArea.text = data!!.getStringExtra("area")
+            country = data!!.getStringExtra("area")
+            countryName = data!!.getStringExtra("country")
+            tvCountry.text = countryName
+            isp = ""
+            region = ""
+            tvIsp.text = getString(R.string.please_choose)
+            tvRegion.text = getString(R.string.optional)
+            topupAbleAdapter!!.data.clear()
+        }
+        if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
+            tvIsp.text = data!!.getStringExtra("isp")
+            isp = data!!.getStringExtra("isp")
+        }
+        if (requestCode == 12 && resultCode == Activity.RESULT_OK) {
+            tvRegion.text = data!!.getStringExtra("region")
+            region = data!!.getStringExtra("region")
         }
         if (requestCode == 20 && resultCode == Activity.RESULT_OK) {
             var contactData = data!!.getData()
@@ -356,6 +573,18 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     override fun initData() {
         title.text = getString(R.string.enter_mobile_phone_number)
+        country = intent.getStringExtra("area")
+        countryName =intent.getStringExtra("country")
+        isp = intent.getStringExtra("isp")
+        if (!"".equals(country)) {
+            tvArea.text = country
+        }
+        if (!"".equals(countryName)) {
+            tvCountry.text = countryName
+        }
+        if (!"".equals(isp)) {
+            tvIsp.text = isp
+        }
         mPresenter.getPayToken()
         etContact.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {

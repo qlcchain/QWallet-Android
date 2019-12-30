@@ -9,7 +9,6 @@
     app:cardElevation="@dimen/x10"
     android:layout_width="@dimen/x500">
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/loading"
         android:layout_width="@dimen/x500"
         android:layout_height="wrap_content"
         android:orientation="vertical">

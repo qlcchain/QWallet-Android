@@ -1561,6 +1561,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="you_do_not_have_qlcwallet_create_immediately">You don‘t have a %1$s wallet yet\n Create one</string>
     <string name="send_qgas_error">send %1$s error</string>
     <string name="a_cahrge_of_will_cost_qgas_and_rmb">Top-up value ¥ %1$s\n pay %2$s %3$s and ¥ %4$s</string>
+    <string name="a_cahrge_of_will_cost_paytoken_and_deduction_token">Top-up value ¥ %1$s\n pay %2$s %3$s and %4$s %5$s</string>
     <string name="balance_insufficient_to_purchase_qgas_on_otc_pages">Insufficient balance\n purchase %1$s</string>
     <string name="buy_topup">BUY</string>
     <string name="choose_a_counntry_and_a_region">Choose a country and a region</string>
@@ -1651,4 +1652,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="new_trade_order">New Order</string>
     <string name="please_pay">Please Pay</string>
     <string name="wait_seller_pay">Wait for seller pay</string>
+    <string name="join_now_telegram">Join Now</string>
+    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">Join us on Telegram To get the latest QGAS news</string>
+    <string name="mobile_plan">Mobile Plan</string>
+    <string name="please_choose">Please choose</string>
+    <string name="operator">Operator</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="region">Region</string>
+    <string name="country_code">Country Code</string>
+    <string name="selective_filling">Selective filling</string>
+    <string name="optional">Optional</string>
+
+    //2019-12-27//
+    <string name="paytoken_paid">Pay Token Paid</string>
+    <string name="please_select_country">Please Select Country</string>
+    <string name="please_select_operator">Please Select Operator</string>
+    <string name="please_select_region">Please Select Region</string>
+    <string name="please_input_phone_number">Please Input Phone Number</string>
+    <string name="the_product_is_sold_out">The product is sold out</string>
 </resources>

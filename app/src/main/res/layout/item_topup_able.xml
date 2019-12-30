@@ -64,15 +64,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/tvFiat"
                 android:layout_width="wrap_content"
                 android:textSize="13sp"
-                android:textColor="@color/white"
                 android:layout_marginBottom="6dp"
-                android:layout_marginLeft="4dp"
-                android:layout_alignBottom="@+id/tvPrice"
                 android:layout_toRightOf="@+id/tvPrice"
-                android:text="元"
+                android:layout_marginLeft="2dp"
+                android:text="CNY"
+                android:layout_alignBottom="@+id/tvPrice"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:text="@string/telephone_bill"
@@ -112,6 +114,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/payTokenSymbol"
+                    android:visibility="gone"
+                    android:textSize="13sp"
+                    android:text="QGAS"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/color_1e1e24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
                     android:id="@+id/rmbCn"
                     android:textSize="13sp"
                     android:text="¥"
@@ -128,13 +139,13 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:id="@+id/qgasCount"
+                    android:id="@+id/deductionAmount"
                     android:textSize="19sp"
                     android:textColor="@color/color_1e1e24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/payTokenSymbol"
+                    android:id="@+id/deductionTokenSymbol"
                     android:textSize="13sp"
                     android:text="QGAS"
                     android:layout_marginTop="2dp"

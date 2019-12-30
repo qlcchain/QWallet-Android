@@ -25,6 +25,7 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
         protected PayTokenListBean(Parcel in) {
             symbol = in.readString();
             chain = in.readString();
+            usdPrice = in.readDouble();
             price = in.readDouble();
             id = in.readString();
             logo_png = in.readString();
@@ -131,7 +132,17 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
 
         private String symbol;
         private String chain;
+        private double usdPrice;
         private double price;
+
+        public double getUsdPrice() {
+            return usdPrice;
+        }
+
+        public void setUsdPrice(double usdPrice) {
+            this.usdPrice = usdPrice;
+        }
+
         private String id;
         private String logo_png;
         private int decimal;
@@ -150,6 +161,7 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
             dest.writeString(symbol);
             dest.writeString(chain);
             dest.writeDouble(price);
+            dest.writeDouble(usdPrice);
             dest.writeString(id);
             dest.writeString(logo_png);
             dest.writeInt(decimal);

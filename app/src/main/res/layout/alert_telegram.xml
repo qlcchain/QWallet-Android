@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="250dp"
+    android:layout_gravity="center">
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:layout_width="250dp">
+        <android.support.constraint.ConstraintLayout
+            android:background="@drawable/bg_rect_round"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/ivTitle"
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:layout_height="wrap_content"
+                android:text="@string/join_us_on_telegram_to_get_the_latest_qgas_news"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="96dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+
+            <TextView
+                android:id="@+id/tvOpreate"
+                android:layout_width="match_parent"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="33dp"
+                app:layout_constraintTop_toBottomOf="@+id/ivTitle"
+                android:text="@string/join_now_telegram"
+                android:textSize="19sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingLeft="@dimen/x40"
+                android:paddingRight="@dimen/x40"
+                android:background="@drawable/telegram_bg"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/white"
+                android:layout_height="@dimen/x80" />
+
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="106dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/tips_telegram"
+        android:layout_height="76dp"/>
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_alignRight="@+id/ll1"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/close_h"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

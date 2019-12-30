@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
@@ -61,6 +62,8 @@ import com.stratagile.qlink.entity.eventbus.CheckConnectRsp;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.FreeCount;
 import com.stratagile.qlink.entity.eventbus.GetPairs;
+import com.stratagile.qlink.entity.eventbus.LoginSuccess;
+import com.stratagile.qlink.entity.eventbus.Logout;
 import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowBind;
@@ -1279,21 +1282,44 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
-    private void showTestDialog() {
-        View view = getLayoutInflater().inflate(R.layout.alert_dialog_tip, null, false);
-        TextView tvContent = view.findViewById(R.id.tvContent);
-        ImageView imageView = view.findViewById(R.id.ivTitle);
-        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
-        tvContent.setText("setting success");
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginSuccess(LoginSuccess loginSuccess) {
+        showTelegramDialog();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void logOut(Logout logout) {
+        showTelegramDialog();
+    }
+
+    private void showTelegramDialog() {
+        View view = getLayoutInflater().inflate(R.layout.alert_telegram, null, false);
+        TextView tvOpreate = view.findViewById(R.id.tvOpreate);
+        ImageView ivClose = view.findViewById(R.id.ivClose);
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
-        sweetAlertDialog.show();
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sweetAlertDialog.cancel();
+            }
+        });
+        tvOpreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sweetAlertDialog.cancel();
+                Intent intent1 = new Intent();
+                intent1.setAction("android.intent.action.VIEW");
+                intent1.setData(Uri.parse("https://t.me/qlinkmobile"));
+                startActivity(intent1);
+            }
+        });
         ivWallet.postDelayed(new Runnable() {
             @Override
             public void run() {
-                sweetAlertDialog.cancel();
+                sweetAlertDialog.show();
             }
-        }, 2000);
+        }, 1500);
     }
 
     @Override

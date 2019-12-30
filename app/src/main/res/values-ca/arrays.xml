@@ -6,20 +6,4 @@
   -->
 <resources>
   <!--  Keep the order the same as the TYPE_ constants in VPNProfile -->
-  <string-array name="vpn_types">
-    <item>Certificats</item>
-    <item>Fitxer PKCS12</item>
-    <item>Certificat Android</item>
-    <item>Usuari/Contrasenya</item>
-    <item>Claus Estàtiques</item>
-    <item>Usuari/Con + Certificats</item>
-    <item>Usuari/Con + PKCS12 </item>
-    <item>Usuari/Con + Android</item>
-  </string-array>
-  <string-array name="tls_directions_entries">
-    <item translatable="false">0</item>
-    <item translatable="false">1</item>
-    <item>Sense especificar</item>
-    <item>Encryption (--tls-crypt)</item>
-  </string-array>
 </resources>

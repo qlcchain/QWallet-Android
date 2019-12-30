@@ -440,10 +440,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
                 break;
             case R.id.cryptoWallet:
-                EventBus.getDefault().post(new ChangeViewpager(1));
+                EventBus.getDefault().post(new ChangeViewpager(2));
                 break;
             case R.id.shareFriend:
-                if (isLogin) {
+                if (isLogin && ConstantValue.currentUser != null) {
                     shareFriend.setDotViewVisible(View.INVISIBLE);
                     controllerDot();
                     startActivity(new Intent(getActivity(), InviteActivity.class));

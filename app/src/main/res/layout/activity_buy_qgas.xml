@@ -227,7 +227,6 @@
 
         <ImageView
             android:padding="@dimen/x15"
-            android:id="@+id/walletMore"
             android:layout_marginRight="@dimen/x30"
             android:layout_width="@dimen/x60"
             android:layout_gravity="center_vertical"
@@ -302,7 +301,6 @@
             android:layout_height="match_parent"/>
 
         <ImageView
-            android:id="@+id/paywalletMore"
             android:layout_marginRight="15dp"
             android:layout_width="15dp"
             android:layout_gravity="center_vertical"

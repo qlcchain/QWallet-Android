@@ -9,6 +9,7 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.entity.MyAsset
+import com.stratagile.qlink.entity.topup.CountryList
 import com.stratagile.qlink.topup.Area
 import com.stratagile.qlink.ui.activity.topup.component.DaggerSelectAreaComponent
 import com.stratagile.qlink.ui.activity.topup.contract.SelectAreaContract
@@ -43,15 +44,11 @@ class SelectAreaActivity : BaseActivity(), SelectAreaContract.View {
     }
     override fun initData() {
         title.text = getString(R.string.choose_a_counntry_and_a_region)
-        val area = Gson().fromJson<ArrayList<Area>>(FileUtil.getJson(this, "area.json"), object : TypeToken<ArrayList<Area?>?>() {}.type)
-        var mobileAreaAdapter = MobileAreaAdapter(area.filter { it.code.contains("+86") })
-        recyclerView.adapter = mobileAreaAdapter
-        mobileAreaAdapter.setOnItemClickListener { adapter, view, position ->
-            var resultIntent = Intent()
-            resultIntent.putExtra("area", mobileAreaAdapter.data[position].code)
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-        }
+        getCountryList()
+    }
+
+    fun getCountryList() {
+        mPresenter.getCountryList(hashMapOf())
     }
 
     override fun setupActivityComponent() {
@@ -72,6 +69,18 @@ class SelectAreaActivity : BaseActivity(), SelectAreaContract.View {
 
     override fun closeProgressDialog() {
         progressDialog.hide()
+    }
+
+    override fun setCountryList(countryList: CountryList) {
+        var mobileAreaAdapter = MobileAreaAdapter(countryList.countryList)
+        recyclerView.adapter = mobileAreaAdapter
+        mobileAreaAdapter.setOnItemClickListener { adapter, view, position ->
+            var resultIntent = Intent()
+            resultIntent.putExtra("area", mobileAreaAdapter.data[position].globalRoaming)
+            resultIntent.putExtra("country", mobileAreaAdapter.data[position].nameEn)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        }
     }
 
 }

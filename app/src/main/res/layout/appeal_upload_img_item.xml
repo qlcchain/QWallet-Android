@@ -27,7 +27,6 @@
             android:src="@mipmap/tabbar_delete"
             android:layout_height="@dimen/x30" />
         <TextView
-            android:id="@+id/tvImgSize"
             android:layout_width="wrap_content"
             android:layout_alignParentBottom="true"
             android:textColor="@color/white"

@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.stratagile.qlink">
 
-    <permission
-        android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
 
     <uses-permission android:name="com.stratagile.qwallet.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
@@ -610,6 +607,11 @@
         <activity android:name=".ui.activity.mining.MiningInviteActivity" />
         <activity android:name=".ui.activity.mining.MiningDailyDetailActivity" />
         <activity android:name=".ui.activity.mining.MiningRewardActivity" />
+        <activity android:name=".ui.activity.topup.SelectOperatorActivity" />
+        <activity android:name=".ui.activity.topup.SelectRegionActivity" />
+        <activity android:name=".ui.activity.topup.TopupDeductionQlcChainActivity" />
+        <activity android:name=".ui.activity.topup.TopupPayNeoChainActivity" />
+        <activity android:name=".ui.activity.topup.TopupDeductionEthChainActivity" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

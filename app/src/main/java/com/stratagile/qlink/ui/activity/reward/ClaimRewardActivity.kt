@@ -12,6 +12,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.reward.ClaimQgas
+import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.ui.activity.reward.component.DaggerClaimRewardComponent
 import com.stratagile.qlink.ui.activity.reward.contract.ClaimRewardContract
@@ -53,6 +54,10 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         setContentView(R.layout.activity_claim_reward)
     }
     override fun initData() {
+        if (ConstantValue.currentUser == null) {
+            startActivity(Intent(this, AccountActivity::class.java))
+            finish()
+        }
         isInvite = "invite".equals(intent.getStringExtra("claimType"))
         if (isInvite) {
             title.text = getString(R.string.get_now)

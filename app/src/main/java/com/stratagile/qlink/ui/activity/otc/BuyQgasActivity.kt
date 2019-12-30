@@ -58,6 +58,7 @@ import qlc.mng.AccountMng
 import java.math.BigDecimal
 
 import javax.inject.Inject;
+import kotlin.properties.Delegates
 
 /**
  * @author hzp
@@ -169,6 +170,12 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         }
 
         tvNext.setOnClickListener {
+            if (!this::entrustOrderInfo.isInitialized) {
+                var map = hashMapOf<String, String>()
+                map.put("entrustOrderId", orderList.id)
+                mPresenter.getEntrustOrderDetail(map)
+                return@setOnClickListener
+            }
             if (entrustOrderInfo.order.userId.equals(ConstantValue.currentUser.userId)) {
 
                 return@setOnClickListener

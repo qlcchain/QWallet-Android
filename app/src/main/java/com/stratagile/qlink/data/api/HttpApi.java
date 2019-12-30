@@ -78,6 +78,8 @@ import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.CountryList;
+import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
@@ -684,6 +686,26 @@ public interface HttpApi {
     @POST(url_sys_bbackup)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> sysBackUp(@Body RequestBody map);
+
+    @POST(API.url_country_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<CountryList> getCountryList(@Body RequestBody map);
+
+    @POST(API.url_getIspList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<IspList> getIspList(@Body RequestBody map);
+
+    @POST(API.provinceList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<IspList> provinceList(@Body RequestBody map);
+
+    @POST(API.saveDeductionTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> saveDeductionTokenTxid(@Body RequestBody map);
+
+    @POST(API.savePayTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> savePayTokenTxid(@Body RequestBody map);
 
 
 
