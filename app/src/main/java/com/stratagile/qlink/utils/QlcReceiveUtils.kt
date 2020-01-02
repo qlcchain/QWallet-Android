@@ -36,7 +36,9 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
     val sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
     var isBendi = true
     //QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()
+    KLog.i("得到发送块")
     val receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, qlcAccount.address, null)
+    KLog.i("得到接收块")
     val aaaa = JSONArray()
     var stateBlock = Gson().fromJson<StateBlock>(receiveBlockJson.toJSONString(), StateBlock::class.java)
     if (Constants.BLOCK_TYPE_CONTRACTREWARD.equals(stateBlock.type) || Constants.LINNK_TYPE_AIRDORP.equals(stateBlock.type)) {

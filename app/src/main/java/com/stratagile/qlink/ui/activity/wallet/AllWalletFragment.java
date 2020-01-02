@@ -695,7 +695,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         JSONArray jsonArray1 = new JSONArray();
         jsonArray1.add(qlcAccount.getAddress());
         jsonArray.add(jsonArray1);
-        jsonArray.add(-1);
+        jsonArray.add(2);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -732,6 +732,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     }
                 } catch (Exception e) {
                     isPending = false;
+                    initData();
                     e.printStackTrace();
                 }
             }
