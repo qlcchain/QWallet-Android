@@ -98,6 +98,15 @@
                             app:layout_constraintBottom_toBottomOf="@+id/ivWalletAvatar"
                             app:layout_constraintStart_toEndOf="@id/ivWalletAvatar" />
 
+                        <TextView
+                            android:id="@+id/tvPending"
+                            android:layout_width="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/color_333"
+                            app:layout_constraintBottom_toBottomOf="@+id/ivWalletAvatar"
+                            app:layout_constraintStart_toEndOf="@id/tvWalletAddress"
+                            android:layout_height="wrap_content"/>
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

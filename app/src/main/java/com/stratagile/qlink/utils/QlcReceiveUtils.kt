@@ -33,7 +33,7 @@ import java.math.BigDecimal
 
 fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount, rpc : LedgerRpc, receiveBack: ReceiveBack){
     KLog.i("开始接收")
-    val sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
+    var sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
     var isBendi = true
     //QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()
     KLog.i("得到发送块")
@@ -53,7 +53,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 return
             }
         } catch (e : Exception) {
-
+            e.printStackTrace()
+            receiveBack.recevie(false)
         }
         return
     }
@@ -83,7 +84,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                     stateBlock.setSignature(Helper.byteToHexString(signature))
                     aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
                 } else {
-
+                    receiveBack.recevie(false)
+                    return@responseString
                 }
                 KLog.i("接收传过去的参数：" + aaaa)
                 var result = rpc.process(aaaa)
@@ -94,6 +96,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                receiveBack.recevie(false)
             }
         }
         KLog.i(aaaa)

@@ -53,15 +53,12 @@ import com.stratagile.qlink.ui.activity.eos.EosResourceManagementActivity;
 import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
 import com.stratagile.qlink.ui.activity.eth.EthMnemonicShowActivity;
 import com.stratagile.qlink.ui.activity.eth.EthTransferActivity;
-import com.stratagile.qlink.ui.activity.eth.EthWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.eth.WalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
 import com.stratagile.qlink.ui.activity.neo.NeoWalletInfoActivity;
-import com.stratagile.qlink.ui.activity.neo.WalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcMnemonicShowActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
-import com.stratagile.qlink.ui.activity.qlc.QlcWalletCreatedActivity;
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
@@ -163,6 +160,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     LinearLayout llBackUp;
     @BindView(R.id.main_content)
     RelativeLayout mainContent;
+    @BindView(R.id.tvPending)
+    TextView tvPending;
 
     private double walletAsset;
 
@@ -178,6 +177,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     private QLCAccount selectedQlcWallet;
 
     private final int START_ACTIVITY_BACKUP = 2;
+
+    private Pending pending;
 
     @Nullable
     @Override
@@ -207,6 +208,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             @Override
             public void onRefresh() {
                 isPending = false;
+                tvPending.setText("");
+                pending = null;
                 refreshLayout.setRefreshing(false);
                 initData();
             }
@@ -505,6 +508,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         hasSelectedWallet = true;
                         selectedEthWallet = ethWallets.get(i);
                         getEthToken(ethWallets.get(i));
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvPending.setText("");
+                            }
+                        });
                     }
                 }
                 List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
@@ -515,6 +524,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             KLog.i("生成neo钱包的结果为：" + Account.INSTANCE.fromWIF(neoWallets.get(i).getWif()));
                             selectedNeoWallet = neoWallets.get(i);
                             getNeoToken(neoWallets.get(i));
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("");
+                                }
+                            });
                         }
                     }
                 }
@@ -524,6 +539,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         if (eosAccounts.get(i).getIsCurrent()) {
                             hasSelectedWallet = true;
                             getEosToken(eosAccounts.get(i));
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("");
+                                }
+                            });
                         }
                     }
                 }
@@ -577,7 +598,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             jsonArray.add(seed);
             String mnemonics = AccountRpc.seedToMnemonics(jsonArray);
             KLog.i(mnemonics);
-            String address =  QlcUtil.publicToAddress(pubKey).toLowerCase();
+            String address = QlcUtil.publicToAddress(pubKey).toLowerCase();
             QLCAccount qlcAccount = new QLCAccount();
             qlcAccount.setPrivKey(priKey.toLowerCase());
             qlcAccount.setPubKey(pubKey);
@@ -671,11 +692,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         viewModel.allWalletMutableLiveData.postValue(currentSelectWallet);
         viewModel.walletTypeMutableLiveData.postValue(AllWallet.WalletType.QlcWallet);
         allWalletMoney.put(allWallet, 0d);
-        List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        if (neoWallets.size() != 0) {
-            Account.INSTANCE.fromWIF(neoWallets.get(0).getWif());
-            mPresenter.getWinqGas(neoWallets.get(0).getAddress());
-        }
+
         new QLCAPI().walletGetBalance(qlcAccount.getAddress(), "", new QLCAPI.BalanceInter() {
             @Override
             public void onBack(@org.jetbrains.annotations.Nullable ArrayList<QlcTokenbalance> baseResult, @org.jetbrains.annotations.Nullable Error error) {
@@ -691,32 +708,49 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             KLog.i("pending中，过滤掉。。");
             return;
         }
-        JSONArray jsonArray = new JSONArray();
-        JSONArray jsonArray1 = new JSONArray();
-        jsonArray1.add(qlcAccount.getAddress());
-        jsonArray.add(jsonArray1);
-        jsonArray.add(2);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
                     LedgerRpc rpc = new LedgerRpc(qlcClient);
-                    JSONObject jsonObject = rpc.accountsPending(jsonArray);
-//                    KLog.i(jsonObject.toJSONString());
-                    JSONObject jsonObject1 = JSONObject.parseObject(jsonObject.get("result").toString());
-//                    KLog.i(jsonObject1.toJSONString());
-                    if (jsonObject1.get(qlcAccount.getAddress()) == null) {
+                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                        pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
+                    }
+                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
                         return;
                     }
-                    Pending pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
                     KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
                     if (pending.getInfoList().size() != 0) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                            }
+                        });
+
                         isPending = true;
                         QlcReceiveUtilsKt.recevive(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()), qlcAccount, rpc, new ReceiveBack() {
                             @Override
                             public void recevie(boolean suceess) {
                                 if (suceess) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            isPending = false;
+                                            if (pending != null && pending.getInfoList() != null && pending.getInfoList().size() != 0) {
+                                                pending.getInfoList().remove(0);
+                                                tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                                                if (pending.getInfoList().size() == 0) {
+                                                    tvPending.setText("");
+                                                }
+                                                initData();
+                                            } else {
+                                                tvPending.setText("");
+                                            }
+                                        }
+                                    });
+                                } else {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -728,15 +762,26 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             }
                         });
                     } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvPending.setText("");
+                            }
+                        });
                         isPending = false;
                     }
                 } catch (Exception e) {
-                    isPending = false;
-                    initData();
                     e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            isPending = false;
+                            initData();
+                        }
+                    });
                 }
             }
-        }). start();
+        }).start();
 
     }
 
@@ -938,6 +983,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            pending = null;
+            tvPending.setText("");
             initData();
         } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             allWalletMoney.remove(currentSelectWallet);
@@ -951,8 +998,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallets.get(0));
                 }
             }
+            pending = null;
+            tvPending.setText("");
             initData();
         } else if (requestCode == 2) {
+            pending = null;
+            tvPending.setText("");
             initData();
         }
     }
