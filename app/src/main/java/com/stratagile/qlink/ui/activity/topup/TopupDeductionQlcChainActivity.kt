@@ -22,9 +22,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.SwitchToOtc
-import com.stratagile.qlink.entity.topup.PayToken
-import com.stratagile.qlink.entity.topup.TopupOrder
-import com.stratagile.qlink.entity.topup.TopupProduct
+import com.stratagile.qlink.entity.topup.*
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopupDeductionQlcChainComponent
@@ -71,6 +69,68 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
 
     override fun setPresenter(presenter: TopupDeductionQlcChainContract.TopupDeductionQlcChainContractPresenter) {
         mPresenter = presenter as TopupDeductionQlcChainPresenter
+    }
+
+    override fun itemOrderStatus(topupJoinGroup: TopupJoinGroup) {
+        if (isFinish) {
+            return
+        }
+        if (!"DEDUCTION_TOKEN_PAID".equals(topupJoinGroup.item.status, true)) {
+            thread {
+                Thread.sleep(5000)
+                var map = hashMapOf<String, String>()
+                map["groupItemId"] = topupJoinGroup.item.id
+                mPresenter.itemDeductionTokenConfirm(map, topupJoinGroup.item)
+            }
+        } else {
+            ivLoad2.setImageResource(R.mipmap.background_success)
+            tvPaying.text = getString(R.string.qgas_transferred, topupOrderBean.symbol)
+            tvVoucher.text = getString(R.string.blockchain_inoice_created)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            showChangeAnimation(ivLoad2)
+            tvSend.postDelayed({
+                sweetAlertDialog.dismissWithAnimation()
+            }, 1000)
+            tvSend.postDelayed({
+                when (OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
+                    AllWallet.WalletType.NeoWallet -> {
+                        var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
+                        payIntent.putExtra("groupBean", topupJoinGroup.item)
+                        payIntent.putExtra("isGroup", true)
+                        startActivity(payIntent)
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    }
+                }
+            }, 1500)
+        }
     }
 
 
@@ -122,24 +182,14 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
             tvSend.postDelayed({
-                if ("TOKEN".equals(topupOrderBean.payWay)) {
-                    when(OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
-                        AllWallet.WalletType.NeoWallet -> {
-                            var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
-                            payIntent.putExtra("order", topupOrder.order)
-                            startActivity(payIntent)
-                            setResult(Activity.RESULT_OK)
-                            finish()
-                        }
+                when (OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
+                    AllWallet.WalletType.NeoWallet -> {
+                        var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
+                        payIntent.putExtra("order", topupOrder.order)
+                        startActivity(payIntent)
+                        setResult(Activity.RESULT_OK)
+                        finish()
                     }
-                } else {
-                    var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${topupOrder.order.phoneNumber}"
-                    val intent = Intent(this, WebViewActivity::class.java)
-                    intent.putExtra("url", url)
-                    intent.putExtra("title", getString(R.string.payment))
-                    startActivityForResult(intent, 10)
-                    setResult(Activity.RESULT_OK)
-                    finish()
                 }
             }, 1500)
         }
@@ -167,6 +217,65 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
 
     override fun createTopupOrderSuccess(topupOrder: TopupOrder) {
 
+    }
+
+    override fun saveItemDeductionTokenTxidBack(topupJoinGroup: TopupJoinGroup) {
+        if (!"DEDUCTION_TOKEN_PAID".equals(topupJoinGroup.item.status, true)) {
+            thread {
+                Thread.sleep(5000)
+                var map = hashMapOf<String, String>()
+                map["groupItemId"] = topupJoinGroup.item.id
+                mPresenter.itemDeductionTokenConfirm(map, groupItemList)
+            }
+        } else {
+            ivLoad2.setImageResource(R.mipmap.background_success)
+            tvPaying.text = getString(R.string.qgas_transferred, topupOrderBean.symbol)
+            tvVoucher.text = getString(R.string.blockchain_inoice_created)
+            ivLoad2.clearAnimation()
+            sa1.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            saHalf.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
+            showChangeAnimation(ivLoad2)
+            tvSend.postDelayed({
+                sweetAlertDialog.dismissWithAnimation()
+            }, 1000)
+            tvSend.postDelayed({
+                when (OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
+                    AllWallet.WalletType.NeoWallet -> {
+                        var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
+                        payIntent.putExtra("groupBean", topupJoinGroup.item)
+                        payIntent.putExtra("isGroup", true)
+                        startActivity(payIntent)
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    }
+                }
+            }, 1500)
+        }
     }
 
     override fun saveDeductionTokenTxidBack(topupOrder: TopupOrder) {
@@ -214,7 +323,7 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
             tvSend.postDelayed({
-                when(OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
+                when (OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
                     AllWallet.WalletType.NeoWallet -> {
                         var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
                         payIntent.putExtra("order", topupOrder.order)
@@ -228,10 +337,11 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
 
     }
 
+
     var qgasCount = BigDecimal.ZERO
 
-    lateinit var saHalf : ScaleAnimation
-    lateinit var sa1 : ScaleAnimation
+    lateinit var saHalf: ScaleAnimation
+    lateinit var sa1: ScaleAnimation
 
     lateinit var animationView: View
     lateinit var ivLoad1: ImageView
@@ -239,17 +349,34 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
     lateinit var ivChain: ImageView
     lateinit var tvPaying: TextView
     lateinit var tvVoucher: TextView
-    lateinit var view2 : View
+    lateinit var view2: View
     var isFinish = false
 
     lateinit var sweetAlertDialog: SweetAlertDialog
 
-    lateinit var topupOrderBean : TopupOrder.OrderBean
+    lateinit var topupOrderBean: TopupOrder.OrderBean
+    lateinit var groupItemList: GroupItemList.ItemListBean
 
     var qlcAccount: QLCAccount? = null
     override fun initData() {
         title.text = getString(R.string.payment_wallet)
-        topupOrderBean = intent.getParcelableExtra("order")
+        if (intent.hasExtra("isGroup")) {
+            groupItemList = intent.getParcelableExtra("groupBean")
+            topupOrderBean = TopupOrder.OrderBean()
+
+            topupOrderBean.payTokenSymbol = groupItemList.payToken
+            topupOrderBean.symbol = groupItemList.deductionToken
+            topupOrderBean.id = groupItemList.id
+            topupOrderBean.userId = groupItemList.userId
+            topupOrderBean.chain = groupItemList.payTokenChain
+            topupOrderBean.payTokenChain = groupItemList.deductionTokenChain
+            topupOrderBean.qgasAmount = groupItemList.deductionTokenAmount
+            topupOrderBean.payTokenAmount = groupItemList.payTokenAmount.toString()
+            topupOrderBean.discountPrice = groupItemList.payFiatMoney
+
+        } else {
+            topupOrderBean = intent.getParcelableExtra("order")
+        }
 
         payToken1.text = topupOrderBean.symbol
 
@@ -367,7 +494,11 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
                             }
                             KLog.i(suceess)
                             Thread.sleep(5000)
-                            saveDeductionTokenTxid(suceess, topupOrderBean.id)
+                            if (intent.hasExtra("isGroup")) {
+                                saveItemDeductionTokenTxid(suceess, topupOrderBean.id)
+                            } else {
+                                saveDeductionTokenTxid(suceess, topupOrderBean.id)
+                            }
                         }
                     }
 
@@ -376,7 +507,7 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
         }
     }
 
-    fun saveDeductionTokenTxid(txid : String, orderId : String) {
+    fun saveDeductionTokenTxid(txid: String, orderId: String) {
         var map = hashMapOf<String, String>()
         var topUpP2pId = SpUtil.getString(this, ConstantValue.topUpP2pId, "")
         if ("".equals(topUpP2pId)) {
@@ -414,6 +545,16 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
         mPresenter.saveDeductionTokenTxid(map)
     }
 
+    fun saveItemDeductionTokenTxid(txid: String, orderId: String) {
+        var map = hashMapOf<String, String>()
+        map["account"] = ConstantValue.currentUser.account
+        map["token"] = AccountUtil.getUserToken()
+
+        map["groupItemId"] = orderId
+        map["deductionTokenTxid"] = txid
+        mPresenter.saveItemDeductionTokenTxid(map)
+    }
+
     fun showPayAnimation() {
         tvPaying.text = getString(R.string.transferring_qgas, topupOrderBean.symbol)
         tvVoucher.text = getString(R.string.creating_blockchain_invoice)
@@ -433,7 +574,7 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
     fun showViewAnimation(view1: View) {
         var viewSa = ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0f);
         viewSa.setDuration(1000)
-        viewSa.setAnimationListener(object : Animation.AnimationListener{
+        viewSa.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {
 
             }
@@ -471,6 +612,7 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
         })
         imageView.startAnimation(sa1)
     }
+
     fun scaleAnimationToHalf(imageView: ImageView) {
         saHalf.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {

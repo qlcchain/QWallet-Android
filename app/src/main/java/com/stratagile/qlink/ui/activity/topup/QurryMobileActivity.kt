@@ -36,6 +36,7 @@ import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.qlinkcom
 import com.stratagile.qlink.topup.Area
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
+import com.stratagile.qlink.ui.activity.recommend.TopupProductDetailActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerQurryMobileComponent
 import com.stratagile.qlink.ui.activity.topup.contract.QurryMobileContract
 import com.stratagile.qlink.ui.activity.topup.module.QurryMobileModule
@@ -137,6 +138,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 bean.payFiat = itss.payFiat
                 bean.payTokenCnyPrice = itss.payTokenCnyPrice
                 bean.payTokenUsdPrice = itss.payTokenUsdPrice
+                bean.imgPath = itss.imgPath
 
 
                 productList.add(bean)
@@ -150,6 +152,8 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
     var topupAbleAdapter: TopupAbleAdapter? = null
     lateinit var selectedPayToken: PayToken.PayTokenListBean
     lateinit var payTokenAdapter: PayTokenAdapter
+
+    var hasActivie = true
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -225,33 +229,41 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 }.show()
             } else {
 
-                var deductionTokenPrice = 0.toDouble()
-                if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)) {
-                    deductionTokenPrice = selectedPayToken.price
-                } else if ("USD".equals(topupAbleAdapter!!.data[position].payFiat)){
-                    deductionTokenPrice = selectedPayToken.usdPrice
-                }
-
-                var dikoubijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal())
-                var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
-                var zhifufabijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal())
-                var zhifudaibijine = zhifufabijine - dikoubijine
-                var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)){topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal()} else {topupAbleAdapter!!.data[position].payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
-
-                alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol)) {
-                    negativeButton(getString(R.string.cancel)) { dismiss() }
-                    positiveButton(getString(R.string.buy_topup)) {
-                        if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
-                            generateTopupOrder(topupAbleAdapter!!.data[position])
-                        } else {
-                            alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
-                                negativeButton(getString(R.string.cancel)) { dismiss() }
-                                positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
-                            }.show()
-                        }
+                if (hasActivie) {
+                    var productIntent = Intent(this, TopupProductDetailActivity::class.java)
+                    productIntent.putExtra("productBean", topupAbleAdapter!!.data[position])
+                    productIntent.putExtra("globalRoaming", country)
+                    productIntent.putExtra("phoneNumber", etContact.text.toString())
+                    productIntent.putExtra("selectedPayToken", selectedPayToken)
+                    startActivity(productIntent)
+                } else {
+                    var deductionTokenPrice = 0.toDouble()
+                    if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)) {
+                        deductionTokenPrice = selectedPayToken.price
+                    } else if ("USD".equals(topupAbleAdapter!!.data[position].payFiat)){
+                        deductionTokenPrice = selectedPayToken.usdPrice
                     }
-                }.show()
 
+                    var dikoubijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal())
+                    var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+                    var zhifufabijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal())
+                    var zhifudaibijine = zhifufabijine - dikoubijine
+                    var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)){topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal()} else {topupAbleAdapter!!.data[position].payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
+
+                    alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol, topupAbleAdapter!!.data[position].localFiat)) {
+                        negativeButton(getString(R.string.cancel)) { dismiss() }
+                        positiveButton(getString(R.string.buy_topup)) {
+                            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                                generateTopupOrder(topupAbleAdapter!!.data[position])
+                            } else {
+                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
+                                    negativeButton(getString(R.string.cancel)) { dismiss() }
+                                    positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                                }.show()
+                            }
+                        }
+                    }.show()
+                }
             }
         }
         payTokenAdapter = PayTokenAdapter(arrayListOf())
@@ -263,24 +275,6 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             getContactPermission()
         }
         qurryMobile.setOnClickListener {
-//            if ("".equals(countryName)) {
-//                toast(getString(R.string.please_select_country))
-//                return@setOnClickListener
-//            }
-//            if ("".equals(etContact.text.toString().trim())) {
-//                toast(getString(R.string.please_input_phone_number))
-//                return@setOnClickListener
-//            }
-//            if ("+86".equals(country)) {
-//                if (!AccountUtil.isTelephone(etContact.text.toString().trim())) {
-//                    toast(getString(R.string.please_input_phone_number))
-//                }
-//                return@setOnClickListener
-//            }
-//            if ("".equals(isp)) {
-//                toast(getString(R.string.please_select_operator))
-//                return@setOnClickListener
-//            }
             getProductList()
         }
         llSelectOperator.setOnClickListener {

@@ -8,6 +8,8 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.db.TopupTodoList
 import com.stratagile.qlink.db.TopupTodoListDao
 import com.stratagile.qlink.entity.BaseBack
+import com.stratagile.qlink.entity.topup.GroupItemList
+import com.stratagile.qlink.entity.topup.TopupJoinGroup
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.topup.contract.TopupDeductionQlcChainContract
 import com.stratagile.qlink.ui.activity.topup.TopupDeductionQlcChainActivity
@@ -77,12 +79,18 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
             mView.saveDeductionTokenTxidBack(it)
         }, {
             mView.createTopupOrderError()
-//            TopupTodoList.createTodoList(map)
-//            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
         }, {
             mView.createTopupOrderError()
-//            TopupTodoList.createTodoList(map)
-//            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
+        }))
+    }
+
+    fun saveItemDeductionTokenTxid(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.saveItemDeductionTokenTxid(map).subscribe({
+            mView.saveItemDeductionTokenTxidBack(it)
+        }, {
+            mView.createTopupOrderError()
+        }, {
+            mView.createTopupOrderError()
         }))
     }
 
@@ -126,6 +134,22 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
             topupOrder.order.id = map["orderId"]
             topupOrder.order.status = "NEW"
             mView.topupOrderStatus(topupOrder)
+        }))
+    }
+
+    fun itemDeductionTokenConfirm(map: MutableMap<String, String>, item : GroupItemList.ItemListBean) {
+        mCompositeDisposable.add(httpAPIWrapper.itemDeductionTokenConfirm(map).subscribe({
+            mView.itemOrderStatus(it)
+        }, {
+            var topupOrder = TopupJoinGroup()
+            var orderBean = GroupItemList.ItemListBean()
+            topupOrder.item = orderBean
+            mView.itemOrderStatus(topupOrder)
+        }, {
+            var topupOrder = TopupJoinGroup()
+            var orderBean = GroupItemList.ItemListBean()
+            topupOrder.item = orderBean
+            mView.itemOrderStatus(topupOrder)
         }))
     }
 }

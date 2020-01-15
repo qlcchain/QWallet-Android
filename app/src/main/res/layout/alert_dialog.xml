@@ -52,8 +52,8 @@
             android:layout_marginTop="@dimen/x40"
             app:layout_constraintTop_toBottomOf="@+id/tvContent"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
-            android:background="@color/color_29282a"/>
+            android:layout_height="1dp"
+            android:background="@color/color_f2f2f2"/>
         <TextView
             android:id="@+id/tvOpreate"
             android:layout_width="match_parent"

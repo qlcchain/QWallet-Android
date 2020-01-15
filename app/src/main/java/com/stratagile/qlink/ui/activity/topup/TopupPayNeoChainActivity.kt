@@ -19,14 +19,14 @@ import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.SendNep5TokenBack
 import com.stratagile.qlink.entity.SwitchToOtc
-import com.stratagile.qlink.entity.topup.PayToken
-import com.stratagile.qlink.entity.topup.TopupOrder
-import com.stratagile.qlink.entity.topup.TopupProduct
+import com.stratagile.qlink.entity.topup.*
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
+import com.stratagile.qlink.ui.activity.recommend.MyTopupGroupActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopupPayNeoChainComponent
 import com.stratagile.qlink.ui.activity.topup.contract.TopupPayNeoChainContract
 import com.stratagile.qlink.ui.activity.topup.module.TopupPayNeoChainModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupPayNeoChainPresenter
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.FileUtil
 import com.stratagile.qlink.utils.SpUtil
 import kotlinx.android.synthetic.main.activity_topup_pay_neo_chain.*
@@ -54,6 +54,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
     internal lateinit var mPresenter: TopupPayNeoChainPresenter
 
     lateinit var topupOrderBean : TopupOrder.OrderBean
+    lateinit var groupItemList: GroupItemList.ItemListBean
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
@@ -66,7 +67,25 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
     override fun initData() {
         mainColor = R.color.white
         title.text = getString(R.string.payment_wallet)
-        topupOrderBean = intent.getParcelableExtra("order")
+
+        if (intent.hasExtra("isGroup")) {
+            groupItemList = intent.getParcelableExtra("groupBean")
+            topupOrderBean = TopupOrder.OrderBean()
+
+            topupOrderBean.payTokenSymbol = groupItemList.payToken
+            topupOrderBean.symbol = groupItemList.deductionToken
+            topupOrderBean.id = groupItemList.id
+            topupOrderBean.userId = groupItemList.userId
+            topupOrderBean.chain = groupItemList.payTokenChain
+            topupOrderBean.payTokenChain = groupItemList.deductionTokenChain
+            topupOrderBean.qgasAmount = groupItemList.deductionTokenAmount
+            topupOrderBean.payTokenAmount = groupItemList.payTokenAmount.toString()
+            topupOrderBean.discountPrice = groupItemList.payFiatMoney
+
+        } else {
+            topupOrderBean = intent.getParcelableExtra("order")
+        }
+
         payToken1.text = topupOrderBean.payTokenSymbol
         tvPayTokenBalance.text = topupOrderBean.payTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString()
         tvReceiveAddress.text = ConstantValue.mainAddressData.neo.address
@@ -119,6 +138,16 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         }
     }
 
+    fun saveItemPayTokenTxid(txid: String, orderId: String) {
+        var map = hashMapOf<String, String>()
+        map["account"] = ConstantValue.currentUser.account
+        map["token"] = AccountUtil.getUserToken()
+
+        map["groupItemId"] = orderId
+        map["deductionTokenTxid"] = txid
+        mPresenter.saveItemPayTokenTxid(map)
+    }
+
     fun savePayTokenTxid(txid : String) {
         var map = hashMapOf<String, String>()
         var topUpP2pId = SpUtil.getString(this, ConstantValue.topUpP2pId, "")
@@ -166,7 +195,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
     override fun setNeoDetail(neoWalletInfo: NeoWalletInfo) {
         this.neoWalletInfo = neoWalletInfo
         neoWalletInfo.data.balance.forEach {
-            if (it.asset_hash.replace("0x", "").equals(topupOrderBean.payTokenHash.replace("0x", ""))) {
+            if (it.asset_symbol.replace("0x", "").equals(topupOrderBean.payTokenSymbol.replace("0x", ""))) {
                 tvQGASBalance.text = getString(R.string.balance) + ": ${it.amount} ${topupOrderBean.payTokenSymbol}"
                 payTokenAmount = it.amount
                 payTokenInfo = it
@@ -178,6 +207,17 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         closeProgressDialog()
         startActivity(Intent(this, TopupOrderListActivity::class.java))
         finish()
+    }
+
+    override fun saveItemPayTokenTxidBack(topupJoinGroup: TopupJoinGroup) {
+        closeProgressDialog()
+        startActivity(Intent(this, MyTopupGroupActivity::class.java))
+        finish()
+    }
+
+
+    override fun saveItemPayTokenError() {
+
     }
 
     override fun savePayTokenTxidError() {
@@ -226,7 +266,11 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-            savePayTokenTxid(nep5SendBack.txid)
+            if (intent.hasExtra("isGroup")) {
+                saveItemPayTokenTxid(nep5SendBack.txid, topupOrderBean.id)
+            } else {
+                savePayTokenTxid(nep5SendBack.txid)
+            }
         })
     }
 

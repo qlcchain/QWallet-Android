@@ -75,7 +75,7 @@ public class TransactionMng {
 				tokenMeta.getBalance().subtract(amount),
 				tokenMeta.getHeader(), 
 				qlc.mng.AccountMng.addressToPublicKey(to),
-				TimeUtil.getTimeSeconds(0), 
+                System.currentTimeMillis()/1000,
 				tokenMeta.getRepresentative());
 		
 		if (StringUtil.isNotBlank(sender))

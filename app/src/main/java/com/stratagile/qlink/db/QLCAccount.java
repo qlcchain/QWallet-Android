@@ -65,7 +65,6 @@ public class QLCAccount implements Parcelable {
         isCurrent = current;
     }
 
-
     @Override
     public String toString() {
         return "QLCAccount{" +
@@ -77,6 +76,10 @@ public class QLCAccount implements Parcelable {
                 ", address='" + address + '\'' +
                 ", isCurrent=" + isCurrent +
                 ", accountName='" + accountName + '\'' +
+                ", isAccountSeed=" + isAccountSeed +
+                ", walletIndex=" + walletIndex +
+                ", mnemonic='" + mnemonic + '\'' +
+                ", isBackUp=" + isBackUp +
                 '}';
     }
 

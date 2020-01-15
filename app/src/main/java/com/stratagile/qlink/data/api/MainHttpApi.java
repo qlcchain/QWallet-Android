@@ -79,8 +79,13 @@ import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
 import com.stratagile.qlink.entity.topup.CountryList;
+import com.stratagile.qlink.entity.topup.CreateGroup;
+import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.TopupGroupKindList;
+import com.stratagile.qlink.entity.topup.TopupGroupList;
+import com.stratagile.qlink.entity.topup.TopupJoinGroup;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
@@ -624,6 +629,42 @@ public interface MainHttpApi {
     @POST(MainAPI.savePayTokenTxid)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrder> savePayTokenTxid(@Body RequestBody map);
+
+    @POST(MainAPI.bindQlcChainAddress)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> bindQlcChainAddress(@Body RequestBody map);
+
+    @POST(MainAPI.getTopupGroupList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupGroupList> getTopupGroupList(@Body RequestBody map);
+
+    @POST(MainAPI.createGroup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<CreateGroup> createGroup(@Body RequestBody map);
+
+    @POST(MainAPI.getTopupGroupKindList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupGroupKindList> getTopupGroupKindList(@Body RequestBody map);
+
+    @POST(MainAPI.topupJoinGroup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> topupJoinGroup(@Body RequestBody map);
+
+    @POST(MainAPI.getGroupItemList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<GroupItemList> getGroupItemList(@Body RequestBody map);
+
+    @POST(MainAPI.saveItemDeductionTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> saveItemDeductionTokenTxid(@Body RequestBody map);
+
+    @POST(MainAPI.itemDeductionTokenConfirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> itemDeductionTokenConfirm(@Body RequestBody map);
+
+    @POST(MainAPI.saveItemPayTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> saveItemPayTokenTxid(@Body RequestBody map);
 
     @POST(MainAPI.url_trade_appeal)
     @Multipart

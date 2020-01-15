@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
 import com.stratagile.qlink.entity.NeoWalletInfo
+import com.stratagile.qlink.entity.topup.TopupJoinGroup
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
@@ -25,6 +26,9 @@ interface TopupPayNeoChainContract {
         fun setNeoDetail(neoWalletInfo: NeoWalletInfo)
 
         fun savePayTokenTxidBack(topupOrder: TopupOrder)
+
+        fun saveItemPayTokenTxidBack(topupJoinGroup: TopupJoinGroup)
+        fun saveItemPayTokenError()
 
         fun savePayTokenTxidError()
     }

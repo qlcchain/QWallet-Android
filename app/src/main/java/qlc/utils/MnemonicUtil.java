@@ -1,6 +1,11 @@
 package qlc.utils;
 
+import android.content.res.AssetManager;
+
+import com.stratagile.qlink.application.AppConfig;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
@@ -165,15 +170,27 @@ public final class MnemonicUtil {
 
         MnemonicLanguage(String fileName) {
             try {
-            	
+
             	List<String> tempList = new ArrayList<String>();
-            	InputStream is = this.getClass().getResourceAsStream("english.txt");
-            	InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String len = null;
-                while ((len=br.readLine()) != null){
-                	tempList.add(len);
-                	len = null;
+//            	InputStream is = this.getClass().getResourceAsStream("english.txt");
+//            	InputStreamReader isr = new InputStreamReader(is);
+//                BufferedReader br = new BufferedReader(isr);
+//                String len = null;
+//                while ((len=br.readLine()) != null){
+//                	tempList.add(len);
+//                	len = null;
+//                }
+
+                AssetManager am = AppConfig.getInstance().getAssets();
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(am.open("english.txt")));
+                    String next = "";
+                    while (null != (next = br.readLine())) {
+                        tempList.add(next);
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
                 
                 this.dictionary = tempList;

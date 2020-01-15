@@ -151,4 +151,14 @@ public class UserInfo extends BaseBack<UserInfo.DataBean> {
             this.holdingPhoto = holdingPhoto;
         }
     }
+
+    private String qlcAddress;
+
+    public String getQlcAddress() {
+        return qlcAddress;
+    }
+
+    public void setQlcAddress(String qlcAddress) {
+        this.qlcAddress = qlcAddress;
+    }
 }

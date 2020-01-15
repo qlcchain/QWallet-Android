@@ -405,7 +405,7 @@
     <string name="has_new_version">QWallet有新版本可以使用，从Google Play更新</string>
     <string name="no_market_no_browser">手机没有安装应用市场，也没有安装浏览器</string>
     <string name="for_voting_mining_node">投票/挖矿节点</string>
-    <string name="stake_from">抵押来自</string>
+    <string name="stake_from">抵押钱包</string>
     <string name="select_a_nep_5_address_you_want_to_stake_qlc_from">选择一个抵押QLC的NEP-5地址</string>
     <string name="select_a_neo_wallet">选择一个NEO钱包</string>
     <string name="stake_to">抵押到</string>
@@ -634,4 +634,35 @@
     <string name="please_input_phone_number">请输入手机号码</string>
     <string name="paytoken_paid">已支付支付币</string>
     <string name="the_product_is_sold_out">该商品已售完</string>
+
+
+    <string name="recharge_phone_bill_1">充值话费：</string>
+    <string name="recharge_directily">单独购买</string>
+    <string name="group_plan">发起拼团</string>
+    <string name="phone_number_">手机号码：</string>
+    <string name="rules_group">拼团规则</string>
+    <string name="ongoing_groups">可参与拼团</string>
+    <string name="plans_group">拼团类型</string>
+    <string name="please_choose_one_plan">请选择：拼团类型</string>
+    <string name="start_the_group_recharge">发起拼团</string>
+    <string name="_more_partner_needed">还差%1$s人</string>
+    <string name="_off_discount_partners">满%2$s人%1$s折团 </string>
+    <string name="ongoing_groups_">可参与拼团</string>
+    <string name="the_plan">参与的拼团</string>
+    <string name="a_recharge_agent_partner_can_start_the_group_recharge">您还不是代理\n成为代理后可发起拼团</string>
+    <string name="agent_partner_details">了解代理</string>
+    <string name="join_now_group">立即参与</string>
+    <string name="a_cahrge_of_will_cost_paytoken_and_deduction_token">充值 %6$s %1$s 话费，需要支付%2$s %3$s + %4$s %5$s </string>
+    <string name="confirm_to_join">确认参加团购</string>
+    <string name="be_a_recharge_agent_partner">开启代理资格</string>
+    <string name="details_agent">说明</string>
+    <string name="earn_qgas_rewards_everyday">抵押还可获得每日QGAS收益</string>
+    <string name="stake_1500_qlc_to_gain_the_qulification_of_recharge_agent_partner">抵押1500QLC获得代理权</string>
+    <string name="how_to_earn_rewards">开启后怎么赚奖励</string>
+    <string name="exclusive_offers">代理优享</string>
+    <string name="not_opened">未开通</string>
+    <string name="already_opened">已开通</string>
+    <string name="verify_eligibility">验证资格</string>
+    <string name="open_agent_qualification">开启代理资格</string>
+    <string name="please_select_a_wallet">请选择一个钱包</string>
 </resources>

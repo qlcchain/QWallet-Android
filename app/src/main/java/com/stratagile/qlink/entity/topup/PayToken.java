@@ -25,8 +25,8 @@ public class PayToken extends BaseBack<PayToken.PayTokenListBean> {
         protected PayTokenListBean(Parcel in) {
             symbol = in.readString();
             chain = in.readString();
-            usdPrice = in.readDouble();
             price = in.readDouble();
+            usdPrice = in.readDouble();
             id = in.readString();
             logo_png = in.readString();
             decimal = in.readInt();

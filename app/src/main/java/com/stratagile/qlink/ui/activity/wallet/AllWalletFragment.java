@@ -487,6 +487,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     boolean hasSelectedWallet = false;
 
     private void initData() {
+//        testGenerateWallet();
         hasSelectedWallet = false;
         llBackUp.setVisibility(View.GONE);
         getActivity().runOnUiThread(new Runnable() {
@@ -582,6 +583,37 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 }
             }
         }).start();
+    }
+
+
+    private void testGenerateWallet() {
+        KLog.i("测试自动生成qlc钱包");
+        String seed = QlcUtil.generateSeed().toLowerCase();
+        try {
+            JSONObject jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0);
+            String priKey = jsonObject.getString("privKey");
+            String pubKey = jsonObject.getString("pubKey");
+            KLog.i(jsonObject.toJSONString());
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(seed);
+            String mnemonics = AccountRpc.seedToMnemonics(jsonArray);
+            KLog.i(mnemonics);
+            String address = QlcUtil.publicToAddress(pubKey).toLowerCase();
+            QLCAccount qlcAccount = new QLCAccount();
+            qlcAccount.setPrivKey(priKey.toLowerCase());
+            qlcAccount.setPubKey(pubKey);
+            qlcAccount.setAddress(address);
+            qlcAccount.setMnemonic(mnemonics);
+            qlcAccount.setIsCurrent(true);
+            qlcAccount.setAccountName(QLCAPI.Companion.getQlcWalletName());
+            qlcAccount.setSeed(seed);
+            qlcAccount.setIsAccountSeed(true);
+            qlcAccount.setWalletIndex(0);
+            KLog.i(qlcAccount.toString());
+        } catch (QlcException e) {
+            closeProgressDialog();
+            e.printStackTrace();
+        }
     }
 
     /**

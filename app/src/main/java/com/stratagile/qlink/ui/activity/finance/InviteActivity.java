@@ -26,6 +26,8 @@ import com.stratagile.qlink.ui.activity.finance.contract.InviteContract;
 import com.stratagile.qlink.ui.activity.finance.module.InviteModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.InvitePresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
+import com.stratagile.qlink.ui.activity.recommend.AgencyExcellenceActivity;
+import com.stratagile.qlink.ui.activity.recommend.OpenAgentActivity;
 import com.stratagile.qlink.ui.activity.reward.ClaimRewardActivity;
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
@@ -157,6 +159,12 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
                         claimQgas();
                     }
                 }
+            }
+        });
+        ivTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InviteActivity.this, AgencyExcellenceActivity.class));
             }
         });
     }

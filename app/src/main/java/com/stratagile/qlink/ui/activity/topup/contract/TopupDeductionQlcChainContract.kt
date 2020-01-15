@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
+import com.stratagile.qlink.entity.topup.TopupJoinGroup
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
@@ -22,6 +23,11 @@ interface TopupDeductionQlcChainContract {
         fun closeProgressDialog()
 
         fun saveDeductionTokenTxidBack(topupOrder: TopupOrder)
+
+        fun saveItemDeductionTokenTxidBack(topupJoinGroup: TopupJoinGroup)
+
+        fun itemOrderStatus(topupJoinGroup: TopupJoinGroup)
+
         fun topupOrderStatus(topupOrder: TopupOrder)
         fun createTopupOrderError()
 

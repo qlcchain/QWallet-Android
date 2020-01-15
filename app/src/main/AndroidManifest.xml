@@ -612,6 +612,10 @@
         <activity android:name=".ui.activity.topup.TopupDeductionQlcChainActivity" />
         <activity android:name=".ui.activity.topup.TopupPayNeoChainActivity" />
         <activity android:name=".ui.activity.topup.TopupDeductionEthChainActivity" />
+        <activity android:name=".ui.activity.recommend.AgencyExcellenceActivity" />
+        <activity android:name=".ui.activity.recommend.OpenAgentActivity" />
+        <activity android:name=".ui.activity.recommend.TopupProductDetailActivity" />
+        <activity android:name=".ui.activity.recommend.MyTopupGroupActivity" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.WebSettings
 import androidx.work.impl.Scheduler
 import com.pawegio.kandroid.alert
@@ -23,6 +25,8 @@ import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
+import com.stratagile.qlink.ui.activity.recommend.MyTopupGroupActivity
+import com.stratagile.qlink.ui.activity.stake.StakeExplainActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopupOrderListComponent
 import com.stratagile.qlink.ui.activity.topup.contract.TopupOrderListContract
 import com.stratagile.qlink.ui.activity.topup.module.TopupOrderListModule
@@ -278,6 +282,18 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
 
     override fun closeProgressDialog() {
         progressDialog.hide()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.topup_group, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.topupGroup) {
+            startActivity(Intent(this, MyTopupGroupActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

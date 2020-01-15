@@ -8,53 +8,47 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
-
-import com.socks.library.KLog
-import com.stratagile.qlc.QLCAPI
-import com.stratagile.qlink.R
-import com.stratagile.qlink.application.AppConfig
-import com.stratagile.qlink.base.BaseActivity
-import com.stratagile.qlink.entity.TokenInfo
-import com.stratagile.qlink.ui.activity.qlc.component.DaggerQlcTransferComponent
-import com.stratagile.qlink.ui.activity.qlc.contract.QlcTransferContract
-import com.stratagile.qlink.ui.activity.qlc.module.QlcTransferModule
-import com.stratagile.qlink.ui.activity.qlc.presenter.QlcTransferPresenter
-import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity
-import com.stratagile.qlink.utils.PopWindowUtil
-import com.stratagile.qlink.utils.SpringAnimationUtil
-import com.stratagile.qlink.utils.ToastUtil
-import com.stratagile.qlink.view.CustomPopWindow
-
-import java.math.BigDecimal
-import java.util.ArrayList
-
-import javax.inject.Inject
-
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.github.kittinunf.fuel.httpGet
 import com.google.gson.Gson
 import com.pawegio.kandroid.toast
+import com.socks.library.KLog
+import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.AccountInfo
-import com.stratagile.qlc.entity.QlcTokenbalance
+import com.stratagile.qlink.R
+import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.TokenInfo
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
+import com.stratagile.qlink.ui.activity.qlc.component.DaggerQlcTransferComponent
+import com.stratagile.qlink.ui.activity.qlc.contract.QlcTransferContract
+import com.stratagile.qlink.ui.activity.qlc.module.QlcTransferModule
+import com.stratagile.qlink.ui.activity.qlc.presenter.QlcTransferPresenter
+import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity
 import com.stratagile.qlink.utils.DecimalDigitsInputFilter
+import com.stratagile.qlink.utils.PopWindowUtil
+import com.stratagile.qlink.utils.SpringAnimationUtil
+import com.stratagile.qlink.utils.ToastUtil
+import com.stratagile.qlink.view.CustomPopWindow
 import kotlinx.android.synthetic.main.activity_qlc_transfer.*
-import kotlinx.coroutines.CommonPool
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import qlc.bean.StateBlock
-import qlc.mng.*
+import qlc.mng.AccountMng
+import qlc.mng.BlockMng
+import qlc.mng.TransactionMng
+import qlc.mng.WalletMng
 import qlc.network.QlcClient
-import qlc.network.QlcException
 import qlc.rpc.impl.LedgerRpc
-import qlc.utils.Constants
 import qlc.utils.Helper
 import qlc.utils.WorkUtil
-import java.nio.charset.Charset
+import java.math.BigDecimal
+import java.util.*
+import javax.inject.Inject
 import kotlin.concurrent.thread
 
 /**
@@ -207,6 +201,7 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
         tvQlcTokenName.setOnClickListener {
             showSpinnerPopWindow()
         }
+        //testSign()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -59,6 +59,7 @@ import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.GlideCircleTransform;
 import com.stratagile.qlink.utils.GlideCircleTransformMainColor;
+import com.stratagile.qlink.utils.GlideCircleTransformWhiteColor;
 import com.stratagile.qlink.utils.NickUtil;
 import com.stratagile.qlink.utils.NotificationUtil;
 import com.stratagile.qlink.utils.SpUtil;
@@ -145,6 +146,13 @@ public class AppConfig extends MultiDexApplication {
     public RequestOptions optionsMainColor = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
+            .priority(Priority.HIGH);
+
+    public RequestOptions optionsWhiteColor = new RequestOptions()
+            .centerCrop()
+            .transform(new GlideCircleTransformWhiteColor(this))
             .placeholder(R.mipmap.icon_user_default)
             .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);

@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
 import com.stratagile.qlink.entity.EthWalletInfo
+import com.stratagile.qlink.entity.topup.TopupJoinGroup
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
@@ -21,6 +22,10 @@ interface TopupDeductionEthChainContract {
          *
          */
         fun closeProgressDialog()
+
+        fun saveItemDeductionTokenTxidBack(topupJoinGroup: TopupJoinGroup)
+
+        fun itemOrderStatus(topupJoinGroup: TopupJoinGroup)
 
 
         fun saveDeductionTokenTxidBack(topupOrder: TopupOrder)

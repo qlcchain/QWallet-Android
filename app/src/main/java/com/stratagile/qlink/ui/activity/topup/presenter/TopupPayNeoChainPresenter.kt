@@ -62,4 +62,14 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
 //            sysbackUp(map["txid"]!!, "TOPUP", "", "", "")
         }))
     }
+
+    fun saveItemPayTokenTxid(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.saveItemPayTokenTxid(map).subscribe({
+            mView.saveItemPayTokenTxidBack(it)
+        }, {
+            mView.saveItemPayTokenError()
+        }, {
+            mView.saveItemPayTokenError()
+        }))
+    }
 }

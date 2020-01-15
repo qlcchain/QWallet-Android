@@ -83,13 +83,18 @@ import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
 import com.stratagile.qlink.entity.topup.CountryList;
+import com.stratagile.qlink.entity.topup.CreateGroup;
+import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.TopupGroupKindList;
+import com.stratagile.qlink.entity.topup.TopupGroupList;
+import com.stratagile.qlink.entity.topup.TopupJoinGroup;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
+import com.stratagile.qlink.ui.adapter.topup.TopupGroupItemAdapter;
 import com.stratagile.qlink.utils.DigestUtils;
-import com.stratagile.qlink.utils.JUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -121,8 +126,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import qlc.network.QlcException;
 import retrofit2.HttpException;
-import retrofit2.http.Part;
 
 /**
  * @author hu
@@ -1190,6 +1195,75 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<BaseBack> bindQlcChainAddress(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.bindQlcChainAddress(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.bindQlcChainAddress(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<TopupGroupList> getTopupGroupList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getTopupGroupList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTopupGroupList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<CreateGroup> createGroup(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.createGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.createGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<TopupGroupKindList> getTopupGroupKindList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getTopupGroupKindList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTopupGroupKindList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TopupJoinGroup> topupJoinGroup(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.topupJoinGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.topupJoinGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<GroupItemList> getGroupItemList(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.getGroupItemList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getGroupItemList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TopupJoinGroup> saveItemDeductionTokenTxid(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.saveItemDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.saveItemDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TopupJoinGroup> itemDeductionTokenConfirm(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.itemDeductionTokenConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.itemDeductionTokenConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<TopupJoinGroup> saveItemPayTokenTxid(Map map) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+            return wrapper(mMainHttpAPI.saveItemPayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.saveItemPayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     public Observable<TopupOrder> savePayTokenTxid(Map map) {
         if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
             return wrapper(mMainHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1223,9 +1297,10 @@ public class HttpAPIWrapper {
                                             if (errorTips.contains("|")) {
                                                 errorTips = errorTips.substring(errorTips.indexOf("|") + 1, errorTips.length());
                                             }
-                                            ToastUtil.displayShortToast(errorTips);
-                                            KLog.i("请求错误。。");
-                                            e.onComplete();
+//                                            ToastUtil.displayShortToast(errorTips);
+//                                            KLog.i("请求错误。。");
+                                            QlcException qlcException = new QlcException(Integer.parseInt(baseResponse.getCode()), errorTips);
+                                            e.onError(qlcException);
                                         } else {
                                             e.onNext(baseResponse);
                                         }
@@ -1257,7 +1332,10 @@ public class HttpAPIWrapper {
                         } else if (e instanceof ConnectException) {
                             KLog.i("连接失败");
                             errorText = "Connection failed.";
-                        } else {
+                        } else if (e instanceof QlcException) {
+                            KLog.i("连接失败");
+                            errorText = e.getMessage();
+                        }else {
                             KLog.i("请求失败");
                             errorText = "The request has failed.";
                         }
