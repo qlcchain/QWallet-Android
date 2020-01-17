@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="@dimen/x123">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x122">
+        <TextView
+            android:id="@+id/tvRank"
+            android:layout_width="20dp"
+            android:textColor="@color/color_333"
+            android:textSize="14sp"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/userAvatar"
+            android:layout_width="@dimen/x77"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_height="@dimen/x77" />
+        <TextView
+            android:id="@+id/userName"
+            android:textColor="@color/color_333"
+            android:textSize="14sp"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/invitePersons"
+            android:textColor="@color/color_333"
+            android:textSize="14sp"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/color_f2f2f2"/>
+</LinearLayout>

@@ -7,7 +7,9 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.InviteeList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
+import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.ui.activity.finance.contract.InviteContract;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 
@@ -60,6 +62,60 @@ public class InvitePresenter implements InviteContract.InviteContractPresenter{
                         //isSuccesse
                         //mView.closeProgressDialog();
                         mView.setData(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getInviteeList(Map map) {
+        Disposable disposable = httpAPIWrapper.getInviteeList(map)
+                .subscribe(new Consumer<InviteeList>() {
+                    @Override
+                    public void accept(InviteeList user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.setInviteeList(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //onError
+                        throwable.printStackTrace();
+                        //mView.closeProgressDialog();
+                        //ToastUtil.show(mActivity, mActivity.getString(R.string.loading_failed_1));
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //onComplete
+                        KLog.i("onComplete");
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getRewardList1(Map map) {
+        Disposable disposable = httpAPIWrapper.getRewardList1(map)
+                .subscribe(new Consumer<SalePartner>() {
+                    @Override
+                    public void accept(SalePartner user) throws Exception {
+                        //isSuccesse
+                        //mView.closeProgressDialog();
+                        mView.setSalePartner(user);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

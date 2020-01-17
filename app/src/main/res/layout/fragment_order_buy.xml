@@ -71,7 +71,7 @@
                 android:layout_marginTop="@dimen/x10"
                 android:layout_marginBottom="@dimen/x4"
                 android:background="@null"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textColor="@color/color_29282a"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -384,14 +384,17 @@
                 android:layout_height="match_parent"/>
 
             <ImageView
-                android:id="@+id/walletMore"
                 android:layout_marginRight="15dp"
                 android:layout_width="15dp"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/icon_enter1"
                 android:layout_height="15dp" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/color_f2f2f2" />
         <TextView
             android:id="@+id/tvCreateWallet"
             android:layout_width="match_parent"

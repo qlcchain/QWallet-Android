@@ -4,11 +4,16 @@ import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.BuySellBuyTodo
+import com.stratagile.qlink.db.BuySellBuyTodoDao
+import com.stratagile.qlink.db.BuySellSellTodoDao
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.entity.BaseBack
+import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.Raw
 import com.stratagile.qlink.ui.activity.otc.contract.UsdtPayContract
 import com.stratagile.qlink.ui.activity.otc.UsdtPayActivity
@@ -34,7 +39,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -94,11 +98,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
         }))
     }
 
-    fun transferUsdt(walletAddress: String, toAddress: String, amount: String, price: Int, tradeOrderId: String, contractAddress: String) {
+    fun transferUsdt(walletAddress: String, toAddress: String, amount: String, price: Int, tradeOrderId: String, tokenInfo: EthWalletInfo.DataBean.TokensBean) {
 //        generateTransaction(walletAddress, "0xdac17f958d2ee523a2206206994597c13d831ec7", toAddress, derivePrivateKey(walletAddress)!!, amount, 6000, price, 6)
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contractAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, tokenInfo.tokenInfo.address, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, tokenInfo.tokenInfo.decimals.toInt()))
         })
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -131,8 +135,33 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
             mView.sendUsdtSuccess(txid)
         }, {
             mView.closeProgressDialog()
+            BuySellBuyTodo.createBuySellBuyTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
         }, {
             mView.closeProgressDialog()
+            BuySellBuyTodo.createBuySellBuyTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
+        })
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+                var list = AppConfig.instance.daoSession.buySellBuyTodoDao.queryBuilder().where(BuySellBuyTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.buySellBuyTodoDao.delete(list[0])
+                }
+            }
         })
     }
 
@@ -149,7 +178,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Usdt
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {

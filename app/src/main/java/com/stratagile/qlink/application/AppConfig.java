@@ -53,11 +53,13 @@ import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
+import com.stratagile.qlink.entity.eventbus.OnAppResume;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.GlideCircleTransform;
 import com.stratagile.qlink.utils.GlideCircleTransformMainColor;
+import com.stratagile.qlink.utils.GlideCircleTransformWhiteColor;
 import com.stratagile.qlink.utils.NickUtil;
 import com.stratagile.qlink.utils.NotificationUtil;
 import com.stratagile.qlink.utils.SpUtil;
@@ -148,6 +150,13 @@ public class AppConfig extends MultiDexApplication {
             .error(R.mipmap.icon_user_default)
             .priority(Priority.HIGH);
 
+    public RequestOptions optionsWhiteColor = new RequestOptions()
+            .centerCrop()
+            .transform(new GlideCircleTransformWhiteColor(this))
+            .placeholder(R.mipmap.icon_user_default)
+            .error(R.mipmap.icon_user_default)
+            .priority(Priority.HIGH);
+
     public RequestOptions optionsAvater = new RequestOptions()
             .centerCrop()
             .transform(new GlideCircleTransformMainColor(this))
@@ -173,9 +182,9 @@ public class AppConfig extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         FileUtil.removeAllImageAvater(this);
-//        AppEventsLogger.activateApp(this);
         instance = this;
         KLog.init(BuildConfig.LOG_DEBUG);
+        KLog.i("app启动！！！");
         CrashReport.initCrashReport(this, "2d19fdd0a6", BuildConfig.LOG_DEBUG);
         setupApplicationComponent();
         setDatabase();
@@ -355,6 +364,7 @@ public class AppConfig extends MultiDexApplication {
             @Override
             public void onBecameForeground() {
                 KLog.i("当前程序切换到前台");
+                EventBus.getDefault().post(new OnAppResume());
             }
 
             @Override

@@ -62,7 +62,7 @@ class QlcMnemonicShowActivity : BaseActivity(), QlcMnemonicShowContract.View {
             cm.primaryClip = mClipData
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
-        tvPublicAddress.text = qlcAccount?.pubKey
+        tvPublicAddress.text = qlcAccount?.address
         tvSeed.setOnClickListener {
             //获取剪贴板管理器：
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

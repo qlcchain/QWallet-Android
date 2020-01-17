@@ -22,6 +22,11 @@ interface TopupQlcPayContract {
         fun closeProgressDialog()
 
         fun createTopupOrderSuccess(topupOrder: TopupOrder)
+        fun topupOrderStatus(topupOrder: TopupOrder)
+
+        fun createTopupOrderError()
+
+        fun setMainAddress()
     }
 
     interface TopupQlcPayContractPresenter : BasePresenter {

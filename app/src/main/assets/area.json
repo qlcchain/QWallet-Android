@@ -1,9 +1,17 @@
-{
-  "area": [
-    {
-      "country": "中国",
-      "countryEn": "China",
-      "number": "86"
-    }
-  ]
-}
+[
+  {
+    "en": "China",
+    "cn": "中国",
+    "code": "+86"
+  },
+  {
+    "en": "Indonesia",
+    "cn": "印度尼西亚",
+    "code": "+62"
+  },
+  {
+    "en": "Singapore",
+    "cn": "新加坡",
+    "code": "+65"
+  }
+]

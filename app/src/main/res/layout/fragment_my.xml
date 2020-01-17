@@ -76,6 +76,18 @@
         android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
+
+    <com.stratagile.qlink.view.MyItemView
+        android:visibility="gone"
+        android:id="@+id/mining"
+        android:layout_width="match_parent"
+        app:showNextmy="true"
+        app:srcmy="@mipmap/ic_mining"
+        app:textmy="@string/sheet_minig"
+        android:layout_height="54dp">
+
+    </com.stratagile.qlink.view.MyItemView>
+
     <com.stratagile.qlink.view.MyItemView
         android:id="@+id/joinCommunity"
         android:layout_width="match_parent"
@@ -85,6 +97,7 @@
         android:layout_height="54dp">
 
     </com.stratagile.qlink.view.MyItemView>
+
     <com.stratagile.qlink.view.MyItemView
         android:visibility="gone"
         android:id="@+id/contactUs"

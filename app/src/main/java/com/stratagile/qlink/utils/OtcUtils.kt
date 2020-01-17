@@ -1,5 +1,8 @@
 package com.stratagile.qlink.utils
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import com.stratagile.qlink.entity.AllWallet
 
 object OtcUtils {
@@ -36,5 +39,27 @@ object OtcUtils {
             }
         }
         return AllWallet.WalletType.NullWallet
+    }
+
+    fun gotoBlockBrowser(context: Context, chain: String, hash : String) {
+        var urlPre = "https://explorer.qlcchain.org/transaction/"
+        when(chain) {
+            "QLC_CHAIN" -> {
+                urlPre = "https://explorer.qlcchain.org/transaction/"
+            }
+            "ETH_CHAIN" -> {
+                urlPre = "https://etherscan.io/tx/"
+            }
+            "NEO_CHAIN" -> {
+                urlPre = "https://neoscan.io/transaction/"
+            }
+            "EOS_CHAIN" -> {
+                urlPre = "https://eosflare.io/tx/"
+            }
+        }
+        val intent1 = Intent()
+        intent1.action = "android.intent.action.VIEW"
+        intent1.data = Uri.parse(urlPre + hash)
+        context.startActivity(intent1)
     }
 }

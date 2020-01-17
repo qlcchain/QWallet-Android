@@ -1,5 +1,7 @@
 package com.stratagile.qlink.ui.activity.stake.contract
 
+import com.stratagile.qlink.entity.reward.Dict
+import com.stratagile.qlink.entity.reward.RewardTotal
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -19,6 +21,10 @@ interface MyStakeContract {
          *
          */
         fun closeProgressDialog()
+
+        fun setRewardQlcAmount(dict: Dict)
+
+        fun setClaimedTotal(rewardTotal: RewardTotal)
     }
 
     interface MyStakeContractPresenter : BasePresenter {

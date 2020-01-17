@@ -8,7 +8,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <ImageView
-            android:id="@+id/ivVote"
             android:layout_width="58dp"
             android:src="@mipmap/mining_node"
             android:layout_marginTop="23dp"
@@ -206,6 +205,7 @@
                 android:layout_width="0px"
                 android:layout_weight="1"
                 android:hint="@string/from_1_qlc"
+                android:maxLength="9"
                 android:inputType="number"
                 android:background="@null"
                 android:textSize="15sp"
@@ -255,6 +255,7 @@
                 android:id="@+id/etStakeDays"
                 android:layout_width="0px"
                 android:layout_weight="1"
+                android:maxLength="5"
                 android:hint="@string/from_10"
                 android:inputType="number"
                 android:background="@null"

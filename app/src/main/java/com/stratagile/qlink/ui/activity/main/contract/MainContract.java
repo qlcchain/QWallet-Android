@@ -44,6 +44,8 @@ public interface MainContract {
         void bindSuccess();
 
         void setStakeQlc(Dict dict);
+
+        void reCreateToopupSuccess();
     }
 
     interface MainContractPresenter extends BasePresenter {

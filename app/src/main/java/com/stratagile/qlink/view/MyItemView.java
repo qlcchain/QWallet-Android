@@ -62,6 +62,10 @@ public class MyItemView extends LinearLayout {
     public void setDotViewVisible(int visibility) {
         dotView.setVisibility(visibility);
     }
+
+    public int getDotViewVisible() {
+        return dotView.getVisibility();
+    }
     public void setIcon(CharSequence text) {
 
         invalidate();

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="30dp">
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="48dp"
+        android:layout_height="30dp">
+    </ImageView>
+
+    <View
+        android:id="@+id/viewFg"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:background="@drawable/fg_country"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

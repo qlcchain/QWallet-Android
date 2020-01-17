@@ -11,6 +11,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -50,6 +52,7 @@ import com.stratagile.qlink.entity.MyAsset
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
+import com.stratagile.qlink.entity.eventbus.StakeQlcError
 import com.stratagile.qlink.entity.stake.*
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.utils.LocalWalletUtil
@@ -63,7 +66,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringEscapeUtils
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.spongycastle.crypto.tls.ContentType.alert
+import org.w3c.dom.Text
 import qlc.bean.StateBlock
 import qlc.mng.AccountMng
 import qlc.mng.BlockMng
@@ -117,11 +123,54 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         return view
     }
 
+    fun scaleAnimationTo1(imageView: View) {
+        sa1.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                scaleAnimationToHalf(imageView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        imageView.startAnimation(sa1)
+    }
+    fun scaleAnimationToHalf(imageView: View) {
+        saHalf.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                scaleAnimationTo1(imageView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        imageView.startAnimation(saHalf)
+    }
+
+    lateinit var saHalf : ScaleAnimation
+    lateinit var sa1 : ScaleAnimation
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tvQlcBalance.text = getString(R.string.balance) + ": -/- QLC"
+
+        saHalf = ScaleAnimation(1f, 0.5f, 1f, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        saHalf.setDuration(400)
+
+        sa1 = ScaleAnimation(0.5f, 1f, 0.5f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        sa1.setDuration(1000)
+
         stakeViewModel = ViewModelProviders.of(activity!!).get<NewStakeViewModel>(NewStakeViewModel::class.java)
         stakeViewModel.lockResult.observe(this, Observer<LockResult> {
+            tvDot!!.text = "3"
             if (it!!.stakeType.type == 0) {
                 getNep5Txid(it)
             }
@@ -244,11 +293,27 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
 
     var sweetAlertDialog: SweetAlertDialog? = null
 
+
+    /**
+     * 抵押步骤
+     * 1 获取多重签名地址
+     * 2 锁定qlc
+     * 3 去neo链查询锁定状态
+     * 4 prePareBenefitPledge
+     * 5 benefitPledge
+     * 6 process
+     */
+    var llDot : View? = null
+    var tvDot : TextView? = null
     fun showStakingPup() {
         val view = layoutInflater.inflate(R.layout.alert_staking, null, false)
+        llDot = view.findViewById(R.id.llDot)
+        tvDot = view.findViewById(R.id.tvDot)
+        tvDot!!.text = "1"
         sweetAlertDialog = SweetAlertDialog(activity)
         sweetAlertDialog!!.setView(view)
         sweetAlertDialog!!.show()
+        scaleAnimationTo1(llDot!!)
     }
 
     fun getNep5Txid(lockResult: LockResult) {
@@ -286,6 +351,35 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                 }
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun stakeQlcError(stakeQlcError: StakeQlcError) {
+        sa1.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        saHalf.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        sweetAlertDialog?.dismissWithAnimation()
     }
 
     fun showEnterTxIdDialog() {
@@ -430,6 +524,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     }
 
     fun prePareBenefitPledge(lockResult: LockResult) {
+        runOnUiThread {
+            tvDot!!.text = "4"
+        }
         val client = QlcClient("https://nep5.qlcchain.online")
         val params = JSONArray()
         val paramOne = JSONObject()
@@ -448,6 +545,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     }
 
     fun benefitPledge(lockResult: LockResult) {
+        runOnUiThread {
+            tvDot!!.text = "5"
+        }
         val client = QlcClient("https://nep5.qlcchain.online")
         val params = JSONArray()
         params.add(lockResult.txid)
@@ -486,6 +586,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     }
 
     fun process(lockResult: LockResult) {
+        runOnUiThread {
+            tvDot!!.text = "6"
+        }
         val client = QlcClient("https://nep5.qlcchain.online")
         val params = JSONArray()
         params.add(JSONObject.parse(Gson().toJson(lockResult.stateBlock)))
@@ -502,8 +605,8 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
             sweetAlertDialog?.dismissWithAnimation()
             launch {
                 delay(300)
-                activity!!.setResult(Activity.RESULT_OK)
-                activity!!.finish()
+                activity?.setResult(Activity.RESULT_OK)
+                activity?.finish()
             }
         }
     }

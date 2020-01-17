@@ -3,7 +3,6 @@ package com.stratagile.qlink.ui.activity.main;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.stratagile.qlink.Account;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.Balance;
@@ -33,6 +32,8 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<String> refreshShowOrder = new MutableLiveData<>();
 
     public MutableLiveData<UserAccount> currentUserAccount = new MutableLiveData<>();
+
+    public MutableLiveData<String> noUserLogin = new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<TradePair.PairsListBean>> pairsLiveData = new MutableLiveData<>();
 

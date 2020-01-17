@@ -12,8 +12,9 @@
 
         <ImageView
             android:id="@+id/ivTitle"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="248dp"/>
+            android:layout_height="145dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
@@ -100,10 +101,11 @@
                 android:textSize="12sp"
                 android:textColor="@color/color_fb5340"
                 android:text="@string/claim_now"
+                android:minHeight="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginRight="17dp"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_height="25dp"/>
+                android:layout_height="wrap_content"/>
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -333,6 +335,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x68"
             android:layout_marginTop="10dp"
@@ -341,6 +344,25 @@
             android:text="@string/ranking_in_the_last_30_days"
             android:textColor="#BB7944"
             android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="#F6EAD4"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="30dp" />
+        </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="1px">
+
+        </android.support.v4.view.ViewPager>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"

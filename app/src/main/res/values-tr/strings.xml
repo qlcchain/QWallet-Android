@@ -1,172 +1,22 @@
 <resources>
     <string name="app_name">Q-Wallet</string>
 
-    <string name="AvailableWiFi">WiFi</string>
-
-    <string name="activity_splash_intro">Dünyanın İlk Merkeziyetsiz Mobil Ağı</string>
-
-    <string name="powered">Blok Zinciri ile Desteklenmektedir</string>
-
     <string name="apploading">Yükleniyor...</string>
 
     <string name="wallet">Cüzdan</string>
 
-    <string name="vpn">VPN</string>
-
-    <string name="wifi">WIFI</string>
-
     <string name="transaction">İşlem</string>
 
-    <string name="nearby">Yakında</string>
-
     <string name="all">HEPSİ</string>
-
-    <string name="registerwifi">Wi-Fi\'ını Kaydet</string>
-
-    <string name="CreateP2pNetwork">p2p ağ oluşturuluyor...</string>
-
-    <string name="NoNetWork">Bağlantı yok, Lütfen bir ağa bağlanmayı deneyiniz.</string>
-
-    <string name="qlinkRegistedWifi">Bir WiFi Seç</string>
-
-    <string name="pleaseEnableWifi">Lütfen wifi\'ı etkinleştirin</string>
-
-    <string name="waitP2pNetWork">Lütfen p2p ağ kurulurken bekleyiniz.</string>
-
-    <string name="registeyouwifi">wifi\'ınızı kaydedin</string>
-
-    <string name="shareotherwifi">Diğerlerinin wifi\'ını Paylaş</string>
-
-    <string name="wifidetails">WIFI DETAYLARI</string>
 
     <string name="privatekeyerror">Bu geçerli bir özel anahtar değildir.</string>
 
     <string name="privatekeyisnone">Lütfen özel anahtarınızı giriniz.</string>
 
-    <string name="passwordisNone">Lütfen şifrenizi giriniz!</string>
-
-    <string name="importWalletSuccess">Cüzdan aktarımı başarılı</string>
-
-    <string name="createWalletSuccess">cüzdan oluşturulması başarılı</string>
-
     <string name="google_map_key">AIzaSyARhjAjyhSIyWxdYWuOkR8JDSopj1xp7gw</string>
 
 
-    <string name="address">Sunucu Adresi:</string>
-
-    <string name="port">Sunucu Portu:</string>
-
-    <string name="location">Konum</string>
-
-    <string name="cant_read_folder">Dizin okunamadı</string>
-
-    <string name="select">Seç</string>
-
     <string name="cancel">İptal</string>
-
-    <string name="no_data">Veri Yok</string>
-
-    <string name="useLZO">LZO Sıkıştırma</string>
-
-    <string name="client_no_certificate">Sertifika Yok</string>
-
-    <string name="client_certificate_title">Müşteri Sertifikası</string>
-
-    <string name="client_key_title">Müşteri Sertifika Anahtarı</string>
-
-    <string name="client_pkcs12_title">PKCS12 Dosyası</string>
-
-    <string name="ca_title">CA Sertifikası</string>
-
-    <string name="no_certificate">Bir sertifika seçmelisiniz</string>
-
-    <string name="copyright_guicode">Kaynak kodu ve sorun izleyicisine https://github.com/schwabe/ics-openvpn/ adresinden ulaşılabilir</string>
-
-    <string name="copyright_others">Bu program aşağıdaki bileşenleri kullanır; lisanslarla ilgili tüm ayrıntılar için kaynak koduna göz atın </string>
-
-    <string name="about">Hakkında</string>
-
-    <string name="vpn_list_title">Profiller</string>
-
-    <string name="vpn_type">Tip</string>
-
-    <string name="pkcs12pwquery">PKCS12 Şifresi</string>
-
-    <string name="file_select">Seç…</string>
-
-    <string name="file_nothing_selected">Bir dosya seçmelisiniz</string>
-
-    <string name="useTLSAuth">TLS Kimlik Doğrulaması Kullanın</string>
-
-    <string name="tls_direction">TLS Yönü</string>
-
-    <string name="ipv6_dialog_tile">IPv6 Adresini/Ağmaskesini CIDR Formatında Giriniz (örn. 2000:dd::23/64)</string>
-
-    <string name="ipv4_dialog_title">IPv4 Adresini/Ağmaskesini CIDR Formatında Giriniz (örn. 1.2.3.4/24)</string>
-
-    <string name="ipv4_address">IPv4 Adresi</string>
-
-    <string name="ipv6_address">IPv6 Adresi</string>
-
-    <string name="custom_option_warning">Özel OpenVPN seçeneklerini giriniz. Dikkatli olun. Ayrıca, tun ile ilgili OpenVPN ayarlarının çoğunun VPNSettings tasarımı tarafından desteklenemeyeceğini de unutmayın. Önemli bir seçeneğin eksik olduğunu düşünüyorsanız iletişime geçin</string>
-
-    <string name="auth_username">Kullanıcı Adı</string>
-
-    <string name="auth_pwquery">Şifre</string>
-
-    <string name="static_keys_info">Statik yapılandırma için, TLS Kimlik Doğrulama Anahtarları statik anahtarlar olarak kullanılacaktır</string>
-
-    <string name="configure_the_vpn">VPN Yapılandırma</string>
-
-    <string name="menu_add_profile">Profil Ekle</string>
-
-    <string name="add_profile_name_prompt">Yeni Profili tanımlamak için bir ad giriniz</string>
-
-    <string name="duplicate_profile_name">Lütfen eşsiz bir Profil Adı giriniz</string>
-
-    <string name="profilename">Profil Adı</string>
-
-    <string name="no_keystore_cert_selected">Bir Kullanıcı sertifikası seçmelisiniz</string>
-
-    <string name="no_ca_cert_selected">Bir CA sertifikası Seçmelisiniz</string>
-
-    <string name="no_error_found">Hata Bulunamadı</string>
-
-    <string name="config_error_found">Yapılandırmada Hata</string>
-
-    <string name="ipv4_format_error">IPv4 adresi ayrıştırılırken hata oluştu</string>
-
-    <string name="custom_route_format_error">Özel rotaları ayrıştırırken hata oluştu</string>
-
-    <string name="pw_query_hint">(talebe bağlı sorgu için boş bırakınız)</string>
-
-    <string name="vpn_shortcut">OpenVPN Kısayolu</string>
-
-    <string name="vpn_launch_title">VPN\'e bağlanılıyor…</string>
-
-    <string name="shortcut_profile_notfound">Kısayolda belirtilen profil bulunamadı</string>
-
-    <string name="random_host_prefix">Rastgele Host Öneki</string>
-
-    <string name="random_host_summary">host adının önüne rastgele 6 karakter ekleyin</string>
-
-    <string name="custom_config_title">Özel Seçenekleri Etkinleştir</string>
-
-    <string name="custom_config_summary">Özel seçenekleri belirtin. Dikkatli olun!</string>
-
-    <string name="route_rejected">Rota Android tarafından reddedildi.</string>
-
-    <string name="cancel_connection">Bağlantıyı Kes</string>
-
-    <string name="cancel_connection_long">VPN bağlantısını kes</string>
-
-    <string name="clear_log">logları temizle</string>
-
-    <string name="title_cancel">Doğrulamayı iptal et</string>
-
-    <string name="cancel_connection_query">Bağlı VPN\'yi sonlandırmak/ bağlantı girişimini iptal etmek mi istiyorsunuz?.</string>
-
-    <string name="remove_vpn">VPN\'i Sil</string>
 
     <!--<string name="check_remote_tlscert">Sunucunun TLS Sunucu uzantıları ile bir sertifika kullanıp kullanmadığını kontrol eder. (&#45;&#45;remote-cert-tls server)</string>-->
 
@@ -1069,33 +919,13 @@
 
     <!--<string name="Loading_certificate_from_Keystore...">Anahtar deposundan sertifika yükleniyor...</string>-->
 
-    <string name="THIS_WiFi_NAME_HAS_ALREADY_BEEN_REGISTERED">Bu WİFİ ADI DAHA ÖNCE ALINMIŞTIR</string>
-
-    <string name="If_you_want_to_claim">Bu %s adı için hak talebinde bulunmak istiyorsanız, halihazırda mevcut sahip tarafından oluşturulan tüm QLC kazançlarını ödemeniz gerekir.</string>
-
     <string name="SET_A_PASSWORD">BİR ŞİFRE BELİRLEYİN</string>
 
-    <string name="ARE_YOU_SURE_YOU_WANT_TO_SPEND_QLC_TO_CONNECT">BAĞLANTI İÇİN %s QLC HARCAMAK İSTEDİĞİNİZE EMİN MİSİNİZ?</string>
-
-    <string name="THE_WiFi_ASSET_HAS_BEEN_REGISTERED">WİFİ VARLIĞI KAYDEDİLDİ</string>
-
-    <string name="If_someone_else_wants_to_grab_your_WiFi">Biri sizin %s ismini almak isterse, bunu bu varlığı paylaşarak kazandığınız QLC\'yi ödeyerek yapabilir, Böylece %s isminin sahipliğini kaybedersiniz ama %s ismini almak isteyen kişinin ödediği QLC\'i alırsınız</string>
-
-    <string name="WiFi_asset_registration_will_consume_1_QLC">WiFi varlık kaydı \n 1 QLC harcayacaktır!</string>
-
     <string name="result">sonuç</string>
-
-    <string name="Import_My_Wallet">Cüzdanımı İçe Aktar</string>
-
-    <string name="Register_Vpn_Asset_Success">Vpn Varlık Kaydı Başarılı</string>
-
-    <string name="send_failure">gönderme başarısız</string>
 
     <string name="error2">hata</string>
 
     <string name="Your_withdrawal_will_arrive_soon">Çekim işleminiz yakın zamanda gelecektir.</string>
-
-    <string name="import_success">içe aktarma başarılı</string>
 
     <string name="Invalid_password_provided">Geçersiz şifre temin edildi</string>
 
@@ -1103,57 +933,7 @@
 
     <string name="please_wait">lütfen bekleyin</string>
 
-    <string name="Please_enter_your_bet">Lütfen bahsinizi girin</string>
-
     <string name="Not_enough_QLC_Or_GAS">Yeterli QLC veya GAS bulunmamakta</string>
-
-    <string name="Your_bet_should_be_greater_than_the_current_asset_value">Bahsiniz şuanki varlık değerinden daha büyük olmalıdır</string>
-
-    <string name="configuration_profile_error">yapılandıram profili hatası</string>
-
-    <string name="Please_select_the_configuration_file">Lütfen yapılandırma dosyasını seçiniz</string>
-
-    <string name="Please_choose_a_country">lütfen bir ülke seçiniz</string>
-
-    <string name="The_friend_is_not_online">Arkadaşınız çevrimiçi değil</string>
-
-    <string name="you_offline">çevrimdışısınız</string>
-
-    <string name="Connect_with_Sharer_Success_You_Can_Connect_this_VPN_Asset">Paylaşımcı ile Bağlantı Başarılı, Bu VpN Varlığına Bağlanabilirsiniz</string>
-
-    <string name="data_damage_of_this_asset">bu varlığın verisi hasarlı</string>
-
-    <string name="Cannot_Read_Configuration_Profilefile">Yapılandırma Profili dosyası okunamıyor</string>
-
-    <string name="Private_Key_Error">Özel Anahtar Hatası</string>
-
-    <string name="Connect_to_VPN_error_last_VPN_status">VPN\'e bağlanma hatası, son VPN durumu:</string>
-
-    <string name="Connect_to_VPN_error">VPN\'e Bağlanma hatası</string>
-
-    <string name="username_or_password_error">Kullanıcı Adı veya Şifre Hatalı</string>
-
-    <string name="Connect_to_Sharer_Timeout">Paylaşımcıya Bağlanma Zaman Aşımına Uğradı</string>
-
-    <string name="Please_fill_in_the_VPN_name">Lütfen VPN adını giriniz</string>
-
-    <string name="The_asset_is_registered_under_another_wallet_Please_change_the_wallet_before_update">Bu varlık başka bir cüzdanda kayıtlıdır. Lütfen güncellemeden önce cüzdanı değiştirin</string>
-
-    <string name="You_must_update_your_asset_config_profile_before_update">Güncellemeden önce varlığınızın yapılandırma profilini güncellemelisiniz</string>
-
-    <string name="Please_enter_VPN_name">Lütfen VPN adını giriniz</string>
-
-    <string name="This_asset_has_been_registered_by_you_please_enter_another_VPN_name">Bu varlık sizin tarafınızdan kaydedilmiş, lütfen başka bir VPN adı giriniz.</string>
-
-    <string name="Not_enough_QLC"></string>
-
-    <string name="update_success">güncelleme başarılı</string>
-
-    <string name="cannot_register_empty_vpn_asset">boş vpn varlığı kaydedilemez</string>
-
-    <string name="Connect_vpn_success">Vpn bağlantısı başarılı</string>
-
-    <string name="deductions_failure">kesinti başarısız</string>
 
     <string name="The_password_must_contain_at_least_6_characters">Şifreniz en az 6 karakterden oluşmalıdır.</string>
 
@@ -1173,30 +953,6 @@
 
     <string name="Incorrect_Password">Hatalı Şifre</string>
 
-    <string name="delete_asset">varlığı sil</string>
-
-    <string name="gratuity_failure">hediye başarısız</string>
-
-    <string name="password_error">şifre hatası</string>
-
-    <string name="connect_to_wifi_success"> %s wifi\'ya bağlantı başarılı</string>
-
-    <string name="connect_to_wifi_failure_password_error">%s wifi\'ya bağlantı başarısız. Şifre hatalı olabilir</string>
-
-    <string name="connect_to_wifi_failure_system_error">%s wifi\'ya bağlantı başarısız, sistem hatası.</string>
-
-    <string name="Permission_Denied_please_go_to_setting_open_location_permission">İzin Reddedildi, lütfen lokasyon iznini açmak için ayarlara gidiniz</string>
-
-    <string name="Try_to_connect_to_a_WiFi_with_green_WiFi_icon">Yeşil WiFi simgesiyle bir WiFi\'ya bağlanmayı deneyin!</string>
-
-    <string name="Network_problem_Please_try_again">Ağ sorunu. Lütfen tekrar deneyiniz</string>
-
-    <string name="please_enter_password">lütfen şifrenizi giriniz</string>
-
-    <string name="asset_info_Lack">varlık bilgisi eksikliği</string>
-
-    <string name="firend_is_not_online">arkadaş çevrimiçi değil</string>
-
     <string name="Coming_soon">Çok yakında</string>
 
     <string name="eth_wallet">eth cüzdanı</string>
@@ -1205,13 +961,7 @@
 
     <string name="SELECT_PROFILE">PROFİL SEÇ</string>
 
-    <string name="REGISTER_YOUR_VPN">VPN\'ini KAYDET</string>
-
     <string name="settings">ayarlar</string>
-
-    <string name="VPN_DETAIL">VPN DETAYLARI</string>
-
-    <string name="VPN">VPN</string>
 
     <string name="SELECT_WALLET">CÜZDAN SEÇ</string>
 
@@ -1219,21 +969,7 @@
 
     <string name="wallet_detail">cüzdan detayı</string>
 
-    <string name="REGISTER_YOUR_WIFI">WIFI\'nızı KAYDEDİN</string>
-
     <string name="Log">Log</string>
-
-    <string name="ASIA">ASYA</string>
-
-    <string name="AFRICA">AFRİKA</string>
-
-    <string name="OCEANIA">OKYANUSYA</string>
-
-    <string name="EUROPE">AVRUPA</string>
-
-    <string name="NORTHAMERICA">KUZEY AMERİKA</string>
-
-    <string name="SOUTHAMERICA">GÜNEY AMERİKA</string>
 
     <string name="no_wallet">cüzdan yok</string>
 
@@ -1247,17 +983,7 @@
 
     <string name="Encrypted_Key_WIF">Şifrelenmiş Anahtar(WIF)</string>
 
-    <string name="yes">evet</string>
-
-    <string name="confirm_purchase">satın almayı onayla</string>
-
-    <string name="purchase_successful">satın alma başarılı</string>
-
-    <string name="confirm_withdrawal">çekme işlemini onayla</string>
-
     <string name="withdrawal_successful">öekme işlemi başarılı</string>
-
-    <string name="Take_a_rest_Your_transfer_request_is_being_processed">Biraz dinlen.\n Aktarım isteğiniz işleniyor.</string>
 
     <string name="Your_private_keys_were_exported_to">Özel anahtarlarınız buraya aktarıldı</string>
 
@@ -1269,15 +995,11 @@
 
     <string name="security_check">güvenlik kontrolü</string>
 
-    <string name="connect">bağlan</string>
-
     <string name="currentP2pId">anlıkP2pId:</string>
 
     <string name="lastP2pId">sonP2pId: </string>
 
     <string name="P2pId_is_changed">P2pId değiştirildi!!!</string>
-
-    <string name="Disconnect_WiFi">Kablosuz bağlantıyı kes</string>
 
     <string name="Permission_Requeset">İzin İsteği</string>
 
@@ -1289,10 +1011,6 @@
 
     <string name="Reject">Reddett</string>
 
-    <string name="CONNECTED">BAĞLI.</string>
-
-    <string name="Amount_of_NEO">NEO Miktarı</string>
-
     <string name="amount">miktar</string>
 
     <string name="wallet_password">cüzdan şifresi</string>
@@ -1301,51 +1019,13 @@
 
     <string name="select_wallet">cüzdan seç</string>
 
-    <string name="CONNECT_TO_VPN_SERVER">VPN SUNUCUSUNA BAĞLAN</string>
-
-    <string name="VPN_Name">VPN Adı</string>
-
     <string name="ssid">ssid</string>
-
-    <string name="Country">Ülke</string>
-
-    <string name="Continent">KITA</string>
-
-    <string name="IP_Address">IP Adresi</string>
-
-    <string name="Band_Width">Bant Genişliği</string>
-
-    <string name="Price">Ücret</string>
-
-    <string name="Devices_Connected">Bağlı Cihazlar</string>
-
-    <string name="DO_YOU_WANT_TO_CONNECT_TO_THIS_VPN">BU VPN\'E BAĞLANMAK\n İSTİYOR MUSUNUZ?</string>
-
-    <string name="yes_connect">evet, bağlan</string>
-
-    <string name="User_ID_IP_Address">Kullanıcı ID/IP Adresi</string>
-
-    <string name="SSID_WIFI_NAME">SSID/WIFI ADI</string>
-
-    <string name="MAC_Address">MAC Adresi</string>
-
-    <string name="IPV4_Address">IPV4 Adresi</string>
-
-    <string name="Signal_Strength">Sinyal kuvveti</string>
-
-    <string name="DO_YOU_WANT_TO_CONNECT_TO_THIS_WIFI">BU WIFI\'YA \n BAĞLANMAK İSTİYOR MUSUNUZ?</string>
 
     <string name="Welcome_to_Group_Chat_Feel_free_to_contact_the_owner_if_you_have_any_questions">Grup Sohbetine Hoşgeldiniz! Herhangi bir sorunuz olursa kurucu ile iletişim kurmaktan çekinmeyin</string>
 
     <string name="Type_a_message">Bir mesaj yaz...</string>
 
-    <string name="Choose_an_unique_password_to_protect_your_wallets">Cüzdanınızı korumak için \n bir şifre girin.</string>
-
-    <string name="Repeat_password">Şifrenizi tekrar girin</string>
-
     <string name="back">geri</string>
-
-    <string name="ENTER_PASSWORD_TO_CONNECT">BAĞLANMAK İÇİN ŞİFRE GİRİN</string>
 
     <string name="confirm">onayla</string>
 
@@ -1362,10 +1042,6 @@
     <string name="no_thanks">hayır, teşekkürler</string>
 
     <string name="yes_send_tip">evet, bahşişi gönder</string>
-
-    <string name="Enter_private_key_to_import_your_wallet">Cüzdanınızı içe aktarmak için özel anahtarınızı girin</string>
-
-    <string name="Private_key">Özel anahtar</string>
 
     <string name="import2">içe aktar</string>
 
@@ -1387,75 +1063,9 @@
 
     <string name="save_picture">resmi kaydet</string>
 
-    <string name="VPN_Server_Location">VPN Sunucu konumu*</string>
-
-    <string name="Choose_a_country">Bir ülke seçiniz</string>
-
-    <string name="VPN_Name2">VPN Adı*</string>
-
-    <string name="Cannot_be_changed_once_confirmed">*Bir kere onaylandığında değiştirilemez</string>
-
-    <string name="Your_Bet">Talebiniz</string>
-
-    <string name="Asset_Tranfer">Varlık Tranferi</string>
-
-    <string name="VPN_CONFIGURATION_PROFILE">VPN YAPILANDIRMA PROFİLİ</string>
-
-    <string name="Import_OpenVPN_Configuration_Profile">OpenVPN Yapılandırma Profilini İçe Aktar</string>
-
-    <string name="private_Key_Password2">özel anahtar Şifresi</string>
-
-    <string name="Username2">Kullanıcı Adı</string>
-
-    <string name="Save">Kaydet</string>
-
-    <string name="USERNAME_AND_PASSWORD_OPTIONAL">KULLANICI ADI VE ŞİFRE(OPSİYONEL)</string>
-
-    <string name="Password2">Şifre</string>
-
-    <string name="Fields_are_optional">** işaretli alanlar opsiyoneldir</string>
-
-    <string name="DEVICE_BANDWIDTH">CİHAZ BANT GENİŞLİĞİ</string>
-
-    <string name="Device_bandwidth_automatic_speed_test">Cihaz bant genişliği (otomatik hız testi)</string>
-
-    <string name="Hourly_Fee_QLC">Saatlik Ücret(QLC)</string>
-
-    <string name="Maximal_number_of_Connections">Maksimum Bağlantı Sayısı</string>
-
-    <string name="verify">doğrula</string>
-
-    <string name="CONGRATULATIONS">TEBRİKLER!</string>
-
-    <string name="Your_VPN_asset_registration_was_successful"> VPN varlık kaydı başarılı</string>
-
-    <string name="Manage_all_your_assets_in_your_wallet_or_go_back_and_register_another_VPN_asset">Cüzdanındaki tüm varlıklarını yönet, \n yada geri dön ve başka bir VPN varlığı kaydet!</string>
-
-    <string name="continue_to_my_wallet"> cüzdanıma ilerle</string>
-
-    <string name="go_back_to_the_home_page">ana sayfaya geri dön </string>
-
-    <string name="VPN_NAME">VPN ADI</string>
-
-    <string name="update_my_registration_info">kayıt bilgilerimi güncelle </string>
-
-    <string name="VPN_INFORMATION">VPN BİLGİSİ</string>
-
-    <string name="Join_our_Telegram">Telegramımıza katıl</string>
-
-    <string name="Share_your_Experience">Deneyimini Paylaş</string>
-
     <string name="Registrations_Sharing_Purchases">Kayıt,Paylaşım,Satın Almalar</string>
 
     <string name="Cost_Earnings">Maliyet/Kazanç</string>
-
-    <string name="You_must_enter_your_password_to_continue">Devam etmek için şifrenizi girmelisiniz.</string>
-
-    <string name="Wallet_Created">Cüzdan Oluşturuldu</string>
-
-    <string name="Your_wallet_keys_were_saved_to_your_phone">Cüzdan anahtarlarınız telefonunuza kaydedilmiştir.</string>
-
-    <string name="You_will_still_need_to_enter_your_password_to_unlock_your_wallet">Cüzdanınızı açmak için halen şifrenizi girmeniz gerekmektedir.</string>
 
     <string name="export_keys">anahtarları dışa aktar</string>
 
@@ -1467,21 +1077,11 @@
 
     <string name="change_wallet">cüzdanı değiştir</string>
 
-    <string name="MAX">MAX</string>
-
-    <string name="Amount_of_QLC">QLC Miktarı</string>
-
-    <string name="Current_exchange_rate">Anlık Değişim Oranı:</string>
-
-    <string name="buy_now">şimdi satın al</string>
-
     <string name="Selection_time">Seçim zamanı</string>
 
     <string name="Display_date">Gösterim Tarihi</string>
 
     <string name="open_folder">Klasörü Aç</string>
-
-    <string name="foo_die_datei">foo, die datei,</string>
 
     <string name="Your_Registed_Assets">Kayıtlı Varlıklarınız</string>
 
@@ -1491,30 +1091,6 @@
 
     <string name="You_have_no_registered_assets">Kayıtlı varlığınız yoktur.</string>
 
-    <string name="key_store">anahtar deposu</string>
-
-    <string name="privatekey">öze lanahtar</string>
-
-    <string name="Owner">Sahibi</string>
-
-    <string name="Seize">Elde et</string>
-
-    <string name="SSID">SSID</string>
-
-    <string name="PROOF_OF_OWNERSHIP">SAHİPLİK İSPATI</string>
-
-    <string name="PRICE_CONNECTIONS_SETTINGS">ÜCRET VE BAĞLANTI AYARLARI</string>
-
-    <string name="Suggested_Tipping_Price_QLC">Önerilen Bahşiş Miktarı(QLC)</string>
-
-    <string name="Maximum_number_of_Connections">Maksimum Bağlantı Sayısı</string>
-
-    <string name="register">kaydet</string>
-
-    <string name="some_speed_status">hız durumu</string>
-
-    <string name="Medium_Text">Orta Metin</string>
-
     <string name="Filename">Dosya Adı</string>
 
     <string name="Open">Aç</string>
@@ -1522,34 +1098,6 @@
     <string name="status">durum</string>
 
     <string name="Connected2">Bağlı :</string>
-
-    <string name="Hourly_Price">Saatlik Ücret:</string>
-
-    <string name="Users">Kullanıcılar:</string>
-
-    <string name="Price2">Ücret: </string>
-
-    <string name="Your_Address">Adresiniz</string>
-
-    <string name="Supported_tokens">Desteklenen tokenler</string>
-
-    <string name="To_receive_NEP5_tokens_copy_the_address_and_share_it_with_the_sender">NEP-5 tokenlerini alabilmek için, adresi kopyalayıp gönderici ile paylaşın</string>
-
-    <string name="copy_address">adresi kopyala</string>
-
-    <string name="Receiver_address">Alıcı adresi</string>
-
-    <string name="PASTE_ADDRESS">ADRESİ YAPIŞTIR</string>
-
-    <string name="SCAN_QR_CODE">QR KODU TARA</string>
-
-    <string name="Amount_to_send">Gönderim Miktarı</string>
-
-    <string name="You_must_hold_at_least_1_drop_of_GAS_in_order_to_send_NEP_5_tokens">NEP-5 token gönderimi için en az 1 GAS drop\'u bulundurmalısınız.</string>
-
-    <string name="send_now">şimdi gönder</string>
-
-    <string name="Please_enter_the_content">Lütfen içeriği giriniz</string>
 
     <string name="CHECKING_VPN_CONFIGURATION">VPN YAPILANDIRMASI KONTROLÜ</string>
 
@@ -1571,14 +1119,6 @@
 
     <string name="time_limit_per_device">cihaz_başı_zaman_limiti</string>
 
-    <string name="THIS_VPN_NAME_HAS_ALREADY_BEEN_REGISTERED">BU VPN ADI DAHA ÖNCEDEN ALINMIŞTIR</string>
-
-    <string name="I_will_pay">Ödeyeceğim</string>
-
-    <string name="Vpn_Name">Vpn Adı</string>
-
-    <string name="Not_connected">Bağlı değil!</string>
-
 
     <!--20180612止，以后每次翻译都要备注时间，方便做增量翻译-->
 
@@ -1595,47 +1135,11 @@
 
 <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum metus, eget efficitur diam duis varius!]]></Data></string>-->
 
-    <string name="TRANSACTIONS">İŞLEMLER</string>
-
-    <string name="RECEIVE">AL</string>
-
-    <string name="mainnnet_wallet">MAINNET CÜZDANI</string>
-
     <!--20180625-->
-    <string name="guest_viewpager_1">Bir Cüzdan Oluşturun \n 100 QLC Ödül Kazanın</string>
-
-    <string name="testnet_reward">Testnet Ödülleri</string>
-
-    <string name="guest_viewpager_2">QLC Token ile \n Sıfır Maliyetli Güvenli VPN</string>
-
-    <string name="guest_viewpager_3">Arkadaşlarınızla Palaşın \n Sürprizler Kazanın</string>
-
-    <string name="got_it">Anladım</string>
 
 
-    <string name="testnet">TestNet!</string>
     <string name="setting_language">AYAR DİLİ</string>
-    <string name="Wallet_Details">Cüzdan Detayları</string>
-    <string name="Switch_Wallet">Cüzdanı Değiştir</string>
-    <string name="Wallets_available">Mevcut_Cüzdanlar</string>
-    <string name="Wallets_available2"> Mevcut Cüzdanlar</string>
-    <string name="My_Registered_Assets">Kayıtlı Varlıklarım</string>
-    <string name="WiFi_Assets">WiFi varlıkları:</string>
-    <string name="VPN_Assets">VPN varlıkları:</string>
-    <string name="Fingerprint_to_unlock">Kilidi açmak için parmak izi kullanın</string>
-    <string name="Switch_Net">Ağı Değiştir</string>
-    <string name="MainNet">MainNet</string>
-    <string name="TestNet">TestNet</string>
     <string name="Language">Dil</string>
-    <string name="Version">Sürüm</string>
-    <string name="MY_WIFI_VPN_ASSETS">WIFI &amp; VPN VARLIKLARIM</string>
-    <string name="MANAGE_FUNDS">YATIRIMLARI YÖNET</string>
-    <string name="RECEIVE_FUNDS">PARA AL</string>
-    <string name="SEND_FUNDS">PARA GÖNDER</string>
-    <string name="VIEW_HISTORY">GEÇMİŞİ</string>
-    <string name="BUY_QLC">QLC SATIN AL</string>
-    <string name="English">İngilizce</string>
-    <string name="Choose_a_VPN">Bir VPN Seç</string>
     <string name="prioritize_the_list_by_server_location">listeyi sunucu konumuna göre önceliklendirin</string>
     <string name="connect_now">Şimdi Bağlan!</string>
     <string name="enter_settings_wallet">Cüzdan Ayarlarına Girin</string>
@@ -1647,30 +1151,17 @@
     <string name="pick_one_online_vpn_asset_the_little_green_spot_means_online">Bir çevrimiçi VPN seçin \nKüçük yeşil nokta çevrimiçi manasına gelir</string>
     <string name="get_into_wallet_detail">Cüzdan detayına gir</string>
     <string name="make_sure_you_backup_this">Bunu yedeklediğinizden emin olun</string>
-    <string name="choose_a_country">bir ülke</string>
     <string name="vpn_list">VPN Listesi</string>
-    <string name="REGISTER_YOUR_VPN_">VPN\'ini KAYDET</string>
     <string name="please_wait_vpn_online">Bu vpn çevrimiçi olana kadar lütfen bekleyin</string>
     <string name="choose_location">Konum seç</string>
-    <string name="no">HAYIR</string>
-    <string name="Just_cost_QLC_Connect_NOW"><Data><![CDATA[<b>\%s\</b> QLC ödenecek.<br />Bağlanmak istiyor musunuz?]]></Data></string>
-    <string name="total_successful_connection">Bağlantı Başarılı</string>
-    <string name="Do_you_want_to_disconnect">Bağlantıyı koparmak istiyor musunuz?</string>
-    <string name="Please_disconnect_the_current_one_first">Lütfen önce mevcut olandan bağlantıyı koparın.</string>  <!--20180712待翻译-->
-    <string name="Deposit">Varlık kaydı için 1 QLC yükleyiniz</string>
-    <string name="free">ÜCRETSİZ</string>
+    <!--20180712待翻译-->
     <string name="free_connection_details">ücretsiz bağlantı detayları</string>
     <string name="Gain">Kazanım</string>
     <string name="Used">Kullanım</string>
     <string name="HISTORY_RECORD">KAYIT GEÇMİŞİ</string>
     <string name="AVAILABLE">KULLANILABİLİR</string>
-    <string name="Please_create_a_wallet_to_continue">Devam etmek için lütfen cüzdan oluşturun.</string>
-    <string name="This_will_consume_one_of_your_free_connections">Bu sizin ücretsiz bağlantılarınızdan birini tüketecektir.</string>
 
-    <string name="weekly_ranking">haftalık sıralama</string>
     <string name="rules">kurallar</string>
-    <string name="Asset">varlık</string>
-    <string name="number_of_successful_connnections">bağlantı başarılı</string>
     <string name="days">GÜN</string>
     <string name="hrs">SAAT</string>
     <string name="mins">DK</string>
@@ -1681,16 +1172,8 @@
     <string name="ranking">Sıralama</string>
     <string name="of_the_Price_Pool">Havuz ödülü</string>
     <string name="Rewards">Ödüller</string>
-    <string name="website">web sitesi</string>
 
 
-
-    <string name="there_is_no_free_connection_available_please_create_a_wallet_to_continue">There is no free connection available. Please create a wallet to continue.</string>
-    <string name="P2pId">P2P ID</string>
-    <string name="It_was_unable_to_get_the_files_Please_try_again">It was unable to get the files.Please try again</string>
-    <string name="reload">RELOAD</string>
-    <string name="Turorial">Turorial</string>s
-    <string name="Choose_One_Configuration_File">Choose One Configuration File</string>
-    <string name="Required">* Required</string>
+    s
 
 </resources>

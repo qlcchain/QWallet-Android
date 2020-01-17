@@ -13,12 +13,12 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -27,8 +27,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.socks.library.KLog;
 import com.stratagile.qlc.QLCAPI;
-import com.stratagile.qlc.utils.QlcUtil;
 import com.stratagile.qlc.entity.QlcTokenbalance;
+import com.stratagile.qlc.utils.QlcUtil;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -51,10 +51,13 @@ import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.eos.EosActivationActivity;
 import com.stratagile.qlink.ui.activity.eos.EosResourceManagementActivity;
 import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
+import com.stratagile.qlink.ui.activity.eth.EthMnemonicShowActivity;
 import com.stratagile.qlink.ui.activity.eth.EthTransferActivity;
 import com.stratagile.qlink.ui.activity.eth.WalletDetailActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.neo.NeoTransferActivity;
+import com.stratagile.qlink.ui.activity.neo.NeoWalletInfoActivity;
+import com.stratagile.qlink.ui.activity.qlc.QlcMnemonicShowActivity;
 import com.stratagile.qlink.ui.activity.qlc.QlcTransferActivity;
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity;
 import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponent;
@@ -76,7 +79,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,12 +92,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import neoutils.Neoutils;
 import qlc.bean.Pending;
-import qlc.bean.StateBlock;
 import qlc.mng.AccountMng;
 import qlc.mng.LedgerMng;
-import qlc.mng.TransactionMng;
 import qlc.network.QlcClient;
 import qlc.network.QlcException;
+import qlc.rpc.AccountRpc;
 import qlc.rpc.impl.LedgerRpc;
 import qlc.utils.Helper;
 
@@ -145,6 +146,22 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     LinearLayout llResouces;
     @BindView(R.id.llStake)
     LinearLayout llStake;
+    @BindView(R.id.view1)
+    View view1;
+    @BindView(R.id.view2)
+    View view2;
+    @BindView(R.id.ivTokenAvatar)
+    ImageView ivTokenAvatar;
+    @BindView(R.id.tvGasIntroduce)
+    TextView tvGasIntroduce;
+    @BindView(R.id.tvBackUpNow)
+    TextView tvBackUpNow;
+    @BindView(R.id.llBackUp)
+    LinearLayout llBackUp;
+    @BindView(R.id.main_content)
+    RelativeLayout mainContent;
+    @BindView(R.id.tvPending)
+    TextView tvPending;
 
     private double walletAsset;
 
@@ -154,6 +171,14 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     private AllWallet currentSelectWallet;
 
     private MainViewModel viewModel;
+
+    private Wallet selectedNeoWallet;
+    private EthWallet selectedEthWallet;
+    private QLCAccount selectedQlcWallet;
+
+    private final int START_ACTIVITY_BACKUP = 2;
+
+    private Pending pending;
 
     @Nullable
     @Override
@@ -183,6 +208,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             @Override
             public void onRefresh() {
                 isPending = false;
+                tvPending.setText("");
+                pending = null;
                 refreshLayout.setRefreshing(false);
                 initData();
             }
@@ -339,11 +366,43 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     walletAsset += Double.parseDouble(value) * tokenInfos.get(i).getTokenPrice();
                     if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EthWallet) {
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eth_wallet));
+                        if (!selectedEthWallet.getIsBackup()) {
+                            if (selectedEthWallet.getMnemonic() != null && !"".equals(selectedEthWallet.getMnemonic())) {
+                                llBackUp.setVisibility(View.VISIBLE);
+                                tvBackUpNow.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        KLog.i("点击");
+                                        startActivityForResult(new Intent(getActivity(), EthMnemonicShowActivity.class).putExtra("wallet", selectedEthWallet), START_ACTIVITY_BACKUP);
+                                    }
+                                });
+                            }
+                        }
                     } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.NeoWallet) {
+                        if (!selectedNeoWallet.getIsBackup()) {
+                            llBackUp.setVisibility(View.VISIBLE);
+                            tvBackUpNow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    KLog.i("点击");
+                                    startActivityForResult(new Intent(getActivity(), NeoWalletInfoActivity.class).putExtra("wallet", selectedNeoWallet), START_ACTIVITY_BACKUP);
+                                }
+                            });
+                        }
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_neo_wallet));
                     } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.EosWallet) {
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_eos_wallet));
                     } else if (tokenInfos.get(i).getWalletType() == AllWallet.WalletType.QlcWallet) {
+                        if (!selectedQlcWallet.getIsBackUp()) {
+                            llBackUp.setVisibility(View.VISIBLE);
+                            tvBackUpNow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    KLog.i("点击");
+                                    startActivityForResult(new Intent(getActivity(), QlcMnemonicShowActivity.class).putExtra("wallet", selectedQlcWallet), START_ACTIVITY_BACKUP);
+                                }
+                            });
+                        }
                         ivWalletAvatar.setImageDrawable(getResources().getDrawable(R.mipmap.icons_qlc_wallet));
                     }
                 }
@@ -428,7 +487,9 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     boolean hasSelectedWallet = false;
 
     private void initData() {
+//        testGenerateWallet();
         hasSelectedWallet = false;
+        llBackUp.setVisibility(View.GONE);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -446,7 +507,14 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 for (int i = 0; i < ethWallets.size(); i++) {
                     if (ethWallets.get(i).getIsCurrent()) {
                         hasSelectedWallet = true;
+                        selectedEthWallet = ethWallets.get(i);
                         getEthToken(ethWallets.get(i));
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvPending.setText("");
+                            }
+                        });
                     }
                 }
                 List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
@@ -455,7 +523,14 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         if (neoWallets.get(i).getIsCurrent()) {
                             hasSelectedWallet = true;
                             KLog.i("生成neo钱包的结果为：" + Account.INSTANCE.fromWIF(neoWallets.get(i).getWif()));
+                            selectedNeoWallet = neoWallets.get(i);
                             getNeoToken(neoWallets.get(i));
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("");
+                                }
+                            });
                         }
                     }
                 }
@@ -465,6 +540,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         if (eosAccounts.get(i).getIsCurrent()) {
                             hasSelectedWallet = true;
                             getEosToken(eosAccounts.get(i));
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("");
+                                }
+                            });
                         }
                     }
                 }
@@ -472,12 +553,13 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 for (QLCAccount wallet : qlcAccounts) {
                     if (wallet.getIsCurrent()) {
                         hasSelectedWallet = true;
+                        selectedQlcWallet = wallet;
                         getQlcToken(wallet);
                     }
                 }
                 if (!hasSelectedWallet) {
                     if (ethWallets.size() == 0 && neoWallets.size() == 0 && eosAccounts.size() == 0 && qlcAccounts.size() == 0) {
-                        startActivityForResult(new Intent(getActivity(), SelectWalletTypeActivity.class), 2);
+                        autoGenerateWallet();
                     }
                     if (ethWallets.size() != 0) {
                         ethWallets.get(0).setCurrent(true);
@@ -501,6 +583,91 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 }
             }
         }).start();
+    }
+
+
+    private void testGenerateWallet() {
+        KLog.i("测试自动生成qlc钱包");
+        String seed = QlcUtil.generateSeed().toLowerCase();
+        try {
+            JSONObject jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0);
+            String priKey = jsonObject.getString("privKey");
+            String pubKey = jsonObject.getString("pubKey");
+            KLog.i(jsonObject.toJSONString());
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(seed);
+            String mnemonics = AccountRpc.seedToMnemonics(jsonArray);
+            KLog.i(mnemonics);
+            String address = QlcUtil.publicToAddress(pubKey).toLowerCase();
+            QLCAccount qlcAccount = new QLCAccount();
+            qlcAccount.setPrivKey(priKey.toLowerCase());
+            qlcAccount.setPubKey(pubKey);
+            qlcAccount.setAddress(address);
+            qlcAccount.setMnemonic(mnemonics);
+            qlcAccount.setIsCurrent(true);
+            qlcAccount.setAccountName(QLCAPI.Companion.getQlcWalletName());
+            qlcAccount.setSeed(seed);
+            qlcAccount.setIsAccountSeed(true);
+            qlcAccount.setWalletIndex(0);
+            KLog.i(qlcAccount.toString());
+        } catch (QlcException e) {
+            closeProgressDialog();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 自动生成钱包逻辑
+     */
+    private void autoGenerateWallet() {
+        String seed = QlcUtil.generateSeed().toLowerCase();
+        try {
+            JSONObject jsonObject = AccountMng.keyPairFromSeed(Helper.hexStringToBytes(seed), 0);
+            String priKey = jsonObject.getString("privKey");
+            String pubKey = jsonObject.getString("pubKey");
+            KLog.i(jsonObject.toJSONString());
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(seed);
+            String mnemonics = AccountRpc.seedToMnemonics(jsonArray);
+            KLog.i(mnemonics);
+            String address = QlcUtil.publicToAddress(pubKey).toLowerCase();
+            QLCAccount qlcAccount = new QLCAccount();
+            qlcAccount.setPrivKey(priKey.toLowerCase());
+            qlcAccount.setPubKey(pubKey);
+            qlcAccount.setAddress(address);
+            qlcAccount.setMnemonic(mnemonics);
+            qlcAccount.setIsCurrent(true);
+            qlcAccount.setAccountName(QLCAPI.Companion.getQlcWalletName());
+            qlcAccount.setSeed(seed);
+            qlcAccount.setIsAccountSeed(true);
+            qlcAccount.setWalletIndex(0);
+            AppConfig.instance.getDaoSession().getQLCAccountDao().insert(qlcAccount);
+        } catch (QlcException e) {
+            closeProgressDialog();
+            e.printStackTrace();
+        }
+        Account.INSTANCE.createNewWallet();
+        neoutils.Wallet wallet = Account.INSTANCE.getWallet();
+        Wallet walletWinq = new Wallet();
+        walletWinq.setAddress(wallet.getAddress());
+        walletWinq.setWif(wallet.getWIF());
+        walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
+        walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()).toLowerCase());
+        walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
+        walletWinq.setIsCurrent(false);
+        walletWinq.setName("NEO-Wallet 01");
+        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+
+        try {
+            EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
+            ethWallet.setIsCurrent(false);
+            AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        initData();
     }
 
     @Override
@@ -557,11 +724,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         viewModel.allWalletMutableLiveData.postValue(currentSelectWallet);
         viewModel.walletTypeMutableLiveData.postValue(AllWallet.WalletType.QlcWallet);
         allWalletMoney.put(allWallet, 0d);
-        List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
-        if (neoWallets.size() != 0) {
-            Account.INSTANCE.fromWIF(neoWallets.get(0).getWif());
-            mPresenter.getWinqGas(neoWallets.get(0).getAddress());
-        }
+
         new QLCAPI().walletGetBalance(qlcAccount.getAddress(), "", new QLCAPI.BalanceInter() {
             @Override
             public void onBack(@org.jetbrains.annotations.Nullable ArrayList<QlcTokenbalance> baseResult, @org.jetbrains.annotations.Nullable Error error) {
@@ -577,32 +740,49 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             KLog.i("pending中，过滤掉。。");
             return;
         }
-        JSONArray jsonArray = new JSONArray();
-        JSONArray jsonArray1 = new JSONArray();
-        jsonArray1.add(qlcAccount.getAddress());
-        jsonArray.add(jsonArray1);
-        jsonArray.add(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
                     LedgerRpc rpc = new LedgerRpc(qlcClient);
-                    JSONObject jsonObject = rpc.accountsPending(jsonArray);
-//                    KLog.i(jsonObject.toJSONString());
-                    JSONObject jsonObject1 = JSONObject.parseObject(jsonObject.get("result").toString());
-//                    KLog.i(jsonObject1.toJSONString());
-                    if (jsonObject1.get(qlcAccount.getAddress()) == null) {
+                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                        pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
+                    }
+                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
                         return;
                     }
-                    Pending pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
                     KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
                     if (pending.getInfoList().size() != 0) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                            }
+                        });
+
                         isPending = true;
                         QlcReceiveUtilsKt.recevive(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()), qlcAccount, rpc, new ReceiveBack() {
                             @Override
                             public void recevie(boolean suceess) {
                                 if (suceess) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            isPending = false;
+                                            if (pending != null && pending.getInfoList() != null && pending.getInfoList().size() != 0) {
+                                                pending.getInfoList().remove(0);
+                                                tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                                                if (pending.getInfoList().size() == 0) {
+                                                    tvPending.setText("");
+                                                }
+                                                initData();
+                                            } else {
+                                                tvPending.setText("");
+                                            }
+                                        }
+                                    });
+                                } else {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -614,16 +794,26 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             }
                         });
                     } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvPending.setText("");
+                            }
+                        });
                         isPending = false;
                     }
                 } catch (Exception e) {
-                    isPending = false;
                     e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            isPending = false;
+                            initData();
+                        }
+                    });
                 }
             }
-        }).
-
-                start();
+        }).start();
 
     }
 
@@ -825,6 +1015,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            pending = null;
+            tvPending.setText("");
             initData();
         } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             allWalletMoney.remove(currentSelectWallet);
@@ -838,8 +1030,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     AppConfig.getInstance().getDaoSession().getEthWalletDao().update(ethWallets.get(0));
                 }
             }
+            pending = null;
+            tvPending.setText("");
             initData();
         } else if (requestCode == 2) {
+            pending = null;
+            tvPending.setText("");
             initData();
         }
     }

@@ -18,7 +18,6 @@
     </string-array>
 
     <!--View-->
-    <string name="view_set_as_the_default_app">设置为默认应用</string>
     <string name="view_title">选择</string>
     <string name="view_no_apps_can_open_this_file">没有应用可以打开这个文件</string>
 

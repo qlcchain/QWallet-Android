@@ -50,6 +50,10 @@ public class EntrustPostedOrderListAdapter extends BaseQuickAdapter<EntrustOrder
                 helper.setText(R.id.tvOrderState, R.string.completed);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_21beb5));
                 break;
+            case "OVERTIME":
+                helper.setText(R.id.tvOrderState, R.string.overtime);
+                helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_21beb5));
+                break;
             case "CANCEL":
                 helper.setText(R.id.tvOrderState, R.string.revoked);
                 helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_29282a));

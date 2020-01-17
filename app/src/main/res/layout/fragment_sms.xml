@@ -67,14 +67,12 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/fragment_wifi_AppCompactImageViewQLinkReg"
                 android:layout_width="@dimen/x40"
                 android:layout_height="@dimen/x40"
                 android:layout_marginRight="@dimen/x20"
                 android:src="@mipmap/icon_choose_a_vpn" />
 
             <TextView
-                android:id="@+id/fragment_wifi_TextViewInfo"
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:layout_gravity="center_vertical"

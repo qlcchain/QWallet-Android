@@ -132,6 +132,13 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
                 getOrderList()
             }
         })
+        viewModel!!.noUserLogin.observe(this, Observer<String> {
+            if (isVisibleToUser && entrustOrderListAdapter.data.size == 0) {
+                KLog.i("------>>>>" + arguments!!["tradeToken"])
+                currentPage = 0
+                getOrderList()
+            }
+        })
 
         refreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
@@ -146,7 +153,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser  && viewModel != null && !currentOrderType.equals(viewModel!!.currentEntrustOrderType.value)) {
+        if (isVisibleToUser  && viewModel != null && !currentOrderType.equals(viewModel!!.currentEntrustOrderType.value) && viewModel!!.currentEntrustOrderType.value != null) {
             currentOrderType = viewModel!!.currentEntrustOrderType.value!!
             refreshLayout.isRefreshing = true
             currentPage = 0

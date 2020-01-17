@@ -9,6 +9,9 @@ public class FireBaseUtils {
     public static String eventLogin = "login";
     public static String eventStartApp = "startApp";
     public static String eventRegiester = "regiester";
+    public static String eventTradesMining = "tradesMining";
+    public static String eventClaimQLC = "claimQLC";
+    public static String eventTradeNow = "tradeNOW";
     public static void logEvent(Context context, String event) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, event);

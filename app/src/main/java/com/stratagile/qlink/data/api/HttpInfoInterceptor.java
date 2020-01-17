@@ -40,7 +40,6 @@ public class HttpInfoInterceptor implements Interceptor {
 //        KLog.i("reqeust的head为:" + request.headers());
         //注意 >>>>>>>>> okhttp3.4.1这里变成了 !HttpHeader.hasBody(response)
         //!HttpEngine.hasBody(response)
-        KLog.i(response.headers().get("Location"));
         if (false) {
 //        if(!HttpHeader.hasBody(response)){
             //END HTTP

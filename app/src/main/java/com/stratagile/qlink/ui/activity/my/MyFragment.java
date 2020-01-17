@@ -2,7 +2,6 @@ package com.stratagile.qlink.ui.activity.my;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,10 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -28,21 +23,26 @@ import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
+import com.stratagile.qlink.entity.eventbus.ShowBind;
+import com.stratagile.qlink.entity.eventbus.ShowDot;
+import com.stratagile.qlink.entity.eventbus.ShowMiningAct;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardTotal;
-import com.stratagile.qlink.qlinkcom;
-import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.main.TestActivity;
+import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
 import com.stratagile.qlink.ui.activity.my.module.MyModule;
 import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
+import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.view.MyItemView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -96,6 +96,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     View testView;
     @BindView(R.id.claimQlc)
     MyItemView claimQlc;
+    @BindView(R.id.mining)
+    MyItemView mining;
     private MainViewModel viewModel;
 
     @Nullable
@@ -124,6 +126,15 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     loginUser = userAccount;
                     ConstantValue.currentUser = userAccount;
                     viewModel.currentUserAccount.postValue(userAccount);
+
+                    if (userAccount.getBindDate() == null || "".equals(userAccount.getBindDate())) {
+                        viewModel.isBind.postValue(false);
+                        EventBus.getDefault().post(new ShowBind());
+                    } else {
+                        viewModel.isBind.postValue(true);
+                        getCanClaimTotal();
+                    }
+
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
                     if (ConstantValue.currentUser.getAvatar() != null && !"".equals(ConstantValue.currentUser.getAvatar())) {
@@ -140,6 +151,19 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
             }
         }
+    }
+
+    private void controllerDot() {
+        if (mining.getDotViewVisible() == View.VISIBLE || claimQlc.getDotViewVisible() == View.VISIBLE || shareFriend.getDotViewVisible() == View.VISIBLE) {
+            EventBus.getDefault().post(new ShowDot(true));
+        } else {
+            EventBus.getDefault().post(new ShowDot(false));
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showMiningAct(ShowMiningAct showMiningAct) {
+        mining.setVisibility(showMiningAct.isShow()? View.VISIBLE : View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -187,6 +211,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     mPresenter.getUserInfo(map);
                 }
             }
+//            if (ConstantValue.currentUser == null) {
+//                viewModel.noUserLogin.postValue("xxx");
+//            }
         }
         claimQlc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,9 +221,12 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 if (isLogin) {
                     if (ConstantValue.currentUser.getBindDate() == null || "".equals(ConstantValue.currentUser.getBindDate())) {
                         viewModel.isBind.postValue(false);
+                        EventBus.getDefault().post(new ShowBind());
                     } else {
+                        viewModel.isBind.postValue(true);
                         claimQlc.setDotViewVisible(View.INVISIBLE);
                         startActivity(new Intent(getActivity(), MyClaimActivity.class));
+                        controllerDot();
                     }
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
@@ -223,6 +253,14 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 .myModule(new MyModule(this))
                 .build()
                 .inject(this);
+    }
+
+    private void getMiningRewardTotal() {
+        Map map = new HashMap<String, String>();
+        map.put("account", ConstantValue.currentUser.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        map.put("status", "NO_AWARD");
+        mPresenter.getMiningRewardTotal(map);
     }
 
     @Override
@@ -310,6 +348,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         if (usrInfo.getData().getBindDate() == null || "".equals(usrInfo.getData().getBindDate())) {
             viewModel.isBind.postValue(false);
         } else {
+            viewModel.isBind.postValue(true);
             getCanClaimTotal();
         }
         KLog.i("更新呢用户信息");
@@ -333,6 +372,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         } else {
             claimQlc.setDotViewVisible(View.INVISIBLE);
         }
+        controllerDot();
     }
 
     @Override
@@ -342,6 +382,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         } else {
             shareFriend.setDotViewVisible(View.INVISIBLE);
         }
+        getMiningRewardTotal();
+        controllerDot();
     }
 
     @Override
@@ -351,8 +393,22 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         if (!"".equals(ConstantValue.currentUser.getBindDate())) {
             tags.add(ConstantValue.userLend);
         }
+        if ("Meizu16th".equals(SystemUtil.getDeviceBrand() + SystemUtil.getSystemModel())) {
+            KLog.i("添加测试tag");
+            tags.add("qwallet_test");
+        }
         ConstantValue.jpushOpreateCount++;
         JPushInterface.setTags(getActivity(), ConstantValue.jpushOpreateCount, tags);
+    }
+
+    @Override
+    public void setMiningRewardCount(RewardTotal claimQgas) {
+        if (claimQgas.getRewardTotal() != 0) {
+            mining.setDotViewVisible(View.VISIBLE);
+        } else {
+            mining.setDotViewVisible(View.INVISIBLE);
+        }
+        controllerDot();
     }
 
     @Override
@@ -360,7 +416,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView})
+    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView, R.id.mining})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user:
@@ -384,11 +440,12 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
                 break;
             case R.id.cryptoWallet:
-                EventBus.getDefault().post(new ChangeViewpager(1));
+                EventBus.getDefault().post(new ChangeViewpager(2));
                 break;
             case R.id.shareFriend:
-                if (isLogin) {
+                if (isLogin && ConstantValue.currentUser != null) {
                     shareFriend.setDotViewVisible(View.INVISIBLE);
+                    controllerDot();
                     startActivity(new Intent(getActivity(), InviteActivity.class));
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
@@ -404,6 +461,11 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 break;
             case R.id.testView:
                 startActivityForResult(new Intent(getActivity(), TestActivity.class), 0);
+                break;
+            case R.id.mining:
+                mining.setDotViewVisible(View.INVISIBLE);
+                controllerDot();
+                startActivityForResult(new Intent(getActivity(), MiningInviteActivity.class), 0);
                 break;
             default:
                 break;

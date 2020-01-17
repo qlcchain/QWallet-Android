@@ -48,6 +48,7 @@ class OtcQlcChainPayActivity : BaseActivity(), OtcQlcChainPayContract.View {
         runOnUiThread {
             closeProgressDialog()
             setResult(Activity.RESULT_OK)
+            startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
             finish()
         }
     }
@@ -83,7 +84,7 @@ class OtcQlcChainPayActivity : BaseActivity(), OtcQlcChainPayContract.View {
         tvAmountPayTokenn.text = intent.getStringExtra("usdt")
         tvPayTokenBalance.text = getString(R.string.balance) + ": -/-"
 
-        etQlcTokenSendMemo.setText(getString(R.string.buy) + " " + intent.getStringExtra("tradeToken") + "( " + intent.getStringExtra("orderNumber") + " )")
+        etQlcTokenSendMemo.setText("otc_trade_buy_" + intent.getStringExtra("orderNumber"))
         llSelectQlcWallet.setOnClickListener {
             var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
             intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)

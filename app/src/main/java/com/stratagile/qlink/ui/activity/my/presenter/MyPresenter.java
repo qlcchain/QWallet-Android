@@ -4,6 +4,7 @@ import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
@@ -78,6 +79,27 @@ public class MyPresenter implements MyContract.MyContractPresenter{
             public void accept(BaseBack user) throws Exception {
                 //isSuccesse
                 mView.bindPushBack();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
+    }
+    public void getMiningRewardTotal(Map map) {
+        mCompositeDisposable.add(httpAPIWrapper.getMiningRewardTotal(map).subscribe(new Consumer<RewardTotal>() {
+            @Override
+            public void accept(RewardTotal user) throws Exception {
+                //isSuccesse
+                mView.setMiningRewardCount(user);
             }
         }, new Consumer<Throwable>() {
             @Override

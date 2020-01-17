@@ -125,6 +125,7 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
                     if (userAccount.getAccount().equals(etEmail)) {
                         //账号密码登录
                         userAccount.setPassword(MD5Util.getStringMD5(etPassword.getText().toString().trim()));
+                        userAccount.setPubKey(register.getData());
                         userAccount.setIsLogin(true);
                         ConstantValue.currentUser = userAccount;
                         AppConfig.getInstance().getDaoSession().getUserAccountDao().update(userAccount);

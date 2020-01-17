@@ -1,4 +1,5 @@
 package com.stratagile.qlink.ui.activity.otc.presenter
+
 import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
@@ -6,6 +7,7 @@ import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.NeoCallBack
@@ -13,11 +15,15 @@ import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.BuySellSellTodo
+import com.stratagile.qlink.db.BuySellSellTodoDao
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.ui.activity.otc.contract.SellQgasContract
 import com.stratagile.qlink.ui.activity.otc.SellQgasActivity
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
 import com.stratagile.qlink.utils.ToastUtil
@@ -41,7 +47,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -90,7 +95,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         }))
     }
 
-    fun sendQgas(amount: String, receiveAddress: String, map: MutableMap<String, String>) {
+    fun sendQgas(amount: String, receiveAddress: String, map: MutableMap<String, String>, message : String) {
         var qlcAccounts = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
         var qlcAccount: QLCAccount
         if (qlcAccounts.filter { it.isCurrent() }.size == 1) {
@@ -115,7 +120,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                             qlcTokenbalances = baseResult
                             if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
                                 if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "SELL QGAS", false, object : SendBack {
+                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, message, false, object : SendBack {
                                         override fun send(suceess: String) {
                                             if ("".equals(suceess)) {
                                                 mView.generateSellQgasOrderFailed("send qgas error")
@@ -141,22 +146,66 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                 })
             })
         }.concatMap {
-            map.put("fromAddress", qlcAccount.address)
             map.put("txid", it.blockingFirst())
-            httpAPIWrapper.generateTradeSellOrder(map)
+            httpAPIWrapper.tradeSellOrderTxid(map)
         }.subscribe({ baseBack ->
             //isSuccesse
             mView.closeProgressDialog()
-            mView.generateBuyQgasOrderSuccess()
-        }, { mView.closeProgressDialog() }, {
+            mView.tradeOrderTxidSuccess()
+        }, {
+            mView.closeProgressDialog()
+            if (map["txid"] != null) {
+                BuySellSellTodo.createBuySellSellTodo(map)
+                sysbackUp(map["txid"]!!, "TRADE_ORDER", "", "", "")
+            }
+        }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
+            if (map["txid"] != null) {
+                BuySellSellTodo.createBuySellSellTodo(map)
+                sysbackUp(map["txid"]!!, "TRADE_ORDER", "", "", "")
+            }
         })
         mCompositeDisposable.add(disposable)
     }
 
-    fun getTxidByHex(txid : String): String {
+    fun confirmTradeOrderTxid(txid: String, map: MutableMap<String, String>) {
+        map["txid"] = txid
+        mCompositeDisposable.add(httpAPIWrapper.tradeSellOrderTxid(map).subscribe({
+            mView.closeProgressDialog()
+            mView.tradeOrderTxidSuccess()
+        }, {
+            BuySellSellTodo.createBuySellSellTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
+        }, {
+            BuySellSellTodo.createBuySellSellTodo(map)
+            sysbackUp(txid, "TRADE_ORDER", "", "", "")
+        }))
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+                var list = AppConfig.instance.daoSession.buySellSellTodoDao.queryBuilder().where(BuySellSellTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.buySellSellTodoDao.delete(list[0])
+                }
+            }
+        })
+    }
+
+    fun getTxidByHex(txid: String): String {
         if (StringUtils.isBlank(txid)) {
             return txid
         }
@@ -165,7 +214,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
             var addCount = 63 - txid.length
             if (addCount > 0) {
                 for (i in 0..addCount) {
-                    addStr+= "0"
+                    addStr += "0"
                 }
             }
             return addStr + txid
@@ -176,16 +225,15 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         return txid
     }
 
-    fun generateTradeSellOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
-        map.put("fromAddress", fromAddress)
-        map.put("txid", getTxidByHex(txid))
+    fun generateTradeSellOrder(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.generateTradeSellOrder(map).subscribe({
-            mView.closeProgressDialog()
-            mView.generateBuyQgasOrderSuccess()
+            mView.generateBuyQgasOrderSuccess(it)
         }, {
-
+            BuySellSellTodo.createBuySellSellTodo(map)
+//            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }, {
-
+            BuySellSellTodo.createBuySellSellTodo(map)
+//            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }))
     }
 
@@ -221,11 +269,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    if ("".equals(it)) {
+                    if (it == null || "".equals(it)) {
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
-                        generateTradeSellOrder(it, walletAddress, map)
+                        confirmTradeOrderTxid(it, map)
                         KLog.i("transaction Hash: $it")
                     }
                 }, {
@@ -250,7 +298,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {
@@ -333,75 +381,12 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
     }
 
 
-
-
-
     fun getNeoWalletDetail(map: HashMap<String, String>, address: String) {
         val disposable = httpAPIWrapper.getNeoWalletInfo(map)
                 .subscribe({ baseBack ->
                     mView.setNeoDetail(baseBack)
 //                    getUtxo(address)
                 }, { }, {
-                    //onComplete
-                    KLog.i("onComplete")
-                })
-        mCompositeDisposable.add(disposable)
-    }
-
-    /**
-     * 获取交易id的方法
-     *
-     * @param hex sendrow的参数，一串很长的参数
-     * @return 返回该笔交易的id
-     */
-    private fun getTxid(hex: String): Transaction {
-        val ba: ByteArray
-        ba = ModelUtil.decodeHex(hex)
-        return Transaction(ByteBuffer.wrap(ba))
-    }
-
-    fun sendNep5Token(address: String, amount: String, toAddress: String, dataBean: NeoWalletInfo.DataBean.BalanceBean, remark: String, generateMap: HashMap<String, String>) {
-        val neoNodeRPC = NeoNodeRPC("")
-        neoNodeRPC.sendNEP5Token(assets, Account.getWallet()!!, dataBean.asset_hash, address, toAddress, amount.toDouble(), remark, object : NeoCallBack {
-            override fun NeoTranscationResult(jsonBody: String?) {
-                val tx = getTxid(jsonBody!!)
-                val map = java.util.HashMap<String, String>()
-                map["addressFrom"] = address
-                map["addressTo"] = toAddress
-                map["symbol"] = dataBean.asset_symbol
-                map["amount"] = amount
-                map["tx"] = jsonBody
-                sendRow(tx.getHash().toReverseHexString(), address, map, generateMap)
-            }
-        })
-    }
-
-    fun sendRow(txid: String, address: String, map: HashMap<String, String>, generateMap: HashMap<String, String>) {
-        mCompositeDisposable.add(httpAPIWrapper.neoTokenTransaction(map).subscribe({
-            generateTradeSellOrder(txid, address, generateMap)
-        }, {
-            mView.closeProgressDialog()
-        }, {
-            mView.closeProgressDialog()
-        }))
-    }
-
-    private var assets: UTXOS? = null
-    fun getUtxo(address: String) {
-        val map = java.util.HashMap<String, String>()
-        map["address"] = address
-        val disposable = httpAPIWrapper.getMainUnspentAsset(map)
-                .subscribe({ unspent ->
-                    //isSuccesse
-                    KLog.i("onSuccesse")
-                    val utxos = arrayOfNulls<UTXO>(unspent.data.size)
-                    assets = UTXOS(unspent.data)
-                    //                        assets.copy(unspent.getData());
-                }, { throwable ->
-                    //onError
-                    KLog.i("onError")
-                    throwable.printStackTrace()
-                }, {
                     //onComplete
                     KLog.i("onComplete")
                 })

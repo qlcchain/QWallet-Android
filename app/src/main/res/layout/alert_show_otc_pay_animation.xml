@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content">
+    <LinearLayout
+        android:layout_width="314dp"
+        android:background="@drawable/bg_topup_pay_top"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/llSelectQlcWallet"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="@dimen/x10"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/x138">
+
+            <ImageView
+                android:id="@+id/ivChain"
+                android:layout_width="44dp"
+                android:src="@mipmap/icons_qlc_wallet"
+                android:layout_height="44dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/select_a_qlc_wallet_to_send_out_qgas"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_29282a"
+                    android:singleLine="true"
+                    android:layout_marginLeft="13dp"
+                    android:id="@+id/tvWalletName"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_29282a_40"
+                    android:layout_marginTop="@dimen/x10"
+                    android:maxEms="10"
+                    android:ellipsize="middle"
+                    android:text="@string/select_a_qlc_wallet"
+                    android:singleLine="true"
+                    android:layout_marginLeft="13dp"
+                    android:maxWidth="@dimen/x400"
+                    android:id="@+id/tvWalletAddess"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_marginTop="-1dp"
+        android:src="@mipmap/background_voucher_n"
+        android:layout_height="wrap_content"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="-1dp"
+        android:background="@drawable/bg_topup_pay_bottom">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="36dp" />
+
+        <ImageView
+            android:id="@+id/ivLoad1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/background_load"
+            app:layout_constraintEnd_toEndOf="@+id/view1"
+            app:layout_constraintStart_toStartOf="@+id/view1"
+            app:layout_constraintBottom_toTopOf="@+id/view1" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="1dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/color_f2f2f2"
+            app:layout_constraintLeft_toLeftOf="@+id/guideLine"
+            app:layout_constraintRight_toRightOf="@+id/guideLine"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view2"
+            android:visibility="gone"
+            android:layout_width="1dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/mainColor"
+            app:layout_constraintLeft_toLeftOf="@+id/guideLine"
+            app:layout_constraintRight_toRightOf="@+id/guideLine"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivLoad2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/background_no"
+            app:layout_constraintEnd_toEndOf="@+id/view1"
+            app:layout_constraintStart_toStartOf="@+id/view1"
+            app:layout_constraintTop_toBottomOf="@+id/view1" />
+
+        <TextView
+            android:id="@+id/tvPaying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qgas_transferred"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/color_29282a"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLoad1"
+            app:layout_constraintLeft_toRightOf="@+id/view1"
+            app:layout_constraintTop_toTopOf="@+id/ivLoad1" />
+
+        <TextView
+            android:id="@+id/tvVoucher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/color_29282a"
+            android:text="@string/blockchain_inoice_created"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLoad2"
+            app:layout_constraintLeft_toRightOf="@+id/view1"
+            app:layout_constraintTop_toTopOf="@+id/ivLoad2" />
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

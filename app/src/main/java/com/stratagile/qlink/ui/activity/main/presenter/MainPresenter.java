@@ -5,7 +5,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
@@ -13,6 +16,10 @@ import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.api.HttpObserver;
+import com.stratagile.qlink.db.BuySellBuyTodo;
+import com.stratagile.qlink.db.BuySellSellTodo;
+import com.stratagile.qlink.db.EntrustTodo;
+import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.FreeNum;
@@ -21,8 +28,13 @@ import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.VpnTitle;
+import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.Dict;
+import com.stratagile.qlink.entity.topup.TopupOrder;
+import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
+import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.WalletKtutil;
@@ -127,61 +139,73 @@ public class MainPresenter implements MainContract.MainContractPresenter {
 
     @Override
     public void getTox() {
-        KLog.i("获取tox的json");
         getMainAddress();
-        String jsonPath = Environment.getExternalStorageDirectory() + "/Qwallet/Profile/jsonFile.json";
-        File jsonFile = new File(jsonPath);
-        if (!jsonFile.exists()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String url = "https://nodes.tox.chat/json";
-                    String result = "";
-                    BufferedReader in = null;
-                    try {
-                        String urlNameString = url;
-                        URL realUrl = new URL(urlNameString);
-                        // 打开和URL之间的连接
-                        URLConnection connection = realUrl.openConnection();
-                        connection.setReadTimeout(10000);
-                        connection.setConnectTimeout(10000);
-                        // 建立实际的连接
-                        connection.connect();
-                        // 获取所有响应头字段
-                        Map<String, List<String>> map = connection.getHeaderFields();
-                        // 定义 BufferedReader输入流来读取URL的响应
-                        in = new BufferedReader(new InputStreamReader(
-                                connection.getInputStream()));
-                        String line;
-                        while ((line = in.readLine()) != null) {
-                            result += line;
-                        }
-                        KLog.i(result);
-                        FileWriter fw = null;
-                        jsonFile.createNewFile();
-                        fw = new FileWriter(jsonFile);
-                        BufferedWriter out = new BufferedWriter(fw);
-                        out.write(result, 0, result.length());
-                        out.close();
-                    } catch (Exception e) {
-                        System.out.println("发送GET请求出现异常！" + e);
-                        e.printStackTrace();
-                    }
-                    // 使用finally块来关闭输入流
-                    finally {
-                        try {
-                            if (in != null) {
-                                in.close();
-                            }
-                        } catch (Exception e2) {
-                            e2.printStackTrace();
-                        }
-                    }
-                }
-            }).start();
-        } else {
-            KLog.i("json文件存在，不再拉取");
+        String local = FileUtil.getStrDataFromFile(new File(Environment.getExternalStorageDirectory() + "/Qwallet/ConstantValue.json"));
+        if (!"".equals(local)) {
+            KLog.i(local);
+            local = new String(qlinkcom.AES(Base64.decode(local.getBytes(), Base64.NO_WRAP), 1));
+            KLog.i("本地保存的主地址");
+            KLog.i(local);
+            Gson gson = new Gson();
+            MainAddress mainAddress = gson.fromJson(local, MainAddress.class);
+            ConstantValue.mainAddress = mainAddress.getData().getNEO().getAddress();
+            ConstantValue.ethMainAddress = mainAddress.getData().getETH().getAddress();
+            ConstantValue.mainAddressData = mainAddress.getData();
         }
+
+//        String jsonPath = Environment.getExternalStorageDirectory() + "/Qwallet/Profile/jsonFile.json";
+//        File jsonFile = new File(jsonPath);
+//        if (!jsonFile.exists()) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    String url = "https://nodes.tox.chat/json";
+//                    String result = "";
+//                    BufferedReader in = null;
+//                    try {
+//                        String urlNameString = url;
+//                        URL realUrl = new URL(urlNameString);
+//                        // 打开和URL之间的连接
+//                        URLConnection connection = realUrl.openConnection();
+//                        connection.setReadTimeout(10000);
+//                        connection.setConnectTimeout(10000);
+//                        // 建立实际的连接
+//                        connection.connect();
+//                        // 获取所有响应头字段
+//                        Map<String, List<String>> map = connection.getHeaderFields();
+//                        // 定义 BufferedReader输入流来读取URL的响应
+//                        in = new BufferedReader(new InputStreamReader(
+//                                connection.getInputStream()));
+//                        String line;
+//                        while ((line = in.readLine()) != null) {
+//                            result += line;
+//                        }
+//                        KLog.i(result);
+//                        FileWriter fw = null;
+//                        jsonFile.createNewFile();
+//                        fw = new FileWriter(jsonFile);
+//                        BufferedWriter out = new BufferedWriter(fw);
+//                        out.write(result, 0, result.length());
+//                        out.close();
+//                    } catch (Exception e) {
+//                        System.out.println("发送GET请求出现异常！" + e);
+//                        e.printStackTrace();
+//                    }
+//                    // 使用finally块来关闭输入流
+//                    finally {
+//                        try {
+//                            if (in != null) {
+//                                in.close();
+//                            }
+//                        } catch (Exception e2) {
+//                            e2.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }).start();
+//        } else {
+//            KLog.i("json文件存在，不再拉取");
+//        }
     }
 
 //    @Override
@@ -324,7 +348,170 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                 Map<String, String> infoMap = new HashMap<>();
                 infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
                 userAvatar(infoMap);
+                FileUtil.savaData("/Qwallet/ConstantValue.json", Base64.encodeToString(qlinkcom.AES(new Gson().toJson(mainAddress).getBytes(),0),Base64.NO_WRAP));
                 onComplete();
+            }
+        });
+    }
+
+    public void reCreateTopupOrder(Map map, TopupTodoList topupTodoList) {
+        httpAPIWrapper.topupCreateOrder(map).subscribe(new Observer<TopupOrder>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(TopupOrder topupOrder) {
+                AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount(), new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                    }
+                });
+            }
+
+            @Override
+            public void onComplete() {
+                sysbackUp(topupTodoList.getTxid(), "TOPUP", "", "", topupTodoList.getAmount(), new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getTopupTodoListDao().delete(topupTodoList);
+                    }
+                });
+            }
+        });
+    }
+
+    private void sysbackUp(String txid, String type, String chain, String tokenName, String amount, OnBackUpSuccess onBackUpSuccess) {
+        Map<String, Object> infoMap = new HashMap<>();
+        infoMap.put("account", ConstantValue.currentUser.getAccount());
+        infoMap.put("token", AccountUtil.getUserToken());
+        infoMap.put("type", type);
+        infoMap.put("chain", chain);
+        infoMap.put("tokenName", tokenName);
+        infoMap.put("amount", amount);
+        infoMap.put("platform", "Android");
+        infoMap.put("txid", txid);
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(new HttpObserver<BaseBack>() {
+            @Override
+            public void onNext(BaseBack baseBack) {
+                onComplete();
+                onBackUpSuccess.onSuccess();
+            }
+        });
+    }
+
+    private interface OnBackUpSuccess {
+        void onSuccess();
+    }
+
+    public void reCreateBuySellSellOrder(Map map, BuySellSellTodo buySellSellTodo) {
+        httpAPIWrapper.tradeSellOrderTxid(map).subscribe(new Observer<BaseBack>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseBack topupOrder) {
+                AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+                    }
+                });
+            }
+
+            @Override
+            public void onComplete() {
+                sysbackUp(buySellSellTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellSellTodoDao().delete(buySellSellTodo);
+                    }
+                });
+            }
+        });
+    }
+
+    public void reCreateBuySellBuyOrder(Map map, BuySellBuyTodo buySellBuyTodo) {
+        httpAPIWrapper.tradeBuyerConfirm(map).subscribe(new Observer<BaseBack>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseBack topupOrder) {
+                AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+                    }
+                });
+            }
+
+            @Override
+            public void onComplete() {
+                sysbackUp(buySellBuyTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getBuySellBuyTodoDao().delete(buySellBuyTodo);
+                    }
+                });
+            }
+        });
+    }
+    public void reCreateEntrustOrder(Map map, EntrustTodo entrustTodo) {
+        httpAPIWrapper.generateBuyQgasOrder(map).subscribe(new Observer<BaseBack>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseBack topupOrder) {
+                AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
+                mView.reCreateToopupSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
+                    }
+                });
+            }
+
+            @Override
+            public void onComplete() {
+                sysbackUp(entrustTodo.getTxid(), "OTC", "", "", "", new OnBackUpSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        AppConfig.getInstance().getDaoSession().getEntrustTodoDao().delete(entrustTodo);
+                    }
+                });
             }
         });
     }
@@ -360,8 +547,8 @@ public class MainPresenter implements MainContract.MainContractPresenter {
             }
 
             @Override
-            public void onNext(Dict appVersion) {
-                mView.setStakeQlc(appVersion);
+            public void onNext(Dict dict) {
+                mView.setStakeQlc(dict);
             }
 
             @Override

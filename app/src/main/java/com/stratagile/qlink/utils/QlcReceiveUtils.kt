@@ -33,10 +33,12 @@ import java.math.BigDecimal
 
 fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount, rpc : LedgerRpc, receiveBack: ReceiveBack){
     KLog.i("开始接收")
-    val sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
+    var sendBlock = LedgerMng.getBlockInfoByHash(qlcClient, byteArray)
     var isBendi = true
     //QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()
+    KLog.i("得到发送块")
     val receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, qlcAccount.address, null)
+    KLog.i("得到接收块")
     val aaaa = JSONArray()
     var stateBlock = Gson().fromJson<StateBlock>(receiveBlockJson.toJSONString(), StateBlock::class.java)
     if (Constants.BLOCK_TYPE_CONTRACTREWARD.equals(stateBlock.type) || Constants.LINNK_TYPE_AIRDORP.equals(stateBlock.type)) {
@@ -51,7 +53,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 return
             }
         } catch (e : Exception) {
-
+            e.printStackTrace()
+            receiveBack.recevie(false)
         }
         return
     }
@@ -81,7 +84,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                     stateBlock.setSignature(Helper.byteToHexString(signature))
                     aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
                 } else {
-
+                    receiveBack.recevie(false)
+                    return@responseString
                 }
                 KLog.i("接收传过去的参数：" + aaaa)
                 var result = rpc.process(aaaa)
@@ -92,6 +96,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                receiveBack.recevie(false)
             }
         }
         KLog.i(aaaa)
@@ -134,7 +139,7 @@ object QlcReceiveUtils {
             val qlcClient = QlcClient(ConstantValue.qlcNode)
             val rpc = LedgerRpc(qlcClient)
             var bendi = true
-            var jsonObject = TransactionMng.sendBlock(qlcClient, qlcAccount.address, "QGAS", receiveAddress, amount.toBigDecimal().multiply(BigDecimal.TEN.pow(8)).toBigInteger(), null, null, null, null)
+            var jsonObject = TransactionMng.sendBlock(qlcClient, qlcAccount.address, "QGAS", receiveAddress, amount.toBigDecimal().multiply(BigDecimal.TEN.pow(8)).toBigInteger(), null, null, null, message, null)
             var aaaa = JSONArray()
             var stateBlock = Gson().fromJson<StateBlock>(jsonObject.toJSONString(), StateBlock::class.java)
             var root = BlockMng.getRoot(stateBlock)
@@ -234,7 +239,7 @@ object QlcReceiveUtils {
         val rpc = LedgerRpc(qlcClient)
         var bendi = true
         //getMemoHash(Helper.byteToHexString(message.toByteArray()))
-        var jsonObject = TransactionMng.sendBlock(qlcClient, qlcAccount.address, tokenName, receiveAddress, amount.toBigDecimal().multiply(BigDecimal.TEN.pow(decimal)).toBigInteger(), null, null, null, null)
+        var jsonObject = TransactionMng.sendBlock(qlcClient, qlcAccount.address, tokenName, receiveAddress, amount.toBigDecimal().multiply(BigDecimal.TEN.pow(decimal)).toBigInteger(), null, null, null, message, null)
         var aaaa = JSONArray()
         var stateBlock = Gson().fromJson<StateBlock>(jsonObject.toJSONString(), StateBlock::class.java)
         var root = BlockMng.getRoot(stateBlock)

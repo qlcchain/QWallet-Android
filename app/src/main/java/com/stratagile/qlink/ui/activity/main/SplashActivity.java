@@ -106,6 +106,9 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void loginSuccees() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
+        if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+            intent.putExtra(ConstantValue.EXTRA_BUNDLE, getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
+        }
         startActivity(intent);
         overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
@@ -115,6 +118,10 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void jumpToLogin() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
+        if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+            intent.putExtra(ConstantValue.EXTRA_BUNDLE,
+                    getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
+        }
         startActivity(intent);
         overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();
@@ -125,6 +132,9 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         if (ConstantValue.thisVersionShouldShowGuest) {
             Intent intent = new Intent(this, GuestActivity.class);
             intent.putExtra("flag", "splash");
+            if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+                intent.putExtra(ConstantValue.EXTRA_BUNDLE, getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
+            }
             startActivity(intent);
         } else {
             startActivity(VerifyWalletPasswordActivity.class);

@@ -6,12 +6,14 @@ package com.stratagile.qlink.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.socks.library.KLog;
 
@@ -93,12 +95,13 @@ public class SystemUtil {
 
     /**
      * 获取系统某个应用包名
+     *
      * @param context
      * @param containsName 包名包含的字段
      * @return
      */
-    public static String getSystemPackagesName(Activity context,String containsName) {
-        if(containsName == null || containsName.equals(""))
+    public static String getSystemPackagesName(Activity context, String containsName) {
+        if (containsName == null || containsName.equals(""))
             return "";
         try {
             String strCamera = "";
@@ -109,7 +112,7 @@ public class SystemUtil {
                     PackageInfo packageInfo = packages.get(i);
                     /*String strLabel = packageInfo.applicationInfo.loadLabel(
                             context.getPackageManager()).toString();*/
-                    if (packageInfo.packageName.endsWith("."+containsName)) {
+                    if (packageInfo.packageName.endsWith("." + containsName)) {
                         strCamera = packageInfo.packageName;
                         if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                             break;
@@ -126,5 +129,26 @@ public class SystemUtil {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static boolean isAppaLive(Context context, String str) {
+        ActivityManager am = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
+        boolean isAppRunning = false;
+        KLog.i("集合的大小为；" + list.size());
+        for (ActivityManager.RunningTaskInfo info : list) {
+            if (info.topActivity.getPackageName().equals(str) || info.baseActivity.getPackageName().equals(str)) {
+                if ("com.stratagile.qlink.ui.activity.main.MainActivity".equals(info.topActivity.getClassName()) || "com.stratagile.qlink.ui.activity.main.MainActivity".equals(info.baseActivity.getClassName())) {
+                    return true;
+                }
+                KLog.i("应用的activity数量为：" + info.numActivities);
+                KLog.i(info.topActivity.getClassName());
+                Log.i("SysTemUtil", info.topActivity.getPackageName()
+                        + " info.baseActivity.getPackageName()="
+                        + info.baseActivity.getPackageName());
+            }
+        }
+        return isAppRunning;
     }
 }

@@ -36,6 +36,14 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
                     helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
                     break;
+                case "NEW":
+                    helper.setText(R.id.tvOrderState, R.string.new_trade_order);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
+                case "TXID_ERROR":
+                    helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
                 case "USDT_PAID":
                     helper.setText(R.id.tvOrderState, R.string.wait_seller_confirmation);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
@@ -68,6 +76,14 @@ public class TradeOrderListAdapter extends BaseQuickAdapter<TradeOrderList.Order
             helper.setTextColor(R.id.tvOrderType, mContext.getResources().getColor(R.color.color_ff3669));
             switch (item.getStatus()) {
                 case "QGAS_TO_PLATFORM":
+                    helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
+                    break;
+                case "NEW":
+                    helper.setText(R.id.tvOrderState, R.string.new_trade_order);
+                    helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.color_ff3669));
+                    break;
+                case "TXID_ERROR":
                     helper.setText(R.id.tvOrderState, R.string.wait_buyer_payment);
                     helper.setTextColor(R.id.tvOrderState, mContext.getResources().getColor(R.color.mainColor));
                     break;

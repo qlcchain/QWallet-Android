@@ -43,6 +43,8 @@ public class ConstantValue {
     //测试 http://47.103.40.20:19735
     //正式 http://wrpc.qlcchain.org:9735
 
+    public static String miningQLC = "";
+
 
 
     public static String qlcNode = "http://wrpc.qlcchain.org:9735";
@@ -61,6 +63,11 @@ public class ConstantValue {
     public static boolean canClickWallet = true;
 
     public static UserAccount lastLoginOut;
+
+    public static String EXTRA_BUNDLE = "bundle";
+
+    public static String isShowMiningAct = "isShowMiningAct";
+    public static String currentMiningActId = "currentMiningActId";
 
     /**
      * eth的bnb契约地址

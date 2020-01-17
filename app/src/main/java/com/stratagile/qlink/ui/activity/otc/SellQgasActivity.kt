@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
@@ -117,6 +118,13 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         }
     }
 
+    override fun tradeOrderTxidSuccess() {
+        toast(getString(R.string.success))
+        closeProgressDialog()
+        startActivity(Intent(this, OtcOrderRecordActivity::class.java).putExtra("position", 1))
+        finish()
+    }
+
     override fun generateSellQgasOrderFailed(content: String) {
         runOnUiThread {
             closeProgressDialog()
@@ -124,10 +132,34 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         }
     }
 
-    override fun generateBuyQgasOrderSuccess() {
-        toast("success")
-        closeProgressDialog()
-        finish()
+    override fun generateBuyQgasOrderSuccess(tradeOrder: TradeOrder) {
+        var tradeOrderId = tradeOrder.order.id
+        var map = hashMapOf<String, String>()
+        map.put("account", ConstantValue.currentUser.account)
+        map.put("token", AccountUtil.getUserToken())
+        map["tradeOrderId"] = tradeOrderId
+        var message = "otc_trade_sell_" + tradeOrderId
+        thread {
+            when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
+                AllWallet.WalletType.EthWallet -> {
+                    mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
+                }
+                AllWallet.WalletType.EosWallet -> {
+                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (tradeTokenInfo == null) {
+                        runOnUiThread {
+                            toast(getString(R.string.pleasewait))
+                        }
+                    }
+                    testTransfer(map, sendNeoWallet!!.address)
+                }
+                AllWallet.WalletType.QlcWallet -> {
+                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
+                }
+            }
+        }
     }
 
     override fun generateTradeSellQgasOrderSuccess() {
@@ -264,6 +296,12 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             if ("".equals(tvSendWalletAddess)) {
                 return@setOnClickListener
             }
+
+            if (etQgas.text.toString().toBigDecimal() >= 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+                KotlinConvertJavaUtils.needVerify(this)
+                return@setOnClickListener
+            }
+
             when(OtcUtils.parseChain(entrustOrderInfo.order.payTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
@@ -368,6 +406,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
 
             }
         })
+        etQgas.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
         etQgas.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (etQgas.hasFocus()) {
@@ -376,9 +415,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     } else {
                         if (etQgas.text.toString().toBigDecimal() > maxQgas) {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
-                            etQgas.setText(maxQgas.stripTrailingZeros().toString())
+                            etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).stripTrailingZeros().toPlainString())
+                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {
@@ -610,51 +649,66 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             map.put("usdtAmount", etUsdt.text.toString())
             map["usdtToAddress"] = tvReceiveWalletAddess.text.toString()
             map.put("qgasAmount", etQgas.text.toString())
-            thread {
-                when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
-                    AllWallet.WalletType.EthWallet -> {
-                        mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
-                    }
-                    AllWallet.WalletType.EosWallet -> {
-                        mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
-                    }
-                    AllWallet.WalletType.NeoWallet -> {
-                        if (tradeTokenInfo == null) {
-                            runOnUiThread {
-                                toast(getString(R.string.pleasewait))
-                            }
-                            return@thread
-                        }
+            when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
+                AllWallet.WalletType.EthWallet -> {
+                    map.put("fromAddress", sendEthWallet!!.address)
+//                    mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
+                }
+                AllWallet.WalletType.EosWallet -> {
+//                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
+                }
+                AllWallet.WalletType.NeoWallet -> {
+                    if (tradeTokenInfo == null) {
                         runOnUiThread {
-                            testTransfer(map, sendNeoWallet!!.address)
+                            toast(getString(R.string.pleasewait))
                         }
-//                        mPresenter.sendNep5Token(sendNeoWallet!!.address, etQgas.text.toString(), ConstantValue.mainAddressData.neo.address, tradeTokenInfo!!, getString(R.string.sell) + " " + entrustOrderInfo.order!!.tradeToken, map)
                     }
-                    AllWallet.WalletType.QlcWallet -> {
-                        mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
-                    }
+                    map.put("fromAddress", sendNeoWallet!!.address)
+//                    testTransfer(map, sendNeoWallet!!.address)
+                }
+                AllWallet.WalletType.QlcWallet -> {
+                    map.put("fromAddress", sendQlcWallet!!.address)
+//                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
                 }
             }
+            mPresenter.generateTradeSellOrder(map)
         }
     }
+
+
+    fun uploadTxid() {
+
+    }
+
+
 
     private var webview: DWebView? = null
     private fun testTransfer(map : HashMap<String, String>, address : String) {
         webview = DWebView(this)
         webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(6)
+        val arrays = arrayOfNulls<Any>(7)
         arrays[0] = sendNeoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = tradeTokenInfo!!.asset_hash
         arrays[3] = etAmount.text.toString()
         arrays[4] = 8
         arrays[5] = Account.getWallet()!!.wif
-        webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
-            KLog.i("call succeed,return value is " + retValue!!)
-            var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-            mPresenter.generateTradeSellOrder(nep5SendBack.txid, address, map)
-        })
+        arrays[6] = "xxx"
+        try {
+            webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
+                KLog.i("call succeed,return value is " + retValue!!)
+                var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
+                if (nep5SendBack != null) {
+                    mPresenter.confirmTradeOrderTxid(nep5SendBack.txid, map)
+                } else {
+                    toast(getString(R.string.send_qgas_error, tradeTokenInfo!!.asset_symbol))
+                }
+            })
+        } catch (e : Exception) {
+            toast(getString(R.string.send_qgas_error, tradeTokenInfo!!.asset_symbol))
+            e.printStackTrace()
+        }
     }
 
 

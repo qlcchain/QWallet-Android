@@ -50,13 +50,31 @@ public class UserAccount {
 
     private int totalInvite;
 
+    private String qlcAddress;
+
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setLogin(boolean login) {
+        isLogin = login;
+    }
+
+    public String getQlcAddress() {
+        return qlcAddress;
+    }
+
+    public void setQlcAddress(String qlcAddress) {
+        this.qlcAddress = qlcAddress;
+    }
+
     //手持身份证照
     private String holdingPhoto;
-    @Generated(hash = 431800730)
+    @Generated(hash = 7088022)
     public UserAccount(Long id, String account, String password, String pubKey,
             boolean isLogin, String inviteCode, String userName, String avatar,
             String test, String bindDate, String phone, String userId, String email,
-            String vstatus, String facePhoto, int totalInvite,
+            String vstatus, String facePhoto, int totalInvite, String qlcAddress,
             String holdingPhoto) {
         this.id = id;
         this.account = account;
@@ -74,6 +92,7 @@ public class UserAccount {
         this.vstatus = vstatus;
         this.facePhoto = facePhoto;
         this.totalInvite = totalInvite;
+        this.qlcAddress = qlcAddress;
         this.holdingPhoto = holdingPhoto;
     }
 

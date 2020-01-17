@@ -44,6 +44,7 @@ import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
+import com.stratagile.qlink.entity.TradeOrder;
 import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
@@ -57,6 +58,10 @@ import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
 import com.stratagile.qlink.entity.finance.HistoryRecord;
 import com.stratagile.qlink.entity.finance.MyRanking;
+import com.stratagile.qlink.entity.mining.MiningIndex;
+import com.stratagile.qlink.entity.mining.MiningRank;
+import com.stratagile.qlink.entity.mining.MiningRewardList;
+import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.newwinq.Order;
 import com.stratagile.qlink.entity.newwinq.Product;
 import com.stratagile.qlink.entity.newwinq.ProductDetail;
@@ -70,9 +75,19 @@ import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.InviteeList;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
+import com.stratagile.qlink.entity.topup.CountryList;
+import com.stratagile.qlink.entity.topup.CreateGroup;
+import com.stratagile.qlink.entity.topup.GroupItemList;
+import com.stratagile.qlink.entity.topup.IspList;
+import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.SalePartner;
+import com.stratagile.qlink.entity.topup.TopupGroupKindList;
+import com.stratagile.qlink.entity.topup.TopupGroupList;
+import com.stratagile.qlink.entity.topup.TopupJoinGroup;
 import com.stratagile.qlink.entity.topup.TopupOrder;
 import com.stratagile.qlink.entity.topup.TopupOrderList;
 import com.stratagile.qlink.entity.topup.TopupProduct;
@@ -101,7 +116,6 @@ import static com.stratagile.qlink.data.api.API.reportVpnInfo;
 import static com.stratagile.qlink.data.api.API.sendRow;
 import static com.stratagile.qlink.data.api.API.ulr_user_sign_up;
 import static com.stratagile.qlink.data.api.API.url_app_version_info;
-import static com.stratagile.qlink.data.api.API.url_bet;
 import static com.stratagile.qlink.data.api.API.url_bina_gettokens;
 import static com.stratagile.qlink.data.api.API.url_bind_push;
 import static com.stratagile.qlink.data.api.API.url_bind_qlcchain_wallet;
@@ -132,28 +146,38 @@ import static com.stratagile.qlink.data.api.API.url_inivte_amount;
 import static com.stratagile.qlink.data.api.API.url_key_account;
 import static com.stratagile.qlink.data.api.API.url_log_save;
 import static com.stratagile.qlink.data.api.API.url_main_address;
+import static com.stratagile.qlink.data.api.API.url_mining_claim;
+import static com.stratagile.qlink.data.api.API.url_mining_list;
+import static com.stratagile.qlink.data.api.API.url_mining_reward_list;
+import static com.stratagile.qlink.data.api.API.url_mining_reward_rank;
+import static com.stratagile.qlink.data.api.API.url_mining_reward_total;
 import static com.stratagile.qlink.data.api.API.url_neo_address_history;
 import static com.stratagile.qlink.data.api.API.url_neo_gas_claim;
 import static com.stratagile.qlink.data.api.API.url_pairs;
+import static com.stratagile.qlink.data.api.API.url_pay_token;
 import static com.stratagile.qlink.data.api.API.url_queryFreeRecords;
 import static com.stratagile.qlink.data.api.API.url_query_winq_gas;
 import static com.stratagile.qlink.data.api.API.url_report_wallet_create;
 import static com.stratagile.qlink.data.api.API.url_reward_claim_invite;
 import static com.stratagile.qlink.data.api.API.url_reward_claims;
 import static com.stratagile.qlink.data.api.API.url_reward_tatal;
+import static com.stratagile.qlink.data.api.API.url_sys_bbackup;
 import static com.stratagile.qlink.data.api.API.url_sys_dict;
 import static com.stratagile.qlink.data.api.API.url_token_price;
 import static com.stratagile.qlink.data.api.API.url_topup_cancel_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order;
+import static com.stratagile.qlink.data.api.API.url_topup_order_confirm;
 import static com.stratagile.qlink.data.api.API.url_topup_order_list;
 import static com.stratagile.qlink.data.api.API.url_topup_productlist;
 import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
 import static com.stratagile.qlink.data.api.API.url_trade_cancel;
+import static com.stratagile.qlink.data.api.API.url_trade_mining_index;
 import static com.stratagile.qlink.data.api.API.url_trade_order_info;
 import static com.stratagile.qlink.data.api.API.url_trade_order_list;
 import static com.stratagile.qlink.data.api.API.url_trade_sell_order;
+import static com.stratagile.qlink.data.api.API.url_trade_sell_order_txid;
 import static com.stratagile.qlink.data.api.API.url_trade_seller_confirm;
 import static com.stratagile.qlink.data.api.API.url_transaction_v2;
 import static com.stratagile.qlink.data.api.API.url_uploadIdCard;
@@ -539,7 +563,11 @@ public interface HttpApi {
 
     @POST(url_trade_sell_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    Observable<BaseBack> generateTradeSellOrder(@Body RequestBody map);
+    Observable<TradeOrder> generateTradeSellOrder(@Body RequestBody map);
+
+    @POST(url_trade_sell_order_txid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TradeOrder> tradeSellOrderTxid(@Body RequestBody map);
 
     @POST(url_trade_seller_confirm)
     @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -580,6 +608,10 @@ public interface HttpApi {
     @POST(url_topup_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
+
+    @POST(url_topup_order_confirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> topupOrderConfirm(@Body RequestBody map);
 
     @POST(url_topup_order_list)
     @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -629,6 +661,101 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BaseBack> userLogout(@Body RequestBody map);
 
+    @POST(url_pay_token)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<PayToken> payToken(@Body RequestBody map);
+
+    @POST(url_mining_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningAct> miningList(@Body RequestBody map);
+
+    @POST(url_mining_reward_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningRewardList> getMiningRewardList(@Body RequestBody map);
+
+    @POST(url_mining_reward_rank)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningRank> getMiningRewardRankList(@Body RequestBody map);
+
+    @POST(url_trade_mining_index)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<MiningIndex> getTradeMiningIndex(@Body RequestBody map);
+
+    @POST(url_mining_claim)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ClaimQgas> claimQlc(@Body RequestBody map);
+
+    @POST(url_mining_reward_total)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RewardTotal> getMiningRewardTotal(@Body RequestBody map);
+
+    @POST(url_sys_bbackup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> sysBackUp(@Body RequestBody map);
+
+    @POST(API.url_country_list)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<CountryList> getCountryList(@Body RequestBody map);
+
+    @POST(API.url_getIspList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<IspList> getIspList(@Body RequestBody map);
+
+    @POST(API.provinceList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<IspList> provinceList(@Body RequestBody map);
+
+    @POST(API.saveDeductionTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> saveDeductionTokenTxid(@Body RequestBody map);
+
+    @POST(API.savePayTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupOrder> savePayTokenTxid(@Body RequestBody map);
+
+    @POST(API.bindQlcChainAddress)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> bindQlcChainAddress(@Body RequestBody map);
+
+    @POST(API.getTopupGroupList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupGroupList> getTopupGroupList(@Body RequestBody map);
+
+    @POST(API.createGroup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<CreateGroup> createGroup(@Body RequestBody map);
+
+    @POST(API.getTopupGroupKindList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupGroupKindList> getTopupGroupKindList(@Body RequestBody map);
+
+    @POST(API.topupJoinGroup)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> topupJoinGroup(@Body RequestBody map);
+
+    @POST(API.getGroupItemList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<GroupItemList> getGroupItemList(@Body RequestBody map);
+
+    @POST(API.saveItemDeductionTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> saveItemDeductionTokenTxid(@Body RequestBody map);
+
+    @POST(API.itemDeductionTokenConfirm)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> itemDeductionTokenConfirm(@Body RequestBody map);
+
+    @POST(API.saveItemPayTokenTxid)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<TopupJoinGroup> saveItemPayTokenTxid(@Body RequestBody map);
+
+    @POST(API.getInviteeList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<InviteeList> getInviteeList(@Body RequestBody map);
+
+    @POST(API.getRewardList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<SalePartner> getRewardList1(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

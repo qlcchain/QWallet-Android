@@ -33,4 +33,14 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sele
             mCompositeDisposable.dispose()
         }
     }
+
+    fun getCountryList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getCountryList(map).subscribe({
+            mView.setCountryList(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
 }

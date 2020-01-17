@@ -3,7 +3,9 @@ package com.stratagile.qlink.ui.activity.finance.contract;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.InviteeList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
+import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
 import com.stratagile.qlink.ui.activity.base.BaseView;
 
@@ -36,6 +38,10 @@ public interface InviteContract {
         void setAtlistInviteFriend(Dict dict);
 
         void setOneFriendReward(Dict dict);
+
+        void setInviteeList(InviteeList inviteeList);
+
+        void setSalePartner(SalePartner salePartner);
 
 
     }

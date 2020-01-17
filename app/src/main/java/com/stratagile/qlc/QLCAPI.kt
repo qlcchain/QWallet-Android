@@ -87,13 +87,17 @@ class QLCAPI {
                     val jsonObject = JSONObject.parseObject(data)
                     val tokenJson = jsonObject.getJSONObject("result").getJSONObject(address)
                     var tokenList = arrayListOf<QlcTokenbalance>()
-                    tokenJson.entries.forEach {
-                        var tokenbalance = QlcTokenbalance()
-                        tokenbalance.symbol = it.key
-                        tokenbalance.balance = JSONObject.parseObject(it.value.toString()).getString("balance")
-                        tokenbalance.pending = JSONObject.parseObject(it.value.toString()).getString("pending")
-                        tokenbalance.address = address
-                        tokenList.add(tokenbalance)
+                    if (tokenJson == null) {
+                        balanceInter.onBack(tokenList, null)
+                    } else {
+                        tokenJson.entries.forEach {
+                            var tokenbalance = QlcTokenbalance()
+                            tokenbalance.symbol = it.key
+                            tokenbalance.balance = JSONObject.parseObject(it.value.toString()).getString("balance")
+                            tokenbalance.pending = JSONObject.parseObject(it.value.toString()).getString("pending")
+                            tokenbalance.address = address
+                            tokenList.add(tokenbalance)
+                        }
                     }
                     balanceInter.onBack(tokenList, null)
                 } catch (e : Exception) {

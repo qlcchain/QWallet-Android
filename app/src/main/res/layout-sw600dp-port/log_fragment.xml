@@ -8,8 +8,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".LogWindow">
+              android:orientation="vertical">
 
     <LinearLayout
         android:background="@drawable/white_rect"
@@ -17,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
-        <include layout="@layout/log_silders"/>
 
         <Space
                 android:layout_weight="5"
@@ -27,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:orientation="vertical">
-            <include layout="@layout/vpnstatus"/>
         </LinearLayout>
         <Space
                 android:layout_height="wrap_content"

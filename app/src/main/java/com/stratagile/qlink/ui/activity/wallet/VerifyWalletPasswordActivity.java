@@ -319,24 +319,6 @@ public class VerifyWalletPasswordActivity extends BaseActivity implements Verify
                                 }
                             }
                         });
-//                        }
-//                        btn_cancel.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                builderTips.dismiss();
-//                                if (cancellationSignal != null) {
-//                                    cancellationSignal.cancel();
-//                                    cancellationSignal = null;
-//                                    if (SpUtil.getString(AppConfig.getInstance(), ConstantValue.walletPassWord, "").equals("")) {
-//                                        Intent intent = new Intent(AppConfig.getInstance(), CreateWalletPasswordActivity.class);
-//                                        startActivityForResult(intent, 1);
-//                                        finish();
-//                                    } else {
-//                                        etPassword.requestFocus();
-//                                    }
-//                                }
-//                            }
-//                        });
                         btn_comfirm.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

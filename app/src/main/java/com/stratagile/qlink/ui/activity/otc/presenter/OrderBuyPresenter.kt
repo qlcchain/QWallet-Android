@@ -5,13 +5,20 @@ import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.db.EntrustTodo
+import com.stratagile.qlink.db.EntrustTodoDao
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.entity.BaseBack
+import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.newwinq.Product
 import com.stratagile.qlink.ui.activity.otc.contract.OrderBuyContract
 import com.stratagile.qlink.ui.activity.otc.OrderBuyFragment
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
 import com.stratagile.qlink.utils.ToastUtil
@@ -33,7 +40,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -98,7 +104,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                             qlcTokenbalances = baseResult
                             if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
                                 if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "SELL QGAS", false, object : SendBack {
+                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "order_entrust_buy", false, object : SendBack {
                                         override fun send(suceess: String) {
                                             if ("".equals(suceess)) {
                                                 mView.generatebuyQgasOrderFailed("send qgas error")
@@ -141,10 +147,48 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         mCompositeDisposable.add(disposable)
     }
 
-    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, contactAddress: String, map: MutableMap<String, String>) {
+    fun generateEntrustBuyOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
+        map.put("fromAddress", fromAddress)
+        map.put("txid", getTxidByHex(txid))
+        mCompositeDisposable.add(httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
+            mView.closeProgressDialog()
+            mView.generateBuyQgasOrderSuccess()
+        }, {
+            mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
+            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
+        }, {
+            mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
+            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
+        }))
+    }
+
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+                var list = AppConfig.instance.daoSession.entrustTodoDao.queryBuilder().where(EntrustTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.entrustTodoDao.delete(list[0])
+                }
+            }
+        })
+    }
+
+    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, tokenInfo: EthWalletInfo.DataBean.TokensBean, map: MutableMap<String, String>) {
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contactAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, tokenInfo.tokenInfo.address, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, tokenInfo.tokenInfo.decimals.toInt()))
         })
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -154,14 +198,16 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
-//                        generateEntrustSellOrder(it, walletAddress, map)
+                        generateEntrustBuyOrder(it, walletAddress, map)
                         KLog.i("transaction Hash: $it")
                     }
                 }, {
                     mView.closeProgressDialog()
+//                    EntrustTodo.createEntrustTodo(map)
                 }, {
                     KLog.i("complete")
                     mView.closeProgressDialog()
+//                    EntrustTodo.createEntrustTodo(map)
                 })
         mCompositeDisposable.add(disposable)
     }
@@ -179,7 +225,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {

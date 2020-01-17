@@ -1,4 +1,5 @@
 package com.stratagile.qlink.ui.activity.eth.presenter;
+
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
@@ -19,22 +20,30 @@ import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.ChainId;
+import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Convert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +62,16 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static org.web3j.tx.Transfer.GAS_LIMIT;
+import static org.web3j.tx.gas.DefaultGasProvider.GAS_PRICE;
+
 /**
  * @author hzp
  * @Package com.stratagile.qlink.ui.activity.wallet
  * @Description: presenter of EthTransferActivity
  * @date 2018/10/31 10:17:17
  */
-public class EthTransferPresenter implements EthTransferContract.EthTransferContractPresenter{
+public class EthTransferPresenter implements EthTransferContract.EthTransferContractPresenter {
 
     HttpAPIWrapper httpAPIWrapper;
     private final EthTransferContract.View mView;
@@ -73,6 +85,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
         mCompositeDisposable = new CompositeDisposable();
         this.mActivity = activity;
     }
+
     @Override
     public void subscribe() {
 
@@ -81,7 +94,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
     @Override
     public void unsubscribe() {
         if (!mCompositeDisposable.isDisposed()) {
-             mCompositeDisposable.dispose();
+            mCompositeDisposable.dispose();
         }
     }
 
@@ -173,12 +186,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
 
     @Override
     public void transactionEth(TokenInfo tokenInfo, String toAddress, String amount, int limit, int price) {
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext(generateTransactionEth(tokenInfo.getWalletAddress(), toAddress, derivePrivateKey(tokenInfo.getWalletAddress()), amount, limit, price));
-            }
-        }).subscribeOn(Schedulers.io())
+        Observable.create((ObservableOnSubscribe<String>) emitter -> emitter.onNext(generateTransactionEth(tokenInfo.getWalletAddress(), toAddress, derivePrivateKey(tokenInfo.getWalletAddress()), amount, limit, price))).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
@@ -261,7 +269,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
     }
 
     private String generateTransaction(String fromAddress, String contractAddress, String toAddress, String privateKey, String amount, int limit, int price, int decimals) {
-        final Web3j web3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price);
         } catch (Exception e) {
@@ -286,11 +294,16 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
         BigInteger gasPrice = Convert.toWei(BigDecimal.valueOf(price), Convert.Unit.GWEI).toBigInteger();
         BigInteger gasLimit = BigInteger.valueOf(limit);
         BigInteger value = BigInteger.ZERO;
-
+        List<TypeReference<?>> outputParameters = new ArrayList<>();
+        TypeReference<Bool> typeReference = new TypeReference<Bool>() {
+        };
+        outputParameters.add(typeReference);
         Function function = new Function(
                 "transfer",
                 Arrays.asList(new Address(toAddress), new Uint256(baseToSubunit(amount, decimals))),
-                Arrays.asList(new TypeReference<Type>() {}));
+                outputParameters);
+//                Arrays.asList(new TypeReference<Type>() {}));
+//                Collections.singletonList(new TypeReference<Type>() {}));
 
         String encodedFunction = FunctionEncoder.encode(function);
 
@@ -319,10 +332,21 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
     }
 
     private String generateTransactionEth(String fromAddress, String toAddress, String privateKey, String amount, int limit, int price) {
-        final Web3j web3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
         try {
             return testEthTransaction(web3j, fromAddress, privateKey, toAddress, amount, limit, price);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String transfer(Web3j web3j, String toaddress, Credentials credentials) {
+        final TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        try {
+            EthSendTransaction ethSendTransaction = transactionManager.sendTransaction(GAS_PRICE, GAS_LIMIT, toaddress, "remark", new BigInteger("20"));
+            return ethSendTransaction.getTransactionHash();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return "";
@@ -370,17 +394,17 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
      * Subunit - taken to mean subdivision of base e.g. WEI, CENTS
      *
      * @param baseAmountStr - decimal amonut in base unit of a given currency
-     * @param decimals - decimal places used to convert to subunits
+     * @param decimals      - decimal places used to convert to subunits
      * @return amount in subunits
      */
     public static BigInteger baseToSubunit(String baseAmountStr, int decimals) {
-        assert(decimals >= 0);
+        assert (decimals >= 0);
         BigDecimal baseAmount = new BigDecimal(baseAmountStr);
         BigDecimal subunitAmount = baseAmount.multiply(BigDecimal.valueOf(10).pow(decimals));
         try {
             return subunitAmount.toBigIntegerExact();
         } catch (ArithmeticException ex) {
-            assert(false);
+            assert (false);
             return subunitAmount.toBigInteger();
         }
     }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="match_parent"
+            android:background="@drawable/main_bg_shape"
+            android:layout_height="70dp"/>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/x20"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="5dp"
+            android:layout_marginRight="15dp"
+            android:clipChildren="false"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="33sp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:text="发送充值到"
+                    android:textColor="@color/color_29282a" />
+
+                <TextView
+                    android:id="@+id/tvLeastAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="12dp"
+                    android:textSize="15sp"
+                    android:text="输入手机号码或从联系人中选择："
+                    android:textColor="@color/color_29282a" />
+
+                <EditText
+                    android:id="@+id/joinNow"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x77"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="@dimen/x30"
+                    android:layout_marginBottom="23dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@null"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="match_parent">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            app:elevation="0px"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/rlInvite"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/x20"
+                app:layout_scrollFlags="scroll"
+                android:layout_height="@dimen/x175">
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="@dimen/x175">
+                </android.support.v4.view.ViewPager>
+                <net.lucode.hackware.magicindicator.MagicIndicator
+                    android:id="@+id/indicator"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/x20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x20" />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/x1"
+                android:orientation="horizontal"
+                android:layout_height="@dimen/x92">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:includeFontPadding="false"
+                    android:gravity="center"
+                    android:textColor="@color/color_29282a"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="15sp"
+                    android:text="运营商套餐"
+                    android:layout_height="@dimen/x92" />
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

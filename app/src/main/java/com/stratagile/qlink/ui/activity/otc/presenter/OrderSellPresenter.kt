@@ -7,18 +7,21 @@ import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.ColdWallet
 import com.stratagile.qlink.R
+import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.NeoCallBack
 import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
-import com.stratagile.qlink.db.EthWallet
-import com.stratagile.qlink.db.QLCAccount
+import com.stratagile.qlink.db.*
 import com.stratagile.qlink.entity.BaseBack
+import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.ui.activity.otc.contract.OrderSellContract
 import com.stratagile.qlink.ui.activity.otc.OrderSellFragment
+import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
 import com.stratagile.qlink.utils.ToastUtil
@@ -44,7 +47,6 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
-import org.web3j.protocol.Web3jFactory
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.http.HttpService
@@ -93,7 +95,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                             qlcTokenbalances = baseResult
                             if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
                                 if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "SELL QGAS", false, object : SendBack {
+                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "otc_entrust_sell", false, object : SendBack {
                                         override fun send(suceess: String) {
                                             if ("".equals(suceess)) {
                                                 mView.generateSellQgasOrderFailed("send qgas error")
@@ -128,20 +130,48 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mView.generateSellQgasOrderSuccess()
         }, {
             mView.closeProgressDialog()
+            if (map["txid"] != null) {
+                EntrustTodo.createEntrustTodo(map)
+                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "", "", "")
+            }
         }, {
             //onComplete
             KLog.i("onComplete")
             mView.closeProgressDialog()
+            if (map["txid"] != null) {
+                EntrustTodo.createEntrustTodo(map)
+                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "", "", "")
+            }
         })
         mCompositeDisposable.add(disposable)
     }
 
-    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, contactAddress: String, map: MutableMap<String, String>) {
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+        val infoMap = java.util.HashMap<String, Any>()
+        infoMap["account"] = ConstantValue.currentUser.account
+        infoMap["token"] = AccountUtil.getUserToken()
+        infoMap["type"] = type
+        infoMap["chain"] = chain
+        infoMap["tokenName"] = tokenName
+        infoMap["amount"] = amount
+        infoMap["platform"] = "Android"
+        infoMap["txid"] = txid
+        httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
+            override fun onNext(baseBack: BaseBack<*>) {
+                onComplete()
+                var list = AppConfig.instance.daoSession.entrustTodoDao.queryBuilder().where(EntrustTodoDao.Properties.Txid.eq(txid)).list()
+                if (list.size > 0) {
+                    AppConfig.instance.daoSession.entrustTodoDao.delete(list[0])
+                }
+            }
+        })
+    }
+
+    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, tokenInfo: EthWalletInfo.DataBean.TokensBean, map: MutableMap<String, String>) {
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contactAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, tokenInfo.tokenInfo.address, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, tokenInfo.tokenInfo.decimals.toInt()))
         })
-                .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -174,7 +204,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
     }
 
     private fun generateTransaction(fromAddress: String, contractAddress: String, toAddress: String, privateKey: String, amount: String, limit: Int, price: Int, decimals: Int): String {
-        val web3j = Web3jFactory.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
+        val web3j = Web3j.build(HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"))
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price)
         } catch (e: Exception) {
@@ -284,8 +314,12 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mView.generateSellQgasOrderSuccess()
         }, {
             mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
+            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
         }, {
             mView.closeProgressDialog()
+            EntrustTodo.createEntrustTodo(map)
+            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
         }))
     }
 

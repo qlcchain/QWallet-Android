@@ -305,6 +305,10 @@ public class GuestActivity extends BaseActivity implements GuestContract.View {
     public void onViewClicked() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
+        if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+            intent.putExtra(ConstantValue.EXTRA_BUNDLE,
+                    getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
+        }
         startActivity(intent);
         overridePendingTransition(R.anim.main_activity_in, R.anim.splash_activity_out);
         finish();

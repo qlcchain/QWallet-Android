@@ -13,14 +13,14 @@ checkstyle {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.2.8"
+        versionName "2.4.2"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -41,16 +41,41 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    signingConfigs{
+        debug{
+            def properties = new Properties()
+            def inputStream = project.rootProject.file('local.properties').newDataInputStream()
+            properties.load( inputStream )
+            storeFile file(rootProject.getRootDir().getAbsolutePath()+"/app/qlink.jks");
+            storePassword properties.getProperty('DEBUG_KEYSTORE_PASSWORD')
+            keyAlias properties.getProperty('DEBUG_KEY_ALIAS')
+            keyPassword properties.getProperty('DEBUG_KEY_PASSWORD')
+        }
+        release{
+            def properties = new Properties()
+            def inputStream = project.rootProject.file('local.properties').newDataInputStream()
+            properties.load( inputStream )
+            storeFile file(rootProject.getRootDir().getAbsolutePath()+"/app/qlink.jks");
+            storePassword properties.getProperty('RELEASE_KEYSTORE_PASSWORD')
+            keyAlias properties.getProperty('RELEASE_KEY_ALIAS')
+            keyPassword properties.getProperty('RELEASE_KEY_PASSWORD')
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
             buildConfigField "boolean", "LOG_DEBUG", "true"
-//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
             jniDebuggable true
         }
         release {
             minifyEnabled false
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             buildConfigField "boolean", "LOG_DEBUG", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -87,9 +112,8 @@ android {
 //        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
 
-
     greendao {
-        schemaVersion 70//数据库版本号
+        schemaVersion 75//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -216,7 +240,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 
-    implementation 'org.web3j:core:3.3.1-android'
+//    implementation 'org.web3j:core:3.3.1-android'
+    implementation 'org.web3j:core:4.2.0-android'
 
     //    implementation('com.facebook.android:facebook-android-sdk:[4,5)') {
 
@@ -259,7 +284,7 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:1.13.0'
     implementation 'com.github.consenlabs:token-core-android:v0.1'
     //    implementation project(':MPChartLib')
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation files('libs/BASE64Encoder.jar')
 
     //imtoken
@@ -268,7 +293,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-jackson:2.5.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
 
-    implementation 'com.github.qlcchain:qlc-java-sdk:2.0'
+    //implementation 'com.github.qlcchain:qlc-java-sdk:2.4'
 //    implementation 'com.github.huzhipeng111:qlc-java-sdk:1.8'
 
     //    implementation 'com.qmuiteam:qmui:1.2.0'
@@ -283,9 +308,15 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
     implementation 'com.google.guava:guava:28.1-jre'
 
-    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
+//    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
+//    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
+    implementation files('libs/jcore-android-2.1.6-google_play.jar')
+    implementation files('libs/jpush-android-3.3.9-google_play.jar')
 
+    implementation 'com.android.support:support-dynamic-animation:28.0.0'
+
+    implementation 'com.rfksystems:blake2b:1.0.0'
+    implementation 'net.i2p.crypto:eddsa:0.3.0'
 
 }
 

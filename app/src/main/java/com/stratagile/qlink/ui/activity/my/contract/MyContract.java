@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.my.contract;
 
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
+import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.base.BasePresenter;
@@ -31,6 +32,8 @@ public interface MyContract {
         void setCanInviteClaimTotal(InviteTotal rewardTotal);
 
         void bindPushBack();
+
+        void setMiningRewardCount(RewardTotal claimQgas);
     }
 
     interface MyContractPresenter extends BasePresenter {

@@ -9,7 +9,6 @@
     app:cardElevation="@dimen/x10"
     android:layout_width="@dimen/x500">
     <LinearLayout
-        android:id="@+id/loading"
         android:gravity="center_horizontal"
         android:layout_width="@dimen/x500"
         android:layout_height="wrap_content"

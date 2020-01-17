@@ -9,68 +9,80 @@ import java.util.ArrayList;
 
 public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
 
-    private ArrayList<OrderListBean> orderList;
+    private ArrayList<TopupOrder.OrderBean> orderList;
 
-    public ArrayList<OrderListBean> getOrderList() {
+    public ArrayList<TopupOrder.OrderBean> getOrderList() {
         return orderList;
     }
 
-    public void setOrderList(ArrayList<OrderListBean> orderList) {
+    public void setOrderList(ArrayList<TopupOrder.OrderBean> orderList) {
         this.orderList = orderList;
     }
 
     public static class OrderListBean implements Parcelable {
 
+
         /**
-         * productIspEn : 移动
+         * symbol : OKB
+         * productIspEn : 通用
+         * chain : ETH_CHAIN
          * originalPrice : 50.0
-         * discountPrice : 49.5
+         * discountPrice : 49.0
+         * txid : 0x200a022fb0fc8a9e2c35deb9b9e97bb5c222061a2817526d8cb1f64bc2e5bf91
          * productCountryEn : 中国
-         * productIsp : 移动
+         * productIsp : 通用
          * type : SLOW
-         * userId : 5809297871f74fe48a4e080ec6ca7745
-         * productName : 广东移动
-         * number : 20190927103310117932
-         * qgasAmount : 0.5
-         * productProvinceEn : 广东
+         * userId : 7060628a65e4450690976bf56c127787
+         * productName : 全国通用
+         * number : 20191024212002427531
+         * qgasAmount : 0.056
+         * productProvinceEn : 全国
          * areaCode : +86
-         * phoneNumber : 15989241234
-         * orderTime : 2019-09-27 10:33:10
-         * productNameEn : 广东移动
+         * phoneNumber : 18670819116
+         * orderTime : 2019-10-24 21:20:03
+         * productNameEn : 全国通用
          * productCountry : 中国
-         * id : d412f1f011944a54b992c02896c42c2e
-         * productProvince : 广东
+         * id : 6055705b2cc546319f355ff260ce6c75
+         * productProvince : 全国
          * status : QGAS_PAID
          */
 
+        private String symbol;
         private String productIspEn;
+        private String chain;
         private double originalPrice;
         private double discountPrice;
+        private String txid;
         private String productCountryEn;
         private String productIsp;
         private String type;
         private String userId;
         private String productName;
         private String number;
-        private String txid;
         private double qgasAmount;
         private String productProvinceEn;
         private String areaCode;
         private String phoneNumber;
         private String orderTime;
         private String productNameEn;
+        private String productCountry;
+        private String id;
+        private String productProvince;
+        private String status;
 
         protected OrderListBean(Parcel in) {
+            symbol = in.readString();
             productIspEn = in.readString();
+            chain = in.readString();
             originalPrice = in.readDouble();
             discountPrice = in.readDouble();
+            txid = in.readString();
             productCountryEn = in.readString();
             productIsp = in.readString();
             type = in.readString();
             userId = in.readString();
             productName = in.readString();
             number = in.readString();
-            txid = in.readString();
             qgasAmount = in.readDouble();
             productProvinceEn = in.readString();
             areaCode = in.readString();
@@ -95,18 +107,13 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
             }
         };
 
-        public String getTxid() {
-            return txid;
+        public String getSymbol() {
+            return symbol;
         }
 
-        public void setTxid(String txid) {
-            this.txid = txid;
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
         }
-
-        private String productCountry;
-        private String id;
-        private String productProvince;
-        private String status;
 
         public String getProductIspEn() {
             return productIspEn;
@@ -114,6 +121,14 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
 
         public void setProductIspEn(String productIspEn) {
             this.productIspEn = productIspEn;
+        }
+
+        public String getChain() {
+            return chain;
+        }
+
+        public void setChain(String chain) {
+            this.chain = chain;
         }
 
         public double getOriginalPrice() {
@@ -130,6 +145,14 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
 
         public void setDiscountPrice(double discountPrice) {
             this.discountPrice = discountPrice;
+        }
+
+        public String getTxid() {
+            return txid;
+        }
+
+        public void setTxid(String txid) {
+            this.txid = txid;
         }
 
         public String getProductCountryEn() {
@@ -267,16 +290,18 @@ public class TopupOrderList extends BaseBack<TopupOrderList.OrderListBean> {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(symbol);
             dest.writeString(productIspEn);
+            dest.writeString(chain);
             dest.writeDouble(originalPrice);
             dest.writeDouble(discountPrice);
+            dest.writeString(txid);
             dest.writeString(productCountryEn);
             dest.writeString(productIsp);
             dest.writeString(type);
             dest.writeString(userId);
             dest.writeString(productName);
             dest.writeString(number);
-            dest.writeString(txid);
             dest.writeDouble(qgasAmount);
             dest.writeString(productProvinceEn);
             dest.writeString(areaCode);

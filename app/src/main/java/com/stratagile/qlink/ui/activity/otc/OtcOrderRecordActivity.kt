@@ -114,6 +114,9 @@ class OtcOrderRecordActivity : BaseActivity(), OtcOrderRecordContract.View {
             }
         }
         ViewPagerHelper.bind(indicator, viewPager)
+        if (intent.hasExtra("position")) {
+            viewPager.setCurrentItem(1)
+        }
     }
 
     override fun setupActivityComponent() {

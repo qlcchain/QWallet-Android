@@ -26,6 +26,7 @@ import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.utils.LogUtil;
 import com.stratagile.qlink.utils.SpUtil;
 import com.socks.library.KLog;
@@ -104,6 +105,10 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
 
     @Override
     protected void initData() {
+        if (ConstantValue.currentUser == null) {
+            startActivity(new Intent(this, AccountActivity.class));
+            finish();
+        }
 //        File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/useImage.jpg", "");
 //        if (dataFile.exists()) {
         galleryPackName = SystemUtil.getSystemPackagesName(this,"gallery");

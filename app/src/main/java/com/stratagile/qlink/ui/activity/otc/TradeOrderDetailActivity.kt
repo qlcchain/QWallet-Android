@@ -31,7 +31,9 @@ import com.stratagile.qlink.view.SweetAlertDialog
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import kotlinx.android.synthetic.main.activity_trade_order_detail.*
+import kotlinx.android.synthetic.main.activity_trade_order_detail.tvUnitPrice
 import java.math.BigDecimal
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -49,6 +51,19 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
     override fun setServerTime(time: String) {
         sysTime = TimeUtil.timeStamp(time)
         getTradeOrderDetail()
+    }
+
+    override fun tradeOrderTxidSuccess() {
+        toast(getString(R.string.success))
+        closeProgressDialog()
+        initData()
+    }
+
+    override fun generateSellQgasOrderFailed(content: String) {
+        runOnUiThread {
+            closeProgressDialog()
+            toast(content)
+        }
     }
 
     override fun cancelOrderSuccess() {
@@ -81,13 +96,13 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
         tvReceiveAddress.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-            cm.primaryClip = mClipData
+            cm.setPrimaryClip(mClipData)
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
         tvAmountUsdt.setOnClickListener {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val mClipData = ClipData.newPlainText("Label", tvAmountUsdt.text.toString())
-            cm.primaryClip = mClipData
+            cm.setPrimaryClip(mClipData)
             ToastUtil.displayShortToast(getString(R.string.copy_success))
         }
         tvOrderTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.orderTime)
@@ -113,7 +128,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -148,7 +163,70 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        val qrEntity = QrEntity(tradeOrderDetail.order.usdtToAddress, tradeOrderDetail.order.payToken + " Receivable Address", tradeOrderDetail.order.payToken.toLowerCase(), OtcUtils.parseChain(tradeOrderDetail.order.payTokenChain).ordinal)
+                        val intent = Intent(this, UsdtReceiveAddressActivity::class.java)
+                        intent.putExtra("tradeToken", tradeOrderDetail.order.tradeToken)
+                        intent.putExtra("usdt", tradeOrderDetail.order.usdtAmount.toString())
+                        intent.putExtra("payToken", tradeOrderDetail.order.payToken)
+                        intent.putExtra("payTokenChain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("chain", tradeOrderDetail.order.payTokenChain)
+                        intent.putExtra("receiveAddress", tradeOrderDetail.order.usdtToAddress)
+                        intent.putExtra("tradeOrderId", tradeOrderId)
+                        intent.putExtra("orderNumber", tradeOrderDetail.order.number.toString())
+                        intent.putExtra("qrentity", qrEntity)
+                        startActivityForResult(intent, 0)
+                    }
+                    tvOpreate2.setOnClickListener {
+                        showEnterTxIdDialog()
+                    }
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    remainTime = tradeOrderExistTime - remainTime
+                    if (remainTime > 0) {
+                        mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext {
+                                    var fen = (remainTime - it) / 60
+                                    var miao = (remainTime - it) % 60
+                                    if (fen > 0) {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + fen + " : " + miao + "分钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    } else {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + miao + "秒钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    }
+                                }
+                                .doOnComplete {
+                                    getTradeOrderDetail()
+                                }
+                                .subscribe();
+                    }
+                }
+                "TXID_ERROR" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.transaction_parsing_failed)
+                    tvOrderState1.text = getString(R.string.transaction_parsing_failed)
+                    tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -215,7 +293,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -250,8 +328,8 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderStateTip.text = ""
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
-                    tvOpreate3.visibility = View.VISIBLE
-                    llOrderPayTime.visibility = View.VISIBLE
+                    tvOpreate3.visibility = View.GONE
+                    llOrderPayTime.visibility = View.GONE
                     tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
                     viewLine.visibility = View.GONE
                     llTxId.visibility = View.VISIBLE
@@ -259,7 +337,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     if (tradeOrderDetail.order.appealStatus.equals("NO")) {
@@ -329,9 +407,25 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.sellerConfirmDate)
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.send_to)
+                    tvPayAddressTip.text = getString(R.string.receive_from)
                     tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
 
+                }
+                "NEW" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.new_trade_order)
+                    tvOrderState1.text = getString(R.string.new_trade_order)
+                    tvOrderStateTip.text = getString(R.string.wait_seller_pay)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.setPrimaryClip(mClipData)
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
                 }
             }
         } else {
@@ -355,7 +449,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvReceiveAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -383,6 +477,43 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
                     tvOrderState.text = getString(R.string.wait_buyer_payment1)
                     tvOrderState1.text = getString(R.string.wait_buyer_payment1)
+                    tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.GONE
+                    viewLine.visibility = View.GONE
+                    var remainTime = (sysTime - TimeUtil.timeStamp(tradeOrderDetail.order.orderTime)) / 1000
+                    remainTime = tradeOrderExistTime - remainTime
+                    if (remainTime > 0) {
+                        mdDisposable = Flowable.intervalRange(0, remainTime, 0, 1, TimeUnit.SECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnNext {
+                                    var fen = (remainTime - it) / 60
+                                    var miao = (remainTime - it) % 60
+                                    if (fen > 0) {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + fen + " : " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + fen + " : " + miao + "分钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    } else {
+                                        if (resources.configuration.locale == Locale.ENGLISH) {
+                                            tvOrderStateTip.setText("The order will be closed automatically, if no further confirmation within " + miao + " minutes.")
+                                        } else {
+                                            tvOrderStateTip.setText("" + miao + "秒钟内没有支付完成，系统将自动关闭订单")
+                                        }
+                                    }
+                                }
+                                .doOnComplete {
+                                    getTradeOrderDetail()
+                                }
+                                .subscribe();
+                    }
+                }
+                "TXID_ERROR" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.mainColor))
+                    tvOrderState.text = getString(R.string.transaction_parsing_failed)
+                    tvOrderState1.text = getString(R.string.transaction_parsing_failed)
                     tvOrderStateTip.text = getString(R.string.the_order_will_be_closed_automatically_if_no_further_confirmation_within_30_minutes)
                     tvOpreate1.visibility = View.GONE
                     tvOpreate2.visibility = View.GONE
@@ -436,7 +567,7 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -479,24 +610,24 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOpreate2.text = getString(R.string.appeal)
                     tvOpreate3.text = getString(R.string.i_have_received)
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.send_to)
-                    tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
+                    tvPayAddressTip.text = getString(R.string.receive_from)
+                    tvPayAddress.text = tradeOrderDetail.order.qgasFromAddress
                     tvPayAddress.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvPayAddress.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     llTxId.visibility = View.VISIBLE
                     tvTxId.text = tradeOrderDetail.order.txid
 
-                    llOrderPayTime.visibility = View.VISIBLE
+                    llOrderPayTime.visibility = View.GONE
                     tvOrderPayTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.buyerConfirmDate)
 
                     tvTxId.setOnClickListener {
                         val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val mClipData = ClipData.newPlainText("Label", tvTxId.text.toString())
-                        cm.primaryClip = mClipData
+                        cm.setPrimaryClip(mClipData)
                         ToastUtil.displayShortToast(getString(R.string.copy_success))
                     }
                     tvOpreate3.setOnClickListener {
@@ -570,12 +701,47 @@ class TradeOrderDetailActivity : BaseActivity(), TradeOrderDetailContract.View {
                     tvOrderSuccessTime.text = TimeUtil.timeConvert(tradeOrderDetail.order.sellerConfirmDate)
 
                     llPayAddress.visibility = View.VISIBLE
-                    tvPayAddressTip.text = getString(R.string.send_to)
-                    tvPayAddress.text = tradeOrderDetail.order.usdtFromAddress
+                    tvPayAddressTip.text = getString(R.string.receive_from)
+                    tvPayAddress.text = tradeOrderDetail.order.qgasFromAddress
 
+                }
+                "NEW" -> {
+                    llOrderState.setBackgroundColor(resources.getColor(R.color.color_ff3669))
+                    tvOrderState.text = getString(R.string.new_trade_order)
+                    tvOrderState1.text = getString(R.string.new_trade_order)
+                    tvOrderStateTip.text = getString(R.string.please_pay)
+                    tvOpreate1.visibility = View.GONE
+                    tvOpreate2.visibility = View.GONE
+                    tvOpreate3.visibility = View.VISIBLE
+                    viewLine.visibility = View.GONE
+                    tvReceiveAddress.setOnClickListener {
+                        val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val mClipData = ClipData.newPlainText("Label", tvReceiveAddress.text.toString())
+                        cm.setPrimaryClip(mClipData)
+                        ToastUtil.displayShortToast(getString(R.string.copy_success))
+                    }
+                    tvOpreate3.setOnClickListener {
+                        transferTradeToken()
+                    }
+                    tvOpreate2.setOnClickListener {
+                        showEnterTxIdDialog()
+                    }
+                    tvOpreate1.setOnClickListener {
+                        tradeCancel()
+                    }
                 }
             }
         }
+    }
+
+    fun transferTradeToken() {
+        showProgressDialog()
+        var map = hashMapOf<String, String>()
+        map.put("account", ConstantValue.currentUser.account)
+        map.put("token", AccountUtil.getUserToken())
+        map["tradeOrderId"] = tradeOrderId
+        var message = "otc_trade_sell_" + tradeOrderId
+        mPresenter.sendQgas(mTradeOrderDetail.order.qgasAmount.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

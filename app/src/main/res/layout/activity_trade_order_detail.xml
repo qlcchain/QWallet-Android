@@ -42,7 +42,6 @@
                 android:background="@color/white"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/receiveAddressTip"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
                     android:text="@string/send_to"
@@ -162,7 +161,6 @@
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/llSendCoinAmount"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/x30"
@@ -290,7 +288,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/orderCloseTime"
                     android:layout_width="match_parent"
                     android:visibility="gone"
                     android:orientation="vertical"

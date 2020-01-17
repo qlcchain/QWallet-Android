@@ -28,7 +28,6 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.http.HttpService;
@@ -197,7 +196,7 @@ public class BnbToQlcPresenter implements BnbToQlcContract.BnbToQlcContractPrese
     }
 
     private String generateTransaction(String address, String privateKey, String amount) {
-        final Web3j web3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
         try {
 //			createWallet("11111111");
 //			decryptWallet(keystore, "11111111");

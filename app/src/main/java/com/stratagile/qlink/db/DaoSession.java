@@ -8,25 +8,33 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.stratagile.qlink.db.TopupTodoList;
+import com.stratagile.qlink.db.BuySellSellTodo;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.EthWallet;
+import com.stratagile.qlink.db.BuySellBuyTodo;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.BtcWallet;
 import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.db.QLCAccount;
+import com.stratagile.qlink.db.EntrustTodo;
 import com.stratagile.qlink.db.TransactionRecord;
 import com.stratagile.qlink.db.UserAccount;
 
+import com.stratagile.qlink.db.TopupTodoListDao;
+import com.stratagile.qlink.db.BuySellSellTodoDao;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.VpnServerRecordDao;
 import com.stratagile.qlink.db.EthWalletDao;
+import com.stratagile.qlink.db.BuySellBuyTodoDao;
 import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.db.RecordSaveDao;
 import com.stratagile.qlink.db.BtcWalletDao;
 import com.stratagile.qlink.db.WalletDao;
 import com.stratagile.qlink.db.QLCAccountDao;
+import com.stratagile.qlink.db.EntrustTodoDao;
 import com.stratagile.qlink.db.TransactionRecordDao;
 import com.stratagile.qlink.db.UserAccountDao;
 
@@ -39,31 +47,45 @@ import com.stratagile.qlink.db.UserAccountDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig topupTodoListDaoConfig;
+    private final DaoConfig buySellSellTodoDaoConfig;
     private final DaoConfig vpnEntityDaoConfig;
     private final DaoConfig vpnServerRecordDaoConfig;
     private final DaoConfig ethWalletDaoConfig;
+    private final DaoConfig buySellBuyTodoDaoConfig;
     private final DaoConfig eosAccountDaoConfig;
     private final DaoConfig recordSaveDaoConfig;
     private final DaoConfig btcWalletDaoConfig;
     private final DaoConfig walletDaoConfig;
     private final DaoConfig qLCAccountDaoConfig;
+    private final DaoConfig entrustTodoDaoConfig;
     private final DaoConfig transactionRecordDaoConfig;
     private final DaoConfig userAccountDaoConfig;
 
+    private final TopupTodoListDao topupTodoListDao;
+    private final BuySellSellTodoDao buySellSellTodoDao;
     private final VpnEntityDao vpnEntityDao;
     private final VpnServerRecordDao vpnServerRecordDao;
     private final EthWalletDao ethWalletDao;
+    private final BuySellBuyTodoDao buySellBuyTodoDao;
     private final EosAccountDao eosAccountDao;
     private final RecordSaveDao recordSaveDao;
     private final BtcWalletDao btcWalletDao;
     private final WalletDao walletDao;
     private final QLCAccountDao qLCAccountDao;
+    private final EntrustTodoDao entrustTodoDao;
     private final TransactionRecordDao transactionRecordDao;
     private final UserAccountDao userAccountDao;
 
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        topupTodoListDaoConfig = daoConfigMap.get(TopupTodoListDao.class).clone();
+        topupTodoListDaoConfig.initIdentityScope(type);
+
+        buySellSellTodoDaoConfig = daoConfigMap.get(BuySellSellTodoDao.class).clone();
+        buySellSellTodoDaoConfig.initIdentityScope(type);
 
         vpnEntityDaoConfig = daoConfigMap.get(VpnEntityDao.class).clone();
         vpnEntityDaoConfig.initIdentityScope(type);
@@ -73,6 +95,9 @@ public class DaoSession extends AbstractDaoSession {
 
         ethWalletDaoConfig = daoConfigMap.get(EthWalletDao.class).clone();
         ethWalletDaoConfig.initIdentityScope(type);
+
+        buySellBuyTodoDaoConfig = daoConfigMap.get(BuySellBuyTodoDao.class).clone();
+        buySellBuyTodoDaoConfig.initIdentityScope(type);
 
         eosAccountDaoConfig = daoConfigMap.get(EosAccountDao.class).clone();
         eosAccountDaoConfig.initIdentityScope(type);
@@ -89,46 +114,69 @@ public class DaoSession extends AbstractDaoSession {
         qLCAccountDaoConfig = daoConfigMap.get(QLCAccountDao.class).clone();
         qLCAccountDaoConfig.initIdentityScope(type);
 
+        entrustTodoDaoConfig = daoConfigMap.get(EntrustTodoDao.class).clone();
+        entrustTodoDaoConfig.initIdentityScope(type);
+
         transactionRecordDaoConfig = daoConfigMap.get(TransactionRecordDao.class).clone();
         transactionRecordDaoConfig.initIdentityScope(type);
 
         userAccountDaoConfig = daoConfigMap.get(UserAccountDao.class).clone();
         userAccountDaoConfig.initIdentityScope(type);
 
+        topupTodoListDao = new TopupTodoListDao(topupTodoListDaoConfig, this);
+        buySellSellTodoDao = new BuySellSellTodoDao(buySellSellTodoDaoConfig, this);
         vpnEntityDao = new VpnEntityDao(vpnEntityDaoConfig, this);
         vpnServerRecordDao = new VpnServerRecordDao(vpnServerRecordDaoConfig, this);
         ethWalletDao = new EthWalletDao(ethWalletDaoConfig, this);
+        buySellBuyTodoDao = new BuySellBuyTodoDao(buySellBuyTodoDaoConfig, this);
         eosAccountDao = new EosAccountDao(eosAccountDaoConfig, this);
         recordSaveDao = new RecordSaveDao(recordSaveDaoConfig, this);
         btcWalletDao = new BtcWalletDao(btcWalletDaoConfig, this);
         walletDao = new WalletDao(walletDaoConfig, this);
         qLCAccountDao = new QLCAccountDao(qLCAccountDaoConfig, this);
+        entrustTodoDao = new EntrustTodoDao(entrustTodoDaoConfig, this);
         transactionRecordDao = new TransactionRecordDao(transactionRecordDaoConfig, this);
         userAccountDao = new UserAccountDao(userAccountDaoConfig, this);
 
+        registerDao(TopupTodoList.class, topupTodoListDao);
+        registerDao(BuySellSellTodo.class, buySellSellTodoDao);
         registerDao(VpnEntity.class, vpnEntityDao);
         registerDao(VpnServerRecord.class, vpnServerRecordDao);
         registerDao(EthWallet.class, ethWalletDao);
+        registerDao(BuySellBuyTodo.class, buySellBuyTodoDao);
         registerDao(EosAccount.class, eosAccountDao);
         registerDao(RecordSave.class, recordSaveDao);
         registerDao(BtcWallet.class, btcWalletDao);
         registerDao(Wallet.class, walletDao);
         registerDao(QLCAccount.class, qLCAccountDao);
+        registerDao(EntrustTodo.class, entrustTodoDao);
         registerDao(TransactionRecord.class, transactionRecordDao);
         registerDao(UserAccount.class, userAccountDao);
     }
     
     public void clear() {
+        topupTodoListDaoConfig.clearIdentityScope();
+        buySellSellTodoDaoConfig.clearIdentityScope();
         vpnEntityDaoConfig.clearIdentityScope();
         vpnServerRecordDaoConfig.clearIdentityScope();
         ethWalletDaoConfig.clearIdentityScope();
+        buySellBuyTodoDaoConfig.clearIdentityScope();
         eosAccountDaoConfig.clearIdentityScope();
         recordSaveDaoConfig.clearIdentityScope();
         btcWalletDaoConfig.clearIdentityScope();
         walletDaoConfig.clearIdentityScope();
         qLCAccountDaoConfig.clearIdentityScope();
+        entrustTodoDaoConfig.clearIdentityScope();
         transactionRecordDaoConfig.clearIdentityScope();
         userAccountDaoConfig.clearIdentityScope();
+    }
+
+    public TopupTodoListDao getTopupTodoListDao() {
+        return topupTodoListDao;
+    }
+
+    public BuySellSellTodoDao getBuySellSellTodoDao() {
+        return buySellSellTodoDao;
     }
 
     public VpnEntityDao getVpnEntityDao() {
@@ -141,6 +189,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public EthWalletDao getEthWalletDao() {
         return ethWalletDao;
+    }
+
+    public BuySellBuyTodoDao getBuySellBuyTodoDao() {
+        return buySellBuyTodoDao;
     }
 
     public EosAccountDao getEosAccountDao() {
@@ -161,6 +213,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public QLCAccountDao getQLCAccountDao() {
         return qLCAccountDao;
+    }
+
+    public EntrustTodoDao getEntrustTodoDao() {
+        return entrustTodoDao;
     }
 
     public TransactionRecordDao getTransactionRecordDao() {

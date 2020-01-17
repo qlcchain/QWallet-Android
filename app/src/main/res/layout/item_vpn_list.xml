@@ -17,7 +17,6 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/rl_friend"
             android:layout_width="@dimen/x90"
             android:layout_gravity="center_vertical"
             android:layout_height="@dimen/x90"
