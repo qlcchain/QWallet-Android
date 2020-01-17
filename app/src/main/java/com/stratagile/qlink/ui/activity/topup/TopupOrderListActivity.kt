@@ -2,57 +2,41 @@ package com.stratagile.qlink.ui.activity.topup
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.view.LayoutInflaterCompat
+import android.support.v4.view.LayoutInflaterFactory
+import android.view.InflateException
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.webkit.WebSettings
-import androidx.work.impl.Scheduler
+import android.widget.TextView
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
-import com.stratagile.qlink.data.api.API
-import com.stratagile.qlink.data.api.HttpInfoInterceptor
-import com.stratagile.qlink.data.api.RequestBodyInterceptor
 import com.stratagile.qlink.entity.AllWallet
-import com.stratagile.qlink.entity.BaseBack
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.entity.topup.TopupOrderList
 import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.recommend.MyTopupGroupActivity
-import com.stratagile.qlink.ui.activity.stake.StakeExplainActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopupOrderListComponent
 import com.stratagile.qlink.ui.activity.topup.contract.TopupOrderListContract
 import com.stratagile.qlink.ui.activity.topup.module.TopupOrderListModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupOrderListPresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupOrderListAdapter
-import com.stratagile.qlink.utils.*
-import com.stratagile.topup.PayService
-import com.stratagile.topup.TopupInterceptor
-import com.stratagile.topup.TopupRequestInterceptor
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_qurry_mobile.*
+import com.stratagile.qlink.utils.FileUtil
+import com.stratagile.qlink.utils.OtcUtils
+import com.stratagile.qlink.utils.SpUtil
+import com.stratagile.qlink.utils.UIUtils
 import kotlinx.android.synthetic.main.activity_topup_order_list.*
-import kotlinx.android.synthetic.main.activity_topup_order_list.recyclerView
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.http.GET
-import retrofit2.http.Url
 import java.io.File
 import java.util.*
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Inject;
-import kotlin.concurrent.thread
+import javax.inject.Inject
 
 /**
  * @author hzp
@@ -90,6 +74,23 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
+        LayoutInflaterCompat.setFactory(LayoutInflater.from(this), LayoutInflaterFactory { parent, name, context, attrs ->
+            if (name == "com.android.internal.view.menu.IconMenuItemView" || name == "com.android.internal.view.menu.ActionMenuItemView" || name == "android.support.v7.view.menu.ActionMenuItemView") {
+                try {
+                    val view = layoutInflater.createView(name, null, attrs)
+                    if (view is TextView) {
+                        view.setTextColor(resources.getColor(R.color.mainColor))
+                        view.isAllCaps = false
+                    }
+                    return@LayoutInflaterFactory view
+                } catch (e: InflateException) {
+                    e.printStackTrace()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+            }
+            null
+        })
         super.onCreate(savedInstanceState)
     }
 

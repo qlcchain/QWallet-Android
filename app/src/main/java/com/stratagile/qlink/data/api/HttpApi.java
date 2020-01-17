@@ -75,6 +75,7 @@ import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.InviteeList;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
@@ -83,6 +84,7 @@ import com.stratagile.qlink.entity.topup.CreateGroup;
 import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.entity.topup.TopupGroupKindList;
 import com.stratagile.qlink.entity.topup.TopupGroupList;
 import com.stratagile.qlink.entity.topup.TopupJoinGroup;
@@ -746,6 +748,14 @@ public interface HttpApi {
     @POST(API.saveItemPayTokenTxid)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupJoinGroup> saveItemPayTokenTxid(@Body RequestBody map);
+
+    @POST(API.getInviteeList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<InviteeList> getInviteeList(@Body RequestBody map);
+
+    @POST(API.getRewardList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<SalePartner> getRewardList1(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

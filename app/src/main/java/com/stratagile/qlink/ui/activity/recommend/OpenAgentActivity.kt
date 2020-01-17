@@ -3,7 +3,12 @@ package com.stratagile.qlink.ui.activity.recommend
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
+import com.alibaba.fastjson.JSONArray
+import com.alibaba.fastjson.JSONObject
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
@@ -14,24 +19,29 @@ import com.stratagile.qlink.data.api.MainAPI
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.UserInfo
+import com.stratagile.qlink.entity.eventbus.ChangeWallet
+import com.stratagile.qlink.entity.qlc.AddressStakeAmount
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.ui.activity.recommend.component.DaggerOpenAgentComponent
 import com.stratagile.qlink.ui.activity.recommend.contract.OpenAgentContract
 import com.stratagile.qlink.ui.activity.recommend.module.OpenAgentModule
 import com.stratagile.qlink.ui.activity.recommend.presenter.OpenAgentPresenter
+import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
 import com.stratagile.qlink.utils.QlcReceiveUtils.drivePrivateKey
 import com.stratagile.qlink.utils.QlcReceiveUtils.drivePublicKey
 import com.stratagile.qlink.utils.UserUtils
+import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_agency_excellence.*
 import kotlinx.android.synthetic.main.activity_open_agent.*
 import kotlinx.android.synthetic.main.activity_open_agent.ivAvatar
 import kotlinx.android.synthetic.main.activity_open_agent.tvKaitong
 import kotlinx.android.synthetic.main.activity_open_agent.tvNickName
-import kotlinx.android.synthetic.main.fragment_my.*
+import org.greenrobot.eventbus.EventBus
 import qlc.mng.WalletMng
+import qlc.network.QlcClient
 import qlc.utils.Helper
-import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 /**
  * @author hzp
@@ -68,7 +78,8 @@ class OpenAgentActivity : BaseActivity(), OpenAgentContract.View {
     }
     override fun initData() {
         if (ConstantValue.currentUser.qlcAddress != null && !"".equals(ConstantValue.currentUser.qlcAddress)) {
-            tvKaitong.text = getString(R.string.already_opened)
+            getStakedQlcAmount1()
+//            tvKaitong.text = getString(R.string.already_opened)
         } else {
             tvKaitong.text = getString(R.string.not_opened)
         }
@@ -86,6 +97,86 @@ class OpenAgentActivity : BaseActivity(), OpenAgentContract.View {
             }
             bindQlcChainAddress()
         }
+    }
+
+    fun getStakedQlcAmount1() {
+        showProgressDialog()
+        thread {
+            val qlcClient = QlcClient(ConstantValue.qlcNode)
+            val addressArr = JSONArray()
+            addressArr.add(ConstantValue.currentUser.qlcAddress)
+            val json: JSONObject = qlcClient.call("pledge_getBeneficialPledgeInfosByAddress", addressArr)
+            KLog.i(json)
+            val addressStakeAmount = Gson().fromJson(json.toJSONString(), AddressStakeAmount::class.java)
+            runOnUiThread {
+                closeProgressDialog()
+                if (addressStakeAmount.result.totalAmounts >= 1500*100000000.toLong()) {
+                    tvKaitong.text = getString(R.string.already_opened)
+                } else {
+                    tvKaitong.text = getString(R.string.not_opened)
+                }
+            }
+        }
+    }
+
+    fun getStakedQlcAmount() {
+        showProgressDialog()
+        thread {
+            val qlcClient = QlcClient(ConstantValue.qlcNode)
+            val addressArr = JSONArray()
+            addressArr.add(sendQlcWallet!!.address)
+            val json: JSONObject = qlcClient.call("pledge_getBeneficialPledgeInfosByAddress", addressArr)
+            KLog.i(json)
+            val addressStakeAmount = Gson().fromJson(json.toJSONString(), AddressStakeAmount::class.java)
+            runOnUiThread {
+                closeProgressDialog()
+                if (addressStakeAmount.result.totalAmounts >= 1500*100000000.toLong()) {
+                    tvKaitong.text = getString(R.string.already_opened)
+                    showGotAgentDialog()
+                } else {
+                    showNoEnoughQlcDialog()
+                }
+                getUserInfo()
+            }
+        }
+    }
+
+    fun showGotAgentDialog() {
+        val view = layoutInflater.inflate(R.layout.alert_dialog, null, false)
+        val tvContent = view.findViewById<TextView>(R.id.tvContent)
+        val imageView = view.findViewById<ImageView>(R.id.ivTitle)
+        imageView.setImageDrawable(resources.getDrawable(R.mipmap.op_success))
+        tvContent.text = getString(R.string.you_are_a_recharge_agent_partner_now)
+        val sweetAlertDialog = SweetAlertDialog(this)
+        val ivClose = view.findViewById<ImageView>(R.id.ivClose)
+        val tvOk = view.findViewById<TextView>(R.id.tvOpreate)
+        tvOk.text = getString(R.string.got_it_stake)
+        tvOk.setOnClickListener {
+            sweetAlertDialog.cancel()
+            finish()
+        }
+        ivClose.setOnClickListener { sweetAlertDialog.cancel() }
+        sweetAlertDialog.setView(view)
+        sweetAlertDialog.show()
+    }
+
+    fun showNoEnoughQlcDialog() {
+        val view = layoutInflater.inflate(R.layout.alert_dialog, null, false)
+        val tvContent = view.findViewById<TextView>(R.id.tvContent)
+        val imageView = view.findViewById<ImageView>(R.id.ivTitle)
+        imageView.setImageDrawable(resources.getDrawable(R.mipmap.icon_no_stake_enogh_qlc))
+        tvContent.text = getString(R.string.you_havenot_staked_1500_qlc_in_this_wallet)
+        val sweetAlertDialog = SweetAlertDialog(this)
+        val ivClose = view.findViewById<ImageView>(R.id.ivClose)
+        val tvOk = view.findViewById<TextView>(R.id.tvOpreate)
+        tvOk.text = getString(R.string.stake_now)
+        tvOk.setOnClickListener {
+            startActivity(Intent(this@OpenAgentActivity, MyStakeActivity::class.java))
+            sweetAlertDialog.cancel()
+        }
+        ivClose.setOnClickListener { sweetAlertDialog.cancel() }
+        sweetAlertDialog.setView(view)
+        sweetAlertDialog.show()
     }
 
     fun testSign() {
@@ -122,7 +213,14 @@ class OpenAgentActivity : BaseActivity(), OpenAgentContract.View {
             sendQlcWallet = data!!.getParcelableExtra("wallet")
             tvNeoWalletName.text = sendQlcWallet!!.accountName
             tvNeoWalletAddess.text = sendQlcWallet!!.address
-            testSign()
+            var list = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
+            list.forEach {
+                it.setIsCurrent(false)
+                AppConfig.instance.daoSession.qlcAccountDao.update(it)
+            }
+            sendQlcWallet!!.setCurrent(true)
+            AppConfig.instance.daoSession.qlcAccountDao.update(sendQlcWallet)
+            EventBus.getDefault().post(ChangeWallet())
         }
     }
 
@@ -147,6 +245,7 @@ class OpenAgentActivity : BaseActivity(), OpenAgentContract.View {
     }
 
     fun getUserInfo() {
+//        showProgressDialog()
         var map = hashMapOf<String, String>()
         map.put("account", ConstantValue.currentUser.account)
         map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
@@ -154,7 +253,7 @@ class OpenAgentActivity : BaseActivity(), OpenAgentContract.View {
     }
 
     override fun bindAddressSuccess() {
-        getUserInfo()
+        getStakedQlcAmount()
     }
 
     override fun setUsrInfo(userInfo: UserInfo) {
@@ -162,7 +261,7 @@ class OpenAgentActivity : BaseActivity(), OpenAgentContract.View {
         ConstantValue.currentUser.qlcAddress = userInfo.qlcAddress
         AppConfig.instance.daoSession.userAccountDao.update(ConstantValue.currentUser)
         setResult(Activity.RESULT_OK)
-        finish()
+//        finish()
     }
 
 }

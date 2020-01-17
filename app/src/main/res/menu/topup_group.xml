@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/topupGroup"
-        android:icon="@mipmap/icon_stake_explain"
-        android:title=""
+        android:title="@string/group_order"
         app:showAsAction="always" />
 </menu>

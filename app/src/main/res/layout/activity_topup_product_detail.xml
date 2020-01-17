@@ -126,7 +126,6 @@
                 <TextView
                     android:visibility="gone"
                     android:layout_width="wrap_content"
-                    android:text="查看全部"
                     android:drawableRight="@mipmap/icon_enter1"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -181,7 +180,7 @@
                     android:textSize="12sp"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/color_808080"
-                    android:text="1. 发起人发起拼团时设定一个拼团人数目标，下单价格就按照对应的折扣来 \n满3人9折团： Family Plan \n满5人8折团：Group Plan \n满8人及以上7折团: Great Value Plan \n\n2. 限定时间内参加这个团充值的人数够了就全团购买成功，转账完成即视为发起拼团或入团。 \n3人团： 3小时 \n5人团：9小时 \n8人团：24小时 \n\n3. 组团成功，根据团员人数，团长每人拿2qgas，团员上级销售代理拿1qgas，团员上上级销售代理拿0.5qgas，团长可以自己参与团购。 \n\n4. 限定时间内人数不够则购买失败，已下单者的QGas/QLC 原路退回。"
+                    android:text="@string/group_rule"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
@@ -274,7 +273,6 @@
                         <TextView
                             android:id="@+id/tvAfterAmount"
                             android:layout_width="wrap_content"
-                            android:text="800QLC 折后 720QLC+5QGAS"
                             android:textColor="@color/mainColor"
                             android:textSize="13sp"
                             android:layout_height="wrap_content"/>
@@ -326,7 +324,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/color_808080"
-                    android:text="1. 发起人发起拼团时设定一个拼团人数目标，下单价格就按照对应的折扣来 \n满3人9折团： Family Plan \n满5人8折团：Group Plan \n满8人及以上7折团: Great Value Plan \n\n2. 限定时间内参加这个团充值的人数够了就全团购买成功，转账完成即视为发起拼团或入团。 \n3人团： 3小时 \n5人团：9小时 \n8人团：24小时 \n\n3. 组团成功，根据团员人数，团长每人拿2qgas，团员上级销售代理拿1qgas，团员上上级销售代理拿0.5qgas，团长可以自己参与团购。 \n\n4. 限定时间内人数不够则购买失败，已下单者的QGas/QLC 原路退回。"
+                    android:text="@string/group_rule"
                     android:layout_height="wrap_content"/>
 
                 <TextView
@@ -398,7 +396,6 @@
                         <TextView
                             android:id="@+id/tvJoinTuanPrice"
                             android:layout_width="wrap_content"
-                            android:text="800QLC 折后 720QLC+5QGAS"
                             android:textColor="@color/mainColor"
                             android:textSize="13sp"
                             android:layout_height="wrap_content"/>
@@ -482,7 +479,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/color_808080"
-                    android:text="1. 发起人发起拼团时设定一个拼团人数目标，下单价格就按照对应的折扣来 \n满3人9折团： Family Plan \n满5人8折团：Group Plan \n满8人及以上7折团: Great Value Plan \n\n2. 限定时间内参加这个团充值的人数够了就全团购买成功，转账完成即视为发起拼团或入团。 \n3人团： 3小时 \n5人团：9小时 \n8人团：24小时 \n\n3. 组团成功，根据团员人数，团长每人拿2qgas，团员上级销售代理拿1qgas，团员上上级销售代理拿0.5qgas，团长可以自己参与团购。 \n\n4. 限定时间内人数不够则购买失败，已下单者的QGas/QLC 原路退回。"
+                    android:text="@string/group_rule"
                     android:layout_height="wrap_content"/>
 
                 <TextView
@@ -493,7 +490,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="确定"
+                    android:text="@string/confirm"
                     android:background="@drawable/main_color_bt_bg"
                     android:gravity="center"
                     android:textSize="15sp"

@@ -52,6 +52,7 @@ import com.stratagile.qlink.entity.MyAsset
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
+import com.stratagile.qlink.entity.eventbus.StakeQlcError
 import com.stratagile.qlink.entity.stake.*
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
 import com.stratagile.qlink.utils.LocalWalletUtil
@@ -65,6 +66,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringEscapeUtils
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.spongycastle.crypto.tls.ContentType.alert
 import org.w3c.dom.Text
 import qlc.bean.StateBlock
@@ -348,6 +351,35 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                 }
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun stakeQlcError(stakeQlcError: StakeQlcError) {
+        sa1.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        saHalf.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+        })
+        sweetAlertDialog?.dismissWithAnimation()
     }
 
     fun showEnterTxIdDialog() {

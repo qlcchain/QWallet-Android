@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/color_f2f2f2"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_agent_youxiang"
+            android:text="Become a Q-Wallet Recharge Sales Partner for Continuous COMMISSION!"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_height="82dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:textSize="12sp"
+            android:textColor="@color/color_1e1e24"
+            android:text="Dear Q-Wallet users, \n\nQ-Wallet​ is now recruiting the mobile plan recharge agent partners to earn commission in Singapore and Indonesia. With the guaranteed commission from each successful recharge order, an agent is expected to earn his/her cumulative QGas income at the value of 20 USD a month!"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#D3D6E6"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/color_1e1e24"
+            android:textSize="13sp"
+            android:text="HOW MUCH do you expect to earn from the Q-Wallet recharge sales partner plan?"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:textSize="12sp"
+            android:textColor="@color/color_1e1e24"
+            android:text="The Q-Wallet sales partners earn rewards based on how many top up orders that the people they referred have completed."
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="330dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/beijin_a"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="204dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:text="The table below explains how the Q-Wallet recharge sales partner plan works, each referrer gets a share of QGas in transaction from the successful top up orders of the referred’s, on the basis of their tier in the system."
+            android:textSize="12sp"
+            android:textColor="@color/color_1e1e24"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="330dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/beijin_b"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="130dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#D3D6E6"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/color_1e1e24"
+            android:textSize="13sp"
+            android:text="How to become a Q-Wallet recharge sales partner?"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:text="Each sales partner is required to stake at least 1500 QLC in their QLC Chain address under the Q-Wallet accounts. \n\nStep 1---> Stake no less than 1,500 QLC to the QLC Chin address under Q-Wallet account \nStep 2---> Generate a unique invite code in Q-Wallet \nStep 3---> Share the invite code and build up your customer base to enjoy the commissions \n\nNext week sales partner campaign will get online by Jan 17th. Our long-time Q-Wallet supporters are suggested to get prepared before the version is live. \n\nMore Q-Wallet promotion campaigns are in the pipeline, such as lucky draw, and QLC, QGas giveaway. We will always keep Q-Wallet users updated on the latest discounts, promotions by email and medium post."
+            android:textSize="12sp"
+            android:textColor="@color/color_1e1e24"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="30dp"
+            android:text="Stay tuned!"
+            android:textStyle="bold"
+            android:textColor="@color/color_1e1e24"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

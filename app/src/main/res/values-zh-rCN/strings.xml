@@ -526,6 +526,7 @@
     <string name="qgas_resolution_failure">链确认失败</string>
     <string name="qgas_has_been_returned">已退回%1$s</string>
     <string name="order_list">我的订单</string>
+    <string name="group_order_list">我的拼团订单</string>
     <string name="you_do_not_have_qlcwallet_create_immediately">您还没有 %1$s 钱包 立即创建</string>
     <string name="send_qgas_error">发送%1$s错误</string>
     <string name="a_cahrge_of_will_cost_qgas_and_rmb">充值%1$s元话费\n需要支付%2$s%3$s和%4$s元</string>
@@ -646,7 +647,7 @@
     <string name="please_choose_one_plan">请选择：拼团类型</string>
     <string name="start_the_group_recharge">发起拼团</string>
     <string name="_more_partner_needed">还差%1$s人</string>
-    <string name="_off_discount_partners">满%2$s人%1$s折团 </string>
+    <string name="_off_discount_partners">满%2$s人%1$s折团</string>
     <string name="ongoing_groups_">可参与拼团</string>
     <string name="the_plan">参与的拼团</string>
     <string name="a_recharge_agent_partner_can_start_the_group_recharge">您还不是代理\n成为代理后可发起拼团</string>
@@ -665,4 +666,21 @@
     <string name="verify_eligibility">验证资格</string>
     <string name="open_agent_qualification">开启代理资格</string>
     <string name="please_select_a_wallet">请选择一个钱包</string>
+    <string name="group_plan_details">拼团详情</string>
+    <string name="group_rule">1. 发起人发起拼团时设定一个拼团人数目标，下单价格就按照对应的折扣来 \n满3人9折团： Family Plan \n满5人8折团：Group Plan \n满8人及以上7折团: Great Value Plan \n\n2. 限定时间内参加这个团充值的人数够了就全团购买成功，销售代理即团长发起拼团，任何用户（包含团长）可参与入团，交易完成视为入团完成，限定时间内该团总交易数目达到最低要求时，视为拼团成功。 \n3人团： 3小时 \n5人团：9小时 \n8人及以上团：24小时 \n\n4. 组团成功，根据团员人数，团长每人拿2qgas，团员上级销售代理拿1qgas，团员上上级销售代理拿0.5qgas，团长可以自己参与团购。 \n\n5. 限定时间内人数不够则购买失败，已下单者的QGas/QLC 原路退回。</string>
+    <string name="valid_till">截止时间：</string>
+    <string name="you_havenot_staked_1500_qlc_in_this_wallet">此钱包未有1500QLC抵押</string>
+    <string name="stake_now">去抵押</string>
+    <string name="you_are_a_recharge_agent_partner_now">已获得代理权</string>
+    <string name="got_it_stake">知道了</string>
+    <string name="group_order">拼团订单</string>
+    <string name="order_time_out">订单超时</string>
+    <string name="order_time_out_down">超时处理完成</string>
+    <string name="sales_partner_commission">代理提成奖励</string>
+    <string name="friends_referred">邀请成功好友</string>
+    <string name="ranking_">邀请奖励榜</string>
+    <string name="no_referred">No Referred</string>
+    <string name="referred">Referred</string>
+    <string name="recharge_commission">充值佣金</string>
+    <string name="group_plan_commission">团购佣金</string>
 </resources>

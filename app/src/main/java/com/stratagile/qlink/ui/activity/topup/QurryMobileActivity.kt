@@ -4,38 +4,27 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.hardware.input.InputManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.ContactsContract
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pawegio.kandroid.alert
-import com.pawegio.kandroid.inputManager
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.AllWallet
-import com.stratagile.qlink.entity.topup.IspList
-import com.stratagile.qlink.entity.topup.PayToken
-import com.stratagile.qlink.entity.topup.TopupOrder
-import com.stratagile.qlink.entity.topup.TopupProduct
-import com.stratagile.qlink.qlinkcom
+import com.stratagile.qlink.entity.reward.Dict
+import com.stratagile.qlink.entity.topup.*
 import com.stratagile.qlink.topup.Area
-import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.recommend.TopupProductDetailActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerQurryMobileComponent
 import com.stratagile.qlink.ui.activity.topup.contract.QurryMobileContract
@@ -47,8 +36,6 @@ import com.stratagile.qlink.ui.adapter.topup.PayTokenAdapter
 import com.stratagile.qlink.ui.adapter.topup.PayTokenDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupAbleAdapter
 import com.stratagile.qlink.utils.*
-import com.stratagile.qlink.view.CustomPopWindow
-import com.vondear.rxtools.RxKeyboardTool
 import com.yanzhenjie.alertdialog.AlertDialog
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.PermissionListener
@@ -58,8 +45,7 @@ import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import java.io.File
 import java.math.BigDecimal
 import java.util.*
-
-import javax.inject.Inject;
+import javax.inject.Inject
 
 
 /**
@@ -228,42 +214,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                     }
                 }.show()
             } else {
-
-                if (hasActivie) {
-                    var productIntent = Intent(this, TopupProductDetailActivity::class.java)
-                    productIntent.putExtra("productBean", topupAbleAdapter!!.data[position])
-                    productIntent.putExtra("globalRoaming", country)
-                    productIntent.putExtra("phoneNumber", etContact.text.toString())
-                    productIntent.putExtra("selectedPayToken", selectedPayToken)
-                    startActivity(productIntent)
-                } else {
-                    var deductionTokenPrice = 0.toDouble()
-                    if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)) {
-                        deductionTokenPrice = selectedPayToken.price
-                    } else if ("USD".equals(topupAbleAdapter!!.data[position].payFiat)){
-                        deductionTokenPrice = selectedPayToken.usdPrice
-                    }
-
-                    var dikoubijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal())
-                    var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
-                    var zhifufabijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal())
-                    var zhifudaibijine = zhifufabijine - dikoubijine
-                    var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)){topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal()} else {topupAbleAdapter!!.data[position].payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
-
-                    alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol, topupAbleAdapter!!.data[position].localFiat)) {
-                        negativeButton(getString(R.string.cancel)) { dismiss() }
-                        positiveButton(getString(R.string.buy_topup)) {
-                            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
-                                generateTopupOrder(topupAbleAdapter!!.data[position])
-                            } else {
-                                alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
-                                    negativeButton(getString(R.string.cancel)) { dismiss() }
-                                    positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
-                                }.show()
-                            }
-                        }
-                    }.show()
-                }
+                getGroupKindList(position)
             }
         }
         payTokenAdapter = PayTokenAdapter(arrayListOf())
@@ -347,6 +298,11 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             }
 
         })
+    }
+
+    lateinit var topupGroupKindList: TopupGroupKindList
+    override fun setGroupKindList(topupGroupKindList: TopupGroupKindList) {
+        this.topupGroupKindList = topupGroupKindList
     }
 
     fun generateTopupOrder(product: TopupProduct.ProductListBean) {
@@ -487,10 +443,12 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                                     + contactId,
                             null,
                             null)
-                    while (phones.moveToNext()) {
-                        phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                    if (phones != null) {
+                        while (phones.moveToNext()) {
+                            phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                        }
+                        phones.close()
                     }
-                    phones.close()
                 }
                 KLog.i(name)
                 KLog.i(phoneNumber)
@@ -607,6 +565,52 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     override fun closeProgressDialog() {
         progressDialog.hide()
+    }
+
+    lateinit var dict: Dict
+    override fun setGroupDate(dict: Dict, position : Int) {
+        this.dict = dict
+        if (this::dict.isInitialized && TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
+            var productIntent = Intent(this, TopupProductDetailActivity::class.java)
+            productIntent.putExtra("productBean", topupAbleAdapter!!.data[position])
+            productIntent.putExtra("globalRoaming", country)
+            productIntent.putExtra("phoneNumber", etContact.text.toString())
+            productIntent.putExtra("selectedPayToken", selectedPayToken)
+            startActivity(productIntent)
+        } else {
+            var deductionTokenPrice = 0.toDouble()
+            if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)) {
+                deductionTokenPrice = selectedPayToken.price
+            } else if ("USD".equals(topupAbleAdapter!!.data[position].payFiat)){
+                deductionTokenPrice = selectedPayToken.usdPrice
+            }
+
+            var dikoubijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal())
+            var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+            var zhifufabijine = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal())
+            var zhifudaibijine = zhifufabijine - dikoubijine
+            var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)){topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal()} else {topupAbleAdapter!!.data[position].payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
+
+            alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol, topupAbleAdapter!!.data[position].localFiat)) {
+                negativeButton(getString(R.string.cancel)) { dismiss() }
+                positiveButton(getString(R.string.buy_topup)) {
+                    if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                        generateTopupOrder(topupAbleAdapter!!.data[position])
+                    } else {
+                        alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
+                            negativeButton(getString(R.string.cancel)) { dismiss() }
+                            positiveButton(getString(R.string.create)) { startActivity(Intent(this@QurryMobileActivity, SelectWalletTypeActivity::class.java)) }
+                        }.show()
+                    }
+                }
+            }.show()
+        }
+    }
+
+    fun getGroupKindList(posiion : Int) {
+        val infoMap: MutableMap<String, String> = HashMap()
+        infoMap["dictType"] = "app_dict"
+        mPresenter.qurryDict(infoMap, posiion)
     }
 
 }

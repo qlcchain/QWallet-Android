@@ -20,6 +20,7 @@ import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.entity.eventbus.StakeQlcError
 import com.stratagile.qlink.entity.stake.LockResult
 import com.stratagile.qlink.entity.stake.MultSign
 import com.stratagile.qlink.entity.stake.StakeType
@@ -100,6 +101,8 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
             var lockResult = Gson().fromJson(retValue.toString(), LockResult::class.java)
             if (lockResult.txid == null) {
                 AppConfig.instance.saveLog("stake", "voteNode lockQlc" + getLine(), Gson().toJson(lockResult))
+                toast("lock qlc error, please try later")
+                EventBus.getDefault().post(StakeQlcError())
             } else {
                 lockResult.stakeType = stakeType
                 stakeViewModel.lockResult.postValue(lockResult)

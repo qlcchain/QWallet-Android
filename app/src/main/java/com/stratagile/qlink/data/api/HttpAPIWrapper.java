@@ -79,6 +79,7 @@ import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.entity.reward.InviteTotal;
+import com.stratagile.qlink.entity.reward.InviteeList;
 import com.stratagile.qlink.entity.reward.RewardList;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.entity.stake.UnLock;
@@ -87,6 +88,7 @@ import com.stratagile.qlink.entity.topup.CreateGroup;
 import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.entity.topup.TopupGroupKindList;
 import com.stratagile.qlink.entity.topup.TopupGroupList;
 import com.stratagile.qlink.entity.topup.TopupJoinGroup;
@@ -146,7 +148,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<WifiRegisteResult> getRegistedSsid(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getRegistedSsid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getRegistedSsid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -154,7 +156,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RegisterWiFi> registeWWifi(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.registeWWifi(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.registeWWifi(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -163,7 +165,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RegisterWiFi> registeWWifiV3(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.registeWWifiV3(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.registeWWifiV3(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -172,7 +174,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> createWallet(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.createWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.createWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -181,7 +183,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<CreateWallet> importWallet(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.importWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.importWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -190,7 +192,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Balance> getBalance(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getBalance(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getBalance(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -199,7 +201,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Reward> reward(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.reward(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.reward(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -208,7 +210,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Raw> getRaw(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getRaw(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getRaw(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -217,7 +219,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Record> recordQuerys(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.recordQuerys(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.recordQuerys(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -226,7 +228,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ConnectedWifiRecord> recordSave(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.recordSave(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.recordSave(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -235,7 +237,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BuyQlc> buyQlc(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.buyQlc(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.buyQlc(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -244,7 +246,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BuyQlc> trasaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.trasaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.trasaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -253,7 +255,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RegisterWiFi> vpnRegister(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vpnRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vpnRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -262,7 +264,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RegisterVpn> vpnRegisterV2(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vpnRegisterV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vpnRegisterV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -271,7 +273,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ChainVpn> vpnQuery(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vpnQuery(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vpnQuery(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -280,7 +282,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ChainVpn> vpnQueryV3(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vpnQueryV3(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vpnQueryV3(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -289,7 +291,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<VertifyVpn> vertifyVpnName(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vertifyVpnName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vertifyVpnName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -298,7 +300,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RecordVpn> vpnRecordSave(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vpnRecordSave(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vpnRecordSave(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -307,7 +309,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<String> getNodes() {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapperGetToxJson(mMainHttpAPI.getNodes()).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapperGetToxJson(mHttpAPI.getNodes()).compose(SCHEDULERS_TRANSFORMER);
@@ -316,7 +318,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<GoogleResult> latlngParseCountry(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapperObject(mMainHttpAPI.latlngParseCountry(map)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapperObject(mHttpAPI.latlngParseCountry(map)).compose(SCHEDULERS_TRANSFORMER);
@@ -325,7 +327,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ImportWalletResult> batchImportWallet(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.batchImportWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.batchImportWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -334,7 +336,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<UpLoadAvatar> updateMyAvatar(MultipartBody.Part photo, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateMyAvatar(account, token, photo)).compose(SCHEDULERS_TRANSFORMER);
@@ -343,7 +345,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Passport> updateIdCard(MultipartBody.Part photo, MultipartBody.Part holdphoto, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
@@ -352,7 +354,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<UpLoadAvatar> userHeadView(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.userHeadView(map)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.userHeadView(map)).compose(SCHEDULERS_TRANSFORMER);
@@ -361,7 +363,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> heartBeat(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.heartBeat(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.heartBeat(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -370,7 +372,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<UpdateVpn> updateVpnInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.updateVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -379,7 +381,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> updateWiFiInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.updateWiFiInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.updateWiFiInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -389,7 +391,7 @@ public class HttpAPIWrapper {
 
 
     public Observable<AssetsWarpper> getUnspentAsset(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -398,7 +400,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<SysTime> getServerTime(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getServerTime(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -407,7 +409,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> sendRawTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.sendRawTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.sendRawTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -416,7 +418,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TransactionResult> v2Transaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.v2Transaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.v2Transaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -425,7 +427,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<MainAddress> getMainAddress(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getMainAddress(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getMainAddress(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -434,7 +436,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BuyQlc> bnb2qlc(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.bnb2qlc(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.bnb2qlc(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -443,7 +445,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EthWalletDetail> getEthAddressDetail(String address, Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapperETH(mMainHttpAPI.getEthAddressDetail(address, map)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapperETH(mHttpAPI.getEthAddressDetail(address, map)).compose(SCHEDULERS_TRANSFORMER);
@@ -452,7 +454,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<FreeNum> zsFreeNum(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.zsFreeNum(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.zsFreeNum(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -461,7 +463,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<FreeNum> freeConnection(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.freeConnection(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.freeConnection(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -470,7 +472,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<FreeRecord> queryFreeRecords(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.queryFreeRecords(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.queryFreeRecords(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -479,7 +481,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> reportVpnInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.reportVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.reportVpnInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -487,7 +489,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Active> getAct(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getAct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getAct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -495,7 +497,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ActiveList> getActAsset(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getActAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getActAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -503,7 +505,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ShowAct> getShowAct(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getShowAct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getShowAct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -511,7 +513,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EthWalletInfo> getEthWalletInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEthWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEthWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -519,7 +521,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<NeoWalletInfo> getNeoWalletInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getNeoWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getNeoWalletInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -527,7 +529,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TokenPrice> getTokenPrice(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTokenPrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTokenPrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -535,7 +537,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EthWalletTransaction> getEthWalletTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEthWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEthWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -543,7 +545,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<OnlyEthTransactionHistory> getOnlyEthTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getOnlyEthTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getOnlyEthTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -551,7 +553,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<NeoWalletTransactionHistory> getNeoWalletTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getNeoWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -560,7 +562,7 @@ public class HttpAPIWrapper {
 
 
     public Observable<AssetsWarpper> getMainUnspentAsset(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getMainUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getMainUnspentAsset(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -568,7 +570,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<NeoTransfer> neoTokenTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.neoTokenTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.neoTokenTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -576,7 +578,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Tpcs> getTpcs(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTpcs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTpcs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -584,7 +586,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<KLine> getTokenKLine(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTokenKLine(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -592,7 +594,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> reportWalletTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.reportWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.reportWalletTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -600,7 +602,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> reportWalletCreate(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.reportWalletCreate(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.reportWalletCreate(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -608,7 +610,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<WinqGasBack> queryWinqGas(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.queryWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.queryWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -616,7 +618,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<GotWinqGas> gotWinqGas(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.gotWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.gotWinqGas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -625,7 +627,7 @@ public class HttpAPIWrapper {
 
     //这个接口都用主网的，不用测试网的
     public Observable<ClaimData> neoGasClaim(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mMainHttpAPI.neoGasClaim(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -633,7 +635,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EosAccountInfo> getEosAccountInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEosAccountInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEosAccountInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -641,7 +643,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EosTokens> getEosTokenList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEosTokenList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEosTokenList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -649,7 +651,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EosResource> getEosTResource(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEosTResource(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEosTResource(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -657,7 +659,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EosAccountTransaction> getEosAccountTransaction(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEosAccountTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEosAccountTransaction(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -665,7 +667,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<LocalTokenBean> getBinaTokens(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getBinaTokens(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getBinaTokens(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -673,7 +675,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> createEosAccount(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.createEosAccount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.createEosAccount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -681,7 +683,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EosNeedInfo> getEosNeedInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEosNeedInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEosNeedInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -689,7 +691,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EosResourcePrice> getEosResourcePrice(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEosResourcePrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEosResourcePrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -698,7 +700,7 @@ public class HttpAPIWrapper {
 
 
     public Observable<EosKeyAccount> getKeyAccount(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return (mMainHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return (mHttpAPI.getKeyAccount(map.get("public_key").toString())).compose(SCHEDULERS_TRANSFORMER);
@@ -706,7 +708,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> getSignUpVcode(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getSignUpVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getSignUpVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -714,7 +716,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> getSignInVcode(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getSignInVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getSignInVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -722,7 +724,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> getForgetPasswordVcode(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getForgetPasswordVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getForgetPasswordVcode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -730,7 +732,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<VcodeLogin> resetPassword(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.resetPassword(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.resetPassword(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -738,7 +740,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<VcodeLogin> userRegister(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.userRegister(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -746,7 +748,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Register> userLogin(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.userLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.userLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -754,7 +756,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<VcodeLogin> vCodeLogin(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.vCodeLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.vCodeLogin(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -762,7 +764,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Product> getProductList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -770,7 +772,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ProductDetail> getProductDetail(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getProductDetail(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getProductDetail(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -778,7 +780,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> buyQLCProduct(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.buyQLCProduct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.buyQLCProduct(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -786,7 +788,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Order> getOrderList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -794,7 +796,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Order> redeemOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.redeemOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.redeemOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -803,7 +805,7 @@ public class HttpAPIWrapper {
 
     //更多的排名
     public Observable<MyRanking> getRankings(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -812,7 +814,7 @@ public class HttpAPIWrapper {
 
     //富豪榜
     public Observable<EarnRank> getEarnRankings(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEarnRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEarnRankings(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -820,7 +822,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<HistoryRecord> getHistoryRecord(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getHistoryRecord(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getHistoryRecord(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -828,7 +830,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<InviteList> getInivteTop5(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getInivteTop5(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getInivteTop5(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -836,7 +838,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> changeNickName(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.changeNickName(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -844,7 +846,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> generateBuyQgasOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.generateEntrustBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.generateEntrustBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -852,7 +854,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EntrustOrderList> getEntrustOrderList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEntrustOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEntrustOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -860,7 +862,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<EntrustOrderInfo> getEntrustOrderInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getEntrustOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getEntrustOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -868,7 +870,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> cancelEntrustOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.cancelEntrustOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.cancelEntrustOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -876,7 +878,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<GenerageTradeOrder> generateTradeBuyQgasOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.generateTradeBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.generateTradeBuyQgasOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -884,7 +886,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> tradeBuyerConfirm(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.tradeBuyerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeBuyerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -892,7 +894,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TradeOrder> generateTradeSellOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.generateTradeSellOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.generateTradeSellOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -900,7 +902,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TradeOrder> tradeSellOrderTxid(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.tradeSellOrderTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeSellOrderTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -908,7 +910,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> tradeSellerConfirm(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.tradeSellerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeSellerConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -916,7 +918,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TradeOrderList> tradeOrderList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.tradeOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -924,7 +926,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TradeOrderDetail> tradeOrderInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeOrderInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -932,7 +934,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> tradeOrderCancel(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.tradeOrderCancel(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.tradeOrderCancel(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -940,7 +942,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<UserInfo> getUserInfo(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getUserInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getUserInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -948,7 +950,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<AppVersion> getAppLastVersion(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getAppLastVersion(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getAppLastVersion(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -956,7 +958,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TradeOrderDetail> generateAppeal(RequestBody account, RequestBody token, RequestBody tradeOrderId, RequestBody reason, MultipartBody.Part photo1, MultipartBody.Part photo2, MultipartBody.Part photo3, MultipartBody.Part photo4) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.generateAppeal(account, token, tradeOrderId, reason, photo1, photo2, photo3, photo4)).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.generateAppeal(account, token, tradeOrderId, reason, photo1, photo2, photo3, photo4)).compose(SCHEDULERS_TRANSFORMER);
@@ -964,7 +966,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TradePair> getPairs(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getPairs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getPairs(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -972,7 +974,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<UnLock> unLock(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.unLock(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.unLock(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -980,7 +982,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupProduct> getTopupProductList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTopupProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTopupProductList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -988,7 +990,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupOrder> topupCreateOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.topupCreateOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.topupCreateOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -996,7 +998,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupOrder> topupOrderConfirm(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.topupOrderConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.topupOrderConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1004,7 +1006,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupOrderList> getTopupOrderList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTopupOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTopupOrderList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1012,7 +1014,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupOrder> topupCancelOrder(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.topupCancelOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.topupCancelOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1020,7 +1022,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> saveLog(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.saveLog(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.saveLog(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1028,7 +1030,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<Dict> qurryDict(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.qurryDict(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.qurryDict(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1036,7 +1038,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RewardTotal> getRewardTotal(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getRewardTotal(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getRewardTotal(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1044,7 +1046,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<InviteTotal> getInviteAmount(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getInviteAmount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getInviteAmount(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1052,7 +1054,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> bindQlcWallet(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.bindQlcWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.bindQlcWallet(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1060,7 +1062,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RewardList> getRewardList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getRewardList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getRewardList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1068,7 +1070,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ClaimQgas> claimQgas(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.claimQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.claimQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1076,7 +1078,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ClaimQgas> claimInviteQgas(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.claimInviteQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.claimInviteQgas(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1084,7 +1086,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> bindPush(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.bindPush(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.bindPush(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1092,7 +1094,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> userLogout(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.userLogout(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.userLogout(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1100,7 +1102,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<PayToken> payToken(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.payToken(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.payToken(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1108,7 +1110,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<MiningAct> miningList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.miningList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.miningList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1116,7 +1118,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<MiningRewardList> getMiningRewardList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getMiningRewardList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getMiningRewardList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1124,7 +1126,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<MiningRank> getMiningRewardRankList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getMiningRewardRankList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getMiningRewardRankList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1132,7 +1134,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<MiningIndex> getTradeMiningIndex(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTradeMiningIndex(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTradeMiningIndex(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1140,7 +1142,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<ClaimQgas> claimQlc(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.claimQlc(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.claimQlc(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1148,7 +1150,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<RewardTotal> getMiningRewardTotal(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getMiningRewardTotal(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getMiningRewardTotal(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1156,7 +1158,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> sysBackUp(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.sysBackUp(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.sysBackUp(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1164,7 +1166,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<CountryList> getCountryList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getCountryList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getCountryList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1172,7 +1174,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<IspList> getIspList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getIspList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getIspList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1180,7 +1182,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<IspList> provinceList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.provinceList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.provinceList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1188,7 +1190,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupOrder> saveDeductionTokenTxid(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.saveDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.saveDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1196,28 +1198,28 @@ public class HttpAPIWrapper {
     }
 
     public Observable<BaseBack> bindQlcChainAddress(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.bindQlcChainAddress(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.bindQlcChainAddress(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
     public Observable<TopupGroupList> getTopupGroupList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTopupGroupList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTopupGroupList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
     public Observable<CreateGroup> createGroup(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.createGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.createGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
     public Observable<TopupGroupKindList> getTopupGroupKindList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getTopupGroupKindList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getTopupGroupKindList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1225,7 +1227,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupJoinGroup> topupJoinGroup(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.topupJoinGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.topupJoinGroup(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1233,7 +1235,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<GroupItemList> getGroupItemList(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.getGroupItemList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.getGroupItemList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1241,7 +1243,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupJoinGroup> saveItemDeductionTokenTxid(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.saveItemDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.saveItemDeductionTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1249,7 +1251,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupJoinGroup> itemDeductionTokenConfirm(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.itemDeductionTokenConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.itemDeductionTokenConfirm(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1257,15 +1259,31 @@ public class HttpAPIWrapper {
     }
 
     public Observable<TopupJoinGroup> saveItemPayTokenTxid(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.saveItemPayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.saveItemPayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 
+    public Observable<InviteeList> getInviteeList(Map map) {
+        if (false) {
+            return wrapper(mMainHttpAPI.getInviteeList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getInviteeList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<SalePartner> getRewardList1(Map map) {
+        if (false) {
+            return wrapper(mMainHttpAPI.getRewardList1(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getRewardList1(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     public Observable<TopupOrder> savePayTokenTxid(Map map) {
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
+        if (false) {
             return wrapper(mMainHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1472,7 +1490,7 @@ public class HttpAPIWrapper {
     //需要额外的添加其他的参数进去，所以把原有的参数和额外的参数通过这个方法一起添加进去.
     private static RequestBody addParams(Map<String, String> data) {
         Map<String, Object> map = new HashMap<>();
-        //SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)
+        //false
         if (false) {
             map.put("appid", MainConstant.MainAppid);
             map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");

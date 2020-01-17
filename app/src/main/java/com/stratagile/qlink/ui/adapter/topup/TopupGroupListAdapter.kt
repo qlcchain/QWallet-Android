@@ -16,24 +16,27 @@ import com.stratagile.qlink.data.api.MainAPI
 import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupGroupKindList
 import com.stratagile.qlink.entity.topup.TopupGroupList
+import com.stratagile.qlink.utils.SpUtil
 import com.stratagile.qlink.utils.TimeUtil
 import com.stratagile.qlink.utils.UIUtils
+import kotlinx.android.synthetic.main.activity_agency_excellence.*
 import java.math.BigDecimal
 
 class TopupGroupListAdapter(array: ArrayList<TopupGroupList.GroupListBean>) : BaseQuickAdapter<TopupGroupList.GroupListBean, BaseViewHolder>(R.layout.item_topup_group, array) {
     lateinit var payToken: PayToken.PayTokenListBean
     override fun convert(helper: BaseViewHolder, item: TopupGroupList.GroupListBean) {
         var isCn = true
+        isCn = SpUtil.getInt(mContext, ConstantValue.Language, -1) == 1
         helper.setText(R.id.tvNeedPartners, mContext.getString(R.string._more_partner_needed, (item.numberOfPeople - item.joined).toString()))
         helper.setText(R.id.tvGroupInfo, mContext.getString(R.string._off_discount_partners, if (isCn){item.discount.toBigDecimal().multiply(BigDecimal.TEN).stripTrailingZeros().toPlainString()} else {(1.toBigDecimal() - item.discount.toBigDecimal()).multiply(100.toBigDecimal()).stripTrailingZeros().toPlainString()}, item.numberOfPeople.toString()))
-        helper.setText(R.id.tvRemainTime, TimeUtil.getOrderTime(TimeUtil.timeStamp(item.createDate) + (item.duration * 60 * 1000)))
+        helper.setText(R.id.tvRemainTime, mContext.getString(R.string.valid_till) + TimeUtil.getOrderTime(TimeUtil.timeStamp(item.createDate) + (item.duration * 60 * 1000)))
         helper.addOnClickListener(R.id.tvJoinNow)
         var headList = arrayListOf<String>()
-        helper.setVisible(R.id.tvJoinNow, true)
+//        helper.setVisible(R.id.tvJoinNow, true)
         item.items?.forEach {
-            if (it.id.equals(ConstantValue.currentUser.userId)) {
-                helper.setVisible(R.id.tvJoinNow, false)
-            }
+//            if (it.id.equals(ConstantValue.currentUser.userId)) {
+//                helper.setVisible(R.id.tvJoinNow, false)
+//            }
             headList.add(it.head)
         }
         headList.add(item.head)
@@ -52,7 +55,6 @@ class TopupGroupListAdapter(array: ArrayList<TopupGroupList.GroupListBean>) : Ba
             KLog.i(AppConfig.instance.baseUrl + s)
             Glide.with(mContext)
                     .load(MainAPI.MainBASE_URL + s)
-//                    .load(AppConfig.instance.baseUrl + "/userfiles/1/images/topup/2019/12/a83bf1e7cd86413b896a1783a43b751f.png".replace("/dapp", ""))
                     .apply(AppConfig.getInstance().optionsWhiteColor)
                     .into(imageView)
             llAvatar.addView(imageView)

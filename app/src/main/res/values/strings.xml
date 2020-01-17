@@ -1671,6 +1671,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="region">Region</string>
     <string name="country_code">Country Code</string>
     <string name="optional">Optional</string>
+
+
     <string name="recharge_phone_bill_1">Recharge Phone bill：</string>
     <string name="recharge_directily">Recharge directily</string>
     <string name="group_plan">Group Plan</string>
@@ -1681,7 +1683,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="please_choose_one_plan">Please choose one plan</string>
     <string name="start_the_group_recharge">Start the Group Recharge</string>
     <string name="_more_partner_needed">%1$s more partner needed</string>
-    <string name="_off_discount_partners">%1$s% off, %2$s discount partners</string>
+    <string name="_off_discount_partners">%1$s%% off, %2$s discount partners</string>
     <string name="ongoing_groups_">Ongoing groups</string>
     <string name="the_plan">The Plan</string>
     <string name="a_recharge_agent_partner_can_start_the_group_recharge">A Recharge Agent Partner \n can start the Group Recharge.</string>
@@ -1694,9 +1696,27 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="stake_1500_qlc_to_gain_the_qulification_of_recharge_agent_partner">Stake 1500 QLC to gain the qulification of Recharge Agent Partner</string>
     <string name="how_to_earn_rewards">How to earn rewards?</string>
     <string name="exclusive_offers">Exclusive Offers</string>
-    <string name="not_opened">Not opened</string>
-    <string name="already_opened">Already opened</string>
+    <string name="not_opened">non-sales partner</string>
+    <string name="already_opened">sales partner</string>
     <string name="verify_eligibility">Verify Eligibility</string>
     <string name="open_agent_qualification">Open agent qualification</string>
     <string name="please_select_a_wallet">Please select a wallet</string>
+    <string name="group_plan_details">Group Plan Details</string>
+    <string name="group_rule">1. The user who starts the Group Recharge sets the target number of group which decides the discount. \n10% off for Family Plan (group of 3) \n20% off for Group Plan (group of 5) \n30% off for Great Value Plan (group of 8 or above) \n\n2. The plan will be effective when all group members pay successfully within limited time. \n3 hours for Family Plan (group of 3) \n9 hours for Group Plan (group of 5) \n24 hours for Great Value Plan (group of 8 or above) \n\n3. Commission distribution details for successful Group Plan The initiator gets 2 QGAS rewards; \nHis/her primary sales partner gets 1 QGAS rewards; \nHis/her secondary sales partner gets 0.5 QGAS rewards. \n\n4. If all group members can\'t pay withinn the limited time which means unsuccessful Group Plan, paid QGAS and QLC will be refunded to the payment wallet.</string>
+    <string name="valid_till">Valid till：</string>
+    <string name="you_havenot_staked_1500_qlc_in_this_wallet">You haven\'t staked 1500 QLC in this wallet.</string>
+    <string name="stake_now">Stake now</string>
+    <string name="you_are_a_recharge_agent_partner_now">You are a Recharge Agent Partner now.</string>
+    <string name="got_it_stake">Got it</string>
+    <string name="group_order">Group Order</string>
+    <string name="order_time_out">Order Time Out</string>
+    <string name="order_time_out_down">Order Time out Down</string>
+    <string name="sales_partner_commission">Sales Partner Commission</string>
+    <string name="friends_referred">Friends Referred</string>
+    <string name="ranking_">Ranking</string>
+    <string name="no_referred">No Referred</string>
+    <string name="referred">Referred</string>
+    <string name="group_order_list">My Group Orders</string>
+    <string name="recharge_commission">Recharge Commission</string>
+    <string name="group_plan_commission">Group Plan Commission</string>
 </resources>

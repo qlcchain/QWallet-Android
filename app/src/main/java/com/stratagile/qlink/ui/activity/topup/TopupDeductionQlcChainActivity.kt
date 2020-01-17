@@ -368,8 +368,8 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
             topupOrderBean.symbol = groupItemList.deductionToken
             topupOrderBean.id = groupItemList.id
             topupOrderBean.userId = groupItemList.userId
-            topupOrderBean.chain = groupItemList.payTokenChain
-            topupOrderBean.payTokenChain = groupItemList.deductionTokenChain
+            topupOrderBean.chain = groupItemList.deductionTokenChain
+            topupOrderBean.payTokenChain = groupItemList.payTokenChain
             topupOrderBean.qgasAmount = groupItemList.deductionTokenAmount
             topupOrderBean.payTokenAmount = groupItemList.payTokenAmount.toString()
             topupOrderBean.discountPrice = groupItemList.payFiatMoney

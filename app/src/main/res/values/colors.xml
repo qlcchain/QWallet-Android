@@ -25,6 +25,7 @@
     <color name="black">#000</color>
     <color name="histroy">#330055</color>
     <color name="color_333">#333333</color>
+    <color name="color_bb7944">#BB7944</color>
     <color name="color_FF007AFF">#FF007AFF</color>
     <!-- 上传图片添加的颜色 -->
     <color name="style_divider_color">#C9C7CD</color>

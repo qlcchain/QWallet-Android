@@ -801,4 +801,53 @@
     <string name="country_code">Kode negara</string>
     <string name="optional">opsional</string>
     <string name="mobile_plan">Paket Operator</string>
+
+    <string name="recharge_phone_bill_1">Isi ulang tagihan telpon：</string>
+    <string name="recharge_directily">Langsung Isi ulang</string>
+    <string name="group_plan">Paket Grup</string>
+    <string name="phone_number_">Nomor Telpon：</string>
+    <string name="rules_group">Aturan</string>
+    <string name="ongoing_groups">Grup yang sedang berjalan</string>
+    <string name="plans_group">Paket</string>
+    <string name="please_choose_one_plan">Silahkan pilih salah satu Paket</string>
+    <string name="start_the_group_recharge">Mulai Grup Isi ulang</string>
+    <string name="_more_partner_needed">%1$s lebih banyak mitra dibutuhkan</string>
+    <string name="_off_discount_partners">%1$s%% potongan, %2$s diskon mitra</string>
+    <string name="ongoing_groups_">Grup yang sedang berjalan</string>
+    <string name="the_plan">Paket</string>
+    <string name="a_recharge_agent_partner_can_start_the_group_recharge">Seorang Mitra Agen \n dapat memulai Grup Isi ulang.</string>
+    <string name="agent_partner_details">Rincian Mitra Agen</string>
+    <string name="join_now_group">Gabung Sekarang</string>
+    <string name="confirm_to_join">Konfirmasi untuk gabung</string>
+    <string name="be_a_recharge_agent_partner">Jadilah Mitra Agen Isi ulang</string>
+    <string name="details_agent">Rincian</string>
+    <string name="earn_qgas_rewards_everyday">Dapatkan hadiah QGAS setiap hari</string>
+    <string name="stake_1500_qlc_to_gain_the_qulification_of_recharge_agent_partner">Stake 1500 QLC untuk memperoleh kualifikasi Mitra Agen Isi ulang</string>
+    <string name="how_to_earn_rewards">Bagaimana cara mendapatkan hadiah?</string>
+    <string name="exclusive_offers">Penawaran Eksklusif</string>
+    <string name="not_opened">bukan-mitra penjualan</string>
+    <string name="already_opened">mitra penjualan</string>
+    <string name="verify_eligibility">Verifikasi Kelayakan</string>
+    <string name="open_agent_qualification">Buka Kualifikasi Agen</string>
+    <string name="please_select_a_wallet">Silahkan pilih dompet</string>
+    <string name="group_plan_details">Rincian Paket Grup</string>
+    <string name="group_rule">1. Pengguna yang memulai Grup Isi ulang mementukan jumlah target grup yang mana memutuskan diskon. \n10% potongan untuk Paket Keluarga (grup terdiri dari 3) \n20% potongan untuk Paket Grup (grup terdiri dari 5) \n30% potongan untuk Paket Bernilai Luar biasa (grup terdiri dari 8 atau lebih) \n\n2. Paket menjadi efektif ketika semua anggota grup berhasil membayar dalam batas jangka waktu. \n3 jam untuk Paket Keluarga (group of 3) \n9 jam untuk Paket Grup (group of 5) \n24 jam untuk Paket Bernilai Luar biasa (group of 8 or above) \n\n3. Rincian distribusi komisi untuk Inisiator Paket Grup yang sukses mendapatkan hadiah 2 QGAS; \nHis/mitra agen utamanya mendapatkan hadiah 1 QGAS; \nHis/mitra agen keduanya mendapatkan hadiah 0.5 QGAS. \n\n4. Jika semua anggota grup tidak dapat membayar dalam batas jangka waktu yang mana berarti Paket Grup gagal, pembayaran QGAS dan QLC akan dikembalikan ke dompet pembayaran.</string>
+    <string name="valid_till">Berlaku sampai：</string>
+    <string name="you_havenot_staked_1500_qlc_in_this_wallet">Anda tidak memiliki 1500 QLC yang distake dalam dompet ini.</string>
+    <string name="stake_now">Stake sekarang</string>
+    <string name="you_are_a_recharge_agent_partner_now">Anda adalah Mitra Agen Isi ulang sekarang.</string>
+    <string name="got_it_stake">Mengerti</string>
+    <string name="group_order">Pesanan Grup</string>
+
+    <string name="order_time_out">Batas Waktu Pesanan</string>
+    <string name="order_time_out_down">Batas Waktu Pesanan Menurun</string>
+    <string name="sales_partner_commission">Komisi Mitra Penjualan</string>
+    <string name="friends_referred">Teman Diajak</string>
+    <string name="ranking_">Peringkat</string>
+    <string name="no_referred">Tidak ada yang diajak</string>
+    <string name="referred">Diajak</string>
+    <string name="group_order_list">Pesanan Grup Saya</string>
+
+    <string name="recharge_commission">Komisi Isi ulang</string>
+    <string name="group_plan_commission">Komisi Paket Grup</string>
 </resources>

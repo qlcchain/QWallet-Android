@@ -547,8 +547,8 @@ public class MainPresenter implements MainContract.MainContractPresenter {
             }
 
             @Override
-            public void onNext(Dict appVersion) {
-                mView.setStakeQlc(appVersion);
+            public void onNext(Dict dict) {
+                mView.setStakeQlc(dict);
             }
 
             @Override

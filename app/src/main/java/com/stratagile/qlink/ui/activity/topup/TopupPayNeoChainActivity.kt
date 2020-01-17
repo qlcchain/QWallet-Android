@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Environment
 import com.google.gson.Gson
 import com.pawegio.kandroid.alert
+import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
@@ -76,8 +77,8 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
             topupOrderBean.symbol = groupItemList.deductionToken
             topupOrderBean.id = groupItemList.id
             topupOrderBean.userId = groupItemList.userId
-            topupOrderBean.chain = groupItemList.payTokenChain
-            topupOrderBean.payTokenChain = groupItemList.deductionTokenChain
+            topupOrderBean.chain = groupItemList.deductionTokenChain
+            topupOrderBean.payTokenChain = groupItemList.payTokenChain
             topupOrderBean.qgasAmount = groupItemList.deductionTokenAmount
             topupOrderBean.payTokenAmount = groupItemList.payTokenAmount.toString()
             topupOrderBean.discountPrice = groupItemList.payFiatMoney
@@ -144,7 +145,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         map["token"] = AccountUtil.getUserToken()
 
         map["groupItemId"] = orderId
-        map["deductionTokenTxid"] = txid
+        map["payTokenTxid"] = txid
         mPresenter.saveItemPayTokenTxid(map)
     }
 
@@ -232,7 +233,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
                     neoWallet = data!!.getParcelableExtra<Wallet>("wallet")
                     tvQlcWalletName.text = neoWallet!!.name
                     tvQlcWalletAddess.text = neoWallet!!.address
-                    tvQGASBalance.text = getString(R.string.balance) + ": -/- ${topupOrderBean.symbol}"
+                    tvQGASBalance.text = getString(R.string.balance) + ": -/- ${topupOrderBean.payTokenSymbol}"
                     payTokenAmount = 0.toDouble()
                     thread {
                         val infoMap = HashMap<String, String>()
@@ -266,10 +267,15 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-            if (intent.hasExtra("isGroup")) {
-                saveItemPayTokenTxid(nep5SendBack.txid, topupOrderBean.id)
+            if (nep5SendBack.txid != null) {
+                if (intent.hasExtra("isGroup")) {
+                    saveItemPayTokenTxid(nep5SendBack.txid, topupOrderBean.id)
+                } else {
+                    savePayTokenTxid(nep5SendBack.txid)
+                }
             } else {
-                savePayTokenTxid(nep5SendBack.txid)
+                toast(getString(R.string.send_qgas_error, topupOrderBean.payTokenSymbol))
+                closeProgressDialog()
             }
         })
     }

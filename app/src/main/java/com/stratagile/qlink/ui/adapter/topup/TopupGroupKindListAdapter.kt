@@ -4,14 +4,17 @@ import android.support.v7.widget.CardView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.stratagile.qlink.R
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupGroupKindList
+import com.stratagile.qlink.utils.SpUtil
 import java.math.BigDecimal
 
 class TopupGroupKindListAdapter(array: ArrayList<TopupGroupKindList.GroupKindListBean>) : BaseQuickAdapter<TopupGroupKindList.GroupKindListBean, BaseViewHolder>(R.layout.item_topup_group_kind, array) {
     lateinit var payToken: PayToken.PayTokenListBean
     override fun convert(helper: BaseViewHolder, item: TopupGroupKindList.GroupKindListBean) {
         var isCn = true
+        isCn = SpUtil.getInt(mContext, ConstantValue.Language, -1) == 1
         helper.setText(R.id.tvContent, mContext.getString(R.string._off_discount_partners, if (isCn){item.discount.toBigDecimal().multiply(BigDecimal.TEN).stripTrailingZeros().toPlainString()} else {(1.toBigDecimal() - item.discount.toBigDecimal()).multiply(100.toBigDecimal()).stripTrailingZeros().toPlainString()}, item.numberOfPeople.toString()))
 //        helper.setText(R.id.tvContent, (1.toBigDecimal() - item.discount.toBigDecimal()).multiply(100.toBigDecimal()).stripTrailingZeros().toPlainString() + "%off," + item.numberOfPeople + " discount partners")
         if (item.isSelected) {

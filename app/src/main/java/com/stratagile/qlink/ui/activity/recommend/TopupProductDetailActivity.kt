@@ -122,6 +122,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         var infoMap = mutableMapOf<String, String>()
         infoMap["productId"] = topupBean.id
         infoMap["localFiatMoney"] = topupBean.amountOfMoney
+        infoMap["deductionTokenId"] = selectToken.id
         infoMap["status"] = "PROCESSING"
         mPresenter.getTopupGroupList(infoMap)
     }
@@ -142,7 +143,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
     }
 
     override fun initData() {
-        title.text = "Order Details"
+        title.text = getString(R.string.group_plan_details)
         tvBuyTuan.setOnClickListener {
             startAnimationNew()
         }
@@ -238,7 +239,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         }
         map["productId"] = product.id
         map["localFiatAmount"] = product.amountOfMoney
-        map["phoneNumber"] = etContact.text.toString()
+        map["phoneNumber"] = intent.getStringExtra("phoneNumber")
         map["deductionTokenId"] = selectToken.id
         mPresenter.createTopupOrder(map)
     }
@@ -310,7 +311,13 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         rlPartTuan.visibility = View.VISIBLE
         currentSheetAnimation.start()
         tvConfirm.setOnClickListener {
-            joinGroup()
+
+            alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.amountOfMoney.toString(), selectedGroup.payTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString(), selectedGroup.payToken, selectedGroup.deductionTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString(), selectedGroup.deductionToken, topupBean.localFiat)) {
+                negativeButton(getString(R.string.cancel)) { dismiss() }
+                positiveButton(getString(R.string.buy_topup)) {
+                    joinGroup()
+                }
+            }.show()
         }
         tvJoinTuanPrice.text = selectedGroup.payTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString() + selectedGroup.payToken + "+" + selectedGroup.deductionTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString() + selectedGroup.deductionToken
     }
@@ -490,11 +497,11 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         val tvContent = view.findViewById<TextView>(R.id.tvContent)
         val imageView = view.findViewById<ImageView>(R.id.ivTitle)
         imageView.setImageDrawable(resources.getDrawable(R.mipmap.icon_liaojie_daili))
-        tvContent.text = "抵押的qlc数量少于1500个."
+        tvContent.text = getString(R.string.you_havenot_staked_1500_qlc_in_this_wallet)
         val sweetAlertDialog = SweetAlertDialog(this)
         val ivClose = view.findViewById<ImageView>(R.id.ivClose)
         val tvOk = view.findViewById<TextView>(R.id.tvOpreate)
-        tvOk.text = "去抵押"
+        tvOk.text = getString(R.string.stake_now)
         tvOk.setOnClickListener {
             startActivity(Intent(this@TopupProductDetailActivity, MyStakeActivity::class.java))
             sweetAlertDialog.cancel()
@@ -525,9 +532,10 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
             selectedGroup = topupGroupListAdapter.data[position]
             runDelayedOnUiThread(430) {
                 var isCn = true
+                isCn = SpUtil.getInt(this, ConstantValue.Language, -1) == 1
                 tvNeedPartners.text = getString(R.string._more_partner_needed, (topupGroupListAdapter.data[position].numberOfPeople - topupGroupListAdapter.data[position].joined).toString())
                 tvGroupInfo.text = getString(R.string._off_discount_partners, if (isCn){topupGroupListAdapter.data[position].discount.toBigDecimal().multiply(BigDecimal.TEN).stripTrailingZeros().toPlainString()} else {(1.toBigDecimal() - topupGroupListAdapter.data[position].discount.toBigDecimal()).multiply(100.toBigDecimal()).stripTrailingZeros().toPlainString()}, topupGroupListAdapter.data[position].numberOfPeople.toString())
-                tvRemainTime.setText(TimeUtil.getOrderTime(TimeUtil.timeStamp(topupGroupListAdapter.data[position].createDate) + (topupGroupListAdapter.data[position].duration * 60 * 1000)))
+                tvRemainTime.setText(getString(R.string.valid_till) + TimeUtil.getOrderTime(TimeUtil.timeStamp(topupGroupListAdapter.data[position].createDate) + (topupGroupListAdapter.data[position].duration * 60 * 1000)))
 
                 var headList = arrayListOf<String>()
                 topupGroupListAdapter.data[position].items?.forEach {
@@ -576,32 +584,27 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         dismiss()
         initData()
 
-        alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.amountOfMoney.toString(), topupJoinGroup.item.payTokenAmount.toString(), topupJoinGroup.item.payToken, topupJoinGroup.item.deductionTokenAmount.toString(), topupJoinGroup.item.deductionToken, topupBean.localFiat)) {
-            negativeButton(getString(R.string.cancel)) { dismiss() }
-            positiveButton(getString(R.string.buy_topup)) {
-                when(OtcUtils.parseChain(topupJoinGroup.item.deductionTokenChain)) {
-                    AllWallet.WalletType.QlcWallet -> {
-                        if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
-                            var payIntent = Intent(this@TopupProductDetailActivity, TopupDeductionQlcChainActivity::class.java)
-                            payIntent.putExtra("groupBean", topupJoinGroup.item)
-                            payIntent.putExtra("isGroup", true)
-                            startActivityForResult(payIntent, 1)
-                        } else {
-                            alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
-                                negativeButton(getString(R.string.cancel)) { dismiss() }
-                                positiveButton(getString(R.string.create)) { startActivity(Intent(this@TopupProductDetailActivity, SelectWalletTypeActivity::class.java)) }
-                            }.show()
-                        }
-                    }
-                    AllWallet.WalletType.EthWallet -> {
-                        var payIntent = Intent(this@TopupProductDetailActivity, TopupDeductionEthChainActivity::class.java)
-                        payIntent.putExtra("groupBean", topupJoinGroup.item)
-                        payIntent.putExtra("isGroup", true)
-                        startActivityForResult(payIntent, 1)
-                    }
+        when(OtcUtils.parseChain(topupJoinGroup.item.deductionTokenChain)) {
+            AllWallet.WalletType.QlcWallet -> {
+                if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                    var payIntent = Intent(this@TopupProductDetailActivity, TopupDeductionQlcChainActivity::class.java)
+                    payIntent.putExtra("groupBean", topupJoinGroup.item)
+                    payIntent.putExtra("isGroup", true)
+                    startActivityForResult(payIntent, 1)
+                } else {
+                    alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
+                        negativeButton(getString(R.string.cancel)) { dismiss() }
+                        positiveButton(getString(R.string.create)) { startActivity(Intent(this@TopupProductDetailActivity, SelectWalletTypeActivity::class.java)) }
+                    }.show()
                 }
             }
-        }.show()
+            AllWallet.WalletType.EthWallet -> {
+                var payIntent = Intent(this@TopupProductDetailActivity, TopupDeductionEthChainActivity::class.java)
+                payIntent.putExtra("groupBean", topupJoinGroup.item)
+                payIntent.putExtra("isGroup", true)
+                startActivityForResult(payIntent, 1)
+            }
+        }
     }
 
 }

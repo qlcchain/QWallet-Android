@@ -26,8 +26,8 @@ class TopupGroupItemAdapter(array: ArrayList<GroupItemList.ItemListBean>) : Base
     lateinit var payToken: PayToken.PayTokenListBean
     override fun convert(helper: BaseViewHolder, item: GroupItemList.ItemListBean) {
         helper.setText(R.id.tvOrderTime, TimeUtil.timeConvert(item.createDate))
-//        helper.setText(R.id.phoneNumber, item.areaCode + item.phoneNumber)
-//        helper.setText(R.id.price, item.localFiatMoney + item.localFiat)
+        helper.setText(R.id.phoneNumber, item.product.globalRoaming + item.phoneNumber)
+        helper.setText(R.id.price, item.product.localFiatMoney + item.product.localFiat)
         helper.setText(R.id.txid, item.deductionTokenInTxid)
         helper.setText(R.id.tvDeductionToken, item.deductionTokenAmount.toString()+ item.deductionToken)
 
@@ -50,10 +50,10 @@ class TopupGroupItemAdapter(array: ArrayList<GroupItemList.ItemListBean>) : Base
 
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {
             //英文
-//            helper.setText(R.id.opreator, item.productCountryEn + item.productProvinceEn + item.productIspEn + "-" + item.productNameEn)
+            helper.setText(R.id.opreator, item.product.countryEn + item.product.provinceEn + item.product.ispEn + "-" + item.product.productNameEn)
             helper.setImageResource(R.id.ivInvoiceDetail, R.mipmap.background_reim_en)
         } else {
-//            helper.setText(R.id.opreator, item.productCountry + item.productProvince + item.productIsp + "-" + item.productName)
+            helper.setText(R.id.opreator, item.product.country + item.product.province + item.product.isp + "-" + item.product.productName)
             helper.setImageResource(R.id.ivInvoiceDetail, R.mipmap.background_reim)
         }
 
@@ -84,7 +84,7 @@ class TopupGroupItemAdapter(array: ArrayList<GroupItemList.ItemListBean>) : Base
         when(item.status) {
             "NEW" -> {
                 helper.setGone(R.id.orderOpreate, true)
-                helper.setGone(R.id.cancelOrder, true)
+                helper.setGone(R.id.cancelOrder, false)
                 helper.setGone(R.id.tvPayNow, true)
                 helper.setText(R.id.orderState, mContext.getString(R.string.qgas_is_not_in_the_accounts, item.deductionToken))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
@@ -96,9 +96,9 @@ class TopupGroupItemAdapter(array: ArrayList<GroupItemList.ItemListBean>) : Base
                     helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
                 }
             }
-            "DEDUCTION_TOKENPAID" -> {
+            "DEDUCTION_TOKEN_PAID" -> {
                 helper.setGone(R.id.orderOpreate, true)
-                helper.setGone(R.id.cancelOrder, true)
+                helper.setGone(R.id.cancelOrder, false)
                 helper.setGone(R.id.tvPayNow, true)
                 helper.setText(R.id.orderState, mContext.getString(R.string.qgas_paid_not_in_the_telephone_fee))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
@@ -138,6 +138,14 @@ class TopupGroupItemAdapter(array: ArrayList<GroupItemList.ItemListBean>) : Base
             }
             "CANCEL" -> {
                 helper.setText(R.id.orderState, mContext.getString(R.string.canceled))
+                helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
+            }
+            "TIME_OUT_DOWN" -> {
+                helper.setText(R.id.orderState, mContext.getString(R.string.order_time_out_down))
+                helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
+            }
+            "TIME_OUT" -> {
+                helper.setText(R.id.orderState, mContext.getString(R.string.order_time_out))
                 helper.setTextColor(R.id.orderState, mContext.resources.getColor(R.color.color_ff3669))
             }
 

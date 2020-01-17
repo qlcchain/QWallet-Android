@@ -1,9 +1,7 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
-import com.stratagile.qlink.entity.topup.IspList
-import com.stratagile.qlink.entity.topup.PayToken
-import com.stratagile.qlink.entity.topup.TopupOrder
-import com.stratagile.qlink.entity.topup.TopupProduct
+import com.stratagile.qlink.entity.reward.Dict
+import com.stratagile.qlink.entity.topup.*
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -35,6 +33,10 @@ interface QurryMobileContract {
         fun setIsp(ispList: IspList)
 
         fun setProvinceList(ispList: IspList)
+
+        fun setGroupDate(dict: Dict, position : Int)
+
+        fun setGroupKindList(topupGroupKindList: TopupGroupKindList)
     }
 
     interface QurryMobileContractPresenter : BasePresenter {

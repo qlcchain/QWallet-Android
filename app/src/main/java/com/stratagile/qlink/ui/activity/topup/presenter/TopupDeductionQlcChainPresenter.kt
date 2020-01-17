@@ -142,13 +142,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
             mView.itemOrderStatus(it)
         }, {
             var topupOrder = TopupJoinGroup()
-            var orderBean = GroupItemList.ItemListBean()
-            topupOrder.item = orderBean
+            topupOrder.item = item
             mView.itemOrderStatus(topupOrder)
         }, {
             var topupOrder = TopupJoinGroup()
-            var orderBean = GroupItemList.ItemListBean()
-            topupOrder.item = orderBean
+            topupOrder.item = item
             mView.itemOrderStatus(topupOrder)
         }))
     }
