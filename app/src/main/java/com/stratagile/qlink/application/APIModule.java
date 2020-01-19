@@ -104,7 +104,7 @@ public final class APIModule {
     @Singleton
     public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         Retrofit.Builder builder = new Retrofit.Builder();
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)) {
             //主网
             builder.client(okHttpClient)
                     .baseUrl(MainAPI.MainBASE_URL)
