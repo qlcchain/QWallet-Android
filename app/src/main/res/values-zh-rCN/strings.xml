@@ -683,4 +683,5 @@
     <string name="referred">Referred</string>
     <string name="recharge_commission">充值佣金</string>
     <string name="group_plan_commission">团购佣金</string>
+    <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">成为 Q-Wallet 充值销售代理，\n得持续</font><font color="#108EE9">收益</font></string>
 </resources>

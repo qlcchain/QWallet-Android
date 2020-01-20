@@ -9,6 +9,7 @@ import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.topup.contract.TopUpContract
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment
+import io.reactivex.Observer
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -122,5 +123,17 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
                     KLog.i("onComplete")
                 })
         mCompositeDisposable.add(disposable)
+    }
+
+    fun queryDict(map: Map<*, *>?) {
+        httpAPIWrapper.qurryDict(map).subscribe(object : Observer<Dict?> {
+            override fun onSubscribe(d: Disposable) {}
+            override fun onNext(dict: Dict) {
+                mView.setProxyActivityBanner(dict)
+            }
+
+            override fun onError(e: Throwable) {}
+            override fun onComplete() {}
+        })
     }
 }

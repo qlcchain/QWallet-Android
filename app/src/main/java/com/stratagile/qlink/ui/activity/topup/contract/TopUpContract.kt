@@ -31,6 +31,7 @@ interface TopUpContract {
         fun setInviteRank(inviteList: InviteList)
 
         fun setOneFriendReward(dict: Dict)
+        fun setProxyActivityBanner(dict: Dict)
 
         fun setChartData(data: KLine)
 

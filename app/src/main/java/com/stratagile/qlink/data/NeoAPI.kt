@@ -37,7 +37,7 @@ class NeoNodeRPC {
             } else if (this == NEO) {
                 return "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
             } else if (this == QLC) {
-                if (SpUtil.getBoolean(AppConfig.instance, ConstantValue.isMainNet, false)) {
+                if (SpUtil.getBoolean(AppConfig.instance, ConstantValue.isMainNet, true)) {
                     return "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5"
                 } else {
                     return "b9d7ea3062e6aeeb3e8ad9548220c4ba1361d263"

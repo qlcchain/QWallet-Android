@@ -1534,7 +1534,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="stake_neo_wallet_not_found">The wallet of %1$s is none。</string>
     <string name="top_up">Top-up</string>
     <string name="make_more">Get more</string>
-    <string name="send_replenishment_to">Top up this number</string>
+    <string name="send_replenishment_to">Send recharge to</string>
     <string name="enter_your_phone_number_or_select_from_your_contacts">Enter a phone number or select a contact to quickly view available packages.</string>
     <string name="operator_package">Carrier mobile plan</string>
     <string name="check_out_your_exclusive_offer">Promotions</string>
@@ -1719,4 +1719,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="group_order_list">My Group Orders</string>
     <string name="recharge_commission">Recharge Commission</string>
     <string name="group_plan_commission">Group Plan Commission</string>
+    <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">Join the Q-Wallet recharge sales \npartner plan for </font><font color="#108EE9">COMMISSIONS</font></string>
 </resources>

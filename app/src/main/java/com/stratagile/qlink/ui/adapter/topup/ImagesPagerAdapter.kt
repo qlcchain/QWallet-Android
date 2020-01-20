@@ -16,6 +16,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity
 import com.stratagile.qlink.ui.activity.my.AccountActivity
+import com.stratagile.qlink.ui.activity.recommend.AgencyExcellenceActivity
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
 
 import java.util.zip.Inflater
@@ -68,6 +69,15 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
             view1.setOnClickListener {
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, MiningInviteActivity::class.java))
+                } else {
+                    context.startActivity(Intent(context, AccountActivity::class.java))
+                }
+            }
+        }
+        if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_banner_proxy_youxiang) {
+            view1.setOnClickListener {
+                if (ConstantValue.currentUser != null) {
+                    context.startActivity(Intent(context, AgencyExcellenceActivity::class.java))
                 } else {
                     context.startActivity(Intent(context, AccountActivity::class.java))
                 }

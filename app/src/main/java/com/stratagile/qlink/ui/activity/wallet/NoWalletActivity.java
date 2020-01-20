@@ -95,7 +95,7 @@ public class NoWalletActivity extends BaseActivity implements NoWalletContract.V
             tvTipTwo.setVisibility(View.GONE);
         }
         noWalletParent.setBackgroundResource(R.drawable.navigation_shape);
-        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
             showTestNetDialog();
         }
 //        if (fromType != null) {

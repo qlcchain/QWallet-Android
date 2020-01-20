@@ -94,6 +94,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         } else {
             tvQlcPrice.text = "¥ " + tokenPrice.data[0].price
         }
+        queryProxyActivity()
     }
 
     override fun setOneFriendReward(dict: Dict) {
@@ -103,6 +104,43 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         mPresenter.getProductList(map, true)
 
         oneFirendClaimQgas = dict.data.value.toFloat()
+    }
+
+    lateinit var proxyAcitivtyDict : Dict
+    override fun setProxyActivityBanner(dict: Dict) {
+        proxyAcitivtyDict = dict
+        if (!isStop) {
+            return
+        }
+        isStop = false
+        viewList.clear()
+        if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
+            viewList.add(R.layout.layout_finance_share)
+            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+            viewList.add(R.layout.layout_finance_earn_rank)
+            if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
+                viewList.add(R.layout.layout_banner_proxy_youxiang)
+            }
+        } else {
+            viewList.add(R.layout.layout_finance_share)
+            if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
+                viewList.add(R.layout.layout_banner_proxy_youxiang)
+            }
+        }
+        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
+        viewPager.adapter = viewAdapter
+        val scaleCircleNavigator = ScaleCircleNavigator(activity)
+        scaleCircleNavigator.setCircleCount(viewList.size)
+        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
+        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
+        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
+        indicator.navigator = scaleCircleNavigator
+        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
+
+        if (viewList.size > 1) {
+//            setFirstLocation()
+            autoPlayView()
+        }
     }
 
     override fun setInviteRank(inviteList: InviteList) {
@@ -138,8 +176,11 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         }).start()
     }
 
+    lateinit var showMiningAct : ShowMiningAct
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun setMiningAct(showMiningAct: ShowMiningAct) {
+        KLog.i("原先的活动轮播逻辑...")
+        this.showMiningAct = showMiningAct
         if (!isStop) {
             return
         }
@@ -148,11 +189,19 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         if (showMiningAct.isShow) {
             viewList.add(R.layout.layout_finance_share)
             ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
-//            var miningView = layoutInflater.inflate(R.layout.layout_finance_earn_rank, null, false)
-//            miningView.findViewById<TextView>(R.id.tvQlc).text = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
             viewList.add(R.layout.layout_finance_earn_rank)
+            if (this::proxyAcitivtyDict.isInitialized) {
+                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+                }
+            }
         } else {
             viewList.add(R.layout.layout_finance_share)
+            if (this::proxyAcitivtyDict.isInitialized) {
+                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+                }
+            }
         }
         val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
         viewPager.adapter = viewAdapter
@@ -391,6 +440,12 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 tvMonth.setTextColor(resources.getColor(R.color.mainColor))
             }
         }
+    }
+
+    fun queryProxyActivity() {
+        val infoMap: MutableMap<String, String> = HashMap()
+        infoMap["dictType"] = "app_dict"
+        mPresenter.queryDict(infoMap)
     }
 
     fun getQlcKline(type: String) {

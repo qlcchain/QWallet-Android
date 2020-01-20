@@ -1069,7 +1069,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         if (requestCode == START_SELECT_PICTURE && resultCode == RESULT_OK) {
 //            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
                 Glide.with(this)
                         .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)
@@ -1350,7 +1350,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     public void getAvatarSuccess(UpLoadAvatar upLoadAvatar) {
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
                 Glide.with(this)
                         .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)

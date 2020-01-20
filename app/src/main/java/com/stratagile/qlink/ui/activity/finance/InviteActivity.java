@@ -157,11 +157,11 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
         setTitle(getString(R.string.share_with_friends));
         if (ConstantValue.currentUser != null) {
             tvIniviteCode.setText(ConstantValue.currentUser.getInviteCode());
-            if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
-                //英文
-                ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_en));
-            } else {
+            if (SpUtil.getInt(this, ConstantValue.Language, -1) == 1) {
+                //中文
                 ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_ch));
+            } else {
+                ivTitle.setBackground(getResources().getDrawable(R.mipmap.ad_share_en));
             }
             getOneFriendReward();
         } else {

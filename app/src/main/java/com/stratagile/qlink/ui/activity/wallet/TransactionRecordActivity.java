@@ -126,7 +126,7 @@ public class TransactionRecordActivity extends BaseActivity implements Transacti
         ArrayList<TransactionRecord> transactionRecords = new ArrayList<>();
         while (iterator.hasNext()) {
             TransactionRecord transactionRecord = iterator.next();
-            if ((transactionRecord.getIsMainNet() && SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) || (!transactionRecord.getIsMainNet() && !SpUtil.getBoolean(this, ConstantValue.isMainNet, false))) {
+            if ((transactionRecord.getIsMainNet() && SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) || (!transactionRecord.getIsMainNet() && !SpUtil.getBoolean(this, ConstantValue.isMainNet, false))) {
                 //相同的网
                 transactionRecords.add(transactionRecord);
             } else {
