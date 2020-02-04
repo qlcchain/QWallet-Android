@@ -5,7 +5,8 @@ package com.stratagile.qlink.utils;
 
 import com.vondear.rxtools.RxEncodeTool;
 
-import org.spongycastle.util.encoders.Hex;
+
+import org.bouncycastle.util.encoders.Hex;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

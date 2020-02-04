@@ -68,7 +68,7 @@ public class ETHWalletUtils {
         String passphrase = "";
         long creationTimeSeconds = System.currentTimeMillis() / 1000;
 
-        DeterministicSeed ds = new DeterministicSeed(secureRandom, 128, passphrase, creationTimeSeconds);
+        DeterministicSeed ds = new DeterministicSeed(secureRandom, 128, passphrase);
         return generateWalletByMnemonic(ds, pathArray);
     }
 

@@ -10,6 +10,7 @@ import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.db.BuySellSellTodo;
+import com.stratagile.qlink.db.BnbWallet;
 import com.stratagile.qlink.db.VpnEntity;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.EthWallet;
@@ -25,6 +26,7 @@ import com.stratagile.qlink.db.UserAccount;
 
 import com.stratagile.qlink.db.TopupTodoListDao;
 import com.stratagile.qlink.db.BuySellSellTodoDao;
+import com.stratagile.qlink.db.BnbWalletDao;
 import com.stratagile.qlink.db.VpnEntityDao;
 import com.stratagile.qlink.db.VpnServerRecordDao;
 import com.stratagile.qlink.db.EthWalletDao;
@@ -49,6 +51,7 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig topupTodoListDaoConfig;
     private final DaoConfig buySellSellTodoDaoConfig;
+    private final DaoConfig bnbWalletDaoConfig;
     private final DaoConfig vpnEntityDaoConfig;
     private final DaoConfig vpnServerRecordDaoConfig;
     private final DaoConfig ethWalletDaoConfig;
@@ -64,6 +67,7 @@ public class DaoSession extends AbstractDaoSession {
 
     private final TopupTodoListDao topupTodoListDao;
     private final BuySellSellTodoDao buySellSellTodoDao;
+    private final BnbWalletDao bnbWalletDao;
     private final VpnEntityDao vpnEntityDao;
     private final VpnServerRecordDao vpnServerRecordDao;
     private final EthWalletDao ethWalletDao;
@@ -86,6 +90,9 @@ public class DaoSession extends AbstractDaoSession {
 
         buySellSellTodoDaoConfig = daoConfigMap.get(BuySellSellTodoDao.class).clone();
         buySellSellTodoDaoConfig.initIdentityScope(type);
+
+        bnbWalletDaoConfig = daoConfigMap.get(BnbWalletDao.class).clone();
+        bnbWalletDaoConfig.initIdentityScope(type);
 
         vpnEntityDaoConfig = daoConfigMap.get(VpnEntityDao.class).clone();
         vpnEntityDaoConfig.initIdentityScope(type);
@@ -125,6 +132,7 @@ public class DaoSession extends AbstractDaoSession {
 
         topupTodoListDao = new TopupTodoListDao(topupTodoListDaoConfig, this);
         buySellSellTodoDao = new BuySellSellTodoDao(buySellSellTodoDaoConfig, this);
+        bnbWalletDao = new BnbWalletDao(bnbWalletDaoConfig, this);
         vpnEntityDao = new VpnEntityDao(vpnEntityDaoConfig, this);
         vpnServerRecordDao = new VpnServerRecordDao(vpnServerRecordDaoConfig, this);
         ethWalletDao = new EthWalletDao(ethWalletDaoConfig, this);
@@ -140,6 +148,7 @@ public class DaoSession extends AbstractDaoSession {
 
         registerDao(TopupTodoList.class, topupTodoListDao);
         registerDao(BuySellSellTodo.class, buySellSellTodoDao);
+        registerDao(BnbWallet.class, bnbWalletDao);
         registerDao(VpnEntity.class, vpnEntityDao);
         registerDao(VpnServerRecord.class, vpnServerRecordDao);
         registerDao(EthWallet.class, ethWalletDao);
@@ -157,6 +166,7 @@ public class DaoSession extends AbstractDaoSession {
     public void clear() {
         topupTodoListDaoConfig.clearIdentityScope();
         buySellSellTodoDaoConfig.clearIdentityScope();
+        bnbWalletDaoConfig.clearIdentityScope();
         vpnEntityDaoConfig.clearIdentityScope();
         vpnServerRecordDaoConfig.clearIdentityScope();
         ethWalletDaoConfig.clearIdentityScope();
@@ -177,6 +187,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public BuySellSellTodoDao getBuySellSellTodoDao() {
         return buySellSellTodoDao;
+    }
+
+    public BnbWalletDao getBnbWalletDao() {
+        return bnbWalletDao;
     }
 
     public VpnEntityDao getVpnEntityDao() {

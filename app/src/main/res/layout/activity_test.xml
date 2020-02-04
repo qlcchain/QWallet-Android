@@ -9,28 +9,28 @@
         android:id="@+id/test"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:text="signBtc"
+        android:text="createBnb"
         android:layout_marginTop="@dimen/x100"
         android:gravity="center"
         android:background="@color/mainColor"
         android:layout_width="@dimen/x200"
         android:layout_height="@dimen/x80" />
     <TextView
-        android:id="@+id/getBtc"
+        android:id="@+id/getBnbTokens"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/x100"
         android:textColor="@color/white"
-        android:text="getBtc"
+        android:text="getBnbTokens"
         android:gravity="center"
         android:background="@color/mainColor"
         android:layout_width="@dimen/x200"
         android:layout_height="@dimen/x80" />
 
     <TextView
-        android:id="@+id/transferBtc"
+        android:id="@+id/getBnbAccount"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:text="transferBtc"
+        android:text="getBnbAccount"
         android:layout_marginTop="@dimen/x100"
         android:gravity="center"
         android:background="@color/mainColor"

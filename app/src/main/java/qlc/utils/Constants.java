@@ -76,6 +76,9 @@ public class Constants {
 	public static final int EXCEPTION_SYS_CODE_3003 = 3003;	
 	public static final String EXCEPTION_SYS_MSG_3003 = "Invalid node url";
 	
+	public static final int EXCEPTION_PUBLISH_BLOCK_CODE_4001 = 4001;	
+	public static final String EXCEPTION_PUBLISH_BLOCK_MSG_4001 = "Parameter error for publish block";
+	
 	// block type
 	public static final String BLOCK_TYPE_OPEN = "Open";
 	public static final String BLOCK_TYPE_SEND = "Send";

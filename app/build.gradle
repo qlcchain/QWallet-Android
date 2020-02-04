@@ -20,7 +20,7 @@ android {
         targetSdkVersion 29
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.4.4"
+        versionName "2.4.5"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -113,7 +113,7 @@ android {
     }
 
     greendao {
-        schemaVersion 75//数据库版本号
+        schemaVersion 76//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -272,7 +272,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.0'
     implementation 'com.pawegio.kandroid:kandroid:0.8.7@aar'
     implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.6'
-    implementation 'org.bitcoinj:bitcoinj-core:0.14.3'
+    implementation 'org.bitcoinj:bitcoinj-core:0.15.2'
     implementation 'com.google.android:flexbox:0.3.2'
     implementation files('libs/commons-collections-3.2.2.jar')
     implementation files('libs/commons-codec-1.9.jar')
@@ -312,6 +312,7 @@ dependencies {
 //    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
     implementation files('libs/jcore-android-2.1.6-google_play.jar')
     implementation files('libs/jpush-android-3.3.9-google_play.jar')
+    implementation files('libs/binance-dex-api-client.jar')
 
     implementation 'com.android.support:support-dynamic-animation:28.0.0'
 

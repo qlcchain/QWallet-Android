@@ -182,14 +182,24 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
                 sweetAlertDialog.dismissWithAnimation()
             }, 1000)
             tvSend.postDelayed({
-                when (OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
-                    AllWallet.WalletType.NeoWallet -> {
-                        var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
-                        payIntent.putExtra("order", topupOrder.order)
-                        startActivity(payIntent)
-                        setResult(Activity.RESULT_OK)
-                        finish()
+                if ("TOKEN".equals(topupOrderBean.payWay)) {
+                    when (OtcUtils.parseChain(topupOrderBean.payTokenChain)) {
+                        AllWallet.WalletType.NeoWallet -> {
+                            var payIntent = Intent(this, TopupPayNeoChainActivity::class.java)
+                            payIntent.putExtra("order", topupOrder.order)
+                            startActivity(payIntent)
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                        }
                     }
+                } else {
+                    var url = "https://shop.huagaotx.cn/vendor/third_pay/index.html?sid=8a51FmcnWGH-j2F-g9Ry2KT4FyZ_Rr5xcKdt7i96&trace_id=mm_1000001_${topupOrder.order.userId}_${topupOrder.order.id}&package=${topupOrder.order.originalPrice.toBigDecimal().stripTrailingZeros().toPlainString()}&mobile=${topupOrder.order.phoneNumber}"
+                    val intent = Intent(this, WebViewActivity::class.java)
+                    intent.putExtra("url", url)
+                    intent.putExtra("title", getString(R.string.payment))
+                    startActivityForResult(intent, 10)
+                    setResult(Activity.RESULT_OK)
+                    finish()
                 }
             }, 1500)
         }

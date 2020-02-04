@@ -14,21 +14,12 @@ import qlc.bean.Pending.PendingInfo;
 import qlc.bean.StateBlock;
 import qlc.bean.Token;
 import qlc.bean.TokenMeta;
-import qlc.mng.AccountMng;
-import qlc.mng.BlockMng;
-import qlc.mng.LedgerMng;
-import qlc.mng.PovMng;
-import qlc.mng.RewardsMng;
-import qlc.mng.TokenMetaMng;
-import qlc.mng.TokenMng;
-import qlc.mng.WalletMng;
 import qlc.network.QlcClient;
 import qlc.network.QlcException;
 import qlc.utils.Constants;
 import qlc.utils.Encodes;
 import qlc.utils.Helper;
 import qlc.utils.StringUtil;
-import qlc.utils.TimeUtil;
 import qlc.utils.WorkUtil;
 
 public class TransactionMng {
@@ -56,7 +47,7 @@ public class TransactionMng {
 		Token token = TokenMng.getTokenByTokenName(client, tokenName);
 		
 		// send address token info
-		TokenMeta tokenMeta = qlc.mng.TokenMetaMng.getTokenMeta(client, token.getTokenId(), from);
+		TokenMeta tokenMeta = TokenMetaMng.getTokenMeta(client, token.getTokenId(), from);
 		if (tokenMeta == null) {
 			throw new QlcException(Constants.EXCEPTION_CODE_1000, Constants.EXCEPTION_MSG_1000);
 		}
@@ -65,7 +56,7 @@ public class TransactionMng {
 		}
 		
 		// previous block info
-		StateBlock previousBlock = qlc.mng.LedgerMng.getBlockInfoByHash(client, Helper.hexStringToBytes(tokenMeta.getHeader()));
+		StateBlock previousBlock = LedgerMng.getBlockInfoByHash(client, Helper.hexStringToBytes(tokenMeta.getHeader()));
 		
 		// create send block
 		StateBlock block = new StateBlock(
@@ -74,8 +65,8 @@ public class TransactionMng {
 				from, 
 				tokenMeta.getBalance().subtract(amount),
 				tokenMeta.getHeader(), 
-				qlc.mng.AccountMng.addressToPublicKey(to),
-                System.currentTimeMillis()/1000,
+				AccountMng.addressToPublicKey(to), 
+				System.currentTimeMillis()/1000, 
 				tokenMeta.getRepresentative());
 		
 		if (StringUtil.isNotBlank(sender))
@@ -96,32 +87,32 @@ public class TransactionMng {
 		block.setNetwork((previousBlock.getNetwork()==null) ? new BigInteger("0") : previousBlock.getNetwork());
 		block.setStorage((previousBlock.getStorage()==null) ? new BigInteger("0") : previousBlock.getStorage());
 		block.setOracle((previousBlock.getOracle()==null) ? new BigInteger("0") : previousBlock.getOracle());
-		block.setPovHeight(qlc.mng.PovMng.getFittestHeader(client));
+		block.setPovHeight(PovMng.getFittestHeader(client));
 		if (StringUtil.isBlank(previousBlock.getExtra()))
 			block.setExtra(Constants.ZERO_HASH);
 		else
 			block.setExtra(previousBlock.getExtra());
 
 		// block hash
-		byte[] hash = qlc.mng.BlockMng.getHash(block);
+		byte[] hash = BlockMng.getHash(block);
 		if (hash==null || hash.length==0)
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2000, Constants.EXCEPTION_BLOCK_MSG_2000);
 
 		if (privateKey!=null && privateKey.length==64) {
 
 			// send address info
-			Address sendAddress = new Address(from, qlc.mng.AccountMng.addressToPublicKey(from), Helper.byteToHexString(privateKey));
+			Address sendAddress = new Address(from, AccountMng.addressToPublicKey(from), Helper.byteToHexString(privateKey));
 			
 			// set signature
 			String priKey = sendAddress.getPrivateKey().replace(sendAddress.getPublicKey(), "");
-			byte[] signature = qlc.mng.WalletMng.sign(hash, Helper.hexStringToBytes(priKey));
-			boolean signCheck = qlc.mng.WalletMng.verify(signature, hash, Helper.hexStringToBytes(sendAddress.getPublicKey()));
+			byte[] signature = WalletMng.sign(hash, Helper.hexStringToBytes(priKey));
+			boolean signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(sendAddress.getPublicKey()));
 			if (!signCheck)
 				throw new QlcException(Constants.EXCEPTION_CODE_1005, Constants.EXCEPTION_MSG_1005);
 			block.setSignature(Helper.byteToHexString(signature));
 			
 			// set work
-			String work = WorkUtil.generateWork(Helper.hexStringToBytes(qlc.mng.BlockMng.getRoot(block)));
+			String work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(block)));
 			block.setWork(work);
 		}
 		
@@ -143,24 +134,16 @@ public class TransactionMng {
 	public static JSONObject receiveBlock(QlcClient client, StateBlock sendBlock, String receiveAddress, byte[] privateKey) throws IOException {
 		
 		// the block hash
-		byte[] sendBlockHash = qlc.mng.BlockMng.getHash(sendBlock);
+		byte[] sendBlockHash = BlockMng.getHash(sendBlock);
 		
 		// Does the send block exist
-//		StateBlock tempBlock = qlc.mng.LedgerMng.getBlockInfoByHash(client, sendBlockHash);
-		if (sendBlock == null) {
+		StateBlock tempBlock = LedgerMng.getBlockInfoByHash(client, sendBlockHash);
+		if (tempBlock == null)
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2003, Constants.EXCEPTION_BLOCK_MSG_2003 + ", block hash[" + Helper.byteToHexString(sendBlockHash) + "]");
-		}
-
-		// is contract send block
-		if (Constants.BLOCK_TYPE_CONTRACTSEND.equals(sendBlock.getType()) && Constants.LINNK_TYPE_AIRDORP.equals(sendBlock.getLink())) {
-			// create reward block
-			StateBlock receiveBlock = RewardsMng.getReceiveRewardBlock(client, sendBlockHash);
-			return JSONObject.parseObject(new Gson().toJson(receiveBlock));
-		}
-
+		
 		// pending info
 		PendingInfo info = null;
-		Pending pending = qlc.mng.LedgerMng.getAccountPending(client, receiveAddress);
+		Pending pending = LedgerMng.getAccountPending(client, receiveAddress);
 		if (pending != null) {
 			List<PendingInfo> itemList = pending.getInfoList();
 			if (itemList!=null && itemList.size()>0) {
@@ -178,9 +161,15 @@ public class TransactionMng {
 		if (info == null)
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2005, Constants.EXCEPTION_BLOCK_MSG_2005);
 		
-
+		// is contract send block
+		if (Constants.BLOCK_TYPE_CONTRACTSEND.equals(sendBlock.getType()) && Constants.LINNK_TYPE_AIRDORP.equals(sendBlock.getLink())) {
+			// create reward block
+			StateBlock receiveBlock = RewardsMng.getReceiveRewardBlock(client, sendBlockHash);
+			return JSONObject.parseObject(new Gson().toJson(receiveBlock));
+		}
+		
 		// check the receive address
-		String tempReceiveAddress = qlc.mng.AccountMng.publicKeyToAddress(Helper.hexStringToBytes(sendBlock.getLink()));
+		String tempReceiveAddress = AccountMng.publicKeyToAddress(Helper.hexStringToBytes(sendBlock.getLink()));
 		if (!tempReceiveAddress.equals(receiveAddress))
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2000, Constants.EXCEPTION_BLOCK_MSG_2000 + ", receive address is [" + tempReceiveAddress + "]");
 		
@@ -189,7 +178,7 @@ public class TransactionMng {
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2002, Constants.EXCEPTION_BLOCK_MSG_2002 + ", block hash[" + Helper.byteToHexString(sendBlockHash) + "]");
 				
 		// has token meta
-		TokenMeta tokenMeta = qlc.mng.TokenMetaMng.getTokenMeta(client, sendBlock.getToken(), receiveAddress);
+		TokenMeta tokenMeta = TokenMetaMng.getTokenMeta(client, sendBlock.getToken(), receiveAddress);
 		boolean has = false;
 		if (tokenMeta != null) 
 			has = true;
@@ -197,7 +186,7 @@ public class TransactionMng {
 		// create receive block
 		StateBlock receiveBlock = new StateBlock();
 		if (has) {
-			StateBlock previousBlock = qlc.mng.LedgerMng.getBlockInfoByHash(client, Helper.hexStringToBytes(tokenMeta.getHeader()));// previous block info
+			StateBlock previousBlock = LedgerMng.getBlockInfoByHash(client, Helper.hexStringToBytes(tokenMeta.getHeader()));// previous block info
 			receiveBlock.setType(Constants.BLOCK_TYPE_RECEIVE);
 			receiveBlock.setAddress(receiveAddress);
 			receiveBlock.setBalance(tokenMeta.getBalance().add(info.getAmount()));
@@ -230,7 +219,7 @@ public class TransactionMng {
 			receiveBlock.setMessage(Constants.ZERO_HASH);
 		else
 			receiveBlock.setMessage(sendBlock.getMessage());
-		receiveBlock.setPovHeight(qlc.mng.PovMng.getFittestHeader(client));
+		receiveBlock.setPovHeight(PovMng.getFittestHeader(client));
 
 		if (privateKey!=null && privateKey.length==64) {
 			
@@ -241,15 +230,15 @@ public class TransactionMng {
 				throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2004, Constants.EXCEPTION_BLOCK_MSG_2004);
 			
 			// set signature
-			byte[] receiveBlockHash = qlc.mng.BlockMng.getHash(receiveBlock);
-			byte[] signature = qlc.mng.WalletMng.sign(receiveBlockHash, Helper.hexStringToBytes(priKey.replace(pubKey, "")));
-			boolean signCheck = qlc.mng.WalletMng.verify(signature, receiveBlockHash, Helper.hexStringToBytes(pubKey));
+			byte[] receiveBlockHash = BlockMng.getHash(receiveBlock);
+			byte[] signature = WalletMng.sign(receiveBlockHash, Helper.hexStringToBytes(priKey.replace(pubKey, "")));
+			boolean signCheck = WalletMng.verify(signature, receiveBlockHash, Helper.hexStringToBytes(pubKey));
 			if (!signCheck)
 				throw new QlcException(Constants.EXCEPTION_CODE_1005, Constants.EXCEPTION_MSG_1005);
 			receiveBlock.setSignature(Helper.byteToHexString(signature));
 			
 			// set work
-			String work = WorkUtil.generateWork(Helper.hexStringToBytes(qlc.mng.BlockMng.getRoot(receiveBlock)));
+			String work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(receiveBlock)));
 			receiveBlock.setWork(work);
 		}
 		
@@ -272,7 +261,7 @@ public class TransactionMng {
 	public static JSONObject changeBlock(QlcClient client, String address, String representative, String chainTokenHash, byte[] privateKey) throws IOException {
 		
 		// check representative
-		Account representativeInfo = qlc.mng.TokenMetaMng.getAccountMeta(client, representative);
+		Account representativeInfo = TokenMetaMng.getAccountMeta(client, representative);
 		if (representativeInfo == null)
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2006, Constants.EXCEPTION_BLOCK_MSG_2006 + "[" + representative + "]");
 		
@@ -325,8 +314,8 @@ public class TransactionMng {
 				throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2004, Constants.EXCEPTION_BLOCK_MSG_2004);
 			
 			// set signature
-			byte[] changeBlockHash = qlc.mng.BlockMng.getHash(changeBlock);
-			byte[] signature = qlc.mng.WalletMng.sign(changeBlockHash, Helper.hexStringToBytes(priKey.replace(pubKey, "")));
+			byte[] changeBlockHash = BlockMng.getHash(changeBlock);
+			byte[] signature = WalletMng.sign(changeBlockHash, Helper.hexStringToBytes(priKey.replace(pubKey, "")));
 			boolean signCheck = WalletMng.verify(signature, changeBlockHash, Helper.hexStringToBytes(pubKey));
 			if (!signCheck)
 				throw new QlcException(Constants.EXCEPTION_CODE_1005, Constants.EXCEPTION_MSG_1005);

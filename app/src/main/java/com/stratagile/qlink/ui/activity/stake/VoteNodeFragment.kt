@@ -68,7 +68,6 @@ import org.apache.commons.lang3.StringEscapeUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.spongycastle.crypto.tls.ContentType.alert
 import org.w3c.dom.Text
 import qlc.bean.StateBlock
 import qlc.mng.AccountMng
