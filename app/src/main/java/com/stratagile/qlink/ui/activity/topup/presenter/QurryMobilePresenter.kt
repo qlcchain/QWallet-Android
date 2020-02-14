@@ -33,7 +33,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Qurr
     }
 
     fun getProductList(map: MutableMap<String, String>) {
-        mCompositeDisposable.add(httpAPIWrapper.getTopupProductList(map).subscribe({
+        mCompositeDisposable.add(httpAPIWrapper.getTopupProductListV2(map).subscribe({
             mView.setProductList(it)
         }, {
             mView.closeProgressDialog()

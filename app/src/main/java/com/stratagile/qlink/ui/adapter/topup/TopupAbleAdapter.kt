@@ -18,7 +18,7 @@ class TopupAbleAdapter(array: ArrayList<TopupProduct.ProductListBean>) : BaseQui
     lateinit var payToken: PayToken.PayTokenListBean
     override fun convert(helper: BaseViewHolder, item: TopupProduct.ProductListBean) {
         helper.setText(R.id.tvFiat, item.localFiat)
-        helper.setText(R.id.tvPrice, item.amountOfMoney.toString())
+        helper.setText(R.id.tvPrice, item.localFiatAmount.toString())
         helper.setText(R.id.deductionTokenSymbol, payToken.symbol)
 
         if (SpUtil.getInt(mContext, ConstantValue.Language, -1) == 0) {

@@ -20,7 +20,7 @@ android {
         targetSdkVersion 29
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.4.5"
+        versionName "2.4.6"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -318,6 +318,8 @@ dependencies {
 
     implementation 'com.rfksystems:blake2b:1.0.0'
     implementation 'net.i2p.crypto:eddsa:0.3.0'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.8'
 
 }
 

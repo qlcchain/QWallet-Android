@@ -14,97 +14,98 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="match_parent">
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:background="@color/white"
-                android:layout_height="40dp">
+                android:layout_height="360dp">
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/contacts"
-                    android:layout_height="20dp"/>
+                    android:id="@+id/ivIsp"
+                    android:layout_width="match_parent"
+                    android:src="@mipmap/yidong"
+                    android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/tvIsp"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="@string/phone_number_"
-                    android:textSize="12sp"
-                    android:textColor="@color/color_1e1e24"
+                    android:layout_marginLeft="105dp"
+                    android:includeFontPadding="false"
+                    android:layout_marginTop="28dp"
+                    android:text="全国通用"
+                    android:textSize="42sp"
+                    android:textColor="@color/color_3191f0"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/tvPhoneNumber"
                     android:layout_width="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/color_1e1e24"
+                    android:layout_marginTop="252dp"
+                    android:includeFontPadding="false"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/phone_top_up"
+                    android:textSize="29sp"
+                    android:textColor="@color/white"
                     android:layout_height="wrap_content"/>
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="290dp"
+                    android:includeFontPadding="false"
+                    android:layout_centerHorizontal="true"
+                    android:text="¥100"
+                    android:textSize="61sp"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:background="@color/white"
-                android:layout_marginTop="10dp"
-                android:layout_height="135dp">
-                <TextView
-                    android:id="@+id/tvCountry"
-                    android:layout_width="wrap_content"
-                    android:drawableLeft="@mipmap/location_1"
-                    android:layout_marginLeft="15dp"
-                    android:drawablePadding="6dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Indonesia"
-                    android:layout_height="wrap_content"/>
+                android:layout_height="73dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="15dp"
+                    android:orientation="vertical"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.CardView
-                        android:layout_width="86dp"
-                        app:cardCornerRadius="6dp"
-                        app:cardElevation="0dp"
-                        android:layout_height="71dp">
-                        <ImageView
-                            android:id="@+id/ivProduct"
-                            android:layout_width="86dp"
-                            android:layout_height="71dp"/>
-                    </android.support.v7.widget.CardView>
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="12dp"
                         android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/tvTokenCount"
                             android:layout_width="wrap_content"
-                            android:textColor="@color/mainColor"
+                            android:textColor="@color/color_f63870"
                             android:text="800QLC+5QGAS"
-                            android:textSize="13sp"
+                            android:textSize="15sp"
                             android:layout_height="wrap_content"/>
+
                         <TextView
-                            android:id="@+id/tvUseArea"
-                            android:layout_width="wrap_content"
-                            android:text="All Operators in Indonesia"
-                            android:textSize="13sp"
-                            android:textColor="@color/color_1e1e24"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/tvPhoneNumber1"
-                            android:layout_width="wrap_content"
-                            android:textColor="@color/color_808080"
+                            android:id="@+id/tvPriceOrgin"
+                            android:layout_marginLeft="4dp"
+                            android:textColor="@color/color_575757"
                             android:textSize="12sp"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/tvChargeAmount"
                             android:layout_width="wrap_content"
-                            android:text="@string/recharge_phone_bill_1"
-                            android:textColor="@color/color_808080"
-                            android:textSize="12sp"
+                            android:layout_height="wrap_content"/>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:id="@+id/tvOrderTimes"
+                            android:layout_width="wrap_content"
+                            android:textSize="13sp"
+                            android:textColor="@color/color_575757"
+                            android:layout_marginRight="17dp"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvOperator"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_2b2b2b"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

@@ -6,7 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.binance.dex.api.client.BinanceDexApiClientFactory;
+import com.binance.dex.api.client.BinanceDexApiNodeClient;
 import com.binance.dex.api.client.BinanceDexEnvironment;
+import com.binance.dex.api.client.domain.Account;
+import com.binance.dex.api.client.domain.TransactionMetadata;
+import com.binance.dex.api.client.domain.broadcast.TransactionOption;
+import com.binance.dex.api.client.domain.broadcast.Transfer;
 import com.binance.dex.api.client.encoding.Crypto;
 import com.socks.library.KLog;
 import com.stratagile.qlink.DSBridge.JsApi;
@@ -41,6 +47,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,8 +80,8 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     @BindView(R.id.getBnbTokens)
     TextView getBnbTokens;
 
-    @BindView(R.id.importBtc)
-    TextView importBtc;
+    @BindView(R.id.transferBnb)
+    TextView transferBnb;
 
     @BindView(R.id.webview)
     DWebView webview;
@@ -129,17 +136,50 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         progressDialog.hide();
     }
 
-    @OnClick({R.id.getBnbTokens, R.id.getBnbAccount, R.id.test, R.id.importBtc})
+    @OnClick({R.id.getBnbTokens, R.id.getBnbAccount, R.id.test, R.id.transferBnb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.getBnbTokens:
 
                 break;
             case R.id.getBnbAccount:
-
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BinanceDexApiNodeClient binanceDexNodeApi = null;
+                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(),BinanceDexEnvironment.PROD.getHrp());
+                        String address = bnbWallet.getAddress();
+                        Account account = binanceDexNodeApi.getAccount(address);
+                        KLog.i(account);
+                    }
+                }).start();
                 break;
-            case R.id.importBtc:
-
+            case R.id.transferBnb:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BinanceDexApiNodeClient binanceDexNodeApi = null;
+                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(),BinanceDexEnvironment.PROD.getHrp());
+                        com.binance.dex.api.client.Wallet walletSender = new com.binance.dex.api.client.Wallet(bnbWallet.getPrivateKey(), BinanceDexEnvironment.PROD);
+                        walletSender.initAccount(binanceDexNodeApi);
+                        Transfer transfer = new Transfer();
+                        transfer.setAmount("10");
+                        transfer.setCoin("MATIC-84A");
+                        transfer.setFromAddress(walletSender.getAddress());
+                        transfer.setToAddress("bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23");
+                        System.out.println(transfer.toString());
+                        TransactionOption options = new TransactionOption("101252674", 0, null);
+                        List<TransactionMetadata> resp = null;
+                        try {
+                            resp = binanceDexNodeApi.transfer(transfer, walletSender, options, true);
+                            System.out.println(resp.get(0));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 break;
             case R.id.test:
                 createBnbWallet();

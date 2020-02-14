@@ -2,17 +2,22 @@ package com.stratagile.qlink.ui.activity.recommend
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Environment
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Interpolator
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.runDelayedOnUiThread
 import com.socks.library.KLog
@@ -20,7 +25,6 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
-import com.stratagile.qlink.data.api.MainAPI
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.topup.*
 import com.stratagile.qlink.ui.activity.finance.InviteActivity
@@ -29,17 +33,18 @@ import com.stratagile.qlink.ui.activity.recommend.contract.TopupProductDetailCon
 import com.stratagile.qlink.ui.activity.recommend.module.TopupProductDetailModule
 import com.stratagile.qlink.ui.activity.recommend.presenter.TopupProductDetailPresenter
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
+import com.stratagile.qlink.ui.activity.topup.TopupConfirmGroupOrderActivity
 import com.stratagile.qlink.ui.activity.topup.TopupDeductionEthChainActivity
 import com.stratagile.qlink.ui.activity.topup.TopupDeductionQlcChainActivity
+import com.stratagile.qlink.ui.activity.topup.TopupSelectDeductionTokenActivity
 import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.ui.adapter.topup.TopupGroupKindListAdapter
 import com.stratagile.qlink.ui.adapter.topup.TopupGroupListAdapter
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.activity_qurry_mobile.*
 import kotlinx.android.synthetic.main.activity_topup_product_detail.*
 import kotlinx.android.synthetic.main.activity_topup_product_detail.recyclerView
-import kotlinx.android.synthetic.main.activity_topup_product_detail.tvCountry
+import kotlinx.android.synthetic.main.fragment_topup.*
 import java.io.File
 import java.math.BigDecimal
 import java.util.*
@@ -78,50 +83,12 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         rlNewPartTuan.setBackgroundDrawable(backDrawableNew)
         topupBean = intent.getParcelableExtra("productBean")
         selectToken = intent.getParcelableExtra("selectedPayToken")
-        tvPhoneNumber.text = intent.getStringExtra("globalRoaming") + " " + intent.getStringExtra("phoneNumber")
-
-        var deductionTokenPrice = 0.toDouble()
-        if ("CNY".equals(topupBean.payFiat)) {
-            deductionTokenPrice = selectToken.price
-        } else if ("USD".equals(topupBean.payFiat)) {
-            deductionTokenPrice = selectToken.usdPrice
-        }
-
-
-        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
-        var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
-
-        var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
-        var zhifudaibijine = zhifufabijine - dikoubijine
-        var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupBean.payFiat)) {
-            topupBean.payTokenCnyPrice.toBigDecimal()
-        } else {
-            topupBean.payTokenUsdPrice.toBigDecimal()
-        }, 3, BigDecimal.ROUND_HALF_UP)
-
-        tvTokenCount.text = zhifubishuliang.stripTrailingZeros().toPlainString() + topupBean.payTokenSymbol + "+" + dikoubishuliang.stripTrailingZeros().toPlainString() + selectToken.symbol
-        tvUseArea.text = topupBean.isp + " in " + topupBean.country
-        tvPhoneNumber1.text = getString(R.string.phone_number_) + intent.getStringExtra("globalRoaming") + " " + intent.getStringExtra("phoneNumber")
-        tvChargeAmount.text = getString(R.string.recharge_phone_bill_1) + topupBean.localFiat + " " + topupBean.amountOfMoney
-        tvCountry.text = topupBean.country
-        Glide.with(this)
-                .load(AppConfig.instance.baseUrl + topupBean.imgPath.replace("/dapp", ""))
-                .apply(AppConfig.getInstance().optionsTopup)
-                .into(ivProduct)
-        Glide.with(this)
-                .load(AppConfig.instance.baseUrl + topupBean.imgPath.replace("/dapp", ""))
-                .apply(AppConfig.getInstance().optionsTopup)
-                .into(ivProduct1New)
-        Glide.with(this)
-                .load(AppConfig.instance.baseUrl + topupBean.imgPath.replace("/dapp", ""))
-                .apply(AppConfig.getInstance().optionsTopup)
-                .into(ivProduct1)
     }
 
     fun getGroupList() {
         var infoMap = mutableMapOf<String, String>()
         infoMap["productId"] = topupBean.id
-        infoMap["localFiatMoney"] = topupBean.amountOfMoney
+        infoMap["localFiatMoney"] = topupBean.localFiatAmount
         infoMap["deductionTokenId"] = selectToken.id
         infoMap["status"] = "PROCESSING"
         mPresenter.getTopupGroupList(infoMap)
@@ -143,6 +110,81 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
     }
 
     override fun initData() {
+        var deductionTokenPrice = 0.toDouble()
+        if ("CNY".equals(topupBean.payFiat)) {
+            deductionTokenPrice = selectToken.price
+        } else if ("USD".equals(topupBean.payFiat)) {
+            deductionTokenPrice = selectToken.usdPrice
+        }
+        tvPrice.text = topupBean.localFiatAmount.toString() + topupBean.localFiat
+        if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
+            KLog.i("设置为英文")
+            tvIsp.text = topupBean.ispEn
+            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn, tvOperator)
+            //tvOperator.text = topupBean.countryEn + topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn
+        } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 1) {
+            KLog.i("设置为中文")
+            TextUtil.setGroupInfo(topupBean.country, topupBean.isp + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explain, tvOperator)
+            //tvOperator.text = topupBean.country + topupBean.isp + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explain
+            tvIsp.text = topupBean.isp
+        } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 2) {
+            KLog.i("设置为印度尼西亚")
+            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn, tvOperator)
+            //tvOperator.text = topupBean.countryEn + topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn
+            tvIsp.text = topupBean.ispEn
+        }
+        when(topupBean.ispEn.trim()) {
+            "Starhub" -> {
+                ivIsp.setImageResource(R.mipmap.starhub)
+            }
+            "M1" -> {
+                ivIsp.setImageResource(R.mipmap.m1)
+            }
+            "Singtel" -> {
+                ivIsp.setImageResource(R.mipmap.singtel)
+            }
+            "All Operators in Indonesia" -> {
+                ivIsp.setImageResource(R.mipmap.telkom)
+            }
+            "All Operators in China" -> {
+                ivIsp.setImageResource(R.mipmap.quanguo)
+            }
+        }
+
+
+        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
+        var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+
+        var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
+        var zhifudaibijine = zhifufabijine - dikoubijine
+        var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupBean.payFiat)) {
+            topupBean.payTokenCnyPrice.toBigDecimal()
+        } else {
+            topupBean.payTokenUsdPrice.toBigDecimal()
+        }, 3, BigDecimal.ROUND_HALF_UP)
+
+        tvTokenCount.text = zhifubishuliang.stripTrailingZeros().toPlainString() + topupBean.payTokenSymbol + "+" + dikoubishuliang.stripTrailingZeros().toPlainString() + selectToken.symbol
+
+
+        var orginZhifufabishuliang = zhifufabijine.divide(if ("CNY".equals(topupBean.payFiat)){topupBean.payTokenCnyPrice.toBigDecimal()} else {topupBean.payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
+        tvPriceOrgin.text = orginZhifufabishuliang.stripTrailingZeros().toPlainString() + topupBean.payTokenSymbol
+        tvPriceOrgin.paint.isAntiAlias = true
+        tvPriceOrgin.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+
+        if (topupBean.orderTimes > 100) {
+            tvOrderTimes.text = getString(R.string.xxx_open, topupBean.orderTimes.toString().trim())
+        } else {
+            tvOrderTimes.text = getString(R.string.xxx_open, "100+")
+        }
+        Glide.with(this)
+                .load(AppConfig.instance.baseUrl + topupBean.imgPath.replace("/dapp", ""))
+                .apply(AppConfig.getInstance().optionsTopup)
+                .into(ivProduct1New)
+        Glide.with(this)
+                .load(AppConfig.instance.baseUrl + topupBean.imgPath.replace("/dapp", ""))
+                .apply(AppConfig.getInstance().optionsTopup)
+                .into(ivProduct1)
+
         title.text = getString(R.string.group_plan_details)
         tvBuyTuan.setOnClickListener {
             startAnimationNew()
@@ -167,7 +209,12 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         getGroupList()
 
         tvBuySelf.setOnClickListener {
-            buySelf()
+            var confirmIntent = Intent(this@TopupProductDetailActivity, TopupConfirmGroupOrderActivity::class.java)
+            confirmIntent.putExtra("buySelf", true)
+            confirmIntent.putExtra("productBean", topupBean)
+            confirmIntent.putExtra("selectedPayToken", selectToken)
+            startActivityForResult(confirmIntent, 10)
+            //buySelf()
         }
     }
 
@@ -189,7 +236,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
             topupBean.payTokenUsdPrice.toBigDecimal()
         }, 3, BigDecimal.ROUND_HALF_UP)
 
-        alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupBean.payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectToken.symbol, topupBean.localFiat)) {
+        alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.localFiatAmount.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupBean.payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectToken.symbol, topupBean.localFiat)) {
             negativeButton(getString(R.string.cancel)) { dismiss() }
             positiveButton(getString(R.string.buy_topup)) {
                 if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
@@ -238,7 +285,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
             map["p2pId"] = topUpP2pId
         }
         map["productId"] = product.id
-        map["localFiatAmount"] = product.amountOfMoney
+        map["localFiatAmount"] = product.localFiatAmount
         map["phoneNumber"] = intent.getStringExtra("phoneNumber")
         map["deductionTokenId"] = selectToken.id
         mPresenter.createTopupOrder(map)
@@ -312,7 +359,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         currentSheetAnimation.start()
         tvConfirm.setOnClickListener {
 
-            alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.amountOfMoney.toString(), selectedGroup.payTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString(), selectedGroup.payToken, selectedGroup.deductionTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString(), selectedGroup.deductionToken, topupBean.localFiat)) {
+            alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.localFiatAmount.toString(), selectedGroup.payTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString(), selectedGroup.payToken, selectedGroup.deductionTokenAmount.toBigDecimal().stripTrailingZeros().toPlainString(), selectedGroup.deductionToken, topupBean.localFiat)) {
                 negativeButton(getString(R.string.cancel)) { dismiss() }
                 positiveButton(getString(R.string.buy_topup)) {
                     joinGroup()
@@ -329,7 +376,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         map.put("token", UserUtils.getUserToken(ConstantValue.currentUser))
         map["groupKindId"] = selectedGroupKind.id
         map["productId"] = topupBean.id
-        map["localFiatMoney"] = topupBean.amountOfMoney
+        map["localFiatMoney"] = topupBean.localFiatAmount
         map["deductionTokenId"] = selectToken.id
         mPresenter.createGroup(map)
     }
@@ -530,52 +577,57 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         tvRemainTime.text = ""
         topupGroupListAdapter.setOnItemChildClickListener { adapter, view, position ->
             selectedGroup = topupGroupListAdapter.data[position]
-            runDelayedOnUiThread(430) {
-                var isCn = true
-                isCn = SpUtil.getInt(this, ConstantValue.Language, -1) == 1
-                tvNeedPartners.text = getString(R.string._more_partner_needed, (topupGroupListAdapter.data[position].numberOfPeople - topupGroupListAdapter.data[position].joined).toString())
-                tvGroupInfo.text = getString(R.string._off_discount_partners, if (isCn){topupGroupListAdapter.data[position].discount.toBigDecimal().multiply(BigDecimal.TEN).stripTrailingZeros().toPlainString()} else {(1.toBigDecimal() - topupGroupListAdapter.data[position].discount.toBigDecimal()).multiply(100.toBigDecimal()).stripTrailingZeros().toPlainString()}, topupGroupListAdapter.data[position].numberOfPeople.toString())
-                tvRemainTime.setText(getString(R.string.valid_till) + TimeUtil.getOrderTime(TimeUtil.timeStamp(topupGroupListAdapter.data[position].createDate) + (topupGroupListAdapter.data[position].duration * 60 * 1000)))
-
-                var headList = arrayListOf<String>()
-                topupGroupListAdapter.data[position].items?.forEach {
-                    headList.add(it.head)
-                }
-                headList.add(topupGroupListAdapter.data[position].head)
-                var allMargin = UIUtils.dip2px(20f, this@TopupProductDetailActivity)
-
-                var leftMargin = 0
-                if (headList.size > 1) {
-                    leftMargin = allMargin / (headList.size - 1)
-                }
-                headList.forEachIndexed { index, s ->
-                    var imageView = ImageView(this@TopupProductDetailActivity)
-                    var lp = RelativeLayout.LayoutParams(UIUtils.dip2px(32f, this@TopupProductDetailActivity), UIUtils.dip2px(32f, this@TopupProductDetailActivity))
-                    lp.leftMargin = index * leftMargin
-                    imageView.layoutParams = lp
-                    KLog.i(AppConfig.instance.baseUrl + s)
-                    Glide.with(this@TopupProductDetailActivity)
-                            .load(MainAPI.MainBASE_URL + s)
-                            .apply(AppConfig.getInstance().optionsWhiteColor)
-                            .into(imageView)
-                    rlAvatar.addView(imageView)
-
-
-                    if (index == headList.size - 1) {
-                        var imageView1 = ImageView(this@TopupProductDetailActivity)
-                        var lp1 = RelativeLayout.LayoutParams(UIUtils.dip2px(12f, this@TopupProductDetailActivity), UIUtils.dip2px(12f, this@TopupProductDetailActivity))
-                        lp1.leftMargin = index * leftMargin + (UIUtils.dip2px(32f, this@TopupProductDetailActivity) - UIUtils.dip2px(12f, this@TopupProductDetailActivity))
-                        lp1.topMargin = UIUtils.dip2px(32f, this@TopupProductDetailActivity) - UIUtils.dip2px(12f, this@TopupProductDetailActivity)
-                        imageView1.layoutParams = lp1
-                        Glide.with(this@TopupProductDetailActivity)
-                                .load(R.mipmap.label_regimental)
-                                .apply(RequestOptions().centerCrop())
-                                .into(imageView1)
-                        rlAvatar.addView(imageView1)
-                    }
-                }
-            }
-            startAnimation()
+            var confirmIntent = Intent(this@TopupProductDetailActivity, TopupConfirmGroupOrderActivity::class.java)
+            confirmIntent.putExtra("productBean", topupBean)
+            confirmIntent.putExtra("selectedPayToken", selectToken)
+            confirmIntent.putExtra("group", selectedGroup)
+            startActivityForResult(confirmIntent, 10)
+//            runDelayedOnUiThread(430) {
+//                var isCn = true
+//                isCn = SpUtil.getInt(this, ConstantValue.Language, -1) == 1
+//                tvNeedPartners.text = getString(R.string._more_partner_needed, (topupGroupListAdapter.data[position].numberOfPeople - topupGroupListAdapter.data[position].joined).toString())
+//                tvGroupInfo.text = getString(R.string._off_discount_partners, if (isCn){topupGroupListAdapter.data[position].discount.toBigDecimal().multiply(BigDecimal.TEN).stripTrailingZeros().toPlainString()} else {(1.toBigDecimal() - topupGroupListAdapter.data[position].discount.toBigDecimal()).multiply(100.toBigDecimal()).stripTrailingZeros().toPlainString()}, topupGroupListAdapter.data[position].numberOfPeople.toString())
+//                tvRemainTime.setText(getString(R.string.valid_till) + TimeUtil.getOrderTime(TimeUtil.timeStamp(topupGroupListAdapter.data[position].createDate) + (topupGroupListAdapter.data[position].duration * 60 * 1000)))
+//
+//                var headList = arrayListOf<String>()
+//                topupGroupListAdapter.data[position].items?.forEach {
+//                    headList.add(it.head)
+//                }
+//                headList.add(topupGroupListAdapter.data[position].head)
+//                var allMargin = UIUtils.dip2px(20f, this@TopupProductDetailActivity)
+//
+//                var leftMargin = 0
+//                if (headList.size > 1) {
+//                    leftMargin = allMargin / (headList.size - 1)
+//                }
+//                headList.forEachIndexed { index, s ->
+//                    var imageView = ImageView(this@TopupProductDetailActivity)
+//                    var lp = RelativeLayout.LayoutParams(UIUtils.dip2px(32f, this@TopupProductDetailActivity), UIUtils.dip2px(32f, this@TopupProductDetailActivity))
+//                    lp.leftMargin = index * leftMargin
+//                    imageView.layoutParams = lp
+//                    KLog.i(AppConfig.instance.baseUrl + s)
+//                    Glide.with(this@TopupProductDetailActivity)
+//                            .load(MainAPI.MainBASE_URL + s)
+//                            .apply(AppConfig.getInstance().optionsWhiteColor)
+//                            .into(imageView)
+//                    rlAvatar.addView(imageView)
+//
+//
+//                    if (index == headList.size - 1) {
+//                        var imageView1 = ImageView(this@TopupProductDetailActivity)
+//                        var lp1 = RelativeLayout.LayoutParams(UIUtils.dip2px(12f, this@TopupProductDetailActivity), UIUtils.dip2px(12f, this@TopupProductDetailActivity))
+//                        lp1.leftMargin = index * leftMargin + (UIUtils.dip2px(32f, this@TopupProductDetailActivity) - UIUtils.dip2px(12f, this@TopupProductDetailActivity))
+//                        lp1.topMargin = UIUtils.dip2px(32f, this@TopupProductDetailActivity) - UIUtils.dip2px(12f, this@TopupProductDetailActivity)
+//                        imageView1.layoutParams = lp1
+//                        Glide.with(this@TopupProductDetailActivity)
+//                                .load(R.mipmap.label_regimental)
+//                                .apply(RequestOptions().centerCrop())
+//                                .into(imageView1)
+//                        rlAvatar.addView(imageView1)
+//                    }
+//                }
+//            }
+//            startAnimation()
         }
     }
 
@@ -603,6 +655,70 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
                 payIntent.putExtra("groupBean", topupJoinGroup.item)
                 payIntent.putExtra("isGroup", true)
                 startActivityForResult(payIntent, 1)
+            }
+        }
+    }
+
+    lateinit var menu: Menu
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.deduction_menu, menu)
+        this.menu = menu
+        val simpleTarget: SimpleTarget<Drawable> = object : SimpleTarget<Drawable>() {
+            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                menu.findItem(R.id.deduction).icon = resource
+            }
+        }
+
+        if ("".equals(selectToken.logo_png)) {
+            Glide.with(this)
+                    .load(resources.getIdentifier(selectToken.symbol.toLowerCase(), "mipmap", packageName))
+                    .apply(AppConfig.instance.optionsTopup)
+                    .into(simpleTarget)
+        } else {
+            Glide.with(this)
+                    .load(selectToken.logo_png)
+                    .apply(AppConfig.instance.optionsTopup)
+                    .into(simpleTarget)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.deduction -> {
+                startActivityForResult(Intent(this, TopupSelectDeductionTokenActivity::class.java),11)
+            }
+            else -> {
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 11 && resultCode == Activity.RESULT_OK) {
+            val simpleTarget: SimpleTarget<Drawable> = object : SimpleTarget<Drawable>() {
+                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                    menu.findItem(R.id.deduction).icon = resource
+                }
+            }
+
+            selectToken = data!!.getParcelableExtra("selectPayToken")
+            if ("".equals(selectToken.logo_png)) {
+                Glide.with(this)
+                        .load(this.resources.getIdentifier(selectToken.symbol.toLowerCase(), "mipmap", packageName))
+                        .apply(AppConfig.instance.optionsTopup)
+                        .into(simpleTarget)
+            } else {
+                Glide.with(this)
+                        .load(selectToken.logo_png)
+                        .apply(AppConfig.instance.optionsTopup)
+                        .into(simpleTarget)
+            }
+            initData()
+        } else {
+            if (resultCode == Activity.RESULT_OK) {
+                finish()
             }
         }
     }

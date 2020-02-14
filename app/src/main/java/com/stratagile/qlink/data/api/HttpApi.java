@@ -84,6 +84,7 @@ import com.stratagile.qlink.entity.topup.CreateGroup;
 import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.ProductListV2;
 import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.entity.topup.TopupGroupKindList;
 import com.stratagile.qlink.entity.topup.TopupGroupList;
@@ -169,6 +170,7 @@ import static com.stratagile.qlink.data.api.API.url_topup_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order_confirm;
 import static com.stratagile.qlink.data.api.API.url_topup_order_list;
 import static com.stratagile.qlink.data.api.API.url_topup_productlist;
+import static com.stratagile.qlink.data.api.API.url_topup_productlist_v2;
 import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
@@ -604,6 +606,10 @@ public interface HttpApi {
     @POST(url_topup_productlist)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupProduct> getTopupProductList(@Body RequestBody map);
+
+    @POST(url_topup_productlist_v2)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ProductListV2> getTopupProductListV2(@Body RequestBody map);
 
     @POST(url_topup_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})

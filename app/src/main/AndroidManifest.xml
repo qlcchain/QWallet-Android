@@ -617,6 +617,8 @@
         <activity android:name=".ui.activity.recommend.TopupProductDetailActivity" />
         <activity android:name=".ui.activity.recommend.MyTopupGroupActivity" />
         <activity android:name=".ui.activity.recommend.GroupExplainActivity" />
+        <activity android:name=".ui.activity.topup.TopupConfirmGroupOrderActivity" />
+        <activity android:name=".ui.activity.topup.TopupSelectDeductionTokenActivity" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

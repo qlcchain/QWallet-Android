@@ -22,7 +22,7 @@ interface QurryMobileContract {
          */
         fun closeProgressDialog()
 
-        fun setProductList(topupProduct: TopupProduct)
+        fun setProductList(topupProduct: ProductListV2)
 
         fun setPayTokenAdapter(payToken: PayToken)
 

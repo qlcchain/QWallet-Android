@@ -930,6 +930,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setTextColor(getResources().getColor(R.color.white));
         statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
         rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        statusBar.setVisibility(View.GONE);
+        rl1.setVisibility(View.GONE);
         ivAvater.setVisibility(View.VISIBLE);
         Glide.with(this)
                 .load(R.mipmap.add_j)
@@ -956,6 +958,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setTextColor(getResources().getColor(R.color.white));
         statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
         rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        statusBar.setVisibility(View.VISIBLE);
+        rl1.setVisibility(View.VISIBLE);
         ivAvater.setVisibility(View.VISIBLE);
         Glide.with(this)
                 .load(R.mipmap.add_j)
@@ -975,12 +979,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
 //            return;
 //        }
-        financeCome.setVisibility(View.GONE);
-        dangqianshijian = Calendar.getInstance().getTimeInMillis();
-        KLog.i("进入钱包页面。。");
-        ivWallet.setVisibility(View.VISIBLE);
-        tvTitle.setVisibility(View.VISIBLE);
-        segmentControlView.setVisibility(View.GONE);
 
         if (ConstantValue.isShouldShowVertifyPassword) {
             Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
@@ -988,6 +986,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
             bottomNavigation.setSelectedItemId(R.id.item_topup);
         } else {
+            financeCome.setVisibility(View.GONE);
+            dangqianshijian = Calendar.getInstance().getTimeInMillis();
+            KLog.i("进入钱包页面。。");
+            ivWallet.setVisibility(View.VISIBLE);
+            tvTitle.setVisibility(View.VISIBLE);
+            segmentControlView.setVisibility(View.GONE);
+            statusBar.setVisibility(View.VISIBLE);
+            rl1.setVisibility(View.VISIBLE);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
             }
@@ -1032,6 +1039,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Glide.with(this)
                 .load(R.mipmap.icon_set1)
                 .into(ivWallet);
+        statusBar.setVisibility(View.VISIBLE);
+        rl1.setVisibility(View.VISIBLE);
     }
 
 

@@ -20,6 +20,7 @@ import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.entity.eventbus.CreateMultSignSuccess
 import com.stratagile.qlink.entity.eventbus.StakeQlcError
 import com.stratagile.qlink.entity.stake.LockResult
 import com.stratagile.qlink.entity.stake.MultSign
@@ -51,6 +52,7 @@ import wendu.dsbridge.OnReturnValue
 import java.util.ArrayList
 
 import javax.inject.Inject;
+import kotlin.concurrent.thread
 
 /**
  * @author hzp
@@ -86,13 +88,31 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
     fun createMultSign(stakeType: StakeType) {
         webview = DWebView(this)
         webview.loadUrl("file:///android_asset/contract.html")
-
+        var isBack = false
         webview.callHandler("staking.createMultiSig", arrayOf<Any>(stakeType.neoPubKey, "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5"), OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var multSign = Gson().fromJson(retValue.toString(), MultSign::class.java)
-            stakeType.toAddress = multSign._address
-            lockQlc(stakeType)
+            if (multSign._address == null) {
+                AppConfig.instance.saveLog("stake", "createMultSign" + getLine(), Gson().toJson(multSign))
+                toast("createMultSign error, please try later")
+                EventBus.getDefault().post(StakeQlcError())
+                isBack = true
+            } else {
+                stakeType.toAddress = multSign._address
+                lockQlc(stakeType)
+                EventBus.getDefault().post(CreateMultSignSuccess())
+                isBack = true
+            }
         })
+        thread {
+            Thread.sleep(3000)
+            if (!isBack) {
+                runOnUiThread {
+                    createMultSign(stakeType)
+                }
+                KLog.i("重新获取多重签名。。。")
+            }
+        }
     }
 
     fun lockQlc(stakeType: StakeType) {

@@ -7,9 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
     <!--require dsbridge init js-->
-    <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
-    <script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>
+<!--        <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>-->
+    <!--    <script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>-->
+    <script src="./bignumber.min.js"></script>
+    <script src="./dsbridge.js"></script>
+    <script src="./browser.min.js"></script>
 </head>
 <body>
 
@@ -26,18 +29,22 @@
 		dsBridge.registerAsyn("staking", {
 			tag: "staking",
 			// multisig
-			createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
-				// user neo public key
-				const accountA = new Neon.wallet.Account(publicKeyA);
-				// environment neo public key
-				const accountB = new Neon.wallet.Account(publicKeyB);
-				// multisig account
-				const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
-					accountA.publicKey,
-					accountB.publicKey
-				]);
-				responseCallback(multisigAcct);
-			},
+        createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
+            try {
+                // user neo public key
+                const accountA = new Neon.wallet.Account(publicKeyA);
+                // environment neo public key
+                const accountB = new Neon.wallet.Account(publicKeyB);
+                // multisig account
+                const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
+                accountA.publicKey,
+                accountB.publicKey
+                ]);
+                responseCallback(multisigAcct);
+                } catch(err) {
+                responseCallback(err);
+            }
+        },
 			// lock
 			contractLock:function (privateKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime, responseCallback) {
 
@@ -156,6 +163,7 @@
 			}
 		});
 
-	</script>
+
+</script>
 </body>
 </html>

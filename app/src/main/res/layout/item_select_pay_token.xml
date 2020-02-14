@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x92"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivToken"
+            android:layout_marginLeft="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_29282a"
+            android:maxEms="8"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:maxWidth="@dimen/x400"
+            android:id="@+id/tvToken"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/ivCheck"
+            android:visibility="gone"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:layout_marginRight="@dimen/x35"
+            android:src="@mipmap/selected" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="#e5e5e5"
+        />
+</LinearLayout>

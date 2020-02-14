@@ -684,4 +684,15 @@
     <string name="recharge_commission">充值佣金</string>
     <string name="group_plan_commission">团购佣金</string>
     <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">成为 Q-Wallet 充值销售代理，\n得持续</font><font color="#108EE9">收益</font></string>
+    <string name="phone_top_up">话费充值</string>
+
+
+
+    <string name="confirm_order">确认订单</string>
+    <string name="xxx_sold">已售%1$s件</string>
+    <string name="xxx_open">已拼%1$s件</string>
+    <string name="up_to_xx_off">团购低至%1$s折</string>
+    <string name="limited_to_offering_of_xx_off_discount">限时优惠%1$s折</string>
+    <string name="only_available_for_xxx_subscribers">仅限%1$s运营商手机号</string>
+    <string name="select_deduction_token">选择抵扣币</string>
 </resources>

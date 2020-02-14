@@ -406,7 +406,7 @@ class TopupQlcPayActivity : BaseActivity(), TopupQlcPayContract.View {
         }
         map["productId"] = product.id
         map["phoneNumber"] = intent.getStringExtra("phoneNumber")
-        map["localFiatAmount"] = product.amountOfMoney
+        map["localFiatAmount"] = product.localFiatAmount
         map["txid"] = txid
         map["deductionTokenId"] = payToken.id
         mPresenter.createTopupOrder(map)

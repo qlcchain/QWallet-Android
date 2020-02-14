@@ -84,7 +84,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         }
     }
 
-    override fun setProductList(topupProduct: TopupProduct) {
+    override fun setProductList(topupProduct: ProductListV2) {
         mPresenter.getCountryList(hashMapOf())
         var productList = arrayListOf<TopupProduct.ProductListBean>()
         if (topupProduct.productList.size == 0) {
@@ -100,7 +100,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             var payFiatAmountList = itss.payFiatAmount.split(",")
             itss.amountOfMoney.split(",").forEachIndexed { index, it ->
                 var bean = TopupProduct.ProductListBean()
-                bean.amountOfMoney = it
+                bean.localFiatAmount = it
                 bean.payFiatAmount = payFiatAmountList[index]
                 bean.country = itss.country
                 bean.province = itss.province
@@ -120,10 +120,10 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
                 bean.localFiat = itss.localFiat
                 bean.payWay = itss.payWay
-                bean.payTokenSymbol = itss.payTokenSymbol
+                bean.payTokenSymbol = ""
                 bean.payFiat = itss.payFiat
-                bean.payTokenCnyPrice = itss.payTokenCnyPrice
-                bean.payTokenUsdPrice = itss.payTokenUsdPrice
+                bean.payTokenCnyPrice = 0.toDouble()
+                bean.payTokenUsdPrice = 0.toDouble()
                 bean.imgPath = itss.imgPath
 
 
@@ -164,7 +164,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 var price = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
                 var dsicountPrice = topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal().multiply(topupAbleAdapter!!.data[position].discount.toBigDecimal()).stripTrailingZeros().toPlainString()
                 var deductionTokenAmount = topupAbleAdapter!!.data[position].payFiatAmount.toBigDecimal().multiply(topupAbleAdapter!!.data[position].qgasDiscount.toBigDecimal()).divide(selectedPayToken.price.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
-                alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, topupAbleAdapter!!.data[position].amountOfMoney.toString(), deductionTokenAmount, selectedPayToken.symbol, price)) {
+                alert(getString(R.string.a_cahrge_of_will_cost_qgas_and_rmb, topupAbleAdapter!!.data[position].localFiatAmount.toString(), deductionTokenAmount, selectedPayToken.symbol, price)) {
                     negativeButton(getString(R.string.cancel)) { dismiss() }
                     positiveButton(getString(R.string.buy_topup)) {
                         when (OtcUtils.parseChain(selectedPayToken.chain)) {
@@ -266,7 +266,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
 
     fun provinceList() {
         var map = mutableMapOf<String, String>()
-        map.put("globalRoaming", country)
+        map.put("globalRoaming", countryName)
         map.put("isp", isp)
         mPresenter.provinceList(map)
     }
@@ -339,7 +339,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             map["p2pId"] = topUpP2pId
         }
         map["productId"] = product.id
-        map["localFiatAmount"] = product.amountOfMoney
+        map["localFiatAmount"] = product.localFiatAmount
         map["phoneNumber"] = etContact.text.toString()
         map["deductionTokenId"] = selectedPayToken.id
         mPresenter.createTopupOrder(map)
@@ -385,7 +385,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         var map = mutableMapOf<String, String>()
         map.put("phoneNumber", etContact.text.toString().trim())
 
-        map.put("globalRoaming", country)
+        map.put("globalRoaming", countryName)
         map.put("isp", isp)
         map.put("province", region)
 
@@ -573,7 +573,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         if (this::dict.isInitialized && TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
             var productIntent = Intent(this, TopupProductDetailActivity::class.java)
             productIntent.putExtra("productBean", topupAbleAdapter!!.data[position])
-            productIntent.putExtra("globalRoaming", country)
+            productIntent.putExtra("globalRoaming", countryName)
             productIntent.putExtra("phoneNumber", etContact.text.toString())
             productIntent.putExtra("selectedPayToken", selectedPayToken)
             startActivity(productIntent)
@@ -591,7 +591,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
             var zhifudaibijine = zhifufabijine - dikoubijine
             var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupAbleAdapter!!.data[position].payFiat)){topupAbleAdapter!!.data[position].payTokenCnyPrice.toBigDecimal()} else {topupAbleAdapter!!.data[position].payTokenUsdPrice.toBigDecimal()}, 3, BigDecimal.ROUND_HALF_UP)
 
-            alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].amountOfMoney.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol, topupAbleAdapter!!.data[position].localFiat)) {
+            alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupAbleAdapter!!.data[position].localFiatAmount.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupAbleAdapter!!.data[position].payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectedPayToken.symbol, topupAbleAdapter!!.data[position].localFiat)) {
                 negativeButton(getString(R.string.cancel)) { dismiss() }
                 positiveButton(getString(R.string.buy_topup)) {
                     if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {

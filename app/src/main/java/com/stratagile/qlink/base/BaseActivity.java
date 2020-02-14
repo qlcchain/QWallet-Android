@@ -27,6 +27,7 @@ import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
+import com.stratagile.qlink.ui.activity.setting.SelectLanguageActivityActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.view.FitRelativeLayout;
@@ -105,7 +106,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
      */
     public void setLanguage(boolean isUpdate) {
 
-        //0，中文， 1英文
+        int defaultLanguage = SpUtil.getInt(this, ConstantValue.Language, -1);
+        if (defaultLanguage == -1) {
+            Resources resources = getResources();
+            // 获取应用内语言
+            final Configuration configuration = resources.getConfiguration();
+            if (configuration.locale == Locale.ENGLISH) {
+                defaultLanguage = 0;
+            } else if (configuration.locale == Locale.CHINESE){
+                defaultLanguage = 1;
+            } else {
+                defaultLanguage = 0;
+            }
+            SpUtil.putInt(this, ConstantValue.Language, defaultLanguage);
+        }
+
+        //0，英文， 1中文
         Resources resources = getResources();
         // 获取应用内语言
         final Configuration configuration = resources.getConfiguration();

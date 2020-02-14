@@ -6,13 +6,66 @@
     android:background="@color/color_f2f2f2"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@drawable/main_bg_shape"
+        android:gravity="center"
+        android:textColor="@color/color_333"
+        android:textSize="9sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/main_bg_shape">
+
+        <ImageView
+            android:id="@+id/iv_avater"
+            android:layout_width="50dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_protfolio_more"
+            android:transitionName="avater" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/top_up"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlWallet"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/ivDeduction"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="12dp"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:visibility="gone"
             android:background="@drawable/main_bg_shape" />
 
 
@@ -20,7 +73,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="@dimen/x20"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="10dp"
             android:clipChildren="false"
@@ -30,6 +82,7 @@
             app:cardElevation="5dp">
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
@@ -219,11 +272,8 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="6dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp"
                     android:layout_height="87dp"
                     android:layout_marginBottom="10dp"
                     android:background="@color/white">
@@ -250,37 +300,20 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="@dimen/x1"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
+                    android:background="@color/white"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content">
+                    <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/indicatorPlan"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="@string/mobile_plan"
-                        android:textColor="@color/color_29282a"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center_horizontal"
+                        android:layout_height="38dp" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerViewMobilePlan"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerView"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="1dp"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 

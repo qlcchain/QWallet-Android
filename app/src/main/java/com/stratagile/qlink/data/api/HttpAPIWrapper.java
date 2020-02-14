@@ -88,6 +88,7 @@ import com.stratagile.qlink.entity.topup.CreateGroup;
 import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.ProductListV2;
 import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.entity.topup.TopupGroupKindList;
 import com.stratagile.qlink.entity.topup.TopupGroupList;
@@ -989,6 +990,14 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<ProductListV2> getTopupProductListV2(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.getTopupProductListV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTopupProductListV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     public Observable<TopupOrder> topupCreateOrder(Map map) {
         if (false) {
             return wrapper(mMainHttpAPI.topupCreateOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1493,14 +1502,14 @@ public class HttpAPIWrapper {
         //false
         if (false) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(40000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(40000).nextInt()) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

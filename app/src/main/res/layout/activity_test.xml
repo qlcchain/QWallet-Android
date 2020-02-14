@@ -38,10 +38,10 @@
         android:layout_height="@dimen/x80" />
 
     <TextView
-        android:id="@+id/importBtc"
+        android:id="@+id/transferBnb"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:text="importBtc"
+        android:text="transferBnb"
         android:layout_marginTop="@dimen/x100"
         android:gravity="center"
         android:background="@color/mainColor"

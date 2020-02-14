@@ -136,4 +136,36 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
             override fun onComplete() {}
         })
     }
+
+    fun getPayToken() {
+        mCompositeDisposable.add(httpAPIWrapper.payToken(hashMapOf<String, String>()).subscribe({
+            mView.setPayToken(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun getTopupGroupKindList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getTopupGroupKindList(map).subscribe({
+            mView.setGroupKindList(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun qurryDict(map: Map<*, *>?, position : Int) {
+        httpAPIWrapper.qurryDict(map).subscribe(object : Observer<Dict?> {
+            override fun onSubscribe(d: Disposable) {}
+            override fun onNext(dict: Dict) {
+                mView.setGroupDate(dict, position)
+            }
+
+            override fun onError(e: Throwable) {}
+            override fun onComplete() {}
+        })
+    }
 }
