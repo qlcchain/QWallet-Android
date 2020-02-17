@@ -46,7 +46,7 @@
             android:id="@+id/tvDiscount"
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/bg_topup_show_discount"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
@@ -67,16 +67,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="@string/recharge_phone_bill"
                 android:textColor="@color/color_f63870"
                 android:textSize="13sp" />
             <TextView
                 android:id="@+id/tvPriceOrgin"
+                android:layout_below="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="2dp"
                 android:textColor="@color/color_999"
-                android:layout_toRightOf="@+id/tvPrice"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
         <View

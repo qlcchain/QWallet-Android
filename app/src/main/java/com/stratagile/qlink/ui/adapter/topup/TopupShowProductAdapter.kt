@@ -112,7 +112,7 @@ class TopupShowProductAdapter(array: ArrayList<TopupProduct.ProductListBean>) : 
             //    支付法币金额  =    原价*产品折扣
             //    支付代币金额  =    支付法币金额-抵扣币金额
             //    支付代币数量  =    支付代币金额/支付代币价格
-            var dikoubijine = item.payFiatAmount.toBigDecimal().multiply(item.qgasDiscount.toBigDecimal())
+            var dikoubijine = item.payFiatAmount.toBigDecimal().multiply(item.qgasDiscount.toBigDecimal().multiply(mustGroupKind.discount.toBigDecimal()))
             var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
 
             var zhifufabijine = item.payFiatAmount.toBigDecimal().multiply(mustGroupKind.discount.toBigDecimal())

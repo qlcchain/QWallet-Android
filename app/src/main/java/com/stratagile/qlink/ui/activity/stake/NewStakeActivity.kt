@@ -86,8 +86,6 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun createMultSign(stakeType: StakeType) {
-        webview = DWebView(this)
-        webview.loadUrl("file:///android_asset/contract.html")
         var isBack = false
         webview.callHandler("staking.createMultiSig", arrayOf<Any>(stakeType.neoPubKey, "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5"), OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
@@ -130,6 +128,9 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
         })
     }
     override fun initData() {
+        webview = DWebView(this)
+        webview.loadUrl("file:///android_asset/contract.html")
+
         EventBus.getDefault().register(this)
         stakeViewModel = ViewModelProviders.of(this).get<NewStakeViewModel>(NewStakeViewModel::class.java)
 //        DWebView.setWebContentsDebuggingEnabled(true)

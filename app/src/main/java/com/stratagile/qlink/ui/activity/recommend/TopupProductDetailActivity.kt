@@ -120,19 +120,20 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
             KLog.i("设置为英文")
             tvIsp.text = topupBean.ispEn
-            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn, tvOperator)
+            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + " " + topupBean.localFiatAmount + topupBean.localFiat + " " + topupBean.explainEn, tvOperator)
             //tvOperator.text = topupBean.countryEn + topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn
         } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 1) {
             KLog.i("设置为中文")
-            TextUtil.setGroupInfo(topupBean.country, topupBean.isp + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explain, tvOperator)
+            TextUtil.setGroupInfo(topupBean.country, topupBean.isp + " " + topupBean.localFiatAmount + topupBean.localFiat + " " + topupBean.explain, tvOperator)
             //tvOperator.text = topupBean.country + topupBean.isp + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explain
             tvIsp.text = topupBean.isp
         } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 2) {
             KLog.i("设置为印度尼西亚")
-            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn, tvOperator)
+            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + " " + topupBean.localFiatAmount + topupBean.localFiat + " " + topupBean.explainEn, tvOperator)
             //tvOperator.text = topupBean.countryEn + topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn
             tvIsp.text = topupBean.ispEn
         }
+
         when(topupBean.ispEn.trim()) {
             "Starhub" -> {
                 ivIsp.setImageResource(R.mipmap.starhub)
@@ -152,7 +153,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         }
 
 
-        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
+        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupBean.discount.toBigDecimal()))
         var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
 
         var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
@@ -483,7 +484,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
                 deductionTokenPrice = selectToken.usdPrice
             }
 
-            var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal()).multiply(topupGroupKindListAdapter.data[position].discount.toBigDecimal())
+            var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupGroupKindListAdapter.data[position].discount.toBigDecimal()))
             var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
 
             var zhifufabijine = topupBean.payFiatAmount.toBigDecimal()

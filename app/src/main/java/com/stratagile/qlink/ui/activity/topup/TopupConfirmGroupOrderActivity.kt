@@ -181,56 +181,72 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
         selectToken = intent.getParcelableExtra("selectedPayToken")
         if (intent.hasExtra("buySelf")) {
             llGroup.visibility = View.GONE
+            var deductionTokenPrice = 0.toDouble()
+            if ("CNY".equals(topupBean.payFiat)) {
+                deductionTokenPrice = selectToken.price
+            } else if ("USD".equals(topupBean.payFiat)) {
+                deductionTokenPrice = selectToken.usdPrice
+            }
+            var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupBean.discount.toBigDecimal()))
+            var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+
+            var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
+            var zhifudaibijine = zhifufabijine - dikoubijine
+            var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupBean.payFiat)) {
+                topupBean.payTokenCnyPrice.toBigDecimal()
+            } else {
+                topupBean.payTokenUsdPrice.toBigDecimal()
+            }, 3, BigDecimal.ROUND_HALF_UP)
+            tvPrice.text = zhifubishuliang.stripTrailingZeros().toPlainString() + topupBean.payTokenSymbol + "+" + dikoubishuliang.stripTrailingZeros().toPlainString() + selectToken.symbol
         } else {
             selectedGroup = intent.getParcelableExtra("group")
+            var deductionTokenPrice = 0.toDouble()
+            if ("CNY".equals(topupBean.payFiat)) {
+                deductionTokenPrice = selectToken.price
+            } else if ("USD".equals(topupBean.payFiat)) {
+                deductionTokenPrice = selectToken.usdPrice
+            }
+            var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(selectedGroup.discount.toBigDecimal()))
+            var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
+
+            var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(selectedGroup.discount.toBigDecimal())
+            var zhifudaibijine = zhifufabijine - dikoubijine
+            var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupBean.payFiat)) {
+                topupBean.payTokenCnyPrice.toBigDecimal()
+            } else {
+                topupBean.payTokenUsdPrice.toBigDecimal()
+            }, 3, BigDecimal.ROUND_HALF_UP)
+            tvPrice.text = zhifubishuliang.stripTrailingZeros().toPlainString() + topupBean.payTokenSymbol + "+" + dikoubishuliang.stripTrailingZeros().toPlainString() + selectToken.symbol
         }
 
         Glide.with(this)
                 .load(AppConfig.instance.baseUrl + topupBean.imgPath.replace("/dapp", ""))
                 .apply(AppConfig.getInstance().optionsTopup)
                 .into(ivProduct1)
-        var deductionTokenPrice = 0.toDouble()
-        if ("CNY".equals(topupBean.payFiat)) {
-            deductionTokenPrice = selectToken.price
-        } else if ("USD".equals(topupBean.payFiat)) {
-            deductionTokenPrice = selectToken.usdPrice
-        }
-        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
-        var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
-
-        var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(if (intent.hasExtra("buySelf")) {topupBean.discount.toBigDecimal()} else {selectedGroup.discount.toBigDecimal()})
-        var zhifudaibijine = zhifufabijine - dikoubijine
-        var zhifubishuliang = zhifudaibijine.divide(if ("CNY".equals(topupBean.payFiat)) {
-            topupBean.payTokenCnyPrice.toBigDecimal()
-        } else {
-            topupBean.payTokenUsdPrice.toBigDecimal()
-        }, 3, BigDecimal.ROUND_HALF_UP)
-        tvPrice.text = zhifubishuliang.stripTrailingZeros().toPlainString() + topupBean.payTokenSymbol + "+" + dikoubishuliang.stripTrailingZeros().toPlainString() + selectToken.symbol
-
         if (SpUtil.getInt(this, ConstantValue.Language, -1) == 0) {
             KLog.i("设置为英文")
             tvIsp.text = getString(R.string.operator) + ": " + topupBean.ispEn
-            tvArea.text = getString(R.string.region) + ": " + topupBean.provinceEn
-            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn, tvOperator)
+            tvArea.text = getString(R.string.region) + ": " + topupBean.countryEn
+            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + " " + topupBean.localFiatAmount + topupBean.localFiat + "\n" + topupBean.explainEn, tvOperator)
         } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 1) {
             KLog.i("设置为中文")
-            TextUtil.setGroupInfo(topupBean.country, topupBean.isp + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explain, tvOperator)
+            TextUtil.setGroupInfo(topupBean.country, topupBean.isp + " " + topupBean.localFiatAmount + topupBean.localFiat + "\n" + topupBean.explain, tvOperator)
             tvIsp.text = getString(R.string.operator) + ": " + topupBean.isp
-            tvArea.text = getString(R.string.region) + ": " + topupBean.province
+            tvArea.text = getString(R.string.region) + ": " + topupBean.country
         } else if (SpUtil.getInt(this, ConstantValue.Language, -1) == 2) {
             KLog.i("设置为印度尼西亚")
-            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + topupBean.localFiatAmount + topupBean.localFiat + topupBean.explainEn, tvOperator)
+            TextUtil.setGroupInfo(topupBean.countryEn, topupBean.ispEn + " " + topupBean.localFiatAmount + topupBean.localFiat + "\n" + topupBean.explainEn, tvOperator)
             tvIsp.text = getString(R.string.operator) + ": " + topupBean.ispEn
-            tvArea.text = getString(R.string.region) + ": " + topupBean.provinceEn
+            tvArea.text = getString(R.string.region) + ": " + topupBean.countryEn
         }
         var isCn = true
         isCn = SpUtil.getInt(this, ConstantValue.Language, -1) == 1
 
-        if (isCn) {
-            etContact.setHint(getString(R.string.only_available_for_xxx_subscribers, topupBean.isp))
-        } else {
-            etContact.setHint(getString(R.string.only_available_for_xxx_subscribers, topupBean.ispEn))
-        }
+//        if (isCn) {
+//            etContact.setHint(getString(R.string.only_available_for_xxx_subscribers, topupBean.isp))
+//        } else {
+//            etContact.setHint(getString(R.string.only_available_for_xxx_subscribers, topupBean.ispEn))
+//        }
 
         if (intent.hasExtra("buySelf")) {
             llGroup.visibility = View.GONE
@@ -376,7 +392,7 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
             deductionTokenPrice = selectToken.usdPrice
         }
 
-        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
+        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupBean.discount.toBigDecimal()))
         var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
         var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
         var zhifudaibijine = zhifufabijine - dikoubijine

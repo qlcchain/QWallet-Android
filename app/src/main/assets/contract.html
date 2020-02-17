@@ -101,8 +101,8 @@
 			// send
 			send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, memo, responseCallback) {
 
+                //console.log("js日志1。。。");
 				const account = new Neon.wallet.Account(wif);
-
 				// NEO or GAS send
 				if (assetHash == NEO_HASH || assetHash == GAS_HASH) {
 					let intent = null;
@@ -124,7 +124,7 @@
 						responseCallback(config);
 					});
 				}
-
+                //console.log("js日志2。。。");
 				// nep5 asset send
 				const amtToSend = new BigNumber(amount).toFixed();
 				const network = 'MainNet';
@@ -139,7 +139,7 @@
 					toAddress,
 					new Neon.u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
 				);
-
+                //console.log("js日志3。。。");
 				const builder = generator();
 				const script = builder.str;
 				const gas = additionalInvocationGas;
@@ -152,12 +152,14 @@
 					script: script, // The Smart Contract invocation script
 					gas: gas // Additional GAS for invocation.
 				};
-
+                //console.log("js日志4。。。");
 				const returnToken = Neon.api.doInvoke(config)
 				.then(config => {
+				    //console.log("js日志5。。。");
 					responseCallback(config.response);
 				})
 				.catch(config => {
+				    //console.log("js日志6。。。");
 					responseCallback(config);
 				});
 			}

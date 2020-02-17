@@ -23,6 +23,7 @@ import com.stratagile.qlink.api.transaction.SendCallBack;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.entity.Nep5Token;
+import com.stratagile.qlink.entity.SendNep5TokenBack;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.stake.MultSign;
 import com.stratagile.qlink.entity.stake.StakeType;
@@ -124,6 +125,9 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
 
     @Override
     protected void initData() {
+        webview = new DWebView(this);
+        webview.loadUrl("file:///android_asset/contract.html");
+
         list = new ArrayList<>();
         tokenInfoArrayList = getIntent().getParcelableArrayListExtra("tokens");
         if (getIntent().hasExtra("tokenInfo")) {
@@ -153,17 +157,17 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         } else {
             etNeoTokenSendValue.setInputType(TYPE_CLASS_NUMBER |TYPE_NUMBER_FLAG_DECIMAL);
         }
-        mPresenter.getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
+//        mPresenter.getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
+//            @Override
+//            public void onSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//        });
 
         currentNep5Token = parseDecimal(tokenInfo.getTokenSymol());
 
@@ -355,8 +359,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
     private DWebView webview;
     private void testTransfer() {
         showProgressDialog();
-        webview = new DWebView(this);
-        webview.loadUrl("file:///android_asset/contract.html");
+
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
         Object[] arrays = new Object[7];
         arrays[0] = tokenInfo.getWalletAddress();
@@ -366,6 +369,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         arrays[4] = parseDecimal(tokenInfo.getTokenSymol()).getNetworks().get_$1().getDecimals();
         arrays[5] = Account.INSTANCE.getWallet().getWIF();
         arrays[6] = "hahaha";
+        KLog.i("开始调用js转账。。。");
         webview.callHandler("staking.send", arrays, (new OnReturnValue() {
             // $FF: synthetic method
             // $FF: bridge method
@@ -380,7 +384,13 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        sendSuccess(getString(R.string.success));
+                        SendNep5TokenBack sendNep5TokenBack = new Gson().fromJson(retValue.toString(), SendNep5TokenBack.class);
+                        if (sendNep5TokenBack.getTxid() == null) {
+                            ToastUtil.displayShortToast(getString(R.string.send_qgas_error, tokenInfo.getTokenSymol()));
+                            closeProgressDialog();
+                        } else {
+                            sendSuccess(getString(R.string.success));
+                        }
                     }
                 });
 
