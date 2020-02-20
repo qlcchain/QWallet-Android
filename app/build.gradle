@@ -16,11 +16,11 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.stratagile.qwallet"
-        minSdkVersion 21
+        minSdkVersion 22
         targetSdkVersion 29
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.4.7"
+        versionName "2.4.8"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

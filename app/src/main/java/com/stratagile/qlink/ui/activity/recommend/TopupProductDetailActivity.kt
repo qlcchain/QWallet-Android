@@ -214,6 +214,9 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
             confirmIntent.putExtra("buySelf", true)
             confirmIntent.putExtra("productBean", topupBean)
             confirmIntent.putExtra("selectedPayToken", selectToken)
+            if (intent.hasExtra("phoneNumber")) {
+                confirmIntent.putExtra("phoneNumber", intent.getStringExtra("phoneNumber"))
+            }
             startActivityForResult(confirmIntent, 10)
             //buySelf()
         }
@@ -581,6 +584,9 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
             var confirmIntent = Intent(this@TopupProductDetailActivity, TopupConfirmGroupOrderActivity::class.java)
             confirmIntent.putExtra("productBean", topupBean)
             confirmIntent.putExtra("selectedPayToken", selectToken)
+            if (intent.hasExtra("phoneNumber")) {
+                confirmIntent.putExtra("phoneNumber", intent.getStringExtra("phoneNumber"))
+            }
             confirmIntent.putExtra("group", selectedGroup)
             startActivityForResult(confirmIntent, 10)
 //            runDelayedOnUiThread(430) {

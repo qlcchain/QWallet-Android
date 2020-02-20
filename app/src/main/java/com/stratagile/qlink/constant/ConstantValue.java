@@ -156,6 +156,8 @@ public class ConstantValue {
 
     public static MainAddress.DataBean mainAddressData;
 
+    public static String blackHoldAddress = "qlc_1111111111111111111111111111111111111111111111111111hifc8npp";
+
     public static String lastRestart = "lastRestart";//上一次自动重启时间
 
     public static String ETH_JAXX_TYPE = "m/44'/60'/0'/0/0";

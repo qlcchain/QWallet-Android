@@ -124,6 +124,11 @@
     <color name="color_575757">#575757</color>
     <color name="color_2b2b2b">#2b2b2b</color>
     <color name="color_9a9a9a">#9A9A9A</color>
+    <color name="color_37343c">#37343C</color>
+    <color name="color_2c2c2c">#2C2C2C</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_b0d8fb">#B0D8FB</color>
+    <color name="color_44cbfe">#44CBFE</color>
 
 
 </resources>

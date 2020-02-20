@@ -45,6 +45,7 @@ import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.SmsReport;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
@@ -1290,6 +1291,9 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.getRewardList1(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
+    public Observable<SmsReport> smsReport(Map map) {
+        return wrapper(mHttpAPI.smsReport(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
 
     public Observable<TopupOrder> savePayTokenTxid(Map map) {
         if (false) {
@@ -1502,14 +1506,14 @@ public class HttpAPIWrapper {
         //false
         if (false) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(40000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random().nextInt(4000)) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(40000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random().nextInt(4000)) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

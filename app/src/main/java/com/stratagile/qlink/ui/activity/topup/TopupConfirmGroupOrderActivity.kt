@@ -179,6 +179,10 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
 
         topupBean = intent.getParcelableExtra("productBean")
         selectToken = intent.getParcelableExtra("selectedPayToken")
+        if (intent.hasExtra("phoneNumber")) {
+            etContact.setText(intent.getStringExtra("phoneNumber"))
+            etContact.setSelection(etContact.text.toString().length)
+        }
         if (intent.hasExtra("buySelf")) {
             llGroup.visibility = View.GONE
             var deductionTokenPrice = 0.toDouble()

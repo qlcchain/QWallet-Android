@@ -63,9 +63,37 @@ public class ProductListV2 extends BaseBack {
         private String imgPath;
         private String name;
         private String explainEn;
+        private String payTokenSymbol;
+
+        public String getPayTokenSymbol() {
+            return payTokenSymbol;
+        }
+
+        public void setPayTokenSymbol(String payTokenSymbol) {
+            this.payTokenSymbol = payTokenSymbol;
+        }
+
+        public double getPayTokenCnyPrice() {
+            return payTokenCnyPrice;
+        }
+
+        public void setPayTokenCnyPrice(double payTokenCnyPrice) {
+            this.payTokenCnyPrice = payTokenCnyPrice;
+        }
+
+        public double getPayTokenUsdPrice() {
+            return payTokenUsdPrice;
+        }
+
+        public void setPayTokenUsdPrice(double payTokenUsdPrice) {
+            this.payTokenUsdPrice = payTokenUsdPrice;
+        }
+
         private String id;
         private int stock;
         private String provinceEn;
+        private double payTokenCnyPrice;
+        private double payTokenUsdPrice;
 
         public String getCountryEn() {
             return countryEn;

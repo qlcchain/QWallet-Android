@@ -10,7 +10,7 @@
         android:id="@+id/status_bar"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@drawable/main_bg_shape"
+        android:background="@color/color_b0d8fb"
         android:gravity="center"
         android:textColor="@color/color_333"
         android:textSize="9sp" />
@@ -19,7 +19,7 @@
         android:id="@+id/rl1"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="@drawable/main_bg_shape">
+        android:background="@color/color_b0d8fb">
 
         <ImageView
             android:id="@+id/iv_avater"
@@ -57,93 +57,6 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:visibility="gone"
-            android:background="@drawable/main_bg_shape" />
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"
-            android:clipChildren="false"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp">
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="13dp"
-                    android:text="@string/send_replenishment_to"
-                    android:textColor="@color/color_29282a"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvLeastAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/enter_your_phone_number_or_select_from_your_contacts"
-                    android:textColor="@color/color_29282a"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginBottom="23dp"
-                    android:background="@drawable/mobile_bg"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/etMobile"
-                        android:layout_width="0px"
-                        android:layout_height="27dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginRight="12dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:hint="+86 100 0000 0000"
-                        android:textColor="@color/white"
-                        android:textColorHint="#B3CEFF"
-                        android:textSize="19sp" />
-
-                    <ImageView
-                        android:layout_width="21dp"
-                        android:layout_height="21dp"
-                        android:layout_marginRight="12dp"
-                        android:src="@mipmap/contacts" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
@@ -157,6 +70,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rlXingcheng"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:src="@mipmap/cx"
+                        android:scaleType="centerCrop"
+                        android:layout_height="185dp"/>
+                    <TextView
+                        android:layout_width="111dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_chaxun_myd_cx"
+                        android:layout_marginTop="166dp"
+                        android:textColor="@color/white"
+                        android:text="@string/click_query"
+                        android:gravity="center"
+                        android:layout_height="28dp"/>
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

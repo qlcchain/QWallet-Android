@@ -695,4 +695,16 @@
     <string name="limited_to_offering_of_xx_off_discount">限时优惠%1$s折</string>
     <string name="only_available_for_xxx_subscribers">仅限%1$s运营商手机号</string>
     <string name="select_deduction_token">选择抵扣币</string>
+    <string name="check_and_store_on_the_blockchain">查询及链上保存</string>
+    <string name="confirm_the_mobile_no">确认查询手机号</string>
+    <string name="input_the_last_4_digits_on_the_id_card">输入身份证后四位</string>
+    <string name="after_you_click_on_check_and_store_on_the_blockchain_your_most_recent_itinerary_will_be_displayed_with_1_qgas_being_consumed_for_generating_a_blockchain_based_proof_of_your_travel_records">查询及链上保存后会查询您最近过往漫游地信息，钱包会消耗1QGAS做为记录费用。</string>
+    <string name="send_a_itinerary_query_message">发送短信查询</string>
+    <string name="analyse_the_message_received">分析接收短信</string>
+    <string name="pay_qgas">支付QGAS</string>
+    <string name="generate_the_blockchain_based_proof_of_the_travel_records">生成链上到访地行程凭证</string>
+    <string name="click_query">点击查询</string>
+    <string name="itinerary_check">到访地行程查询</string>
+    <string name="invoice_content">凭证内容</string>
+    <string name="itinerary">到访地行程</string>
 </resources>

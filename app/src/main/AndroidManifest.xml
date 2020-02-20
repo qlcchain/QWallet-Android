@@ -26,6 +26,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
     <permission
         android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
@@ -619,6 +622,8 @@
         <activity android:name=".ui.activity.recommend.GroupExplainActivity" />
         <activity android:name=".ui.activity.topup.TopupConfirmGroupOrderActivity" />
         <activity android:name=".ui.activity.topup.TopupSelectDeductionTokenActivity" />
+        <activity android:name=".ui.activity.place.PlaceVisitActivity" />
+        <activity android:name=".ui.activity.place.SmsVourchActivity" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

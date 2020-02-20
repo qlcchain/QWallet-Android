@@ -1730,4 +1730,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="limited_to_offering_of_xx_off_discount">Limited offering of %1$s%% off discount</string>
     <string name="only_available_for_xxx_subscribers">Only available for %1$s subscribers</string>
     <string name="select_deduction_token">SelectDeductionToken</string>
+    <string name="check_and_store_on_the_blockchain">Check and store on the blockchain</string>
+    <string name="confirm_the_mobile_no">Confirm the mobile No.</string>
+    <string name="input_the_last_4_digits_on_the_id_card">Input the last 4 digits on the ID card</string>
+    <string name="after_you_click_on_check_and_store_on_the_blockchain_your_most_recent_itinerary_will_be_displayed_with_1_qgas_being_consumed_for_generating_a_blockchain_based_proof_of_your_travel_records">After you click on \'Check and store on the blockchain\', your most recent itinerary will be displayed with 1 QGas being consumed for generating a blockchain-based proof of your travel records.</string>
+    <string name="send_a_itinerary_query_message">Send a itinerary query message</string>
+    <string name="analyse_the_message_received">Analyse the message received</string>
+    <string name="pay_qgas">Pay QGas</string>
+    <string name="generate_the_blockchain_based_proof_of_the_travel_records">Generate the blockchain-based proof of the travel records</string>
+    <string name="click_query">Click Query</string>
+    <string name="itinerary_check">Itinerary Check</string>
+    <string name="invoice_content">Invoice Content</string>
+    <string name="itinerary">Itinerary</string>
 </resources>

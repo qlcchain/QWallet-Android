@@ -122,8 +122,9 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
                 bean.payWay = itss.payWay
                 bean.payTokenSymbol = ""
                 bean.payFiat = itss.payFiat
-                bean.payTokenCnyPrice = 0.toDouble()
-                bean.payTokenUsdPrice = 0.toDouble()
+                bean.payTokenCnyPrice = itss.payTokenCnyPrice
+                bean.payTokenUsdPrice = itss.payTokenUsdPrice
+                bean.payTokenSymbol = itss.payTokenSymbol
                 bean.imgPath = itss.imgPath
 
 
@@ -385,7 +386,7 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         var map = mutableMapOf<String, String>()
         map.put("phoneNumber", etContact.text.toString().trim())
 
-        map.put("globalRoaming", countryName)
+        map.put("globalRoaming", country)
         map.put("isp", isp)
         map.put("province", region)
 
@@ -398,7 +399,9 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         super.onDestroy()
     }
 
+    //+86
     var country = ""
+    //国家名字
     var countryName = ""
     var isp = ""
     var region = ""
@@ -529,12 +532,8 @@ class QurryMobileActivity : BaseActivity(), QurryMobileContract.View {
         country = intent.getStringExtra("area")
         countryName =intent.getStringExtra("country")
         isp = intent.getStringExtra("isp")
-        if (!"".equals(country)) {
-            tvArea.text = country
-        }
-        if (!"".equals(countryName)) {
-            tvCountry.text = countryName
-        }
+        tvArea.text = country
+        tvCountry.text = countryName
         if (!"".equals(isp)) {
             tvIsp.text = isp
         }

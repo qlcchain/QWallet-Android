@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_44cbfe"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        app:cardCornerRadius="6dp"
+        android:layout_width="337dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_height="408dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/confirm_the_mobile_no"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/color_2c2c2c"
+                android:textSize="15sp"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/llPhone1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/tvPhone1"
+                        android:layout_width="126dp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_myd_phonenumber"
+                        android:layout_height="38dp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="1dp"/>
+                <LinearLayout
+                    android:id="@+id/llPhone2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/tvPhone2"
+                        android:layout_width="126dp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_myd_phonenumber"
+                        android:layout_height="38dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/color_f2f2f2"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/input_the_last_4_digits_on_the_id_card"
+                android:layout_marginTop="13dp"
+                android:textColor="@color/color_2c2c2c"
+                android:textSize="15sp"
+                android:layout_height="wrap_content"/>
+
+            <com.stratagile.qlink.views.VerificationCodeEditText
+                android:id="@+id/etVCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_37343c"
+                android:digits="1234567890X"
+                android:textSize="40sp"
+                app:bottomLineHeight="2dp"
+                app:bottomLineNormalColor="@color/color_f2f2f2"
+                app:bottomLineSelectedColor="@color/color_37343c"
+                app:figures="4"
+                app:selectedBackgroundColor="@color/transparent"
+                app:verCodeMargin="10dp" />
+
+            <LinearLayout
+                android:id="@+id/llusdt"
+                android:layout_width="match_parent"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvPayToken"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:text="@string/choose_a_wallet"
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="15sp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvQGASBalance"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/mainColor"
+                    android:text="Balance: -/-"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llSelectQlcWallet"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="60dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/wallet_address"
+                        android:textColor="@color/color_29282a"
+                        android:maxEms="18"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:id="@+id/tvWalletAddess"
+                        />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+
+                <ImageView
+                    android:padding="@dimen/x15"
+                    android:layout_width="@dimen/x60"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/icon_enter1"
+                    android:layout_height="@dimen/x60" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_f2f2f2"/>
+
+            <TextView
+                android:id="@+id/checkBlockChain"
+                android:layout_width="295dp"
+                android:layout_marginTop="34dp"
+                android:text="@string/check_and_store_on_the_blockchain"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="17sp"
+                android:background="@drawable/bg_chaxun_myd"
+                android:layout_height="45dp"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/cardView"
+        android:layout_marginRight="20dp"
+        android:textSize="13sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:text="@string/after_you_click_on_check_and_store_on_the_blockchain_your_most_recent_itinerary_will_be_displayed_with_1_qgas_being_consumed_for_generating_a_blockchain_based_proof_of_your_travel_records"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

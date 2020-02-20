@@ -183,6 +183,7 @@ public class AppConfig extends MultiDexApplication {
         JPushInterface.init(this);
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();

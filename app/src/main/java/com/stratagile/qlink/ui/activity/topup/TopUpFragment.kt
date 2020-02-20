@@ -37,6 +37,8 @@ import com.stratagile.qlink.entity.topup.TopupGroupKindList
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.main.MainViewModel
+import com.stratagile.qlink.ui.activity.my.AccountActivity
+import com.stratagile.qlink.ui.activity.place.PlaceVisitActivity
 import com.stratagile.qlink.ui.activity.recommend.TopupProductDetailActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopUpComponent
 import com.stratagile.qlink.ui.activity.topup.contract.TopUpContract
@@ -283,11 +285,15 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         recyclerViewInvite.isNestedScrollingEnabled = false
         mPresenter.getPayToken()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
+            if (ConstantValue.currentUser == null) {
+                startActivity(Intent(activity!!, AccountActivity::class.java))
+                return@setOnItemClickListener
+            }
             if (topupShowProductAdapter.data[position].stock != 0) {
                 if ("FIAT".equals(topupShowProductAdapter.data[position].payWay)) {
                     var qurryIntent = Intent(activity!!, QurryMobileActivity::class.java)
-                    qurryIntent.putExtra("area", selectedCountry.nameEn)
-                    qurryIntent.putExtra("country", selectedCountry.globalRoaming)
+                    qurryIntent.putExtra("country", selectedCountry.nameEn)
+                    qurryIntent.putExtra("area", selectedCountry.globalRoaming)
                     qurryIntent.putExtra("isp", topupShowProductAdapter.data[position].ispEn.trim())
                     startActivity(qurryIntent)
                 } else {
@@ -306,19 +312,11 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 toast(getString(R.string.the_product_is_sold_out))
             }
         }
-        etMobile.setOnClickListener {
-            if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size == 0) {
-                activity!!.alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately)) {
-                    negativeButton(getString(R.string.cancel)) { dismiss() }
-                    positiveButton(getString(R.string.create)) { startActivity(Intent(context, SelectWalletTypeActivity::class.java)) }
-                }.show()
-                return@setOnClickListener
-            }
-            var qurryIntent = Intent(activity!!, QurryMobileActivity::class.java)
-            qurryIntent.putExtra("area", "")
-            qurryIntent.putExtra("country", "")
-            qurryIntent.putExtra("isp", "")
-            startActivity(qurryIntent)
+        rlXingcheng.setOnClickListener {
+
+            var xingchengIntent = Intent(activity!!, PlaceVisitActivity::class.java)
+
+            startActivity(xingchengIntent)
         }
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = false
@@ -328,6 +326,13 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 getOneFriendReward()
             }
         }
+
+        var countryListBean = CountryList.CountryListBean()
+        countryListBean.name = "全部"
+        countryListBean.nameEn = "All"
+        countryListBean.globalRoaming = ""
+        countryListBean.imgPath = ""
+        selectedCountry = countryListBean
 
     }
 
@@ -363,8 +368,8 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             startActivity(productIntent)
         } else {
             var qurryIntent = Intent(activity!!, QurryMobileActivity::class.java)
-            qurryIntent.putExtra("area", selectedCountry.nameEn)
-            qurryIntent.putExtra("country", selectedCountry.globalRoaming)
+            qurryIntent.putExtra("country", selectedCountry.nameEn)
+            qurryIntent.putExtra("area", selectedCountry.globalRoaming)
             qurryIntent.putExtra("isp", topupShowProductAdapter.data[position].ispEn.trim())
 //            var deductionTokenPrice = 0.toDouble()
 //            if ("CNY".equals(topupShowProductAdapter!!.data[position].payFiat)) {

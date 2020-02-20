@@ -41,6 +41,7 @@ import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.SmsReport;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
@@ -762,6 +763,10 @@ public interface HttpApi {
     @POST(API.getRewardList)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<SalePartner> getRewardList1(@Body RequestBody map);
+
+    @POST(API.smsReport)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<SmsReport> smsReport(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)
