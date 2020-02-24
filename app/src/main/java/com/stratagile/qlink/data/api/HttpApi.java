@@ -39,6 +39,7 @@ import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
+import com.stratagile.qlink.entity.ReportList;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.SmsReport;
@@ -767,6 +768,9 @@ public interface HttpApi {
     @POST(API.smsReport)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<SmsReport> smsReport(@Body RequestBody map);
+    @POST(API.smsList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ReportList> smsList(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

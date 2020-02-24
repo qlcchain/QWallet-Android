@@ -43,6 +43,7 @@ import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
+import com.stratagile.qlink.entity.ReportList;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
 import com.stratagile.qlink.entity.SmsReport;
@@ -1293,6 +1294,9 @@ public class HttpAPIWrapper {
     }
     public Observable<SmsReport> smsReport(Map map) {
         return wrapper(mHttpAPI.smsReport(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+    public Observable<ReportList> smsList(Map map) {
+        return wrapper(mHttpAPI.smsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
 
     public Observable<TopupOrder> savePayTokenTxid(Map map) {

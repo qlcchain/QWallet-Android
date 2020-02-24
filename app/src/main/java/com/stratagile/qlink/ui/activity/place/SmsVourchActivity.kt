@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.place
 
 import android.os.Bundle
+import android.view.View
 import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
@@ -46,6 +47,9 @@ class SmsVourchActivity : BaseActivity(), SmsVourchContract.View {
         txid.text = reportBean.qgasHash
         txid.setOnClickListener {
             OtcUtils.gotoBlockBrowser(this, "QLC_CHAIN", reportBean.qgasHash)
+        }
+        if ("".equals(reportBean.qgasHash)) {
+            llTxid.visibility = View.GONE
         }
     }
 

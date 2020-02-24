@@ -9,8 +9,8 @@
         app:cardCornerRadius="6dp"
         android:layout_width="337dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:layout_height="408dp">
+        android:layout_marginTop="20dp"
+        android:layout_height="400dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -25,36 +25,132 @@
                 android:textSize="15sp"
                 android:layout_height="wrap_content"/>
 
+            <EditText
+                android:visibility="gone"
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="10dp"
+                android:textSize="13sp"
+                android:hint="@string/please_input_the_mobile_number"
+                android:background="@drawable/bg_myd_phonenumber"
+                android:layout_height="38dp"/>
+
             <LinearLayout
+                android:id="@+id/llPhone"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:layout_marginTop="15dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/llPhone1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content">
-                    <EditText
+                    <TextView
                         android:id="@+id/tvPhone1"
                         android:layout_width="126dp"
+                        android:textSize="17sp"
                         android:gravity="center"
                         android:background="@drawable/bg_myd_phonenumber"
                         android:layout_height="38dp"/>
                 </LinearLayout>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="1dp"/>
                 <LinearLayout
                     android:id="@+id/llPhone2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:visibility="invisible"
+                    android:gravity="center"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content">
-                    <EditText
+                    <TextView
                         android:id="@+id/tvPhone2"
                         android:layout_width="126dp"
+                        android:textSize="17sp"
                         android:gravity="center"
                         android:background="@drawable/bg_myd_phonenumber"
                         android:layout_height="38dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/llKa1"
+                    android:layout_width="0dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:id="@+id/ivKa1"
+                        android:layout_width="15dp"
+                        android:src="@mipmap/selected_h"
+                        android:layout_height="15dp"/>
+                    <LinearLayout
+                        android:layout_width="64dp"
+                        android:layout_marginLeft="14dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@mipmap/ka_a"
+                        android:layout_height="43dp">
+                        <TextView
+                            android:id="@+id/tvKa1"
+                            android:text="卡1"
+                            android:visibility="gone"
+                            android:textSize="12sp"
+                            android:textColor="@color/color_2b2b2b"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@string/china_unicom"
+                            android:textColor="@color/color_999"
+                            android:textSize="12sp"
+                            android:id="@+id/tvIsp1"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llKa2"
+                    android:visibility="invisible"
+                    android:layout_width="0dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:id="@+id/ivKa2"
+                        android:layout_width="15dp"
+                        android:src="@mipmap/icon_default"
+                        android:layout_height="15dp"/>
+                    <LinearLayout
+                        android:layout_width="63dp"
+                        android:layout_marginLeft="14dp"
+                        android:paddingLeft="6dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@mipmap/ka_a"
+                        android:layout_height="43dp">
+                        <TextView
+                            android:id="@+id/tvKa2"
+                            android:text="卡2"
+                            android:textSize="12sp"
+                            android:textColor="@color/color_2b2b2b"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="联通"
+                            android:textColor="@color/color_999"
+                            android:textSize="12sp"
+                            android:id="@+id/tvIsp2"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
             <View
@@ -75,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_37343c"
-                android:digits="1234567890X"
+                android:digits="1234567890Xx"
                 android:textSize="40sp"
                 app:bottomLineHeight="2dp"
                 app:bottomLineNormalColor="@color/color_f2f2f2"
@@ -86,6 +182,7 @@
 
             <LinearLayout
                 android:id="@+id/llusdt"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_marginTop="18dp"
                 android:orientation="horizontal"
@@ -107,6 +204,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/llSelectQlcWallet"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
@@ -132,6 +230,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:layout_height="match_parent"/>
 
                 <ImageView

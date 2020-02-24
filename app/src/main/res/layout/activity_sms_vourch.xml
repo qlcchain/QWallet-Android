@@ -27,7 +27,7 @@
                 android:textSize="15sp"
                 android:textColor="@color/color_d0021b"
                 android:textAllCaps="true"
-                android:text="@string/blockchain_invoice"
+                android:text="@string/blockchain_credential"
                 android:layout_centerInParent="true"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/invoice_type"
+                android:text="@string/proof_type"
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 android:textColor="@color/color_808080"
@@ -74,7 +74,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/invoice_amount"
+                android:text="@string/fees_amount"
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 android:layout_marginTop="9dp"
@@ -100,7 +100,7 @@
                 android:background="@color/color_f2f2f2"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/invoice_date"
+                android:text="@string/proof_generation_date"
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 android:layout_marginTop="9dp"
@@ -150,7 +150,7 @@
                 android:background="@color/color_f2f2f2"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/invoice_no"
+                android:text="@string/proof_no"
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 android:textColor="@color/color_808080"
@@ -176,7 +176,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:text="@string/invoice_content"
+                android:text="@string/proof_content"
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 android:layout_marginTop="9dp"
@@ -193,34 +193,41 @@
                 android:layout_marginTop="6dp"
                 android:textSize="15sp"
                 android:layout_height="wrap_content"/>
-            <View
+
+            <LinearLayout
+                android:id="@+id/llTxid"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginLeft="23dp"
-                android:layout_marginRight="23dp"
-                android:background="@color/color_f2f2f2"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="@string/check_on_blockchain"
-                android:layout_marginLeft="23dp"
-                android:layout_marginRight="23dp"
-                android:layout_marginTop="9dp"
-                android:textColor="@color/color_808080"
-                android:textSize="15sp"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/txid"
-                android:layout_width="wrap_content"
-                android:text="sdfsfsf"
-                android:layout_marginLeft="23dp"
-                android:drawableRight="@mipmap/icon_enter1"
-                android:layout_marginRight="23dp"
-                android:textColor="@color/color_29282a"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="11dp"
-                android:textSize="15sp"
-                android:layout_height="wrap_content"/>
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginRight="23dp"
+                    android:background="@color/color_f2f2f2"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/check_on_blockchain"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginRight="23dp"
+                    android:layout_marginTop="9dp"
+                    android:textColor="@color/color_808080"
+                    android:textSize="15sp"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/txid"
+                    android:layout_width="wrap_content"
+                    android:text="sdfsfsf"
+                    android:layout_marginLeft="23dp"
+                    android:drawableRight="@mipmap/icon_enter1"
+                    android:layout_marginRight="23dp"
+                    android:textColor="@color/color_29282a"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="11dp"
+                    android:textSize="15sp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

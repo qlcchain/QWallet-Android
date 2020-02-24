@@ -607,23 +607,60 @@
                 <category android:name="com.stratagile.qwallet" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.mining.MiningInviteActivity" />
-        <activity android:name=".ui.activity.mining.MiningDailyDetailActivity" />
-        <activity android:name=".ui.activity.mining.MiningRewardActivity" />
-        <activity android:name=".ui.activity.topup.SelectOperatorActivity" />
-        <activity android:name=".ui.activity.topup.SelectRegionActivity" />
-        <activity android:name=".ui.activity.topup.TopupDeductionQlcChainActivity" />
-        <activity android:name=".ui.activity.topup.TopupPayNeoChainActivity" />
-        <activity android:name=".ui.activity.topup.TopupDeductionEthChainActivity" />
-        <activity android:name=".ui.activity.recommend.AgencyExcellenceActivity" />
-        <activity android:name=".ui.activity.recommend.OpenAgentActivity" />
-        <activity android:name=".ui.activity.recommend.TopupProductDetailActivity" />
-        <activity android:name=".ui.activity.recommend.MyTopupGroupActivity" />
-        <activity android:name=".ui.activity.recommend.GroupExplainActivity" />
-        <activity android:name=".ui.activity.topup.TopupConfirmGroupOrderActivity" />
-        <activity android:name=".ui.activity.topup.TopupSelectDeductionTokenActivity" />
-        <activity android:name=".ui.activity.place.PlaceVisitActivity" />
-        <activity android:name=".ui.activity.place.SmsVourchActivity" />
+        <activity
+            android:name=".ui.activity.mining.MiningInviteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.mining.MiningDailyDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.mining.MiningRewardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.SelectOperatorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.SelectRegionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupDeductionQlcChainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupPayNeoChainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupDeductionEthChainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.recommend.AgencyExcellenceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.recommend.OpenAgentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.recommend.TopupProductDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.recommend.MyTopupGroupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.recommend.GroupExplainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupConfirmGroupOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.topup.TopupSelectDeductionTokenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.place.PlaceVisitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.place.SmsVourchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.place.PlaceListActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

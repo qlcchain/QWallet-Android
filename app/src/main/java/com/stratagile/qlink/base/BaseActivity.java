@@ -259,8 +259,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         if (drawableBg != 0) {
             view.setBackgroundResource(drawableBg);
         }
+        toolbar.setBackgroundColor(getResources().getColor(mainColor));
         if (mainColor == R.color.white) {
-            toolbar.setBackgroundColor(getResources().getColor(mainColor));
             title.setTextColor(getResources().getColor(R.color.color_1F314A));
             toolbar.setNavigationIcon(getResources().getDrawable(R.mipmap.icon_back_dark));
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {

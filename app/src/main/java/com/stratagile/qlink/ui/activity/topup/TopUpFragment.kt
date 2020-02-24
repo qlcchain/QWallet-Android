@@ -38,6 +38,7 @@ import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.main.MainViewModel
 import com.stratagile.qlink.ui.activity.my.AccountActivity
+import com.stratagile.qlink.ui.activity.place.PlaceListActivity
 import com.stratagile.qlink.ui.activity.place.PlaceVisitActivity
 import com.stratagile.qlink.ui.activity.recommend.TopupProductDetailActivity
 import com.stratagile.qlink.ui.activity.topup.component.DaggerTopUpComponent
@@ -251,6 +252,18 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         rl1.setOnClickListener {
             val intent1 = Intent(activity!!, TopupOrderListActivity::class.java)
             startActivity(intent1)
+        }
+        tvPlaceQuery.setOnClickListener {
+            val intent1 = Intent(activity!!, PlaceListActivity::class.java)
+            startActivity(intent1)
+        }
+
+        var isCn = true
+        isCn = SpUtil.getInt(activity!!, ConstantValue.Language, -1) == 1
+        if (isCn) {
+            ivxingcheng.setImageResource(R.mipmap.cx)
+        } else {
+            ivxingcheng.setImageResource(R.mipmap.xc_en)
         }
 
         viewModel?.currentUserAccount?.observe(this, Observer {

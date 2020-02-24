@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
+import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,8 +20,10 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
@@ -40,6 +43,7 @@ import com.stratagile.qlink.ui.activity.place.component.DaggerPlaceVisitComponen
 import com.stratagile.qlink.ui.activity.place.contract.PlaceVisitContract
 import com.stratagile.qlink.ui.activity.place.module.PlaceVisitModule
 import com.stratagile.qlink.ui.activity.place.presenter.PlaceVisitPresenter
+import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.MD5Util
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.SendBack
@@ -52,6 +56,8 @@ import kotlinx.android.synthetic.main.activity_place_visit.*
 import kotlinx.android.synthetic.main.activity_place_visit.llSelectQlcWallet
 import kotlinx.android.synthetic.main.activity_place_visit.tvQGASBalance
 import kotlinx.android.synthetic.main.activity_topup_qlc_pay.*
+import kotlinx.android.synthetic.main.alert_mining.*
+import kotlinx.android.synthetic.main.item_select_country.*
 import org.apache.commons.collections.MultiHashMap
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -83,61 +89,59 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         override fun handleMessage(msg: Message) {
             if (msg.what == 1) {
                 var qlcSms = msg.obj as QLcSms
-                if (System.currentTimeMillis() - qlcSms.timestamp < 1000*8) {
-                    if (qlcSms.body.contains("请重新输入")) {
-                        toast("输入的证件后四位与本手机号持有者证件后四位不符，请确认重新输入")
+                if ((System.currentTimeMillis() - qlcSms.timestamp < 1000 * 3)) {
+                    if (qlcSms.body.contains("重新输入") || qlcSms.body.contains("证件数字有误")) {
+                        if (qlcSms1 == null) {
+                            qlcSms1 = qlcSms
+                            sweetAlertDialog.dismissWithAnimation()
+                            showError(qlcSms.body)
+                        }
                     } else {
-                        if (this@PlaceVisitActivity::qlcSms1.isInitialized) {
-                            if (qlcSms1.id == qlcSms.id) {
+                        if (qlcSms1 != null) {
+                            if (qlcSms1!!.id == qlcSms.id) {
 
                             } else {
-                                if (this@PlaceVisitActivity::qlcSms2.isInitialized) {
+                                if (qlcSms2 != null) {
 
                                 } else {
-                                    if (selectedPhone.imsi.startsWith("46000") || selectedPhone.imsi.startsWith("46002")) {
+                                    if (qlcSms.number.contains("10086")) {
                                         //中国移动
-                                        if (qlcSms.number.contains("10086")) {
-                                            qlcSms2 = qlcSms
-                                            analyseSms(qlcSms2)
-                                        }
-                                    } else if (selectedPhone.imsi.startsWith("46001")) {
+                                        qlcSms2 = qlcSms
+                                        analyseSms(qlcSms2!!)
+                                    } else if (qlcSms.number.equals("10010")) {
                                         //中国联通
-                                        if (qlcSms.number.equals("10010")) {
 //                                            qlcSms1 = qlcSms
-                                        }
-                                    } else if (selectedPhone.imsi.startsWith("46003")) {
+                                    } else if (qlcSms.number.contains("10001")) {
                                         //中国电信
-                                        if (qlcSms.number.contains("10001")) {
-                                            qlcSms2 = qlcSms
-                                            analyseSms(qlcSms2)
-                                        }
+                                        qlcSms2 = qlcSms
+                                        analyseSms(qlcSms2!!)
                                     }
                                 }
                             }
                         } else {
-                            if (selectedPhone.imsi.startsWith("46000") || selectedPhone.imsi.startsWith("46002")) {
+                            if (qlcSms.number.contains("10086")) {
                                 //中国移动
-                                if (qlcSms.number.contains("10086") && qlcSms.body.contains("二次确认")) {
+                                if (qlcSms.body.contains("二次确认")) {
                                     qlcSms1 = qlcSms
                                     sendYiDongSms2(qlcSms.number)
                                 } else {
-                                    toast("error")
-                                    sweetAlertDialog.dismissWithAnimation()
-                                    finish()
+                                    if (qlcSms.body.contains("根据您的授权查询")) {
+                                        qlcSms1 = qlcSms
+                                        analyseSms(qlcSms1!!)
+                                    } else {
+                                        sweetAlertDialog.dismissWithAnimation()
+                                        showError(qlcSms.body)
+                                    }
                                 }
-                            } else if (selectedPhone.imsi.startsWith("46001")) {
+                            } else if (qlcSms.number.equals("10010")) {
                                 //中国联通
-                                if (qlcSms.number.equals("10010")) {
-                                    qlcSms1 = qlcSms
-                                    analyseSms(qlcSms1)
-                                }
-                            } else if (selectedPhone.imsi.startsWith("46003")) {
+                                qlcSms1 = qlcSms
+                                analyseSms(qlcSms1!!)
+                            } else if (qlcSms.number.contains("10001")) {
                                 //中国电信
-                                if (qlcSms.number.contains("10001")) {
-                                    qlcSms1 = qlcSms
-                                    analyseSms(qlcSms1)
+                                qlcSms1 = qlcSms
+                                analyseSms(qlcSms1!!)
 //                                    sendDianXinSms2()
-                                }
                             }
                         }
                     }
@@ -147,21 +151,33 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         }
     }
 
+    fun showError(string: String) {
+        alert(string) {
+            positiveButton(getString(R.string.confirm)) {
+                qlcSms1 = null
+                qlcSms2 = null
+                dismiss()
+            }
+        }.show()
+    }
+
     fun analyseSms(qLcSms: QLcSms) {
         if (qLcSms.body.contains("根据您的授权查询")) {
-            showViewAnimation(view1Main, {toAnimation2()})
+            showViewAnimation(view1Main, { toAnimation2() })
             tvWalletAddess.postDelayed({
-                payQgas(qLcSms)
+//                payQgas(qLcSms)
+                reportSms(qLcSms)
             }, 4000)
         } else {
-            toast("error")
             sweetAlertDialog.dismissWithAnimation()
-            finish()
+            showError(qLcSms.body)
+            qlcSms1 = null
+            qlcSms2 = null
         }
     }
 
     fun payQgas(qLcSms: QLcSms) {
-        showViewAnimation(view2Main, {toAnimation3()})
+        showViewAnimation(view2Main, { toAnimation3() })
         thread {
             QlcReceiveUtils.sendQGas(sendQlcWallet, ConstantValue.blackHoldAddress, "1", "", true, object : SendBack {
                 override fun send(suceess: String) {
@@ -172,7 +188,7 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
                         }
                     } else {
                         runOnUiThread {
-                            reportSms(suceess, qLcSms)
+//                            reportSms(suceess, qLcSms)
                         }
                     }
                 }
@@ -181,16 +197,20 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         }
     }
 
-    fun reportSms(txid : String, qLcSms: QLcSms) {
-        showViewAnimation(view3Main, {toAnimation4()})
+    fun reportSms(qLcSms: QLcSms) {
+        showViewAnimation(view2Main, { toAnimation3() })
         var infoMap = hashMapOf<String, String>()
-        infoMap["qgasAmount"] = "1"
-        infoMap["qgasHash"] = txid
+//        infoMap["qgasAmount"] = "1"
+//        infoMap["qgasHash"] = txid
         infoMap["isp"] = getIsp()
-        infoMap["phoneHash"] = MD5Util.getStringMD5(selectedPhone.phoneNumber)
+        infoMap["phoneHash"] = MD5Util.getStringMD5("+86" + phoneNumber.replace("+86", ""))
         infoMap["sms"] = qLcSms.body
         infoMap["smsHash"] = MD5Util.getStringMD5(qLcSms.body)
-        infoMap["userAccount"] = if(ConstantValue.currentUser != null) {ConstantValue.currentUser.account} else {""}
+        infoMap["userAccount"] = if (ConstantValue.currentUser != null) {
+            ConstantValue.currentUser.account
+        } else {
+            ""
+        }
         mPresenter.smsReport(infoMap)
     }
 
@@ -198,20 +218,17 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     override fun reportBack(smsReport: SmsReport) {
         completeAnimation()
         startActivityForResult(Intent(this, SmsVourchActivity::class.java).putExtra("report", smsReport.report), 2)
-        tvPhone1.postDelayed({
-            onBackPressed()
-        }, 1000)
+
     }
 
-
-    fun getIsp() : String{
-        if (selectedPhone.imsi.startsWith("46000") || selectedPhone.imsi.startsWith("46002")) {
+    fun getIsp(): String {
+        if (imsi.startsWith("46000") || imsi.startsWith("46002")) {
             //中国移动
-           return "中国移动"
-        } else if (selectedPhone.imsi.startsWith("46001")) {
+            return "中国移动"
+        } else if (imsi.startsWith("46001")) {
             //中国联通
             return "中国联通"
-        } else if (selectedPhone.imsi.startsWith("46003")) {
+        } else if (imsi.startsWith("46003")) {
             //中国电信
             return "中国电信"
         }
@@ -231,19 +248,25 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         view1Main = animationView.findViewById(R.id.view1Main)
         view2Main = animationView.findViewById(R.id.view2Main)
         view3Main = animationView.findViewById(R.id.view3Main)
-        tvWalletName = animationView.findViewById(R.id.tvWalletName)
-        tvWalletAddress = animationView.findViewById(R.id.tvWalletAddress)
+//        tvWalletName = animationView.findViewById(R.id.tvWalletName)
+//        tvWalletAddress = animationView.findViewById(R.id.tvWalletAddress)
         sweetAlertDialog = SweetAlertDialog(this)
         sweetAlertDialog.setView(animationView)
         sweetAlertDialog.setOnBackListener {
-            onBackPressed()
+            sweetAlertDialog.dismissWithAnimation()
         }
         saHalf = ScaleAnimation(1f, 0.5f, 1f, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         saHalf.setDuration(400)
 
         sa1 = ScaleAnimation(0.5f, 1f, 0.5f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         sa1.setDuration(1000)
-
+        etVCode.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                KLog.i("失去焦点")
+                var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(tvPhone1.getWindowToken(), 0)
+            }
+        }
     }
 
 
@@ -300,31 +323,35 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         })
         imageView.startAnimation(saHalf)
     }
+
     override fun initData() {
         title.text = getString(R.string.itinerary_check)
         title.postDelayed({
             getPermission()
         }, 500)
-        llSelectQlcWallet.setOnClickListener {
-            var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
-            intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
-            intent1.putExtra("select", true)
-            startActivityForResult(intent1, 1)
-            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
-        }
+//        llSelectQlcWallet.setOnClickListener {
+//            var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            if (imm != null) {
+//                imm.hideSoftInputFromWindow(view.getWindowToken(),0)
+//            }
+//
+//            var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
+//            intent1.putExtra("walletType", AllWallet.WalletType.QlcWallet.ordinal)
+//            intent1.putExtra("select", true)
+//            startActivityForResult(intent1, 1)
+//            overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
+//        }
         checkBlockChain.setOnClickListener {
-            if (!this::sendQlcWallet.isInitialized) {
-                toast(getString(R.string.please_select_a_wallet))
+            if ("".equals(imsi)) {
+                toast(getString(R.string.no_valid_mobile_number_was_found))
                 return@setOnClickListener
             }
-            if (qgasCount < 1.toBigDecimal()) {
-                toast(getString(R.string.no_enough) + " QGAS")
+            if (etVCode.text.toString().length != 4) {
+                toast(getString(R.string.please_input_the_last_4_digits_on_the_id_card))
                 return@setOnClickListener
             }
-            if (phoneNumberList.size == 0) {
-                toast("没有找到手机号码")
-                return@setOnClickListener
-            }
+            var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(tvPhone1.getWindowToken(), 0)
             startCheckBlockChain()
         }
 
@@ -369,7 +396,7 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     var DELIVERED_SMS_ACTION = "DELIVERED_SMS_ACTION"
     var deliverIntent = Intent(DELIVERED_SMS_ACTION)
     lateinit var sendPI: PendingIntent
-    lateinit var deliverPI : PendingIntent
+    lateinit var deliverPI: PendingIntent
 
     lateinit var animationView: View
     lateinit var ivLoad1: ImageView
@@ -382,25 +409,25 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     lateinit var view1Main: View
     lateinit var view2Main: View
     lateinit var view3Main: View
-    lateinit var tvWalletName : TextView
-    lateinit var tvWalletAddress : TextView
+//    lateinit var tvWalletName: TextView
+//    lateinit var tvWalletAddress: TextView
 
     lateinit var saHalf: ScaleAnimation
     lateinit var sa1: ScaleAnimation
 
-    lateinit var selectedPhone : PhoneNumber
+    lateinit var selectedPhone: PhoneNumber
 
+    var phoneNumber = ""
+    var imsi = ""
     fun startCheckBlockChain() {
-        tvWalletName.text = sendQlcWallet.accountName
-        tvWalletAddress.text = sendQlcWallet.address
-        sweetAlertDialog.show()
-        if ("".equals(selectedPhone.phoneNumber)) {
-            if (selectedPhone.shunxu == 0) {
-                selectedPhone.phoneNumber = tvPhone1.text.toString()
-            } else {
-                selectedPhone.phoneNumber = tvPhone2.text.toString()
-            }
+        if ("".equals(phoneNumber)) {
+            phoneNumber = etPhone.text.toString()
         }
+        if ("".equals(phoneNumber)) {
+            toast(getString(R.string.please_input_the_mobile_number))
+            return
+        }
+        sweetAlertDialog.show()
         startAnimation()
 //        ivLoad1.postDelayed({
 //            showViewAnimation(view1Main, {toAnimation2()})
@@ -417,46 +444,53 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         sendSms()
     }
 
+    override fun onBackPressed() {
+        var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(tvPhone1.getWindowToken(), 0)
+        super.onBackPressed()
+    }
+
 
     fun sendSms() {
-        KLog.i(selectedPhone.toString())
-        if (selectedPhone.imsi.startsWith("46000") || selectedPhone.imsi.startsWith("46002")) {
+        if (imsi.startsWith("46000") || imsi.startsWith("46002")) {
             //中国移动
             sendYiDongSms1()
-        } else if (selectedPhone.imsi.startsWith("46001")) {
+        } else if (imsi.startsWith("46001")) {
             //中国联通
             sendLianTongSms()
-        } else if (selectedPhone.imsi.startsWith("46003")) {
+        } else if (imsi.startsWith("46003")) {
             //中国电信
             sendDianXinSms1()
         }
     }
 
     fun sendLianTongSms() {
-        KLog.i("发送联通短信")
-        var smsManager = android.telephony.SmsManager.getSmsManagerForSubscriptionId(selectedPhone.id)
+        var smsManager = android.telephony.SmsManager.getDefault()
         smsManager.sendTextMessage("10010", null, "CXMYD#${etVCode.text}", sendPI, deliverPI)
     }
 
     fun sendYiDongSms1() {
-        var smsManager = android.telephony.SmsManager.getSmsManagerForSubscriptionId(selectedPhone.id)
+        var smsManager = android.telephony.SmsManager.getDefault()
         smsManager.sendTextMessage("10086", null, "CXMYD", sendPI, deliverPI)
     }
-    fun sendYiDongSms2(number : String) {
-        var smsManager = android.telephony.SmsManager.getSmsManagerForSubscriptionId(selectedPhone.id)
+
+    fun sendYiDongSms2(number: String) {
+        var smsManager = android.telephony.SmsManager.getDefault()
         smsManager.sendTextMessage(number, null, etVCode.text.toString(), sendPI, deliverPI)
     }
+
     fun sendDianXinSms1() {
-        var smsManager = android.telephony.SmsManager.getSmsManagerForSubscriptionId(selectedPhone.id)
+        var smsManager = android.telephony.SmsManager.getDefault()
         smsManager.sendTextMessage("10001", null, "CXMYD#${etVCode.text}", sendPI, deliverPI)
     }
+
     fun sendDianXinSms2() {
-        var smsManager = android.telephony.SmsManager.getSmsManagerForSubscriptionId(selectedPhone.id)
+        var smsManager = android.telephony.SmsManager.getDefault()
         smsManager.sendTextMessage("10001", null, "Y", sendPI, deliverPI)
     }
 
-    lateinit var qlcSms1 : QLcSms
-    lateinit var qlcSms2 : QLcSms
+    var qlcSms1: QLcSms? = null
+    var qlcSms2: QLcSms? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun handlerSms(qLcSms: QLcSms) {
         KLog.i(qLcSms.toString())
@@ -602,7 +636,7 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     }
 
     fun completeAnimation() {
-        ivLoad4.setImageResource(R.mipmap.background_success)
+        ivLoad3.setImageResource(R.mipmap.background_success)
         sa1.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {
 
@@ -677,16 +711,17 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     }
 
     override fun setupActivityComponent() {
-       DaggerPlaceVisitComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .placeVisitModule(PlaceVisitModule(this))
-               .build()
-               .inject(this)
+        DaggerPlaceVisitComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .placeVisitModule(PlaceVisitModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: PlaceVisitContract.PlaceVisitContractPresenter) {
-            mPresenter = presenter as PlaceVisitPresenter
-        }
+        mPresenter = presenter as PlaceVisitPresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()
@@ -726,68 +761,134 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
 
     var phoneNumberList = mutableListOf<PhoneNumber>()
     fun getSimInfo() {
-        val uri: Uri
-        uri = Uri.parse("content://telephony/siminfo")
-        var cursor: Cursor? = null
-        val contentResolver = applicationContext.contentResolver
-        cursor = contentResolver.query(
-                uri,
-                arrayOf("_id", "sim_id", "icc_id", "display_name", "number"),
-                "0=0",
-                arrayOf(),
-                null
-        )
-        if (null != cursor) {
-            while (cursor.moveToNext()) {
-                val icc_id = cursor.getString(cursor.getColumnIndex("icc_id"))
-                val display_name = cursor.getString(cursor.getColumnIndex("display_name"))
-                val sim_id = cursor.getInt(cursor.getColumnIndex("sim_id"))
-                val _id = cursor.getInt(cursor.getColumnIndex("_id"))
-                val simNumber = cursor.getString(cursor.getColumnIndex("number"))
-                val number = getLine1Number(_id)
-                val imsi = getSubscriberId(_id)
-                KLog.i("icc_id-->$icc_id")
-                KLog.i("sim_id-->$sim_id")
-                KLog.i("display_name-->$display_name")
-                KLog.i("subId或者说是_id->$_id")
-                KLog.i("imsi-->${imsi}")
-                KLog.i("手机号码-->${number}")
-                KLog.i("---------------------------------")
-                if (sim_id >= 0) {
-                    phoneNumberList.add(PhoneNumber(_id, number, imsi, sim_id, simNumber, phoneNumberList.size))
-                }
-            }
-            setPhoneNumber()
+        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager // 取得相关系统服务
+        phoneNumber = telephonyManager.line1Number
+        if ("".equals(phoneNumber)) {
+            llPhone.visibility = View.GONE
+            etPhone.visibility = View.VISIBLE
+        } else {
+            llPhone.visibility = View.VISIBLE
+            etPhone.visibility = View.GONE
+            tvPhone1.text = phoneNumber.replace("+86", "")
         }
+
+        imsi = telephonyManager.subscriberId
+        if (imsi.startsWith("46000") || imsi.startsWith("46002")) {
+            //中国移动
+            tvIsp1.text = getString(R.string.china_mobile)
+        } else if (imsi.startsWith("46001")) {
+            //中国联通
+            tvIsp1.text = getString(R.string.china_unicom)
+        } else if (imsi.startsWith("46003")) {
+            //中国电信
+            tvIsp1.text = getString(R.string.china_telecom)
+        }
+
+//        val uri: Uri
+//        uri = Uri.parse("content://telephony/siminfo")
+//        var cursor: Cursor? = null
+//        val contentResolver = applicationContext.contentResolver
+//        cursor = contentResolver.query(
+//                uri,
+//                arrayOf("_id", "sim_id", "icc_id", "display_name", "number"),
+//                "0=0",
+//                arrayOf(),
+//                null
+//        )
+//        if (null != cursor) {
+//            while (cursor.moveToNext()) {
+//                val icc_id = cursor.getString(cursor.getColumnIndex("icc_id"))
+//                val display_name = cursor.getString(cursor.getColumnIndex("display_name"))
+//                val sim_id = cursor.getInt(cursor.getColumnIndex("sim_id"))
+//                val _id = cursor.getInt(cursor.getColumnIndex("_id"))
+//                val simNumber = cursor.getString(cursor.getColumnIndex("number"))
+//                val number = getLine1Number(_id)
+//                val imsi = getSubscriberId(_id)
+//                KLog.i("icc_id-->$icc_id")
+//                KLog.i("sim_id-->$sim_id")
+//                KLog.i("display_name-->$display_name")
+//                KLog.i("subId或者说是_id->$_id")
+//                KLog.i("imsi-->${imsi}")
+//                KLog.i("手机号码-->${number}")
+//                KLog.i("---------------------------------")
+//                if (sim_id >= 0) {
+//                    phoneNumberList.add(PhoneNumber(_id, number, imsi, sim_id, simNumber, phoneNumberList.size))
+//                }
+//            }
+//            setPhoneNumber()
+//        }
+
     }
 
     fun setPhoneNumber() {
+        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager // 取得相关系统服务
+        KLog.i(telephonyManager.subscriberId)
+        KLog.i(telephonyManager.line1Number)
+//        toast("默认手机号码：" + telephonyManager.line1Number)
         if (phoneNumberList.size == 1) {
-            tvPhone2.visibility = View.GONE
+            llPhone2.visibility = View.INVISIBLE
+            llKa2.visibility = View.INVISIBLE
+            if ("".equals(phoneNumberList[0].phoneNumber)) {
+                llPhone.visibility = View.GONE
+                etPhone.visibility = View.VISIBLE
+            } else {
+                llPhone.visibility = View.VISIBLE
+                etPhone.visibility = View.GONE
+            }
         }
+        if (phoneNumberList.size == 2 && ("".equals(phoneNumberList[0].phoneNumber) || "".equals(phoneNumberList[1].phoneNumber))) {
+            llPhone.visibility = View.GONE
+            etPhone.visibility = View.VISIBLE
+        } else {
+            llPhone.visibility = View.VISIBLE
+            etPhone.visibility = View.GONE
+        }
+
         phoneNumberList.forEachIndexed { index, phoneNumber ->
             KLog.i(phoneNumber.toString())
             if (index == 0) {
                 selectedPhone = phoneNumber
-//                tvPhone1.isEnabled = "".equals(selectedPhone.phoneNumber)
                 tvPhone1.setText(phoneNumber.phoneNumber.replace("+86", ""))
                 tvPhone1.setTextColor(resources.getColor(R.color.color_37343c))
+                if (phoneNumber.imsi.startsWith("46000") || phoneNumber.imsi.startsWith("46002")) {
+                    //中国移动
+                    tvIsp1.text = "移动"
+                } else if (phoneNumber.imsi.startsWith("46001")) {
+                    //中国联通
+                    tvIsp1.text = "联通"
+                } else if (phoneNumber.imsi.startsWith("46003")) {
+                    //中国电信
+                    tvIsp1.text = "电信"
+                }
             }
             if (index == 1) {
-//                tvPhone2.isEnabled = "".equals(selectedPhone.phoneNumber)
                 tvPhone2.setText(phoneNumber.phoneNumber.replace("+86", ""))
                 tvPhone2.setTextColor(resources.getColor(R.color.color_cccccc))
+                if (phoneNumber.imsi.startsWith("46000") || phoneNumber.imsi.startsWith("46002")) {
+                    //中国移动
+                    tvIsp2.text = "移动"
+                } else if (phoneNumber.imsi.startsWith("46001")) {
+                    //中国联通
+                    tvIsp2.text = "联通"
+                } else if (phoneNumber.imsi.startsWith("46003")) {
+                    //中国电信
+                    tvIsp2.text = "电信"
+                }
             }
         }
-        tvPhone1.setOnClickListener {
+        llKa1.setOnClickListener {
             selectedPhone = phoneNumberList[0]
             tvPhone1.setTextColor(resources.getColor(R.color.color_37343c))
             tvPhone2.setTextColor(resources.getColor(R.color.color_cccccc))
+            ivKa1.setImageResource(R.mipmap.selected_h)
+            ivKa2.setImageResource(R.mipmap.icon_default)
         }
-        tvPhone2.setOnClickListener {
+        llKa2.setOnClickListener {
             selectedPhone = phoneNumberList[1]
             tvPhone1.setTextColor(resources.getColor(R.color.color_cccccc))
             tvPhone2.setTextColor(resources.getColor(R.color.color_37343c))
+            ivKa1.setImageResource(R.mipmap.icon_default)
+            ivKa2.setImageResource(R.mipmap.selected_h)
         }
     }
 
@@ -833,6 +934,7 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
         Log.d("Q_M", "IMSI--$imsi")
         return imsi
     }
+
     fun getLine1NumberForSubscriber(subId: Int): String {
         val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager // 取得相关系统服务
         var telephonyManagerClass: Class<*>? = null
