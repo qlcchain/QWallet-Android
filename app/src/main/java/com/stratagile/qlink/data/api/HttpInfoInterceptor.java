@@ -31,7 +31,7 @@ public class HttpInfoInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
 
         Request request = chain.request();
-        KLog.i("请求的地址为：" + request.url());
+//        KLog.i("请求的地址为：" + request.url());
         Response response = chain.proceed(request);
         ResponseBody responseBody = response.body();
 //        KLog.i("网络请求的网址为:" + request.toString());
@@ -70,6 +70,7 @@ public class HttpInfoInterceptor implements Interceptor {
                 //获取到response的body的string字符串
                 //do something .... <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 String result = buffer.clone().readString(charset);
+                KLog.i("请求的地址为：" + request.url());
                 KLog.i("拦截到的okhttp结果:" + result);
             }
         }

@@ -132,10 +132,17 @@ public class TransactionMng {
 	 * @throws IOException io exception 
 	 */
 	public static JSONObject receiveBlock(QlcClient client, StateBlock sendBlock, String receiveAddress, byte[] privateKey) throws IOException {
-		
+
 		// the block hash
 		byte[] sendBlockHash = BlockMng.getHash(sendBlock);
-		
+
+		// is contract send block
+		if (Constants.BLOCK_TYPE_CONTRACTSEND.equals(sendBlock.getType()) && Constants.LINNK_TYPE_AIRDORP.equals(sendBlock.getLink())) {
+			// create reward block
+			StateBlock receiveBlock = RewardsMng.getReceiveRewardBlock(client, sendBlockHash);
+			return JSONObject.parseObject(new Gson().toJson(receiveBlock));
+		}
+
 		// Does the send block exist
 		StateBlock tempBlock = LedgerMng.getBlockInfoByHash(client, sendBlockHash);
 		if (tempBlock == null)
@@ -161,12 +168,7 @@ public class TransactionMng {
 		if (info == null)
 			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2005, Constants.EXCEPTION_BLOCK_MSG_2005);
 		
-		// is contract send block
-		if (Constants.BLOCK_TYPE_CONTRACTSEND.equals(sendBlock.getType()) && Constants.LINNK_TYPE_AIRDORP.equals(sendBlock.getLink())) {
-			// create reward block
-			StateBlock receiveBlock = RewardsMng.getReceiveRewardBlock(client, sendBlockHash);
-			return JSONObject.parseObject(new Gson().toJson(receiveBlock));
-		}
+
 		
 		// check the receive address
 		String tempReceiveAddress = AccountMng.publicKeyToAddress(Helper.hexStringToBytes(sendBlock.getLink()));

@@ -25,7 +25,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-rc2'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'

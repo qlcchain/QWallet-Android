@@ -85,14 +85,20 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         viewModel!!.currentEntrustOrderType.observe(this, Observer<String> { s ->
             currentPage = 0
             KLog.i("------>>>>" + arguments!!["tradeToken"])
+            KLog.i("------>>>>" + s!!)
             currentOrderType = s!!
             entrustOrderListAdapter.setNewData(ArrayList())
-            if (isVisibleToUser) {
-                if ("".equals(tradeToken)) {
-                    EventBus.getDefault().post(GetPairs())
-                } else {
-                    getOrderList()
-                }
+//            if (isVisibleToUser) {
+//                if ("".equals(tradeToken)) {
+//                    EventBus.getDefault().post(GetPairs())
+//                } else {
+//                    getOrderList()
+//                }
+//            }
+            if ("".equals(tradeToken)) {
+                EventBus.getDefault().post(GetPairs())
+            } else {
+                getOrderList()
             }
         })
         entrustOrderListAdapter.setOnItemClickListener(BaseQuickAdapter.OnItemClickListener { adapter, view, position ->

@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
+import com.stratagile.qlink.entity.BurnQgasAct
 import com.stratagile.qlink.entity.InviteList
 import com.stratagile.qlink.entity.KLine
 import com.stratagile.qlink.entity.TokenPrice
@@ -43,6 +44,8 @@ interface TopUpContract {
         fun setPayToken(payToken: PayToken)
 
         fun setGroupKindList(topupGroupList: TopupGroupKindList)
+
+        fun setBurnQgasAct(burnQgasAct: BurnQgasAct)
     }
 
     interface TopUpContractPresenter : BasePresenter {

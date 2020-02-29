@@ -7,6 +7,7 @@ import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.BurnQgasAct;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
@@ -53,6 +54,7 @@ import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
+import com.stratagile.qlink.entity.VoteResult;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
@@ -768,9 +770,22 @@ public interface HttpApi {
     @POST(API.smsReport)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<SmsReport> smsReport(@Body RequestBody map);
+
     @POST(API.smsList)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<ReportList> smsList(@Body RequestBody map);
+
+    @POST(API.sysVote)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> sysVote(@Body RequestBody map);
+
+    @POST(API.sysVoteResult)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VoteResult> sysVoteResult(@Body RequestBody map);
+
+    @POST(API.burnQgasList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BurnQgasAct> burnQgasList(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

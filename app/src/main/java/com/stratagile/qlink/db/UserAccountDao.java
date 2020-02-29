@@ -39,7 +39,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         public final static Property FacePhoto = new Property(14, String.class, "facePhoto", false, "FACE_PHOTO");
         public final static Property TotalInvite = new Property(15, int.class, "totalInvite", false, "TOTAL_INVITE");
         public final static Property QlcAddress = new Property(16, String.class, "qlcAddress", false, "QLC_ADDRESS");
-        public final static Property HoldingPhoto = new Property(17, String.class, "holdingPhoto", false, "HOLDING_PHOTO");
+        public final static Property StartApp = new Property(17, boolean.class, "startApp", false, "START_APP");
+        public final static Property HoldingPhoto = new Property(18, String.class, "holdingPhoto", false, "HOLDING_PHOTO");
     }
 
 
@@ -72,7 +73,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
                 "\"FACE_PHOTO\" TEXT," + // 14: facePhoto
                 "\"TOTAL_INVITE\" INTEGER NOT NULL ," + // 15: totalInvite
                 "\"QLC_ADDRESS\" TEXT," + // 16: qlcAddress
-                "\"HOLDING_PHOTO\" TEXT);"); // 17: holdingPhoto
+                "\"START_APP\" INTEGER NOT NULL ," + // 17: startApp
+                "\"HOLDING_PHOTO\" TEXT);"); // 18: holdingPhoto
     }
 
     /** Drops the underlying database table. */
@@ -161,10 +163,11 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         if (qlcAddress != null) {
             stmt.bindString(17, qlcAddress);
         }
+        stmt.bindLong(18, entity.getStartApp() ? 1L: 0L);
  
         String holdingPhoto = entity.getHoldingPhoto();
         if (holdingPhoto != null) {
-            stmt.bindString(18, holdingPhoto);
+            stmt.bindString(19, holdingPhoto);
         }
     }
 
@@ -248,10 +251,11 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         if (qlcAddress != null) {
             stmt.bindString(17, qlcAddress);
         }
+        stmt.bindLong(18, entity.getStartApp() ? 1L: 0L);
  
         String holdingPhoto = entity.getHoldingPhoto();
         if (holdingPhoto != null) {
-            stmt.bindString(18, holdingPhoto);
+            stmt.bindString(19, holdingPhoto);
         }
     }
 
@@ -280,7 +284,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // facePhoto
             cursor.getInt(offset + 15), // totalInvite
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // qlcAddress
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17) // holdingPhoto
+            cursor.getShort(offset + 17) != 0, // startApp
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18) // holdingPhoto
         );
         return entity;
     }
@@ -304,7 +309,8 @@ public class UserAccountDao extends AbstractDao<UserAccount, Long> {
         entity.setFacePhoto(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setTotalInvite(cursor.getInt(offset + 15));
         entity.setQlcAddress(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
-        entity.setHoldingPhoto(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setStartApp(cursor.getShort(offset + 17) != 0);
+        entity.setHoldingPhoto(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
      }
     
     @Override

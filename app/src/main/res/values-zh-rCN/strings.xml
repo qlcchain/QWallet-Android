@@ -726,4 +726,33 @@
     <string name="china_telecom">电信</string>
     <string name="china_unicom">联通</string>
     <string name="china_mobile">移动</string>
+    <string name="how_do_you_think_if_qlc_chain_runs_the_qgas_buyback_program_allowing_the_qgas_hodlers_to_sell_their_qgas_for_qlc_at_the_price_higher_than_the_public_market">QLC Chain将在Q-Wallet OTC中开展首次QGas回购销毁活动，指定交易对为QGas/QLC。即QGas持有者可通过本活动以高于市场价的价格出售QGas，得到QLC。您是否赞成这次活动？请为下列的选项投票。</string>
+    <string name="i_like_the_idea_and_i_will_engage_in_the_program">我支持这项活动，我会参加。</string>
+    <string name="i_like_the_idea_but_i_won_t_engage_in_the_program">我支持这项活动，但不会参加。</string>
+    <string name="i_don_t_like_the_idea_but_i_might_engage_in_the_program">我不支持这项活动，但可能会参加。</string>
+    <string name="i_don_t_like_the_idea_neither_will_i_engage_in_the_program">我不支持这项活动，也不会参加。</string>
+    <string name="write_here">写在这里</string>
+    <string name="if_you_got_more_to_share_with_us_leave_your_opinions_and_comments_below">如果您有其他反馈意见，请在以下输入框中留言：</string>
+    <string name="vote_1">投票</string>
+    <string name="vote_2">去投票</string>
+    <string name="you_have_voted_successfully_thanks_for_your">您已投票，感谢您的支持与帮助。</string>
+    <string name="the_voting_has_been_closed">投票已结束，以上是最后的投票结果</string>
+    <string name="qgas_buyback_and_burn_program">QGas回购销毁计划</string>
+    <string name="team">团队</string>
+    <string name="qgas_buyback_and_burn"><font color="#242426">QGAS </font> <font color="#1190EB">回购销毁计划</font></string>
+    <string name="details_burn">活动介绍</string>
+    <string name="program_implementation">
+* 一个活动日定义为前一天晚7点至次日晚7点
+\n* 每天晚7点以后团队开始挂买单，每天买单总量为 2万QGas，分批挂单时间： 晚7：00， 12：00， 凌晨2：00，凌晨5：00，早9：00
+\n* 单个用户一个活动日内交易数量不得超过10，000 QGas
+\n* 专门创建一个用于接收QGas的地址，并事先向社群公示，接受监督。
+\n* 前一天没有成交的买单延续到次日，次日继续新投放总量2万 QGas买单
+\n* 所有买单的QGas接收地址均统一使用上述地址
+\n* 活动后48小时内，进行QGas销毁操</string>
+    <string name="program_time">活动周期:</string>
+    <string name="_10_days">10 天</string>
+    <string name="buyback_price">回购价格：</string>
+    <string name="program_implementation_1">活动细则：</string>
+    <string name="qgas_buyback_and_burn_1">QGas回购销毁计划</string>
+    <string name="more_details_buyback">了解详情</string>
 </resources>

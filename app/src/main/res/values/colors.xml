@@ -129,6 +129,8 @@
     <color name="color_cccccc">#cccccc</color>
     <color name="color_b0d8fb">#B0D8FB</color>
     <color name="color_44cbfe">#44CBFE</color>
+    <color name="color_ecefef">#ECEFFE</color>
+    <color name="color_040404">#040404</color>
 
 
 </resources>

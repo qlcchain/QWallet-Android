@@ -13,11 +13,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.SwitchToOtc
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity
 import com.stratagile.qlink.ui.activity.my.AccountActivity
+import com.stratagile.qlink.ui.activity.my.BurnIntroduceActivity
 import com.stratagile.qlink.ui.activity.recommend.AgencyExcellenceActivity
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
+import org.greenrobot.eventbus.EventBus
 
 import java.util.zip.Inflater
 
@@ -81,6 +84,15 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
                 } else {
                     context.startActivity(Intent(context, AccountActivity::class.java))
                 }
+            }
+        }
+        if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_banner_buyback) {
+            var tvJoinNow = view1.findViewById<TextView>(R.id.tvJoinNow)
+            tvJoinNow.setOnClickListener {
+                EventBus.getDefault().post(SwitchToOtc(true))
+            }
+            view1.setOnClickListener {
+                context.startActivity(Intent(context, BurnIntroduceActivity::class.java))
             }
         }
         return view1

@@ -48,6 +48,41 @@
             android:layout_height="15dp" />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlVoteEnter"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/bg_vote_enter"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="9dp"
+        android:layout_height="88dp">
+        <ImageView
+            android:layout_width="107dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/wj"
+            android:layout_height="83dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/color_040404"
+            android:textSize="14sp"
+            android:text="@string/qgas_buyback_and_burn_program"
+            android:layout_marginTop="22dp"/>
+
+        <TextView
+            android:layout_width="80dp"
+            android:background="@drawable/bg_white_stroke_maincolor_10dp"
+            android:layout_marginLeft="26dp"
+            android:text="@string/vote_2"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/mainColor"
+            android:layout_marginTop="50dp"
+            android:layout_height="20dp"/>
+    </RelativeLayout>
     
     <com.stratagile.qlink.view.MyItemView
         android:id="@+id/cryptoWallet"

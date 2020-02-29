@@ -26,9 +26,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-
     <permission
         android:name="com.stratagile.qwallet.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
@@ -459,7 +456,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.topup.TopupEthPayActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
 
         <meta-data
@@ -661,6 +659,11 @@
         <activity
             android:name=".ui.activity.place.PlaceListActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.VoteActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".ui.activity.my.BurnIntroduceActivity" />
 
         <meta-data
             android:name="JPUSH_CHANNEL"

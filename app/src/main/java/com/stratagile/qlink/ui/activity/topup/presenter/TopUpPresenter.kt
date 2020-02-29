@@ -65,6 +65,16 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }))
     }
 
+    fun burnQgasList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.burnQgasList(map).subscribe({
+            mView.setBurnQgasAct(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
 
     fun getToeknPrice(map: HashMap<*, *>) {
         val disposable = httpAPIWrapper.getTokenPrice(map)

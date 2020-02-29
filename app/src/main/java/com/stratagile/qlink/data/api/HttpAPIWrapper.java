@@ -11,6 +11,7 @@ import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.BurnQgasAct;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
@@ -57,6 +58,7 @@ import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
+import com.stratagile.qlink.entity.VoteResult;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
@@ -1299,6 +1301,18 @@ public class HttpAPIWrapper {
         return wrapper(mHttpAPI.smsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
     }
 
+    public Observable<BaseBack> sysVote(Map map) {
+        return wrapper(mHttpAPI.sysVote(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<VoteResult> sysVoteResult(Map map) {
+        return wrapper(mHttpAPI.sysVoteResult(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<BurnQgasAct> burnQgasList(Map map) {
+        return wrapper(mHttpAPI.burnQgasList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
     public Observable<TopupOrder> savePayTokenTxid(Map map) {
         if (false) {
             return wrapper(mMainHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1510,14 +1524,14 @@ public class HttpAPIWrapper {
         //false
         if (false) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random().nextInt(4000)) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random().nextInt(1000)) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random().nextInt(4000)) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random().nextInt(1000)) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

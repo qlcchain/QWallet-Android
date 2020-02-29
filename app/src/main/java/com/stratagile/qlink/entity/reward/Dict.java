@@ -26,6 +26,25 @@ public class Dict extends BaseBack<Dict.DataBean> {
         private String value;
         private String topopGroupEndDate;
         private String topupGroupStartDate;
+        private String burnQgasVoteStartDate;
+
+        public String getBurnQgasVoteStartDate() {
+            return burnQgasVoteStartDate;
+        }
+
+        public void setBurnQgasVoteStartDate(String burnQgasVoteStartDate) {
+            this.burnQgasVoteStartDate = burnQgasVoteStartDate;
+        }
+
+        public String getBurnQgasVoteEndDate() {
+            return burnQgasVoteEndDate;
+        }
+
+        public void setBurnQgasVoteEndDate(String burnQgasVoteEndDate) {
+            this.burnQgasVoteEndDate = burnQgasVoteEndDate;
+        }
+
+        private String burnQgasVoteEndDate;
 
         public String getTopopGroupEndDate() {
             return topopGroupEndDate;

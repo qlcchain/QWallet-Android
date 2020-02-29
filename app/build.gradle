@@ -20,7 +20,7 @@ android {
         targetSdkVersion 29
         versionCode getSelfDefinedVersion("code") + 5
         multiDexEnabled true
-        versionName "2.4.8"
+        versionName "2.5.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -98,22 +98,16 @@ android {
             jniLibs.srcDirs = ['src/main/jniLibs']
         }
 
-        noovpn3 {
+        normal {
         }
 
-        debug {
+        googleplay {
 
         }
-
-        release {
-
-        }
-//        sourceSets.main.jniLibs.srcDirs += new File(project(':core').buildDir, "intermediates/bundles/${getCurrentFlavor()}/jni")
-//        sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
     }
 
     greendao {
-        schemaVersion 76//数据库版本号
+        schemaVersion 77//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -121,11 +115,15 @@ android {
     }
     flavorDimensions "implementation"
     productFlavors {
-        noovpn3 {
+        normal {
             dimension "implementation"
-            buildConfigField 'boolean', 'openvpn3', 'false'
+            buildConfigField 'boolean', 'isGooglePlay', 'false'
         }
+        googleplay {
+            dimension "implementation"
+            buildConfigField 'boolean', 'isGooglePlay', 'true'
 
+        }
     }
     buildToolsVersion '28.0.3'
 }
@@ -145,15 +143,16 @@ android.applicationVariants.all { variant ->
 
 
 android.applicationVariants.all { variant ->
-    variant.productFlavors.each {
-        if (it.dimension == 'implementation' && it.name != 'noovpn3')
-            variant.getJavaCompiler().dependsOn(generateOpenVPN3Swig)
-
-    }
+//    variant.productFlavors.each {
+//        if (it.dimension == 'implementation' && it.name != 'noovpn3')
+//            variant.getJavaCompiler().dependsOn(generateOpenVPN3Swig)
+//
+//    }
 
 }
 
 dependencies {
+    normalImplementation project(':smsLib')
     implementation 'com.google.firebase:firebase-analytics:16.0.4'
     implementation 'com.google.firebase:firebase-core:16.0.4'
     configurations {
@@ -172,7 +171,6 @@ dependencies {
     implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
     implementation "com.android.support:cardview-v7:$supportVersion"
     implementation 'com.android.support:multidex:1.0.3'
-
     // Net
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'

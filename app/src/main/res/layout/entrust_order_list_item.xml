@@ -25,12 +25,26 @@
                 android:layout_height="29dp" />
             <TextView
                 android:id="@+id/tvNickName"
-                android:layout_width="0px"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:textColor="@color/color_222222"
                 android:textSize="14sp"
                 android:layout_marginLeft="12dp"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvTeam"
+                android:layout_width="26dp"
+                android:layout_marginLeft="7dp"
+                android:text="@string/team"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:includeFontPadding="false"
+                android:background="@drawable/main_color_bt_bg"
+                android:layout_height="12dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
             <TextView
                 android:id="@+id/tvDeals"
                 android:textSize="12sp"

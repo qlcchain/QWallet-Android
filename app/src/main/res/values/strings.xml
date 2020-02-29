@@ -1761,4 +1761,26 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="china_telecom">Telecom</string>
     <string name="china_unicom">Unicom</string>
     <string name="china_mobile">Mobile</string>
+    <string name="how_do_you_think_if_qlc_chain_runs_the_qgas_buyback_program_allowing_the_qgas_hodlers_to_sell_their_qgas_for_qlc_at_the_price_higher_than_the_public_market">How do you think if QLC Chain runs the QGas buyback program allowing the QGas hodlers to sell their QGas for QLC at the price higher than the public market?</string>
+    <string name="i_like_the_idea_and_i_will_engage_in_the_program">I like the idea and I will engage in the program.</string>
+    <string name="i_like_the_idea_but_i_won_t_engage_in_the_program">I like the idea but I won’t engage in the program.</string>
+    <string name="i_don_t_like_the_idea_but_i_might_engage_in_the_program">I don’t like the idea but I might engage in the program.</string>
+    <string name="i_don_t_like_the_idea_neither_will_i_engage_in_the_program">I don’t like the idea, neither will I engage in the program.</string>
+    <string name="write_here">Write here</string>
+    <string name="if_you_got_more_to_share_with_us_leave_your_opinions_and_comments_below">If you got more to share with us, leave your opinions and comments below:</string>
+    <string name="vote_1">Vote</string>
+    <string name="vote_2">Vote</string>
+    <string name="you_have_voted_successfully_thanks_for_your">You have voted successfully, thanks for your engagement.</string>
+    <string name="the_voting_has_been_closed">The voting has been closed.</string>
+    <string name="qgas_buyback_and_burn_program">QGas Buyback and Burn</string>
+    <string name="team">Team</string>
+    <string name="qgas_buyback_and_burn"><font color="#242426">QGAS </font> <font color="#1190EB">Buyback and Burn</font></string>
+    <string name="details_burn">Details</string>
+    <string name="program_implementation">* One campaign day starts from 7:00 pm till 7:00 pm the next day lasting for 24 hours. \n* During each campaign, the team will gradually publish the QGas buy orders in Q-Wallet OTC at 5 different time points, 7:00 pm, 12:00 am, 2:00 am, 5:00 am, 9:00 am (UTC+8) . \n* Each time there will be several QGas buy orders splitting the 4000 QGas placed, the QGas buyback amount may vary in each order. \n* All the Q-Wallet users with no less than 1 QGas balance in their Q-Wallet are eligible to trade their QGas for QLC . \n* The buyback program is expected to buy back a total of 20K QGas for burning later, at the buyback price of 1QGas=2 QLC which is slightly higher than the average public market price. The 40K QLC traded for QGas will be released to the QLC community. \n* A dedicated QGas buyback pool which is a QGas address will be published to the public. \n* Once the buyback concludes, all the QGas in the pool shall be burnt within 48 hours after the buyback completion.</string>
+    <string name="program_time">Program time:</string>
+    <string name="_10_days">10 days</string>
+    <string name="buyback_price">Buyback price：</string>
+    <string name="program_implementation_1">Program implementation:</string>
+    <string name="qgas_buyback_and_burn_1">QGas Buyback and Burn</string>
+    <string name="more_details_buyback">More Details</string>
 </resources>

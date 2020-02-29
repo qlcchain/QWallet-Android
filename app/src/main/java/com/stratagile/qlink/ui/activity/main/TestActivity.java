@@ -50,6 +50,7 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -140,7 +141,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.getBnbTokens:
-
                 break;
             case R.id.getBnbAccount:
                 new Thread(new Runnable() {

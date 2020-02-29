@@ -1129,6 +1129,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void switchToOtc(SwitchToOtc switchToOtc) {
         bottomNavigation.setSelectedItemId(R.id.item_sms);
+        if (switchToOtc.isToSell()) {
+            button22.toggle();
+            viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+        }
         setVpnPage();
     }
 

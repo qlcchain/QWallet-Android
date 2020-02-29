@@ -68,6 +68,7 @@ public class ConstantValue {
 
     public static String isShowMiningAct = "isShowMiningAct";
     public static String currentMiningActId = "currentMiningActId";
+    public static String currentBurnQgasActId = "currentBurnQgasActId";
 
     /**
      * eth的bnb契约地址

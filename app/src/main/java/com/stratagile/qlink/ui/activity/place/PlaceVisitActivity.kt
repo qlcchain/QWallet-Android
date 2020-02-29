@@ -762,6 +762,16 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     var phoneNumberList = mutableListOf<PhoneNumber>()
     fun getSimInfo() {
         val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager // 取得相关系统服务
+        if(telephonyManager.line1Number == null) {
+            alert("手机号为空，没有插入sim卡？") {
+                positiveButton("确定") {
+                    dismiss()
+                    finish()
+                }
+                cancellable(false)
+            }.show()
+            return
+        }
         phoneNumber = telephonyManager.line1Number
         if ("".equals(phoneNumber)) {
             llPhone.visibility = View.GONE

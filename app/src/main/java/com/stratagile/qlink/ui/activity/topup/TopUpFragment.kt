@@ -17,14 +17,15 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.bumptech.glide.Glide
-import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
+import com.stratagile.qlink.BuildConfig
 import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseFragment
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.BurnQgasAct
 import com.stratagile.qlink.entity.InviteList
 import com.stratagile.qlink.entity.KLine
 import com.stratagile.qlink.entity.TokenPrice
@@ -45,7 +46,6 @@ import com.stratagile.qlink.ui.activity.topup.component.DaggerTopUpComponent
 import com.stratagile.qlink.ui.activity.topup.contract.TopUpContract
 import com.stratagile.qlink.ui.activity.topup.module.TopUpModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopUpPresenter
-import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.ui.adapter.finance.InvitedAdapter
 import com.stratagile.qlink.ui.adapter.topup.CountryListAdapter
 import com.stratagile.qlink.ui.adapter.topup.ImagesPagerAdapter
@@ -100,11 +100,15 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
                 viewList.add(R.layout.layout_banner_proxy_youxiang)
             }
+
         } else {
             viewList.add(R.layout.layout_finance_share)
             if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
                 viewList.add(R.layout.layout_banner_proxy_youxiang)
             }
+        }
+        if (this::burnQgasAct1.isInitialized && burnQgasAct1.list.size > 0) {
+            viewList.add(R.layout.layout_banner_buyback)
         }
         val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
         viewPager.adapter = viewAdapter
@@ -130,7 +134,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     override fun setProductList(topupProduct: TopupProduct, next : Boolean) {
         if (!this::selectPayToken.isInitialized) {
-            getOneFriendReward()
+            mPresenter.getPayToken()
         } else {
             topupShowProductAdapter.setNewData(topupProduct.productList)
             if (next) {
@@ -185,6 +189,55 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                     viewList.add(R.layout.layout_banner_proxy_youxiang)
                 }
             }
+        }
+        if (this::burnQgasAct1.isInitialized && burnQgasAct1.list.size > 0) {
+            viewList.add(R.layout.layout_banner_buyback)
+        }
+        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
+        viewPager.adapter = viewAdapter
+        val scaleCircleNavigator = ScaleCircleNavigator(activity)
+        scaleCircleNavigator.setCircleCount(viewList.size)
+        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
+        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
+        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
+        indicator.navigator = scaleCircleNavigator
+        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
+
+        if (viewList.size > 1) {
+//            setFirstLocation()
+            autoPlayView()
+        }
+    }
+
+    lateinit var burnQgasAct1: BurnQgasAct
+    override fun setBurnQgasAct(burnQgasAct: BurnQgasAct) {
+        KLog.i("setBurnQgasAct")
+//        if (!isStop) {
+//            return
+//        }
+//        isStop = false
+        viewList.clear()
+
+        if (showMiningAct.isShow) {
+            viewList.add(R.layout.layout_finance_share)
+            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+            viewList.add(R.layout.layout_finance_earn_rank)
+            if (this::proxyAcitivtyDict.isInitialized) {
+                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+                }
+            }
+        } else {
+            viewList.add(R.layout.layout_finance_share)
+            if (this::proxyAcitivtyDict.isInitialized) {
+                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+                }
+            }
+        }
+        val currentBurnQgasActId = SpUtil.getString(activity, ConstantValue.currentBurnQgasActId, "")
+        if (burnQgasAct.list.size > 0) {
+            viewList.add(R.layout.layout_banner_buyback)
         }
         val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
         viewPager.adapter = viewAdapter
@@ -282,7 +335,13 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                     cm!!.setPrimaryClip(mClipData)
                     ToastUtil.displayShortToast(getString(R.string.copy_success))
                 }
-                getOneFriendReward()
+                if (!it.startApp) {
+                    if (!this::selectPayToken.isInitialized) {
+                        mPresenter.getPayToken()
+                    } else {
+                        getOneFriendReward()
+                    }
+                }
             } else {
                 llReferralCode.visibility = View.GONE
             }
@@ -346,6 +405,14 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         countryListBean.globalRoaming = ""
         countryListBean.imgPath = ""
         selectedCountry = countryListBean
+        if (BuildConfig.isGooglePlay) {
+            rlXingcheng.visibility = View.GONE
+            rl1.background = resources.getDrawable(R.drawable.main_bg_shape)
+            status_bar.background = resources.getDrawable(R.drawable.main_bg_shape)
+            tv_title.visibility = View.VISIBLE
+        } else {
+
+        }
 
     }
 
@@ -502,6 +569,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 //                return UIUtils.dip2px(10f, this@InviteActivity)
 //            }
 //        }
+        mPresenter.burnQgasList(hashMapOf())
     }
 
     fun reChangeTaoCan(bean: CountryList.CountryListBean) {
