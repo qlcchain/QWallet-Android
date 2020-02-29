@@ -212,6 +212,9 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     lateinit var burnQgasAct1: BurnQgasAct
     override fun setBurnQgasAct(burnQgasAct: BurnQgasAct) {
         KLog.i("setBurnQgasAct")
+        if (burnQgasAct.list.size == 0) {
+            return
+        }
 //        if (!isStop) {
 //            return
 //        }
