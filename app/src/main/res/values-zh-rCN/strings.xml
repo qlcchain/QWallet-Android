@@ -620,7 +620,7 @@
     <string name="please_pay">请支付</string>
     <string name="wait_seller_pay">等待卖家支付</string>
     <string name="join_now_telegram">立即加入</string>
-    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">加入我们的电报群 获得最新QGAS动态</string>
+    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">加入我们的电报群\n获得最新QGAS动态</string>
     <string name="mobile_plan">运营商套餐</string>
     <string name="please_choose">请选择</string>
     <string name="operator">运营商</string>
@@ -746,9 +746,9 @@
 \n* 每天晚7点以后团队开始挂买单，每天买单总量为 2万QGas，分批挂单时间： 晚7：00， 12：00， 凌晨2：00，凌晨5：00，早9：00
 \n* 单个用户一个活动日内交易数量不得超过10，000 QGas
 \n* 专门创建一个用于接收QGas的地址，并事先向社群公示，接受监督。
-\n* 前一天没有成交的买单延续到次日，次日继续新投放总量2万 QGas买单
+\n* 前一天没有成交的买单延续到次日，次日继续新投放总量2万 QGas买单，收购单价%1$s QLC
 \n* 所有买单的QGas接收地址均统一使用上述地址
-\n* 活动后48小时内，进行QGas销毁操</string>
+\n* 活动后48小时内，进行QGas销毁操作</string>
     <string name="program_time">活动周期:</string>
     <string name="_10_days">10 天</string>
     <string name="buyback_price">回购价格：</string>

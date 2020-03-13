@@ -70,6 +70,8 @@ public class ConstantValue {
     public static String currentMiningActId = "currentMiningActId";
     public static String currentBurnQgasActId = "currentBurnQgasActId";
 
+    public static float qgasToQlcPrice = 4.5F;
+
     /**
      * eth的bnb契约地址
      */

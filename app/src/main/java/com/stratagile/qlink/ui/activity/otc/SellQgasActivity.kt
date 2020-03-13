@@ -297,7 +297,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                 return@setOnClickListener
             }
 
-            if (etQgas.text.toString().toBigDecimal() >= 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (etQgas.text.toString().toBigDecimal() > 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(this)
                 return@setOnClickListener
             }

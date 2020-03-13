@@ -82,16 +82,14 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         oneFirendClaimQgas = dict.data.value.toFloat()
     }
 
-    lateinit var proxyAcitivtyDict : Dict
+    lateinit var proxyAcitivtyDict: Dict
     override fun setProxyActivityBanner(dict: Dict) {
         mPresenter.getTopupGroupKindList(mutableMapOf())
 
         proxyAcitivtyDict = dict
         topupShowProductAdapter.proxyAcitivtyDict = dict
-        if (!isStop) {
-            return
-        }
-        isStop = false
+
+        isStop = true
         viewList.clear()
         if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
             viewList.add(R.layout.layout_finance_share)
@@ -132,7 +130,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         recyclerViewInvite.adapter = invitedAdapter
     }
 
-    override fun setProductList(topupProduct: TopupProduct, next : Boolean) {
+    override fun setProductList(topupProduct: TopupProduct, next: Boolean) {
         if (!this::selectPayToken.isInitialized) {
             mPresenter.getPayToken()
         } else {
@@ -149,29 +147,35 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     }
 
     private var isStop: Boolean = true
+    var autoPlayThread: Thread? = null
 
     /**
      * 第五步: 设置自动播放,每隔PAGER_TIOME秒换一张图片
      */
     private fun autoPlayView() {
+        isStop = false
         //自动播放图片
-        Thread(Runnable {
-            while (!isStop) {
-                runOnUiThread { viewPager.currentItem = viewPager.currentItem + 1 }
-                SystemClock.sleep(5000)
-            }
-        }).start()
+        if (autoPlayThread == null) {
+            autoPlayThread = Thread(Runnable {
+                while (true) {
+                    if (!isStop && viewList.size > 1) {
+                        runOnUiThread { viewPager.currentItem = viewPager.currentItem + 1 }
+                        SystemClock.sleep(5000)
+                    }
+                    SystemClock.sleep(10)
+                }
+            })
+            autoPlayThread!!.start()
+        }
     }
 
-    lateinit var showMiningAct : ShowMiningAct
+    lateinit var showMiningAct: ShowMiningAct
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun setMiningAct(showMiningAct: ShowMiningAct) {
         KLog.i("原先的活动轮播逻辑...")
         this.showMiningAct = showMiningAct
-        if (!isStop) {
-            return
-        }
-        isStop = false
+        isStop = true
+
         viewList.clear()
         if (showMiningAct.isShow) {
             viewList.add(R.layout.layout_finance_share)
@@ -215,13 +219,15 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         if (burnQgasAct.list.size == 0) {
             return
         }
+        ConstantValue.qgasToQlcPrice = burnQgasAct.list[0].unitPrice.toFloat()
+        isStop = true
 //        if (!isStop) {
 //            return
 //        }
 //        isStop = false
         viewList.clear()
 
-        if (showMiningAct.isShow) {
+        if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
             viewList.add(R.layout.layout_finance_share)
             ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
             viewList.add(R.layout.layout_finance_earn_rank)
@@ -421,7 +427,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 11 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
             selectPayToken = data!!.getParcelableExtra("selectPayToken")
             topupShowProductAdapter.payToken = selectPayToken
             topupShowProductAdapter.notifyDataSetChanged()
@@ -483,7 +489,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         }
     }
 
-    fun getGroupKindList(posiion : Int) {
+    fun getGroupKindList(posiion: Int) {
         val infoMap: MutableMap<String, String> = HashMap()
         infoMap["dictType"] = "app_dict"
         mPresenter.qurryDict(infoMap, posiion)
@@ -518,7 +524,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     }
 
     private val mFragmentContainerHelper = FragmentContainerHelper()
-    lateinit var selectedCountry : CountryList.CountryListBean
+    lateinit var selectedCountry: CountryList.CountryListBean
     override fun setCountryList(countryList: CountryList) {
 //        countryAdapter.setNewData(countryList.countryList)
         var countryListBean = CountryList.CountryListBean()
@@ -579,12 +585,16 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         var map = mutableMapOf<String, String>()
         map.put("page", "1")
         map.put("globalRoaming", bean.globalRoaming)
-        map.put("deductionTokenId", if (this::selectPayToken.isInitialized) {selectPayToken.id} else {""})
+        map.put("deductionTokenId", if (this::selectPayToken.isInitialized) {
+            selectPayToken.id
+        } else {
+            ""
+        })
         map.put("size", "20")
-        mPresenter.getProductList(map, false)
+        mPresenter.getProductList(map, true)
     }
 
-    lateinit var mustGroupKind : TopupGroupKindList.GroupKindListBean
+    lateinit var mustGroupKind: TopupGroupKindList.GroupKindListBean
     override fun setGroupKindList(topupGroupList: TopupGroupKindList) {
         var mustDiscount = 1.toDouble()
         topupGroupList.groupKindList.forEach {
@@ -601,8 +611,16 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         var map = mutableMapOf<String, String>()
         map.put("page", "1")
         map.put("size", "20")
-        map.put("globalRoaming", if (this::selectedCountry.isInitialized) {selectedCountry.globalRoaming} else {""})
-        map.put("deductionTokenId", if (this::selectPayToken.isInitialized) {selectPayToken.id} else {""})
+        map.put("globalRoaming", if (this::selectedCountry.isInitialized) {
+            selectedCountry.globalRoaming
+        } else {
+            ""
+        })
+        map.put("deductionTokenId", if (this::selectPayToken.isInitialized) {
+            selectPayToken.id
+        } else {
+            ""
+        })
         mPresenter.getProductList(map, true)
     }
 
@@ -628,6 +646,8 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             infoMap["account"] = ConstantValue.currentUser.account
             infoMap["token"] = AccountUtil.getUserToken()
             mPresenter.getInivteRank(infoMap)
+        } else {
+            mPresenter.getCountryList(hashMapOf())
         }
     }
 

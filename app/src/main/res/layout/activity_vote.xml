@@ -10,7 +10,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:background="@color/mainColor"
-            android:layout_height="102dp">
+            android:minHeight="102dp"
+            android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="107dp"
                 android:src="@mipmap/wj"

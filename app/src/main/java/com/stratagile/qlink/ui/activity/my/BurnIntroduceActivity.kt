@@ -5,10 +5,14 @@ import com.stratagile.qlink.R
 
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.my.component.DaggerBurnIntroduceComponent
 import com.stratagile.qlink.ui.activity.my.contract.BurnIntroduceContract
 import com.stratagile.qlink.ui.activity.my.module.BurnIntroduceModule
 import com.stratagile.qlink.ui.activity.my.presenter.BurnIntroducePresenter
+import kotlinx.android.synthetic.main.activity_burn_introduce.*
+import java.util.HashMap
 
 import javax.inject.Inject;
 
@@ -34,7 +38,11 @@ class BurnIntroduceActivity : BaseActivity(), BurnIntroduceContract.View {
     }
     override fun initData() {
         title.text = getString(R.string.details_burn)
+        var qgasPrice = ConstantValue.qgasToQlcPrice.toBigDecimal().stripTrailingZeros().toPlainString()
+        tvQgasPrice.text = "1QGas= ${qgasPrice} QLC"
+        tvIntroduce.text = getString(R.string.program_implementation, qgasPrice)
     }
+
 
     override fun setupActivityComponent() {
        DaggerBurnIntroduceComponent

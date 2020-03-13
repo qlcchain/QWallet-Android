@@ -254,7 +254,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast(getString(R.string.not_enough) + " ${selectedPair!!.tradeToken}")
                 return@setOnClickListener
             }
-            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() >= 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(activity!!)
                 return@setOnClickListener
             }

@@ -349,6 +349,7 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
             for (int i = 0; i < accountHistory.getResult().size(); i++) {
                 TransactionInfo transactionInfo = new TransactionInfo();
                 transactionInfo.setTransactionType(AllWallet.WalletType.QlcWallet);
+                transactionInfo.setShowAddress("");
                 transactionInfo.setTransactionToken(accountHistory.getResult().get(i).getTokenName());
                 transactionInfo.setTransactionValue(accountHistory.getResult().get(i).getAmount());
                 if ("Receive".equals(accountHistory.getResult().get(i).getType()) || "Open".equals(accountHistory.getResult().get(i).getType())) {

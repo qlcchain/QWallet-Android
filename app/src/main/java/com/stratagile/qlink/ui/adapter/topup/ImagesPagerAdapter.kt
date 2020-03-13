@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.SwitchToOtc
@@ -47,6 +48,10 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
     //实例化Item
     //在指定的位置创建页面；适配器负责添加view到这个容器中，然而它只保证在finishUpdate(ViewGroup)返回时才完成。
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+//        if (simpleDraweeViewList.size == 0) {
+//            KLog.i("数据为空。")
+//            return View(context)
+//        }
         var view1 = LayoutInflater.from(context).inflate(simpleDraweeViewList[position % simpleDraweeViewList.size], null, false)
         container.addView(view1)
         if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_finance_share) {

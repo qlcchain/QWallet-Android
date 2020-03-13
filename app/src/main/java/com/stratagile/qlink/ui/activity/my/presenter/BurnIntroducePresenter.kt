@@ -1,6 +1,8 @@
 package com.stratagile.qlink.ui.activity.my.presenter
 import android.support.annotation.NonNull
+import com.socks.library.KLog
 import com.stratagile.qlink.data.api.HttpAPIWrapper
+import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.my.contract.BurnIntroduceContract
 import com.stratagile.qlink.ui.activity.my.BurnIntroduceActivity
 import javax.inject.Inject

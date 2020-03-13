@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my.contract
 
+import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -19,6 +20,7 @@ interface BurnIntroduceContract {
          *
          */
         fun closeProgressDialog()
+
     }
 
     interface BurnIntroduceContractPresenter : BasePresenter {

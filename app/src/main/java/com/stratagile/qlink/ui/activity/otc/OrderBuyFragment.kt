@@ -256,7 +256,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() >= 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(activity!!)
                 return@setOnClickListener
             }
@@ -427,10 +427,11 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 KLog.i("call succeed,return value is " + retValue!!)
                 retStr = retValue!!.toString()
                 var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-                if (nep5SendBack != null) {
+                if (nep5SendBack != null && nep5SendBack.txid != null) {
                     mPresenter.generateEntrustBuyOrder(nep5SendBack.txid, address, map)
                 } else {
-
+                    toast(getString(R.string.send_qgas_error, "QLC"))
+                    closeProgressDialog()
                 }
             })
         } catch (e : Exception) {
