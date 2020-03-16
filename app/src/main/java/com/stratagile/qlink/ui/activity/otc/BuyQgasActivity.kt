@@ -72,10 +72,15 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
         closeProgressDialog()
         this.entrustOrderInfo = entrustOrderInfo
         maxQgas = entrustOrderInfo.order.totalAmount.toBigDecimal() - entrustOrderInfo.order.lockingAmount.toBigDecimal() - entrustOrderInfo.order.completeAmount.toBigDecimal()
+        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+        if (entrustOrderInfo.order.maxAmount.toBigDecimal() < maxQgas) {
+            maxQgas = entrustOrderInfo.order.maxAmount.toBigDecimal()
+        }
+
         maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
         etUsdt.hint = getString(R.string.max) + " " + maxUsdt.stripTrailingZeros().toPlainString()
         etQgas.hint = getString(R.string.max) + " " + maxQgas.stripTrailingZeros().toPlainString()
-        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+
         if (maxQgas < BigDecimal.valueOf(orderList.maxAmount)) {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.stripTrailingZeros().toPlainString()
         } else {

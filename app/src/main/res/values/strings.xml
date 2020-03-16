@@ -1351,7 +1351,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="confirm_your_mnemonic_words">CONFIRM YOUR MNEMONIC WORDS</string>
     <string name="please_choose_mnemonic_words_in_order_and_make_sure_your_mnemonic_was_correct_written">Please choose mnemonic words in order and make sure your mnemonic was correct written</string>
     <string name="neo_wallet">NEO Wallet</string>
-    <string name="i_have_backuped_the_priate_key">I have backuped the Priate key</string>
+    <string name="i_have_backuped_the_priate_key">I have backed up the Priate key</string>
     <string name="register_eos_account">Register EOS Account</string>
     <string name="transfer_error">transfer error</string>
     <string name="hide_qr_code">Hide QR code</string>

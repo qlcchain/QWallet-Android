@@ -179,6 +179,8 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        webview = DWebView(activity!!)
+        webview!!.loadUrl("file:///android_asset/contract.html")
         tvCreateWallet.setOnClickListener {
             startActivity(Intent(activity, SelectWalletTypeActivity::class.java))
         }
@@ -410,8 +412,6 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
     private var webview: DWebView? = null
     private fun testTransfer(map : HashMap<String, String>, address : String) {
-        webview = DWebView(activity!!)
-        webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
         val arrays = arrayOfNulls<Any>(7)
         arrays[0] = sendNeoWallet!!.address

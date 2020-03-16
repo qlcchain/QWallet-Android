@@ -174,10 +174,16 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         closeProgressDialog()
         this.entrustOrderInfo = entrustOrderInfo
         maxQgas = entrustOrderInfo.order.totalAmount.toBigDecimal() - entrustOrderInfo.order.lockingAmount.toBigDecimal() - entrustOrderInfo.order.completeAmount.toBigDecimal()
+//        maxQgas = entrustOrderInfo.order.totalAmount.toBigDecimal()
+        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+        if (entrustOrderInfo.order.maxAmount.toBigDecimal() < maxQgas) {
+            maxQgas = entrustOrderInfo.order.maxAmount.toBigDecimal()
+        }
+
         maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
         etUsdt.hint = getString(R.string.max) + " " + maxUsdt.stripTrailingZeros().toPlainString()
         etQgas.hint = getString(R.string.max) + " " + maxQgas
-        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+
         if (maxQgas < BigDecimal.valueOf(orderList.maxAmount)) {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.stripTrailingZeros().toPlainString()
         } else {
@@ -263,6 +269,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         tvAmount.text= BigDecimal.valueOf(orderList.totalAmount).stripTrailingZeros().toPlainString()
         tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         maxQgas = orderList.totalAmount.toBigDecimal()
+        if (orderList.maxAmount < orderList.totalAmount) {
+            maxQgas = orderList.maxAmount.toBigDecimal()
+        }
         maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
         etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
         etQgas.hint = getString(R.string.max) + " " + maxQgas

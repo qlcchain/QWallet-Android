@@ -67,6 +67,7 @@ import com.stratagile.qlink.ui.activity.wallet.presenter.AllWalletPresenter;
 import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
 import com.stratagile.qlink.utils.EosUtil;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.QlcReceiveUtilsKt;
 import com.stratagile.qlink.utils.ReceiveBack;
 import com.stratagile.qlink.utils.SpUtil;
@@ -82,6 +83,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -180,6 +182,8 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     private Pending pending;
 
+    private String errorTxid = "";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -188,6 +192,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         EventBus.getDefault().register(this);
         Bundle mBundle = getArguments();
         tokensAdapter = new TokensAdapter(null);
+        errorTxid = FileUtil.getJson(getActivity(), "airdrop.json");
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         recyclerView.setAdapter(tokensAdapter);
         isPending = false;
@@ -752,6 +757,17 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
                         return;
                     }
+                    Iterator<Pending.PendingInfo> iterator = pending.getInfoList().iterator();
+                    KLog.i("pending的数量为：" + pending.getInfoList().size());
+                    while (iterator.hasNext()) {
+                        if (errorTxid.contains(iterator.next().getHash())) {
+                            iterator.remove();
+                        }
+
+                    }
+                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                        return;
+                    }
                     KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
                     if (pending.getInfoList().size() != 0) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -815,6 +831,13 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             }
         }).start();
 
+    }
+
+    /**
+     * 判断这个txid是否是不能得到qgas的txid
+     */
+    private String isContantsTxid() {
+        return FileUtil.getJson(getActivity(), "area.json");
     }
 
     private void getEosToken(EosAccount eosAccount) {
