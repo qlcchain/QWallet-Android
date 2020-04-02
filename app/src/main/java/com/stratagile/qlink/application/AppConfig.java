@@ -173,6 +173,9 @@ public class AppConfig extends MultiDexApplication {
             .skipMemoryCache(true)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .priority(Priority.HIGH);
+    public RequestOptions optionsNormal = new RequestOptions()
+            .centerCrop()
+            .priority(Priority.HIGH);
 
     public AppConfig() {
 
@@ -191,6 +194,7 @@ public class AppConfig extends MultiDexApplication {
         instance = this;
         KLog.init(BuildConfig.LOG_DEBUG);
         KLog.i("app启动！！！");
+        initJpush();
         CrashReport.initCrashReport(this, "2d19fdd0a6", BuildConfig.LOG_DEBUG);
         setupApplicationComponent();
         setDatabase();
@@ -204,7 +208,6 @@ public class AppConfig extends MultiDexApplication {
         initResumeListener();
 //        initMiPush();
         setMode();
-        initJpush();
         setLanguage(false);
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());

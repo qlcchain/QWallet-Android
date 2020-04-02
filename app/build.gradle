@@ -18,9 +18,9 @@ android {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode getSelfDefinedVersion("code") + 5
+        versionCode getSelfDefinedVersion("code") + 9
         multiDexEnabled true
-        versionName "2.5.3"
+        versionName "2.5.7"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -28,8 +28,8 @@ android {
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY : "0b552b82816c33ceda8a8d16", //JPush 上注册的包名对应的 Appkey.
-//                JPUSH_APPKEY : "75f163203819cc97f4ba16b8", //测试
+//                JPUSH_APPKEY : "0b552b82816c33ceda8a8d16", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_APPKEY : "75f163203819cc97f4ba16b8", //测试
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }

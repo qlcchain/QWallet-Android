@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.bumptech.glide.Glide
+import com.pawegio.kandroid.runDelayedOnUiThread
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
@@ -25,10 +26,7 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseFragment
 import com.stratagile.qlink.constant.ConstantValue
-import com.stratagile.qlink.entity.BurnQgasAct
-import com.stratagile.qlink.entity.InviteList
-import com.stratagile.qlink.entity.KLine
-import com.stratagile.qlink.entity.TokenPrice
+import com.stratagile.qlink.entity.*
 import com.stratagile.qlink.entity.eventbus.Logout
 import com.stratagile.qlink.entity.eventbus.ShowMiningAct
 import com.stratagile.qlink.entity.reward.Dict
@@ -82,32 +80,86 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         oneFirendClaimQgas = dict.data.value.toFloat()
     }
 
-    lateinit var proxyAcitivtyDict: Dict
-    override fun setProxyActivityBanner(dict: Dict) {
-        mPresenter.getTopupGroupKindList(mutableMapOf())
+    lateinit var mIndexInterface: IndexInterface
+    override fun setIndexInterface(indexInterface: IndexInterface) {
+        var indexInterfaceStr = GsonUtils.objToJson(indexInterface)
+        KLog.i(indexInterfaceStr)
+        FileUtil.savaData("/Qwallet/indexInterfaceStr.txt", indexInterfaceStr)
 
-        proxyAcitivtyDict = dict
-        topupShowProductAdapter.proxyAcitivtyDict = dict
+        this.mIndexInterface = indexInterface
+        this.oneFirendClaimQgas = mIndexInterface.dictList.winq_invite_reward_amount.toFloat()
+        //处理轮播图
+        handlerBanner()
+        //设置topup支持的国家
+        setCountry()
+        selectPayToken = mIndexInterface.payTokenList[0]
+        if ("".equals(mIndexInterface.payTokenList[0].logo_png)) {
+            Glide.with(activity!!)
+                    .load(resources.getIdentifier(mIndexInterface.payTokenList[0].symbol.toLowerCase(), "mipmap", activity!!.packageName))
+                    .apply(AppConfig.instance.optionsNormal)
+                    .into(ivDeduction)
+        } else {
+            Glide.with(activity!!)
+                    .load(mIndexInterface.payTokenList[0].logo_png)
+                    .apply(AppConfig.instance.optionsNormal)
+                    .into(ivDeduction)
+        }
 
+
+        topupShowProductAdapter.currentTime = mIndexInterface.currentTimeMillis
+        topupShowProductAdapter.dictListBean = mIndexInterface.dictList
+        var mustDiscount = 1.toDouble()
+        mIndexInterface.groupKindList.forEach {
+            if (mustDiscount > it.discount) {
+                mustDiscount = it.discount
+            }
+        }
+        mIndexInterface.groupKindList.forEach {
+            if (mustDiscount == it.discount) {
+                topupShowProductAdapter.mustGroupKind = it
+            }
+        }
+        topupShowProductAdapter.payToken = mIndexInterface.payTokenList[0]
+
+        var map = mutableMapOf<String, String>()
+        map.put("page", "1")
+        map.put("size", "20")
+        map.put("globalRoaming", if (this::selectedCountry.isInitialized) {
+            selectedCountry.globalRoaming
+        } else {
+            ""
+        })
+        map.put("deductionTokenId", if (this::selectPayToken.isInitialized) {
+            selectPayToken.id
+        } else {
+            ""
+        })
+        mPresenter.getProductList(map, true, true)
+
+    }
+
+    fun handlerBanner() {
         isStop = true
         viewList.clear()
-        if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
-            viewList.add(R.layout.layout_finance_share)
-            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
-            viewList.add(R.layout.layout_finance_earn_rank)
-            if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
-                viewList.add(R.layout.layout_banner_proxy_youxiang)
-            }
+        //分享
+        viewList.add(R.layout.layout_finance_share)
 
-        } else {
-            viewList.add(R.layout.layout_finance_share)
-            if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
-                viewList.add(R.layout.layout_banner_proxy_youxiang)
-            }
+        //赚取qgas
+        if (mIndexInterface.tradeMiningList.size > 0) {
+            ConstantValue.miningQLC = mIndexInterface.tradeMiningList[0].totalRewardAmount.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+            viewList.add(R.layout.layout_finance_earn_rank)
         }
-        if (this::burnQgasAct1.isInitialized && burnQgasAct1.list.size > 0) {
+
+        //回购
+        if (TimeUtil.timeStamp(mIndexInterface.dictList.burnQgasVoteStartDate) < mIndexInterface.currentTimeMillis && (TimeUtil.timeStamp(mIndexInterface.dictList.burnQgasVoteEndDate) > mIndexInterface.currentTimeMillis)) {
             viewList.add(R.layout.layout_banner_buyback)
         }
+
+        //代理
+        if (TimeUtil.timeStamp(mIndexInterface.dictList.topupGroupStartDate) < mIndexInterface.currentTimeMillis && (TimeUtil.timeStamp(mIndexInterface.dictList.topopGroupEndDate) > mIndexInterface.currentTimeMillis)) {
+            viewList.add(R.layout.layout_banner_proxy_youxiang)
+        }
+
         val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
         viewPager.adapter = viewAdapter
         val scaleCircleNavigator = ScaleCircleNavigator(activity)
@@ -119,25 +171,118 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         ViewPagerHelper.bind(indicator, viewPager, viewList.size)
 
         if (viewList.size > 1) {
-//            setFirstLocation()
             autoPlayView()
         }
     }
 
+    fun setCountry() {
+        var countryListBean = IndexInterface.CountryListBean()
+        countryListBean.name = "全部"
+        countryListBean.nameEn = "All"
+        countryListBean.globalRoaming = ""
+        countryListBean.imgPath = ""
+        selectedCountry = countryListBean
+        mIndexInterface.countryList.add(0, countryListBean)
+        val commonNavigator = CommonNavigator(activity!!)
+        commonNavigator.isAdjustMode = true
+        commonNavigator.adapter = object : CommonNavigatorAdapter() {
+            override fun getCount(): Int {
+                return mIndexInterface.countryList.size
+            }
+
+            override fun getTitleView(context: Context, i: Int): IPagerTitleView {
+                val simplePagerTitleView = SimplePagerTitleView(context)
+                var isCn = true
+                isCn = SpUtil.getInt(activity!!, ConstantValue.Language, -1) == 1
+                if (isCn) {
+                    simplePagerTitleView.setText(mIndexInterface.countryList.get(i).name)
+                } else {
+                    simplePagerTitleView.setText(mIndexInterface.countryList.get(i).nameEn)
+                }
+                simplePagerTitleView.isSingleLine = false
+                simplePagerTitleView.normalColor = resources.getColor(R.color.color_505050)
+                simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                simplePagerTitleView.selectedColor = resources.getColor(R.color.color_F50B6E)
+                simplePagerTitleView.setOnClickListener {
+                    mFragmentContainerHelper.handlePageSelected(i)
+                    selectedCountry = mIndexInterface.countryList[i]
+                    reChangeTaoCan(mIndexInterface.countryList[i])
+                }
+                return simplePagerTitleView
+            }
+
+            override fun getIndicator(context: Context): IPagerIndicator {
+                val indicator = LinePagerIndicator(context)
+                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
+                indicator.lineHeight = resources.getDimension(R.dimen.x3)
+                indicator.setColors(resources.getColor(R.color.transparent))
+                return indicator
+            }
+        }
+        indicatorPlan.navigator = commonNavigator
+        commonNavigator.titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+        mFragmentContainerHelper.attachMagicIndicator(indicatorPlan)
+    }
+
+
+    lateinit var proxyAcitivtyDict: Dict
+    override fun setProxyActivityBanner(dict: Dict) {
+//        mPresenter.getTopupGroupKindList(mutableMapOf())
+//
+//        proxyAcitivtyDict = dict
+//        topupShowProductAdapter.proxyAcitivtyDict = dict
+//
+//        isStop = true
+//        viewList.clear()
+//        if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
+//            viewList.add(R.layout.layout_finance_share)
+//            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+//            viewList.add(R.layout.layout_finance_earn_rank)
+//            if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
+//                viewList.add(R.layout.layout_banner_proxy_youxiang)
+//            }
+//
+//        } else {
+//            viewList.add(R.layout.layout_finance_share)
+//            if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
+//                viewList.add(R.layout.layout_banner_proxy_youxiang)
+//            }
+//        }
+//        if (this::burnQgasAct1.isInitialized && burnQgasAct1.list.size > 0) {
+//            viewList.add(R.layout.layout_banner_buyback)
+//        }
+//        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
+//        viewPager.adapter = viewAdapter
+//        val scaleCircleNavigator = ScaleCircleNavigator(activity)
+//        scaleCircleNavigator.setCircleCount(viewList.size)
+//        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
+//        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
+//        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
+//        indicator.navigator = scaleCircleNavigator
+//        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
+//
+//        if (viewList.size > 1) {
+////            setFirstLocation()
+//            autoPlayView()
+//        }
+    }
+
     override fun setInviteRank(inviteList: InviteList) {
-        mPresenter.getCountryList(hashMapOf())
+//        mPresenter.getCountryList(hashMapOf())
         val invitedAdapter = InvitedAdapter(inviteList.top5, oneFirendClaimQgas)
         recyclerViewInvite.adapter = invitedAdapter
     }
 
-    override fun setProductList(topupProduct: TopupProduct, next: Boolean) {
-        if (!this::selectPayToken.isInitialized) {
-            mPresenter.getPayToken()
-        } else {
-            topupShowProductAdapter.setNewData(topupProduct.productList)
-            if (next) {
-                getInviteRank()
-            }
+    override fun setProductList(topupProduct: TopupProduct, next: Boolean, saveToLocal : Boolean) {
+        if (saveToLocal) {
+            var productListStr = GsonUtils.objToJson(topupProduct)
+            KLog.i(productListStr)
+            FileUtil.savaData("/Qwallet/productListStr.txt", productListStr)
+        }
+
+        topupShowProductAdapter.setNewData(topupProduct.productList)
+        if (next) {
+            getInviteRank()
         }
     }
 
@@ -172,96 +317,96 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     lateinit var showMiningAct: ShowMiningAct
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun setMiningAct(showMiningAct: ShowMiningAct) {
-        KLog.i("原先的活动轮播逻辑...")
-        this.showMiningAct = showMiningAct
-        isStop = true
-
-        viewList.clear()
-        if (showMiningAct.isShow) {
-            viewList.add(R.layout.layout_finance_share)
-            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
-            viewList.add(R.layout.layout_finance_earn_rank)
-            if (this::proxyAcitivtyDict.isInitialized) {
-                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
-                    viewList.add(R.layout.layout_banner_proxy_youxiang)
-                }
-            }
-        } else {
-            viewList.add(R.layout.layout_finance_share)
-            if (this::proxyAcitivtyDict.isInitialized) {
-                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
-                    viewList.add(R.layout.layout_banner_proxy_youxiang)
-                }
-            }
-        }
-        if (this::burnQgasAct1.isInitialized && burnQgasAct1.list.size > 0) {
-            viewList.add(R.layout.layout_banner_buyback)
-        }
-        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
-        viewPager.adapter = viewAdapter
-        val scaleCircleNavigator = ScaleCircleNavigator(activity)
-        scaleCircleNavigator.setCircleCount(viewList.size)
-        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
-        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
-        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
-        indicator.navigator = scaleCircleNavigator
-        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
-
-        if (viewList.size > 1) {
-//            setFirstLocation()
-            autoPlayView()
-        }
+//        KLog.i("原先的活动轮播逻辑...")
+//        this.showMiningAct = showMiningAct
+//        isStop = true
+//
+//        viewList.clear()
+//        if (showMiningAct.isShow) {
+//            viewList.add(R.layout.layout_finance_share)
+//            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+//            viewList.add(R.layout.layout_finance_earn_rank)
+//            if (this::proxyAcitivtyDict.isInitialized) {
+//                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+//                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+//                }
+//            }
+//        } else {
+//            viewList.add(R.layout.layout_finance_share)
+//            if (this::proxyAcitivtyDict.isInitialized) {
+//                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+//                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+//                }
+//            }
+//        }
+//        if (this::burnQgasAct1.isInitialized && burnQgasAct1.list.size > 0) {
+//            viewList.add(R.layout.layout_banner_buyback)
+//        }
+//        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
+//        viewPager.adapter = viewAdapter
+//        val scaleCircleNavigator = ScaleCircleNavigator(activity)
+//        scaleCircleNavigator.setCircleCount(viewList.size)
+//        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
+//        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
+//        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
+//        indicator.navigator = scaleCircleNavigator
+//        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
+//
+//        if (viewList.size > 1) {
+////            setFirstLocation()
+//            autoPlayView()
+//        }
     }
 
     lateinit var burnQgasAct1: BurnQgasAct
     override fun setBurnQgasAct(burnQgasAct: BurnQgasAct) {
-        KLog.i("setBurnQgasAct")
-        if (burnQgasAct.list.size == 0) {
-            return
-        }
-        ConstantValue.qgasToQlcPrice = burnQgasAct.list[0].unitPrice.toFloat()
-        isStop = true
-//        if (!isStop) {
+//        KLog.i("setBurnQgasAct")
+//        if (burnQgasAct.list.size == 0) {
 //            return
 //        }
-//        isStop = false
-        viewList.clear()
-
-        if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
-            viewList.add(R.layout.layout_finance_share)
-            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
-            viewList.add(R.layout.layout_finance_earn_rank)
-            if (this::proxyAcitivtyDict.isInitialized) {
-                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
-                    viewList.add(R.layout.layout_banner_proxy_youxiang)
-                }
-            }
-        } else {
-            viewList.add(R.layout.layout_finance_share)
-            if (this::proxyAcitivtyDict.isInitialized) {
-                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
-                    viewList.add(R.layout.layout_banner_proxy_youxiang)
-                }
-            }
-        }
-        val currentBurnQgasActId = SpUtil.getString(activity, ConstantValue.currentBurnQgasActId, "")
-        if (burnQgasAct.list.size > 0) {
-            viewList.add(R.layout.layout_banner_buyback)
-        }
-        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
-        viewPager.adapter = viewAdapter
-        val scaleCircleNavigator = ScaleCircleNavigator(activity)
-        scaleCircleNavigator.setCircleCount(viewList.size)
-        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
-        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
-        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
-        indicator.navigator = scaleCircleNavigator
-        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
-
-        if (viewList.size > 1) {
-//            setFirstLocation()
-            autoPlayView()
-        }
+//        ConstantValue.qgasToQlcPrice = burnQgasAct.list[0].unitPrice.toFloat()
+//        isStop = true
+////        if (!isStop) {
+////            return
+////        }
+////        isStop = false
+//        viewList.clear()
+//
+//        if (this::showMiningAct.isInitialized && showMiningAct.isShow) {
+//            viewList.add(R.layout.layout_finance_share)
+//            ConstantValue.miningQLC = showMiningAct.count.toBigDecimal().stripTrailingZeros().toPlainString() + " QLC!"
+//            viewList.add(R.layout.layout_finance_earn_rank)
+//            if (this::proxyAcitivtyDict.isInitialized) {
+//                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+//                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+//                }
+//            }
+//        } else {
+//            viewList.add(R.layout.layout_finance_share)
+//            if (this::proxyAcitivtyDict.isInitialized) {
+//                if (TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+//                    viewList.add(R.layout.layout_banner_proxy_youxiang)
+//                }
+//            }
+//        }
+//        val currentBurnQgasActId = SpUtil.getString(activity, ConstantValue.currentBurnQgasActId, "")
+//        if (burnQgasAct.list.size > 0) {
+//            viewList.add(R.layout.layout_banner_buyback)
+//        }
+//        val viewAdapter = ImagesPagerAdapter(viewList, viewPager, activity!!)
+//        viewPager.adapter = viewAdapter
+//        val scaleCircleNavigator = ScaleCircleNavigator(activity)
+//        scaleCircleNavigator.setCircleCount(viewList.size)
+//        scaleCircleNavigator.setNormalCircleColor(Color.LTGRAY)
+//        scaleCircleNavigator.setSelectedCircleColor(activity!!.resources.getColor(R.color.mainColor))
+//        scaleCircleNavigator.setCircleClickListener { index -> viewPager.currentItem = index }
+//        indicator.navigator = scaleCircleNavigator
+//        ViewPagerHelper.bind(indicator, viewPager, viewList.size)
+//
+//        if (viewList.size > 1) {
+////            setFirstLocation()
+//            autoPlayView()
+//        }
     }
 
     @Inject
@@ -307,11 +452,13 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         indicator.navigator = scaleCircleNavigator
         ViewPagerHelper.bind(indicator, viewPager!!, viewList.size)
         rlWallet.setOnClickListener {
+            FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Home_ChooseToken)
             val intent1 = Intent(activity!!, TopupSelectDeductionTokenActivity::class.java)
             startActivityForResult(intent1, 11)
         }
 
         rl1.setOnClickListener {
+            FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Home_MyOrders)
             val intent1 = Intent(activity!!, TopupOrderListActivity::class.java)
             startActivity(intent1)
         }
@@ -333,9 +480,11 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 tvIniviteCode.text = ConstantValue.currentUser.inviteCode
                 llReferralCode.visibility = View.VISIBLE
                 tvInivteNow.setOnClickListener {
+                    FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Home_MyReferralCode_ReferNOW)
                     startActivity(Intent(activity, InviteNowActivity::class.java))
                 }
                 llCopy.setOnClickListener {
+                    FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Home_MyReferralCode_Copy)
                     //获取剪贴板管理器：
                     var cm = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
                     // 创建普通字符型ClipData
@@ -364,7 +513,10 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
         recyclerViewInvite.setHasFixedSize(true)
         recyclerViewInvite.isNestedScrollingEnabled = false
-        mPresenter.getPayToken()
+
+        getLocalData()
+
+        mPresenter.indexInterface()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
             if (ConstantValue.currentUser == null) {
                 startActivity(Intent(activity!!, AccountActivity::class.java))
@@ -401,14 +553,15 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         }
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = false
-            if (!this::selectPayToken.isInitialized) {
-                mPresenter.getPayToken()
-            } else {
+            mPresenter.indexInterface()
+//            if (!this::selectPayToken.isInitialized) {
+//                mPresenter.getPayToken()
+//            } else {
                 getOneFriendReward()
-            }
+//            }
         }
 
-        var countryListBean = CountryList.CountryListBean()
+        var countryListBean = IndexInterface.CountryListBean()
         countryListBean.name = "全部"
         countryListBean.nameEn = "All"
         countryListBean.globalRoaming = ""
@@ -425,10 +578,40 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     }
 
+    fun getLocalData() {
+        runDelayedOnUiThread(5) {
+            try {
+                var interfaceListStr = FileUtil.readData("/Qwallet/indexInterfaceStr.txt")
+                if (!"".equals(interfaceListStr)) {
+                    var indexInterface = GsonUtils.jsonToObj(interfaceListStr, IndexInterface::class.java)
+                    setIndexInterface(indexInterface)
+                }
+                var productListStr = FileUtil.readData("/Qwallet/productListStr.txt")
+                KLog.i(productListStr)
+                if (!"".equals(productListStr)) {
+                    var topuproduct = GsonUtils.jsonToObj(productListStr, TopupProduct::class.java)
+                    setProductList(topuproduct, false, false)
+                }
+            } catch (e : Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
-            selectPayToken = data!!.getParcelableExtra("selectPayToken")
+            var returnPayToken = data!!.getParcelableExtra<PayToken.PayTokenListBean>("selectPayToken")
+            selectPayToken = returnPayToken
+//            selectPayToken.decimal = returnPayToken.decimal
+//            selectPayToken.hash = returnPayToken.hash
+//            selectPayToken.id = returnPayToken.id
+//            selectPayToken.logo_png = returnPayToken.logo_png
+//            selectPayToken.logo_webp = returnPayToken.logo_webp
+//            selectPayToken.price = returnPayToken.price
+//            selectPayToken.symbol = returnPayToken.symbol
+//            selectPayToken.usdPrice = returnPayToken.usdPrice
+
             topupShowProductAdapter.payToken = selectPayToken
             topupShowProductAdapter.notifyDataSetChanged()
             if ("".equals(selectPayToken.logo_png)) {
@@ -447,7 +630,6 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     override fun setGroupDate(dict: Dict, position: Int) {
         this.proxyAcitivtyDict = dict
-        topupShowProductAdapter.proxyAcitivtyDict = dict
         if (TimeUtil.timeStamp(dict.data.topupGroupStartDate) < dict.currentTimeMillis && (TimeUtil.timeStamp(dict.data.topopGroupEndDate) > dict.currentTimeMillis)) {
             var productIntent = Intent(activity!!, TopupProductDetailActivity::class.java)
             productIntent.putExtra("productBean", topupShowProductAdapter!!.data[position])
@@ -460,6 +642,8 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             qurryIntent.putExtra("country", selectedCountry.nameEn)
             qurryIntent.putExtra("area", selectedCountry.globalRoaming)
             qurryIntent.putExtra("isp", topupShowProductAdapter.data[position].ispEn.trim())
+            qurryIntent.putExtra("selectedPayToken", selectPayToken)
+            startActivity(qurryIntent)
 //            var deductionTokenPrice = 0.toDouble()
 //            if ("CNY".equals(topupShowProductAdapter!!.data[position].payFiat)) {
 //                deductionTokenPrice = selectPayToken.price
@@ -503,20 +687,20 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
     lateinit var selectPayToken: PayToken.PayTokenListBean
     override fun setPayToken(payToken: PayToken) {
-        selectPayToken = payToken.payTokenList[0]
-        topupShowProductAdapter.payToken = selectPayToken
-        if ("".equals(payToken.payTokenList[0].logo_png)) {
-            Glide.with(activity!!)
-                    .load(resources.getIdentifier(payToken.payTokenList[0].symbol.toLowerCase(), "mipmap", activity!!.packageName))
-                    .apply(AppConfig.instance.optionsTopup)
-                    .into(ivDeduction)
-        } else {
-            Glide.with(activity!!)
-                    .load(payToken.payTokenList[0].logo_png)
-                    .apply(AppConfig.instance.optionsTopup)
-                    .into(ivDeduction)
-        }
-        getOneFriendReward()
+//        selectPayToken = payToken.payTokenList[0]
+//        topupShowProductAdapter.payToken = selectPayToken
+//        if ("".equals(payToken.payTokenList[0].logo_png)) {
+//            Glide.with(activity!!)
+//                    .load(resources.getIdentifier(payToken.payTokenList[0].symbol.toLowerCase(), "mipmap", activity!!.packageName))
+//                    .apply(AppConfig.instance.optionsTopup)
+//                    .into(ivDeduction)
+//        } else {
+//            Glide.with(activity!!)
+//                    .load(payToken.payTokenList[0].logo_png)
+//                    .apply(AppConfig.instance.optionsTopup)
+//                    .into(ivDeduction)
+//        }
+//        getOneFriendReward()
     }
 
     override fun setChartData(data: KLine) {
@@ -524,64 +708,64 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     }
 
     private val mFragmentContainerHelper = FragmentContainerHelper()
-    lateinit var selectedCountry: CountryList.CountryListBean
+    lateinit var selectedCountry: IndexInterface.CountryListBean
     override fun setCountryList(countryList: CountryList) {
 //        countryAdapter.setNewData(countryList.countryList)
-        var countryListBean = CountryList.CountryListBean()
-        countryListBean.name = "全部"
-        countryListBean.nameEn = "All"
-        countryListBean.globalRoaming = ""
-        countryListBean.imgPath = ""
-        selectedCountry = countryListBean
-        countryList.countryList.add(0, countryListBean)
-        val commonNavigator = CommonNavigator(activity!!)
-        commonNavigator.isAdjustMode = true
-        commonNavigator.adapter = object : CommonNavigatorAdapter() {
-            override fun getCount(): Int {
-                return countryList.countryList.size
-            }
-
-            override fun getTitleView(context: Context, i: Int): IPagerTitleView {
-                val simplePagerTitleView = SimplePagerTitleView(context)
-                var isCn = true
-                isCn = SpUtil.getInt(activity!!, ConstantValue.Language, -1) == 1
-                if (isCn) {
-                    simplePagerTitleView.setText(countryList.countryList.get(i).name)
-                } else {
-                    simplePagerTitleView.setText(countryList.countryList.get(i).nameEn)
-                }
-                simplePagerTitleView.isSingleLine = false
-                simplePagerTitleView.normalColor = resources.getColor(R.color.color_505050)
-                simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-                simplePagerTitleView.selectedColor = resources.getColor(R.color.color_F50B6E)
-                simplePagerTitleView.setOnClickListener {
-                    mFragmentContainerHelper.handlePageSelected(i)
-                    selectedCountry = countryList.countryList[i]
-                    reChangeTaoCan(countryList.countryList[i])
-                }
-                return simplePagerTitleView
-            }
-
-            override fun getIndicator(context: Context): IPagerIndicator {
-                val indicator = LinePagerIndicator(context)
-                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.lineHeight = resources.getDimension(R.dimen.x3)
-                indicator.setColors(resources.getColor(R.color.transparent))
-                return indicator
-            }
-        }
-        indicatorPlan.navigator = commonNavigator
-        commonNavigator.titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
-        mFragmentContainerHelper.attachMagicIndicator(indicatorPlan)
-//        commonNavigator.titleContainer.dividerDrawable = object : ColorDrawable() {
-//            override fun getIntrinsicWidth(): Int {
-//                return UIUtils.dip2px(10f, this@InviteActivity)
+//        var countryListBean = CountryList.CountryListBean()
+//        countryListBean.name = "全部"
+//        countryListBean.nameEn = "All"
+//        countryListBean.globalRoaming = ""
+//        countryListBean.imgPath = ""
+//        selectedCountry = countryListBean
+//        countryList.countryList.add(0, countryListBean)
+//        val commonNavigator = CommonNavigator(activity!!)
+//        commonNavigator.isAdjustMode = true
+//        commonNavigator.adapter = object : CommonNavigatorAdapter() {
+//            override fun getCount(): Int {
+//                return countryList.countryList.size
+//            }
+//
+//            override fun getTitleView(context: Context, i: Int): IPagerTitleView {
+//                val simplePagerTitleView = SimplePagerTitleView(context)
+//                var isCn = true
+//                isCn = SpUtil.getInt(activity!!, ConstantValue.Language, -1) == 1
+//                if (isCn) {
+//                    simplePagerTitleView.setText(countryList.countryList.get(i).name)
+//                } else {
+//                    simplePagerTitleView.setText(countryList.countryList.get(i).nameEn)
+//                }
+//                simplePagerTitleView.isSingleLine = false
+//                simplePagerTitleView.normalColor = resources.getColor(R.color.color_505050)
+//                simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                simplePagerTitleView.selectedColor = resources.getColor(R.color.color_F50B6E)
+//                simplePagerTitleView.setOnClickListener {
+//                    mFragmentContainerHelper.handlePageSelected(i)
+//                    selectedCountry = countryList.countryList[i]
+//                    reChangeTaoCan(countryList.countryList[i])
+//                }
+//                return simplePagerTitleView
+//            }
+//
+//            override fun getIndicator(context: Context): IPagerIndicator {
+//                val indicator = LinePagerIndicator(context)
+//                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
+//                indicator.lineHeight = resources.getDimension(R.dimen.x3)
+//                indicator.setColors(resources.getColor(R.color.transparent))
+//                return indicator
 //            }
 //        }
-        mPresenter.burnQgasList(hashMapOf())
+//        indicatorPlan.navigator = commonNavigator
+//        commonNavigator.titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+//        mFragmentContainerHelper.attachMagicIndicator(indicatorPlan)
+////        commonNavigator.titleContainer.dividerDrawable = object : ColorDrawable() {
+////            override fun getIntrinsicWidth(): Int {
+////                return UIUtils.dip2px(10f, this@InviteActivity)
+////            }
+////        }
+//        mPresenter.burnQgasList(hashMapOf())
     }
 
-    fun reChangeTaoCan(bean: CountryList.CountryListBean) {
+    fun reChangeTaoCan(bean: IndexInterface.CountryListBean) {
         var map = mutableMapOf<String, String>()
         map.put("page", "1")
         map.put("globalRoaming", bean.globalRoaming)
@@ -591,37 +775,23 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             ""
         })
         map.put("size", "20")
-        mPresenter.getProductList(map, true)
+        mPresenter.getProductList(map, false, false)
     }
 
     lateinit var mustGroupKind: TopupGroupKindList.GroupKindListBean
     override fun setGroupKindList(topupGroupList: TopupGroupKindList) {
-        var mustDiscount = 1.toDouble()
-        topupGroupList.groupKindList.forEach {
-            if (mustDiscount > it.discount) {
-                mustDiscount = it.discount
-            }
-        }
-        topupGroupList.groupKindList.forEach {
-            if (mustDiscount == it.discount) {
-                topupShowProductAdapter.mustGroupKind = it
-            }
-        }
+//        var mustDiscount = 1.toDouble()
+//        topupGroupList.groupKindList.forEach {
+//            if (mustDiscount > it.discount) {
+//                mustDiscount = it.discount
+//            }
+//        }
+//        topupGroupList.groupKindList.forEach {
+//            if (mustDiscount == it.discount) {
+//                topupShowProductAdapter.mustGroupKind = it
+//            }
+//        }
 
-        var map = mutableMapOf<String, String>()
-        map.put("page", "1")
-        map.put("size", "20")
-        map.put("globalRoaming", if (this::selectedCountry.isInitialized) {
-            selectedCountry.globalRoaming
-        } else {
-            ""
-        })
-        map.put("deductionTokenId", if (this::selectPayToken.isInitialized) {
-            selectPayToken.id
-        } else {
-            ""
-        })
-        mPresenter.getProductList(map, true)
     }
 
 
@@ -647,7 +817,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             infoMap["token"] = AccountUtil.getUserToken()
             mPresenter.getInivteRank(infoMap)
         } else {
-            mPresenter.getCountryList(hashMapOf())
+//            mPresenter.getCountryList(hashMapOf())
         }
     }
 

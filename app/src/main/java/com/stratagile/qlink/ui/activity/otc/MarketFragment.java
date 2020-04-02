@@ -47,6 +47,7 @@ import com.stratagile.qlink.ui.activity.otc.module.MarketModule;
 import com.stratagile.qlink.ui.activity.otc.presenter.MarketPresenter;
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
@@ -308,6 +309,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         tvFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FireBaseUtils.logEvent(getActivity(), FireBaseUtils.OTC_Home_Filter);
                 EventBus.getDefault().post(new StartFilter());
             }
         });

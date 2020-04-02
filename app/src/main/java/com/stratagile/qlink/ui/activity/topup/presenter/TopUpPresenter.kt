@@ -45,9 +45,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }
     }
 
-    fun getProductList(map: MutableMap<String, String>, next : Boolean) {
+    fun getProductList(map: MutableMap<String, String>, next : Boolean, saveToLocal : Boolean) {
         mCompositeDisposable.add(httpAPIWrapper.getTopupProductList(map).subscribe({
-            mView.setProductList(it, next)
+            mView.setProductList(it, next, saveToLocal)
         }, {
             mView.closeProgressDialog()
         }, {
@@ -150,6 +150,16 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
     fun getPayToken() {
         mCompositeDisposable.add(httpAPIWrapper.payToken(hashMapOf<String, String>()).subscribe({
             mView.setPayToken(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun indexInterface() {
+        mCompositeDisposable.add(httpAPIWrapper.indexInterface(hashMapOf<String, String>()).subscribe({
+            mView.setIndexInterface(it)
         }, {
             mView.closeProgressDialog()
         }, {

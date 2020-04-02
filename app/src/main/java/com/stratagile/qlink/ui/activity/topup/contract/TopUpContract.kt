@@ -1,9 +1,6 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
-import com.stratagile.qlink.entity.BurnQgasAct
-import com.stratagile.qlink.entity.InviteList
-import com.stratagile.qlink.entity.KLine
-import com.stratagile.qlink.entity.TokenPrice
+import com.stratagile.qlink.entity.*
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.entity.topup.*
 import com.stratagile.qlink.ui.activity.base.BasePresenter
@@ -26,7 +23,7 @@ interface TopUpContract {
          */
         fun closeProgressDialog()
 
-        fun setProductList(topupProduct: TopupProduct, next : Boolean)
+        fun setProductList(topupProduct: TopupProduct, next : Boolean, saveToLocal : Boolean)
 
         fun setInviteRank(inviteList: InviteList)
 
@@ -46,6 +43,8 @@ interface TopUpContract {
         fun setGroupKindList(topupGroupList: TopupGroupKindList)
 
         fun setBurnQgasAct(burnQgasAct: BurnQgasAct)
+
+        fun setIndexInterface (indexInterface: IndexInterface)
     }
 
     interface TopUpContractPresenter : BasePresenter {

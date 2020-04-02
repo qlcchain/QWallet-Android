@@ -231,7 +231,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         }, {
             KLog.i("错误1")
             mView.closeProgressDialog()
-            BuySellSellTodo.createBuySellSellTodo(map)
+//            BuySellSellTodo.createBuySellSellTodo(map)
 //            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }, {
             BuySellSellTodo.createBuySellSellTodo(map)

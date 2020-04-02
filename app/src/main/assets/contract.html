@@ -162,7 +162,28 @@
 				    //console.log("js日志6。。。");
 					responseCallback(config);
 				});
-			}
+			},
+			// claimGas
+            claimGas:function (privateKey, responseCallback) {
+
+             const account = new Neon.wallet.Account(privateKey);
+
+             const config = {
+              api: apiProvider, // The API Provider that we rely on for balance and rpc information
+              account: account  // The sending Account
+             };
+
+             Neon.api.claimGas(config)
+             .then(config => {
+              console.log(config.response);
+              responseCallback({'claimed': true, 'msg':config.response});
+             })
+             .catch(config => {
+              console.log("出错了。。");
+              console.log(config);
+              responseCallback({'claimed': false, 'msg':config});
+             });
+            }
 		});
 
 

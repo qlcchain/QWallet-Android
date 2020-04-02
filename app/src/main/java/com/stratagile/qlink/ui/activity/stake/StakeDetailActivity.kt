@@ -123,11 +123,13 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                 tvStakeStatus.text = getString(R.string.not_succeed_continue_to_invoke)
                 tvStakeStatus.setTextColor(resources.getColor(R.color.color_108ee9))
                 optionRevokeTime.text = "-/-"
+                getLockInfo1()
             }
             "PledgeProcess" -> {
                 tvStakeStatus.text = getString(R.string.not_succeed_continue_to_invoke)
                 tvStakeStatus.setTextColor(resources.getColor(R.color.color_108ee9))
                 optionRevokeTime.text = "-/-"
+                getLockInfo1()
             }
             "PledgeDone" -> {
                 if (System.currentTimeMillis() > myStake.withdrawTime * 1000) {
@@ -139,21 +141,25 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                     tvStakeStatus.setTextColor(resources.getColor(R.color.color_29282a))
                     optionRevokeTime.text = TimeUtil.getRevokeTime(myStake.withdrawTime)
                 }
+                getLockInfo1()
             }
             "WithdrawStart" -> {
                 tvStakeStatus.text = getString(R.string.revoke_stake)
                 tvStakeStatus.setTextColor(resources.getColor(R.color.color_108ee9))
                 optionRevokeTime.text = TimeUtil.getRevokeTime(myStake.withdrawTime)
+                getLockInfo1()
             }
             "WithdrawProcess" -> {
                 tvStakeStatus.text = getString(R.string.revoke_failed1)
                 tvStakeStatus.setTextColor(resources.getColor(R.color.color_29282a))
                 optionRevokeTime.text = TimeUtil.getRevokeTime(myStake.withdrawTime)
+                getLockInfo1()
             }
             "WithdrawDone" -> {
                 tvStakeStatus.text = getString(R.string.withdrawal_successful)
                 tvStakeStatus.setTextColor(resources.getColor(R.color.color_0cb8ae))
                 optionRevokeTime.text = TimeUtil.getRevokeTime(myStake.withdrawTime)
+                getLockInfo1()
             }
         }
         tvStakeStatus.setOnClickListener {
@@ -254,6 +260,8 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
     fun getNeoAddressPubKey(address: String) {
         var walletList = AppConfig.instance.daoSession.walletDao.loadAll()
         neoWallet = walletList.find { it.address.equals(address) }
+        KLog.i(neoWallet.toString())
+        KLog.i(Neoutils.neoAddressToScriptHash(neoWallet!!.address))
         if (neoWallet != null) {
             unLockQLc(neoWallet!!.publicKey)
         } else {
@@ -264,6 +272,8 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
 
         }
     }
+
+
 
     fun getNep5TxidWithDraw(string: String) {
         thread {
@@ -340,6 +350,8 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                 processWithdraw(stateBlock, unLock)
             } else {
                 KLog.i("work出错、、、")
+                error!!.exception.printStackTrace()
+                KLog.i(error!!.response.statusCode)
                 benefitWithdraw(unLock)
             }
         }
@@ -449,6 +461,38 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                 } else {
                     com.pawegio.kandroid.runOnUiThread {
                         closeProgressDialog()
+                        toast("txid is unlock")
+                    }
+                }
+            } catch (e : Exception) {
+                e.printStackTrace()
+                com.pawegio.kandroid.runOnUiThread {
+                    closeProgressDialog()
+                    toast("get lockInfo error")
+                }
+            }
+        }
+    }
+    fun getLockInfo1() {
+        thread {
+            try {
+                val client = QlcClient("https://nep5.qlcchain.online")
+                val params = JSONArray()
+                params.add(myStake.nep5TxId)
+                var result = client.call("nep5_getLockInfo", params)
+                KLog.i(result.toJSONString())
+                var lockInfo = Gson().fromJson(result.toJSONString(), LockInfo::class.java)
+                if (lockInfo.result.isState) {
+                    com.pawegio.kandroid.runOnUiThread {
+                        tvNeoAddress.text = lockInfo.result.neoAddress
+
+//                        var walletList = AppConfig.instance.daoSession.walletDao.loadAll()
+//                        neoWallet = walletList.find { it.address.equals(lockInfo.result.neoAddress) }
+//                        KLog.i(neoWallet.toString())
+//                        KLog.i(Neoutils.neoAddressToScriptHash(neoWallet!!.address))
+                    }
+                } else {
+                    com.pawegio.kandroid.runOnUiThread {
                         toast("txid is unlock")
                     }
                 }

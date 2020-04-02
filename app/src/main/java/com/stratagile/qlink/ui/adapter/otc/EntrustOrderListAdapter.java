@@ -43,9 +43,9 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
         }
         helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
         helper.setText(R.id.tvNickName, AccountUtil.setUserNickName(item.getNickname()));
-        helper.setText(R.id.tvAmount, (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()) + "");
+        helper.setText(R.id.tvAmount, (BigDecimal.valueOf(item.getTotalAmount()).subtract(BigDecimal.valueOf(item.getLockingAmount())).subtract(BigDecimal.valueOf(item.getCompleteAmount())).stripTrailingZeros().toPlainString()));
         if (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue() < BigDecimal.valueOf(item.getMaxAmount()).intValue()) {
-            helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()));
+            helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + (BigDecimal.valueOf(item.getTotalAmount()).subtract(BigDecimal.valueOf(item.getLockingAmount())).subtract(BigDecimal.valueOf(item.getCompleteAmount())).stripTrailingZeros().toPlainString()));
         } else {
             helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());
         }

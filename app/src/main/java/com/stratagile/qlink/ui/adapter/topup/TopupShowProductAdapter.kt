@@ -13,6 +13,7 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.api.MainAPI
+import com.stratagile.qlink.entity.IndexInterface
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.entity.topup.PayToken
 import com.stratagile.qlink.entity.topup.TopupGroupKindList
@@ -25,8 +26,9 @@ import java.math.BigDecimal
 
 class TopupShowProductAdapter(array: ArrayList<TopupProduct.ProductListBean>) : BaseQuickAdapter<TopupProduct.ProductListBean, BaseViewHolder>(R.layout.item_topup_show_product, array) {
     lateinit var payToken: PayToken.PayTokenListBean
-    lateinit var proxyAcitivtyDict : Dict
-    lateinit var mustGroupKind : TopupGroupKindList.GroupKindListBean
+    lateinit var dictListBean: IndexInterface.DictListBean
+    var currentTime = 0L
+    lateinit var mustGroupKind : IndexInterface.GroupKindListBean
     override fun convert(helper: BaseViewHolder, item: TopupProduct.ProductListBean) {
         var isCn = true
         isCn = SpUtil.getInt(mContext, ConstantValue.Language, -1) == 1
@@ -83,7 +85,7 @@ class TopupShowProductAdapter(array: ArrayList<TopupProduct.ProductListBean>) : 
             } else {
                 helper.setText(R.id.tvSaleVolume, mContext.getString(R.string.xxx_open, item.orderTimes.toString()))
             }
-            if (this::proxyAcitivtyDict.isInitialized && TimeUtil.timeStamp(proxyAcitivtyDict.data.topupGroupStartDate) < proxyAcitivtyDict.currentTimeMillis && (TimeUtil.timeStamp(proxyAcitivtyDict.data.topopGroupEndDate) > proxyAcitivtyDict.currentTimeMillis)) {
+            if (this::dictListBean.isInitialized && TimeUtil.timeStamp(dictListBean.topupGroupStartDate) < currentTime && (TimeUtil.timeStamp(dictListBean.topopGroupEndDate) > currentTime)) {
                 if (isCn) {
                     helper.setText(R.id.tvDiscount, mContext.getString(R.string.up_to_xx_off, mustGroupKind.discount.toBigDecimal().multiply(BigDecimal.TEN).stripTrailingZeros().toPlainString()))
                 } else {

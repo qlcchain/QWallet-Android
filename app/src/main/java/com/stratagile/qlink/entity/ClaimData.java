@@ -28,6 +28,15 @@ public class ClaimData extends BaseBack<ClaimData.DataBean> {
         private String address;
         private String net;
         private List<ClaimsBean> claims;
+        private float unclaimed;
+
+        public float getUnclaimed() {
+            return unclaimed;
+        }
+
+        public void setUnclaimed(float unclaimed) {
+            this.unclaimed = unclaimed;
+        }
 
         public String getAddress() {
             return address;

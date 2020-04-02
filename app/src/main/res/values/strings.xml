@@ -1497,7 +1497,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="staking_type">Staking Type</string>
     <string name="accounts_invocation_hash">Accounts/Invocation Hash</string>
     <string name="stake_from_neo_address">Stake From: NEO Address</string>
-    <string name="stake_to_go_qlc_address">Stake To: GO-QLC Address</string>
+    <string name="stake_to_go_qlc_address">Stake To: QLC Chain Address</string>
     <string name="transaction_neo_invocation_hash">Transaction : NEO Invocation Hash</string>
     <string name="token_decimals">Token Decimals</string>
     <string name="amount_stake_detail">Amount</string>

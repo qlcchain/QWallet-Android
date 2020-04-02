@@ -131,6 +131,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
             startActivityForResult(Intent(this, NewStakeActivity::class.java), 1)
         }
         myStakeAdapter = MyStakeAdapter(arrayListOf())
+        myStakeAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         myStakeAdapter.setEnableLoadMore(true)
         getRewardQlcAmount()
         refreshLayout.setOnRefreshListener {

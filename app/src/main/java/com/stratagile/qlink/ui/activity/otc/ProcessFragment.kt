@@ -63,6 +63,7 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tradeOrderListAdapter = TradeOrderListAdapter(arrayListOf())
+        tradeOrderListAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         recyclerView.adapter = tradeOrderListAdapter
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivityForResult(Intent(activity, TradeOrderDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id), 0)

@@ -2,6 +2,7 @@ package qlc.network;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -22,14 +23,13 @@ public class QlcHttpClient {
 	
 	public JSONObject send(JSONObject params) {
 		
-		OkHttpClient client = new OkHttpClient();
+		OkHttpClient client = new OkHttpClient.Builder().build();
 		
 		try {
 			
 			RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), params.toJSONString());
 			
 			Request request = new Request.Builder().url(url).post(body).build();
-			
 			Response response = client.newCall(request).execute();
 			if (response == null) 
 				throw new qlc.network.QlcException(900, "Invalid response type");

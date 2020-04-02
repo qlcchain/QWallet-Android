@@ -145,7 +145,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
                 }
                 AllWallet.WalletType.EosWallet -> {
-                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
+//                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
                 }
                 AllWallet.WalletType.NeoWallet -> {
                     if (tradeTokenInfo == null) {
@@ -649,6 +649,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             sweetAlertDialog.cancel()
         }
         tvOk.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.OTC_SELL_Submit)
             sweetAlertDialog.cancel()
             showProgressDialog()
             var map = hashMapOf<String, String>()

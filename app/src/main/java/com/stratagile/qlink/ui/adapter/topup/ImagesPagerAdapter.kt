@@ -21,6 +21,7 @@ import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.my.BurnIntroduceActivity
 import com.stratagile.qlink.ui.activity.recommend.AgencyExcellenceActivity
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
+import com.stratagile.qlink.utils.FireBaseUtils
 import org.greenrobot.eventbus.EventBus
 
 import java.util.zip.Inflater
@@ -58,6 +59,7 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
             var referFriend = view1.findViewById<View>(R.id.tvReferFriend)
             var stakeQlc = view1.findViewById<View>(R.id.tvStakeQlc)
             referFriend.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_getMoreQGAS_ReferFriends)
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, InviteNowActivity::class.java))
                 } else {
@@ -65,6 +67,7 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
                 }
             }
             stakeQlc.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_getMoreQGAS_StakeQLC)
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, MyStakeActivity::class.java))
                 } else {
@@ -75,6 +78,7 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
         if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_finance_earn_rank) {
             view1.findViewById<TextView>(R.id.tvQlc).text = ConstantValue.miningQLC
             view1.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_TradeMining_MoreDetails)
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, MiningInviteActivity::class.java))
                 } else {
@@ -85,6 +89,7 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
         if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_banner_proxy_youxiang) {
             view1.setOnClickListener {
                 if (ConstantValue.currentUser != null) {
+                    FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_PartnerPlan_MoreDetails)
                     context.startActivity(Intent(context, AgencyExcellenceActivity::class.java))
                 } else {
                     context.startActivity(Intent(context, AccountActivity::class.java))
@@ -94,9 +99,11 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
         if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_banner_buyback) {
             var tvJoinNow = view1.findViewById<TextView>(R.id.tvJoinNow)
             tvJoinNow.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_QGASBuyBack_JoinNow)
                 EventBus.getDefault().post(SwitchToOtc(true))
             }
             view1.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_QGASBuyBack_MoreDetails)
                 context.startActivity(Intent(context, BurnIntroduceActivity::class.java))
             }
         }

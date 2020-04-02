@@ -421,6 +421,7 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     var imsi = ""
     fun startCheckBlockChain() {
         if ("".equals(phoneNumber)) {
+            KLog.i("手机号为空")
             phoneNumber = etPhone.text.toString()
         }
         if ("".equals(phoneNumber)) {
@@ -454,9 +455,11 @@ class PlaceVisitActivity : BaseActivity(), PlaceVisitContract.View {
     fun sendSms() {
         if (imsi.startsWith("46000") || imsi.startsWith("46002")) {
             //中国移动
+            KLog.i("移动短信")
             sendYiDongSms1()
         } else if (imsi.startsWith("46001")) {
             //中国联通
+            KLog.i("联通短信")
             sendLianTongSms()
         } else if (imsi.startsWith("46003")) {
             //中国电信

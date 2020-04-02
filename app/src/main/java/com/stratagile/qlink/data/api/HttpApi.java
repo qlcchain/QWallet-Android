@@ -27,6 +27,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
@@ -52,6 +53,7 @@ import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VCodeVerifyCode;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.VoteResult;
@@ -786,6 +788,14 @@ public interface HttpApi {
     @POST(API.burnQgasList)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<BurnQgasAct> burnQgasList(@Body RequestBody map);
+
+    @POST(API.vcodeVerifyCode)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VCodeVerifyCode> vcodeVerifyCode(@Body RequestBody map);
+
+    @POST(API.indexInterface)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<IndexInterface> indexInterface(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

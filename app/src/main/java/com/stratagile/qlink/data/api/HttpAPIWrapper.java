@@ -31,6 +31,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
@@ -56,6 +57,7 @@ import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VCodeVerifyCode;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.VoteResult;
@@ -1315,9 +1317,24 @@ public class HttpAPIWrapper {
 
     public Observable<TopupOrder> savePayTokenTxid(Map map) {
         if (false) {
-            return wrapper(mMainHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<VCodeVerifyCode> getVcode(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.vcodeVerifyCode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.vcodeVerifyCode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<IndexInterface> indexInterface(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.indexInterface(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.indexInterface(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

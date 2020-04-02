@@ -122,7 +122,7 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
 
     private int atLeastInviteFirend = 0;
 
-    private float totalTopupReward;
+    private float totalTopupReward = 0;
     private float totalClaimedTopoupReward;
 
     private float atLeastRewardQgas = 0;
@@ -274,9 +274,13 @@ public class InviteActivity extends BaseActivity implements InviteContract.View 
             Intent claimIntent = new Intent(this, ClaimRewardActivity.class);
 
             if (canClaimFriendTotal >= atLeastInviteFirend) {
-                claimIntent.putExtra("total", canClaimFriendTotal * oneFirendClaimQgas + totalTopupReward);
+                claimIntent.putExtra("total", (canClaimFriendTotal * oneFirendClaimQgas + totalTopupReward) + "");
             } else if (totalTopupReward >= atLeastRewardQgas) {
                 claimIntent.putExtra("total", totalTopupReward + "");
+                if (totalTopupReward == 0) {
+                    ToastUtil.displayShortToast(getString(R.string.no_qgas_can_claim));
+                    return;
+                }
             }
             claimIntent.putExtra("claimType", "invite");
             startActivityForResult(claimIntent, 1);

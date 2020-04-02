@@ -460,7 +460,7 @@
     <string name="staking_type">抵押类型</string>
     <string name="accounts_invocation_hash">账户/交易 Hash</string>
     <string name="stake_from_neo_address">抵押来自: NEO 地址</string>
-    <string name="stake_to_go_qlc_address">抵押到: GO-QLC 地址</string>
+    <string name="stake_to_go_qlc_address">抵押到: QLC Chain 地址</string>
     <string name="transaction_neo_invocation_hash">交易：NEO调用hash</string>
     <string name="token_decimals">Token 小数位数</string>
     <string name="amount_stake_detail">抵押数量</string>
@@ -755,4 +755,6 @@
     <string name="program_implementation_1">活动细则：</string>
     <string name="qgas_buyback_and_burn_1">QGas回购销毁计划</string>
     <string name="more_details_buyback">了解详情</string>
+
+    <string name="no_data">暂无数据</string>
 </resources>

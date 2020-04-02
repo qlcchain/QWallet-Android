@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.TypedValue
-import android.view.View
 import android.widget.LinearLayout
+import com.jaeger.library.StatusBarUtil
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
-import com.stratagile.qlink.ui.activity.my.Login1Fragment
-import com.stratagile.qlink.ui.activity.my.RegiesterFragment
+import com.stratagile.qlink.statusbar.StatusBarCompat
 import com.stratagile.qlink.ui.activity.otc.component.DaggerNewOrderComponent
 import com.stratagile.qlink.ui.activity.otc.contract.NewOrderContract
 import com.stratagile.qlink.ui.activity.otc.module.NewOrderModule
@@ -27,9 +25,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView
-import java.util.ArrayList
-
-import javax.inject.Inject;
+import java.util.*
+import javax.inject.Inject
 
 /**
  * @author hzp
@@ -45,12 +42,14 @@ class NewOrderActivity : BaseActivity(), NewOrderContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
+        isEditActivity = true
         super.onCreate(savedInstanceState)
     }
 
     override fun initView() {
         setContentView(R.layout.activity_new_order)
     }
+
     override fun initData() {
         if (ConstantValue.mainAddressData == null) {
             mPresenter.getMainAddress()
@@ -107,16 +106,17 @@ class NewOrderActivity : BaseActivity(), NewOrderContract.View {
     }
 
     override fun setupActivityComponent() {
-       DaggerNewOrderComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .newOrderModule(NewOrderModule(this))
-               .build()
-               .inject(this)
+        DaggerNewOrderComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .newOrderModule(NewOrderModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: NewOrderContract.NewOrderContractPresenter) {
-            mPresenter = presenter as NewOrderPresenter
-        }
+        mPresenter = presenter as NewOrderPresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()

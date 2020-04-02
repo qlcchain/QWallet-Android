@@ -77,6 +77,7 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         KLog.i("tradeToken------>>> " + tradeToken)
         entrustOrderListAdapter = EntrustOrderListAdapter(ArrayList())
         entrustOrderListAdapter.setEnableLoadMore(true)
+        entrustOrderListAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(activity!!.resources.getDimension(R.dimen.x20).toInt()))
         refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
         recyclerView.setAdapter(entrustOrderListAdapter)
@@ -170,10 +171,10 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        currentPage = 0
-        KLog.i("------>>>>" + arguments!!["tradeToken"])
-        entrustOrderListAdapter.setNewData(ArrayList())
-        getOrderList()
+//        currentPage = 0
+//        KLog.i("------>>>>" + arguments!!["tradeToken"])
+//        entrustOrderListAdapter.setNewData(ArrayList())
+//        getOrderList()
     }
 
     fun getOrderList() {

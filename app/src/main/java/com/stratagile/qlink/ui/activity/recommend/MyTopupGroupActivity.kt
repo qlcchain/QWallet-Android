@@ -60,6 +60,7 @@ class MyTopupGroupActivity : BaseActivity(), MyTopupGroupContract.View {
         title.text = getString(R.string.group_order_list)
         topupGroupItemAdapter = TopupGroupItemAdapter(arrayListOf())
         topupGroupItemAdapter.setEnableLoadMore(true)
+        topupGroupItemAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         recyclerView.adapter = topupGroupItemAdapter
         recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, this)))
         refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))

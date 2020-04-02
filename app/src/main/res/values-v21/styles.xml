@@ -8,20 +8,20 @@
     <!-- http://www.google.de/design/spec/style/color.html#color-color-palette -->
 
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:navigationBarColor"></item>-->
-        <item name="android:windowAnimationStyle">@style/AnimaActivity</item>
-    </style>
+<!--    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">-->
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+<!--        &lt;!&ndash;<item name="android:navigationBarColor"></item>&ndash;&gt;-->
+<!--        <item name="android:windowAnimationStyle">@style/AnimaActivity</item>-->
+<!--    </style>-->
 
-    <style name="AnimaActivity">
-        <item name="android:activityOpenEnterAnimation">@anim/translate_right_to_center</item>
-        <item name="android:activityOpenExitAnimation">@anim/translate_center_to_left</item>
-        <item name="android:activityCloseEnterAnimation">@anim/translate_left_to_center</item>
-        <item name="android:activityCloseExitAnimation">@anim/translate_center_to_right</item>
-    </style>
+<!--    <style name="AnimaActivity">-->
+<!--        <item name="android:activityOpenEnterAnimation">@anim/translate_right_to_center</item>-->
+<!--        <item name="android:activityOpenExitAnimation">@anim/translate_center_to_left</item>-->
+<!--        <item name="android:activityCloseEnterAnimation">@anim/translate_left_to_center</item>-->
+<!--        <item name="android:activityCloseExitAnimation">@anim/translate_center_to_right</item>-->
+<!--    </style>-->
 
     <!--<style name="TabLayoutTextStyle">-->
         <!--<item name="android:textSize">13sp</item>-->

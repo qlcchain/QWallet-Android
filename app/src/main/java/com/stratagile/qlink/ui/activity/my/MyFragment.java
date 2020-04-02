@@ -238,6 +238,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     }
 
     private void bindPush(UserAccount userAccount) {
+        if ("".equals(JPushInterface.getRegistrationID(getActivity()))) {
+            return;
+        }
         Map map = new HashMap<String, String>();
         map.put("account", userAccount.getAccount());
         map.put("token", AccountUtil.getUserToken());

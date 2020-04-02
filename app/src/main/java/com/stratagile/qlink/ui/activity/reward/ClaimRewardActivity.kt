@@ -3,14 +3,16 @@ package com.stratagile.qlink.ui.activity.reward
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
+import com.stratagile.qlink.entity.VCodeVerifyCode
 import com.stratagile.qlink.entity.reward.ClaimQgas
 import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
@@ -19,9 +21,7 @@ import com.stratagile.qlink.ui.activity.reward.contract.ClaimRewardContract
 import com.stratagile.qlink.ui.activity.reward.module.ClaimRewardModule
 import com.stratagile.qlink.ui.activity.reward.presenter.ClaimRewardPresenter
 import com.stratagile.qlink.utils.AccountUtil
-import com.stratagile.qlink.utils.OtcUtils
 import kotlinx.android.synthetic.main.activity_claim_reward.*
-
 import javax.inject.Inject
 
 /**
@@ -78,12 +78,36 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
             if (receiveQlcWallet == null) {
                 return@setOnClickListener
             }
+            if ("".equals(etVcode.text.toString())) {
+                return@setOnClickListener
+            }
             if (isInvite) {
                 claiminviteQgas()
             } else {
                 claimQgas()
             }
         }
+        ivVcode.setOnClickListener {
+            getVcode()
+        }
+        getVcode()
+    }
+
+    fun getVcode() {
+        var map = hashMapOf<String, String>()
+        map["account"] = ConstantValue.currentUser.account
+        if (isInvite) {
+            map["type"] = "CLAIM_INVITE"
+        } else {
+            map["type"] = "CLAIM_BIND"
+        }
+        mPresenter.getVCode(map)
+    }
+
+    override fun setInviteCode(vCodeVerifyCode: VCodeVerifyCode) {
+        Glide.with(this)
+                .load(vCodeVerifyCode.codeUrl)
+                .into(ivVcode)
     }
 
     fun claimQgas() {
@@ -92,6 +116,7 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveQlcWallet!!.address
+        map["code"] = etVcode.text.toString().trim()
         mPresenter.claimQgas(map)
     }
 
@@ -101,6 +126,7 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveQlcWallet!!.address
+        map["code"] = etVcode.text.toString().trim()
         mPresenter.claiminviteQgas(map)
     }
 

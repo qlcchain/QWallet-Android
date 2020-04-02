@@ -82,6 +82,7 @@ import com.stratagile.qlink.guideview.compnonet.EnterVpnComponent;
 import com.stratagile.qlink.guideview.compnonet.EnterWalletComponent;
 import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.Qsdk;
+import com.stratagile.qlink.statusbar.StatusBarCompat;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
@@ -106,6 +107,7 @@ import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.LogUtil;
@@ -518,8 +520,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     EventBus.getDefault().post(new GetPairs());
                 } else {
                     if (i == R.id.button21) {
+                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_BUY);
                         viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
                     } else {
+                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_SELL);
                         viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
                     }
                 }
@@ -918,9 +922,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     private void setTopupPage() {
         financeCome.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-        }
+        StatusBarCompat.cancelLightStatusBar(this);
         viewPager.setCurrentItem(0, false);
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
@@ -946,9 +948,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
      */
     private void setVpnPage() {
         financeCome.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-        }
+        StatusBarCompat.cancelLightStatusBar(this);
         viewPager.setCurrentItem(1, false);
         tvTitle.setVisibility(View.GONE);
         segmentControlView.setVisibility(View.VISIBLE);
@@ -995,9 +995,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             statusBar.setVisibility(View.VISIBLE);
             rl1.setVisibility(View.VISIBLE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-            }
+            StatusBarCompat.cancelLightStatusBar(this);
             viewPager.setCurrentItem(2, false);
             ivQRCode.setVisibility(View.VISIBLE);
             statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -1022,10 +1020,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     long dangqianshijian = 0;
 
     private void setSettingsPage() {
+        KLog.i(UIUtils.isNavigationBarExist(this));
         financeCome.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
-        }
+        StatusBarCompat.changeToLightStatusBar(this);
         ivWallet.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
@@ -1210,7 +1207,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-
+                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_Record);
                     Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
                     startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
@@ -1246,6 +1243,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
 //                        return;
 //                    }
+                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_NewOrder);
                     startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
                     return;
                 }

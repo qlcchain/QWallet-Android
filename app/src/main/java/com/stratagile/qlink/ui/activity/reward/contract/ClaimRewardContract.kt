@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.reward.contract
 
+import com.stratagile.qlink.entity.VCodeVerifyCode
 import com.stratagile.qlink.entity.reward.ClaimQgas
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
@@ -22,6 +23,8 @@ interface ClaimRewardContract {
         fun closeProgressDialog()
 
         fun claimQgasBack(claimQgas: ClaimQgas)
+
+        fun setInviteCode(vCodeVerifyCode: VCodeVerifyCode)
     }
 
     interface ClaimRewardContractPresenter : BasePresenter {

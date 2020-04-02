@@ -147,6 +147,9 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     }
 
     private void bindPush(UserAccount userAccount) {
+        if ("".equals(JPushInterface.getRegistrationID(getActivity()))) {
+            return;
+        }
         Map map = new HashMap<String, String>();
         map.put("account", userAccount.getAccount());
         map.put("token", AccountUtil.getUserToken());

@@ -245,6 +245,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                     return@setOnClickListener
                 }
             }
+            FireBaseUtils.logEvent(this, FireBaseUtils.OTC_BUY_Submit)
             showProgressDialog()
             var map = hashMapOf<String, String>()
             map.put("account", ConstantValue.currentUser.account)

@@ -366,6 +366,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             sweetAlertDialog.cancel()
         }
         tvOk.setOnClickListener {
+            FireBaseUtils.logEvent(activity, FireBaseUtils.OTC_NewOrder_SELL_Confirm)
             sweetAlertDialog.cancel()
             showProgressDialog()
             var map = hashMapOf<String, String>()

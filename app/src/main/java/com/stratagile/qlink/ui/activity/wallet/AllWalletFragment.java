@@ -43,6 +43,7 @@ import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.NeoTransfer;
+import com.stratagile.qlink.entity.SendNep5TokenBack;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosQrBean;
@@ -82,6 +83,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -101,6 +103,8 @@ import qlc.network.QlcException;
 import qlc.rpc.AccountRpc;
 import qlc.rpc.impl.LedgerRpc;
 import qlc.utils.Helper;
+import wendu.dsbridge.DWebView;
+import wendu.dsbridge.OnReturnValue;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
 
@@ -212,6 +216,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+//                autoGenerateWallet();
                 isPending = false;
                 tvPending.setText("");
                 pending = null;
@@ -444,11 +449,11 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     @Override
     public void queryGasClaimBack(ClaimData claimData) {
         this.claimData = claimData;
-        if (claimData.getData().getClaims().size() == 0) {
+        if (claimData.getData().getUnclaimed() == 0) {
             llGetGas.setVisibility(View.GONE);
         } else {
             llGetGas.setVisibility(View.VISIBLE);
-            tvGasValue.setText(setGasValue(claimData.getData()));
+            tvGasValue.setText(new BigDecimal(claimData.getData().getUnclaimed() + "").toPlainString());
         }
     }
 
@@ -647,6 +652,16 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             qlcAccount.setIsAccountSeed(true);
             qlcAccount.setWalletIndex(0);
             AppConfig.instance.getDaoSession().getQLCAccountDao().insert(qlcAccount);
+
+            try {
+                EthWallet ethWallet = ETHWalletUtils.importMnemonic(ETHWalletUtils.ETH_JAXX_TYPE, Arrays.asList(mnemonics.split(" ")));
+                ethWallet.setIsCurrent(false);
+                KLog.i(ethWallet.toString());
+                AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } catch (QlcException e) {
             closeProgressDialog();
             e.printStackTrace();
@@ -662,15 +677,6 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         walletWinq.setIsCurrent(false);
         walletWinq.setName("NEO-Wallet 01");
         AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
-
-        try {
-            EthWallet ethWallet = ETHWalletUtils.generateMnemonic();
-            ethWallet.setIsCurrent(false);
-            AppConfig.getInstance().getDaoSession().getEthWalletDao().insert(ethWallet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
         initData();
     }
@@ -934,6 +940,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvWalletName:
+//                getGas();
                 startActivityForResult(new Intent(getActivity(), ChooseWalletActivity.class), 0);
                 getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 break;
@@ -1028,10 +1035,56 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
     private void getGas() {
         showProgressDialog();
-        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        String txid = neoNodeRPC.claimGAS(Account.INSTANCE.getWallet(), claimData, tvGasValue.getText().toString());
-        KLog.i(txid);
-        mPresenter.claimGas(Account.INSTANCE.getWallet().getAddress(), tvGasValue.getText().toString(), txid);
+        DWebView webview = new DWebView(getActivity());
+        webview.loadUrl("file:///android_asset/contract.html");
+
+        tvPending.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //fromAddress, toAddress, assetHash, amount, wif, responseCallback
+                Object[] arrays = new Object[1];
+                arrays[0] = Account.INSTANCE.getWallet().getWIF();
+                KLog.i("开始调用jsclaimGas。。。");
+                webview.callHandler("staking.claimGas", arrays, (new OnReturnValue() {
+                    // $FF: synthetic method
+                    // $FF: bridge method
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((org.json.JSONObject)var1);
+                    }
+
+                    public final void onValue(org.json.JSONObject retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                closeProgressDialog();
+                                try {
+                                    llGetGas.setVisibility(View.GONE);
+                                    ToastUtil.displayShortToast("Claim Success");
+//                                    if (retValue.getBoolean("claimed")) {
+//                                        llGetGas.setVisibility(View.GONE);
+//                                        ToastUtil.displayShortToast("Claim Success");
+//                                    } else {
+//                                        ToastUtil.displayShortToast("Claim failed");
+//                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+//                                queryGas(Account.INSTANCE.getWallet().getAddress());
+                            }
+                        });
+
+                    }
+                }));
+            }
+        }, 1000);
+
+//        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
+//        String txid = neoNodeRPC.claimGAS(Account.INSTANCE.getWallet(), claimData, tvGasValue.getText().toString());
+//        KLog.i(txid);
+//        mPresenter.claimGas(Account.INSTANCE.getWallet().getAddress(), tvGasValue.getText().toString(), txid);
     }
 
     @Override
