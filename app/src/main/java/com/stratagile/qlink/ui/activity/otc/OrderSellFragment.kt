@@ -254,7 +254,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast(getString(R.string.not_enough) + " ${selectedPair!!.tradeToken}")
                 return@setOnClickListener
             }
-            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() >= 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(activity!!)
                 return@setOnClickListener
             }
@@ -366,6 +366,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             sweetAlertDialog.cancel()
         }
         tvOk.setOnClickListener {
+            FireBaseUtils.logEvent(activity, FireBaseUtils.OTC_NewOrder_SELL_Confirm)
             sweetAlertDialog.cancel()
             showProgressDialog()
             var map = hashMapOf<String, String>()

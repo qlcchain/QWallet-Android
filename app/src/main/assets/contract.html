@@ -7,9 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
     <!--require dsbridge init js-->
-    <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
-    <script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>
+<!--        <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>-->
+    <!--    <script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>-->
+    <script src="./bignumber.min.js"></script>
+    <script src="./dsbridge.js"></script>
+    <script src="./browser.min.js"></script>
 </head>
 <body>
 
@@ -26,18 +29,22 @@
 		dsBridge.registerAsyn("staking", {
 			tag: "staking",
 			// multisig
-			createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
-				// user neo public key
-				const accountA = new Neon.wallet.Account(publicKeyA);
-				// environment neo public key
-				const accountB = new Neon.wallet.Account(publicKeyB);
-				// multisig account
-				const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
-					accountA.publicKey,
-					accountB.publicKey
-				]);
-				responseCallback(multisigAcct);
-			},
+        createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
+            try {
+                // user neo public key
+                const accountA = new Neon.wallet.Account(publicKeyA);
+                // environment neo public key
+                const accountB = new Neon.wallet.Account(publicKeyB);
+                // multisig account
+                const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
+                accountA.publicKey,
+                accountB.publicKey
+                ]);
+                responseCallback(multisigAcct);
+                } catch(err) {
+                responseCallback(err);
+            }
+        },
 			// lock
 			contractLock:function (privateKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime, responseCallback) {
 
@@ -94,8 +101,8 @@
 			// send
 			send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, memo, responseCallback) {
 
+                //console.log("js日志1。。。");
 				const account = new Neon.wallet.Account(wif);
-
 				// NEO or GAS send
 				if (assetHash == NEO_HASH || assetHash == GAS_HASH) {
 					let intent = null;
@@ -117,7 +124,7 @@
 						responseCallback(config);
 					});
 				}
-
+                //console.log("js日志2。。。");
 				// nep5 asset send
 				const amtToSend = new BigNumber(amount).toFixed();
 				const network = 'MainNet';
@@ -132,7 +139,7 @@
 					toAddress,
 					new Neon.u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
 				);
-
+                //console.log("js日志3。。。");
 				const builder = generator();
 				const script = builder.str;
 				const gas = additionalInvocationGas;
@@ -145,17 +152,41 @@
 					script: script, // The Smart Contract invocation script
 					gas: gas // Additional GAS for invocation.
 				};
-
+                //console.log("js日志4。。。");
 				const returnToken = Neon.api.doInvoke(config)
 				.then(config => {
+				    //console.log("js日志5。。。");
 					responseCallback(config.response);
 				})
 				.catch(config => {
+				    //console.log("js日志6。。。");
 					responseCallback(config);
 				});
-			}
+			},
+			// claimGas
+            claimGas:function (privateKey, responseCallback) {
+
+             const account = new Neon.wallet.Account(privateKey);
+
+             const config = {
+              api: apiProvider, // The API Provider that we rely on for balance and rpc information
+              account: account  // The sending Account
+             };
+
+             Neon.api.claimGas(config)
+             .then(config => {
+              console.log(config.response);
+              responseCallback({'claimed': true, 'msg':config.response});
+             })
+             .catch(config => {
+              console.log("出错了。。");
+              console.log(config);
+              responseCallback({'claimed': false, 'msg':config});
+             });
+            }
 		});
 
-	</script>
+
+</script>
 </body>
 </html>

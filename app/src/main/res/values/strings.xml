@@ -1351,7 +1351,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="confirm_your_mnemonic_words">CONFIRM YOUR MNEMONIC WORDS</string>
     <string name="please_choose_mnemonic_words_in_order_and_make_sure_your_mnemonic_was_correct_written">Please choose mnemonic words in order and make sure your mnemonic was correct written</string>
     <string name="neo_wallet">NEO Wallet</string>
-    <string name="i_have_backuped_the_priate_key">I have backuped the Priate key</string>
+    <string name="i_have_backuped_the_priate_key">I have backed up the Priate key</string>
     <string name="register_eos_account">Register EOS Account</string>
     <string name="transfer_error">transfer error</string>
     <string name="hide_qr_code">Hide QR code</string>
@@ -1497,7 +1497,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="staking_type">Staking Type</string>
     <string name="accounts_invocation_hash">Accounts/Invocation Hash</string>
     <string name="stake_from_neo_address">Stake From: NEO Address</string>
-    <string name="stake_to_go_qlc_address">Stake To: GO-QLC Address</string>
+    <string name="stake_to_go_qlc_address">Stake To: QLC Chain Address</string>
     <string name="transaction_neo_invocation_hash">Transaction : NEO Invocation Hash</string>
     <string name="token_decimals">Token Decimals</string>
     <string name="amount_stake_detail">Amount</string>
@@ -1534,7 +1534,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="stake_neo_wallet_not_found">The wallet of %1$s is none。</string>
     <string name="top_up">Top-up</string>
     <string name="make_more">Get more</string>
-    <string name="send_replenishment_to">Top up this number</string>
+    <string name="send_replenishment_to">Send recharge to</string>
     <string name="enter_your_phone_number_or_select_from_your_contacts">Enter a phone number or select a contact to quickly view available packages.</string>
     <string name="operator_package">Carrier mobile plan</string>
     <string name="check_out_your_exclusive_offer">Promotions</string>
@@ -1653,7 +1653,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="please_pay">Please Pay</string>
     <string name="wait_seller_pay">Wait for seller pay</string>
     <string name="join_now_telegram">Join Now</string>
-    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">Join us on Telegram To get the latest QGAS news</string>
+    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">Join us on Telegram\nTo get the latest QGAS news</string>
     <string name="mobile_plan">Mobile Plan</string>
 
 
@@ -1719,4 +1719,74 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="group_order_list">My Group Orders</string>
     <string name="recharge_commission">Recharge Commission</string>
     <string name="group_plan_commission">Group Plan Commission</string>
+    <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">Join the Q-Wallet recharge sales \npartner plan for </font><font color="#108EE9">COMMISSIONS</font></string>
+    <string name="phone_top_up">Phone top up</string>
+    <string name="confirm_order">Confirm Order</string>
+
+
+    <string name="xxx_sold">%1$s sold</string>
+    <string name="xxx_open">%1$s open</string>
+    <string name="up_to_xx_off">Up to %1$s%% off</string>
+    <string name="limited_to_offering_of_xx_off_discount">Limited offering of %1$s%% off discount</string>
+    <string name="only_available_for_xxx_subscribers">Only available for %1$s subscribers</string>
+    <string name="select_deduction_token">SelectDeductionToken</string>
+    <string name="check_and_store_on_the_blockchain">Check and store on the blockchain</string>
+    <string name="confirm_the_mobile_no">Confirm the mobile No.</string>
+    <string name="input_the_last_4_digits_on_the_id_card">Input the last 4 digits on the ID card</string>
+    <string name="after_you_click_on_check_and_store_on_the_blockchain_your_most_recent_itinerary_will_be_displayed_with_1_qgas_being_consumed_for_generating_a_blockchain_based_proof_of_your_travel_records">After you click on \'Check and store on the blockchain\', your most recent itinerary will be displayed with 1 QGas being consumed for generating a blockchain-based proof of your travel records.</string>
+    <string name="send_a_itinerary_query_message">Send an Itinerary Check Message</string>
+    <string name="analyse_the_message_received">Parse the Message</string>
+    <string name="pay_qgas">Pay QGas</string>
+    <string name="generate_the_blockchain_based_proof_of_the_travel_records">Generate the Blockchain-based\nProof of Itinerary</string>
+    <string name="click_query">Check the Itinerary</string>
+    <string name="itinerary_check">Itinerary Check</string>
+    <string name="invoice_content">Invoice Content</string>
+    <string name="itinerary">Itinerary</string>
+    <string name="please_input_the_mobile_number">Please Input the Mobile Number</string>
+    <string name="query">Query</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="blockchain_credential">Blockchain-based Proof of Itinerary</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="no_valid_mobile_number_was_found">No valid mobile number was found</string>
+    <string name="please_input_the_last_4_digits_on_the_id_card">Please input the lase 4 digits on the ID card</string>
+    <string name="query_history">Query History</string>
+    <string name="proof_type">Proof Type</string>
+    <string name="fees_amount">Fees Amount</string>
+    <string name="proof_generation_date">Proof Generation Date</string>
+    <string name="proof_no">Proof No.</string>
+    <string name="proof_content">Proof Content</string>
+    <string name="check_the_on_chain_records">Check the On-chain Records</string>
+    <string name="blockchain_based_proof_of_itinerary_2">Blockchain-based Proof of Itinerary</string>
+    <string name="china_telecom">Telecom</string>
+    <string name="china_unicom">Unicom</string>
+    <string name="china_mobile">Mobile</string>
+    <string name="how_do_you_think_if_qlc_chain_runs_the_qgas_buyback_program_allowing_the_qgas_hodlers_to_sell_their_qgas_for_qlc_at_the_price_higher_than_the_public_market">How do you think if QLC Chain runs the QGas buyback program allowing the QGas hodlers to sell their QGas for QLC at the price higher than the public market?</string>
+    <string name="i_like_the_idea_and_i_will_engage_in_the_program">I like the idea and I will engage in the program.</string>
+    <string name="i_like_the_idea_but_i_won_t_engage_in_the_program">I like the idea but I won’t engage in the program.</string>
+    <string name="i_don_t_like_the_idea_but_i_might_engage_in_the_program">I don’t like the idea but I might engage in the program.</string>
+    <string name="i_don_t_like_the_idea_neither_will_i_engage_in_the_program">I don’t like the idea, neither will I engage in the program.</string>
+    <string name="write_here">Write here</string>
+    <string name="if_you_got_more_to_share_with_us_leave_your_opinions_and_comments_below">If you got more to share with us, leave your opinions and comments below:</string>
+    <string name="vote_1">Vote</string>
+    <string name="vote_2">Vote</string>
+    <string name="you_have_voted_successfully_thanks_for_your">You have voted successfully, thanks for your engagement.</string>
+    <string name="the_voting_has_been_closed">The voting has been closed.</string>
+    <string name="qgas_buyback_and_burn_program">QGas Buyback and Burn</string>
+    <string name="team">Team</string>
+    <string name="qgas_buyback_and_burn"><font color="#242426">QGAS </font> <font color="#1190EB">Buyback and Burn</font></string>
+    <string name="details_burn">Details</string>
+    <string name="program_implementation">* One campaign day starts from 7:00 pm till 7:00 pm the next day lasting for 24 hours.
+        \n* During each campaign, the team will gradually publish the QGas buy orders in Q-Wallet OTC at 5 different time points, 7:00 pm, 12:00 am, 2:00 am, 5:00 am, 9:00 am (UTC+8) .
+        \n* Each time there will be several QGas buy orders splitting the 4000 QGas placed, the QGas buyback amount may vary in each order.
+        \n* All the Q-Wallet users with no less than 1 QGas balance in their Q-Wallet are eligible to trade their QGas for QLC .
+        \n* The buyback program is expected to buy back a total of 20K QGas for burning later, at the buyback price of 1QGas=%1$s QLC which is slightly higher than the average public market price. The 40K QLC traded for QGas will be released to the QLC community.
+        \n* A dedicated QGas buyback pool which is a QGas address will be published to the public.
+        \n* Once the buyback concludes, all the QGas in the pool shall be burnt within 48 hours after the buyback completion.</string>
+    <string name="program_time">Program time:</string>
+    <string name="_10_days">10 days</string>
+    <string name="buyback_price">Buyback price：</string>
+    <string name="program_implementation_1">Program implementation:</string>
+    <string name="qgas_buyback_and_burn_1">QGas Buyback and Burn</string>
+    <string name="more_details_buyback">More Details</string>
 </resources>

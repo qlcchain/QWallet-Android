@@ -60,6 +60,7 @@ class PostedFragment : BaseFragment(), PostedContract.View {
         }
         entrustOrderListAdapter = EntrustPostedOrderListAdapter(ArrayList())
         entrustOrderListAdapter.setEnableLoadMore(true)
+        entrustOrderListAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         recyclerView.adapter = entrustOrderListAdapter
         recyclerView.addItemDecoration(BottomMarginItemDecoration(activity!!.resources.getDimension(R.dimen.x20).toInt()))
         entrustOrderListAdapter.setOnItemClickListener { adapter, view, position ->

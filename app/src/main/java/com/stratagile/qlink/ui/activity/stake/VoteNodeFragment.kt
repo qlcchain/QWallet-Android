@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.Nullable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 
 import com.stratagile.qlink.application.AppConfig
@@ -30,55 +28,38 @@ import butterknife.ButterKnife;
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
-import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
-import com.stratagile.qlc.QLCAPI
-import com.stratagile.qlc.entity.BaseResult
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.db.Wallet
-import com.stratagile.qlink.db.WalletDao
 import com.stratagile.qlink.entity.AllWallet
-import com.stratagile.qlink.entity.MyAsset
 import com.stratagile.qlink.entity.NeoWalletInfo
-import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
+import com.stratagile.qlink.entity.eventbus.CreateMultSignSuccess
 import com.stratagile.qlink.entity.eventbus.StakeQlcError
 import com.stratagile.qlink.entity.stake.*
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
-import com.stratagile.qlink.utils.LocalWalletUtil
-import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.QlcReceiveUtils
 import com.stratagile.qlink.utils.getLine
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import kotlinx.android.synthetic.main.fragment_vote_node.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.apache.commons.lang3.StringEscapeUtils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.spongycastle.crypto.tls.ContentType.alert
-import org.w3c.dom.Text
 import qlc.bean.StateBlock
-import qlc.mng.AccountMng
 import qlc.mng.BlockMng
 import qlc.mng.WalletMng
 import qlc.network.QlcClient
-import qlc.network.QlcException
-import qlc.utils.Constants
 import qlc.utils.Helper
-import qlc.utils.WorkUtil
 import java.math.BigDecimal
 import java.net.URLEncoder
 import java.util.*
@@ -120,7 +101,13 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         val view = inflater.inflate(R.layout.fragment_vote_node, null)
         ButterKnife.bind(this, view)
         val mBundle = arguments
+        EventBus.getDefault().register(this)
         return view
+    }
+
+    override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
+        super.onDestroy()
     }
 
     fun scaleAnimationTo1(imageView: View) {
@@ -220,6 +207,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
             stakeType.stakeQLcAmount = stakeQLcAmount
             stakeType.stakeQlcDays = stakeQlcDays
             EventBus.getDefault().post(stakeType)
+
         }
 
         llSelectNeoWallet.setOnClickListener {
@@ -350,6 +338,13 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     KLog.i(error.localizedMessage)
                 }
             }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun createMultSignSuccess(createMultSignSuccess: CreateMultSignSuccess) {
+        runOnUiThread {
+            tvDot!!.text = "2"
         }
     }
 
@@ -577,7 +572,10 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     lockResult.stateBlock = stateBlock
                     process(lockResult)
                 } else {
-
+                    AppConfig.instance.saveLog("stake", "process" + getLine(), Gson().toJson(lockResult))
+                    toast("process error, please try later")
+                    KLog.i(error.response)
+                    KLog.i(error.exception)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

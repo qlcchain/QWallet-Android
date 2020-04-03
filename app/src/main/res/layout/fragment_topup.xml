@@ -6,89 +6,56 @@
     android:background="@color/color_f2f2f2"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/status_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1px"
+        android:background="@color/color_b0d8fb"
+        android:gravity="center"
+        android:textColor="@color/color_333"
+        android:textSize="9sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/main_bg_shape" />
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@color/color_b0d8fb">
 
+        <ImageView
+            android:id="@+id/iv_avater"
+            android:layout_width="50dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_protfolio_more"
+            android:transitionName="avater" />
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_title"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="@dimen/x20"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"
-            android:clipChildren="false"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp">
+            android:layout_centerInParent="true"
+            android:text="@string/top_up"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="13dp"
-                    android:text="@string/send_replenishment_to"
-                    android:textColor="@color/color_29282a"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+        <RelativeLayout
+            android:id="@+id/rlWallet"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
 
-                <TextView
-                    android:id="@+id/tvLeastAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/enter_your_phone_number_or_select_from_your_contacts"
-                    android:textColor="@color/color_29282a"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/ivDeduction"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="12dp"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginBottom="23dp"
-                    android:background="@drawable/mobile_bg"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/etMobile"
-                        android:layout_width="0px"
-                        android:layout_height="27dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginRight="12dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:hint="+86 100 0000 0000"
-                        android:textColor="@color/white"
-                        android:textColorHint="#B3CEFF"
-                        android:textSize="19sp" />
-
-                    <ImageView
-                        android:layout_width="21dp"
-                        android:layout_height="21dp"
-                        android:layout_marginRight="12dp"
-                        android:src="@mipmap/contacts" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -104,6 +71,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rlXingcheng"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+                    <ImageView
+                        android:id="@+id/ivxingcheng"
+                        android:layout_width="match_parent"
+                        android:src="@mipmap/cx"
+                        android:scaleType="centerCrop"
+                        android:layout_height="185dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="150dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="140dp"
+                            android:background="@drawable/bg_chaxun_myd_cx"
+                            android:textColor="@color/white"
+                            android:text="@string/click_query"
+                            android:gravity="center"
+                            android:layout_height="40dp"/>
+                        <TextView
+                            android:id="@+id/tvPlaceQuery"
+                            android:textColor="@color/white"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"
+                            android:background="@drawable/bg_chaxun_myd_cx"
+                            android:layout_width="140dp"
+                            android:text="@string/check_the_on_chain_records"
+                            android:layout_height="40dp"/>
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -219,11 +224,8 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="6dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp"
                     android:layout_height="87dp"
                     android:layout_marginBottom="10dp"
                     android:background="@color/white">
@@ -250,37 +252,20 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="@dimen/x1"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
+                    android:background="@color/white"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content">
+                    <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/indicatorPlan"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="@string/mobile_plan"
-                        android:textColor="@color/color_29282a"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center_horizontal"
+                        android:layout_height="38dp" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerViewMobilePlan"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerView"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="1dp"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 

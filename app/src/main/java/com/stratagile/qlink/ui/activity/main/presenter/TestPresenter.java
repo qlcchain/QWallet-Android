@@ -27,7 +27,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-import static com.stratagile.qlink.blockchain.btc.BitUtil.getParams;
 
 /**
  * @author hzp
@@ -68,7 +67,7 @@ public class TestPresenter implements TestContract.TestContractPresenter{
         infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
         infoMap.put("pubKey", publicKey);
         NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        infoMap.put("signData", signingtrasaction(wif, SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + address));
+//        infoMap.put("signData", signingtrasaction(wif, SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + address));
         Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
                 .subscribe(new Consumer<BaseBack>() {
                     @Override
@@ -93,38 +92,38 @@ public class TestPresenter implements TestContract.TestContractPresenter{
         mCompositeDisposable.add(disposable);
     }
 
-    public String signingtrasaction(String wif, String msg) {
-        try {
-            // creating a key object from WiF
-            DumpedPrivateKey dpk = DumpedPrivateKey.fromBase58(getParams(), wif);
-            ECKey key = dpk.getKey();
-            // checking our key object
-            // NetworkParameters main = MainNetParams.get();
-            String check = key.getPrivateKeyAsWiF(getParams());
-            System.out.println(wif.equals(check));  // true
-            Log.e("wif check", String.valueOf(wif.equals(check)));
-            String sign = key.signMessage(msg);
-            KLog.i(sign);
-            KLog.i(key.toString());
-            ECKey ecKey = ECKey.signedMessageToKey(msg, sign);
-            KLog.i(ecKey);
-            // creating Sha object from string
-//            Sha256Hash hash = Sha256Hash.wrap(msg);
-            // creating signature
-//            ECKey.ECDSASignature sig = key.signMessage(msg);
-            // encoding
-//            byte[] res = sig.encodeToDER();
-//            // converting to hex
-//            //String hex = DatatypeConverter.printHexBinary(res);
-//            // String hex = new String(res);
-//            String hex = new String(Base64.encode(res, Base64.DEFAULT));
-//            Log.e("sigendTransaction", hex);
-//            Log.e("decrypttx",""+ HexUtils.toHex(sig.encodeToDER()));
-            return sign;
-        } catch (Exception e) {   //signingkey = ecdsa.from_string(privateKey.decode('hex'), curve=ecdsa.SECP256k1)
-            e.printStackTrace();
-            return "";
-        }
-    }
+//    public String signingtrasaction(String wif, String msg) {
+//        try {
+//            // creating a key object from WiF
+//            DumpedPrivateKey dpk = DumpedPrivateKey.fromBase58(getParams(), wif);
+//            ECKey key = dpk.getKey();
+//            // checking our key object
+//            // NetworkParameters main = MainNetParams.get();
+//            String check = key.getPrivateKeyAsWiF(getParams());
+//            System.out.println(wif.equals(check));  // true
+//            Log.e("wif check", String.valueOf(wif.equals(check)));
+//            String sign = key.signMessage(msg);
+//            KLog.i(sign);
+//            KLog.i(key.toString());
+//            ECKey ecKey = ECKey.signedMessageToKey(msg, sign);
+//            KLog.i(ecKey);
+//            // creating Sha object from string
+////            Sha256Hash hash = Sha256Hash.wrap(msg);
+//            // creating signature
+////            ECKey.ECDSASignature sig = key.signMessage(msg);
+//            // encoding
+////            byte[] res = sig.encodeToDER();
+////            // converting to hex
+////            //String hex = DatatypeConverter.printHexBinary(res);
+////            // String hex = new String(res);
+////            String hex = new String(Base64.encode(res, Base64.DEFAULT));
+////            Log.e("sigendTransaction", hex);
+////            Log.e("decrypttx",""+ HexUtils.toHex(sig.encodeToDER()));
+//            return sign;
+//        } catch (Exception e) {   //signingkey = ecdsa.from_string(privateKey.decode('hex'), curve=ecdsa.SECP256k1)
+//            e.printStackTrace();
+//            return "";
+//        }
+//    }
 
 }

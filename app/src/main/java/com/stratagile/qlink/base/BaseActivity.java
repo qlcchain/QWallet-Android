@@ -26,7 +26,9 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.statusbar.StatusBarCompat;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
+import com.stratagile.qlink.ui.activity.setting.SelectLanguageActivityActivity;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.view.FitRelativeLayout;
@@ -55,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     public TextView title;
     public int mainColor = 0;
     public int drawableBg = 0;
+    public boolean isEditActivity = false;
     /**
      * 公共的加载进度弹窗
      */
@@ -75,23 +78,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         if (mainColor == 0) {
             mainColor = R.color.mainColor;
         }
-
-//        if (android.os.Build.MANUFACTURER.toUpperCase().equals("MEIZU")) {
-//            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-//            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-//        } else {
-//            StatusBarUtil.setTransparent(this);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //设置状态栏黑色字体
-//            }
-//        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //设置状态栏黑色字体
+        if (!isEditActivity) {
+            StatusBarCompat.translucentStatusBar(this, true);
+            StatusBarCompat.cancelLightStatusBar(this);
         }
-        StatusBarUtil.setTransparent(this);
         initToolbar();
         setupActivityComponent();
         initView();
@@ -105,7 +95,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
      */
     public void setLanguage(boolean isUpdate) {
 
-        //0，中文， 1英文
+        int defaultLanguage = SpUtil.getInt(this, ConstantValue.Language, -1);
+        if (defaultLanguage == -1) {
+            Resources resources = getResources();
+            // 获取应用内语言
+            final Configuration configuration = resources.getConfiguration();
+            if (configuration.locale == Locale.ENGLISH) {
+                defaultLanguage = 0;
+            } else if (configuration.locale == Locale.CHINESE){
+                defaultLanguage = 1;
+            } else {
+                defaultLanguage = 0;
+            }
+            SpUtil.putInt(this, ConstantValue.Language, defaultLanguage);
+        }
+
+        //0，英文， 1中文
         Resources resources = getResources();
         // 获取应用内语言
         final Configuration configuration = resources.getConfiguration();
@@ -243,15 +248,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         if (drawableBg != 0) {
             view.setBackgroundResource(drawableBg);
         }
+        toolbar.setBackgroundColor(getResources().getColor(mainColor));
         if (mainColor == R.color.white) {
-            toolbar.setBackgroundColor(getResources().getColor(mainColor));
             title.setTextColor(getResources().getColor(R.color.color_1F314A));
             toolbar.setNavigationIcon(getResources().getDrawable(R.mipmap.icon_back_dark));
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
-            }
+            StatusBarCompat.changeToLightStatusBar(this);
         } else {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
+            StatusBarCompat.cancelLightStatusBar(this);
         }
         if (drawableBg != 0) {
             toolbar.setBackgroundResource(drawableBg);
@@ -267,6 +270,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         relativeLayout_root.setLayoutParams(new FitRelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) ((UIUtils.getStatusBarHeight(this)) + UIUtils.dip2px(42f, this))));
         if (toolbar != null && !needFront) {
             setSupportActionBar(toolbar);
+        }
+        if (isEditActivity) {
+            relativeLayout_root.setLayoutParams(new FitRelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) UIUtils.dip2px(42f, this)));
+            view.setVisibility(View.GONE);
+            StatusBarUtil.setColor(this, getResources().getColor(R.color.white), 0);
         }
     }
 

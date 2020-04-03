@@ -5,7 +5,8 @@
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@color/white</item>
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
+        <item name="android:windowBackground">@drawable/icon_splash</item>
         <!--<item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>-->
     </style>
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">

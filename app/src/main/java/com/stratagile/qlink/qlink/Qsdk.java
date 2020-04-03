@@ -275,7 +275,7 @@ public class Qsdk {
         for (TransactionRecord transactionRecord : transactionRecordList) {
             if (transactionRecord.getTxid().equals(recordSaveRsp.getTxid()) && transactionRecord.getConnectType() == 0) {
                 transactionRecord.setIsReported(true);
-                transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
+                transactionRecord.setIsMainNet(SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true));
                 AppConfig.getInstance().getDaoSession().getTransactionRecordDao().update(transactionRecord);
                 break;
             }
@@ -395,7 +395,7 @@ public class Qsdk {
     public void sendVpnUserAndPasswordReq(String friendNum, String vpnName) {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnName);
-        infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
+        infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
         QlinkUtil.parseMap2StringAndSendOld(friendNum, ConstantValue.vpnUserAndPasswordReq, infoMap);
     }
 
@@ -425,7 +425,7 @@ public class Qsdk {
     public void sendVpnPrivateKeyReq(String friendNum, String vpnName) {
         Map<String, Object> infoMap = new HashMap<>();
         infoMap.put("vpnName", vpnName);
-        infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
+        infoMap.put("isMainNet", SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true)? VpnUserAndPasswordReq.mainNet : VpnUserAndPasswordReq.testNet);
         QlinkUtil.parseMap2StringAndSendOld(friendNum, ConstantValue.vpnPrivateKeyReq, infoMap);
     }
 

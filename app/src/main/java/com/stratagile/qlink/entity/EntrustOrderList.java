@@ -21,31 +21,35 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
     public static class OrderListBean implements Parcelable {
 
         /**
-         * unitPrice : 1.0
-         * minAmount : 1.0
-         * lockingAmount : 1.0
-         * type : SELL
-         * userId : 61be9c09c0784827af303005f983c705
-         * tradeTokenChain : NEO_CHAIN
+         * unitPrice : 2.0
+         * minAmount : 100.0
+         * isBurnQgasOrder : 1
+         * lockingAmount : 0.0
+         * type : BUY
+         * payTokenAmount : 40000.0
+         * userId : 949caa0a0d8b4f2c81dd1750e8e867de
+         * tradeTokenChain : QLC_CHAIN
          * completeAmount : 0.0
-         * head :
-         * number : 20190823212742197841
-         * totalAmount : 2.0
-         * orderTime : 2019-08-23 21:27:42
-         * nickname : ios_test
-         * payTokenChain : QLC_CHAIN
-         * tradeToken : QLC
-         * id : 38013bdf37f84c4fad8e688dd186bb39
-         * maxAmount : 2.0
-         * otcTimes : 0
+         * head : /data/dapp/head/d0b58c62e15445e4b26b93a2f18a138a.jpg
+         * number : 20200227010000562142
+         * totalAmount : 20000.0
+         * orderTime : 2020-02-27 01:00:00
+         * nickname : 黄大叔
+         * payTokenChain : NEO_CHAIN
+         * tradeToken : QGAS
+         * id : 079ff6b193f54c769a9b5bd2c29ea7d6
+         * maxAmount : 1000.0
+         * otcTimes : 3
          * status : NORMAL
-         * payToken : QGAS
+         * payToken : QLC
          */
 
         private double unitPrice;
         private double minAmount;
+        private String isBurnQgasOrder;
         private double lockingAmount;
         private String type;
+        private double payTokenAmount;
         private String userId;
         private String tradeTokenChain;
         private double completeAmount;
@@ -65,8 +69,10 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
         protected OrderListBean(Parcel in) {
             unitPrice = in.readDouble();
             minAmount = in.readDouble();
+            isBurnQgasOrder = in.readString();
             lockingAmount = in.readDouble();
             type = in.readString();
+            payTokenAmount = in.readDouble();
             userId = in.readString();
             tradeTokenChain = in.readString();
             completeAmount = in.readDouble();
@@ -112,6 +118,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.minAmount = minAmount;
         }
 
+        public String getIsBurnQgasOrder() {
+            return isBurnQgasOrder;
+        }
+
+        public void setIsBurnQgasOrder(String isBurnQgasOrder) {
+            this.isBurnQgasOrder = isBurnQgasOrder;
+        }
+
         public double getLockingAmount() {
             return lockingAmount;
         }
@@ -126,6 +140,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public double getPayTokenAmount() {
+            return payTokenAmount;
+        }
+
+        public void setPayTokenAmount(double payTokenAmount) {
+            this.payTokenAmount = payTokenAmount;
         }
 
         public String getUserId() {
@@ -254,26 +276,28 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
         }
 
         @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeDouble(unitPrice);
-            parcel.writeDouble(minAmount);
-            parcel.writeDouble(lockingAmount);
-            parcel.writeString(type);
-            parcel.writeString(userId);
-            parcel.writeString(tradeTokenChain);
-            parcel.writeDouble(completeAmount);
-            parcel.writeString(head);
-            parcel.writeString(number);
-            parcel.writeDouble(totalAmount);
-            parcel.writeString(orderTime);
-            parcel.writeString(nickname);
-            parcel.writeString(payTokenChain);
-            parcel.writeString(tradeToken);
-            parcel.writeString(id);
-            parcel.writeDouble(maxAmount);
-            parcel.writeInt(otcTimes);
-            parcel.writeString(status);
-            parcel.writeString(payToken);
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeDouble(unitPrice);
+            dest.writeDouble(minAmount);
+            dest.writeString(isBurnQgasOrder);
+            dest.writeDouble(lockingAmount);
+            dest.writeString(type);
+            dest.writeDouble(payTokenAmount);
+            dest.writeString(userId);
+            dest.writeString(tradeTokenChain);
+            dest.writeDouble(completeAmount);
+            dest.writeString(head);
+            dest.writeString(number);
+            dest.writeDouble(totalAmount);
+            dest.writeString(orderTime);
+            dest.writeString(nickname);
+            dest.writeString(payTokenChain);
+            dest.writeString(tradeToken);
+            dest.writeString(id);
+            dest.writeDouble(maxAmount);
+            dest.writeInt(otcTimes);
+            dest.writeString(status);
+            dest.writeString(payToken);
         }
     }
 }

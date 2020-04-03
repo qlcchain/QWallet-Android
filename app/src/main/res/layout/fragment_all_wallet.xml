@@ -178,7 +178,7 @@
                             android:layout_height="20dp"
                             android:layout_marginRight="27dp"
                             android:textColor="@color/white"
-                            android:text="@string/sync"
+                            android:text="@string/claim"
                             android:includeFontPadding="false"
                             android:gravity="center"
                             android:background="@drawable/claim_bg"

@@ -38,7 +38,7 @@
             android:id="@+id/etVcode"
             android:layout_width="0px"
             android:layout_weight="1"
-            android:inputType="number"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:background="@null"
             android:hint="@string/verification_code"
             android:textSize="16sp"

@@ -70,6 +70,7 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tradeOrderListAdapter = TradeOrderAppealListAdapter(arrayListOf())
+        tradeOrderListAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         recyclerView.adapter = tradeOrderListAdapter
         tradeOrderListAdapter.setOnItemClickListener { adapter, view, position ->
             startActivity(Intent(activity, AppealDetailActivity::class.java).putExtra("tradeOrderId", tradeOrderListAdapter.data[position].id))

@@ -52,6 +52,9 @@ public class UserAccount {
 
     private String qlcAddress;
 
+    //打开app自动登录的
+    private boolean startApp;
+
     public boolean isLogin() {
         return isLogin;
     }
@@ -70,12 +73,12 @@ public class UserAccount {
 
     //手持身份证照
     private String holdingPhoto;
-    @Generated(hash = 7088022)
+    @Generated(hash = 201896621)
     public UserAccount(Long id, String account, String password, String pubKey,
             boolean isLogin, String inviteCode, String userName, String avatar,
             String test, String bindDate, String phone, String userId, String email,
             String vstatus, String facePhoto, int totalInvite, String qlcAddress,
-            String holdingPhoto) {
+            boolean startApp, String holdingPhoto) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -93,6 +96,7 @@ public class UserAccount {
         this.facePhoto = facePhoto;
         this.totalInvite = totalInvite;
         this.qlcAddress = qlcAddress;
+        this.startApp = startApp;
         this.holdingPhoto = holdingPhoto;
     }
 
@@ -198,5 +202,13 @@ public class UserAccount {
 
     public void setBindDate(String bindDate) {
         this.bindDate = bindDate;
+    }
+
+    public boolean getStartApp() {
+        return this.startApp;
+    }
+
+    public void setStartApp(boolean startApp) {
+        this.startApp = startApp;
     }
 }

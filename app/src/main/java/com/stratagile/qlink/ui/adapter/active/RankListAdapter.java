@@ -117,7 +117,7 @@ public class RankListAdapter extends BaseQuickAdapter<ActiveList.DataBean.VpnRan
                 .setText(R.id.tv_connect_count, item.getConnectSuccessNum() + "");
         helper.setText(R.id.tv_asset_name, item.getAssetName());
         ImageView imageView = helper.getView(R.id.iv_avatar);
-        if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, false)) {
+        if (SpUtil.getBoolean(mContext, ConstantValue.isMainNet, true)) {
             Glide.with(mContext)
                     .load(MainAPI.MainBASE_URL + item.getImgUrl())
                     .apply(AppConfig.getInstance().optionsAvater)

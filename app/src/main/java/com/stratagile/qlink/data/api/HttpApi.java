@@ -7,6 +7,7 @@ import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.BurnQgasAct;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
@@ -26,6 +27,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
@@ -39,8 +41,10 @@ import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
+import com.stratagile.qlink.entity.ReportList;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.SmsReport;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
@@ -49,8 +53,10 @@ import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VCodeVerifyCode;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
+import com.stratagile.qlink.entity.VoteResult;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
@@ -84,6 +90,7 @@ import com.stratagile.qlink.entity.topup.CreateGroup;
 import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.ProductListV2;
 import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.entity.topup.TopupGroupKindList;
 import com.stratagile.qlink.entity.topup.TopupGroupList;
@@ -169,6 +176,7 @@ import static com.stratagile.qlink.data.api.API.url_topup_order;
 import static com.stratagile.qlink.data.api.API.url_topup_order_confirm;
 import static com.stratagile.qlink.data.api.API.url_topup_order_list;
 import static com.stratagile.qlink.data.api.API.url_topup_productlist;
+import static com.stratagile.qlink.data.api.API.url_topup_productlist_v2;
 import static com.stratagile.qlink.data.api.API.url_trade_appeal;
 import static com.stratagile.qlink.data.api.API.url_trade_buy_order;
 import static com.stratagile.qlink.data.api.API.url_trade_buyer_confirm;
@@ -605,6 +613,10 @@ public interface HttpApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupProduct> getTopupProductList(@Body RequestBody map);
 
+    @POST(url_topup_productlist_v2)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ProductListV2> getTopupProductListV2(@Body RequestBody map);
+
     @POST(url_topup_order)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<TopupOrder> topupCreateOrder(@Body RequestBody map);
@@ -756,6 +768,34 @@ public interface HttpApi {
     @POST(API.getRewardList)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<SalePartner> getRewardList1(@Body RequestBody map);
+
+    @POST(API.smsReport)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<SmsReport> smsReport(@Body RequestBody map);
+
+    @POST(API.smsList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ReportList> smsList(@Body RequestBody map);
+
+    @POST(API.sysVote)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BaseBack> sysVote(@Body RequestBody map);
+
+    @POST(API.sysVoteResult)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VoteResult> sysVoteResult(@Body RequestBody map);
+
+    @POST(API.burnQgasList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<BurnQgasAct> burnQgasList(@Body RequestBody map);
+
+    @POST(API.vcodeVerifyCode)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<VCodeVerifyCode> vcodeVerifyCode(@Body RequestBody map);
+
+    @POST(API.indexInterface)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<IndexInterface> indexInterface(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

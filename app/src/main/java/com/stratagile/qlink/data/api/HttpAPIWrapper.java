@@ -11,6 +11,7 @@ import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.AssetsWarpper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.BurnQgasAct;
 import com.stratagile.qlink.entity.BuyQlc;
 import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
@@ -30,6 +31,7 @@ import com.stratagile.qlink.entity.FreeRecord;
 import com.stratagile.qlink.entity.GoogleResult;
 import com.stratagile.qlink.entity.GotWinqGas;
 import com.stratagile.qlink.entity.ImportWalletResult;
+import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
@@ -43,8 +45,10 @@ import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
+import com.stratagile.qlink.entity.ReportList;
 import com.stratagile.qlink.entity.Reward;
 import com.stratagile.qlink.entity.ShowAct;
+import com.stratagile.qlink.entity.SmsReport;
 import com.stratagile.qlink.entity.SysTime;
 import com.stratagile.qlink.entity.TokenPrice;
 import com.stratagile.qlink.entity.Tpcs;
@@ -53,8 +57,10 @@ import com.stratagile.qlink.entity.TransactionResult;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.UpdateVpn;
 import com.stratagile.qlink.entity.UserInfo;
+import com.stratagile.qlink.entity.VCodeVerifyCode;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.VertifyVpn;
+import com.stratagile.qlink.entity.VoteResult;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
@@ -88,6 +94,7 @@ import com.stratagile.qlink.entity.topup.CreateGroup;
 import com.stratagile.qlink.entity.topup.GroupItemList;
 import com.stratagile.qlink.entity.topup.IspList;
 import com.stratagile.qlink.entity.topup.PayToken;
+import com.stratagile.qlink.entity.topup.ProductListV2;
 import com.stratagile.qlink.entity.topup.SalePartner;
 import com.stratagile.qlink.entity.topup.TopupGroupKindList;
 import com.stratagile.qlink.entity.topup.TopupGroupList;
@@ -989,6 +996,14 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<ProductListV2> getTopupProductListV2(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.getTopupProductListV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getTopupProductListV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     public Observable<TopupOrder> topupCreateOrder(Map map) {
         if (false) {
             return wrapper(mMainHttpAPI.topupCreateOrder(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1281,12 +1296,45 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.getRewardList1(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
+    public Observable<SmsReport> smsReport(Map map) {
+        return wrapper(mHttpAPI.smsReport(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+    public Observable<ReportList> smsList(Map map) {
+        return wrapper(mHttpAPI.smsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<BaseBack> sysVote(Map map) {
+        return wrapper(mHttpAPI.sysVote(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<VoteResult> sysVoteResult(Map map) {
+        return wrapper(mHttpAPI.sysVoteResult(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
+
+    public Observable<BurnQgasAct> burnQgasList(Map map) {
+        return wrapper(mHttpAPI.burnQgasList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+    }
 
     public Observable<TopupOrder> savePayTokenTxid(Map map) {
         if (false) {
-            return wrapper(mMainHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.savePayTokenTxid(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<VCodeVerifyCode> getVcode(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.vcodeVerifyCode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.vcodeVerifyCode(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<IndexInterface> indexInterface(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.indexInterface(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.indexInterface(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 
@@ -1493,14 +1541,14 @@ public class HttpAPIWrapper {
         //false
         if (false) {
             map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random().nextInt(1000)) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
         } else {
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() / 10 + new Random(10000).nextInt()) + "");
+            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random().nextInt(1000)) + "");
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

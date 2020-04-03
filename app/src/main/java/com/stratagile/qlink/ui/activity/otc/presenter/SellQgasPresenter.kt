@@ -229,10 +229,14 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         mCompositeDisposable.add(httpAPIWrapper.generateTradeSellOrder(map).subscribe({
             mView.generateBuyQgasOrderSuccess(it)
         }, {
-            BuySellSellTodo.createBuySellSellTodo(map)
+            KLog.i("错误1")
+            mView.closeProgressDialog()
+//            BuySellSellTodo.createBuySellSellTodo(map)
 //            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }, {
             BuySellSellTodo.createBuySellSellTodo(map)
+            KLog.i("错误2")
+            mView.closeProgressDialog()
 //            sysbackUp(getTxidByHex(txid), "TRADE_ORDER", "", "", "")
         }))
     }

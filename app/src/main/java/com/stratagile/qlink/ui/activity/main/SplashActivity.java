@@ -1,31 +1,34 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.statusbar.StatusBarCompat;
 import com.stratagile.qlink.ui.activity.main.component.DaggerSplashComponent;
 import com.stratagile.qlink.ui.activity.main.contract.SplashContract;
 import com.stratagile.qlink.ui.activity.main.module.SplashModule;
 import com.stratagile.qlink.ui.activity.main.presenter.SplashPresenter;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
 import com.stratagile.qlink.utils.FireBaseUtils;
-import com.stratagile.qlink.utils.LocalAssetsUtils;
-import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.SpUtil;
+import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
-import com.stratagile.qlink.utils.eth.ETHWalletUtils;
 
 import java.util.Calendar;
 
@@ -33,6 +36,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.View.NO_ID;
 
 /**
  * @author hzp
@@ -45,20 +50,29 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Inject
     SplashPresenter mPresenter;
-    @BindView(R.id.activity_splash_ImageViewLogo)
-    ImageView activitySplashImageViewLogo;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         needFront = true;
         super.onCreate(savedInstanceState);
+        StatusBarCompat.translucentStatusBar(this, false);
     }
 
     @Override
     protected void initView() {
         setContentView(R.layout.activity_splash);
+        rootLayout.setVisibility(View.GONE);
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+//        KLog.i(UIUtils.isNavigationBarExist(this));
+//        if (UIUtils.isNavigationBarExist(this)) {
+//            statusBar1.setLayoutParams(new LinearLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) (UIUtils.getStatusBarHeight(this))));
+//        }
     }
 
     @Override
@@ -70,7 +84,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 //        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "startApp");
 //        mFirebaseAnalytics.logEvent("startApp", bundle);
         FireBaseUtils.logEvent(this, FireBaseUtils.eventStartApp);
-        SpUtil.putLong(AppConfig.getInstance(),ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
+        SpUtil.putLong(AppConfig.getInstance(), ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
         mPresenter.getLastVersion();
         mPresenter.getPermission();
         mPresenter.observeJump();
@@ -106,7 +120,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void loginSuccees() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
-        if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+        if (getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null) {
             intent.putExtra(ConstantValue.EXTRA_BUNDLE, getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
         }
         startActivity(intent);
@@ -118,7 +132,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void jumpToLogin() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("flag", "splash");
-        if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+        if (getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null) {
             intent.putExtra(ConstantValue.EXTRA_BUNDLE,
                     getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
         }
@@ -132,7 +146,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         if (ConstantValue.thisVersionShouldShowGuest) {
             Intent intent = new Intent(this, GuestActivity.class);
             intent.putExtra("flag", "splash");
-            if(getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null){
+            if (getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE) != null) {
                 intent.putExtra(ConstantValue.EXTRA_BUNDLE, getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE));
             }
             startActivity(intent);

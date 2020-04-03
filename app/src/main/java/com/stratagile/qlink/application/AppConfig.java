@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -37,6 +38,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 //import com.facebook.FacebookSdk;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.socks.library.KLog;
 //import com.squareup.leakcanary.LeakCanary;
 import com.stratagile.qlink.BuildConfig;
@@ -60,6 +63,7 @@ import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.GlideCircleTransform;
 import com.stratagile.qlink.utils.GlideCircleTransformMainColor;
 import com.stratagile.qlink.utils.GlideCircleTransformWhiteColor;
+import com.stratagile.qlink.utils.GlideRoundTransform;
 import com.stratagile.qlink.utils.NickUtil;
 import com.stratagile.qlink.utils.NotificationUtil;
 import com.stratagile.qlink.utils.SpUtil;
@@ -139,6 +143,7 @@ public class AppConfig extends MultiDexApplication {
 
     public RequestOptions optionsTopup = new RequestOptions()
             .centerCrop()
+            .transform(new GlideRoundTransform(this, 4))
             .placeholder(R.mipmap.guangdong_mobile)
             .error(R.mipmap.guangdong_mobile)
             .priority(Priority.HIGH);
@@ -168,6 +173,9 @@ public class AppConfig extends MultiDexApplication {
             .skipMemoryCache(true)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .priority(Priority.HIGH);
+    public RequestOptions optionsNormal = new RequestOptions()
+            .centerCrop()
+            .priority(Priority.HIGH);
 
     public AppConfig() {
 
@@ -178,6 +186,7 @@ public class AppConfig extends MultiDexApplication {
         JPushInterface.init(this);
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -185,6 +194,7 @@ public class AppConfig extends MultiDexApplication {
         instance = this;
         KLog.init(BuildConfig.LOG_DEBUG);
         KLog.i("app启动！！！");
+        initJpush();
         CrashReport.initCrashReport(this, "2d19fdd0a6", BuildConfig.LOG_DEBUG);
         setupApplicationComponent();
         setDatabase();
@@ -198,7 +208,6 @@ public class AppConfig extends MultiDexApplication {
         initResumeListener();
 //        initMiPush();
         setMode();
-        initJpush();
         setLanguage(false);
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());

@@ -68,6 +68,9 @@ public class ConstantValue {
 
     public static String isShowMiningAct = "isShowMiningAct";
     public static String currentMiningActId = "currentMiningActId";
+    public static String currentBurnQgasActId = "currentBurnQgasActId";
+
+    public static float qgasToQlcPrice = 4.5F;
 
     /**
      * eth的bnb契约地址
@@ -155,6 +158,8 @@ public class ConstantValue {
     public static boolean isConnectedVpn = false;
 
     public static MainAddress.DataBean mainAddressData;
+
+    public static String blackHoldAddress = "qlc_1111111111111111111111111111111111111111111111111111hifc8npp";
 
     public static String lastRestart = "lastRestart";//上一次自动重启时间
 

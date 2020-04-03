@@ -85,6 +85,9 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
         setContentView(R.layout.activity_otc_neo_chain_pay)
     }
     override fun initData() {
+        webview = DWebView(this)
+        webview!!.loadUrl("file:///android_asset/contract.html")
+
         title.text = getString(R.string.send) + " " + intent.getStringExtra("payToken")
         tvPayToken.text = intent.getStringExtra("payToken")
         tvReceiveAddress.text = intent.getStringExtra("receiveAddress")
@@ -153,8 +156,6 @@ class OtcNeoChainPayActivity : BaseActivity(), OtcNeoChainPayContract.View {
 
     private var webview: DWebView? = null
     private fun testTransfer() {
-        webview = DWebView(this)
-        webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
         val arrays = arrayOfNulls<Any>(7)
         arrays[0] = neoWallet!!.address

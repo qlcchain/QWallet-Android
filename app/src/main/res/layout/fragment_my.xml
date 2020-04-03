@@ -1,125 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/user"
         android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_height="88dp">
-        <ImageView
-            android:id="@+id/userAvatar"
-            android:layout_width="58dp"
-            android:src="@mipmap/icon_user_default"
-            android:layout_marginLeft="15dp"
-            android:layout_height="58dp" />
+        android:orientation="vertical"
+        android:layout_height="match_parent">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/userName"
+            android:id="@+id/user"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_height="88dp">
+            <ImageView
+                android:id="@+id/userAvatar"
+                android:layout_width="58dp"
+                android:src="@mipmap/icon_user_default"
+                android:layout_marginLeft="15dp"
+                android:layout_height="58dp" />
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:text="@string/login_register"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/userId"
-                android:text="ID: 123456"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:layout_height="wrap_content" />
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:text="@string/login_register"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/userId"
+                    android:text="ID: 123456"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="15dp"
+                android:src="@mipmap/icon_enter1"
+                android:layout_marginRight="15dp"
+                android:layout_height="15dp" />
+
         </LinearLayout>
-        <View
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <ImageView
-            android:layout_width="15dp"
-            android:src="@mipmap/icon_enter1"
+
+        <RelativeLayout
+            android:id="@+id/rlVoteEnter"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/bg_vote_enter"
             android:layout_marginRight="15dp"
-            android:layout_height="15dp" />
+            android:layout_marginBottom="9dp"
+            android:layout_height="88dp">
+            <ImageView
+                android:layout_width="107dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/wj"
+                android:layout_height="83dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/color_040404"
+                android:textSize="14sp"
+                android:text="@string/qgas_buyback_and_burn_program"
+                android:layout_marginTop="22dp"/>
 
+            <TextView
+                android:layout_width="80dp"
+                android:background="@drawable/bg_white_stroke_maincolor_10dp"
+                android:layout_marginLeft="26dp"
+                android:text="@string/vote_2"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/mainColor"
+                android:layout_marginTop="50dp"
+                android:layout_height="20dp"/>
+        </RelativeLayout>
+
+        <com.stratagile.qlink.view.MyItemView
+            android:id="@+id/cryptoWallet"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/icon_crypto_wallet"
+            app:textmy="@string/crypto_wallet"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+        <com.stratagile.qlink.view.MyItemView
+            android:id="@+id/claimQlc"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/icon_earn_detail"
+            app:textmy="@string/earning_detail"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+        <com.stratagile.qlink.view.MyItemView
+            android:id="@+id/shareFriend"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/icon_share_friend"
+            app:textmy="@string/share_with_friends"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+
+        <com.stratagile.qlink.view.MyItemView
+            android:visibility="gone"
+            android:id="@+id/mining"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/ic_mining"
+            app:textmy="@string/sheet_minig"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+
+        <com.stratagile.qlink.view.MyItemView
+            android:id="@+id/joinCommunity"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/icon_join_community"
+            app:textmy="@string/join_the_community"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+
+        <com.stratagile.qlink.view.MyItemView
+            android:visibility="gone"
+            android:id="@+id/contactUs"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/icon_contact_us"
+            app:textmy="@string/contact_us"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+        <com.stratagile.qlink.view.MyItemView
+            android:id="@+id/settings"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/icon_settings"
+            app:textmy="@string/settings"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+
+        <View
+            android:id="@+id/testView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
     </LinearLayout>
-    
-    <com.stratagile.qlink.view.MyItemView
-        android:id="@+id/cryptoWallet"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/icon_crypto_wallet"
-        app:textmy="@string/crypto_wallet"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-    <com.stratagile.qlink.view.MyItemView
-        android:id="@+id/claimQlc"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/icon_earn_detail"
-        app:textmy="@string/earning_detail"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-    <com.stratagile.qlink.view.MyItemView
-        android:id="@+id/shareFriend"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/icon_share_friend"
-        app:textmy="@string/share_with_friends"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-
-    <com.stratagile.qlink.view.MyItemView
-        android:visibility="gone"
-        android:id="@+id/mining"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/ic_mining"
-        app:textmy="@string/sheet_minig"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-
-    <com.stratagile.qlink.view.MyItemView
-        android:id="@+id/joinCommunity"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/icon_join_community"
-        app:textmy="@string/join_the_community"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-
-    <com.stratagile.qlink.view.MyItemView
-        android:visibility="gone"
-        android:id="@+id/contactUs"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/icon_contact_us"
-        app:textmy="@string/contact_us"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-    <com.stratagile.qlink.view.MyItemView
-        android:id="@+id/settings"
-        android:layout_width="match_parent"
-        app:showNextmy="true"
-        app:srcmy="@mipmap/icon_settings"
-        app:textmy="@string/settings"
-        android:layout_height="54dp">
-
-    </com.stratagile.qlink.view.MyItemView>
-
-    <View
-        android:id="@+id/testView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

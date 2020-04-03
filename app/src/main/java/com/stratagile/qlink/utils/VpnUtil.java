@@ -16,10 +16,10 @@ public class VpnUtil {
     public static boolean isInSameNet(VpnEntity vpnEntity) {
 //        KLog.i("当前网络为：" + SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false));
 //        KLog.i("资产: " + vpnEntity.getVpnName() + "网络为：" + vpnEntity.getIsMainNet());
-        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && vpnEntity.getIsMainNet()) {
+        if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true) && vpnEntity.getIsMainNet()) {
             return true;
         }
-        if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !vpnEntity.getIsMainNet()) {
+        if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true) && !vpnEntity.getIsMainNet()) {
             return true;
         }
         return false;

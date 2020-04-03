@@ -35,6 +35,22 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Clai
         }
     }
 
+    fun getVCode(map: Map<String, String>) {
+        val disposable = httpAPIWrapper.getVcode(map)
+                .subscribe({ baseBack ->
+                    mView.closeProgressDialog()
+                    mView.setInviteCode(baseBack)
+                    //isSuccesse
+                }, {
+                    mView.closeProgressDialog()
+                }, {
+                    //onComplete
+                    mView.closeProgressDialog()
+                    KLog.i("onComplete")
+                })
+        mCompositeDisposable.add(disposable)
+    }
+
     fun claimQgas(map : Map<String, String>) {
         val disposable = httpAPIWrapper.claimQgas(map)
                 .subscribe({ baseBack ->

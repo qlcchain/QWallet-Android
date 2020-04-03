@@ -460,7 +460,7 @@
     <string name="staking_type">抵押类型</string>
     <string name="accounts_invocation_hash">账户/交易 Hash</string>
     <string name="stake_from_neo_address">抵押来自: NEO 地址</string>
-    <string name="stake_to_go_qlc_address">抵押到: GO-QLC 地址</string>
+    <string name="stake_to_go_qlc_address">抵押到: QLC Chain 地址</string>
     <string name="transaction_neo_invocation_hash">交易：NEO调用hash</string>
     <string name="token_decimals">Token 小数位数</string>
     <string name="amount_stake_detail">抵押数量</string>
@@ -620,7 +620,7 @@
     <string name="please_pay">请支付</string>
     <string name="wait_seller_pay">等待卖家支付</string>
     <string name="join_now_telegram">立即加入</string>
-    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">加入我们的电报群 获得最新QGAS动态</string>
+    <string name="join_us_on_telegram_to_get_the_latest_qgas_news">加入我们的电报群\n获得最新QGAS动态</string>
     <string name="mobile_plan">运营商套餐</string>
     <string name="please_choose">请选择</string>
     <string name="operator">运营商</string>
@@ -683,4 +683,78 @@
     <string name="referred">Referred</string>
     <string name="recharge_commission">充值佣金</string>
     <string name="group_plan_commission">团购佣金</string>
+    <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">成为 Q-Wallet 充值销售代理，\n得持续</font><font color="#108EE9">收益</font></string>
+    <string name="phone_top_up">话费充值</string>
+
+
+
+    <string name="confirm_order">确认订单</string>
+    <string name="xxx_sold">已售%1$s件</string>
+    <string name="xxx_open">已拼%1$s件</string>
+    <string name="up_to_xx_off">团购低至%1$s折</string>
+    <string name="limited_to_offering_of_xx_off_discount">限时优惠%1$s折</string>
+    <string name="only_available_for_xxx_subscribers">仅限%1$s运营商手机号</string>
+    <string name="select_deduction_token">选择抵扣币</string>
+    <string name="check_and_store_on_the_blockchain">查询及链上保存</string>
+    <string name="confirm_the_mobile_no">确认查询手机号</string>
+    <string name="input_the_last_4_digits_on_the_id_card">输入身份证后四位</string>
+    <string name="after_you_click_on_check_and_store_on_the_blockchain_your_most_recent_itinerary_will_be_displayed_with_1_qgas_being_consumed_for_generating_a_blockchain_based_proof_of_your_travel_records">查询及链上保存后会查询您最近过往漫游地信息，钱包会消耗1QGAS做为记录费用。</string>
+    <string name="send_a_itinerary_query_message">发送查询短信</string>
+    <string name="analyse_the_message_received">解析短信</string>
+    <string name="pay_qgas">支付QGAS</string>
+    <string name="generate_the_blockchain_based_proof_of_the_travel_records">链上生成到访地行程凭证</string>
+    <string name="click_query">查询上链</string>
+    <string name="itinerary_check">到访地行程查询</string>
+    <string name="invoice_content">凭证内容</string>
+    <string name="itinerary">到访地行程</string>
+    <string name="please_input_the_mobile_number">请输入手机号码</string>
+    <string name="query">查询</string>
+    <string name="time">行程时间</string>
+    <string name="date">行程时间</string>
+    <string name="blockchain_credential">区块链电子凭证</string>
+    <string name="mobile_number">手机号码</string>
+    <string name="no_valid_mobile_number_was_found">没有找到手机号码</string>
+    <string name="please_input_the_last_4_digits_on_the_id_card">请输入身份证后四位</string>
+    <string name="query_history">查询记录</string>
+    <string name="proof_type">凭证类型</string>
+    <string name="fees_amount">凭证费用</string>
+    <string name="proof_generation_date">凭证生成时间</string>
+    <string name="proof_no">凭证编号</string>
+    <string name="proof_content">凭证内容</string>
+    <string name="check_the_on_chain_records">链上记录</string>
+    <string name="blockchain_based_proof_of_itinerary_2">链上行程凭证</string>
+    <string name="china_telecom">电信</string>
+    <string name="china_unicom">联通</string>
+    <string name="china_mobile">移动</string>
+    <string name="how_do_you_think_if_qlc_chain_runs_the_qgas_buyback_program_allowing_the_qgas_hodlers_to_sell_their_qgas_for_qlc_at_the_price_higher_than_the_public_market">QLC Chain将在Q-Wallet OTC中开展首次QGas回购销毁活动，指定交易对为QGas/QLC。即QGas持有者可通过本活动以高于市场价的价格出售QGas，得到QLC。您是否赞成这次活动？请为下列的选项投票。</string>
+    <string name="i_like_the_idea_and_i_will_engage_in_the_program">我支持这项活动，我会参加。</string>
+    <string name="i_like_the_idea_but_i_won_t_engage_in_the_program">我支持这项活动，但不会参加。</string>
+    <string name="i_don_t_like_the_idea_but_i_might_engage_in_the_program">我不支持这项活动，但可能会参加。</string>
+    <string name="i_don_t_like_the_idea_neither_will_i_engage_in_the_program">我不支持这项活动，也不会参加。</string>
+    <string name="write_here">写在这里</string>
+    <string name="if_you_got_more_to_share_with_us_leave_your_opinions_and_comments_below">如果您有其他反馈意见，请在以下输入框中留言：</string>
+    <string name="vote_1">投票</string>
+    <string name="vote_2">去投票</string>
+    <string name="you_have_voted_successfully_thanks_for_your">您已投票，感谢您的支持与帮助。</string>
+    <string name="the_voting_has_been_closed">投票已结束，以上是最后的投票结果</string>
+    <string name="qgas_buyback_and_burn_program">QGas回购销毁计划</string>
+    <string name="team">团队</string>
+    <string name="qgas_buyback_and_burn"><font color="#242426">QGAS </font> <font color="#1190EB">回购销毁计划</font></string>
+    <string name="details_burn">活动介绍</string>
+    <string name="program_implementation">
+* 一个活动日定义为前一天晚7点至次日晚7点
+\n* 每天晚7点以后团队开始挂买单，每天买单总量为 2万QGas，分批挂单时间： 晚7：00， 12：00， 凌晨2：00，凌晨5：00，早9：00
+\n* 单个用户一个活动日内交易数量不得超过10，000 QGas
+\n* 专门创建一个用于接收QGas的地址，并事先向社群公示，接受监督。
+\n* 前一天没有成交的买单延续到次日，次日继续新投放总量2万 QGas买单，收购单价%1$s QLC
+\n* 所有买单的QGas接收地址均统一使用上述地址
+\n* 活动后48小时内，进行QGas销毁操作</string>
+    <string name="program_time">活动周期:</string>
+    <string name="_10_days">10 天</string>
+    <string name="buyback_price">回购价格：</string>
+    <string name="program_implementation_1">活动细则：</string>
+    <string name="qgas_buyback_and_burn_1">QGas回购销毁计划</string>
+    <string name="more_details_buyback">了解详情</string>
+
+    <string name="no_data">暂无数据</string>
 </resources>

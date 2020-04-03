@@ -9,6 +9,7 @@ import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.topup.contract.TopUpContract
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment
+import io.reactivex.Observer
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -44,9 +45,9 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }
     }
 
-    fun getProductList(map: MutableMap<String, String>, next : Boolean) {
+    fun getProductList(map: MutableMap<String, String>, next : Boolean, saveToLocal : Boolean) {
         mCompositeDisposable.add(httpAPIWrapper.getTopupProductList(map).subscribe({
-            mView.setProductList(it, next)
+            mView.setProductList(it, next, saveToLocal)
         }, {
             mView.closeProgressDialog()
         }, {
@@ -57,6 +58,16 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
     fun getCountryList(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.getCountryList(map).subscribe({
             mView.setCountryList(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun burnQgasList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.burnQgasList(map).subscribe({
+            mView.setBurnQgasAct(it)
         }, {
             mView.closeProgressDialog()
         }, {
@@ -122,5 +133,59 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
                     KLog.i("onComplete")
                 })
         mCompositeDisposable.add(disposable)
+    }
+
+    fun queryDict(map: Map<*, *>?) {
+        httpAPIWrapper.qurryDict(map).subscribe(object : Observer<Dict?> {
+            override fun onSubscribe(d: Disposable) {}
+            override fun onNext(dict: Dict) {
+                mView.setProxyActivityBanner(dict)
+            }
+
+            override fun onError(e: Throwable) {}
+            override fun onComplete() {}
+        })
+    }
+
+    fun getPayToken() {
+        mCompositeDisposable.add(httpAPIWrapper.payToken(hashMapOf<String, String>()).subscribe({
+            mView.setPayToken(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun indexInterface() {
+        mCompositeDisposable.add(httpAPIWrapper.indexInterface(hashMapOf<String, String>()).subscribe({
+            mView.setIndexInterface(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun getTopupGroupKindList(map: MutableMap<String, String>) {
+        mCompositeDisposable.add(httpAPIWrapper.getTopupGroupKindList(map).subscribe({
+            mView.setGroupKindList(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
+    }
+
+    fun qurryDict(map: Map<*, *>?, position : Int) {
+        httpAPIWrapper.qurryDict(map).subscribe(object : Observer<Dict?> {
+            override fun onSubscribe(d: Disposable) {}
+            override fun onNext(dict: Dict) {
+                mView.setGroupDate(dict, position)
+            }
+
+            override fun onError(e: Throwable) {}
+            override fun onComplete() {}
+        })
     }
 }

@@ -82,6 +82,7 @@ import com.stratagile.qlink.guideview.compnonet.EnterVpnComponent;
 import com.stratagile.qlink.guideview.compnonet.EnterWalletComponent;
 import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.Qsdk;
+import com.stratagile.qlink.statusbar.StatusBarCompat;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
@@ -106,6 +107,7 @@ import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.LogUtil;
@@ -518,8 +520,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                     EventBus.getDefault().post(new GetPairs());
                 } else {
                     if (i == R.id.button21) {
+                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_BUY);
                         viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
                     } else {
+                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_SELL);
                         viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
                     }
                 }
@@ -918,9 +922,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     private void setTopupPage() {
         financeCome.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-        }
+        StatusBarCompat.cancelLightStatusBar(this);
         viewPager.setCurrentItem(0, false);
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
@@ -930,6 +932,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setTextColor(getResources().getColor(R.color.white));
         statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
         rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        statusBar.setVisibility(View.GONE);
+        rl1.setVisibility(View.GONE);
         ivAvater.setVisibility(View.VISIBLE);
         Glide.with(this)
                 .load(R.mipmap.add_j)
@@ -944,9 +948,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
      */
     private void setVpnPage() {
         financeCome.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-        }
+        StatusBarCompat.cancelLightStatusBar(this);
         viewPager.setCurrentItem(1, false);
         tvTitle.setVisibility(View.GONE);
         segmentControlView.setVisibility(View.VISIBLE);
@@ -956,6 +958,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setTextColor(getResources().getColor(R.color.white));
         statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
         rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        statusBar.setVisibility(View.VISIBLE);
+        rl1.setVisibility(View.VISIBLE);
         ivAvater.setVisibility(View.VISIBLE);
         Glide.with(this)
                 .load(R.mipmap.add_j)
@@ -975,12 +979,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //        if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
 //            return;
 //        }
-        financeCome.setVisibility(View.GONE);
-        dangqianshijian = Calendar.getInstance().getTimeInMillis();
-        KLog.i("进入钱包页面。。");
-        ivWallet.setVisibility(View.VISIBLE);
-        tvTitle.setVisibility(View.VISIBLE);
-        segmentControlView.setVisibility(View.GONE);
 
         if (ConstantValue.isShouldShowVertifyPassword) {
             Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
@@ -988,9 +986,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
             bottomNavigation.setSelectedItemId(R.id.item_topup);
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//设置状态栏黑色字体
-            }
+            financeCome.setVisibility(View.GONE);
+            dangqianshijian = Calendar.getInstance().getTimeInMillis();
+            KLog.i("进入钱包页面。。");
+            ivWallet.setVisibility(View.VISIBLE);
+            tvTitle.setVisibility(View.VISIBLE);
+            segmentControlView.setVisibility(View.GONE);
+            statusBar.setVisibility(View.VISIBLE);
+            rl1.setVisibility(View.VISIBLE);
+
+            StatusBarCompat.cancelLightStatusBar(this);
             viewPager.setCurrentItem(2, false);
             ivQRCode.setVisibility(View.VISIBLE);
             statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
@@ -1015,10 +1020,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     long dangqianshijian = 0;
 
     private void setSettingsPage() {
+        KLog.i(UIUtils.isNavigationBarExist(this));
         financeCome.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
-        }
+        StatusBarCompat.changeToLightStatusBar(this);
         ivWallet.setVisibility(View.GONE);
         tvTitle.setVisibility(View.VISIBLE);
         segmentControlView.setVisibility(View.GONE);
@@ -1032,6 +1036,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         Glide.with(this)
                 .load(R.mipmap.icon_set1)
                 .into(ivWallet);
+        statusBar.setVisibility(View.VISIBLE);
+        rl1.setVisibility(View.VISIBLE);
     }
 
 
@@ -1069,7 +1075,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         if (requestCode == START_SELECT_PICTURE && resultCode == RESULT_OK) {
 //            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
                 Glide.with(this)
                         .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)
@@ -1120,6 +1126,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void switchToOtc(SwitchToOtc switchToOtc) {
         bottomNavigation.setSelectedItemId(R.id.item_sms);
+        if (switchToOtc.isToSell()) {
+            button22.toggle();
+            viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+        }
         setVpnPage();
     }
 
@@ -1197,7 +1207,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                         startActivity(new Intent(this, AccountActivity.class));
                         return;
                     }
-
+                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_Record);
                     Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
                     startActivity(intent1);
                 } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
@@ -1233,6 +1243,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 //                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
 //                        return;
 //                    }
+                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_NewOrder);
                     startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
                     return;
                 }
@@ -1350,7 +1361,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     public void getAvatarSuccess(UpLoadAvatar upLoadAvatar) {
         if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, false)) {
+            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
                 Glide.with(this)
                         .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
                         .apply(AppConfig.getInstance().optionsMainColor)

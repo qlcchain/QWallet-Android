@@ -125,6 +125,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 if (userAccount.getIsLogin()) {
                     loginUser = userAccount;
                     ConstantValue.currentUser = userAccount;
+                    userAccount.setStartApp(false);
                     viewModel.currentUserAccount.postValue(userAccount);
 
                     if (userAccount.getBindDate() == null || "".equals(userAccount.getBindDate())) {
@@ -191,6 +192,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 if (userAccount.getIsLogin()) {
                     loginUser = userAccount;
                     ConstantValue.currentUser = userAccount;
+                    userAccount.setStartApp(true);
                     viewModel.currentUserAccount.postValue(userAccount);
                     isLogin = true;
                     userName.setText(loginUser.getAccount());
@@ -236,6 +238,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     }
 
     private void bindPush(UserAccount userAccount) {
+        if ("".equals(JPushInterface.getRegistrationID(getActivity()))) {
+            return;
+        }
         Map map = new HashMap<String, String>();
         map.put("account", userAccount.getAccount());
         map.put("token", AccountUtil.getUserToken());
@@ -416,7 +421,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView, R.id.mining})
+    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView, R.id.mining, R.id.rlVoteEnter})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user:
@@ -461,6 +466,9 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 break;
             case R.id.testView:
                 startActivityForResult(new Intent(getActivity(), TestActivity.class), 0);
+                break;
+            case R.id.rlVoteEnter:
+                startActivity(new Intent(getActivity(), VoteActivity.class));
                 break;
             case R.id.mining:
                 mining.setDotViewVisible(View.INVISIBLE);

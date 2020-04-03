@@ -630,7 +630,7 @@
     <string name="staking_type">Jenis Staking</string>
     <string name="accounts_invocation_hash">Akun/pemintaan Hash</string>
     <string name="stake_from_neo_address">Stake Dari: Alamat NEO</string>
-    <string name="stake_to_go_qlc_address">Stake Untuk: Alamat GO-QLC</string>
+    <string name="stake_to_go_qlc_address">Stake Untuk: Alamat QLC Chain</string>
     <string name="transaction_neo_invocation_hash">Transaksi : Permintaan Hash NEO</string>
     <string name="token_decimals">Desimal Token</string>
     <string name="amount_stake_detail">Jumlah</string>

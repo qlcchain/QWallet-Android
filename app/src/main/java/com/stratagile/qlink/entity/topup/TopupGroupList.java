@@ -1,5 +1,8 @@
 package com.stratagile.qlink.entity.topup;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.stratagile.qlink.entity.BaseBack;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ public class TopupGroupList extends BaseBack {
         this.groupList = groupList;
     }
 
-    public static class GroupListBean {
+    public static class GroupListBean implements Parcelable {
         /**
          * joined : 1
          * discount : 0.7
@@ -46,6 +49,35 @@ public class TopupGroupList extends BaseBack {
         private String id;
         private double payTokenPrice;
         private int numberOfPeople;
+
+        protected GroupListBean(Parcel in) {
+            joined = in.readInt();
+            discount = in.readDouble();
+            payFiatMoney = in.readDouble();
+            deductionToken = in.readString();
+            payTokenAmount = in.readDouble();
+            deductionTokenAmount = in.readDouble();
+            duration = in.readInt();
+            id = in.readString();
+            payTokenPrice = in.readDouble();
+            numberOfPeople = in.readInt();
+            status = in.readString();
+            payToken = in.readString();
+            head = in.readString();
+            createDate = in.readString();
+        }
+
+        public static final Creator<GroupListBean> CREATOR = new Creator<GroupListBean>() {
+            @Override
+            public GroupListBean createFromParcel(Parcel in) {
+                return new GroupListBean(in);
+            }
+
+            @Override
+            public GroupListBean[] newArray(int size) {
+                return new GroupListBean[size];
+            }
+        };
 
         public String getHead() {
             return head;
@@ -171,6 +203,29 @@ public class TopupGroupList extends BaseBack {
 
         public void setItems(ArrayList<ItemsBean> items) {
             this.items = items;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(joined);
+            dest.writeDouble(discount);
+            dest.writeDouble(payFiatMoney);
+            dest.writeString(deductionToken);
+            dest.writeDouble(payTokenAmount);
+            dest.writeDouble(deductionTokenAmount);
+            dest.writeInt(duration);
+            dest.writeString(id);
+            dest.writeDouble(payTokenPrice);
+            dest.writeInt(numberOfPeople);
+            dest.writeString(status);
+            dest.writeString(payToken);
+            dest.writeString(head);
+            dest.writeString(createDate);
         }
 
         public static class ItemsBean {

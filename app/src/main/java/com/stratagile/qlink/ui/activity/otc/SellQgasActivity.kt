@@ -145,7 +145,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
                 }
                 AllWallet.WalletType.EosWallet -> {
-                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
+//                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
                 }
                 AllWallet.WalletType.NeoWallet -> {
                     if (tradeTokenInfo == null) {
@@ -174,10 +174,16 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         closeProgressDialog()
         this.entrustOrderInfo = entrustOrderInfo
         maxQgas = entrustOrderInfo.order.totalAmount.toBigDecimal() - entrustOrderInfo.order.lockingAmount.toBigDecimal() - entrustOrderInfo.order.completeAmount.toBigDecimal()
+//        maxQgas = entrustOrderInfo.order.totalAmount.toBigDecimal()
+        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+        if (entrustOrderInfo.order.maxAmount.toBigDecimal() < maxQgas) {
+            maxQgas = entrustOrderInfo.order.maxAmount.toBigDecimal()
+        }
+
         maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
         etUsdt.hint = getString(R.string.max) + " " + maxUsdt.stripTrailingZeros().toPlainString()
         etQgas.hint = getString(R.string.max) + " " + maxQgas
-        tvAmount.text = maxQgas.stripTrailingZeros().toPlainString()
+
         if (maxQgas < BigDecimal.valueOf(orderList.maxAmount)) {
             tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + " - " + maxQgas.stripTrailingZeros().toPlainString()
         } else {
@@ -263,6 +269,9 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         tvAmount.text= BigDecimal.valueOf(orderList.totalAmount).stripTrailingZeros().toPlainString()
         tvQgasVolume.text = BigDecimal.valueOf(orderList.minAmount).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(orderList.maxAmount).stripTrailingZeros().toPlainString()
         maxQgas = orderList.totalAmount.toBigDecimal()
+        if (orderList.maxAmount < orderList.totalAmount) {
+            maxQgas = orderList.maxAmount.toBigDecimal()
+        }
         maxUsdt = maxQgas.multiply(orderList.unitPrice.toBigDecimal())
         etUsdt.hint = getString(R.string.max) + " " + maxUsdt.toPlainString()
         etQgas.hint = getString(R.string.max) + " " + maxQgas
@@ -297,7 +306,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                 return@setOnClickListener
             }
 
-            if (etQgas.text.toString().toBigDecimal() >= 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (etQgas.text.toString().toBigDecimal() > 1000.toBigDecimal() && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(this)
                 return@setOnClickListener
             }
@@ -640,6 +649,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
             sweetAlertDialog.cancel()
         }
         tvOk.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.OTC_SELL_Submit)
             sweetAlertDialog.cancel()
             showProgressDialog()
             var map = hashMapOf<String, String>()

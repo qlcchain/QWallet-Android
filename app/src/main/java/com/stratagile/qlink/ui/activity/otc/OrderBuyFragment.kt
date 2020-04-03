@@ -179,6 +179,8 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        webview = DWebView(activity!!)
+        webview!!.loadUrl("file:///android_asset/contract.html")
         tvCreateWallet.setOnClickListener {
             startActivity(Intent(activity, SelectWalletTypeActivity::class.java))
         }
@@ -256,7 +258,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() >= 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+            if (selectedPair!!.tradeToken.equals("QGAS") && etAmount.text.toString().trim().toDouble() > 1000 && !"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
                 KotlinConvertJavaUtils.needVerify(activity!!)
                 return@setOnClickListener
             }
@@ -367,6 +369,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
         }
 
         tvOk.setOnClickListener {
+            FireBaseUtils.logEvent(activity, FireBaseUtils.OTC_NewOrder_BUY_Confirm)
             sweetAlertDialog.cancel()
             showProgressDialog()
             var map = hashMapOf<String, String>()
@@ -410,8 +413,6 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
     private var webview: DWebView? = null
     private fun testTransfer(map : HashMap<String, String>, address : String) {
-        webview = DWebView(activity!!)
-        webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
         val arrays = arrayOfNulls<Any>(7)
         arrays[0] = sendNeoWallet!!.address
@@ -427,10 +428,11 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 KLog.i("call succeed,return value is " + retValue!!)
                 retStr = retValue!!.toString()
                 var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-                if (nep5SendBack != null) {
+                if (nep5SendBack != null && nep5SendBack.txid != null) {
                     mPresenter.generateEntrustBuyOrder(nep5SendBack.txid, address, map)
                 } else {
-
+                    toast(getString(R.string.send_qgas_error, "QLC"))
+                    closeProgressDialog()
                 }
             })
         } catch (e : Exception) {

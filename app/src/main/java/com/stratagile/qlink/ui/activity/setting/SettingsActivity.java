@@ -32,6 +32,7 @@ import com.stratagile.qlink.ui.activity.setting.module.SettingsModule;
 import com.stratagile.qlink.ui.activity.setting.presenter.SettingsPresenter;
 import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -109,6 +110,8 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         debugMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                FileUtil.savaData("/Qwallet/indexInterfaceStr.txt", "");
+                FileUtil.savaData("/Qwallet/productListStr.txt", "");
                 SpUtil.putBoolean(SettingsActivity.this, ConstantValue.isMainNet, !b);
                 Intent intent = new Intent(SettingsActivity.this, SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -195,10 +198,10 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
         ArrayList<MyAsset> assetArrayList = new ArrayList<>();
         List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
         for (VpnEntity vpnEntity : vpnEntityList) {
-            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && !vpnEntity.getIsInMainWallet()) {//主网
+            if (SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true) && !vpnEntity.getIsInMainWallet()) {//主网
                 continue;
             }
-            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, false) && vpnEntity.getIsInMainWallet()) {//测试网
+            if (!SpUtil.getBoolean(AppConfig.getInstance(), ConstantValue.isMainNet, true) && vpnEntity.getIsInMainWallet()) {//测试网
                 continue;
             }
             if (vpnEntity.getP2pId() != null && vpnEntity.getP2pId().equals(SpUtil.getString(this, ConstantValue.P2PID, ""))) {

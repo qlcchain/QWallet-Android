@@ -29,10 +29,7 @@ import com.stratagile.qlink.ui.activity.topup.module.TopupOrderListModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupOrderListPresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.topup.TopupOrderListAdapter
-import com.stratagile.qlink.utils.FileUtil
-import com.stratagile.qlink.utils.OtcUtils
-import com.stratagile.qlink.utils.SpUtil
-import com.stratagile.qlink.utils.UIUtils
+import com.stratagile.qlink.utils.*
 import kotlinx.android.synthetic.main.activity_topup_order_list.*
 import java.io.File
 import java.util.*
@@ -102,6 +99,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         title.text = getString(R.string.order_list)
         topupOrderListAdapter = TopupOrderListAdapter(ArrayList())
         topupOrderListAdapter.setEnableLoadMore(true)
+        topupOrderListAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         recyclerView.addItemDecoration(BottomMarginItemDecoration(UIUtils.dip2px(15f, this)))
         refreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor))
         recyclerView.adapter = topupOrderListAdapter
@@ -157,12 +155,15 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
                     showCancelDialog(position)
                 }
                 R.id.llVoucher -> {
+                    FireBaseUtils.logEvent(this, FireBaseUtils.Topup_MyOrders_BlockchainInvoice)
                     OtcUtils.gotoBlockBrowser(this, topupOrderListAdapter.data[position].chain, topupOrderListAdapter.data[position].txid)
                 }
                 R.id.voucherDetail -> {
+//                    FireBaseUtils.logEvent(this, FireBaseUtils.Topup_MyOrders_BlockchainInvoice)
                     startActivity(Intent(this, VoucherDetailActivity::class.java).putExtra("orderBean", topupOrderListAdapter.data[position]))
                 }
                 R.id.tvPayNow -> {
+                    FireBaseUtils.logEvent(this, FireBaseUtils.Topup_MyOrders_PayNow)
                     if ("TOKEN".equals(topupOrderListAdapter.data[position].payWay)) {
                         if ("".equals(topupOrderListAdapter.data[position].txid)) {
                             when(OtcUtils.parseChain(topupOrderListAdapter.data[position].chain)) {
@@ -231,6 +232,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
         alert(getString(R.string.are_you_sure_want_to_cancel_the_order)) {
             negativeButton(getString(R.string.cancel)) { dismiss() }
             positiveButton(getString(R.string.confirm)) {
+                FireBaseUtils.logEvent(this@TopupOrderListActivity, FireBaseUtils.Topup_MyOrders_Cancel)
                 cancelOrder(position)
             }
         }.show()
@@ -292,6 +294,7 @@ class TopupOrderListActivity : BaseActivity(), TopupOrderListContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.topupGroup) {
+            FireBaseUtils.logEvent(this, FireBaseUtils.Topup_MyOrders_GroupOrders)
             startActivity(Intent(this, MyTopupGroupActivity::class.java))
         }
         return super.onOptionsItemSelected(item)

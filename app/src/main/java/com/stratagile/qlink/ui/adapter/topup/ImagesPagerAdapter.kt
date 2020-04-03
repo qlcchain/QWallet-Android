@@ -11,12 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.SwitchToOtc
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity
 import com.stratagile.qlink.ui.activity.my.AccountActivity
+import com.stratagile.qlink.ui.activity.my.BurnIntroduceActivity
+import com.stratagile.qlink.ui.activity.recommend.AgencyExcellenceActivity
 import com.stratagile.qlink.ui.activity.stake.MyStakeActivity
+import com.stratagile.qlink.utils.FireBaseUtils
+import org.greenrobot.eventbus.EventBus
 
 import java.util.zip.Inflater
 
@@ -43,12 +49,17 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
     //实例化Item
     //在指定的位置创建页面；适配器负责添加view到这个容器中，然而它只保证在finishUpdate(ViewGroup)返回时才完成。
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+//        if (simpleDraweeViewList.size == 0) {
+//            KLog.i("数据为空。")
+//            return View(context)
+//        }
         var view1 = LayoutInflater.from(context).inflate(simpleDraweeViewList[position % simpleDraweeViewList.size], null, false)
         container.addView(view1)
         if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_finance_share) {
             var referFriend = view1.findViewById<View>(R.id.tvReferFriend)
             var stakeQlc = view1.findViewById<View>(R.id.tvStakeQlc)
             referFriend.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_getMoreQGAS_ReferFriends)
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, InviteNowActivity::class.java))
                 } else {
@@ -56,6 +67,7 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
                 }
             }
             stakeQlc.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_getMoreQGAS_StakeQLC)
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, MyStakeActivity::class.java))
                 } else {
@@ -66,11 +78,33 @@ class ImagesPagerAdapter(private val simpleDraweeViewList: MutableList<Int>, pri
         if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_finance_earn_rank) {
             view1.findViewById<TextView>(R.id.tvQlc).text = ConstantValue.miningQLC
             view1.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_TradeMining_MoreDetails)
                 if (ConstantValue.currentUser != null) {
                     context.startActivity(Intent(context, MiningInviteActivity::class.java))
                 } else {
                     context.startActivity(Intent(context, AccountActivity::class.java))
                 }
+            }
+        }
+        if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_banner_proxy_youxiang) {
+            view1.setOnClickListener {
+                if (ConstantValue.currentUser != null) {
+                    FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_PartnerPlan_MoreDetails)
+                    context.startActivity(Intent(context, AgencyExcellenceActivity::class.java))
+                } else {
+                    context.startActivity(Intent(context, AccountActivity::class.java))
+                }
+            }
+        }
+        if (simpleDraweeViewList[position % simpleDraweeViewList.size] == R.layout.layout_banner_buyback) {
+            var tvJoinNow = view1.findViewById<TextView>(R.id.tvJoinNow)
+            tvJoinNow.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_QGASBuyBack_JoinNow)
+                EventBus.getDefault().post(SwitchToOtc(true))
+            }
+            view1.setOnClickListener {
+                FireBaseUtils.logEvent(context, FireBaseUtils.Topup_Home_QGASBuyBack_MoreDetails)
+                context.startActivity(Intent(context, BurnIntroduceActivity::class.java))
             }
         }
         return view1

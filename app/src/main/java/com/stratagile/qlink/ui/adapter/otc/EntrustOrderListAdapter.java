@@ -36,16 +36,21 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
             helper.setText(R.id.tvOpreate, mContext.getResources().getString(R.string.sell).toUpperCase());
             helper.setBackgroundRes(R.id.tvOpreate, R.drawable.sell_bg);
         }
+        if ("1".equals(item.getIsBurnQgasOrder())) {
+            helper.setVisible(R.id.tvTeam, true);
+        } else {
+            helper.setVisible(R.id.tvTeam, false);
+        }
         helper.setText(R.id.tvDeals, item.getOtcTimes() + " Deals");
         helper.setText(R.id.tvNickName, AccountUtil.setUserNickName(item.getNickname()));
-        helper.setText(R.id.tvAmount, (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()) + "");
+        helper.setText(R.id.tvAmount, (BigDecimal.valueOf(item.getTotalAmount()).subtract(BigDecimal.valueOf(item.getLockingAmount())).subtract(BigDecimal.valueOf(item.getCompleteAmount())).stripTrailingZeros().toPlainString()));
         if (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue() < BigDecimal.valueOf(item.getMaxAmount()).intValue()) {
-            helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + (BigDecimal.valueOf(item.getTotalAmount()).intValue() - BigDecimal.valueOf(item.getLockingAmount()).intValue() - BigDecimal.valueOf(item.getCompleteAmount()).intValue()));
+            helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + (BigDecimal.valueOf(item.getTotalAmount()).subtract(BigDecimal.valueOf(item.getLockingAmount())).subtract(BigDecimal.valueOf(item.getCompleteAmount())).stripTrailingZeros().toPlainString()));
         } else {
             helper.setText(R.id.tvQgasVolume, BigDecimal.valueOf(item.getMinAmount()).stripTrailingZeros().toPlainString() + " - " + BigDecimal.valueOf(item.getMaxAmount()).stripTrailingZeros().toPlainString());
         }
         Glide.with(mContext)
-                .load(MainAPI.MainBASE_URL + item.getHead())
+                .load(AppConfig.getInstance().getBaseUrl() + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.ivAvatar));
     }

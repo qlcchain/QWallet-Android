@@ -66,6 +66,9 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         setContentView(R.layout.activity_topup_pay_neo_chain)
     }
     override fun initData() {
+        webview = DWebView(this)
+        webview!!.loadUrl("file:///android_asset/contract.html")
+
         mainColor = R.color.white
         title.text = getString(R.string.payment_wallet)
 
@@ -253,8 +256,6 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
     private var webview: DWebView? = null
     private fun sendNeoToken() {
         showProgressDialog()
-        webview = DWebView(this)
-        webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
         val arrays = arrayOfNulls<Any>(7)
         arrays[0] = neoWallet!!.address

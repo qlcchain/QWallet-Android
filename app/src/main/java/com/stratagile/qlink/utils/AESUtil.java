@@ -1,6 +1,7 @@
 package com.stratagile.qlink.utils;
 
-import org.spongycastle.util.encoders.Hex;
+
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
