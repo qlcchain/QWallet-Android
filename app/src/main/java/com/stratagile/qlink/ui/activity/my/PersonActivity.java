@@ -21,6 +21,7 @@ import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
+import com.stratagile.qlink.statusbar.StatusBarCompat;
 import com.stratagile.qlink.ui.activity.main.EditInputActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerPersonComponent;
 import com.stratagile.qlink.ui.activity.my.contract.PersonContract;

@@ -191,7 +191,7 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
             } else if ("USD".equals(topupBean.payFiat)) {
                 deductionTokenPrice = selectToken.usdPrice
             }
-            var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupBean.discount.toBigDecimal()))
+            var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
             var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
 
             var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
@@ -396,7 +396,7 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
             deductionTokenPrice = selectToken.usdPrice
         }
 
-        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupBean.discount.toBigDecimal()))
+        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
         var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
         var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
         var zhifudaibijine = zhifufabijine - dikoubijine

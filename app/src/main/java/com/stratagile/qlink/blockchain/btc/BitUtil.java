@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.google.common.base.Joiner;
+//import com.google.common.base.Joiner;
 import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.blockchain.cypto.util.HexUtils;

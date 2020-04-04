@@ -18,9 +18,9 @@ android {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode getSelfDefinedVersion("code") + 9
+        versionCode getSelfDefinedVersion("code") + 10
         multiDexEnabled true
-        versionName "2.5.7"
+        versionName "2.5.8"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -225,10 +225,7 @@ dependencies {
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.2'
 
     //谷歌的kotlin扩展库
-    implementation 'androidx.core:core-ktx:0.3'
-    implementation('com.google.guava:guava:23.3-android') {
-        exclude group: 'com.google.code.findbugs'
-    }
+//    implementation 'androidx.core:core-ktx:0.3'
     implementation project(':neoutils')
     implementation project(':autosize')
 
@@ -304,7 +301,7 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
-    implementation 'com.google.guava:guava:28.1-jre'
+    implementation 'com.google.guava:guava:28.2-jre'
 
 //    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
 //    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。

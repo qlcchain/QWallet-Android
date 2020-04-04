@@ -73,9 +73,6 @@ public class AccountActivity extends BaseActivity implements AccountContract.Vie
     protected void initView() {
         setContentView(R.layout.activity_account);
         ButterKnife.bind(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
-        }
     }
 
     @Override
