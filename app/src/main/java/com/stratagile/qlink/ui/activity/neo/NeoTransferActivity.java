@@ -430,13 +430,14 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                             viewLine.setLayoutParams(layoutParams);
                         }
                     }
-                }
-                SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
-                    @Override
-                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                } else{
+                    SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {
+                        @Override
+                        public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
         SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow, new DynamicAnimation.OnAnimationEndListener() {

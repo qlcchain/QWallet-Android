@@ -120,7 +120,7 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
         }
         String currentPassword = ETHWalletUtils.encryption(etCurrentPassword.getText().toString().trim());
         if (!currentPassword.equals(SpUtil.getString(this, ConstantValue.walletPassWord, ""))) {
-            ToastUtil.displayShortToast("old password error");
+            ToastUtil.displayShortToast(getString(R.string.old_password_error));
             closeProgressDialog();
             return;
         }

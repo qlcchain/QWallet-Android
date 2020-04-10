@@ -444,6 +444,7 @@ class TopupDeductionQlcChainActivity : BaseActivity(), TopupDeductionQlcChainCon
             if (qlcAccount == null) {
                 return@setOnClickListener
             }
+            FireBaseUtils.logEvent(this@TopupDeductionQlcChainActivity, FireBaseUtils.Topup_Confirm_Send_QGas)
             if (tvAmountQgas.text.toString().toBigDecimal() > qgasCount) {
                 alert(getString(R.string.balance_insufficient_to_purchase_qgas_on_otc_pages, topupOrderBean.symbol)) {
                     negativeButton(getString(R.string.cancel)) {

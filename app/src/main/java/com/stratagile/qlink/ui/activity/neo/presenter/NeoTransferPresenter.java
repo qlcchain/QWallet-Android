@@ -196,7 +196,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
     @Override
     public void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress, String remark) {
         if (assets == null) {
-            ToastUtil.displayShortToast("please wait");
+            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.pleasewait));
             mView.showProgressDialog();
             getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
                 @Override
@@ -268,7 +268,7 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
                     mView.closeProgressDialog();
                 }
             });
-            ToastUtil.displayShortToast("please wait");
+            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.pleasewait));
             return;
         }
         if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {

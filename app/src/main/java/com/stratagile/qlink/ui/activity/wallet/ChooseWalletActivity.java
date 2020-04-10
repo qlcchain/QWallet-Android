@@ -156,7 +156,7 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (downCheckAdapter.getItem(position).getWalletType() == AllWallet.WalletType.EosWallet && downCheckAdapter.getItem(position).getWalletAddress() == null) {
-                    ToastUtil.displayShortToast("This is a wallet waiting to be created.");
+                    ToastUtil.displayShortToast(getString(R.string.this_is_a_wallet_waitting_to_be_created));
                     return;
                 }
                 showProgressDialog();

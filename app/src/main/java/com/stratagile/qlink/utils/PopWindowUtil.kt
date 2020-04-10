@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.pawegio.kandroid.toast
 import com.stratagile.qlink.R
 import com.stratagile.qlink.entity.eos.TransferEthToCreateEos
+import com.stratagile.qlink.view.BottomSheet
 import com.stratagile.qlink.view.CustomPopWindow
 
 import java.util.ArrayList
@@ -82,11 +84,21 @@ object PopWindowUtil {
      * @param activity 上下文
      * @param showView 从activity中传进来的view,用于让popWindow附着的
      */
-    fun showSharePopWindow(activity: Activity, showView: View, arrayList: List<String>, onItemSelectListener: OnItemSelectListener) {
+    fun showSharePopWindow(activity: Activity, showView: View, arrayList: MutableList<String>, onItemSelectListener: OnItemSelectListener) {
         val maskView = LayoutInflater.from(activity).inflate(R.layout.share_pop_layout, null)
+        val builder = BottomSheet.Builder(activity)
+//        builder.setApplyTopPadding(true)
+        builder.setApplyTopPadding(false)
+
+        builder.setCustomView(maskView)
+        builder.create().setOnDismissListener {
+            onItemSelectListener.onSelect("")
+        }
+
         val contentView = maskView.findViewById<View>(R.id.ll_popup)
-        maskView.animation = AnimationUtils.loadAnimation(activity, R.anim.open_fade)
-        contentView.animation = AnimationUtils.loadAnimation(activity, R.anim.pop_manage_product_in)
+        val bt_cancal = maskView.findViewById<View>(R.id.bt_cancal)
+//        maskView.animation = AnimationUtils.loadAnimation(activity, R.anim.open_fade)
+//        contentView.animation = AnimationUtils.loadAnimation(activity, R.anim.pop_manage_product_in)
         val recyclerView = contentView.findViewById<RecyclerView>(R.id.recyclerView)
         val linearLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
@@ -94,22 +106,22 @@ object PopWindowUtil {
         recyclerView.adapter = sendTokenAdapter
         //对具体的view的事件的处理
         sendTokenAdapter.setOnItemClickListener { adapter, view, position ->
-            CustomPopWindow.onBackPressed()
             onItemSelectListener.onSelect(arrayList[position])
+            builder.create().dismiss()
         }
-        CustomPopWindow.PopupWindowBuilder(activity)
-                .setView(maskView)
-                .setClippingEnable(false)
-                .setContenView(contentView)
-                .setFocusable(false)
-                .size(UIUtils.getDisplayWidth(activity), UIUtils.getDisplayHeigh(activity))
-                .create()
-                .showAtLocation(showView, Gravity.NO_GRAVITY, 0, 0)
+//        CustomPopWindow.PopupWindowBuilder(activity)
+//                .setView(maskView)
+//                .setClippingEnable(false)
+//                .setContenView(contentView)
+//                .setFocusable(false)
+//                .size(UIUtils.getDisplayWidth(activity), UIUtils.getDisplayHeigh(activity))
+//                .create()
+//                .showAtLocation(showView, Gravity.NO_GRAVITY, 0, 0)
 
-        maskView.setOnClickListener {
-            onItemSelectListener.onSelect("")
-            CustomPopWindow.onBackPressed()
+        bt_cancal.setOnClickListener {
+            builder.create().dismiss()
         }
+        builder.create().show()
     }
 
     fun showTransferEthPopWindow(transferEthToCreateEos: TransferEthToCreateEos, activity: Activity, showView: View, onClickListener: View.OnClickListener) {

@@ -930,8 +930,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         tvTitle.setText(R.string.top_up);
         ivQRCode.setVisibility(View.GONE);
         tvTitle.setTextColor(getResources().getColor(R.color.white));
-        statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
-        rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
+        statusBar.setBackground(getResources().getDrawable(R.color.color_4a7eee));
+        rl1.setBackground(getResources().getDrawable(R.color.color_4a7eee));
         statusBar.setVisibility(View.GONE);
         rl1.setVisibility(View.GONE);
         ivAvater.setVisibility(View.VISIBLE);

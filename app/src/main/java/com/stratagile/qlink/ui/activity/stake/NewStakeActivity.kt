@@ -92,7 +92,7 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
             var multSign = Gson().fromJson(retValue.toString(), MultSign::class.java)
             if (multSign._address == null) {
                 AppConfig.instance.saveLog("stake", "createMultSign" + getLine(), Gson().toJson(multSign))
-                toast("createMultSign error, please try later")
+                toast(getString(R.string.create_multsign_error_please_try_later))
                 EventBus.getDefault().post(StakeQlcError())
                 isBack = true
             } else {
@@ -119,7 +119,7 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
             var lockResult = Gson().fromJson(retValue.toString(), LockResult::class.java)
             if (lockResult.txid == null) {
                 AppConfig.instance.saveLog("stake", "voteNode lockQlc" + getLine(), Gson().toJson(lockResult))
-                toast("lock qlc error, please try later")
+                toast(getString(R.string.lock_qlc_error_please_try_later))
                 EventBus.getDefault().post(StakeQlcError())
             } else {
                 lockResult.stakeType = stakeType

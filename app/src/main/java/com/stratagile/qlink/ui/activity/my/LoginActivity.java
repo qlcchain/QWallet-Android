@@ -170,7 +170,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void loginSuccess(Register register) {
         closeProgressDialog();
-        ToastUtil.displayShortToast("login Success");
+        ToastUtil.displayShortToast(getString(R.string.Login_success));
         List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
         if (userAccounts.size() > 0) {
             for (UserAccount userAccount : userAccounts) {
@@ -217,15 +217,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 account = etAccount.getText().toString().trim();
                 password = etPassword.getText().toString().trim();
                 if ("".equals(account)) {
-                    ToastUtil.displayShortToast("account error");
+                    ToastUtil.displayShortToast(getString(R.string.account_error));
                     return;
                 }
                 if (!AccountUtil.isTelephone(account) && !AccountUtil.isEmail(account)) {
-                    ToastUtil.displayShortToast("account error");
+                    ToastUtil.displayShortToast(getString(R.string.account_error));
                     return;
                 }
                 if ("".equals(password) || password.length() < 6) {
-                    ToastUtil.displayShortToast("password error");
+                    ToastUtil.displayShortToast(getString(R.string.password_error));
                     return;
                 }
                 if (regexAccount(account)) {

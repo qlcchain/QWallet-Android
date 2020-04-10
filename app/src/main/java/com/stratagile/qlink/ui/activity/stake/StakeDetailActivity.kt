@@ -159,7 +159,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                 tvStakeStatus.text = getString(R.string.withdrawal_successful)
                 tvStakeStatus.setTextColor(resources.getColor(R.color.color_0cb8ae))
                 optionRevokeTime.text = TimeUtil.getRevokeTime(myStake.withdrawTime)
-                getLockInfo1()
+//                getLockInfo1()
             }
         }
         tvStakeStatus.setOnClickListener {
@@ -319,41 +319,47 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
 
 
     fun benefitWithdraw(unLock: UnLock) {
-        val client = QlcClient("https://nep5.qlcchain.online")
-        val params = JSONArray()
-        val paramOne = JSONObject()
-        paramOne["beneficial"] = myStake.beneficial
-        paramOne["amount"] = myStake.amount.toString()
-        paramOne["pType"] = "vote"
-        params.add(paramOne)
-        params.add(myStake.nep5TxId)
-        val result = client.call("nep5_benefitWithdraw", params)
-        var stateBlock = Gson().fromJson(result.getJSONObject("result").toString(), StateBlock::class.java)
+        try {
+            val client = QlcClient("https://nep5.qlcchain.online")
+            val params = JSONArray()
+            val paramOne = JSONObject()
+            paramOne["beneficial"] = myStake.beneficial
+            paramOne["amount"] = myStake.amount.toString()
+            paramOne["pType"] = "vote"
+            params.add(paramOne)
+            params.add(myStake.nep5TxId)
+            val result = client.call("nep5_benefitWithdraw", params)
+            var stateBlock = Gson().fromJson(result.getJSONObject("result").toString(), StateBlock::class.java)
 
-        var root = BlockMng.getRoot(stateBlock)
-        var params1 = mutableListOf<Pair<String, String>>()
-        params1.add(Pair("root", root))
-        var request = "http://pow1.qlcchain.org/work".httpGet(params1)
-        request.responseString { _, _, result ->
-            KLog.i("远程work返回、、")
-            val (data, error) = result
-            if (error == null) {
-                stateBlock.work = data
-                var hash = BlockMng.getHash(stateBlock)
-                var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(myStake.beneficial).substring(0, 64)))
-                val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePublicKey(myStake.beneficial)))
-                if (!signCheck) {
-                    KLog.i("签名验证失败")
-                    return@responseString
+            var root = BlockMng.getRoot(stateBlock)
+            var params1 = mutableListOf<Pair<String, String>>()
+            params1.add(Pair("root", root))
+            var request = "http://pow1.qlcchain.org/work".httpGet(params1)
+            request.responseString { _, _, result ->
+                KLog.i("远程work返回、、")
+                val (data, error) = result
+                if (error == null) {
+                    stateBlock.work = data
+                    var hash = BlockMng.getHash(stateBlock)
+                    var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(myStake.beneficial).substring(0, 64)))
+                    val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePublicKey(myStake.beneficial)))
+                    if (!signCheck) {
+                        KLog.i("签名验证失败")
+                        return@responseString
+                    }
+                    stateBlock.setSignature(Helper.byteToHexString(signature))
+                    processWithdraw(stateBlock, unLock)
+                } else {
+                    KLog.i("work出错、、、")
+                    error!!.exception.printStackTrace()
+                    KLog.i(error!!.response.statusCode)
+                    benefitWithdraw(unLock)
                 }
-                stateBlock.setSignature(Helper.byteToHexString(signature))
-                processWithdraw(stateBlock, unLock)
-            } else {
-                KLog.i("work出错、、、")
-                error!!.exception.printStackTrace()
-                KLog.i(error!!.response.statusCode)
-                benefitWithdraw(unLock)
             }
+        } catch (e :Exception) {
+            toast(getString(R.string.revoke_failed))
+            e.printStackTrace()
+            closeProgressDialog()
         }
     }
 
@@ -437,7 +443,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                     if (neoWallet == null) {
                         com.pawegio.kandroid.runOnUiThread {
                             closeProgressDialog()
-                            toast("neo wallet not found")
+                            toast(getString(R.string.stake_neo_wallet_not_found))
                         }
                     } else {
                         var qlcWallets = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
@@ -454,21 +460,21 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                         } else {
                             com.pawegio.kandroid.runOnUiThread {
                                 closeProgressDialog()
-                                toast("qlc wallet not found")
+                                toast(getString(R.string.qlc_wallet_not_found))
                             }
                         }
                     }
                 } else {
                     com.pawegio.kandroid.runOnUiThread {
                         closeProgressDialog()
-                        toast("txid is unlock")
+                        toast(getString(R.string.txid_is_unlock))
                     }
                 }
             } catch (e : Exception) {
                 e.printStackTrace()
                 com.pawegio.kandroid.runOnUiThread {
                     closeProgressDialog()
-                    toast("get lockInfo error")
+                    toast(getString(R.string.get_lockinfo_error))
                 }
             }
         }
@@ -493,14 +499,14 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                     }
                 } else {
                     com.pawegio.kandroid.runOnUiThread {
-                        toast("txid is unlock")
+                        toast(getString(R.string.txid_is_unlock))
                     }
                 }
             } catch (e : Exception) {
                 e.printStackTrace()
                 com.pawegio.kandroid.runOnUiThread {
                     closeProgressDialog()
-                    toast("get lockInfo error")
+                    toast(getString(R.string.get_lockinfo_error))
                 }
             }
         }
@@ -532,7 +538,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
         KLog.i(result.toString())
         if (result.get("error") != null) {
             runOnUiThread {
-                toast("stake error")
+                toast(getString(R.string.stake_error))
                 closeProgressDialog()
             }
             return

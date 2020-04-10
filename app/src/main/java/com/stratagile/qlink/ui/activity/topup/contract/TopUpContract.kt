@@ -45,6 +45,8 @@ interface TopUpContract {
         fun setBurnQgasAct(burnQgasAct: BurnQgasAct)
 
         fun setIndexInterface (indexInterface: IndexInterface)
+
+        fun setLocation(location: Location)
     }
 
     interface TopUpContractPresenter : BasePresenter {

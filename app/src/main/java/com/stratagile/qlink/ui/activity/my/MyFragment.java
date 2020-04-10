@@ -34,6 +34,7 @@ import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.main.TestActivity;
+import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
@@ -42,6 +43,7 @@ import com.stratagile.qlink.ui.activity.my.presenter.MyPresenter;
 import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.AccountUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.view.MyItemView;
 
@@ -421,7 +423,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView, R.id.mining, R.id.rlVoteEnter})
+    @OnClick({R.id.user, R.id.cryptoWallet, R.id.shareFriend, R.id.joinCommunity, R.id.contactUs, R.id.settings, R.id.testView, R.id.mining, R.id.rlVoteEnter, R.id.covid19})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user:
@@ -452,12 +454,14 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                     shareFriend.setDotViewVisible(View.INVISIBLE);
                     controllerDot();
                     startActivity(new Intent(getActivity(), InviteActivity.class));
+                    FireBaseUtils.logEvent(getActivity(), FireBaseUtils.Me_Referral_Rewards);
                 } else {
                     startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
                 }
                 break;
             case R.id.joinCommunity:
                 startActivity(new Intent(getActivity(), JoinCommunityActivity.class));
+                FireBaseUtils.logEvent(getActivity(), FireBaseUtils.Me_Join_the_community);
                 break;
             case R.id.contactUs:
                 break;
@@ -474,6 +478,12 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 mining.setDotViewVisible(View.INVISIBLE);
                 controllerDot();
                 startActivityForResult(new Intent(getActivity(), MiningInviteActivity.class), 0);
+                break;
+            case R.id.covid19:
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("url", "http://covid19.qlink.mobi/covid-19trend/dist");
+                intent.putExtra("title", "covid19");
+                startActivity(intent);
                 break;
             default:
                 break;

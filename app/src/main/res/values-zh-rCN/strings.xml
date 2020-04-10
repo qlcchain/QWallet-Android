@@ -757,4 +757,29 @@
     <string name="more_details_buyback">了解详情</string>
 
     <string name="no_data">暂无数据</string>
+
+    <string name="please_select_facephoto">请选择facephoto</string>
+    <string name="please_select_holdphoto">请选择holdphoto</string>
+    <string name="eos_transaction_error">EOS 交易错误</string>
+    <string name="account_error">账户错误</string>
+    <string name="the_verification_code_has_been_sent_successfully">验证码已成功发送。</string>
+    <string name="please_type_privateKey">请输入私钥</string>
+    <string name="walleet_exist">钱包已经存在</string>
+    <string name="create_eos_account_error">创建eos账号失败</string>
+    <string name="activate_success">激活成功</string>
+    <string name="please_switch_to_qlc_chain_wallet">请选择qlc链钱包</string>
+    <string name="privatekey_format_error">私钥格式错误</string>
+    <string name="qlc_wallet_not_found">qlc wallet not found</string>
+    <string name="txid_is_unlock">txid is unlock</string>
+    <string name="get_lockinfo_error">get lockInfo error</string>
+    <string name="stake_error">stake error</string>
+    <string name="create_multsign_error_please_try_later">createMultSign error, please try later</string>
+    <string name="lock_qlc_error_please_try_later">lock qlc error, please try later</string>
+    <string name="this_txid_is_pledged">this txid is pledged</string>
+    <string name="get_txid_info_error">get txid info error</string>
+    <string name="process_error_please_try_later">process error, please try later</string>
+    <string name="only_watch_eth_wallet_cannot_exportkeystore">Olny Watch ETH Wallet Cannot ExportKeystore</string>
+    <string name="claim_success">Claim Success</string>
+    <string name="old_password_error">old password error</string>
+    <string name="this_is_a_wallet_waitting_to_be_created">This is a wallet waiting to be created.</string>
 </resources>

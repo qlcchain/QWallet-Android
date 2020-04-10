@@ -219,7 +219,7 @@ public class EosImportActivity extends BaseActivity implements EosImportContract
             }
         } catch (Exception e) {
             e.printStackTrace();
-            ToastUtil.displayShortToast("私钥格式错误");
+            ToastUtil.displayShortToast(getString(R.string.privatekey_format_error));
             return;
         }
         List<EosAccount> wallets2 = AppConfig.getInstance().getDaoSession().getEosAccountDao().loadAll();

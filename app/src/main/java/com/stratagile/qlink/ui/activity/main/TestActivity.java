@@ -1,10 +1,14 @@
 package com.stratagile.qlink.ui.activity.main;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.binance.dex.api.client.BinanceDexApiClientFactory;
 import com.binance.dex.api.client.BinanceDexApiNodeClient;
@@ -26,8 +30,10 @@ import com.stratagile.qlink.ui.activity.main.component.DaggerTestComponent;
 import com.stratagile.qlink.ui.activity.main.contract.TestContract;
 import com.stratagile.qlink.ui.activity.main.module.TestModule;
 import com.stratagile.qlink.ui.activity.main.presenter.TestPresenter;
+import com.stratagile.qlink.ui.components.AlertsCreator;
 import com.stratagile.qlink.utils.BnbUtil;
 import com.stratagile.qlink.utils.ToastUtil;
+import com.stratagile.qlink.view.BottomSheet;
 
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -141,6 +147,14 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.getBnbTokens:
+                BottomSheet.Builder builder = new BottomSheet.Builder(TestActivity.this);
+                builder.setApplyTopPadding(false);
+
+                LinearLayout linearLayout = new LinearLayout(TestActivity.this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                builder.setCustomView(linearLayout);
+                builder.create().show();
                 break;
             case R.id.getBnbAccount:
                 new Thread(new Runnable() {
@@ -187,6 +201,51 @@ public class TestActivity extends BaseActivity implements TestContract.View {
             default:
                 break;
         }
+    }
+
+    private AlertDialog visibleDialog;
+    private AlertDialog localeDialog;
+    private AlertDialog proxyErrorDialog;
+    public AlertDialog showAlertDialog(AlertDialog.Builder builder) {
+        try {
+            if (visibleDialog != null) {
+                visibleDialog.dismiss();
+                visibleDialog = null;
+            }
+        } catch (Exception e) {
+//            FileLog.e(e);
+        }
+        try {
+            visibleDialog = builder.show();
+            visibleDialog.setCanceledOnTouchOutside(true);
+            visibleDialog.setOnDismissListener(dialog -> {
+                if (visibleDialog != null) {
+                    if (visibleDialog == localeDialog) {
+//                        try {
+//                            String shorname = LocaleController.getInstance().getCurrentLocaleInfo().shortName;
+//                            Toast.makeText(LaunchActivity.this, getStringForLanguageAlert(shorname.equals("en") ? englishLocaleStrings : systemLocaleStrings, "ChangeLanguageLater", R.string.ChangeLanguageLater), Toast.LENGTH_LONG).show();
+//                        } catch (Exception e) {
+//                            FileLog.e(e);
+//                        }
+                        localeDialog = null;
+                    } else if (visibleDialog == proxyErrorDialog) {
+//                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                        SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
+//                        editor.putBoolean("proxy_enabled", false);
+//                        editor.putBoolean("proxy_enabled_calls", false);
+//                        editor.commit();
+//                        ConnectionsManager.setProxySettings(false, "", 1080, "", "", "");
+//                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+                        proxyErrorDialog = null;
+                    }
+                }
+                visibleDialog = null;
+            });
+            return visibleDialog;
+        } catch (Exception e) {
+//            FileLog.e(e);
+        }
+        return null;
     }
 
 

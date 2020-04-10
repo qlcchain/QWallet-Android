@@ -97,7 +97,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
         } else if (jump == JUMPTOLOGIN) {
             mView.jumpToLogin();
         }
-//        Observable.interval(0, 1, TimeUnit.SECONDS).take(2)
+//        Observable.interval(0, 1, TimeUnit.SECONDS).take(3)
 //                .map(new Function<Long, Long>() {
 //                    @Override
 //                    public Long apply(@NonNull Long aLong) throws Exception {
@@ -210,9 +210,9 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
     private PermissionListener permission = new PermissionListener() {
         @Override
         public void onSucceed(int requestCode, List<String> grantedPermissions) {
-//            LocalAssetsUtils.updateGreanDaoFromLocal();
             KLog.i("权限申请成功回调。");
             if (requestCode == 101) {
+                KLog.i("初始化sd卡");
                 qlinkcom.init();
                 permissionState = 0;
                 try {

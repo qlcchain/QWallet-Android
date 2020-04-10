@@ -1789,4 +1789,30 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="program_implementation_1">Program implementation:</string>
     <string name="qgas_buyback_and_burn_1">QGas Buyback and Burn</string>
     <string name="more_details_buyback">More Details</string>
+
+
+    <string name="please_select_facephoto">please select facephoto</string>
+    <string name="please_select_holdphoto">please select holdphoto</string>
+    <string name="eos_transaction_error">EOS Transaction error</string>
+    <string name="account_error">account error</string>
+    <string name="the_verification_code_has_been_sent_successfully">The verification code has been sent successfully.</string>
+    <string name="please_type_privateKey">please type privatekey</string>
+    <string name="walleet_exist">wallet exist</string>
+    <string name="create_eos_account_error">create eos account error</string>
+    <string name="activate_success">Activate Success</string>
+    <string name="please_switch_to_qlc_chain_wallet">Please Switch to QLC Chain Wallet</string>
+    <string name="privatekey_format_error">privatekey format error</string>
+    <string name="qlc_wallet_not_found">qlc wallet not found</string>
+    <string name="txid_is_unlock">txid is unlock</string>
+    <string name="get_lockinfo_error">get lockInfo error</string>
+    <string name="stake_error">stake error</string>
+    <string name="create_multsign_error_please_try_later">createMultSign error, please try later</string>
+    <string name="lock_qlc_error_please_try_later">lock qlc error, please try later</string>
+    <string name="this_txid_is_pledged">this txid is pledged</string>
+    <string name="get_txid_info_error">get txid info error</string>
+    <string name="process_error_please_try_later">process error, please try later</string>
+    <string name="only_watch_eth_wallet_cannot_exportkeystore">Olny Watch ETH Wallet Cannot ExportKeystore</string>
+    <string name="claim_success">Claim Success</string>
+    <string name="old_password_error">old password error</string>
+    <string name="this_is_a_wallet_waitting_to_be_created">This is a wallet waiting to be created.</string>
 </resources>

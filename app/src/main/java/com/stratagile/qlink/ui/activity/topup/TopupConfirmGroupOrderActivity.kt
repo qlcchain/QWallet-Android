@@ -389,6 +389,7 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
     }
 
     fun buySelf() {
+        FireBaseUtils.logEvent(this, FireBaseUtils.Topup_order_confirm)
         var deductionTokenPrice = 0.toDouble()
         if ("CNY".equals(topupBean.payFiat)) {
             deductionTokenPrice = selectToken.price
@@ -407,14 +408,22 @@ class TopupConfirmGroupOrderActivity : BaseActivity(), TopupConfirmGroupOrderCon
         }, 3, BigDecimal.ROUND_HALF_UP)
 
         alert(getString(R.string.a_cahrge_of_will_cost_paytoken_and_deduction_token, topupBean.localFiatAmount.toString(), zhifubishuliang.stripTrailingZeros().toPlainString(), topupBean.payTokenSymbol, dikoubishuliang.stripTrailingZeros().toPlainString(), selectToken.symbol, topupBean.localFiat)) {
-            negativeButton(getString(R.string.cancel)) { dismiss() }
+            negativeButton(getString(R.string.cancel)) {
+                FireBaseUtils.logEvent(this@TopupConfirmGroupOrderActivity, FireBaseUtils.Topup_Confirm_Cancel)
+                dismiss()
+            }
             positiveButton(getString(R.string.buy_topup)) {
                 if (AppConfig.instance.daoSession.qlcAccountDao.loadAll().size != 0) {
+                    FireBaseUtils.logEvent(this@TopupConfirmGroupOrderActivity, FireBaseUtils.Topup_Confirm_buy)
                     generateTopupOrder(topupBean)
                 } else {
                     alert(getString(R.string.you_do_not_have_qlcwallet_create_immediately, "QLC Chain")) {
-                        negativeButton(getString(R.string.cancel)) { dismiss() }
-                        positiveButton(getString(R.string.create)) { startActivity(Intent(this@TopupConfirmGroupOrderActivity, SelectWalletTypeActivity::class.java)) }
+                        negativeButton(getString(R.string.cancel)) {
+                            dismiss()
+                        }
+                        positiveButton(getString(R.string.create)) {
+                            startActivity(Intent(this@TopupConfirmGroupOrderActivity, SelectWalletTypeActivity::class.java))
+                        }
                     }.show()
                 }
             }

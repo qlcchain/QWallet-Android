@@ -13,14 +13,14 @@ checkstyle {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.stratagile.qwallet"
-        minSdkVersion 22
-        targetSdkVersion 29
-        versionCode getSelfDefinedVersion("code") + 10
+        minSdkVersion 23
+        targetSdkVersion 28
+        versionCode getSelfDefinedVersion("code") + 11
         multiDexEnabled true
-        versionName "2.5.8"
+        versionName "2.5.9"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

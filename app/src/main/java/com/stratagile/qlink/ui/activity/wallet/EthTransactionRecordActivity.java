@@ -361,7 +361,7 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
                     if (!ethWallet.getIsLook()) {
 
                     } else {
-                        ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot Transfer");
+                        ToastUtil.displayShortToast(getString(R.string.only_watch_eth_wallet_cannot_transfer));
                         return;
                     }
                     Intent intent1 = new Intent(this, EthTransferActivity.class);

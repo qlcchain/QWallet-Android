@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
+import com.stratagile.qlink.BuildConfig
 import com.stratagile.qlink.R
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.ui.activity.my.VerificationActivity
@@ -44,23 +45,34 @@ object KotlinConvertJavaUtils {
     }
 
     fun rateNow(context: Context) {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("market://details?id=" + context.getPackageName())
+        if (BuildConfig.isGooglePlay) {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("market://details?id=" + context.getPackageName())
 //            intent.setPackage(GoogleMarket.GOOGLE_PLAY)//这里对应的是谷歌商店，跳转别的商店改成对应的即可
-            if (intent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(intent)
-            } else {//没有应用市场，通过浏览器跳转到Google Play
-                val intent2 = Intent(Intent.ACTION_VIEW)
-                intent2.data = Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())
-                if (intent2.resolveActivity(context.packageManager) != null) {
-                    context.startActivity(intent2)
-                } else {
-                    //没有Google Play 也没有浏览器
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(intent)
+                } else {//没有应用市场，通过浏览器跳转到Google Play
+                    val intent2 = Intent(Intent.ACTION_VIEW)
+                    intent2.data = Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())
+                    if (intent2.resolveActivity(context.packageManager) != null) {
+                        context.startActivity(intent2)
+                    } else {
+                        //没有Google Play 也没有浏览器
+                    }
                 }
+            } catch (activityNotFoundException1: ActivityNotFoundException) {
+                context.toast(context.getString(R.string.no_market_no_browser))
             }
-        } catch (activityNotFoundException1: ActivityNotFoundException) {
-            context.toast(context.getString(R.string.no_market_no_browser))
+        } else {
+            //跳网页下载
+            try {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("https://hk.qwallet.network")
+                context.startActivity(intent)
+            } catch (activityNotFoundException1: ActivityNotFoundException) {
+                context.toast(context.getString(R.string.no_market_no_browser))
+            }
         }
 
     }

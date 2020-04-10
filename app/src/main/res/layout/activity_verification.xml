@@ -19,6 +19,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="@dimen/x484"
         android:layout_marginTop="@dimen/x35"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_height="@dimen/x300">
         <ImageView
             android:id="@+id/passport1"
@@ -34,6 +35,7 @@
         android:layout_height="wrap_content" />
     <android.support.v7.widget.CardView
         android:layout_width="@dimen/x484"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="@dimen/x35"
         android:layout_height="@dimen/x300">
         <ImageView

@@ -127,7 +127,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
     private var gasEth: String = "0.0004"
 
     override fun generateSellQgasOrderSuccess() {
-        toast("success")
+//        toast("success")
         closeProgressDialog()
         activity?.finish()
     }
@@ -449,7 +449,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 tvReceiveWalletAddess.text = etContent.text.toString().trim()
                 tvReceiveWalletName.text = etContent.text.toString().trim()
             } else {
-                toast("Illegal Receipt Address")
+                toast(getString(R.string.illegal_receipt_address))
             }
             sweetAlertDialog.cancel()
         }

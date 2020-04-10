@@ -35,6 +35,7 @@ import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
+import com.stratagile.qlink.entity.Location;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
@@ -1335,6 +1336,14 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.indexInterface(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.indexInterface(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<Location> getLocation(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.getLocation(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.getLocation(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

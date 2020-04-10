@@ -101,7 +101,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         if (qlcAccounts.filter { it.isCurrent() }.size == 1) {
             qlcAccount = qlcAccounts.filter { it.isCurrent() }.get(0)
         } else {
-            ToastUtil.displayShortToast("Please Switch to QLC Chain Wallet")
+            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.please_switch_to_qlc_chain_wallet))
             mView.closeProgressDialog()
             return
         }

@@ -286,7 +286,7 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                                     KLog.i(result.toJSONString())
                                     if (result.getString("result") != null && !"".equals(result.getString("result"))) {
                                         runOnUiThread {
-                                            toast("success")
+//                                            toast("success")
                                         }
                                         EventBus.getDefault().post(ChangeWallet())
                                         setResult(Activity.RESULT_OK)
@@ -320,7 +320,7 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                                 KLog.i(result.toJSONString())
                                 if (result.getString("result") != null && !"".equals(result.getString("result"))) {
                                     runOnUiThread {
-                                        toast("success")
+//                                        toast("success")
                                     }
                                     EventBus.getDefault().post(ChangeWallet())
                                     setResult(Activity.RESULT_OK)
@@ -363,6 +363,7 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
     private fun showSpinnerPopWindow() {
         PopWindowUtil.showSharePopWindow(this, ivArrow!!, list!!, object : PopWindowUtil.OnItemSelectListener {
             override fun onSelect(content: String) {
+                KLog.i("返回结果：" + content)
                 if ("" != content) {
                     for (i in tokenInfoArrayList!!.indices) {
                         if (tokenInfoArrayList!![i].tokenSymol == content) {
@@ -376,18 +377,15 @@ class QlcTransferActivity : BaseActivity(), QlcTransferContract.View {
                             viewLine!!.layoutParams = layoutParams
                         }
                     }
+                } else {
+                    SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow) { animation, canceled, value, velocity -> }
                 }
-                SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow) { animation, canceled, value, velocity -> }
             }
         })
         SpringAnimationUtil.startRotatoSpringViewAnimation(ivArrow) { animation, canceled, value, velocity -> }
     }
 
     override fun onBackPressed() {
-        if (CustomPopWindow.onBackPressed()) {
-            SpringAnimationUtil.endRotatoSpringViewAnimation(ivArrow) { animation, canceled, value, velocity -> }
-        } else {
-            super.onBackPressed()
-        }
+        super.onBackPressed()
     }
 }

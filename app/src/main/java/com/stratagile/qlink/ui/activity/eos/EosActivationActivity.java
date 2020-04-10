@@ -268,7 +268,7 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
                             public void run() {
                                 closeProgressDialog();
                                 if (result == null || "".equals(result)) {
-                                    ToastUtil.displayShortToast("create eos account error");
+                                    ToastUtil.displayShortToast(getString(R.string.create_eos_account_error));
                                 } else {
                                     showTestDialog();
                                 }
@@ -287,7 +287,7 @@ public class EosActivationActivity extends BaseActivity implements EosActivation
         TextView tvContent = view.findViewById(R.id.tvContent);
         ImageView imageView = view.findViewById(R.id.ivTitle);
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.op_success));
-        tvContent.setText("Activate Success");
+        tvContent.setText(getString(R.string.activate_success));
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();

@@ -76,10 +76,10 @@ public class ImportQlcPrivateKeyFragment extends BaseFragment implements ImportQ
                         if (QlcUtil.privateToPublic(scanPri).equals(scanPub)) {
                             etPrivateKey.setText(s);
                         } else {
-                            ToastUtil.displayShortToast("privatekey error");
+                            ToastUtil.displayShortToast(getString(R.string.privatekeyerror));
                         }
                     } else {
-                        ToastUtil.displayShortToast("privatekey error");
+                        ToastUtil.displayShortToast(getString(R.string.privatekeyerror));
                     }
                 }
             }
@@ -126,7 +126,7 @@ public class ImportQlcPrivateKeyFragment extends BaseFragment implements ImportQ
     @OnClick(R.id.btImport)
     public void onViewClicked() {
         if ("".equals(etPrivateKey.getText().toString().trim())) {
-            ToastUtil.displayShortToast("please type privatekey");
+            ToastUtil.displayShortToast(getString(R.string.please_type_privateKey));
             return;
         }
         showProgressDialog();
@@ -145,7 +145,7 @@ public class ImportQlcPrivateKeyFragment extends BaseFragment implements ImportQ
         if (wallets3 != null && wallets3.size() != 0) {
             for (int i = 0; i < wallets3.size(); i++) {
                 if (wallets3.get(i).getPrivKey().toLowerCase().equals(qlcAccount.getPrivKey())) {
-                    ToastUtil.displayShortToast("wallet exist");
+                    ToastUtil.displayShortToast(getString(R.string.walleet_exist));
                     closeProgressDialog();
                     return;
                 }

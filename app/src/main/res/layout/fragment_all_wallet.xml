@@ -39,6 +39,7 @@
                     android:id="@+id/cardView"
                     android:layout_width="match_parent"
                     android:layout_marginTop="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_marginBottom="10dp"
                     android:layout_height="106dp"
                     android:layout_marginLeft="7dp"
@@ -237,96 +238,60 @@
                         android:layout_height="2dp"
                         android:background="#eff1f5"/>
                 </LinearLayout>
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:id="@+id/llStake"
-                    android:visibility="visible"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="match_parent"
+                    android:visibility="visible"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp"
                     android:orientation="vertical"
                     android:layout_below="@+id/view2"
                     android:layout_height="48dp">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginLeft="22dp"
-                        android:layout_height="46dp">
-
-                        <ImageView
-                            android:layout_width="23dp"
-                            android:src="@mipmap/mining_node"
-                            android:layout_height="23dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:textSize="15sp"
-                            android:text="@string/my_stakeings"
-                            android:textStyle="bold"
-                            android:textColor="@color/color_29282a"
+                        android:orientation="vertical"
+                        android:layout_below="@+id/view2"
+                        android:layout_height="48dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
                             android:layout_marginLeft="22dp"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="46dp">
 
+                            <ImageView
+                                android:layout_width="23dp"
+                                android:src="@mipmap/mining_node"
+                                android:layout_height="23dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:textSize="15sp"
+                                android:text="@string/my_stakeings"
+                                android:textStyle="bold"
+                                android:textColor="@color/color_29282a"
+                                android:layout_marginLeft="22dp"
+                                android:layout_height="wrap_content" />
+
+                            <View
+                                android:layout_width="0px"
+                                android:layout_height="1px"
+                                android:layout_weight="1"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:src="@mipmap/icon_back_4"
+                                android:layout_marginRight="27dp"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
                         <View
-                            android:layout_width="0px"
-                            android:layout_height="1px"
-                            android:layout_weight="1"/>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:src="@mipmap/icon_back_4"
-                            android:layout_marginRight="27dp"
-                            android:layout_height="wrap_content" />
-
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#eff1f5"/>
                     </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="#eff1f5"/>
-                </LinearLayout>
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/llStake"-->
-<!--                    android:visibility="gone"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_below="@+id/view2"-->
-<!--                    android:layout_height="@dimen/x123">-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:gravity="center_vertical"-->
-<!--                        android:layout_marginLeft="@dimen/x50"-->
-<!--                        android:layout_height="@dimen/x119">-->
-
-<!--                        <ImageView-->
-<!--                            android:layout_width="@dimen/x45"-->
-<!--                            android:src="@mipmap/icons_stakeing"-->
-<!--                            android:layout_height="@dimen/x45" />-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:textSize="15sp"-->
-<!--                            android:text="@string/my_stakeings"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:textColor="@color/color_29282a"-->
-<!--                            android:layout_marginLeft="@dimen/x38"-->
-<!--                            android:layout_height="wrap_content" />-->
-
-<!--                        <View-->
-<!--                            android:layout_width="0px"-->
-<!--                            android:layout_height="1px"-->
-<!--                            android:layout_weight="1"/>-->
-
-<!--                        <ImageView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:src="@mipmap/icon_back_4"-->
-<!--                            android:layout_marginRight="@dimen/x45"-->
-<!--                            android:layout_height="wrap_content" />-->
-
-<!--                    </LinearLayout>-->
-<!--                    <View-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="@dimen/x4"-->
-<!--                        android:background="#eff1f5"/>-->
-<!--                </LinearLayout>-->
+                </android.support.v7.widget.CardView>
             </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>

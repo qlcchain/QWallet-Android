@@ -423,14 +423,14 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                 } else {
                     runOnUiThread {
                         closeProgressDialog()
-                        toast("this txid is pledged")
+                        toast(getString(R.string.this_txid_is_pledged))
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
                     closeProgressDialog()
-                    toast("get txid info error")
+                    toast(getString(R.string.get_txid_info_error))
                 }
             }
         }
@@ -477,7 +477,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     if (neoWallet == null) {
                         runOnUiThread {
                             closeProgressDialog()
-                            toast("neo wallet not found")
+                            toast(getString(R.string.stake_neo_wallet_not_found))
                         }
                     } else {
                         var qlcWallets = AppConfig.instance.daoSession.qlcAccountDao.loadAll()
@@ -498,21 +498,21 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                         } else {
                             runOnUiThread {
                                 closeProgressDialog()
-                                toast("qlc wallet not found")
+                                toast(getString(R.string.qlc_wallet_not_found))
                             }
                         }
                     }
                 } else {
                     runOnUiThread {
                         closeProgressDialog()
-                        toast("txid is unlock")
+                        toast(getString(R.string.txid_is_unlock))
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
                     closeProgressDialog()
-                    toast("get lockInfo error")
+                    toast(getString(R.string.get_lockinfo_error))
                 }
             }
         }
@@ -573,7 +573,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     process(lockResult)
                 } else {
                     AppConfig.instance.saveLog("stake", "process" + getLine(), Gson().toJson(lockResult))
-                    toast("process error, please try later")
+                    toast(getString(R.string.process_error_please_try_later))
                     KLog.i(error.response)
                     KLog.i(error.exception)
                 }

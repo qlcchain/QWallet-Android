@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
 import android.service.autofill.Dataset;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -70,6 +71,7 @@ import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.AppFilePath;
+import com.stratagile.qlink.view.AndroidUtilities;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxDataTool;
 import com.vondear.rxtools.RxDeviceTool;
@@ -95,6 +97,8 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+
+import static com.tencent.bugly.Bugly.applicationContext;
 
 //import com.tencent.bugly.crashreport.CrashReport;
 
@@ -125,6 +129,8 @@ public class AppConfig extends MultiDexApplication {
 
     public static final String MI_PUSH_APP_ID = "2882303761517798507";
     public static final String MI_PUSH_APP_KEY = "5231779840507";
+
+    public static Handler applicationHandler;
 
     public static VpnEntity currentUseVpn;
     /**
@@ -186,6 +192,17 @@ public class AppConfig extends MultiDexApplication {
         JPushInterface.init(this);
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        KLog.i("设置屏幕");
+        try {
+//            LocaleController.getInstance().onDeviceConfigurationChange(newConfig);
+            AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -209,6 +226,7 @@ public class AppConfig extends MultiDexApplication {
 //        initMiPush();
         setMode();
         setLanguage(false);
+        applicationHandler = new Handler(getMainLooper());
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
         updateNotificationChannels();
@@ -221,6 +239,7 @@ public class AppConfig extends MultiDexApplication {
                 new WebView(this).destroy();
             }
         }
+        AndroidUtilities.checkDisplaySize(this, null);
         //初始化btc钱包
 //        org.bitcoinj.core.Context.enableStrictMode();
 //        org.bitcoinj.core.Context.propagate(new org.bitcoinj.core.Context(TestNet3Params.get()));
