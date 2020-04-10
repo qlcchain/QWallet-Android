@@ -3,12 +3,24 @@
   ~ Copyright (c) 2012-2016 Arne Schwabe
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" >
+        <shape android:shape="rectangle"
+            >
 
-<shape android:shape="rectangle"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+            <gradient android:startColor="#00DEEA"
+                android:endColor="#00DEEA"
+                android:angle="0"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+    <item android:state_pressed="true" >
+        <shape android:shape="rectangle">
 
-    <gradient android:startColor="#2293FF"
-        android:endColor="#0073E1"
-        android:angle="0"/>
-    <corners android:radius="20dp"/>
-</shape>
+            <gradient android:startColor="#00B9D1"
+                android:endColor="#00B9D1"
+                android:angle="0"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+</selector>

@@ -69,12 +69,14 @@ import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
 import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.Network;
 import com.stratagile.qlink.utils.QlcReceiveUtilsKt;
 import com.stratagile.qlink.utils.ReceiveBack;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.utils.txutils.model.util.NetworkUtil;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -151,7 +153,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     @BindView(R.id.llResouces)
     LinearLayout llResouces;
     @BindView(R.id.llStake)
-    LinearLayout llStake;
+    CardView llStake;
     @BindView(R.id.view1)
     View view1;
     @BindView(R.id.view2)
@@ -200,7 +202,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         recyclerView.setAdapter(tokensAdapter);
         isPending = false;
-        recyclerView.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(10, getActivity())));
+//        recyclerView.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(10, getActivity())));
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -751,91 +753,93 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             KLog.i("pending中，过滤掉。。");
             return;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
-                    LedgerRpc rpc = new LedgerRpc(qlcClient);
-                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
-                        pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
-                    }
-                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
-                        return;
-                    }
-                    Iterator<Pending.PendingInfo> iterator = pending.getInfoList().iterator();
-                    KLog.i("pending的数量为：" + pending.getInfoList().size());
-                    while (iterator.hasNext()) {
-                        if (errorTxid.contains(iterator.next().getHash())) {
-                            iterator.remove();
+        if (Network.isAvailable(getActivity())) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
+                        LedgerRpc rpc = new LedgerRpc(qlcClient);
+                        if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                            pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
                         }
-
-                    }
-                    if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
-                        return;
-                    }
-                    KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
-                    if (pending.getInfoList().size() != 0) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                        if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                            return;
+                        }
+                        Iterator<Pending.PendingInfo> iterator = pending.getInfoList().iterator();
+                        KLog.i("pending的数量为：" + pending.getInfoList().size());
+                        while (iterator.hasNext()) {
+                            if (errorTxid.contains(iterator.next().getHash())) {
+                                iterator.remove();
                             }
-                        });
 
-                        isPending = true;
-                        QlcReceiveUtilsKt.recevive(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()), qlcAccount, rpc, new ReceiveBack() {
-                            @Override
-                            public void recevie(boolean suceess) {
-                                if (suceess) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            isPending = false;
-                                            if (pending != null && pending.getInfoList() != null && pending.getInfoList().size() != 0) {
-                                                pending.getInfoList().remove(0);
-                                                tvPending.setText("pending: " + pending.getInfoList().size() + "");
-                                                if (pending.getInfoList().size() == 0) {
+                        }
+                        if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                            return;
+                        }
+                        KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
+                        if (pending.getInfoList().size() != 0) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                                }
+                            });
+
+                            isPending = true;
+                            QlcReceiveUtilsKt.recevive(qlcClient, Helper.hexStringToBytes(pending.getInfoList().get(0).getHash()), qlcAccount, rpc, new ReceiveBack() {
+                                @Override
+                                public void recevie(boolean suceess) {
+                                    if (suceess) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                isPending = false;
+                                                if (pending != null && pending.getInfoList() != null && pending.getInfoList().size() != 0) {
+                                                    pending.getInfoList().remove(0);
+                                                    tvPending.setText("pending: " + pending.getInfoList().size() + "");
+                                                    if (pending.getInfoList().size() == 0) {
+                                                        tvPending.setText("");
+                                                    }
+                                                    initData();
+                                                } else {
                                                     tvPending.setText("");
                                                 }
-                                                initData();
-                                            } else {
-                                                tvPending.setText("");
                                             }
-                                        }
-                                    });
-                                } else {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            isPending = false;
-                                            initData();
-                                        }
-                                    });
+                                        });
+                                    } else {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                isPending = false;
+                                                initData();
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
-                    } else {
+                            });
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("");
+                                }
+                            });
+                            isPending = false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                tvPending.setText("");
+                                isPending = false;
+                                initData();
                             }
                         });
-                        isPending = false;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            isPending = false;
-                            initData();
-                        }
-                    });
                 }
-            }
-        }).start();
+            }).start();
+        }
 
     }
 
@@ -1062,7 +1066,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                                 closeProgressDialog();
                                 try {
                                     llGetGas.setVisibility(View.GONE);
-                                    ToastUtil.displayShortToast("Claim Success");
+                                    ToastUtil.displayShortToast(getString(R.string.claim_success));
 //                                    if (retValue.getBoolean("claimed")) {
 //                                        llGetGas.setVisibility(View.GONE);
 //                                        ToastUtil.displayShortToast("Claim Success");

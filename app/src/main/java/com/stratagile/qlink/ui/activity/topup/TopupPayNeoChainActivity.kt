@@ -29,6 +29,7 @@ import com.stratagile.qlink.ui.activity.topup.module.TopupPayNeoChainModule
 import com.stratagile.qlink.ui.activity.topup.presenter.TopupPayNeoChainPresenter
 import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.FileUtil
+import com.stratagile.qlink.utils.FireBaseUtils
 import com.stratagile.qlink.utils.SpUtil
 import kotlinx.android.synthetic.main.activity_topup_pay_neo_chain.*
 import org.greenrobot.eventbus.EventBus
@@ -123,6 +124,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
             if (neoWallet == null) {
                 return@setOnClickListener
             }
+            FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Confirm_Send_QLC)
             if (tvPayTokenBalance.text.toString().toBigDecimal() > payTokenAmount.toBigDecimal()) {
                 alert(getString(R.string.balance_insufficient_to_purchase_qgas_on_otc_pages, topupOrderBean.symbol)) {
                     negativeButton(getString(R.string.cancel)) {

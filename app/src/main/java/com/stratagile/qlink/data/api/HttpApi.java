@@ -31,6 +31,7 @@ import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.InviteList;
 import com.stratagile.qlink.entity.KLine;
 import com.stratagile.qlink.entity.LocalTokenBean;
+import com.stratagile.qlink.entity.Location;
 import com.stratagile.qlink.entity.MainAddress;
 import com.stratagile.qlink.entity.NeoTransfer;
 import com.stratagile.qlink.entity.NeoWalletInfo;
@@ -796,6 +797,10 @@ public interface HttpApi {
     @POST(API.indexInterface)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<IndexInterface> indexInterface(@Body RequestBody map);
+
+    @POST(API.getLocation)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<Location> getLocation(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

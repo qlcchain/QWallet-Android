@@ -1,6 +1,8 @@
 package io.eblock.eos4j.api.utils;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.R;
+import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import java.io.IOException;
@@ -51,7 +53,7 @@ public class Generator {
 				throw new ApiException(apiError);
 			}
 		} catch (IOException e) {
-			ToastUtil.displayShortToast("EOS Transaction error");
+			ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.eos_transaction_error));
 			throw new ApiException(e);
 		}
 	}

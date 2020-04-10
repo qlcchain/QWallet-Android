@@ -2,10 +2,7 @@ package com.stratagile.qlink.ui.activity.topup.presenter
 import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlink.data.api.HttpAPIWrapper
-import com.stratagile.qlink.entity.InviteList
-import com.stratagile.qlink.entity.KLine
-import com.stratagile.qlink.entity.TokenInfo
-import com.stratagile.qlink.entity.TokenPrice
+import com.stratagile.qlink.entity.*
 import com.stratagile.qlink.entity.reward.Dict
 import com.stratagile.qlink.ui.activity.topup.contract.TopUpContract
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment
@@ -187,5 +184,15 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
             override fun onError(e: Throwable) {}
             override fun onComplete() {}
         })
+    }
+
+    fun getLocation(map: Map<*, *>?) {
+        mCompositeDisposable.add(httpAPIWrapper.getLocation(map).subscribe({
+            mView.setLocation(it)
+        }, {
+            mView.closeProgressDialog()
+        }, {
+            mView.closeProgressDialog()
+        }))
     }
 }

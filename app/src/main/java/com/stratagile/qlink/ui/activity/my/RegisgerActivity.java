@@ -113,7 +113,7 @@ public class RegisgerActivity extends BaseActivity implements RegisgerContract.V
             SpUtil.putString(this, ConstantValue.userEmail, etAccount.getText().toString().trim());
         }
         SpUtil.putString(this, ConstantValue.userPassword, MD5Util.getStringMD5(etPassword.getText().toString().trim()));
-        ToastUtil.displayShortToast("regisger success");
+        ToastUtil.displayShortToast(getString(R.string.register_success));
 
         UserAccount userAccount = new UserAccount();
         userAccount.setAccount(etAccount.getText().toString().trim());
@@ -152,7 +152,7 @@ public class RegisgerActivity extends BaseActivity implements RegisgerContract.V
         Map map = new HashMap<String, String>();
         map.put("account", etAccount.getText().toString().trim());
         if ("".equals(password) || password.length() < 6) {
-            ToastUtil.displayShortToast("password error");
+            ToastUtil.displayShortToast(getString(R.string.password_error));
             return;
         }
         showProgressDialog();

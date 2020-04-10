@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.bumptech.glide.Glide
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pawegio.kandroid.runDelayedOnUiThread
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
@@ -36,6 +37,7 @@ import com.stratagile.qlink.entity.topup.TopupGroupKindList
 import com.stratagile.qlink.entity.topup.TopupProduct
 import com.stratagile.qlink.ui.activity.finance.InviteNowActivity
 import com.stratagile.qlink.ui.activity.main.MainViewModel
+import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.my.AccountActivity
 import com.stratagile.qlink.ui.activity.place.PlaceListActivity
 import com.stratagile.qlink.ui.activity.place.PlaceVisitActivity
@@ -199,7 +201,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 } else {
                     simplePagerTitleView.setText(mIndexInterface.countryList.get(i).nameEn)
                 }
-                simplePagerTitleView.isSingleLine = false
+//                simplePagerTitleView.isSingleLine = false
                 simplePagerTitleView.normalColor = resources.getColor(R.color.color_505050)
                 simplePagerTitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                 simplePagerTitleView.selectedColor = resources.getColor(R.color.color_F50B6E)
@@ -463,17 +465,18 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
             startActivity(intent1)
         }
         tvPlaceQuery.setOnClickListener {
-            val intent1 = Intent(activity!!, PlaceListActivity::class.java)
-            startActivity(intent1)
+            mPresenter.getLocation(hashMapOf<String, String>())
+//            val intent1 = Intent(activity!!, PlaceListActivity::class.java)
+//            startActivity(intent1)
         }
 
-        var isCn = true
-        isCn = SpUtil.getInt(activity!!, ConstantValue.Language, -1) == 1
-        if (isCn) {
-            ivxingcheng.setImageResource(R.mipmap.cx)
-        } else {
-            ivxingcheng.setImageResource(R.mipmap.xc_en)
-        }
+//        var isCn = true
+//        isCn = SpUtil.getInt(activity!!, ConstantValue.Language, -1) == 1
+//        if (isCn) {
+//            ivxingcheng.setImageResource(R.mipmap.banner_covid)
+//        } else {
+//            ivxingcheng.setImageResource(R.mipmap.banner_covid)
+//        }
 
         viewModel?.currentUserAccount?.observe(this, Observer {
             if (it != null) {
@@ -518,6 +521,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
         mPresenter.indexInterface()
         topupShowProductAdapter.setOnItemClickListener { adapter, view, position ->
+            FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Choose_a_plan)
             if (ConstantValue.currentUser == null) {
                 startActivity(Intent(activity!!, AccountActivity::class.java))
                 return@setOnItemClickListener
@@ -545,12 +549,12 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
                 toast(getString(R.string.the_product_is_sold_out))
             }
         }
-        rlXingcheng.setOnClickListener {
-
-            var xingchengIntent = Intent(activity!!, PlaceVisitActivity::class.java)
-
-            startActivity(xingchengIntent)
-        }
+//        rlXingcheng.setOnClickListener {
+//
+//            var xingchengIntent = Intent(activity!!, PlaceVisitActivity::class.java)
+//
+//            startActivity(xingchengIntent)
+//        }
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = false
             mPresenter.indexInterface()
@@ -567,21 +571,37 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
         countryListBean.globalRoaming = ""
         countryListBean.imgPath = ""
         selectedCountry = countryListBean
-        if (BuildConfig.isGooglePlay) {
-            rlXingcheng.visibility = View.GONE
-            rl1.background = resources.getDrawable(R.drawable.main_bg_shape)
-            status_bar.background = resources.getDrawable(R.drawable.main_bg_shape)
-            tv_title.visibility = View.VISIBLE
+//        if (BuildConfig.isGooglePlay) {
+//            rlXingcheng.visibility = View.GONE
+//            rl1.background = resources.getDrawable(R.drawable.main_bg_shape)
+//            status_bar.background = resources.getDrawable(R.drawable.main_bg_shape)
+//            tv_title.visibility = View.VISIBLE
+//        } else {
+//
+//        }
+
+    }
+
+    override fun setLocation(location: Location) {
+        if ("domestic".equals(location.location)) {
+            val intent = Intent(activity, WebViewActivity::class.java)
+            intent.putExtra("url", "http://covid19.qlink.mobi/covid-19trend/dist")
+            intent.putExtra("title", "covid19")
+            startActivity(intent)
         } else {
-
+            val intent = Intent(activity, WebViewActivity::class.java)
+            intent.putExtra("url", "https://google.com/covid19-map/?hl=en")
+            intent.putExtra("title", "covid19")
+            startActivity(intent)
         }
-
     }
 
     fun getLocalData() {
         runDelayedOnUiThread(5) {
+            KLog.i("获取本地数据")
             try {
                 var interfaceListStr = FileUtil.readData("/Qwallet/indexInterfaceStr.txt")
+                KLog.i(interfaceListStr)
                 if (!"".equals(interfaceListStr)) {
                     var indexInterface = GsonUtils.jsonToObj(interfaceListStr, IndexInterface::class.java)
                     setIndexInterface(indexInterface)
@@ -766,6 +786,13 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
     }
 
     fun reChangeTaoCan(bean: IndexInterface.CountryListBean) {
+        if ("China".equals(bean.nameEn)) {
+            FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_China)
+        } else if ("Singapore".equals(bean.nameEn)) {
+            FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Singapore)
+        } else if ("Indonesia".equals(bean.nameEn)) {
+            FireBaseUtils.logEvent(activity!!, FireBaseUtils.Topup_Indonesia)
+        }
         var map = mutableMapOf<String, String>()
         map.put("page", "1")
         map.put("globalRoaming", bean.globalRoaming)

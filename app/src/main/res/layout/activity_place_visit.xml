@@ -7,6 +7,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         app:cardCornerRadius="6dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="337dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"

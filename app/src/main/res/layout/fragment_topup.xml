@@ -10,7 +10,7 @@
         android:id="@+id/status_bar"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_b0d8fb"
+        android:background="@color/color_4a7eee"
         android:gravity="center"
         android:textColor="@color/color_333"
         android:textSize="9sp" />
@@ -19,7 +19,7 @@
         android:id="@+id/rl1"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="@color/color_b0d8fb">
+        android:background="@color/color_4a7eee">
 
         <ImageView
             android:id="@+id/iv_avater"
@@ -75,27 +75,21 @@
                 <RelativeLayout
                     android:id="@+id/rlXingcheng"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="155dp">
                     <ImageView
                         android:id="@+id/ivxingcheng"
                         android:layout_width="match_parent"
-                        android:src="@mipmap/cx"
-                        android:scaleType="centerCrop"
-                        android:layout_height="185dp"/>
+                        android:src="@mipmap/banner_covid"
+                        android:scaleType="fitXY"
+                        android:layout_height="140dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:orientation="horizontal"
                         android:gravity="center"
-                        android:layout_marginTop="150dp"
+                        android:layout_marginTop="120dp"
                         android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="140dp"
-                            android:background="@drawable/bg_chaxun_myd_cx"
-                            android:textColor="@color/white"
-                            android:text="@string/click_query"
-                            android:gravity="center"
-                            android:layout_height="40dp"/>
+
                         <TextView
                             android:id="@+id/tvPlaceQuery"
                             android:textColor="@color/white"
@@ -104,9 +98,9 @@
                             android:layout_marginLeft="10dp"
                             android:gravity="center"
                             android:background="@drawable/bg_chaxun_myd_cx"
-                            android:layout_width="140dp"
-                            android:text="@string/check_the_on_chain_records"
-                            android:layout_height="40dp"/>
+                            android:layout_width="120dp"
+                            android:text="@string/more_details"
+                            android:layout_height="30dp"/>
                     </LinearLayout>
                 </RelativeLayout>
 

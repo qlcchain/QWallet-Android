@@ -109,7 +109,7 @@ public class LoginFragment extends BaseFragment {
         }
 //        SpUtil.putString(getActivity(), ConstantValue.userRsaPubKey, register.getData());
         SpUtil.putString(getActivity(), ConstantValue.userPassword, MD5Util.getStringMD5(etPassword.getText().toString().trim()));
-        ToastUtil.displayShortToast("login Success");
+        ToastUtil.displayShortToast(getString(R.string.Login_success));
         getActivity().finish();
     }
 
@@ -128,15 +128,15 @@ public class LoginFragment extends BaseFragment {
                 account = etAccount.getText().toString().trim();
                 password = etPassword.getText().toString().trim();
                 if ("".equals(account)) {
-                    ToastUtil.displayShortToast("account error");
+                    ToastUtil.displayShortToast(getString(R.string.account_error));
                     return;
                 }
                 if (!AccountUtil.isTelephone(account) && !AccountUtil.isEmail(account)) {
-                    ToastUtil.displayShortToast("account error");
+                    ToastUtil.displayShortToast(getString(R.string.account_error));
                     return;
                 }
                 if ("".equals(password) || password.length() < 6) {
-                    ToastUtil.displayShortToast("password error");
+                    ToastUtil.displayShortToast(getString(R.string.password_error));
                     return;
                 }
                 login();

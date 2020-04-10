@@ -4,8 +4,17 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 
-<shape android:shape="rectangle"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient android:type="linear" android:useLevel="true" android:startColor="#fffe6b4b" android:endColor="#fffc5140" android:angle="180" />
-    <corners android:radius="43dp" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" >
+        <shape android:shape="rectangle">
+            <gradient android:type="linear" android:useLevel="true" android:startColor="#fffe6b4b" android:endColor="#fffc5140" android:angle="180" />
+            <corners android:radius="43dp" />
+        </shape>
+    </item>
+    <item android:state_pressed="true" >
+        <shape android:shape="rectangle">
+            <gradient android:type="linear" android:useLevel="true" android:startColor="#ffff6b4b" android:endColor="#fff65140" android:angle="180" />
+            <corners android:radius="43dp" />
+        </shape>
+    </item>
+</selector>

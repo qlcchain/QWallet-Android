@@ -84,6 +84,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                     stateBlock.setSignature(Helper.byteToHexString(signature))
                     aaaa.add(JSONObject.parseObject(Gson().toJson(stateBlock)))
                 } else {
+                    KLog.i("算work出错了。")
+                    error!!.exception.printStackTrace()
                     receiveBack.recevie(false)
                     return@responseString
                 }

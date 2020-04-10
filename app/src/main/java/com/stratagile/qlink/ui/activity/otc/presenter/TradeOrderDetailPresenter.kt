@@ -4,6 +4,7 @@ import android.support.annotation.NonNull
 import com.socks.library.KLog
 import com.stratagile.qlc.QLCAPI
 import com.stratagile.qlc.entity.QlcTokenbalance
+import com.stratagile.qlink.R
 import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
@@ -109,7 +110,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Trad
         if (qlcAccounts.filter { it.isCurrent() }.size == 1) {
             qlcAccount = qlcAccounts.filter { it.isCurrent() }.get(0)
         } else {
-            ToastUtil.displayShortToast("Please Switch to QLC Chain Wallet")
+            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.please_switch_to_qlc_chain_wallet))
             mView.closeProgressDialog()
             return
         }

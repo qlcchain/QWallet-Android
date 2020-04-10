@@ -2,6 +2,8 @@ package com.stratagile.qlink.ui.activity.my.presenter;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.R;
+import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.VcodeLogin;
@@ -112,7 +114,7 @@ public class Login1Presenter implements Login1Contract.Login1ContractPresenter{
                         //isSuccesse
                         mView.closeProgressDialog();
                         mView.getLoginVCodeSuccess();
-                        ToastUtil.displayShortToast("success");
+                        ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.success));
 
                     }
                 }, new Consumer<Throwable>() {

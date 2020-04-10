@@ -234,7 +234,7 @@ public class WalletDetailActivity extends BaseActivity implements WalletDetailCo
                 break;
             case R.id.llExportKeystore:
                 if (ethWallet.getIsLook()) {
-                    ToastUtil.displayShortToast("Olny Watch ETH Wallet Cannot ExportKeystore");
+                    ToastUtil.displayShortToast(getString(R.string.only_watch_eth_wallet_cannot_exportkeystore));
                     return;
                 }
                 startActivity(new Intent(this, ExportEthKeyStoreActivity.class).putExtra("wallet", ethWallet));

@@ -5,10 +5,10 @@
     <color name="f6f6f6">#f6f6f6</color>
     <color name="mainColorTwo">#5b4278</color>
     <color name="mainColorThree">#8F74AC</color>
-    <color name="mainColorDark">#108EE9</color>
+    <color name="mainColorDark">#047AD0</color>
     <color name="colorPrimary">#108EE9</color>
-    <color name="colorPrimaryDark">#108EE9</color>
-    <color name="colorAccent">#108EE9</color>
+    <color name="colorPrimaryDark">#047AD0</color>
+    <color name="colorAccent">#58B0F0</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="splashtext">#9100c8</color>
     <color name="colorFade">#D1D1D1</color>
@@ -131,6 +131,7 @@
     <color name="color_44cbfe">#44CBFE</color>
     <color name="color_ecefef">#ECEFFE</color>
     <color name="color_040404">#040404</color>
+    <color name="color_4a7eee">#4A7EEE</color>
 
 
 </resources>

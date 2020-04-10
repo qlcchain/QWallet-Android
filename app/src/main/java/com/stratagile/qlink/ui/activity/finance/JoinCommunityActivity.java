@@ -13,6 +13,7 @@ import com.stratagile.qlink.ui.activity.finance.component.DaggerJoinCommunityCom
 import com.stratagile.qlink.ui.activity.finance.contract.JoinCommunityContract;
 import com.stratagile.qlink.ui.activity.finance.module.JoinCommunityModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.JoinCommunityPresenter;
+import com.stratagile.qlink.utils.FireBaseUtils;
 
 import javax.inject.Inject;
 
@@ -91,16 +92,20 @@ public class JoinCommunityActivity extends BaseActivity implements JoinCommunity
             case R.id.twitter:
                 intent1.setData(Uri.parse("https://twitter.com/QLCchain"));
                 startActivity(intent1);
+                FireBaseUtils.logEvent(this, FireBaseUtils.Community_Twitter);
                 break;
             case R.id.telegram:
+                FireBaseUtils.logEvent(this, FireBaseUtils.Community_Telegram);
                 intent1.setData(Uri.parse("https://t.me/qlinkmobile"));
                 startActivity(intent1);
                 break;
             case R.id.facebook:
+                FireBaseUtils.logEvent(this, FireBaseUtils.Community_Facebook);
                 intent1.setData(Uri.parse("https://www.facebook.com/QLCchain"));
                 startActivity(intent1);
                 break;
             case R.id.winq:
+                FireBaseUtils.logEvent(this, FireBaseUtils.Community_QLC_Chain);
                 intent1.setData(Uri.parse("https://qlcchain.org"));
                 startActivity(intent1);
                 break;

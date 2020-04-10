@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="@dimen/x20"
     android:layout_marginLeft="@dimen/x20"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/x10"
     app:cardElevation="@dimen/x10"
     android:layout_marginRight="@dimen/x20"

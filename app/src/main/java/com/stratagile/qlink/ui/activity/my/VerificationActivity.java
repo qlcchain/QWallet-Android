@@ -400,12 +400,12 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
             case R.id.submit:
                 File lastFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport1.jpg", "");
                 if (!lastFile.exists()) {
-                    ToastUtil.displayShortToast("please select facephoto");
+                    ToastUtil.displayShortToast(getString(R.string.please_select_facephoto));
                     return;
                 }
                 File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport2.jpg", "");
                 if (!dataFile.exists()) {
-                    ToastUtil.displayShortToast("please select holdphoto");
+                    ToastUtil.displayShortToast(getString(R.string.please_select_holdphoto));
                     return;
                 }
                 showProgressDialog();

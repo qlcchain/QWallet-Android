@@ -79,10 +79,9 @@ public class WebViewActivity extends BaseActivity implements WebViewContract.Vie
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.getSettings().setDefaultTextEncodingName("UTF-8");
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAllowContentAccess(true);
         webView.getSettings().setAppCacheEnabled(false);

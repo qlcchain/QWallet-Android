@@ -56,6 +56,7 @@
             android:id="@+id/llSend"
             android:layout_width="0px"
             android:layout_weight="1"
+            android:background="@drawable/topup_show_item_bg_selector"
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_height="match_parent">
@@ -66,7 +67,7 @@
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="wrap_content"
-                android:textColor="@color/mainColor"
+                android:textColor="@drawable/main_textcolor_bg_selector"
                 android:text="@string/send"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -74,6 +75,7 @@
             android:id="@+id/llRecive"
             android:layout_width="0px"
             android:layout_weight="1"
+            android:background="@drawable/topup_show_item_bg_selector"
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_height="match_parent">
@@ -84,7 +86,7 @@
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="wrap_content"
-                android:textColor="@color/mainColor"
+                android:textColor="@drawable/main_textcolor_bg_selector"
                 android:text="@string/recive"
                 android:layout_height="wrap_content" />
         </LinearLayout>

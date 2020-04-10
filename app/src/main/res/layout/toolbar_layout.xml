@@ -22,9 +22,7 @@
         android:layout_below="@+id/view"
         android:navigationIcon="@mipmap/icon_back"
         android:titleTextColor="@color/white"
-        app:navigationIcon="@mipmap/icon_back"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:navigationIcon="@mipmap/icon_back">
 
     </android.support.v7.widget.Toolbar>
 

@@ -17,6 +17,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/x30"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginRight="@dimen/x30"
         android:layout_marginTop="@dimen/x18"
         app:cardCornerRadius="@dimen/x10"

@@ -43,8 +43,6 @@ import com.stratagile.qlink.ui.adapter.topup.TopupGroupListAdapter
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_topup_product_detail.*
-import kotlinx.android.synthetic.main.activity_topup_product_detail.recyclerView
-import kotlinx.android.synthetic.main.fragment_topup.*
 import java.io.File
 import java.math.BigDecimal
 import java.util.*
@@ -153,7 +151,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         }
 
 
-        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal().multiply(topupBean.discount.toBigDecimal()))
+        var dikoubijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.qgasDiscount.toBigDecimal())
         var dikoubishuliang = dikoubijine.divide(deductionTokenPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)
 
         var zhifufabijine = topupBean.payFiatAmount.toBigDecimal().multiply(topupBean.discount.toBigDecimal())
@@ -188,6 +186,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
 
         title.text = getString(R.string.group_plan_details)
         tvBuyTuan.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Group_Plan)
             startAnimationNew()
         }
         rlPartTuan.setOnClickListener { dismiss() }
@@ -210,6 +209,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         getGroupList()
 
         tvBuySelf.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Recharge_directly)
             var confirmIntent = Intent(this@TopupProductDetailActivity, TopupConfirmGroupOrderActivity::class.java)
             confirmIntent.putExtra("buySelf", true)
             confirmIntent.putExtra("productBean", topupBean)
@@ -223,6 +223,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
     }
 
     fun buySelf() {
+        FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Recharge_directly)
         var deductionTokenPrice = 0.toDouble()
         if ("CNY".equals(topupBean.payFiat)) {
             deductionTokenPrice = selectToken.price
@@ -693,6 +694,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.deduction -> {
+                FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Home_ChooseToken)
                 startActivityForResult(Intent(this, TopupSelectDeductionTokenActivity::class.java),11)
             }
             else -> {

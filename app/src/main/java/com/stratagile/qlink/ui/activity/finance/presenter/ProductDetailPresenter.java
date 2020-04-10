@@ -106,7 +106,7 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
 
                                         @Override
                                         public void onFailure() {
-                                            ToastUtil.displayShortToast("error");
+//                                            ToastUtil.displayShortToast("error");
                                         }
                                     });
                                 } else {
@@ -120,14 +120,14 @@ public class ProductDetailPresenter implements ProductDetailContract.ProductDeta
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         mView.closeProgressDialog();
-                        ToastUtil.displayShortToast("error");
+//                        ToastUtil.displayShortToast("error");
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
                         //onComplete
                         mView.closeProgressDialog();
-                        ToastUtil.displayShortToast("error");
+//                        ToastUtil.displayShortToast("error");
                         KLog.i("onComplete");
                     }
                 });

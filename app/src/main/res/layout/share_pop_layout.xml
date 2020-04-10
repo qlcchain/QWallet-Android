@@ -3,23 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/color_4c000000">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/ll_popup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:gravity="bottom"
-            android:layout_height="@dimen/x376">
+            android:layout_height="wrap_content">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:background="#f6f6f6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

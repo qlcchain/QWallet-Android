@@ -81,51 +81,6 @@ public class Qsdk {
 
     public static void init() {
         getInstance();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //将所有的好友的状态置为未在线
-                List<VpnEntity> vpnEntityList = AppConfig.getInstance().getDaoSession().getVpnEntityDao().loadAll();
-                List<VpnEntity> vpnEntityList1 = new ArrayList<>();
-                for (VpnEntity vpnEntity : vpnEntityList) {
-                    vpnEntity.setOnline(false);
-                    vpnEntity.setGroupNum(-1);
-                    vpnEntity.setFriendNum("");
-                    vpnEntity.setUnReadMessageCount(0);
-                    vpnEntity.setIsConnected(false);
-                    vpnEntity.setIsLoadingAvater(false);
-                    vpnEntity.setCurrentConnect(0);
-                    if (vpnEntity.getP2pId() == null) {
-                        continue;
-                    }
-                    if (vpnEntity.getP2pId().equals(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""))) {
-                        vpnEntity.setAvaterUpdateTime(Long.parseLong(SpUtil.getString(AppConfig.getInstance(), ConstantValue.myAvaterUpdateTime, "0")));
-                    }
-                    vpnEntityList1.add(vpnEntity);
-                }
-                try {
-                    AppConfig.getInstance().getDaoSession().getVpnEntityDao().updateInTx(vpnEntityList1);
-                }catch (Exception e)
-                {
-
-                }
-                List<TransactionRecord> transactionRecordList = AppConfig.getInstance().getDaoSession().getTransactionRecordDao().loadAll();
-                for (TransactionRecord transactionRecord : transactionRecordList) {
-                    //3为vpn
-                    if (transactionRecord.getTransactiomType() == 3) {
-                        if (transactionRecord.getConnectType() == 0 && !transactionRecord.getIsReported()) {
-                            ConstantValue.unReportRecord.add(transactionRecord);
-                        }
-                    }
-                    //0为wifi
-                    if (transactionRecord.getTransactiomType() == 0) {
-                        if (transactionRecord.getConnectType() == 0 && !transactionRecord.getIsReported()) {
-                            ConstantValue.unReportRecord.add(transactionRecord);
-                        }
-                    }
-                }
-            }
-        }).start();
     }
 
     /**
