@@ -18,9 +18,9 @@ android {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode getSelfDefinedVersion("code") + 11
+        versionCode getSelfDefinedVersion("code") + 14
         multiDexEnabled true
-        versionName "2.5.9"
+        versionName "2.6.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -153,8 +153,8 @@ android.applicationVariants.all { variant ->
 
 dependencies {
     normalImplementation project(':smsLib')
-    implementation 'com.google.firebase:firebase-analytics:16.0.4'
-    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-analytics:16.0.9'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
     configurations {
         all*.exclude group: 'com.android.support', module: 'support-v13'
         all*.exclude group: 'com.google.zxing'
@@ -301,7 +301,7 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
-    implementation 'com.google.guava:guava:28.2-jre'
+    implementation 'com.google.guava:guava:28.2-android'
 
 //    implementation 'cn.jiguang.sdk:jpush:3.3.6'  // 此处以JPush 3.3.6 版本为例。
 //    implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
@@ -313,8 +313,10 @@ dependencies {
 
     implementation 'com.rfksystems:blake2b:1.0.0'
     implementation 'net.i2p.crypto:eddsa:0.3.0'
-
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.8'
+
+//    implementation project(':lib-todaystepcounter')
+    implementation files('libs/lib-todaystepcounter-release.aar')
 
 }
 

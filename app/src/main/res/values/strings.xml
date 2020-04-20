@@ -1815,4 +1815,25 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="claim_success">Claim Success</string>
     <string name="old_password_error">old password error</string>
     <string name="this_is_a_wallet_waitting_to_be_created">This is a wallet waiting to be created.</string>
+    <string name="claim_epidemic">Claim</string>
+    <string name="you_have_checked_out_the_covid_19_live_updates_page_for_1_consecutive_day_your_cumulative_steps_now_is_59"><Data><![CDATA[<font color="#1E1E24">You have checked out the Covid-19 live updates page for</font><font color="#108EE9"><b>%1$s</b></font > <font color="#1E1E24">consecutive day, your cumulative steps now is</font> <font color="#F50F6D"><b>%2$s</b></font><font color="#1E1E24">.</font>]]></Data></string>
+    <string name="rules_for_covid_19_bounty">Rules for Covid-19 bounty</string>
+    <string name="_1_how_to_claim_qlc_for_staking_daily_bounty_check_out_the_covid_19_live_updates_page_at_least_once_a_day_you_are_entitled_to_claim_daily_qgas_bounty_in_your_qgas_wallet_the_qgas_amount_is_calculated_based_on_that_earned_from_100_qlc_for_staking_2_how_to_claim_social_distancing_bounty_check_out_the_covid_19_live_updates_page_at_least_once_a_day_with_your_daily_steps_no_greater_than_1000_for_consecutive_14_days_you_are_entitled_to_claim_100_qlc_the_reward_will_be_sent_to_your_nep_5_wallet_when_claimed">1. How to claim QLC for staking daily bounty:\n Check out the Covid-19 Live Updates page at least once a day, you are entitled to claim daily QGas bounty in your QGas wallet.The Qgas amount is calculated based on that earned from %1$s QLC for staking. \n\n2. How to claim social-distancing bounty:\n Check out the Covid-19 Live Updates page at least once a day with your daily steps no greater than 1000 for consecutive %2$s days, you are entitled to claim %3$s QLC. The reward will be sent to your Nep-5 wallet when claimed.</string>
+    <string name="daily_steps">Daily Steps</string>
+    <string name="cumulative_qgas_claimed">Cumulative QGas Claimed</string>
+    <string name="today_s_bounty_to_claim">Today\'s bounty to claim</string>
+    <string name="daily_bounty">Daily bounty</string>
+    <string name="claim_daily_qgas_bounty_simply_by_checking_out_the_covid_19_live_updates_page_for_1_consecutive_day">Claim daily QGas bounty from %2$s staked QLC by checking out the Covid-19 live updates page for %1$s consecutive days.</string>
+    <string name="check">Check</string>
+    <string name="qlc_social_distancing_bounty">QLC Social-distancing bounty</string>
+    <string name="claim_100_qlc_when_your_mission_is_completed">Claim %1$s QLC when your mission is completed</string>
+    <string name="_14_days_left">%1$s days left</string>
+    <string name="covid_19_fighter_bounty">Covid-19 Fighter Bounty</string>
+    <string name="you_have_claimed_the_bounty_for_today_come_back_here_tomorrow">You have claimed the bounty for today, come back here tomorrow!</string>
+    <string name="get_bounty_by_checking_out_covid_19_live_updates">Get bounty by checking out Covid-19 live updates</string>
+    <string name="claim_the_covid_19_fighter_bounty">Claim the Covid-19 fighter bounty</string>
+    <string name="claim_now_epidemic">Claim Now</string>
+    <string name="you_haven_t_checked_out_the_covid_19_updates_for_a_while_your_qlc_for_staking_will_now_cumulate_from_0_with_the_upper_limit_of_1500">You haven\'t checked out the Covid-19 updates for a while, your QLC for staking will now cumulate from 0 with the upper limit of 1500</string>
+    <string name="claimed_epidemic">Claimed</string>
+    <string name="covid_19_fighter_bounty_1">Covid-19 Fighter Bounty</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
@@ -34,7 +35,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.socks.library.KLog;
@@ -68,6 +68,7 @@ import com.stratagile.qlink.entity.eventbus.MyStatus;
 import com.stratagile.qlink.entity.eventbus.ReCreateMainActivity;
 import com.stratagile.qlink.entity.eventbus.ShowBind;
 import com.stratagile.qlink.entity.eventbus.ShowDot;
+import com.stratagile.qlink.entity.eventbus.ShowEpidemic;
 import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
@@ -88,6 +89,7 @@ import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
 import com.stratagile.qlink.ui.activity.main.presenter.MainPresenter;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
+import com.stratagile.qlink.ui.activity.my.EpidemicRedPaperActivity;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
 import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
@@ -200,7 +202,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @BindView(R.id.viewDot)
     View viewDot;
-    private FirebaseAnalytics mFirebaseAnalytics;
     private MainViewModel viewModel;
 
     public static final int START_NO_WALLLET = 0;
@@ -226,12 +227,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-//        Bundle bundle = new Bundle();
-//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
-//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
-//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
-//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
         needFront = true;
         super.onCreate(savedInstanceState);
         mainActivity = this;
@@ -260,6 +255,20 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             }
         });
         recyclerViewTradePair.addItemDecoration(new TradePairDecoration(10));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+            setLightNavigationBar(this, true);
+        }
+    }
+
+    public void setLightNavigationBar (Activity activity, boolean light) {
+        int vis = activity.getWindow().getDecorView().getSystemUiVisibility();
+        if (light) {
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;     // 黑色
+        } else {
+            vis &= ~ View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        }
+        activity.getWindow().getDecorView().setSystemUiVisibility(vis);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -380,6 +389,53 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showEpidemic(ShowEpidemic showEpidemic) {
+        KLog.i("显示疫情弹窗。。。。");
+        if (viewModel.indexInterfaceMutableLiveData.getValue().getDictList().getShow19().equals("1")) {
+            View view = getLayoutInflater().inflate(R.layout.alert_epidemic, null, false);
+            ImageView ivClose = view.findViewById(R.id.ivClose);
+            TextView title = view.findViewById(R.id.ivTitle);
+            if (showEpidemic.isIntrupte()) {
+                title.setText(getString(R.string.you_haven_t_checked_out_the_covid_19_updates_for_a_while_your_qlc_for_staking_will_now_cumulate_from_0_with_the_upper_limit_of_1500));
+            } else {
+                title.setText(getString(R.string.claim_the_covid_19_fighter_bounty));
+            }
+            TextView tvOpreate = view.findViewById(R.id.tvOpreate);
+            tvOpreate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sweetAlertDialog.dismissWithAnimation();
+                    if (ConstantValue.currentUser == null) {
+                        viewPager.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                            }
+                        }, 200);
+                    }
+                    if (ConstantValue.currentUser != null && ConstantValue.currentUser.getBindDate() != null) {
+
+                    }
+                    if (ConstantValue.currentUser != null) {
+                        SpUtil.putBoolean(MainActivity.this, ConstantValue.showedEpidemic, true);
+                        Intent intent = new Intent(MainActivity.this, EpidemicRedPaperActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            });
+            ivClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+            });
+            sweetAlertDialog = new SweetAlertDialog(this);
+            sweetAlertDialog.setView(view);
+            sweetAlertDialog.show();
+        }
     }
 
     private void bindQlcWallet() {
@@ -571,34 +627,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 switch (item.getItemId()) {
                     case R.id.item_sms:
                         item.setIcon(R.mipmap.finance_h);
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
-//                        mFirebaseAnalytics.logEvent("finance", bundle);
                         setVpnPage();
                         break;
                     case R.id.item_topup:
                         item.setIcon(R.mipmap.topup_h);
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
-//                        mFirebaseAnalytics.logEvent("topup", bundle);
                         setTopupPage();
                         break;
                     case R.id.item_all_wallet:
                         item.setIcon(R.mipmap.wallet_h);
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
-//                        mFirebaseAnalytics.logEvent("wallet", bundle);
                         setAllWalletPage();
                         break;
                     case R.id.item_settings:
                         item.setIcon(R.mipmap.settings_h);
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "MainActivity");
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "MainActivity");
-//                        mFirebaseAnalytics.logEvent("me", bundle);
                         setSettingsPage();
                         break;
                     default:

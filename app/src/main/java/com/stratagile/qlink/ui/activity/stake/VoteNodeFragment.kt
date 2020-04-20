@@ -546,7 +546,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         val client = QlcClient("https://nep5.qlcchain.online")
         val params = JSONArray()
         params.add(lockResult.txid)
+        KLog.i("开始最后一步")
         var result = client.call("nep5_benefitPledge", params)
+        KLog.i("最后一步返回")
         KLog.i(result.toString())
         var stateBlock = Gson().fromJson(result.getJSONObject("result").toString(), StateBlock::class.java)
 

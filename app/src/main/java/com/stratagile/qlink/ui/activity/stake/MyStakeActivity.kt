@@ -29,6 +29,7 @@ import com.stratagile.qlink.ui.activity.stake.presenter.MyStakePresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.stake.MyStakeAdapter
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.FireBaseUtils
 import com.stratagile.qlink.utils.LogUtil
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper
 import kotlinx.android.synthetic.main.activity_my_stake.*
@@ -128,6 +129,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
             qlcWallet = wallets[0]
         }
         newStaking.setOnClickListener {
+            FireBaseUtils.logEvent(this, FireBaseUtils.Wallet_MyStakings_InvokeNewStakings)
             startActivityForResult(Intent(this, NewStakeActivity::class.java), 1)
         }
         myStakeAdapter = MyStakeAdapter(arrayListOf())

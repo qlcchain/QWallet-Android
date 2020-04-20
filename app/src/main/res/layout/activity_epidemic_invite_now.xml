@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/llShare"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/color_487ced"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:background="@mipmap/me_invitation_ch"
+                android:layout_height="578dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/color_e6f2fc"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="@dimen/x316"
+            android:gravity="center"
+            android:background="@drawable/invite_qrcode_bg"
+            android:layout_marginTop="330dp"
+            android:layout_height="@dimen/x316">
+            <ImageView
+                android:id="@+id/ivQRCode"
+                android:layout_width="@dimen/x280"
+                android:layout_height="@dimen/x280" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="@dimen/x432"
+            android:layout_marginTop="@dimen/x25"
+            android:gravity="center"
+            android:background="@drawable/invite_qrcode_epidemic_invitecode_bg"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/x63">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/invitation_code_1"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/inviteCode"
+                android:layout_width="wrap_content"
+                android:textColor="#F8E71C"
+                android:textSize="14sp"
+                android:text="1223344"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

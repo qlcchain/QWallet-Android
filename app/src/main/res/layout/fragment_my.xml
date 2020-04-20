@@ -97,6 +97,17 @@
             android:layout_height="54dp">
 
         </com.stratagile.qlink.view.MyItemView>
+
+        <com.stratagile.qlink.view.MyItemView
+            android:id="@+id/covid19"
+            android:layout_width="match_parent"
+            app:showNextmy="true"
+            app:srcmy="@mipmap/epidemic_reward"
+            app:textmy="@string/covid_19_fighter_bounty_1"
+            android:layout_height="54dp">
+
+        </com.stratagile.qlink.view.MyItemView>
+
         <com.stratagile.qlink.view.MyItemView
             android:id="@+id/claimQlc"
             android:layout_width="match_parent"
@@ -149,16 +160,6 @@
         </com.stratagile.qlink.view.MyItemView>
         <com.stratagile.qlink.view.MyItemView
             android:id="@+id/settings"
-            android:layout_width="match_parent"
-            app:showNextmy="true"
-            app:srcmy="@mipmap/icon_settings"
-            app:textmy="@string/settings"
-            android:layout_height="54dp">
-
-        </com.stratagile.qlink.view.MyItemView>
-        <com.stratagile.qlink.view.MyItemView
-            android:visibility="gone"
-            android:id="@+id/covid19"
             android:layout_width="match_parent"
             app:showNextmy="true"
             app:srcmy="@mipmap/icon_settings"

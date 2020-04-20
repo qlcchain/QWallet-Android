@@ -782,4 +782,25 @@
     <string name="claim_success">Claim Success</string>
     <string name="old_password_error">old password error</string>
     <string name="this_is_a_wallet_waitting_to_be_created">This is a wallet waiting to be created.</string>
+    <string name="claim_epidemic">立即领取</string>
+    <string name="you_have_checked_out_the_covid_19_live_updates_page_for_1_consecutive_day_your_cumulative_steps_now_is_59"><Data><![CDATA[<font color="#1E1E24">您已连续</font> <font color="#108EE9"><b>%1$s</b></font > <font color="#1E1E24">天关注新冠肺炎疫情实时页面，当前累计步数</font>  <font color="#F50F6D"><b>%2$s</b></font><font color="#1E1E24">步</font>]]></Data></string>
+    <string name="rules_for_covid_19_bounty">疫情红包领取规则</string>
+    <string name="_1_how_to_claim_qlc_for_staking_daily_bounty_check_out_the_covid_19_live_updates_page_at_least_once_a_day_you_are_entitled_to_claim_daily_qgas_bounty_in_your_qgas_wallet_the_qgas_amount_is_calculated_based_on_that_earned_from_100_qlc_for_staking_2_how_to_claim_social_distancing_bounty_check_out_the_covid_19_live_updates_page_at_least_once_a_day_with_your_daily_steps_no_greater_than_1000_for_consecutive_14_days_you_are_entitled_to_claim_100_qlc_the_reward_will_be_sent_to_your_nep_5_wallet_when_claimed">1.如何领取每日红包： \n每天至少关注一次新冠肺炎疫情实时页面，您就可以获得%1$sQLC抵押奖励，根据这些抵押获取的QGAS收益您可以立即领取到QGAS钱包中。 \n\n2. 如何领取不外出激励红包： \n每天至少关注一次新冠肺炎疫情实时页面，每天行走步数不超过1000，连续%2$s天，您就可以领取%3$s个QLC。该奖励您可以立即领取到NEO钱包中。</string>
+    <string name="daily_steps">今日步数</string>
+    <string name="cumulative_qgas_claimed">累计收益 (QGAS)</string>
+    <string name="today_s_bounty_to_claim">每日领取红包</string>
+    <string name="daily_bounty">QLC疫情补助红包</string>
+    <string name="claim_daily_qgas_bounty_simply_by_checking_out_the_covid_19_live_updates_page_for_1_consecutive_day">连续关注第%1$s天疫情情况可领取%2$s抵押QLC对应的QGas奖励</string>
+    <string name="check">去关注</string>
+    <string name="qlc_social_distancing_bounty">不外出激励红包</string>
+    <string name="claim_100_qlc_when_your_mission_is_completed">当任务完成时，可领取%1$sQLC</string>
+    <string name="_14_days_left">差%1$s天</string>
+    <string name="covid_19_fighter_bounty">疫情补贴红包</string>
+    <string name="you_have_claimed_the_bounty_for_today_come_back_here_tomorrow">今天的红包已领取，明天再来！</string>
+    <string name="get_bounty_by_checking_out_covid_19_live_updates">通过关注过新冠肺炎疫情实时页面获得红包</string>
+    <string name="claim_the_covid_19_fighter_bounty">领取疫情补贴</string>
+    <string name="claim_now_epidemic">立即领取</string>
+    <string name="you_haven_t_checked_out_the_covid_19_updates_for_a_while_your_qlc_for_staking_will_now_cumulate_from_0_with_the_upper_limit_of_1500">你已经有一段时间没有关注过新冠肺炎疫情，你的QLC抵押的限制从0开始累积，上限是1500。</string>
+    <string name="claimed_epidemic">已领取</string>
+    <string name="covid_19_fighter_bounty_1">疫情激励</string>
 </resources>

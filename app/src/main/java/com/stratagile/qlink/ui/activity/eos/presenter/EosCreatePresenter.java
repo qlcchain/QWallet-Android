@@ -273,7 +273,7 @@ public class EosCreatePresenter implements EosCreateContract.EosCreateContractPr
     }
 
     private String generateTransactionEth(String fromAddress, String toAddress, String privateKey, String amount, int limit, int price) {
-        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService(ConstantValue.ethNodeUrl));
         try {
             return testEthTransaction(web3j, fromAddress, privateKey, toAddress, amount, limit, price);
         } catch (Exception e) {

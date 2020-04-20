@@ -69,6 +69,7 @@ import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
 import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.Network;
 import com.stratagile.qlink.utils.QlcReceiveUtilsKt;
 import com.stratagile.qlink.utils.ReceiveBack;
@@ -978,6 +979,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                 startActivity(new Intent(getActivity(), EosResourceManagementActivity.class).putExtra("eosAccount", currentSelectWallet.getEosAccount()));
                 break;
             case R.id.llStake:
+                FireBaseUtils.logEvent(getActivity(), FireBaseUtils.Topup_GroupPlan_Stake);
                 startActivity(new Intent(getActivity(), MyStakeActivity.class));
                 break;
             default:

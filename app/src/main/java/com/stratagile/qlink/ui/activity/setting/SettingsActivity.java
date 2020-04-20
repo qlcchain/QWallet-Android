@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.socks.library.KLog;
 import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
@@ -33,10 +34,12 @@ import com.stratagile.qlink.ui.activity.setting.presenter.SettingsPresenter;
 import com.stratagile.qlink.ui.adapter.settings.SettingsAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.VpnUtil;
+import com.today.step.net.StepSpUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -113,6 +116,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                 FileUtil.savaData("/Qwallet/indexInterfaceStr.txt", "");
                 FileUtil.savaData("/Qwallet/productListStr.txt", "");
                 SpUtil.putBoolean(SettingsActivity.this, ConstantValue.isMainNet, !b);
+                StepSpUtil.putBoolean(SettingsActivity.this, "stepMainNet", !b);
                 Intent intent = new Intent(SettingsActivity.this, SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -300,6 +304,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
                 startActivity(new Intent(this, CurrencyUnitActivity.class));
                 break;
             case R.id.language:
+                FireBaseUtils.logEvent(this, FireBaseUtils.Me_Settings_Languages);
                 startActivity(new Intent(this, SelectLanguageActivityActivity.class));
                 break;
             default:

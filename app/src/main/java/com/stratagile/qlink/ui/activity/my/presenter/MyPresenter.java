@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.my.presenter;
 import android.support.annotation.NonNull;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
+import com.stratagile.qlink.entity.RedPoint;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
@@ -100,6 +101,28 @@ public class MyPresenter implements MyContract.MyContractPresenter{
             public void accept(RewardTotal user) throws Exception {
                 //isSuccesse
                 mView.setMiningRewardCount(user);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                //onError
+                throwable.printStackTrace();
+                //mView.closeProgressDialog();
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                //onComplete
+            }
+        }));
+    }
+
+    public void redPoint(Map map) {
+        mCompositeDisposable.add(httpAPIWrapper.redPoint(map).subscribe(new Consumer<RedPoint>() {
+            @Override
+            public void accept(RedPoint user) throws Exception {
+                mView.setRedPoint(user);
+                //isSuccesse
             }
         }, new Consumer<Throwable>() {
             @Override

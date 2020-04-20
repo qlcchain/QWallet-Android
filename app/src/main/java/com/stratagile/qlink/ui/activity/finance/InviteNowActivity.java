@@ -27,6 +27,7 @@ import com.stratagile.qlink.ui.activity.finance.component.DaggerInviteNowCompone
 import com.stratagile.qlink.ui.activity.finance.contract.InviteNowContract;
 import com.stratagile.qlink.ui.activity.finance.module.InviteNowModule;
 import com.stratagile.qlink.ui.activity.finance.presenter.InviteNowPresenter;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ThreadUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -83,17 +84,6 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
         } else {
             llShare.setBackground(getResources().getDrawable(R.mipmap.invitation_ch));
         }
-//        Bitmap logo = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("ic_launcher", "mipmap", getPackageName()));
-//        ThreadUtil.Companion.CreateEnglishQRCode createEnglishQRCode = new ThreadUtil.Companion.CreateEnglishQRCode(content, ivQRCode, logo);
-//        createEnglishQRCode.execute();
-
-
-//        Bitmap bitmap = RxQRCode.builder(content).
-//                backColor(getResources().getColor(com.vondear.rxtools.R.color.white)).
-//                codeColor(getResources().getColor(com.vondear.rxtools.R.color.black)).
-//                codeSide(800).
-//                into(ivQRCode);
-
 
         Glide.with(this)
                 .load(R.mipmap.qwallet_qrcode)
@@ -123,6 +113,7 @@ public class InviteNowActivity extends BaseActivity implements InviteNowContract
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.share) {
+            FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Home_MyReferralCode_Share);
             llShare.setDrawingCacheEnabled(true);
             llShare.buildDrawingCache();
             Bitmap bgimg0 = Bitmap.createBitmap(llShare.getDrawingCache());

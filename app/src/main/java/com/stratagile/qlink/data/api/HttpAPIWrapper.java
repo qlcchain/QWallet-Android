@@ -44,6 +44,7 @@ import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
+import com.stratagile.qlink.entity.RedPoint;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.ReportList;
@@ -1347,6 +1348,14 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<RedPoint> redPoint(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.redPoint(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.redPoint(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -1557,7 +1566,10 @@ public class HttpAPIWrapper {
         } else {
             map.put("appid", "MIFI");
             map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random().nextInt(1000)) + "");
+            String timeStamp = (Calendar.getInstance().getTimeInMillis() / 1000 + new Random().nextInt(100)) + "";
+
+            KLog.i("时间戳为：" + timeStamp);
+            map.put("timestamp", timeStamp);
             map.put("params", JSONObject.toJSON(data));
             map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
         }

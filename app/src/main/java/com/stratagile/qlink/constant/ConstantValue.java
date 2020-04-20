@@ -48,7 +48,12 @@ public class ConstantValue {
 
 
     public static String qlcNode = "http://wrpc.qlcchain.org:9735";
+    //https://mainnet.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2
+    public static String ethNodeUrl = "https://mainnet.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2";
 //    public static String qlcNode = "http://47.103.40.20:19735";
+
+    public static String guoneiEpidemic = "https://news.qq.com/zt2020/page/feiyan.htm#/?nojump=1";
+    public static String haiwaiEpidemic = "https://google.com/covid19-map/?hl=en";
 
     public static UserAccount currentUser;
     /**
@@ -273,4 +278,7 @@ public class ConstantValue {
     public static final String orderTypeSell = "SELL";
 
     public static final String ignoreVersion = "ignoreVersion";
+
+    public static final String showedEpidemic = "showedEpidemic";
+
 }

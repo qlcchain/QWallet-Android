@@ -40,6 +40,7 @@ import com.stratagile.qlink.entity.OnlyEthTransactionHistory;
 import com.stratagile.qlink.entity.Raw;
 import com.stratagile.qlink.entity.Record;
 import com.stratagile.qlink.entity.RecordVpn;
+import com.stratagile.qlink.entity.RedPoint;
 import com.stratagile.qlink.entity.RegisterVpn;
 import com.stratagile.qlink.entity.RegisterWiFi;
 import com.stratagile.qlink.entity.ReportList;
@@ -801,6 +802,10 @@ public interface HttpApi {
     @POST(API.getLocation)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<Location> getLocation(@Body RequestBody map);
+
+    @POST(API.redPoint)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RedPoint> redPoint(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

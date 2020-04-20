@@ -196,7 +196,7 @@ public class BnbToQlcPresenter implements BnbToQlcContract.BnbToQlcContractPrese
     }
 
     private String generateTransaction(String address, String privateKey, String amount) {
-        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService(ConstantValue.ethNodeUrl));
         try {
 //			createWallet("11111111");
 //			decryptWallet(keystore, "11111111");

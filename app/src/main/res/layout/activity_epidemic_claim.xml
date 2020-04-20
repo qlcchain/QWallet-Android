@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="15sp"
+        android:text="@string/receiveable"
+        android:textColor="@color/color_7f7f7f"
+        android:layout_marginLeft="15dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvClaimQgasCount"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="19sp"
+        android:text="48.00 QGAS"
+        android:textColor="@color/color_1e1e24"
+        android:layout_marginLeft="15dp"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_f2f2f2"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="15dp"
+        android:layout_height="1dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:text="@string/send_to_reward"
+        android:textColor="@color/color_7f7f7f"
+        android:layout_marginLeft="15dp"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/llSelectReceiveWallet"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="@dimen/x138">
+
+        <ImageView
+            android:id="@+id/ivSendChain"
+            android:layout_width="@dimen/x88"
+            android:src="@mipmap/icons_qlc_wallet"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_height="@dimen/x88" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/select_a_qlc_wallet_to_receive_qgas"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a"
+                android:singleLine="true"
+                android:maxWidth="@dimen/x480"
+                android:layout_marginLeft="@dimen/x30"
+                android:id="@+id/tvReceiveWalletName"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_29282a_40"
+                android:text="@string/select_a_wallet"
+                android:layout_marginTop="@dimen/x10"
+                android:maxEms="10"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:maxWidth="@dimen/x400"
+                android:id="@+id/tvReceiveWalletAddess"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:layout_marginRight="15dp"
+            android:layout_width="15dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/icon_enter1"
+            android:layout_height="15dp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_f2f2f2"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="15dp"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:id="@+id/llVcode"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:layout_height="47dp">
+        <EditText
+            android:id="@+id/etVcode"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:background="@null"
+            android:hint="@string/verification_code"
+            android:textSize="16sp"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/ivVcode"
+            android:layout_width="100dp"
+            android:layout_height="25dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_f2f2f2"
+        android:layout_marginLeft="15dp"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:id="@+id/tvClaim"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:background="@drawable/main_color_bt_bg"
+        android:text="@string/claim"
+        android:layout_height="47dp"/>
+</LinearLayout>
