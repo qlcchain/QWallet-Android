@@ -6,6 +6,7 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.ColdWallet;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.entity.BaseBack;
@@ -269,7 +270,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
     }
 
     private String generateTransaction(String fromAddress, String contractAddress, String toAddress, String privateKey, String amount, int limit, int price, int decimals) {
-        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService(ConstantValue.ethNodeUrl));
         try {
             return testTokenTransaction(web3j, fromAddress, privateKey, contractAddress, toAddress, amount, decimals, limit, price);
         } catch (Exception e) {
@@ -332,7 +333,7 @@ public class EthTransferPresenter implements EthTransferContract.EthTransferCont
     }
 
     private String generateTransactionEth(String fromAddress, String toAddress, String privateKey, String amount, int limit, int price) {
-        final Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/llyrtzQ3YhkdESt2Fzrk"));
+        final Web3j web3j = Web3j.build(new HttpService(ConstantValue.ethNodeUrl));
         try {
             return testEthTransaction(web3j, fromAddress, privateKey, toAddress, amount, limit, price);
         } catch (Exception e) {

@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.Balance;
+import com.stratagile.qlink.entity.IndexInterface;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.otc.TradePair;
 
@@ -38,5 +39,7 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<ArrayList<TradePair.PairsListBean>> pairsLiveData = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> isBind = new MutableLiveData<>();
+
+    public MutableLiveData<IndexInterface> indexInterfaceMutableLiveData = new MutableLiveData<>();
 
 }

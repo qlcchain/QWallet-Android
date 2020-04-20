@@ -27,10 +27,7 @@ import com.stratagile.qlink.ui.activity.stake.component.DaggerStakeDetailCompone
 import com.stratagile.qlink.ui.activity.stake.contract.StakeDetailContract
 import com.stratagile.qlink.ui.activity.stake.module.StakeDetailModule
 import com.stratagile.qlink.ui.activity.stake.presenter.StakeDetailPresenter
-import com.stratagile.qlink.utils.QlcReceiveUtils
-import com.stratagile.qlink.utils.StakeUtils
-import com.stratagile.qlink.utils.TimeUtil
-import com.stratagile.qlink.utils.UIUtils
+import com.stratagile.qlink.utils.*
 import kotlinx.android.synthetic.main.activity_stake_detail.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -181,6 +178,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                     }
                 }
                 "PledgeDone" -> {
+                    FireBaseUtils.logEvent(this, FireBaseUtils.Wallet_MyStakings_InvokeNewStakings_Invoke)
                     if (System.currentTimeMillis() > myStake.withdrawTime * 1000) {
                         showProgressDialog()
                         thread {

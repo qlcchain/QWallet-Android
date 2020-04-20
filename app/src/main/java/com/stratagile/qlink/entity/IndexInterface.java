@@ -97,6 +97,24 @@ public class IndexInterface extends BaseBack {
         private String topopGroupEndDate;
         private String topupGroupStartDate;
         private String winq_invite_reward_amount;
+        private String show19;
+        private String appShow19;
+
+        public String getAppShow19() {
+            return appShow19;
+        }
+
+        public void setAppShow19(String appShow19) {
+            this.appShow19 = appShow19;
+        }
+
+        public String getShow19() {
+            return appShow19;
+        }
+
+        public void setShow19(String show19) {
+            this.show19 = show19;
+        }
 
         public String getWinq_invite_reward_amount() {
             return winq_invite_reward_amount;

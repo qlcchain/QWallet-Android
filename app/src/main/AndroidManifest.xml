@@ -706,6 +706,12 @@
                 <category android:name="com.stratagile.qlink" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.my.EpidemicRedPaperActivity" />
+        <activity android:name=".ui.activity.my.CumulativeQgasClaimedActivity" />
+        <activity android:name=".ui.activity.my.EpidemicClaimActivity" />
+        <activity android:name=".ui.activity.my.EpidemicClaimQlcActivity" />
+        <activity android:name=".ui.activity.my.EpidemicWebViewActivity" />
+        <activity android:name=".ui.activity.my.EpidemicInviteNowActivity" />
 
         <service
             android:name="com.stratagile.qlink.service.JpushService"

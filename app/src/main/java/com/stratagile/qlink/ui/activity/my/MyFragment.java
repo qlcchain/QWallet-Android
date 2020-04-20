@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,21 +22,22 @@ import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.UserAccount;
+import com.stratagile.qlink.entity.IndexInterface;
+import com.stratagile.qlink.entity.RedPoint;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.eventbus.ChangeViewpager;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
 import com.stratagile.qlink.entity.eventbus.ShowBind;
 import com.stratagile.qlink.entity.eventbus.ShowDot;
+import com.stratagile.qlink.entity.eventbus.ShowEpidemic;
 import com.stratagile.qlink.entity.eventbus.ShowMiningAct;
 import com.stratagile.qlink.entity.eventbus.UpdateAvatar;
-import com.stratagile.qlink.entity.reward.ClaimQgas;
 import com.stratagile.qlink.entity.reward.InviteTotal;
 import com.stratagile.qlink.entity.reward.RewardTotal;
 import com.stratagile.qlink.ui.activity.finance.InviteActivity;
 import com.stratagile.qlink.ui.activity.finance.JoinCommunityActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.main.TestActivity;
-import com.stratagile.qlink.ui.activity.main.WebViewActivity;
 import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity;
 import com.stratagile.qlink.ui.activity.my.component.DaggerMyComponent;
 import com.stratagile.qlink.ui.activity.my.contract.MyContract;
@@ -44,7 +47,9 @@ import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.setting.SettingsActivity;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.FireBaseUtils;
+import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
+import com.stratagile.qlink.utils.TimeUtil;
 import com.stratagile.qlink.view.MyItemView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -100,6 +105,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     MyItemView claimQlc;
     @BindView(R.id.mining)
     MyItemView mining;
+    @BindView(R.id.rlVoteEnter)
+    RelativeLayout rlVoteEnter;
+    @BindView(R.id.covid19)
+    MyItemView covid19;
     private MainViewModel viewModel;
 
     @Nullable
@@ -157,16 +166,34 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     }
 
     private void controllerDot() {
-        if (mining.getDotViewVisible() == View.VISIBLE || claimQlc.getDotViewVisible() == View.VISIBLE || shareFriend.getDotViewVisible() == View.VISIBLE) {
+        if (mining.getDotViewVisible() == View.VISIBLE || claimQlc.getDotViewVisible() == View.VISIBLE || shareFriend.getDotViewVisible() == View.VISIBLE || covid19.getDotViewVisible() == View.VISIBLE) {
             EventBus.getDefault().post(new ShowDot(true));
         } else {
             EventBus.getDefault().post(new ShowDot(false));
         }
     }
 
+    @Override
+    public void setRedPoint(RedPoint redPoint) {
+        if (redPoint.getGzbdPoint() == 0) {
+            covid19.setDotViewVisible(View.GONE);
+        } else {
+            covid19.setDotViewVisible(View.VISIBLE);
+        }
+        //0是未中断，1是中断
+        if (redPoint.getGzbdFocusInterrupt() == 1) {
+            EventBus.getDefault().post(new ShowEpidemic(true));
+        } else {
+            if (!SpUtil.getBoolean(getActivity(), ConstantValue.showedEpidemic, false)) {
+                EventBus.getDefault().post(new ShowEpidemic(false));
+            }
+        }
+        controllerDot();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showMiningAct(ShowMiningAct showMiningAct) {
-        mining.setVisibility(showMiningAct.isShow()? View.VISIBLE : View.GONE);
+        mining.setVisibility(showMiningAct.isShow() ? View.VISIBLE : View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -237,6 +264,21 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
             }
         });
+        viewModel.indexInterfaceMutableLiveData.observe(this, new Observer<IndexInterface>() {
+            @Override
+            public void onChanged(@Nullable IndexInterface indexInterface) {
+                if (indexInterface.getDictList().getShow19().equals("1")) {
+                    covid19.setVisibility(View.VISIBLE);
+                } else {
+                    covid19.setVisibility(View.GONE);
+                }
+                if (TimeUtil.timeStamp(indexInterface.getDictList().getBurnQgasVoteStartDate()) > indexInterface.getCurrentTimeMillis() && TimeUtil.timeStamp(indexInterface.getDictList().getBurnQgasVoteEndDate()) < indexInterface.getCurrentTimeMillis()) {
+                    rlVoteEnter.setVisibility(View.VISIBLE);
+                } else {
+                    rlVoteEnter.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void bindPush(UserAccount userAccount) {
@@ -268,6 +310,13 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         map.put("token", AccountUtil.getUserToken());
         map.put("status", "NO_AWARD");
         mPresenter.getMiningRewardTotal(map);
+    }
+
+    private void redPoint() {
+        Map map = new HashMap<String, String>();
+        map.put("account", ConstantValue.currentUser.getAccount());
+        map.put("token", AccountUtil.getUserToken());
+        mPresenter.redPoint(map);
     }
 
     @Override
@@ -410,6 +459,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
 
     @Override
     public void setMiningRewardCount(RewardTotal claimQgas) {
+        redPoint();
         if (claimQgas.getRewardTotal() != 0) {
             mining.setDotViewVisible(View.VISIBLE);
         } else {
@@ -431,6 +481,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 List<UserAccount> userAccounts = AppConfig.getInstance().getDaoSession().getUserAccountDao().loadAll();
                 if (userAccounts.size() > 0) {
                     for (UserAccount userAccount : userAccounts) {
+//                        getCanClaimTotal();
                         if (userAccount.getIsLogin()) {
                             loginUser = userAccount;
                             ConstantValue.currentUser = userAccount;
@@ -480,10 +531,14 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 startActivityForResult(new Intent(getActivity(), MiningInviteActivity.class), 0);
                 break;
             case R.id.covid19:
-                Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("url", "http://covid19.qlink.mobi/covid-19trend/dist");
-                intent.putExtra("title", "covid19");
+                if (ConstantValue.currentUser == null) {
+                    startActivityForResult(new Intent(getActivity(), AccountActivity.class), 0);
+                    return;
+                }
+                covid19.setDotViewVisible(View.INVISIBLE);
+                Intent intent = new Intent(getActivity(), EpidemicRedPaperActivity.class);
                 startActivity(intent);
+                controllerDot();
                 break;
             default:
                 break;

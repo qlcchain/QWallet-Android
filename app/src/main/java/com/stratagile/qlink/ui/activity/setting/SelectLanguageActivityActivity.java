@@ -27,6 +27,7 @@ import com.stratagile.qlink.ui.activity.setting.module.SelectLanguageActivityMod
 import com.stratagile.qlink.ui.activity.setting.presenter.SelectLanguageActivityPresenter;
 import com.stratagile.qlink.ui.adapter.settings.LanguageCityAdapter;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.StringUitl;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -94,6 +95,13 @@ public class SelectLanguageActivityActivity extends BaseActivity implements Sele
             mAdapterContactCity.setOnItemChangeListener(new LanguageCityAdapter.OnItemChangeListener() {
                 @Override
                 public void onItemChange(int position) {
+                    if (position == 0) {
+                        FireBaseUtils.logEvent(SelectLanguageActivityActivity.this, FireBaseUtils.Me_Settings_Languages_English);
+                    } else if (position == 1) {
+                        FireBaseUtils.logEvent(SelectLanguageActivityActivity.this, FireBaseUtils.Me_Settings_Languages_Chinese);
+                    } else if (position == 2) {
+                        FireBaseUtils.logEvent(SelectLanguageActivityActivity.this, FireBaseUtils.Me_Settings_Languages_Indonesian);
+                    }
                     SpUtil.putInt(SelectLanguageActivityActivity.this, ConstantValue.Language, position);
                 }
             });

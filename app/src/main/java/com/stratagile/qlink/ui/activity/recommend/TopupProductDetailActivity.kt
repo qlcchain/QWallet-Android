@@ -375,6 +375,8 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
     }
 
     fun createNewGroup() {
+
+        FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Home_PartnerPlan_Be_Recharge_Partner)
         showProgressDialog()
         var map = hashMapOf<String, String>()
         map.put("account", ConstantValue.currentUser.account)
@@ -474,6 +476,17 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         topupGroupKindListAdapter = TopupGroupKindListAdapter(topupGroupKindList.groupKindList)
         recyclerViewGroupKind.adapter = topupGroupKindListAdapter
         topupGroupKindListAdapter.setOnItemClickListener { adapter, view, position ->
+            when(topupGroupKindListAdapter.data[position].discount) {
+                0.90 -> {
+                    FireBaseUtils.logEvent(this, FireBaseUtils.Topup_GroupPlan_10_off)
+                }
+                0.80 -> {
+                    FireBaseUtils.logEvent(this, FireBaseUtils.Topup_GroupPlan_20_off)
+                }
+                0.70 -> {
+                    FireBaseUtils.logEvent(this, FireBaseUtils.Topup_GroupPlan_30_off)
+                }
+            }
             topupGroupKindListAdapter.data.forEachIndexed { index, groupKindListBean ->
                 groupKindListBean.isSelected = index == position
                 if (groupKindListBean.isSelected) {

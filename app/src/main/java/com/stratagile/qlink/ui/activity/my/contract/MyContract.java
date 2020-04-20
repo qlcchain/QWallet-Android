@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.my.contract;
 
+import com.stratagile.qlink.entity.RedPoint;
 import com.stratagile.qlink.entity.UserInfo;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.reward.ClaimQgas;
@@ -34,6 +35,8 @@ public interface MyContract {
         void bindPushBack();
 
         void setMiningRewardCount(RewardTotal claimQgas);
+
+        void setRedPoint(RedPoint redPoint);
     }
 
     interface MyContractPresenter extends BasePresenter {

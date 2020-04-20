@@ -72,6 +72,7 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
+        isEditActivity = true
         super.onCreate(savedInstanceState)
     }
 

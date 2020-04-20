@@ -19,6 +19,7 @@ import com.stratagile.qlink.entity.Auth;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.VersionUtil;
+import com.today.step.net.CHttpApi;
 import com.vondear.rxtools.RxDeviceTool;
 
 import java.io.IOException;
@@ -122,6 +123,12 @@ public final class APIModule {
     @Singleton
     public HttpApi provideHttpAPI(Retrofit restAdapter) {
         return restAdapter.create(HttpApi.class);
+    }
+
+    @Provides
+    @Singleton
+    public CHttpApi provideCHttpAPI(Retrofit restAdapter) {
+        return restAdapter.create(CHttpApi.class);
     }
 
     //这里是对外输出部分

@@ -50,11 +50,11 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Inject
     SplashPresenter mPresenter;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         needFront = true;
+
         super.onCreate(savedInstanceState);
         StatusBarCompat.translucentStatusBar(this, false);
     }
@@ -62,8 +62,8 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     protected void initView() {
         setContentView(R.layout.activity_splash);
-        rootLayout.setVisibility(View.GONE);
-        ButterKnife.bind(this);
+//        rootLayout.setVisibility(View.GONE);
+//        ButterKnife.bind(this);
     }
 
     @Override
@@ -77,13 +77,12 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     protected void initData() {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
 //        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "startApp");
 //        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "startApp");
 //        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "startApp");
 //        mFirebaseAnalytics.logEvent("startApp", bundle);
-        FireBaseUtils.logEvent(this, FireBaseUtils.eventStartApp);
+//        FireBaseUtils.logEvent(this, FireBaseUtils.eventStartApp);
         SpUtil.putLong(AppConfig.getInstance(), ConstantValue.lastRestart, Calendar.getInstance().getTimeInMillis());
         mPresenter.getLastVersion();
         mPresenter.getPermission();

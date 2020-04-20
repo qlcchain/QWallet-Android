@@ -23,8 +23,8 @@ public class QlcHttpClient {
 	
 	public JSONObject send(JSONObject params) {
 		
-		OkHttpClient client = new OkHttpClient.Builder().build();
-		
+		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(40, TimeUnit.SECONDS).build();
+
 		try {
 			
 			RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), params.toJSONString());

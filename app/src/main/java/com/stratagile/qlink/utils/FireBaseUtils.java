@@ -53,6 +53,7 @@ public class FireBaseUtils {
     public static String Topup_Confirm_Cancel = "Topup_Confirm_Cancel";
     public static String Topup_Confirm_Send_QGas = "Topup_Confirm_Send_QGas";
     public static String Topup_Confirm_Send_QLC = "Topup_Confirm_Send_QLC";
+
     public static String Topup_GroupPlan_10_off = "Topup_GroupPlan_10%off";
     public static String Topup_GroupPlan_20_off = "Topup_GroupPlan_20%off";
     public static String Topup_GroupPlan_30_off = "Topup_GroupPlan_30%off";
@@ -65,6 +66,12 @@ public class FireBaseUtils {
     public static String Me_Settings_Languages_English = "Me_Settings_Languages_English";
     public static String Me_Settings_Languages_Chinese = "Me_Settings_Languages_Chinese";
     public static String Me_Settings_Languages_Indonesian = "Me_Settings_Languages_Indonesian";
+
+    public static String Campaign_Covid19_more_details = "Campaign_Covid19_more_details";
+    public static String Campaign_Covid19_QGas_Claim = "Campaign_Covid19_QGas_Claim";
+    public static String Campaign_Covid19_QLC_Claim = "Campaign_Covid19_QLC_Claim";
+
+
     public static void logEvent(Context context, String event) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, event);
