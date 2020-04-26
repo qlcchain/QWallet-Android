@@ -1719,11 +1719,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="group_order_list">My Group Orders</string>
     <string name="recharge_commission">Recharge Commission</string>
     <string name="group_plan_commission">Group Plan Commission</string>
+
+
     <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">Join the Q-Wallet recharge sales \npartner plan for </font><font color="#108EE9">COMMISSIONS</font></string>
     <string name="phone_top_up">Phone top up</string>
     <string name="confirm_order">Confirm Order</string>
-
-
     <string name="xxx_sold">%1$s sold</string>
     <string name="xxx_open">%1$s open</string>
     <string name="up_to_xx_off">Up to %1$s%% off</string>
