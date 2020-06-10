@@ -44,6 +44,8 @@ import io.julian.common.widget.LoadingLayout;
  */
 
 public class FileInfosFragment extends BaseFragment implements FileInfosContract.View {
+
+
     private static final String EXTRA_ABSOLUTE_PATH = BuildConfig.APPLICATION_ID + ".extra.ABSOLUTE_PATH";
     @Inject
     FileInfosPresenter mPresenter;
@@ -80,6 +82,11 @@ public class FileInfosFragment extends BaseFragment implements FileInfosContract
         });
         KLog.i("onCreateView一次。。");
         return view;
+    }
+
+    @Override
+    protected void initDataFromNet() {
+
     }
 
     @Override

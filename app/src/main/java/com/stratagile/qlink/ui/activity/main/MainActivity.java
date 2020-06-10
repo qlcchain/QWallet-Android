@@ -14,45 +14,36 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.lzy.widget.AlphaIndicator;
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.BuySellBuyTodo;
 import com.stratagile.qlink.db.BuySellSellTodo;
 import com.stratagile.qlink.db.EntrustTodo;
 import com.stratagile.qlink.db.TopupTodoList;
 import com.stratagile.qlink.db.VpnServerRecord;
 import com.stratagile.qlink.db.Wallet;
-import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.AppVersion;
-import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.SwitchToOtc;
 import com.stratagile.qlink.entity.UpLoadAvatar;
 import com.stratagile.qlink.entity.eventbus.ChangeToTestWallet;
@@ -73,15 +64,6 @@ import com.stratagile.qlink.entity.eventbus.ShowGuide;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.Dict;
-import com.stratagile.qlink.guideview.Component;
-import com.stratagile.qlink.guideview.Guide;
-import com.stratagile.qlink.guideview.GuideBuilder;
-import com.stratagile.qlink.guideview.GuideConstantValue;
-import com.stratagile.qlink.guideview.GuideSpUtil;
-import com.stratagile.qlink.guideview.compnonet.EnterSettingComponent;
-import com.stratagile.qlink.guideview.compnonet.EnterVpnComponent;
-import com.stratagile.qlink.guideview.compnonet.EnterWalletComponent;
-import com.stratagile.qlink.guideview.compnonet.RegistVpnComponent;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.statusbar.StatusBarCompat;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
@@ -92,24 +74,18 @@ import com.stratagile.qlink.ui.activity.my.AccountActivity;
 import com.stratagile.qlink.ui.activity.my.EpidemicRedPaperActivity;
 import com.stratagile.qlink.ui.activity.my.MyFragment;
 import com.stratagile.qlink.ui.activity.otc.MarketFragment;
-import com.stratagile.qlink.ui.activity.otc.NewOrderActivity;
 import com.stratagile.qlink.ui.activity.otc.OtcOrderRecordActivity;
 import com.stratagile.qlink.ui.activity.reward.MyClaimActivity;
 import com.stratagile.qlink.ui.activity.topup.TopUpFragment;
-import com.stratagile.qlink.ui.activity.topup.TopupOrderListActivity;
 import com.stratagile.qlink.ui.activity.wallet.AllWalletFragment;
 import com.stratagile.qlink.ui.activity.wallet.FreeConnectActivity;
-import com.stratagile.qlink.ui.activity.wallet.ScanQrCodeActivity;
-import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity;
 import com.stratagile.qlink.ui.activity.wallet.VerifyWalletPasswordActivity;
-import com.stratagile.qlink.ui.activity.wallet.WalletQRCodeActivity;
 import com.stratagile.qlink.ui.adapter.TradePairDecoration;
 import com.stratagile.qlink.ui.adapter.otc.TradePairAdapter;
 import com.stratagile.qlink.utils.AccountUtil;
 import com.stratagile.qlink.utils.CountDownTimerUtils;
 import com.stratagile.qlink.utils.DoubleClickHelper;
 import com.stratagile.qlink.utils.FileUtil;
-import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.LocalWalletUtil;
 import com.stratagile.qlink.utils.LogUtil;
@@ -118,7 +94,6 @@ import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.TimeUtil;
 import com.stratagile.qlink.utils.ToastUtil;
-import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.view.ActiveTogglePopWindow;
 import com.stratagile.qlink.view.NoScrollViewPager;
@@ -143,7 +118,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
-import info.hoang8f.android.segmented.SegmentedGroup;
 import qlc.utils.Helper;
 
 //import com.facebook.appevents.AppEventsLogger;
@@ -161,34 +135,32 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     MainPresenter mPresenter;
     @BindView(R.id.viewPager)
     NoScrollViewPager viewPager;
-    @BindView(R.id.bottom_navigation)
-    BottomNavigationViewEx bottomNavigation;
-    @BindView(R.id.status_bar)
-    TextView statusBar;
-    @BindView(R.id.iv_avater)
-    ImageView ivAvater;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
-    @BindView(R.id.iv_wallet)
-    ImageView ivWallet;
-    @BindView(R.id.rl1)
-    RelativeLayout rl1;
-    @BindView(R.id.rl2)
-    RelativeLayout rl2;
-    @BindView(R.id.ivQRCode)
-    ImageView ivQRCode;
+    //    @BindView(R.id.status_bar)
+//    TextView statusBar;
+//    @BindView(R.id.iv_avater)
+//    ImageView ivAvater;
+//    @BindView(R.id.tv_title)
+//    TextView tvTitle;
+//    @BindView(R.id.iv_wallet)
+//    ImageView ivWallet;
+//    @BindView(R.id.rl1)
+//    RelativeLayout rl1;
+//    @BindView(R.id.rl2)
+//    RelativeLayout rl2;
+//    @BindView(R.id.ivQRCode)
+//    ImageView ivQRCode;
     @BindView(R.id.financeCome)
     ImageView financeCome;
-    @BindView(R.id.rlWallet)
-    RelativeLayout rlWallet;
-    @BindView(R.id.button21)
-    RadioButton button21;
-    @BindView(R.id.button22)
-    RadioButton button22;
-    @BindView(R.id.segmentControlView)
-    SegmentedGroup segmentControlView;
-    @BindView(R.id.xxx)
-    View xxx;
+    //    @BindView(R.id.rlWallet)
+//    RelativeLayout rlWallet;
+//    @BindView(R.id.button21)
+//    RadioButton button21;
+//    @BindView(R.id.button22)
+//    RadioButton button22;
+//    @BindView(R.id.segmentControlView)
+//    SegmentedGroup segmentControlView;
+//    @BindView(R.id.xxx)
+//    View xxx;
     @BindView(R.id.drawerLayout)
     DrawerLayout drawerLayout;
     @BindView(R.id.recyclerViewTradePair)
@@ -202,6 +174,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @BindView(R.id.viewDot)
     View viewDot;
+    @BindView(R.id.alphaIndicator)
+    AlphaIndicator alphaIndicator;
+    @BindView(R.id.ivDefi)
+    ImageView ivDefi;
     private MainViewModel viewModel;
 
     public static final int START_NO_WALLLET = 0;
@@ -235,9 +211,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setDot(ShowDot showDot) {
-        viewDot.setVisibility(showDot.isShow()? View.VISIBLE : View.GONE);
+        viewDot.setVisibility(showDot.isShow() ? View.VISIBLE : View.GONE);
     }
-
 
 
     @Override
@@ -246,8 +221,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         SpUtil.putBoolean(this, ConstantValue.showTestFlag, false);
-        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.getStatusBarHeight(this));
-        statusBar.setLayoutParams(llp);
+//        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), UIUtils.getStatusBarHeight(this));
+//        statusBar.setLayoutParams(llp);
         financeCome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -261,12 +236,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
-    public void setLightNavigationBar (Activity activity, boolean light) {
+    public void setLightNavigationBar(Activity activity, boolean light) {
         int vis = activity.getWindow().getDecorView().getSystemUiVisibility();
         if (light) {
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;     // 黑色
         } else {
-            vis &= ~ View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         }
         activity.getWindow().getDecorView().setSystemUiVisibility(vis);
     }
@@ -390,11 +365,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         sweetAlertDialog.setView(view);
         sweetAlertDialog.show();
     }
-
+    private SweetAlertDialog convid19SweetAlertDialog;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showEpidemic(ShowEpidemic showEpidemic) {
         KLog.i("显示疫情弹窗。。。。");
         if (viewModel.indexInterfaceMutableLiveData.getValue().getDictList().getShow19().equals("1")) {
+            if (convid19SweetAlertDialog != null && convid19SweetAlertDialog.isShowing()) {
+                return;
+            }
             View view = getLayoutInflater().inflate(R.layout.alert_epidemic, null, false);
             ImageView ivClose = view.findViewById(R.id.ivClose);
             TextView title = view.findViewById(R.id.ivTitle);
@@ -407,7 +385,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             tvOpreate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sweetAlertDialog.dismissWithAnimation();
+                    convid19SweetAlertDialog.dismissWithAnimation();
                     if (ConstantValue.currentUser == null) {
                         viewPager.postDelayed(new Runnable() {
                             @Override
@@ -429,12 +407,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             ivClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sweetAlertDialog.dismissWithAnimation();
+                    convid19SweetAlertDialog.dismissWithAnimation();
                 }
             });
-            sweetAlertDialog = new SweetAlertDialog(this);
-            sweetAlertDialog.setView(view);
-            sweetAlertDialog.show();
+            convid19SweetAlertDialog = new SweetAlertDialog(this);
+            convid19SweetAlertDialog.setView(view);
+            convid19SweetAlertDialog.show();
         }
     }
 
@@ -569,22 +547,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
         getStakeQlcCount();
 
-        segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
-                    EventBus.getDefault().post(new GetPairs());
-                } else {
-                    if (i == R.id.button21) {
-                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_BUY);
-                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
-                    } else {
-                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_SELL);
-                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
-                    }
-                }
-            }
-        });
+//        segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
+//                    EventBus.getDefault().post(new GetPairs());
+//                } else {
+//                    if (i == R.id.button21) {
+//                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_BUY);
+//                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
+//                    } else {
+//                        FireBaseUtils.logEvent(MainActivity.this, FireBaseUtils.OTC_Home_SELL);
+//                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+//                    }
+//                }
+//            }
+//        });
         LogUtil.addLog(SystemUtil.getDeviceBrand() + "  " + SystemUtil.getSystemModel() + "   " + SystemUtil.getSystemVersion() + "   " + VersionUtil.getAppVersionName(this), getClass().getSimpleName());
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -594,9 +572,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 } else if (position == 1) {
                     return new MarketFragment();
                 } else if (position == 2) {
-                    return new AllWalletFragment();
+                    return new DefiFragment();
                 } else if (position == 3) {
-                    return new MyFragment();
+                    return new AllWalletFragment();
                 } else {
                     return new MyFragment();
                 }
@@ -604,55 +582,46 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             @Override
             public int getCount() {
-                return 4;
+                return 5;
             }
         });
-        //设置BottomNavigationMenuView的字体
-        bottomNavigation.enableAnimation(false);
-        bottomNavigation.enableShiftingMode(false);
-        bottomNavigation.enableItemShiftingMode(false);
-        bottomNavigation.enableAnimation(false);
-        viewPager.setOffscreenPageLimit(4);
-//        bottomNavigation.setTextSize(12);
-//        bottomNavigation.setIconSizeAt(0, 25f, 20.8f);
-//        bottomNavigation.setIconSizeAt(1, 25f, 20.8f);
-//        bottomNavigation.setIconSizeAt(2, 25f, 20.8f);
-//        bottomNavigation.setIconsMarginTop((int) getResources().getDimension(R.dimen.x22));
-//        bottomNavigation.setItemIconTintList(null);
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        viewPager.setOffscreenPageLimit(5);
+        alphaIndicator.setViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                resetToDefaultIcon();
-                Bundle bundle = new Bundle();
-                switch (item.getItemId()) {
-                    case R.id.item_sms:
-                        item.setIcon(R.mipmap.finance_h);
-                        setVpnPage();
-                        break;
-                    case R.id.item_topup:
-                        item.setIcon(R.mipmap.topup_h);
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                switch (i) {
+                    case 0:
                         setTopupPage();
                         break;
-                    case R.id.item_all_wallet:
-                        item.setIcon(R.mipmap.wallet_h);
+                    case 1:
+                        setMarketPage();
+                        break;
+                    case 2:
+                        setToDefiPage();
+                        break;
+                    case 3:
                         setAllWalletPage();
                         break;
-                    case R.id.item_settings:
-                        item.setIcon(R.mipmap.settings_h);
+                    case 4:
                         setSettingsPage();
                         break;
                     default:
                         break;
                 }
-                return true;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
-        bottomNavigation.setSelectedItemId(R.id.item_topup);
-//        setVpnPage();
-//        IntentFilter intent = new IntentFilter();
-//        intent.addAction(BroadCastAction.disconnectVpnSuccess);
-//        registerReceiver(disconnectVpnSuccessBroadReceiver, intent);
-//        startService(new Intent(this, ClientConnectedWifiRecordService.class));
+
         /**
          */
 //        EventBus.getDefault().post(new NeoRefrash());
@@ -671,7 +640,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 }).start();
             }
         }
-        button21.toggle();
+//        button21.toggle();
 
         new Thread(new Runnable() {
             @Override
@@ -699,9 +668,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
             }
         });
-        bottomNavigation.postDelayed(() -> handlerTopupTodoList(), 5000);
+        viewPager.postDelayed(() -> handlerTopupTodoList(), 5000);
 
-        bottomNavigation.postDelayed(() -> {
+        viewPager.postDelayed(() -> {
             Bundle bundle = getIntent().getBundleExtra(ConstantValue.EXTRA_BUNDLE);
             if (bundle != null) {
                 String debit = bundle.getString("skip");
@@ -918,12 +887,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         dialog.show();
     }
 
-    private void resetToDefaultIcon() {
-        bottomNavigation.getMenu().findItem(R.id.item_all_wallet).setIcon(R.mipmap.wallet_n);
-//        bottomNavigation.getMenu().findItem(R.id.item_market).setIcon(R.mipmap.icon_markets_n);
-        bottomNavigation.getMenu().findItem(R.id.item_sms).setIcon(R.mipmap.finance_n);
-        bottomNavigation.getMenu().findItem(R.id.item_settings).setIcon(R.mipmap.settings_n);
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void checkSharerConnectRsp(CheckConnectRsp checkConnectRsp) {
@@ -961,52 +924,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     private void setTopupPage() {
+        ivDefi.setImageResource(R.mipmap.defi_n);
         financeCome.setVisibility(View.GONE);
         StatusBarCompat.cancelLightStatusBar(this);
-        viewPager.setCurrentItem(0, false);
-        tvTitle.setVisibility(View.VISIBLE);
-        segmentControlView.setVisibility(View.GONE);
-        ivWallet.setVisibility(View.GONE);
-        tvTitle.setText(R.string.top_up);
-        ivQRCode.setVisibility(View.GONE);
-        tvTitle.setTextColor(getResources().getColor(R.color.white));
-        statusBar.setBackground(getResources().getDrawable(R.color.color_4a7eee));
-        rl1.setBackground(getResources().getDrawable(R.color.color_4a7eee));
-        statusBar.setVisibility(View.GONE);
-        rl1.setVisibility(View.GONE);
-        ivAvater.setVisibility(View.VISIBLE);
-        Glide.with(this)
-                .load(R.mipmap.add_j)
-                .into(ivWallet);
-        Glide.with(this)
-                .load(R.mipmap.icon_protfolio_more)
-                .into(ivAvater);
     }
 
     /**
      * 设置为vpn界面
      */
-    private void setVpnPage() {
+    private void setMarketPage() {
+        ivDefi.setImageResource(R.mipmap.defi_n);
         financeCome.setVisibility(View.GONE);
         StatusBarCompat.cancelLightStatusBar(this);
-        viewPager.setCurrentItem(1, false);
-        tvTitle.setVisibility(View.GONE);
-        segmentControlView.setVisibility(View.VISIBLE);
-        ivWallet.setVisibility(View.VISIBLE);
-        tvTitle.setText(R.string.finance);
-        ivQRCode.setVisibility(View.GONE);
-        tvTitle.setTextColor(getResources().getColor(R.color.white));
-        statusBar.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
-        rl1.setBackground(getResources().getDrawable(R.drawable.main_bg_shape));
-        statusBar.setVisibility(View.VISIBLE);
-        rl1.setVisibility(View.VISIBLE);
-        ivAvater.setVisibility(View.VISIBLE);
-        Glide.with(this)
-                .load(R.mipmap.add_j)
-                .into(ivWallet);
-        Glide.with(this)
-                .load(R.mipmap.icon_protfolio_more)
-                .into(ivAvater);
         if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
             EventBus.getDefault().post(new GetPairs());
         }
@@ -1015,41 +944,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         }
     }
 
-    private void setAllWalletPage() {
-//        if (Calendar.getInstance().getTimeInMillis() - dangqianshijian <= jianjushijian) {
-//            return;
-//        }
+    private void setToDefiPage() {
+        financeCome.setVisibility(View.GONE);
+        ivDefi.setImageResource(R.mipmap.defi_h);
+        StatusBarCompat.cancelLightStatusBar(this);
+    }
 
+    private void setAllWalletPage() {
+        ivDefi.setImageResource(R.mipmap.defi_n);
         if (ConstantValue.isShouldShowVertifyPassword) {
             Intent intent = new Intent(this, VerifyWalletPasswordActivity.class);
             startActivityForResult(intent, 1);
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-            bottomNavigation.setSelectedItemId(R.id.item_topup);
         } else {
             financeCome.setVisibility(View.GONE);
             dangqianshijian = Calendar.getInstance().getTimeInMillis();
             KLog.i("进入钱包页面。。");
-            ivWallet.setVisibility(View.VISIBLE);
-            tvTitle.setVisibility(View.VISIBLE);
-            segmentControlView.setVisibility(View.GONE);
-            statusBar.setVisibility(View.VISIBLE);
-            rl1.setVisibility(View.VISIBLE);
-
             StatusBarCompat.cancelLightStatusBar(this);
-            viewPager.setCurrentItem(2, false);
-            ivQRCode.setVisibility(View.VISIBLE);
-            statusBar.setBackgroundColor(getResources().getColor(R.color.mainColor));
-            rl1.setBackgroundColor(getResources().getColor(R.color.mainColor));
-            tvTitle.setText(R.string.wallet);
-            tvTitle.setTextColor(getResources().getColor(R.color.white));
-            Glide.with(this)
-                    .load(R.mipmap.add_j)
-                    .into(ivWallet);
-            ivAvater.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(R.mipmap.qr_code_n)
-                    .into(ivAvater);
-//                    showGuideViewEnterSetting();
         }
     }
 
@@ -1060,24 +971,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     long dangqianshijian = 0;
 
     private void setSettingsPage() {
-        KLog.i(UIUtils.isNavigationBarExist(this));
+        ivDefi.setImageResource(R.mipmap.defi_n);
         financeCome.setVisibility(View.GONE);
         StatusBarCompat.changeToLightStatusBar(this);
-        ivWallet.setVisibility(View.GONE);
-        tvTitle.setVisibility(View.VISIBLE);
-        segmentControlView.setVisibility(View.GONE);
-        ivQRCode.setVisibility(View.GONE);
-        viewPager.setCurrentItem(3, false);
-        statusBar.setBackgroundColor(getResources().getColor(R.color.white));
-        rl1.setBackgroundColor(getResources().getColor(R.color.white));
-        tvTitle.setText(R.string.me);
-        tvTitle.setTextColor(getResources().getColor(R.color.color_29282a));
-        ivAvater.setVisibility(View.GONE);
-        Glide.with(this)
-                .load(R.mipmap.icon_set1)
-                .into(ivWallet);
-        statusBar.setVisibility(View.VISIBLE);
-        rl1.setVisibility(View.VISIBLE);
     }
 
 
@@ -1107,25 +1003,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             if (resultCode == RESULT_OK) {
                 ConstantValue.isShouldShowVertifyPassword = false;
                 KLog.i("验证指纹回来，并且成功");
-                bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
+                //viewPager.setCurrentItem(3);
             } else {
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
+                viewPager.setCurrentItem(2);
             }
 
         }
         if (requestCode == START_SELECT_PICTURE && resultCode == RESULT_OK) {
 //            File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/" + SpUtil.getString(this, ConstantValue.myAvaterUpdateTime, "") + ".jpg", "");
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
-                Glide.with(this)
-                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsMainColor)
-                        .into(ivAvater);
-            } else {
-                Glide.with(this)
-                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsMainColor)
-                        .into(ivAvater);
-            }
         }
         if (requestCode == START_QRCODE && resultCode == RESULT_OK) {
             viewModel.qrcode.postValue(data.getStringExtra("result"));
@@ -1158,19 +1043,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     public void handleToAppToBack(ForegroundCallBack foregroundCallBack) {
         if (!foregroundCallBack.isForeground()) {
             ConstantValue.isShouldShowVertifyPassword = true;
-            bottomNavigation.setSelectedItemId(R.id.item_topup);
-            setTopupPage();
+//            viewPager.setCurrentItem(0);
+            alphaIndicator.setSelectItem(0);
+//            setTopupPage();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void switchToOtc(SwitchToOtc switchToOtc) {
-        bottomNavigation.setSelectedItemId(R.id.item_sms);
+//        viewPager.setCurrentItem(1);
+        alphaIndicator.setSelectItem(1);
         if (switchToOtc.isToSell()) {
-            button22.toggle();
             viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
         }
-        setVpnPage();
     }
 
     @Override
@@ -1208,22 +1093,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setViewPager(ChangeViewpager changeViewpager) {
-        switch (changeViewpager.getPosition()) {
-            case 0:
-                bottomNavigation.setSelectedItemId(R.id.item_topup);
-                break;
-            case 1:
-                bottomNavigation.setSelectedItemId(R.id.item_sms);
-                break;
-            case 2:
-                bottomNavigation.setSelectedItemId(R.id.item_all_wallet);
-                break;
-            case 3:
-                bottomNavigation.setSelectedItemId(R.id.item_settings);
-                break;
-            default:
-                break;
-        }
+        viewPager.setCurrentItem(changeViewpager.getPosition());
     }
 
 
@@ -1238,68 +1108,68 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
     }
 
     @SuppressLint("RestrictedApi")
-    @OnClick({R.id.iv_avater, R.id.rlWallet, R.id.tv_title, R.id.ivQRCode, R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
+    @OnClick({R.id.tvReset, R.id.tvConfirm, R.id.drawerlayout_side_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_avater:
-                if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-                    if (ConstantValue.currentUser == null) {
-                        startActivity(new Intent(this, AccountActivity.class));
-                        return;
-                    }
-                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_Record);
-                    Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
-                    startActivity(intent1);
-                } else if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
-                    if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), getString(R.string.eth_receivable_address), "eth", 2);
-                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
-                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), getString(R.string.neo_receivable_address), "neo", 1);
-                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
-                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EosWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), getString(R.string.eos_receivable_address), "eos", 3);
-                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
-                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.QlcWallet) {
-                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), getString(R.string.receivable_address), "qlc", 4);
-                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
-                    }
-                } else if (bottomNavigation.getSelectedItemId() == R.id.item_topup) {
-                    Intent intent1 = new Intent(this, TopupOrderListActivity.class);
-                    startActivity(intent1);
-                }
-                break;
-            case R.id.rlWallet:
-//                if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
-//                    startActivityForResult(new Intent(this, AddTokenActivity.class), START_ADD_TOKEN);
-//                    return;
-//                }
-                if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-                    if (ConstantValue.currentUser == null) {
-                        startActivity(new Intent(this, AccountActivity.class));
-                        return;
-                    }
-//                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
-//                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
+//            case R.id.iv_avater:
+//                if (viewPager.getCurrentItem() == 1) {
+//                    if (ConstantValue.currentUser == null) {
+//                        startActivity(new Intent(this, AccountActivity.class));
 //                        return;
 //                    }
-                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_NewOrder);
-                    startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
-                    return;
-                }
-                if (bottomNavigation.getSelectedItemId() == R.id.item_all_wallet) {
-                    startActivityForResult(new Intent(this, SelectWalletTypeActivity.class), START_CHOOSE_WALLET);
-                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-                }
-                break;
-            case R.id.tv_title:
-                if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-                    startActivity(new Intent(this, LogActivity.class));
-                }
-                break;
-            case R.id.ivQRCode:
-                startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
-                break;
+//                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_Record);
+//                    Intent intent1 = new Intent(this, OtcOrderRecordActivity.class);
+//                    startActivity(intent1);
+//                } else if (viewPager.getCurrentItem() == 3) {
+//                    if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
+//                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), getString(R.string.eth_receivable_address), "eth", 2);
+//                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+//                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
+//                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), getString(R.string.neo_receivable_address), "neo", 1);
+//                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+//                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EosWallet) {
+//                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), getString(R.string.eos_receivable_address), "eos", 3);
+//                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+//                    } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.QlcWallet) {
+//                        QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), getString(R.string.receivable_address), "qlc", 4);
+//                        startActivity(new Intent(this, WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+//                    }
+//                } else if (viewPager.getCurrentItem() == 0) {
+//                    Intent intent1 = new Intent(this, TopupOrderListActivity.class);
+//                    startActivity(intent1);
+//                }
+//                break;
+//            case R.id.rlWallet:
+////                if (bottomNavigation.getSelectedItemId() == R.id.item_market) {
+////                    startActivityForResult(new Intent(this, AddTokenActivity.class), START_ADD_TOKEN);
+////                    return;
+////                }
+//                if (viewPager.getCurrentItem() == 1) {
+//                    if (ConstantValue.currentUser == null) {
+//                        startActivity(new Intent(this, AccountActivity.class));
+//                        return;
+//                    }
+////                    if (!"KYC_SUCCESS".equals(ConstantValue.currentUser.getVstatus())) {
+////                        KotlinConvertJavaUtils.INSTANCE.needVerify(this);
+////                        return;
+////                    }
+//                    FireBaseUtils.logEvent(this, FireBaseUtils.OTC_Home_NewOrder);
+//                    startActivityForResult(new Intent(this, NewOrderActivity.class), NEW_ORDER);
+//                    return;
+//                }
+//                if (viewPager.getCurrentItem() == 3) {
+//                    startActivityForResult(new Intent(this, SelectWalletTypeActivity.class), START_CHOOSE_WALLET);
+//                    overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+//                }
+//                break;
+//            case R.id.tv_title:
+//                if (viewPager.getCurrentItem() == 1) {
+//                    startActivity(new Intent(this, LogActivity.class));
+//                }
+//                break;
+//            case R.id.ivQRCode:
+//                startActivityForResult(new Intent(this, ScanQrCodeActivity.class), START_QRCODE);
+//                break;
             case R.id.drawerlayout_side_tv:
                 break;
             case R.id.tvReset:
@@ -1365,7 +1235,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 startActivity(intent1);
             }
         });
-        ivWallet.postDelayed(new Runnable() {
+        relativeLayout_root.postDelayed(new Runnable() {
             @Override
             public void run() {
                 sweetAlertDialog.show();
@@ -1400,18 +1270,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
 
     @Override
     public void getAvatarSuccess(UpLoadAvatar upLoadAvatar) {
-        if (bottomNavigation.getSelectedItemId() == R.id.item_sms) {
-            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
-                Glide.with(this)
-                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsMainColor)
-                        .into(ivAvater);
-            } else {
-                Glide.with(this)
-                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
-                        .apply(AppConfig.getInstance().optionsMainColor)
-                        .into(ivAvater);
-            }
+        if (viewPager.getCurrentItem() == 1) {
+//            if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
+//                Glide.with(this)
+//                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+//                        .apply(AppConfig.getInstance().optionsMainColor)
+//                        .into(ivAvater);
+//            } else {
+//                Glide.with(this)
+//                        .load(MainAPI.MainBASE_URL + SpUtil.getString(this, ConstantValue.myAvatarPath, "").replace("\\", "/"))
+//                        .apply(AppConfig.getInstance().optionsMainColor)
+//                        .into(ivAvater);
+//            }
         }
 
     }

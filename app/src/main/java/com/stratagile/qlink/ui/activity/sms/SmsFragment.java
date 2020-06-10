@@ -58,7 +58,10 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class SmsFragment extends BaseFragment implements SmsContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     SmsPresenter mPresenter;
     //    @BindView(R.id.tabLayout)

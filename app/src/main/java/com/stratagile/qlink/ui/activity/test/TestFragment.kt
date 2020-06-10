@@ -24,7 +24,9 @@ import butterknife.ButterKnife
  */
 
 class TestFragment : BaseFragment(), TestContract.View {
+    override fun initDataFromNet() {
 
+    }
     @Inject
     lateinit internal var mPresenter: TestPresenter
 

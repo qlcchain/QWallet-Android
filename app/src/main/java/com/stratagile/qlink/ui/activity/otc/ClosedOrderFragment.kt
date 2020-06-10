@@ -53,7 +53,6 @@ class ClosedOrderFragment : BaseFragment(), CloasedOrderContract.View {
 
     override fun initDataFromNet() {
         currentPage = 0
-        super.initDataFromNet()
         getTradeOrderList()
     }
 

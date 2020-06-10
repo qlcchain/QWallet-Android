@@ -53,7 +53,7 @@
     <color name="color_online">#66ba02</color>
     <color name="cannotbet">#ecebed</color>
     <color name="deposi">#adadad</color>
-    <color name="regedit"> #480180</color>
+    <color name="regedit">#480180</color>
     <color name="color_ababab">#ababab</color>
     <color name="color_9980ad">#9980ad</color>
 
@@ -135,6 +135,34 @@
     <color name="color_bcbcbc">#bcbcbc</color>
     <color name="color_e6f2fc">#e6f2fc</color>
     <color name="color_487ced">#487ced</color>
+    <color name="color_FF679D_26">#26FF679D</color>
+    <color name="color_FF679D">#FF679D</color>
+    <color name="color_945BFF">#945BFF</color>
+    <color name="color_945BFF_26">#26945BFF</color>
 
+    <color name="color_00C0FF_26">#2600C0FF</color>
+    <color name="color_00C0FF">#00C0FF</color>
+    <color name="color_ED321">#7ED321</color>
+    <color name="color_ED321_26">#267ED321</color>
+    <color name="color_0C66FF">#0C66FF</color>
+    <color name="color_0C66FF_26">#260C66FF</color>
+    <color name="color_FFB46A">#FFB46A</color>
+    <color name="color_FFB46A_26">#26FFB46A</color>
+
+
+
+    <color name="color_f50f60">#f50f60</color>
+
+    <color name="color_7ED321">#7ED321</color>
+    <color name="color_108EE9">#108EE9</color>
+    <color name="color_F5A623">#F5A623</color>
+    <color name="color_FF3669">#FF3669</color>
+
+    <color name="radio_button_selected_color">#ff33b5e5</color>
+    <color name="radio_button_unselected_color">@android:color/transparent</color>
+    <color name="color_909090">#909090</color>
+    <color name="color_f0f0f0">#f0f0f0</color>
+    <color name="color_555555">#555555</color>
+    <color name="color_292b33">#292B33</color>
 
 </resources>

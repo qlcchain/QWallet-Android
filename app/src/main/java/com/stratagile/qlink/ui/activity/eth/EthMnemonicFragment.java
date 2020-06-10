@@ -52,7 +52,10 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class EthMnemonicFragment extends BaseFragment implements EthMnemonicContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     EthMnemonicPresenter mPresenter;
 

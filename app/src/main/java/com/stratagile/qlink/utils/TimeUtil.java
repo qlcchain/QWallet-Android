@@ -75,6 +75,11 @@ public class TimeUtil {
         return sdr.format(new Date(timestamp));
     }
 
+    public static String getActiveDataTime(long timestamp) {
+        SimpleDateFormat sdr = new SimpleDateFormat("MM-dd", Locale.CHINA);
+        return sdr.format(new Date(timestamp));
+    }
+
     public static String getTransactionHistoryTime(long timestamp) {
         SimpleDateFormat sdr = new SimpleDateFormat("HH:mm", Locale.CHINA);
         return sdr.format(new Date(timestamp));

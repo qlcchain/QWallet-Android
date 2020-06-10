@@ -47,6 +47,7 @@ import com.stratagile.qlink.BuildConfig;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.blockchain.btc.BitUtil;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.db.DaoMaster;
@@ -73,6 +74,7 @@ import com.stratagile.qlink.utils.VersionUtil;
 import com.stratagile.qlink.utils.eth.AppFilePath;
 import com.stratagile.qlink.view.AndroidUtilities;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.today.step.lib.TodayStep;
 import com.vondear.rxtools.RxDataTool;
 import com.vondear.rxtools.RxDeviceTool;
 import com.vondear.rxtools.RxPhotoTool;
@@ -97,6 +99,7 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 
 import static com.tencent.bugly.Bugly.applicationContext;
 
@@ -226,6 +229,7 @@ public class AppConfig extends MultiDexApplication {
 //        initMiPush();
         setMode();
         setLanguage(false);
+        TodayStep.init(MainConstant.MainAppid, MainConstant.unKownKeyButImportant);
         applicationHandler = new Handler(getMainLooper());
         info = getPackageInfo(getPackageName());
         handler = new Handler(Looper.getMainLooper());
@@ -249,6 +253,12 @@ public class AppConfig extends MultiDexApplication {
 //        adb shell setprop debug.firebase.analytics.app <com.stratagile.qwallet>
 //        adb shell setprop debug.firebase.analytics.app com.stratagile.qwallet
         // adb shell setprop debug.firebase.analytics.app .none.
+        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
+            }
+        });
     }
 
     private void initGlide() {

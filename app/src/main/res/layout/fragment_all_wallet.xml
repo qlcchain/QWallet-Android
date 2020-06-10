@@ -11,7 +11,70 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <TextView
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/mainColor"
+            android:gravity="center"
+            android:textColor="@color/color_333"
+            android:textSize="9sp" />
+        <RelativeLayout
+            android:id="@+id/rl1"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_below="@+id/status_bar"
+            android:background="@color/mainColor">
+
+            <ImageView
+                android:id="@+id/iv_avater"
+                android:layout_width="50dp"
+                android:layout_height="23dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/qr_code_n"
+                android:transitionName="avater" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/wallet"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/ivQRCode"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/rlWallet"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icons_scan_qrcode_n" />
+
+            <RelativeLayout
+                android:id="@+id/rlWallet"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/iv_wallet"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="12dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/add_j" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
         <android.support.design.widget.AppBarLayout
+            android:layout_below="@+id/rl1"
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

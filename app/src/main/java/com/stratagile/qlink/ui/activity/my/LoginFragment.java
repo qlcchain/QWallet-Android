@@ -44,7 +44,10 @@ import butterknife.OnClick;
  */
 
 public class LoginFragment extends BaseFragment {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     LoginPresenter mPresenter;
     @BindView(R.id.tvLogin)

@@ -48,7 +48,10 @@ import butterknife.OnClick;
  */
 
 public class EthPrivateKeyFragment extends BaseFragment implements EthPrivateKeyContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     EthPrivateKeyPresenter mPresenter;
 

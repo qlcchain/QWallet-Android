@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.socks.library.KLog;
 import com.stratagile.qlink.view.RxDialogLoading;
 import com.stratagile.qlink.R;
 
@@ -89,9 +90,7 @@ public abstract class BaseFragment extends Fragment {
 	 * 
 	 * @return
 	 */
-	protected void initDataFromNet() {
-
-	}
+	protected abstract void initDataFromNet();
 
 	/**
 	 * 获取本地数据
@@ -119,6 +118,9 @@ public abstract class BaseFragment extends Fragment {
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
+		KLog.i("isVisibleToUser：" + isVisibleToUser);
+		KLog.i("isLoaded：" + isLoaded);
+		KLog.i("viewCreated：" + viewCreated);
 		this.isVisibleToUser = isVisibleToUser;
 		if(this != null ){
 			super.setUserVisibleHint(isVisibleToUser);

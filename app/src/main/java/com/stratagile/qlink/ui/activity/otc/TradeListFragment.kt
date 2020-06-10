@@ -200,7 +200,6 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
     }
 
     override fun initDataFromNet() {
-        super.initDataFromNet()
         KLog.i("可见。。。" + arguments!!["tradeToken"])
         currentPage = 0
         getOrderList()

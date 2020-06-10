@@ -18,9 +18,9 @@ android {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode getSelfDefinedVersion("code") + 14
+        versionCode getSelfDefinedVersion("code") + 20
         multiDexEnabled true
-        versionName "2.6.1"
+        versionName "2.6.7"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -28,8 +28,8 @@ android {
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-//                JPUSH_APPKEY : "0b552b82816c33ceda8a8d16", //JPush 上注册的包名对应的 Appkey.
-                JPUSH_APPKEY : "75f163203819cc97f4ba16b8", //测试
+                JPUSH_APPKEY : "0b552b82816c33ceda8a8d16", //JPush 上注册的包名对应的 Appkey.
+//                JPUSH_APPKEY : "75f163203819cc97f4ba16b8", //测试
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
@@ -211,7 +211,7 @@ dependencies {
     implementation files('libs/wowoviewpager.aar')
     implementation 'com.alibaba:fastjson:1.2.37'
     implementation 'org.greenrobot:greendao:3.2.2'
-    implementation 'com.lzy.widget:view-core:0.1.5'
+//    implementation 'com.lzy.widget:view-core:0.1.5'
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
     implementation project(':RxTools-library')
@@ -297,7 +297,7 @@ dependencies {
 
     implementation files('libs/klogLibrary-release.aar')
 
-    implementation 'info.hoang8f:android-segmented:1.0.6'
+//    implementation 'info.hoang8f:android-segmented:1.0.6'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'

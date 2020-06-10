@@ -51,6 +51,8 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
             if (result.getString("result") != null && !"".equals(result.getString("result"))) {
                 receiveBack.recevie(true)
                 return
+            } else {
+                receiveBack.recevie(false)
             }
         } catch (e : Exception) {
             e.printStackTrace()

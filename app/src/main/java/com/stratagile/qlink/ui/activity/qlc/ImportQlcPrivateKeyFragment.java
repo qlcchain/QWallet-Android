@@ -42,7 +42,10 @@ import butterknife.OnClick;
  */
 
 public class ImportQlcPrivateKeyFragment extends BaseFragment implements ImportQlcPrivateKeyContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     ImportQlcPrivateKeyPresenter mPresenter;
     @BindView(R.id.etPrivateKey)

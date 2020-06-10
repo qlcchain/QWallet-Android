@@ -75,7 +75,9 @@ import kotlin.concurrent.thread
  */
 
 class TokenMintageFragment : BaseFragment(), TokenMintageContract.View {
+    override fun initDataFromNet() {
 
+    }
     override fun setNeoDetail(neoWalletInfo: NeoWalletInfo) {
         closeProgressDialog()
         this.neoWalletInfo = neoWalletInfo

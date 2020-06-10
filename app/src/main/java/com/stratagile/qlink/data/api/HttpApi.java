@@ -61,6 +61,15 @@ import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.VoteResult;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
+import com.stratagile.qlink.entity.defi.DefiCategory;
+import com.stratagile.qlink.entity.defi.DefiDetail;
+import com.stratagile.qlink.entity.defi.DefiList;
+import com.stratagile.qlink.entity.defi.DefiNewsDetail;
+import com.stratagile.qlink.entity.defi.DefiNewsList;
+import com.stratagile.qlink.entity.defi.DefiRating;
+import com.stratagile.qlink.entity.defi.DefiStateList;
+import com.stratagile.qlink.entity.defi.DefiStatsCache;
+import com.stratagile.qlink.entity.defi.RatingInfo;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
@@ -806,6 +815,42 @@ public interface HttpApi {
     @POST(API.redPoint)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<RedPoint> redPoint(@Body RequestBody map);
+
+    @POST(API.defiProjectList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiList> defiProjectList(@Body RequestBody map);
+
+    @POST(API.defiStatsList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiStateList> defiStatsList(@Body RequestBody map);
+
+    @POST(API.defiRating)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiRating> defiRating(@Body RequestBody map);
+
+    @POST(API.defiCategoryList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiCategory> defiCategoryList(@Body RequestBody map);
+
+    @POST(API.defiProject)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiDetail> defiProject(@Body RequestBody map);
+
+    @POST(API.defiNewsList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiNewsList> defiNewsList(@Body RequestBody map);
+
+    @POST(API.defiNews)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiNewsDetail> defiNews(@Body RequestBody map);
+
+    @POST(API.defiRatingInfo)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<RatingInfo> defiRatingInfo(@Body RequestBody map);
+
+    @POST(API.defiStasCache)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiStatsCache> defiStasCache(@Body RequestBody map);
 
 
     @POST(url_trade_appeal)

@@ -163,6 +163,10 @@ class EpidemicRedPaperActivity : BaseActivity(), EpidemicRedPaperContract.View {
             mPresenter.getLocation(hashMapOf<String, String>())
         }
         tvNoOutSide.setOnClickListener {
+            if (!this::createRecord.isInitialized) {
+                toast(getString(R.string.pleasewait))
+                return@setOnClickListener
+            }
             if (createRecord.isolationDays >= 14 && this::createRecord.isInitialized && !"1".equals(createRecord.subsidised.toString())) {
                 var intent = Intent(this, EpidemicClaimQlcActivity::class.java).putExtra("qlc", createRecord.rewardQlcAmount.toString())
                 startActivityForResult(intent, 0)

@@ -803,4 +803,27 @@
     <string name="you_haven_t_checked_out_the_covid_19_updates_for_a_while_your_qlc_for_staking_will_now_cumulate_from_0_with_the_upper_limit_of_1500">你已经有一段时间没有关注过新冠肺炎疫情，你的QLC抵押的限制从0开始累积，上限是1500。</string>
     <string name="claimed_epidemic">已领取</string>
     <string name="covid_19_fighter_bounty_1">疫情激励</string>
+    <string name="defi">Defi</string>
+    <string name="news">新闻</string>
+    <string name="my_rating_weight_18">我的评级所占权重 %1$s%%</string>
+    <string name="rating_">评级: </string>
+    <string name="rate_this_defi">项目评级</string>
+    <string name="success_you_rating_weight_is_counted">评级成功。根据QLC持仓量计算你的评级权重。</string>
+    <string name="my_rating">我的评级</string>
+    <string name="key_stats">关键数据</string>
+    <string name="active_data">动态数据</string>
+    <string name="historical_stats">历史数据</string>
+    <string name="rate">评级</string>
+    <string name="explorer">更多</string>
+    <string name="defi_details">Details</string>
+    <string name="rating__">评级\n</string>
+    <string name="date_defi">日期</string>
+    <string name="tvl_usd">锁定 USD</string>
+    <string name="total_eth_locked">锁定 ETH</string>
+    <string name="total_value_locked">锁定</string>
+    <string name="project">项目</string>
+    <string name="rating___">评级</string>
+    <string name="views">阅读</string>
+    <string name="reading_your_special_rating_interest_on_the_chain">正在链上读取你的特属评级权益</string>
+    <string name="pleasewait">请等待...</string>
 </resources>

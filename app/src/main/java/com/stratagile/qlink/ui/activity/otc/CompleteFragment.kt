@@ -97,7 +97,6 @@ class CompleteFragment : BaseFragment(), CompleteContract.View {
     }
 
     override fun initDataFromNet() {
-        super.initDataFromNet()
         getTradeOrderList()
     }
 

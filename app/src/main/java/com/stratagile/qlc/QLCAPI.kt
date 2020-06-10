@@ -12,6 +12,7 @@ import com.stratagile.qlc.entity.BaseResult
 import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
+import kotlin.random.Random
 
 class QLCAPI {
     companion object {
@@ -74,7 +75,7 @@ class QLCAPI {
                 "jsonrpc" to "2.0",
                 "method" to RPC.ledger_accountsBalance.methodName(),
                 "params" to array,
-                "id" to 18
+                "id" to Random.nextInt(10000)
         )
         KLog.i(dataJson.toString())
         var request = ConstantValue.qlcNode.httpPost().body(dataJson.toString())
@@ -95,6 +96,7 @@ class QLCAPI {
                             tokenbalance.symbol = it.key
                             tokenbalance.balance = JSONObject.parseObject(it.value.toString()).getString("balance")
                             tokenbalance.pending = JSONObject.parseObject(it.value.toString()).getString("pending")
+                            tokenbalance.vote = JSONObject.parseObject(it.value.toString()).getString("vote")
                             tokenbalance.address = address
                             tokenList.add(tokenbalance)
                         }

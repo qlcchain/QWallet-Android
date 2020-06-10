@@ -2,12 +2,15 @@ package com.stratagile.qlink.ui.activity.my.presenter;
 import android.support.annotation.NonNull;
 
 import com.socks.library.KLog;
+import com.stratagile.qlink.R;
+import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.newwinq.Register;
 import com.stratagile.qlink.ui.activity.my.contract.RegiesterContract;
 import com.stratagile.qlink.ui.activity.my.RegiesterFragment;
+import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.Map;
 
@@ -57,7 +60,7 @@ public class RegiesterPresenter implements RegiesterContract.RegiesterContractPr
                     public void accept(BaseBack baseBack) throws Exception {
                         //isSuccesse
                         mView.closeProgressDialog();
-
+                        ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.the_verification_code_has_been_sent_successfully));
                     }
                 }, new Consumer<Throwable>() {
                     @Override

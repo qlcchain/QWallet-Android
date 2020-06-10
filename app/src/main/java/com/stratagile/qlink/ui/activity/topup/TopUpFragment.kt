@@ -78,7 +78,9 @@ import javax.inject.Inject
 class TopUpFragment : BaseFragment(), TopUpContract.View {
     override fun setQlcPrice(tokenPrice: TokenPrice) {
     }
+    override fun initDataFromNet() {
 
+    }
     override fun setOneFriendReward(dict: Dict) {
         queryProxyActivity()
         oneFirendClaimQgas = dict.data.value.toFloat()
@@ -162,6 +164,7 @@ class TopUpFragment : BaseFragment(), TopUpContract.View {
 
         //回购
         if (TimeUtil.timeStamp(mIndexInterface.dictList.burnQgasVoteStartDate) < mIndexInterface.currentTimeMillis && (TimeUtil.timeStamp(mIndexInterface.dictList.burnQgasVoteEndDate) > mIndexInterface.currentTimeMillis)) {
+            ConstantValue.qgasToQlcPrice = mIndexInterface.burnQgasList[0].unitPrice.toFloat()
             viewList.add(R.layout.layout_banner_buyback)
         }
 

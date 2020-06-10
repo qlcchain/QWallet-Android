@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton
+    style="@style/ActiveDataRadioButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/news"
+    android:textSize="12sp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

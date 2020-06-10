@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/defiCategory"
+    android:layout_width="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:gravity="center"
+    android:layout_marginRight="15dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:background="@color/mainColor"
+    android:includeFontPadding="false"
+    android:textSize="13sp"
+    android:layout_height="wrap_content">
+</TextView>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_height="62dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="61dp">
+        <TextView
+            android:id="@+id/tvIndex"
+            android:layout_width="wrap_content"
+            android:text="#"
+            android:layout_centerVertical="true"
+            android:includeFontPadding="false"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:layout_marginLeft="13dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="40dp"
+            android:src="@mipmap/maker"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            android:layout_height="40dp"/>
+
+
+        <TextView
+            android:id="@+id/tvDefiProjectName"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="82dp"
+            android:includeFontPadding="false"
+            android:layout_centerVertical="true"
+            android:text="Project"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvRating"
+            android:layout_width="36dp"
+            android:layout_marginLeft="213dp"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="Rating"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:layout_height="36dp"/>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="281dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvLockedCount"
+                android:layout_width="wrap_content"
+                android:text="Locked"
+                android:includeFontPadding="false"
+                android:textColor="@color/color_29282a"
+                android:textSize="13sp"
+                android:layout_height="wrap_content"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:visibility="invisible"
+                android:id="@+id/chart"
+                android:layout_width="60dp"
+                android:layout_height="22dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_f5f5f5"
+        android:layout_height="1dp"/>
+</LinearLayout>

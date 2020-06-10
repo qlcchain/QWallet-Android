@@ -55,7 +55,10 @@ import butterknife.OnClick;
  */
 
 public class EthKeyStroeFragment extends BaseFragment implements EthKeyStroeContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     EthKeyStroePresenter mPresenter;
     private static final String ARG_TYPE = "arg_type";

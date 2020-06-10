@@ -73,7 +73,9 @@ import kotlin.concurrent.thread
  */
 
 class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
+    override fun initDataFromNet() {
 
+    }
     @Inject
     lateinit internal var mPresenter: VoteNodePresenter
 

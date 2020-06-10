@@ -130,22 +130,6 @@ public class EthTransactionRecordActivity extends BaseActivity implements EthTra
         x.setGranularity(1);
         x.setDrawLabels(true);
         x.setTextColor(getResources().getColor(R.color.color_29282a));
-//        x.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        x.setAxisLineColor(getResources().getColor(R.color.mainColor));
-//        x.setAxisMaximum(12);
-//        x.setAxisMinimum(4);
-
-
-//        x.setValueFormatter(new IAxisValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value, AxisBase axis) {
-////                KLog.i((long)value + 25000000);
-//                long millis = TimeUnit.MINUTES.toMillis((long) value + 25000000);
-////                KLog.i(millis);
-//                return TimeUtil.getTransactionHistoryTime(millis);
-////                return value + "";
-//            }
-//        });
 
         YAxis y = chart.getAxisRight();
         y.setLabelCount(6, false);

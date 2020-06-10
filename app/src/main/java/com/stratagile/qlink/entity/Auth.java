@@ -5,6 +5,15 @@ public class Auth {
     private String uuid;
     private String platform;
     private String appBuild;
+    private String phonemodel;
+
+    public String getPhonemodel() {
+        return phonemodel;
+    }
+
+    public void setPhonemodel(String phonemodel) {
+        this.phonemodel = phonemodel;
+    }
 
     public String getAppBuild() {
         return appBuild;
@@ -16,6 +25,7 @@ public class Auth {
                 "agent='" + agent + '\'' +
                 ", uuid='" + uuid + '\'' +
                 ", platform='" + platform + '\'' +
+                ", phonemodel='" + phonemodel + '\'' +
                 ", appBuild='" + appBuild + '\'' +
                 ", appVersion='" + appVersion + '\'' +
                 '}';

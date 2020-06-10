@@ -76,6 +76,7 @@ public final class APIModule {
                     auth.setUuid("");
                 }
                 auth.setPlatform("Android");
+                auth.setPhonemodel(RxDeviceTool.getBuildMANUFACTURER() + " " + RxDeviceTool.getBuildBrandModel());
                 auth.setAppVersion(VersionUtil.getAppVersionName(AppConfig.instance));
                 auth.setAppBuild(VersionUtil.getAppVersionCode(AppConfig.instance) + "");
                 KLog.i(auth.toString());
