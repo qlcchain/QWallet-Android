@@ -1,0 +1,4 @@
+#
+github push失败解决
+修改hosts的github的IP地址。在ipaddress.com上查
+把github的全局设置为翻墙的那个端口

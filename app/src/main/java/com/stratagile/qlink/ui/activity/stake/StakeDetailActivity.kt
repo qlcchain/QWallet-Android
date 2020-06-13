@@ -55,11 +55,11 @@ import kotlin.concurrent.thread
 class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
 
     override fun sign(unLock: UnLock) {
-        val signature = Neoutils.sign(unLock.data.result.unsignedRawTx.hexStringToByteArray(), neoWallet!!.privateKey)
-        KLog.i(signature.toHex())
-        unLock.data.result.signature = signature.toHex().toLowerCase()
-        unLock.data.result.publicKey = neoWallet!!.publicKey.toLowerCase()
         try {
+            val signature = Neoutils.sign(unLock.data.result.unsignedRawTx.hexStringToByteArray(), neoWallet!!.privateKey)
+            KLog.i(signature.toHex())
+            unLock.data.result.signature = signature.toHex().toLowerCase()
+            unLock.data.result.publicKey = neoWallet!!.publicKey.toLowerCase()
             thread {
                 benefitWithdraw(unLock)
             }
