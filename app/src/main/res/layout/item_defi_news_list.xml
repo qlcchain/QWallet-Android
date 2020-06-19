@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:id="@+id/viewDot"
+        android:layout_width="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/oval_maincolor_bg"
+        android:layout_marginLeft="10dp"
+        android:layout_height="8dp"/>
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_toRightOf="@+id/viewDot"
+        android:includeFontPadding="false"
+        android:layout_marginLeft="10dp"
+        android:textSize="12sp"
+        android:textColor="@color/color_909090"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_marginLeft="13.5dp"
+        android:layout_below="@+id/viewDot"
+        android:layout_alignBottom="@+id/tvContent"
+        android:background="@color/color_f0f0f0"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_toRightOf="@+id/viewDot"
+        android:layout_below="@+id/viewDot"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_29282a"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_toRightOf="@+id/viewDot"
+        android:layout_below="@+id/tvTitle"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:maxLines="4"
+        android:paddingBottom="27dp"
+        android:ellipsize="end"
+        android:textColor="@color/color_555555"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

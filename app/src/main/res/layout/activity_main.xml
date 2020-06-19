@@ -12,101 +12,6 @@
         android:background="@color/white"
         tools:context="com.stratagile.qlink.ui.activity.main.MainActivity">
 
-
-        <TextView
-            android:id="@+id/status_bar"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@drawable/navigation_shape"
-            android:gravity="center"
-            android:textColor="@color/color_333"
-            android:textSize="9sp" />
-
-        <RelativeLayout
-            android:id="@+id/rl1"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_below="@+id/status_bar"
-            android:background="@color/mainColor">
-
-            <ImageView
-                android:id="@+id/iv_avater"
-                android:layout_width="50dp"
-                android:layout_height="23dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/icon_protfolio_more"
-                android:transitionName="avater" />
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/wallet"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/ivQRCode"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/rlWallet"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/icons_scan_qrcode_n"
-                android:visibility="invisible" />
-
-            <RelativeLayout
-                android:id="@+id/rlWallet"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true">
-
-                <ImageView
-                    android:id="@+id/iv_wallet"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="12dp"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/icon_free"
-                    android:visibility="invisible" />
-            </RelativeLayout>
-
-            <info.hoang8f.android.segmented.SegmentedGroup
-                android:id="@+id/segmentControlView"
-                android:layout_width="wrap_content"
-                android:layout_height="29dp"
-                android:layout_centerInParent="true"
-                android:orientation="horizontal"
-                app:sc_border_width="1dp"
-                app:sc_checked_text_color="@color/mainColor"
-                app:sc_corner_radius="4dp"
-                app:sc_tint_color="@color/white">
-
-                <RadioButton
-                    android:id="@+id/button21"
-                    style="@style/RadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/buy"
-                    android:textSize="12sp" />
-
-                <RadioButton
-                    android:id="@+id/button22"
-                    style="@style/RadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sell"
-                    android:textSize="12sp" />
-            </info.hoang8f.android.segmented.SegmentedGroup>
-
-
-        </RelativeLayout>
-
         <com.stratagile.qlink.view.NoScrollViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
@@ -120,7 +25,6 @@
             android:id="@+id/financeCome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/xxx"
             android:scaleType="fitXY"
             android:src="@mipmap/finance_soon"
             android:visibility="gone" />
@@ -128,9 +32,9 @@
         <View
             android:id="@+id/xxx"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
+            android:layout_height="1dp"
             android:layout_above="@+id/rl2"
-            android:background="@color/color_29282a_40" />
+            android:background="@color/color_f9f9f9" />
 
         <RelativeLayout
             android:id="@+id/rl2"
@@ -138,15 +42,87 @@
             android:layout_height="46dp"
             android:layout_alignParentBottom="true">
 
-            <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
-                android:id="@+id/bottom_navigation"
+            <com.lzy.widget.AlphaIndicator
+                android:id="@+id/alphaIndicator"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
+
+                android:clipChildren="true"
+                android:layout_height="55dp"
                 android:background="@color/white"
-                app:itemIconTint="@drawable/bottom_navigation_selector"
-                app:itemTextColor="@drawable/bottom_navigation_selector"
-                app:menu="@menu/menu_bottom_navigation" />
+                android:orientation="horizontal">
+
+                <com.lzy.widget.AlphaView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:padding="6dp"
+                    app:av_tabIconSelected="@mipmap/topup_h"
+                    app:av_tabIconNormal="@mipmap/topup_n"
+                    app:av_tabText="@string/top_up"
+                    app:av_tabTextSize="10sp"
+                    app:av_textColorNormal="#999999"
+                    app:av_textColorSelected="@color/main_color" />
+
+                <com.lzy.widget.AlphaView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@color/white"
+                    android:padding="6dp"
+                    app:av_tabIconSelected="@mipmap/finance_h"
+                    app:av_tabIconNormal="@mipmap/finance_n"
+                    app:av_tabText="@string/finance"
+                    app:av_tabTextSize="10sp"
+                    app:av_textColorNormal="#999999"
+                    app:av_textColorSelected="@color/main_color" />
+
+                <com.lzy.widget.AlphaView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:padding="6dp"
+                    app:av_tabIconSelected="@mipmap/defi_h"
+                    app:av_tabIconNormal="@mipmap/defi_n"
+                    app:av_tabText="Defi"
+                    app:av_tabTextSize="10sp"
+                    app:av_textColorNormal="#999999"
+                    app:av_textColorSelected="@color/main_color" />
+
+                <com.lzy.widget.AlphaView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@color/white"
+                    android:padding="6dp"
+                    app:av_tabIconSelected="@mipmap/wallet_h"
+                    app:av_tabIconNormal="@mipmap/wallet_n"
+                    app:av_tabText="@string/wallet"
+                    app:av_tabTextSize="10sp"
+                    app:av_textColorNormal="#999999"
+                    app:av_textColorSelected="@color/main_color" />
+
+                <com.lzy.widget.AlphaView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@color/white"
+                    android:padding="6dp"
+                    app:av_tabIconNormal="@mipmap/settings_n"
+                    app:av_tabIconSelected="@mipmap/settings_h"
+                    app:av_tabText="@string/me"
+                    app:av_tabTextSize="10sp"
+                    app:av_textColorNormal="#999999"
+                    app:av_textColorSelected="@color/main_color" />
+
+            </com.lzy.widget.AlphaIndicator>
 
         </RelativeLayout>
 
@@ -170,6 +146,10 @@
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <RelativeLayout
                 android:layout_width="0px"
@@ -186,6 +166,16 @@
                     android:visibility="gone" />
             </RelativeLayout>
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivDefi"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/defi_n"
+            android:layout_marginBottom="18dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"/>
+
     </RelativeLayout>
 
     <LinearLayout

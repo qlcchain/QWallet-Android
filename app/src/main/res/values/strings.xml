@@ -1719,11 +1719,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="group_order_list">My Group Orders</string>
     <string name="recharge_commission">Recharge Commission</string>
     <string name="group_plan_commission">Group Plan Commission</string>
+
+
     <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">Join the Q-Wallet recharge sales \npartner plan for </font><font color="#108EE9">COMMISSIONS</font></string>
     <string name="phone_top_up">Phone top up</string>
     <string name="confirm_order">Confirm Order</string>
-
-
     <string name="xxx_sold">%1$s sold</string>
     <string name="xxx_open">%1$s open</string>
     <string name="up_to_xx_off">Up to %1$s%% off</string>
@@ -1836,4 +1836,26 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="you_haven_t_checked_out_the_covid_19_updates_for_a_while_your_qlc_for_staking_will_now_cumulate_from_0_with_the_upper_limit_of_1500">You haven\'t checked out the Covid-19 updates for a while, your QLC for staking will now cumulate from 0 with the upper limit of 1500</string>
     <string name="claimed_epidemic">Claimed</string>
     <string name="covid_19_fighter_bounty_1">Covid-19 Fighter Bounty</string>
+    <string name="defi">Defi</string>
+    <string name="news">News</string>
+    <string name="my_rating_weight_18">My Rating Weight %1$s%%</string>
+    <string name="rating_">Rating: </string>
+    <string name="rate_this_defi">Rate this Defi</string>
+    <string name="success_you_rating_weight_is_counted">Success! Your rating weight is counted based on the QLC amount you own.</string>
+    <string name="my_rating">My Rating</string>
+    <string name="key_stats">Key Stats</string>
+    <string name="active_data">Active Data</string>
+    <string name="historical_stats">Historical Stats</string>
+    <string name="rate">Rate</string>
+    <string name="explorer">Explorer</string>
+    <string name="defi_details">Details</string>
+    <string name="rating__">Rating\n</string>
+    <string name="date_defi">Date</string>
+    <string name="tvl_usd">TVL USD</string>
+    <string name="total_eth_locked">Total ETH Locked</string>
+    <string name="total_value_locked">Total Value Locked</string>
+    <string name="project">Project</string>
+    <string name="rating___">Rating</string>
+    <string name="views">views</string>
+    <string name="reading_your_special_rating_interest_on_the_chain">Reading your special rating interest on the chain</string>
 </resources>

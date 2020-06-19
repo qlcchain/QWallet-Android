@@ -138,6 +138,9 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
 //            default:
 //                break;
 //        }
+        if (ConstantValue.currentUser.getVstatus() == null) {
+            return;
+        }
         switch (ConstantValue.currentUser.getVstatus()) {
             case "NOT_UPLOAD":
                 tvVerification.setText(getString(R.string.unverified));

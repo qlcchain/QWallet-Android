@@ -34,7 +34,6 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.EthWallet;
 import com.stratagile.qlink.db.QLCAccount;
@@ -43,7 +42,7 @@ import com.stratagile.qlink.entity.AllWallet;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.NeoTransfer;
-import com.stratagile.qlink.entity.SendNep5TokenBack;
+import com.stratagile.qlink.entity.QrEntity;
 import com.stratagile.qlink.entity.TokenInfo;
 import com.stratagile.qlink.entity.WinqGasBack;
 import com.stratagile.qlink.entity.eos.EosQrBean;
@@ -65,7 +64,6 @@ import com.stratagile.qlink.ui.activity.wallet.component.DaggerAllWalletComponen
 import com.stratagile.qlink.ui.activity.wallet.contract.AllWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.module.AllWalletModule;
 import com.stratagile.qlink.ui.activity.wallet.presenter.AllWalletPresenter;
-import com.stratagile.qlink.ui.adapter.SpaceItemDecoration;
 import com.stratagile.qlink.ui.adapter.wallet.TokensAdapter;
 import com.stratagile.qlink.utils.EosUtil;
 import com.stratagile.qlink.utils.FileUtil;
@@ -77,7 +75,6 @@ import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.utils.eth.ETHWalletUtils;
-import com.stratagile.qlink.utils.txutils.model.util.NetworkUtil;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,6 +84,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -119,7 +117,10 @@ import static java.math.BigDecimal.ROUND_HALF_UP;
  */
 
 public class AllWalletFragment extends BaseFragment implements AllWalletContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     AllWalletPresenter mPresenter;
     TokensAdapter tokensAdapter;
@@ -171,6 +172,24 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
     RelativeLayout mainContent;
     @BindView(R.id.tvPending)
     TextView tvPending;
+    @BindView(R.id.status_bar)
+    TextView statusBar;
+    @BindView(R.id.iv_avater)
+    ImageView ivAvater;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.ivQRCode)
+    ImageView ivQRCode;
+    @BindView(R.id.iv_wallet)
+    ImageView ivWallet;
+    @BindView(R.id.rlWallet)
+    RelativeLayout rlWallet;
+    @BindView(R.id.rl1)
+    RelativeLayout rl1;
+//    @BindView(R.id.cardView)
+//    CardView cardView;
+//    @BindView(R.id.tvGasValue)
+//    TextView tvGasValue;
 
     private double walletAsset;
 
@@ -202,6 +221,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         errorTxid = FileUtil.getJson(getActivity(), "airdrop.json");
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.mainColor));
         recyclerView.setAdapter(tokensAdapter);
+
+        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(getActivity()), UIUtils.getStatusBarHeight(getActivity()));
+        statusBar.setLayoutParams(llp);
+
         isPending = false;
 //        recyclerView.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(10, getActivity())));
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
@@ -941,7 +964,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         super.onDestroyView();
     }
 
-    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.tvClaim, R.id.llResouces, R.id.llStake})
+    @OnClick({R.id.tvWalletName, R.id.tvWalletAddress, R.id.cardView, R.id.tvClaim, R.id.llResouces, R.id.llStake, R.id.iv_avater, R.id.rlWallet, R.id.ivQRCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvWalletName:
@@ -981,6 +1004,28 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             case R.id.llStake:
                 FireBaseUtils.logEvent(getActivity(), FireBaseUtils.Topup_GroupPlan_Stake);
                 startActivity(new Intent(getActivity(), MyStakeActivity.class));
+                break;
+            case R.id.iv_avater:
+                if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EthWallet) {
+                    QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEthWallet().getAddress(), getString(R.string.eth_receivable_address), "eth", 2);
+                    startActivity(new Intent(getActivity(), WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.NeoWallet) {
+                    QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getWallet().getAddress(), getString(R.string.neo_receivable_address), "neo", 1);
+                    startActivity(new Intent(getActivity(), WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.EosWallet) {
+                    QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getEosAccount().getAccountName(), getString(R.string.eos_receivable_address), "eos", 3);
+                    startActivity(new Intent(getActivity(), WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                } else if (viewModel.walletTypeMutableLiveData.getValue() == AllWallet.WalletType.QlcWallet) {
+                    QrEntity qrEntity = new QrEntity(viewModel.allWalletMutableLiveData.getValue().getQlcAccount().getAddress(), getString(R.string.receivable_address), "qlc", 4);
+                    startActivity(new Intent(getActivity(), WalletQRCodeActivity.class).putExtra("qrentity", qrEntity));
+                }
+                break;
+            case R.id.rlWallet:
+                startActivityForResult(new Intent(getActivity(), SelectWalletTypeActivity.class), 7);
+                getActivity().overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
+                break;
+            case R.id.ivQRCode:
+                startActivityForResult(new Intent(getActivity(), ScanQrCodeActivity.class), 5);
                 break;
             default:
                 break;
@@ -1056,7 +1101,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     // $FF: bridge method
                     @Override
                     public void onValue(Object var1) {
-                        this.onValue((org.json.JSONObject)var1);
+                        this.onValue((org.json.JSONObject) var1);
                     }
 
                     public final void onValue(org.json.JSONObject retValue) {
@@ -1119,6 +1164,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
             pending = null;
             tvPending.setText("");
             initData();
+        }else if (requestCode == 7 && resultCode == Activity.RESULT_OK) {
+            viewModel.timeStampAllWalletInitData.postValue(Calendar.getInstance().getTimeInMillis());
+        } else if (requestCode == 5 && resultCode == Activity.RESULT_OK) {
+            viewModel.qrcode.postValue(data.getStringExtra("result"));
         }
     }
 

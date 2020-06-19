@@ -850,4 +850,120 @@
 
     <string name="recharge_commission">Komisi Isi ulang</string>
     <string name="group_plan_commission">Komisi Paket Grup</string>
+
+    <string name="join_the_q_wallet_recharge_sales_partner_plan_for_commissions"><font color="#29282A">Gabung Penjualan isi ulang Q-Wallet \npaket mitra untuk </font><font color="#108EE9">KOMISI</font></string>
+    <string name="phone_top_up">Isi ulang Pulsa</string>
+    <string name="confirm_order">Konfirmasi Pesanan</string>
+    <string name="xxx_sold">%1$s terjual</string>
+    <string name="xxx_open">%1$s dibuka</string>
+    <string name="up_to_xx_off">Up to %1$s%% potongan</string>
+    <string name="limited_to_offering_of_xx_off_discount">Penawaran terbatas %1$s%% potongan diskon</string>
+    <string name="only_available_for_xxx_subscribers">Hanya tersedia untuk %1$s pelanggan</string>
+    <string name="select_deduction_token">Pilih Token Pemotong</string>
+    <string name="check_and_store_on_the_blockchain">Periksa dan simpan pada blockchain</string>
+    <string name="confirm_the_mobile_no">Konfirmasi Nomor telepon.</string>
+    <string name="input_the_last_4_digits_on_the_id_card">Masukkan 4 digit terakhir pada ID kartu</string>
+    <string name="after_you_click_on_check_and_store_on_the_blockchain_your_most_recent_itinerary_will_be_displayed_with_1_qgas_being_consumed_for_generating_a_blockchain_based_proof_of_your_travel_records">Setelah anda klik pada \'Periksa dan simpan pada blockchain\', Rencana perjalanan terakhir anda akan ditampilkan dengan 1 QGas yang dikonsumsi untuk menghasilkan sebuah blockchain berdasarkan bukti dari rekaman perjalanan anda.</string>
+    <string name="send_a_itinerary_query_message">Kirim Rencana perjalanan Periksa Pesan</string>
+    <string name="analyse_the_message_received">Parsing Pesan</string>
+    <string name="pay_qgas">Bayar QGas</string>
+    <string name="generate_the_blockchain_based_proof_of_the_travel_records">Hasilkan Blockchain berdasarkan\nBukti Rencana Perjalanan</string>
+    <string name="click_query">Periksa Rencana Perjalanan</string>
+    <string name="itinerary_check">Periksa Rencana Perjalanan</string>
+    <string name="invoice_content">Konten Tagihan</string>
+    <string name="itinerary">Rencana perjalanan</string>
+    <string name="please_input_the_mobile_number">Silahkan masukkan Nomor Telpon</string>
+    <string name="query">Query</string>
+    <string name="time">Waktu</string>
+    <string name="date">Tanggal</string>
+    <string name="blockchain_credential">Blockchain berdasarkan Bukti Rencana Perjalanan</string>
+    <string name="mobile_number">Nomor Telepon</string>
+    <string name="no_valid_mobile_number_was_found">Nomor benar nomor telepon ditemukan</string>
+    <string name="please_input_the_last_4_digits_on_the_id_card">Silahkan masukkan setidaknya 4 digit pada ID kartu</string>
+    <string name="query_history">Sejarah Query</string>
+    <string name="proof_type">Jenis Bukti</string>
+    <string name="fees_amount">Jumlah biaya fee</string>
+    <string name="proof_generation_date">Bukti Tanggal Dihasilkan</string>
+    <string name="proof_no">Bukti No.</string>
+    <string name="proof_content">Bukti Konten</string>
+    <string name="check_the_on_chain_records">Periksa pada-rantai Rekaman</string>
+    <string name="blockchain_based_proof_of_itinerary_2">Blockchain-berdasarkan Bukti rekaman perjalanan</string>
+    <string name="china_telecom">Telecom</string>
+    <string name="china_unicom">Unicom</string>
+    <string name="china_mobile">Mobile</string>
+    <string name="how_do_you_think_if_qlc_chain_runs_the_qgas_buyback_program_allowing_the_qgas_hodlers_to_sell_their_qgas_for_qlc_at_the_price_higher_than_the_public_market">Bagaimana menurut Anda jika QLC Chain menjalankan program pembelian kembali QGas yang memungkinkan pemegang (hodler) QGas menjual QGas mereka untuk QLC pada harga lebih tinggi daripada pasar publik?</string>
+    <string name="i_like_the_idea_and_i_will_engage_in_the_program">Saya menyukai idenya dan Saya akan ikut dalam program.</string>
+    <string name="i_like_the_idea_but_i_won_t_engage_in_the_program">Saya menyukai idenya tetapi Saya tidak ingin ikut dalam program.</string>
+    <string name="i_don_t_like_the_idea_but_i_might_engage_in_the_program">Saya tidak menyukai idenya tetapi Saya mungkin akan ikut dalam program.</string>
+    <string name="i_don_t_like_the_idea_neither_will_i_engage_in_the_program">Saya tidak menyukai idenya, saya juga tidak akan ikut dalam program.</string>
+    <string name="write_here">Tulis disini</string>
+    <string name="if_you_got_more_to_share_with_us_leave_your_opinions_and_comments_below">Jika Anda punya lebih banyak untuk dibagikan dengan kami, tinggalkan pendapat dan komentar anda dibawah:</string>
+    <string name="vote_1">Vote</string>
+    <string name="vote_2">Vote</string>
+    <string name="you_have_voted_successfully_thanks_for_your">Anda telah berhasil vote, terima kasih untuk keikutsertaan anda.</string>
+    <string name="the_voting_has_been_closed">Voting telah ditutup.</string>
+    <string name="qgas_buyback_and_burn_program">Beli-Kembali dan Bakar QGas</string>
+    <string name="team">Tim</string>
+    <string name="qgas_buyback_and_burn"><font color="#242426">QGAS </font> <font color="#1190EB">Beli-Kembali dan Bakar</font></string>
+    <string name="details_burn">Rincian</string>
+    <string name="program_implementation">* Salah satu hari kampanye dimulai dari 7:00 pm sampai 7:00 pm hari berikutnya yang berlangsung selama 24 jam.
+    \n* Selama setiap kampanye, tim akan mempublikasikan secara bertahap buy order QGas dalam Q-Wallet OTC pada titik waktu yang berbeda, 7:00 pm, 12:00 am, 2:00 am, 5:00 am, 9:00 am (UTC+8) .
+    \n* Setiap kali akan ada beberapa pemisahan buy order QGas sejumlah 4000 QGas yang ditempatkan, jumlah pembelian kembali QGas dapat bervariasi disetiap pesanan.
+    \n* Semua pengguna Q-Wallet dengan saldo yang tidak lebih dari 1 QGas dalam Q-Wallet mereka berhak untuk memperdagangkan QGas mereka untuk QLC .
+    \n* Program pembelian kembali diperkirakan untuk membeli kembali total sejumlah 20K QGas untuk dibakar kemudian, pada harga pembelian kembali 1QGAS=%1$s QLC yang mana sedikit lebih tinggi daripada rata-rata harga pasar publik. 40K QLC diperdagangkan untuk QGas akan dirilis ke komunitas QLC.
+    \n* Dedikasi Pool Pembelian kembali QGas yang mana sebuah alamat QGas akan dipublikasikan ke publik.
+    \n* Setelah pembelian kembali berakhir, semua QGas dalam pool akan dibakar selama 48 jam setelah pembelian kembali selesai.</string>
+    <string name="program_time">Waktu program:</string>
+    <string name="_10_days">10 hari</string>
+    <string name="buyback_price">Harga Beli-Kembali：</string>
+    <string name="program_implementation_1">Penerapan program:</string>
+    <string name="qgas_buyback_and_burn_1">Beli-Kembali dan Bakar QGas</string>
+    <string name="more_details_buyback">Rincian lebih banyak</string>
+
+
+    <string name="please_select_facephoto">silahkan pilih foto wajah</string>
+    <string name="please_select_holdphoto">silahkan pilih holdphoto</string>
+    <string name="eos_transaction_error">Transaksi EOS error</string>
+    <string name="account_error">akun error</string>
+    <string name="the_verification_code_has_been_sent_successfully">Kode verifikasi telah berhasil dikirim.</string>
+    <string name="please_type_privateKey">silahkan tulis privatekey</string>
+    <string name="walleet_exist">dompet ada</string>
+    <string name="create_eos_account_error">pembuatan akun eos error</string>
+    <string name="activate_success">Berhasil diaktivasi</string>
+    <string name="please_switch_to_qlc_chain_wallet">Silahkan Ganti ke Dompet QLC Chain</string>
+    <string name="privatekey_format_error">format privatekey error</string>
+    <string name="qlc_wallet_not_found">dompet qlc tidak ditemukan</string>
+    <string name="txid_is_unlock">txid dikunci</string>
+    <string name="get_lockinfo_error">mendapatkan lockInfo error</string>
+    <string name="stake_error">stake error</string>
+    <string name="create_multsign_error_please_try_later">Pembuatan MultSign error, silahkan coba lagi nanti</string>
+    <string name="lock_qlc_error_please_try_later">penguncian qlc error, silahkan coba lagi nanti</string>
+    <string name="this_txid_is_pledged">txid ini dijamin</string>
+    <string name="get_txid_info_error">mendapatkan info txid error</string>
+    <string name="process_error_please_try_later">proses error, silahkan coba lagi nanti</string>
+    <string name="only_watch_eth_wallet_cannot_exportkeystore">Hanya Menonton Dompet ETH Tidak dapat Mengekspor Keystore</string>
+    <string name="claim_success">Klaim Berhasil</string>
+    <string name="old_password_error">kata sandi lama salah</string>
+    <string name="this_is_a_wallet_waitting_to_be_created">Dompet ini menunggu untuk dibuat.</string>
+    <string name="claim_epidemic">Klaim</string>
+    <string name="you_have_checked_out_the_covid_19_live_updates_page_for_1_consecutive_day_your_cumulative_steps_now_is_59"><Data><![CDATA[<font color="#1E1E24">Anda telah memerika halaman update Covid-19 terbaru untuk</font><font color="#108EE9"><b>%1$s</b></font > <font color="#1E1E24">hari berturutan, langkah kumulatif Anda sekarang adalah</font> <font color="#F50F6D"><b>%2$s</b></font><font color="#1E1E24">.</font>]]></Data></string>
+    <string name="rules_for_covid_19_bounty">Aturan untuk Hadiah Covid-19</string>
+    <string name="_1_how_to_claim_qlc_for_staking_daily_bounty_check_out_the_covid_19_live_updates_page_at_least_once_a_day_you_are_entitled_to_claim_daily_qgas_bounty_in_your_qgas_wallet_the_qgas_amount_is_calculated_based_on_that_earned_from_100_qlc_for_staking_2_how_to_claim_social_distancing_bounty_check_out_the_covid_19_live_updates_page_at_least_once_a_day_with_your_daily_steps_no_greater_than_1000_for_consecutive_14_days_you_are_entitled_to_claim_100_qlc_the_reward_will_be_sent_to_your_nep_5_wallet_when_claimed">1. Bagaimana cara mengklaim QLC untuk staking hadiah harian:\n eriksa halaman update Covid-19 terbaru setidaknya sekali setiap hari, anda berhak mengklaim hadiah QGas pada dompet QGas. Jumlah QGas dihitung berdasarkan pada pendapatan dari  %1$s QLC untuk staking. \n\n2. Bagaimana cara mengklaim hadiah Pembatasan sosial:\n Periksa halaman update Covid-19 terbaru setidaknya sekali setiap hari dengan langkah-langkah harian anda yang tidak lebih dari 1000 untuk %2$s hari berturutan, anda berhak mengklaim %3$s QLC. Hadiah akan dikirimkan ke dompet Nep-5 anda ketika diklaim.</string>
+    <string name="daily_steps">Langkah Harian</string>
+    <string name="cumulative_qgas_claimed">Kumulatif QGAS Diklaim</string>
+    <string name="today_s_bounty_to_claim">Hadiah hari ini untuk diklaim</string>
+    <string name="daily_bounty">Hadiah Harian</string>
+    <string name="claim_daily_qgas_bounty_simply_by_checking_out_the_covid_19_live_updates_page_for_1_consecutive_day">Klaim hadiah harian QGas dari %2$s QLC yang distake dengan memeriksa halaman update Covid-19 terbaru untuk %1$s hari berturutan.</string>
+    <string name="check">Periksa</string>
+    <string name="qlc_social_distancing_bounty">Hadiah Pembatasan sosial QLC</string>
+    <string name="claim_100_qlc_when_your_mission_is_completed">Klaim %1$s QLC ketika misi anda selesai</string>
+    <string name="_14_days_left">%1$s hari tersisa</string>
+    <string name="covid_19_fighter_bounty">Hadiah Pejuang Covid-19</string>
+    <string name="you_have_claimed_the_bounty_for_today_come_back_here_tomorrow">Anda telah mengklaim hadiah untuk hari ini, datang kembali kesini besok!</string>
+    <string name="get_bounty_by_checking_out_covid_19_live_updates">Dapatkan hadiah dengan memeriksa update Covid-19 secara langsung</string>
+    <string name="claim_the_covid_19_fighter_bounty">Klaim hadiah pejuang Covid-19</string>
+    <string name="claim_now_epidemic">Klaim Sekarang</string>
+    <string name="you_haven_t_checked_out_the_covid_19_updates_for_a_while_your_qlc_for_staking_will_now_cumulate_from_0_with_the_upper_limit_of_1500">Anda belum memeriksa halaman Covid-19 terbaru untuk sebentar saja, QLC anda untuk staking sekarang akan dihitung dari 0 dengan batas teratas 1500</string>
+    <string name="claimed_epidemic">Diklaim</string>
+    <string name="covid_19_fighter_bounty_1">Hadiah Pejuang Covid-19</string>
 </resources>

@@ -132,4 +132,30 @@
         <attr name="cursorColor" format="color|reference" />
     </declare-styleable>
 
+    <!--透明渐变的TabView-->
+    <declare-styleable name="AlphaView">
+        <attr name="av_tabIconNormal" format="reference"/>
+        <attr name="av_tabIconSelected" format="reference"/>
+        <attr name="av_tabText" format="string"/>
+        <attr name="av_tabTextSize" format="dimension"/>
+        <attr name="av_textColorNormal" format="color"/>
+        <attr name="av_textColorSelected" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="SegmentedGroup">
+        <attr name="sc_corner_radius" format="dimension" />
+        <attr name="sc_border_width" format="dimension" />
+        <attr name="sc_tint_color" format="color" />
+        <attr name="sc_checked_text_color" format="color" />
+        <attr name="sc_checked_bg_color" format="color" />
+        <attr name="unchecked_tint_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="DefiOvalView">
+        <attr name="startAngle" format="float"/>
+        <attr name="sweepAngle" format="float"/>
+        <attr name="strokeWidthOval" format="integer"/>
+        <attr name="ovalColor" format="color" />
+    </declare-styleable>
+
 </resources>

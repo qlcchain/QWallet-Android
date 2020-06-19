@@ -61,7 +61,10 @@ import butterknife.OnClick;
  */
 
 public class MarketFragment extends BaseFragment implements MarketContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     MarketPresenter mPresenter;
     @BindView(R.id.tvPrice)

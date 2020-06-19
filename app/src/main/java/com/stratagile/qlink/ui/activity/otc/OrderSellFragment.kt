@@ -91,6 +91,9 @@ import kotlin.concurrent.thread
  */
 
 class OrderSellFragment : BaseFragment(), OrderSellContract.View {
+    override fun initDataFromNet() {
+
+    }
     override fun setEthTokens(ethWalletInfo: EthWalletInfo) {
         closeProgressDialog()
         if (ethWalletInfo.data.eth != null && !"false".equals(ethWalletInfo.data.eth.balance.toString()) && !"-1".equals(ethWalletInfo.data.eth.balance.toString())) {

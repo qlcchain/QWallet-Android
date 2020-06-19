@@ -114,8 +114,6 @@ public class Login1Presenter implements Login1Contract.Login1ContractPresenter{
                         //isSuccesse
                         mView.closeProgressDialog();
                         mView.getLoginVCodeSuccess();
-                        ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.success));
-
                     }
                 }, new Consumer<Throwable>() {
                     @Override

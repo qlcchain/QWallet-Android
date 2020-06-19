@@ -38,7 +38,10 @@ import butterknife.ButterKnife;
  */
 
 public class RankListFragment extends BaseFragment implements RankListContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     RankListPresenter mPresenter;
     @BindView(R.id.recyclerView)

@@ -10,6 +10,15 @@ public class QlcTokenbalance {
 
     private String symbol;
     private String balance;
+    private String vote;
+
+    public String getVote() {
+        return vote;
+    }
+
+    public void setVote(String vote) {
+        this.vote = vote;
+    }
 
     @Override
     public String toString() {

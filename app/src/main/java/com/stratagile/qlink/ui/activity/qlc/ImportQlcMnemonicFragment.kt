@@ -41,7 +41,9 @@ import qlc.utils.Helper
  */
 
 class ImportQlcMnemonicFragment : BaseFragment(), ImportQlcMnemonicContract.View {
+    override fun initDataFromNet() {
 
+    }
     @Inject
     lateinit internal var mPresenter: ImportQlcMnemonicPresenter
     private var viewModel: ImportViewModel? = null

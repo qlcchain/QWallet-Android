@@ -9,6 +9,10 @@
         android:icon="@mipmap/finance_n"
         android:title="@string/finance" />
     <item
+        android:id="@+id/item_defi"
+        android:icon="@mipmap/defi_n"
+        android:title="@string/defi" />
+    <item
         android:id="@+id/item_all_wallet"
         android:icon="@mipmap/wallet_n"
         android:title="@string/wallet" />

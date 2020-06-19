@@ -71,6 +71,17 @@ public class FireBaseUtils {
     public static String Campaign_Covid19_QGas_Claim = "Campaign_Covid19_QGas_Claim";
     public static String Campaign_Covid19_QLC_Claim = "Campaign_Covid19_QLC_Claim";
 
+    //defi首页点击defi
+    public static String Defi_Home_Top_Defi = "Defi_Home_Top_Defi";
+    public static String Defi_Home_Top_Hot = "Defi_Home_Top_Hot";
+    public static String Defi_Home_Top_Category = "Defi_Home_Top_Category";
+    public static String Defi_Home_Record = "Defi_Home_Record";
+    public static String Defi_Detail_KeyStats = "Defi_Detail_KeyStats";
+    public static String Defi_Detail_ActiveData = "Defi_Detail_ActiveData";
+    public static String Defi_Detail_HistoricalStats = "Defi_Detail_HistoricalStats";
+    public static String Defi_Detail_Rate_ = "Defi_Detail_Rate_";
+    public static String Defi_Detail_Explore = "Defi_Detail_Explore";
+
 
     public static void logEvent(Context context, String event) {
         Bundle bundle = new Bundle();

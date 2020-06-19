@@ -62,7 +62,10 @@ import io.reactivex.functions.Consumer;
  */
 
 public class Login1Fragment extends BaseFragment implements Login1Contract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     Login1Presenter mPresenter;
     @BindView(R.id.etAccount)

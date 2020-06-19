@@ -44,7 +44,9 @@ import kotlin.concurrent.thread
  */
 
 class ConfidantFragment : BaseFragment(), ConfidantContract.View {
+    override fun initDataFromNet() {
 
+    }
     @Inject
     lateinit internal var mPresenter: ConfidantPresenter
 

@@ -50,7 +50,6 @@ class PostedFragment : BaseFragment(), PostedContract.View {
     }
 
     override fun initDataFromNet() {
-        super.initDataFromNet()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

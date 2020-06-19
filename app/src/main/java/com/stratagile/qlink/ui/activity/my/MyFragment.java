@@ -50,6 +50,7 @@ import com.stratagile.qlink.utils.FireBaseUtils;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
 import com.stratagile.qlink.utils.TimeUtil;
+import com.stratagile.qlink.utils.UIUtils;
 import com.stratagile.qlink.view.MyItemView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -77,7 +78,10 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class MyFragment extends BaseFragment implements MyContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     MyPresenter mPresenter;
     @BindView(R.id.userAvatar)
@@ -109,6 +113,12 @@ public class MyFragment extends BaseFragment implements MyContract.View {
     RelativeLayout rlVoteEnter;
     @BindView(R.id.covid19)
     MyItemView covid19;
+    @BindView(R.id.status_bar)
+    TextView statusBar;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.rl1)
+    RelativeLayout rl1;
     private MainViewModel viewModel;
 
     @Nullable
@@ -119,6 +129,10 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         EventBus.getDefault().register(this);
         Bundle mBundle = getArguments();
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(UIUtils.getDisplayWidth(getActivity()), UIUtils.getStatusBarHeight(getActivity()));
+        statusBar.setLayoutParams(llp);
+
         return view;
     }
 
@@ -291,6 +305,8 @@ public class MyFragment extends BaseFragment implements MyContract.View {
         map.put("appOs", "Android");
         map.put("pushPlatform", "JIGUANG");
         map.put("pushId", JPushInterface.getRegistrationID(getActivity()));
+
+        KLog.i("极光推送id" + JPushInterface.getRegistrationID(getActivity()));
         mPresenter.bindPush(map);
     }
 

@@ -55,17 +55,17 @@ import kotlin.concurrent.thread
 class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
 
     override fun sign(unLock: UnLock) {
-        val signature = Neoutils.sign(unLock.data.result.unsignedRawTx.hexStringToByteArray(), neoWallet!!.privateKey)
-        KLog.i(signature.toHex())
-        unLock.data.result.signature = signature.toHex().toLowerCase()
-        unLock.data.result.publicKey = neoWallet!!.publicKey.toLowerCase()
         try {
+            val signature = Neoutils.sign(unLock.data.result.unsignedRawTx.hexStringToByteArray(), neoWallet!!.privateKey)
+            KLog.i(signature.toHex())
+            unLock.data.result.signature = signature.toHex().toLowerCase()
+            unLock.data.result.publicKey = neoWallet!!.publicKey.toLowerCase()
             thread {
                 benefitWithdraw(unLock)
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            toast(getString(R.string.revoke_failed))
+            runOnUiThread { toast(getString(R.string.revoke_failed)) }
             closeProgressDialog()
         }
     }
@@ -337,6 +337,7 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
                 KLog.i("远程work返回、、")
                 val (data, error) = result
                 if (error == null) {
+                    KLog.i("work正确、、、")
                     stateBlock.work = data
                     var hash = BlockMng.getHash(stateBlock)
                     var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(myStake.beneficial).substring(0, 64)))
@@ -573,15 +574,20 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
     }
 
     fun processWithdraw(stateBlock: StateBlock, unLock: UnLock) {
-        val client = QlcClient("https://nep5.qlcchain.online")
-        val params = JSONArray()
-        params.add(JSONObject.parse(Gson().toJson(stateBlock)))
-        params.add(myStake.nep5TxId)
-        params.add(JSONObject.parse(Gson().toJson(unLock.data.result)))
-        KLog.i(params)
-        val result = client.call("ledger_process", params)
-        KLog.i(result)
-        getNep5TxidWithDraw(unLock.data.result.unlockTxId)
+        try {
+            val client = QlcClient("https://nep5.qlcchain.online")
+            val params = JSONArray()
+            params.add(JSONObject.parse(Gson().toJson(stateBlock)))
+            params.add(myStake.nep5TxId)
+            params.add(JSONObject.parse(Gson().toJson(unLock.data.result)))
+            KLog.i(params)
+            KLog.i("开始赎回")
+            val result = client.call("ledger_process", params)
+            KLog.i(result)
+            getNep5TxidWithDraw(unLock.data.result.unlockTxId)
+        } catch (e : Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun process(stateBlock: StateBlock) {

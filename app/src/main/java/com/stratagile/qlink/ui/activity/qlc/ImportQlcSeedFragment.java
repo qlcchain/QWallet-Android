@@ -48,7 +48,10 @@ import qlc.utils.Helper;
  */
 
 public class ImportQlcSeedFragment extends BaseFragment implements ImportQlcSeedContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     ImportQlcSeedPresenter mPresenter;
     @BindView(R.id.etPrivateKey)

@@ -24,6 +24,7 @@ import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.otc.TradeOrderAppealListAdapter
 import com.stratagile.qlink.ui.adapter.otc.TradeOrderListAdapter
 import com.stratagile.qlink.utils.AccountUtil
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.fragment_posted.*
 import kotlinx.android.synthetic.main.fragment_process.*
 import kotlinx.android.synthetic.main.fragment_process.recyclerView
@@ -51,7 +52,6 @@ class AppealsFragment : BaseFragment(), AppealsContract.View {
 
     override fun initDataFromNet() {
         currentPage = 0
-        super.initDataFromNet()
         getTradeOrderList()
     }
 

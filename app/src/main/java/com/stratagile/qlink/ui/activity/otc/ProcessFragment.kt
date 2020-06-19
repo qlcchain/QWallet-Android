@@ -46,7 +46,6 @@ class ProcessFragment : BaseFragment(), ProcessContract.View {
 
     override fun initDataFromNet() {
         currentPage = 0
-        super.initDataFromNet()
         getTradeOrderList()
     }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="active_data_tvl_usd" type="id"/>
+    <item name="active_data_eth" type="id"/>
+    <item name="active_data_dai" type="id"/>
+    <item name="active_data_btc" type="id"/>
+</resources>

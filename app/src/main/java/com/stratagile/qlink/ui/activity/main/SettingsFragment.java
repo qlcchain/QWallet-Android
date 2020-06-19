@@ -46,7 +46,10 @@ import butterknife.OnClick;
  */
 
 public class SettingsFragment extends BaseFragment implements SettingsContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     SettingsPresenter mPresenter;
     @BindView(R.id.switchBar)

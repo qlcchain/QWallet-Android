@@ -712,6 +712,9 @@
         <activity android:name=".ui.activity.my.EpidemicClaimQlcActivity" />
         <activity android:name=".ui.activity.my.EpidemicWebViewActivity" />
         <activity android:name=".ui.activity.my.EpidemicInviteNowActivity" />
+        <activity android:name=".ui.activity.defi.DefiDetailActivity" />
+        <activity android:name=".ui.activity.defi.DefiRateActivity" />
+        <activity android:name=".ui.activity.defi.DefiNewsDetailActivity" />
 
         <service
             android:name="com.stratagile.qlink.service.JpushService"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="@string/date_defi"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="156dp"
+            android:text="@string/tvl_usd"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvEthDesc"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="@string/total_eth_locked"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_29282a"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/f6f6f6"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

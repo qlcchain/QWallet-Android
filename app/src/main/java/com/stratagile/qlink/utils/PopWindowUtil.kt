@@ -87,7 +87,6 @@ object PopWindowUtil {
     fun showSharePopWindow(activity: Activity, showView: View, arrayList: MutableList<String>, onItemSelectListener: OnItemSelectListener) {
         val maskView = LayoutInflater.from(activity).inflate(R.layout.share_pop_layout, null)
         val builder = BottomSheet.Builder(activity)
-//        builder.setApplyTopPadding(true)
         builder.setApplyTopPadding(false)
 
         builder.setCustomView(maskView)

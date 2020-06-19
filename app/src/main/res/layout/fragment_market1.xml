@@ -4,6 +4,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@drawable/main_bg_shape"
+        android:gravity="center"
+        android:textColor="@color/color_333"
+        android:textSize="9sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/main_bg_shape">
+
+
+        <ImageView
+            android:id="@+id/iv_avater"
+            android:layout_width="50dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_protfolio_more"
+            android:transitionName="avater" />
+
+        <com.stratagile.qlink.view.SegmentedGroup
+            android:id="@+id/segmentControlView"
+            android:layout_width="wrap_content"
+            android:layout_height="29dp"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            app:sc_border_width="1dp"
+            app:sc_checked_text_color="@color/mainColor"
+            app:sc_corner_radius="4dp"
+            app:sc_tint_color="@color/white">
+
+            <RadioButton
+                android:id="@+id/button21"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buy"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/button22"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sell"
+                android:textSize="12sp" />
+        </com.stratagile.qlink.view.SegmentedGroup>
+        <RelativeLayout
+            android:id="@+id/rlWallet"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_wallet"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="12dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/add_j" />
+        </RelativeLayout>
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"

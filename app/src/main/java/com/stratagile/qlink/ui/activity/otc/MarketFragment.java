@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -18,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
@@ -28,29 +29,23 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.db.EosAccount;
-import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.eventbus.GetPairs;
 import com.stratagile.qlink.entity.eventbus.ShowMiningAct;
 import com.stratagile.qlink.entity.eventbus.StartFilter;
 import com.stratagile.qlink.entity.newwinq.MiningAct;
 import com.stratagile.qlink.entity.otc.TradePair;
-import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.ui.activity.main.MainViewModel;
 import com.stratagile.qlink.ui.activity.mining.MiningInviteActivity;
 import com.stratagile.qlink.ui.activity.my.AccountActivity;
-import com.stratagile.qlink.ui.activity.my.Login1Fragment;
-import com.stratagile.qlink.ui.activity.my.RegiesterFragment;
 import com.stratagile.qlink.ui.activity.otc.component.DaggerMarketComponent;
 import com.stratagile.qlink.ui.activity.otc.contract.MarketContract;
 import com.stratagile.qlink.ui.activity.otc.module.MarketModule;
 import com.stratagile.qlink.ui.activity.otc.presenter.MarketPresenter;
-import com.stratagile.qlink.ui.adapter.otc.EntrustOrderListAdapter;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.FireBaseUtils;
-import com.stratagile.qlink.utils.KotlinConvertJavaUtils;
 import com.stratagile.qlink.utils.SpUtil;
-import com.stratagile.qlink.utils.eth.ETHWalletUtils;
+import com.stratagile.qlink.utils.UIUtils;
+import com.stratagile.qlink.view.SegmentedGroup;
 import com.stratagile.qlink.view.SweetAlertDialog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -69,8 +64,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -91,6 +84,15 @@ import io.reactivex.functions.Function;
  */
 
 public class MarketFragment extends BaseFragment implements MarketContract.View {
+    @BindView(R.id.iv_avater)
+    ImageView ivAvater;
+    @BindView(R.id.rlWallet)
+    RelativeLayout rlWallet;
+
+    @Override
+    protected void initDataFromNet() {
+
+    }
 
     @Inject
     MarketPresenter mPresenter;
@@ -104,6 +106,16 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     TextView tvFilter;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+    @BindView(R.id.status_bar)
+    TextView statusBar;
+    @BindView(R.id.button21)
+    RadioButton button21;
+    @BindView(R.id.button22)
+    RadioButton button22;
+    @BindView(R.id.segmentControlView)
+    SegmentedGroup segmentControlView;
+    @BindView(R.id.rl1)
+    RelativeLayout rl1;
     private MainViewModel viewModel;
 
     @Nullable
@@ -115,10 +127,14 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         EventBus.getDefault().register(this);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(UIUtils.getDisplayWidth(getActivity()), UIUtils.getStatusBarHeight(getActivity()));
+        statusBar.setLayoutParams(llp);
+
         String local = FileUtil.getStrDataFromFile(new File(Environment.getExternalStorageDirectory() + "/Qwallet/tradePair.json"));
         Gson gson = new Gson();
         if (!"".equals(local)) {
-            ArrayList<TradePair.PairsListBean> localPair = gson.fromJson(local, new TypeToken<ArrayList<TradePair.PairsListBean >>() {}.getType());
+            ArrayList<TradePair.PairsListBean> localPair = gson.fromJson(local, new TypeToken<ArrayList<TradePair.PairsListBean>>() {
+            }.getType());
             for (TradePair.PairsListBean pairsListBean1 : localPair) {
                 pairsListBean1.setSelect(true);
             }
@@ -190,8 +206,27 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             }
         }, 1000);
 
+        button21.toggle();
+        segmentControlView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (viewModel.pairsLiveData.getValue() == null || viewModel.pairsLiveData.getValue().size() == 0) {
+                    EventBus.getDefault().post(new GetPairs());
+                } else {
+                    if (i == R.id.button21) {
+                        FireBaseUtils.logEvent(getActivity(), FireBaseUtils.OTC_Home_BUY);
+                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeSell);
+                    } else {
+                        FireBaseUtils.logEvent(getActivity(), FireBaseUtils.OTC_Home_SELL);
+                        viewModel.currentEntrustOrderType.postValue(ConstantValue.orderTypeBuy);
+                    }
+                }
+            }
+        });
+
         return view;
     }
+
 
     @Override
     public void onDestroy() {
@@ -262,8 +297,9 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
     }
 
     private SweetAlertDialog sweetAlertDialog;
+
     private void showMiningAct(MiningAct miningAct) {
-        View view  = getLayoutInflater().inflate(R.layout.alert_mining, null, false);
+        View view = getLayoutInflater().inflate(R.layout.alert_mining, null, false);
         ImageView ivClose = view.findViewById(R.id.ivClose);
         TextView qlc = view.findViewById(R.id.qlc);
         qlc.setText(BigDecimal.valueOf(miningAct.getList().get(0).getTotalRewardAmount()).stripTrailingZeros().toPlainString());
@@ -314,7 +350,40 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             }
         });
         mPresenter.getPairs();
+        ivAvater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ConstantValue.currentUser == null) {
+                    startActivity(new Intent(getActivity(), AccountActivity.class));
+                    return;
+                }
+                FireBaseUtils.logEvent(getActivity(), FireBaseUtils.OTC_Home_Record);
+                Intent intent1 = new Intent(getActivity(), OtcOrderRecordActivity.class);
+                startActivity(intent1);
+            }
+        });
+        rlWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ConstantValue.currentUser == null) {
+                    startActivity(new Intent(getActivity(), AccountActivity.class));
+                    return;
+                }
+                FireBaseUtils.logEvent(getActivity(), FireBaseUtils.OTC_Home_NewOrder);
+                startActivityForResult(new Intent(getActivity(), NewOrderActivity.class), NEW_ORDER);
+            }
+        });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_ORDER) {
+            viewModel.timeStampLiveData.postValue(System.currentTimeMillis());
+        }
+    }
+
+    public static final int NEW_ORDER = 8;
 
     public void getPairs() {
         if (viewModel.pairsLiveData.getValue() != null) {
@@ -359,7 +428,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
         String local = FileUtil.getStrDataFromFile(new File(Environment.getExternalStorageDirectory() + "/Qwallet/tradePair.json"));
         Gson gson = new Gson();
         if (!"".equals(local)) {
-            ArrayList<TradePair.PairsListBean> localPair = gson.fromJson(local, new TypeToken<ArrayList<TradePair.PairsListBean >>() {
+            ArrayList<TradePair.PairsListBean> localPair = gson.fromJson(local, new TypeToken<ArrayList<TradePair.PairsListBean>>() {
             }.getType());
             for (TradePair.PairsListBean pairsListBean : pairsListBeans) {
                 for (TradePair.PairsListBean pairsListBean1 : localPair) {

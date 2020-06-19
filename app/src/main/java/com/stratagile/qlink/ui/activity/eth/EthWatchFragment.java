@@ -37,7 +37,10 @@ import butterknife.OnClick;
  */
 
 public class EthWatchFragment extends BaseFragment implements EthWatchContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     EthWatchPresenter mPresenter;
     private static final String ARG_TYPE = "arg_type";

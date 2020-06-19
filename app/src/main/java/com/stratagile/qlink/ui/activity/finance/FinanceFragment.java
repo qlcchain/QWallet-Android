@@ -56,7 +56,10 @@ import butterknife.OnClick;
  */
 
 public class FinanceFragment extends BaseFragment implements FinanceContract.View {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     FinancePresenter mPresenter;
     @BindView(R.id.recyclerView)

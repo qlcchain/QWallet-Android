@@ -23,7 +23,7 @@ public class QlcHttpClient {
 	
 	public JSONObject send(JSONObject params) {
 		
-		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(40, TimeUnit.SECONDS).build();
+		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS).build();
 
 		try {
 			

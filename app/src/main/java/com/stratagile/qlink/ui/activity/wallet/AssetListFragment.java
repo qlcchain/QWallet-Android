@@ -57,7 +57,10 @@ import butterknife.ButterKnife;
  */
 
 public class AssetListFragment extends MyBaseFragment implements AssetListContract.View, SwipeRefreshLayout.OnRefreshListener {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     AssetListPresenter mPresenter;
     @Inject

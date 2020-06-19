@@ -31,7 +31,10 @@ import butterknife.ButterKnife;
  */
 
 public class WalletListFragment extends MyBaseFragment implements WalletListContract.View ,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener {
+    @Override
+    protected void initDataFromNet() {
 
+    }
     @Inject
     WalletListPresenter mPresenter;
     @Inject

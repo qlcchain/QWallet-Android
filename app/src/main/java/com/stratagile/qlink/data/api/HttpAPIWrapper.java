@@ -65,6 +65,15 @@ import com.stratagile.qlink.entity.VertifyVpn;
 import com.stratagile.qlink.entity.VoteResult;
 import com.stratagile.qlink.entity.WifiRegisteResult;
 import com.stratagile.qlink.entity.WinqGasBack;
+import com.stratagile.qlink.entity.defi.DefiCategory;
+import com.stratagile.qlink.entity.defi.DefiDetail;
+import com.stratagile.qlink.entity.defi.DefiList;
+import com.stratagile.qlink.entity.defi.DefiNewsDetail;
+import com.stratagile.qlink.entity.defi.DefiNewsList;
+import com.stratagile.qlink.entity.defi.DefiRating;
+import com.stratagile.qlink.entity.defi.DefiStateList;
+import com.stratagile.qlink.entity.defi.DefiStatsCache;
+import com.stratagile.qlink.entity.defi.RatingInfo;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
@@ -1356,6 +1365,70 @@ public class HttpAPIWrapper {
         }
     }
 
+    public Observable<DefiList> defiProjectList(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiProjectList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiProjectList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiStateList> defiStatsList(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiStatsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiStatsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiRating> defiRating(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiRating(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiRating(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiCategory> defiCategoryList(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiCategoryList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiCategoryList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiDetail> defiProject(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiProject(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiProject(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiNewsList> defiNewsList(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiNewsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiNewsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiNewsDetail> defiNews(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiNews(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiNews(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<RatingInfo> defiRatingInfo(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiRatingInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiRatingInfo(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<DefiStatsCache> defiStasCache(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiStasCache(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiStasCache(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
     /**
      * 给任何Http的Observable加上通用的线程调度器
      */
@@ -1557,22 +1630,16 @@ public class HttpAPIWrapper {
     private static RequestBody addParams(Map<String, String> data) {
         Map<String, Object> map = new HashMap<>();
         //false
-        if (false) {
-            map.put("appid", MainConstant.MainAppid);
-            map.put("timestamp", (Calendar.getInstance().getTimeInMillis() + new Random().nextInt(1000)) + "");
-            map.put("params", JSONObject.toJSON(data));
-            map.put("system", "Android " + SystemUtil.getSystemVersion() + " " + SystemUtil.getSystemModel() + " " + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.MainSign, "UTF-8"));
-        } else {
-            map.put("appid", "MIFI");
-            map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
-            String timeStamp = (Calendar.getInstance().getTimeInMillis() / 1000 + new Random().nextInt(100)) + "";
+        map.put("appid", MainConstant.MainAppid);
+        map.put("system", "Android" + SystemUtil.getSystemVersion() + " " + SystemUtil.getDeviceBrand() +SystemUtil.getSystemModel() + " version:" + VersionUtil.getAppVersionCode(AppConfig.getInstance()));
+        String timeStamp = (Calendar.getInstance().getTimeInMillis()+ new Random().nextInt(1000)) + "";
 
-            KLog.i("时间戳为：" + timeStamp);
-            map.put("timestamp", timeStamp);
-            map.put("params", JSONObject.toJSON(data));
-            map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
-        }
+        KLog.i("时间戳为：" + timeStamp);
+        map.put("timestamp", timeStamp);
+        map.put("params", JSONObject.toJSON(data));
+        map.put("sign", DigestUtils.getSignature((JSONObject) JSONObject.toJSON(map), MainConstant.unKownKeyButImportant, "UTF-8"));
+
+
 //        KLog.i("传的参数为:" + map);
         MediaType textType = MediaType.parse("text/plain");
         String bodyStr = JSONObject.toJSON(map).toString();
