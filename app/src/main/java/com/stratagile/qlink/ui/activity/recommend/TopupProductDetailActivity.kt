@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -77,7 +78,10 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
     override fun initView() {
         setContentView(R.layout.activity_topup_product_detail)
         rlPartTuan.setBackgroundDrawable(backDrawable)
-
+        KLog.i("签名信息为：" + packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures)
+        packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures.forEach {
+            KLog.i(MD5Util.getBytesMD5(it.toByteArray()))
+        }
         rlNewPartTuan.setBackgroundDrawable(backDrawableNew)
         topupBean = intent.getParcelableExtra("productBean")
         selectToken = intent.getParcelableExtra("selectedPayToken")
@@ -595,6 +599,7 @@ class TopupProductDetailActivity : BaseActivity(), TopupProductDetailContract.Vi
         tvRemainTime.text = ""
         topupGroupListAdapter.setOnItemChildClickListener { adapter, view, position ->
             selectedGroup = topupGroupListAdapter.data[position]
+            FireBaseUtils.logEvent(this, FireBaseUtils.Topup_Join_Now)
             var confirmIntent = Intent(this@TopupProductDetailActivity, TopupConfirmGroupOrderActivity::class.java)
             confirmIntent.putExtra("productBean", topupBean)
             confirmIntent.putExtra("selectedPayToken", selectToken)

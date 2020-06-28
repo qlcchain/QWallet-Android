@@ -22,7 +22,7 @@ public class ConstantValue {
     public static String ENVIRONMENT = "environment";
     public static String LOCALVERSIONCODE = "localversioncode";
     //升级到这个版本是否需要显示guest页面
-
+    public static int gasPrice = 30;
     public static boolean thisVersionShouldShowGuest = true;
     public static String P2PID = "p2pid";
     public static String topUpP2pId = "topUpP2pId";

@@ -2,14 +2,21 @@ package com.stratagile.qlink.ui.activity.reward
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.widget.ImageView
+import android.view.View
+import android.webkit.JavascriptInterface
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.bumptech.glide.Glide
 import com.pawegio.kandroid.toast
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.constant.MainConstant
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.VCodeVerifyCode
@@ -22,6 +29,7 @@ import com.stratagile.qlink.ui.activity.reward.module.ClaimRewardModule
 import com.stratagile.qlink.ui.activity.reward.presenter.ClaimRewardPresenter
 import com.stratagile.qlink.utils.AccountUtil
 import kotlinx.android.synthetic.main.activity_claim_reward.*
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -78,19 +86,65 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
             if (receiveQlcWallet == null) {
                 return@setOnClickListener
             }
-            if ("".equals(etVcode.text.toString())) {
-                return@setOnClickListener
-            }
             if (isInvite) {
                 claiminviteQgas()
             } else {
                 claimQgas()
             }
         }
-        ivVcode.setOnClickListener {
-            getVcode()
+//        ivVcode.setOnClickListener {
+//            getVcode()
+//        }
+//        getVcode()
+
+        webview.setBackgroundColor(Color.WHITE)
+        webview.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null)
+        webview.settings.useWideViewPort = true
+        webview.settings.loadWithOverviewMode = true
+        // 禁止缓存加载，以确保可获取最新的验证图片。
+        // 禁止缓存加载，以确保可获取最新的验证图片。
+        webview.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        // 设置不使用默认浏览器，而直接使用WebView组件加载页面。
+        // 设置不使用默认浏览器，而直接使用WebView组件加载页面。
+        webview.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                KLog.i(url)
+                view.loadUrl(url)
+                return true
+            }
         }
-        getVcode()
+        // 设置WebView组件支持加载JavaScript。
+        // 设置WebView组件支持加载JavaScript。
+        webview.settings.javaScriptEnabled = true
+        webview.isHorizontalScrollBarEnabled = false
+        webview.isVerticalScrollBarEnabled = false
+        // 建立JavaScript调用Java接口的桥梁。
+        // 建立JavaScript调用Java接口的桥梁。
+        webview.addJavascriptInterface(WebAppInterface(), "successCallback")
+        webview.visibility = View.VISIBLE
+        webview.loadUrl("file:///android_asset/slideActivity.html")
+    }
+    var token = ""
+    var sid = ""
+    var sig = ""
+    inner class WebAppInterface {
+        @JavascriptInterface
+        fun postMessage(message: String?) {
+
+        }
+
+        @JavascriptInterface
+        fun sendToken(token1: String, sid1: String, sig1: String) {
+            token = token1
+            sid = sid1
+            sig = sig1
+            KLog.i(token)
+            KLog.i(sid)
+            KLog.i(sig)
+            runOnUiThread {
+                webview.setVisibility(View.GONE)
+            }
+        }
     }
 
     fun getVcode() {
@@ -105,18 +159,24 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
     }
 
     override fun setInviteCode(vCodeVerifyCode: VCodeVerifyCode) {
-        Glide.with(this)
-                .load(vCodeVerifyCode.codeUrl)
-                .into(ivVcode)
+
     }
 
     fun claimQgas() {
+        if ("".equals(token)) {
+            toast(getString(R.string.please_complete_the_man_machine_verfy))
+            return
+        }
         showProgressDialog()
-        var map = hashMapOf<String, String>()
+        val map: MutableMap<String, String> = HashMap<String, String>()
+        map["sessionId"] = sid
+        map["sig"] = sig
+        map["afsToken"] = token
+        map["appKey"] = MainConstant.afsAppKey
+        map["scene"] = MainConstant.ncActivity
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveQlcWallet!!.address
-        map["code"] = etVcode.text.toString().trim()
         mPresenter.claimQgas(map)
     }
 
@@ -126,7 +186,11 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveQlcWallet!!.address
-        map["code"] = etVcode.text.toString().trim()
+        map["sessionId"] = sid
+        map["sig"] = sig
+        map["afsToken"] = token
+        map["appKey"] = MainConstant.afsAppKey
+        map["scene"] = MainConstant.ncActivity
         mPresenter.claiminviteQgas(map)
     }
 

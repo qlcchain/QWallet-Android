@@ -100,37 +100,48 @@
         android:layout_marginLeft="15dp"
         android:layout_height="1dp"/>
 
-    <LinearLayout
-        android:id="@+id/llVcode"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="15dp"
-        android:gravity="center_vertical"
-        android:layout_height="47dp">
-        <EditText
-            android:id="@+id/etVcode"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            android:background="@null"
-            android:hint="@string/verification_code"
-            android:textSize="16sp"
-            android:layout_height="match_parent" />
-        <ImageView
-            android:id="@+id/ivVcode"
-            android:layout_width="100dp"
-            android:layout_height="25dp" />
+        android:layout_height="48dp">
+        <LinearLayout
+            android:id="@+id/llVcode"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:layout_height="47dp">
+            <EditText
+                android:id="@+id/etVcode"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:background="@null"
+                android:hint="@string/verification_code"
+                android:textSize="16sp"
+                android:layout_height="match_parent" />
+            <ImageView
+                android:id="@+id/ivVcode"
+                android:layout_width="100dp"
+                android:layout_height="25dp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:background="@color/color_f2f2f2"
-        android:layout_marginLeft="15dp"
-        android:layout_height="1dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_f2f2f2"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_height="1dp"/>
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvClaim"

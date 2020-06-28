@@ -262,4 +262,18 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Topu
 
         return ""
     }
+
+    fun getEthPrice() {
+        val infoMap = java.util.HashMap<String, Any>()
+        val tokens = arrayListOf<String>("ETH")
+        infoMap["symbols"] = tokens
+        infoMap["coin"] = ConstantValue.currencyBean.name
+        mCompositeDisposable.add(httpAPIWrapper.getTokenPrice(infoMap).subscribe({
+            mView.setEthPrice(it)
+        }, {
+
+        }, {
+
+        }))
+    }
 }

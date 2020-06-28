@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import com.pawegio.kandroid.alert
 import com.pawegio.kandroid.toast
@@ -21,10 +22,7 @@ import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
-import com.stratagile.qlink.entity.AllWallet
-import com.stratagile.qlink.entity.EthWalletDetail
-import com.stratagile.qlink.entity.EthWalletInfo
-import com.stratagile.qlink.entity.SwitchToOtc
+import com.stratagile.qlink.entity.*
 import com.stratagile.qlink.entity.topup.GroupItemList
 import com.stratagile.qlink.entity.topup.TopupJoinGroup
 import com.stratagile.qlink.entity.topup.TopupOrder
@@ -37,16 +35,13 @@ import com.stratagile.qlink.ui.activity.topup.presenter.TopupDeductionEthChainPr
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.*
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.*
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.etEthTokenSendMemo
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.llSelectQlcWallet
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.tvAmountQgas
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.tvQGASBalance
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.tvQlcWalletAddess
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.tvQlcWalletName
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.tvReceiveAddress
-import kotlinx.android.synthetic.main.activity_topup_eth_pay.tvSend
-import kotlinx.android.synthetic.main.activity_topup_qlc_pay.*
+import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.group
+import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.ivShow
+import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.llOpen
+import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.seekBar
+import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.tvCostEth
+import kotlinx.android.synthetic.main.activity_topup_deduction_eth_chain.tvGwei
+import kotlinx.android.synthetic.main.fragment_order_buy.*
 import org.greenrobot.eventbus.EventBus
 import org.web3j.utils.Convert
 import java.io.File
@@ -445,6 +440,20 @@ class TopupDeductionEthChainActivity : BaseActivity(), TopupDeductionEthChainCon
 
     }
 
+    var isOpen = false
+
+    private fun toggleCost() {
+        if (isOpen) {
+            isOpen = false
+            group.visibility = View.GONE
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivShow) { animation, canceled, value, velocity -> }
+        } else {
+            isOpen = true
+            group.visibility = View.VISIBLE
+            SpringAnimationUtil.startRotatoSpringViewAnimation(ivShow) { animation, canceled, value, velocity -> }
+        }
+    }
+
     var qgasCount = BigDecimal.ZERO
 
     lateinit var saHalf: ScaleAnimation
@@ -457,7 +466,7 @@ class TopupDeductionEthChainActivity : BaseActivity(), TopupDeductionEthChainCon
 
     private val gasLimit = 60000
 
-    private var gasPrice = 6
+    private var gasPrice = ConstantValue.gasPrice
 
     private var gasEth: String? = null
 
@@ -578,7 +587,53 @@ class TopupDeductionEthChainActivity : BaseActivity(), TopupDeductionEthChainCon
                 ToastUtil.displayShortToast(getString(R.string.not_enough) + " eth")
             }
         }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                gasPrice = progress + ConstantValue.gasPrice
+                tvGwei.text = "$gasPrice gwei"
+                val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
+                val f = gas.multiply(BigDecimal(gasLimit))
+
+                val gasMoney = f.multiply(BigDecimal(ethPrice.toString() + ""))
+                val f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+                KLog.i(f1)
+                gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
+                tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+            }
+        })
+        llOpen.setOnClickListener {
+            toggleCost()
+        }
+
+        mPresenter.getEthPrice()
     }
+
+    override fun setEthPrice(tokenPrice: TokenPrice) {
+        ethPrice = tokenPrice.data[0].price
+        gasPrice = seekBar.progress + ConstantValue.gasPrice
+        tvGwei.text = "$gasPrice gwei"
+        val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
+        val f = gas.multiply(BigDecimal(gasLimit))
+        val gasMoney = f.multiply(BigDecimal(ethPrice.toString() + ""))
+        val f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+        gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
+        tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
+    }
+
+
+    /**
+     * eth当前的市价
+     */
+    private var ethPrice: Double = 0.toDouble()
 
     fun sendPayToken() {
         showPayAnimation()

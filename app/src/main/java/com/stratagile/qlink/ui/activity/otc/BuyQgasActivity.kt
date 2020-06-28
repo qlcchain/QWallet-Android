@@ -182,7 +182,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                 return@setOnClickListener
             }
             if (entrustOrderInfo.order.userId.equals(ConstantValue.currentUser.userId)) {
-
+                toast(getString(R.string.this_is_your_order))
                 return@setOnClickListener
             }
             if ("".equals(etQgas.text.toString())) {
@@ -271,7 +271,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
                             etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etQgas.setText((etUsdt.text.toString().toBigDecimal().divide(entrustOrderInfo.order.unitPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString())
+                            etQgas.setText((etUsdt.text.toString().toBigDecimal().divide(entrustOrderInfo.order.unitPrice.toBigDecimal(), 8, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {
@@ -287,7 +287,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
 
             }
         })
-        etQgas.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
+        etQgas.filters = arrayOf<InputFilter>(InputNumLengthFilter(8, 13))
         etQgas.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (etQgas.hasFocus()) {
@@ -298,7 +298,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
                             etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
+                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {

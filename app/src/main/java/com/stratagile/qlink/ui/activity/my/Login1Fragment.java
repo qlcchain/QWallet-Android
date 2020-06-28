@@ -1,15 +1,22 @@
 package com.stratagile.qlink.ui.activity.my;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -18,6 +25,7 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseFragment;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.constant.MainConstant;
 import com.stratagile.qlink.db.UserAccount;
 import com.stratagile.qlink.entity.VcodeLogin;
 import com.stratagile.qlink.entity.eventbus.LoginSuccess;
@@ -33,6 +41,8 @@ import com.stratagile.qlink.utils.RSAEncrypt;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -62,10 +72,14 @@ import io.reactivex.functions.Consumer;
  */
 
 public class Login1Fragment extends BaseFragment implements Login1Contract.View {
+    @BindView(R.id.webview)
+    WebView webview;
+
     @Override
     protected void initDataFromNet() {
 
     }
+
     @Inject
     Login1Presenter mPresenter;
     @BindView(R.id.etAccount)
@@ -75,7 +89,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
     @BindView(R.id.tvVerificationCode)
     TextView tvVerificationCode;
     @BindView(R.id.llVcode)
-    LinearLayout llVcode;
+    RelativeLayout llVcode;
     @BindView(R.id.etPassword)
     EditText etPassword;
     @BindView(R.id.tvLogin)
@@ -116,6 +130,70 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
             etAccount.setSelection(etAccount.getText().length());
         }
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        webview.setBackgroundColor(Color.WHITE);
+        webview.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        webview.getSettings().setUseWideViewPort(true);
+        webview.getSettings().setLoadWithOverviewMode(true);
+        // 禁止缓存加载，以确保可获取最新的验证图片。
+        webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        // 设置不使用默认浏览器，而直接使用WebView组件加载页面。
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                KLog.i(url);
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        // 设置WebView组件支持加载JavaScript。
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.setHorizontalScrollBarEnabled(false);
+        webview.setVerticalScrollBarEnabled(false);
+        // 建立JavaScript调用Java接口的桥梁。
+        webview.addJavascriptInterface(new WebAppInterface(), "successCallback");
+    }
+
+    public class WebAppInterface {
+
+        @JavascriptInterface
+        public void postMessage(String message) {
+            try {
+                JSONObject jsonObject = new JSONObject(message);
+                String token = jsonObject.getString("token");
+                String sid = jsonObject.getString("sid");
+                String sig = jsonObject.getString("sig");
+                KLog.i(token);
+                KLog.i(sid);
+                KLog.i(sig);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        @JavascriptInterface
+        public void sendToken(String token, String sid, String sig) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    KLog.i(token);
+                    KLog.i(sid);
+                    KLog.i(sig);
+                    webview.setVisibility(View.GONE);
+                    Map map = new HashMap<String, String>();
+                    map.put("account", etAccount.getText().toString().trim().toLowerCase());
+                    map.put("sessionId", sid);
+                    map.put("sig", sig);
+                    map.put("afsToken", token);
+                    map.put("appKey", MainConstant.afsAppKey);
+                    map.put("scene", MainConstant.ncRegister);
+                    mPresenter.getSignInVcode(map);
+                }
+            });
+        }
     }
 
     boolean isVCodeLogin = false;
@@ -235,6 +313,7 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                 break;
         }
     }
+
     private Disposable mdDisposable;
 
     private void startVCodeCountDown() {
@@ -272,10 +351,12 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
      * 获取登录验证码
      */
     private void getLoginVcode() {
-        showProgressDialog();
-        Map map = new HashMap<String, String>();
-        map.put("account", etAccount.getText().toString().trim().toLowerCase());
-        mPresenter.getSignInVcode(map);
+        webview.setVisibility(View.VISIBLE);
+        webview.loadUrl("file:///android_asset/slideLogin.html");
+//        showProgressDialog();
+//        Map map = new HashMap<String, String>();
+//        map.put("account", etAccount.getText().toString().trim().toLowerCase());
+//        mPresenter.getSignInVcode(map);
     }
 
     private void vCodeLogin() {

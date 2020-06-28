@@ -54,6 +54,8 @@ public class FireBaseUtils {
     public static String Topup_Confirm_Send_QGas = "Topup_Confirm_Send_QGas";
     public static String Topup_Confirm_Send_QLC = "Topup_Confirm_Send_QLC";
 
+    public static String Topup_Join_Now = "Topup_Join_Now";
+
     public static String Topup_GroupPlan_10_off = "Topup_GroupPlan_10%off";
     public static String Topup_GroupPlan_20_off = "Topup_GroupPlan_20%off";
     public static String Topup_GroupPlan_30_off = "Topup_GroupPlan_30%off";

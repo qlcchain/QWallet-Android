@@ -431,10 +431,17 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
             ArrayList<TradePair.PairsListBean> localPair = gson.fromJson(local, new TypeToken<ArrayList<TradePair.PairsListBean>>() {
             }.getType());
             for (TradePair.PairsListBean pairsListBean : pairsListBeans) {
+                boolean hasLocalPair = false;
                 for (TradePair.PairsListBean pairsListBean1 : localPair) {
                     if (pairsListBean.getTradeToken().equals(pairsListBean1.getTradeToken()) && pairsListBean.getPayToken().equals(pairsListBean1.getPayToken())) {
-                        pairsListBean.setSelect(true);
+                        hasLocalPair = true;
+                        if (pairsListBean1.isSelect()) {
+                            pairsListBean.setSelect(true);
+                        }
                     }
+                }
+                if (!hasLocalPair) {
+                    pairsListBean.setSelect(true);
                 }
             }
         } else {

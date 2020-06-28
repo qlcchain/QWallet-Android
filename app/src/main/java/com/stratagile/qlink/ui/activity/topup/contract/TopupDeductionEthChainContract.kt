@@ -1,6 +1,7 @@
 package com.stratagile.qlink.ui.activity.topup.contract
 
 import com.stratagile.qlink.entity.EthWalletInfo
+import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.topup.TopupJoinGroup
 import com.stratagile.qlink.entity.topup.TopupOrder
 import com.stratagile.qlink.ui.activity.base.BasePresenter
@@ -39,6 +40,8 @@ interface TopupDeductionEthChainContract {
         fun getEthWalletBack(ethWalletInfo: EthWalletInfo)
 
         fun sendPayTokenSuccess(s : String)
+
+        fun setEthPrice(tokenPrice: TokenPrice)
     }
 
     interface TopupDeductionEthChainContractPresenter : BasePresenter {

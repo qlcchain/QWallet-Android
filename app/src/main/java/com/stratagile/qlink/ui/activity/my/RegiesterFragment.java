@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.JsonObject;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -114,7 +116,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        webview.setBackgroundColor(Color.TRANSPARENT);
+        webview.setBackgroundColor(Color.WHITE);
         webview.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
         webview.getSettings().setUseWideViewPort(true);
         webview.getSettings().setLoadWithOverviewMode(true);
@@ -131,9 +133,51 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
         });
         // 设置WebView组件支持加载JavaScript。
         webview.getSettings().setJavaScriptEnabled(true);
+        webview.setHorizontalScrollBarEnabled(false);
+        webview.setVerticalScrollBarEnabled(false);
         // 建立JavaScript调用Java接口的桥梁。
-        webview.addJavascriptInterface(new vaptchaInterface(), "vaptchaInterface");
+        webview.addJavascriptInterface(new WebAppInterface(), "successCallback");
     }
+
+    public class WebAppInterface {
+
+        @JavascriptInterface
+        public void postMessage(String message) {
+            try {
+                JSONObject jsonObject = new JSONObject(message);
+                String token = jsonObject.getString("token");
+                String sid = jsonObject.getString("sid");
+                String sig = jsonObject.getString("sig");
+                KLog.i(token);
+                KLog.i(sid);
+                KLog.i(sig);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        @JavascriptInterface
+        public void sendToken(String token, String sid, String sig) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    KLog.i(token);
+                    KLog.i(sid);
+                    KLog.i(sig);
+                    webview.setVisibility(View.GONE);
+                    startVCodeCountDown();
+                    Map map = new HashMap<String, String>();
+                    map.put("account", etEmail.getText().toString().trim());
+                    map.put("sessionId", sid);
+                    map.put("sig", sig);
+                    map.put("afsToken", token);
+                    map.put("appKey", MainConstant.afsAppKey);
+                    map.put("scene", MainConstant.ncRegister);
+                    mPresenter.getSignUpVcode(map);
+                }
+            });
+        }
+    }
+
 
     public static String CANCEL = "cancel";
     private String vptToken = "";
@@ -260,7 +304,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
                         lang = "en";
                     }
                     String url = "https://v.vaptcha.com/app/android.html?vid=" + MainConstant.vptCha + "&scene=2&lang=" + lang + "&offline_server=https://www.vaptchadowntime.com/dometime";
-                    webview.loadUrl(url);
+                    webview.loadUrl("file:///android_asset/slideRegister.html");
                 } else {
                     ToastUtil.displayShortToast(getString(R.string.wrong_account));
                 }

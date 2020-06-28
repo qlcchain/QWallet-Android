@@ -26,6 +26,8 @@ public interface RetrievePasswordContract {
         void closeProgressDialog();
 
         void resetPasswordBack(VcodeLogin register);
+
+        void getResetPwCodeSuucess();
     }
 
     interface RetrievePasswordContractPresenter extends BasePresenter {

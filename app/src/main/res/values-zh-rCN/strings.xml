@@ -826,4 +826,9 @@
     <string name="views">阅读</string>
     <string name="reading_your_special_rating_interest_on_the_chain">正在链上读取你的特属评级权益</string>
     <string name="pleasewait">请等待...</string>
+
+    <string name="please_complete_the_man_machine_verfy">请完成人机验证</string>
+    <string name="this_is_your_order">这是你自己的订单</string>
+    <string name="sorry_this_order_cannot_be_placeed_">抱歉，交易价值过低，不能下单。</string>
+
 </resources>

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 
 import com.stratagile.qlink.application.AppConfig
@@ -37,10 +38,7 @@ import com.stratagile.qlink.db.EosAccount
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.db.Wallet
-import com.stratagile.qlink.entity.AllWallet
-import com.stratagile.qlink.entity.EthWalletInfo
-import com.stratagile.qlink.entity.NeoWalletInfo
-import com.stratagile.qlink.entity.SendNep5TokenBack
+import com.stratagile.qlink.entity.*
 import com.stratagile.qlink.entity.eventbus.ChangeCurrency
 import com.stratagile.qlink.entity.otc.TradePair
 import com.stratagile.qlink.ui.activity.my.AccountActivity
@@ -48,22 +46,40 @@ import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.activity_buy_qgas.*
 import kotlinx.android.synthetic.main.fragment_order_buy.*
+import kotlinx.android.synthetic.main.fragment_order_buy.buyingToken
+import kotlinx.android.synthetic.main.fragment_order_buy.buyingTokenPrice
+import kotlinx.android.synthetic.main.fragment_order_buy.constraintLayout
+import kotlinx.android.synthetic.main.fragment_order_buy.etAmount
+import kotlinx.android.synthetic.main.fragment_order_buy.etMaxAmount
+import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
+import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
+import kotlinx.android.synthetic.main.fragment_order_buy.group
 import kotlinx.android.synthetic.main.fragment_order_buy.ivReceiveChain
 import kotlinx.android.synthetic.main.fragment_order_buy.ivSendChain
+import kotlinx.android.synthetic.main.fragment_order_buy.ivShow
+import kotlinx.android.synthetic.main.fragment_order_buy.llBuyToken
+import kotlinx.android.synthetic.main.fragment_order_buy.llOpen
+import kotlinx.android.synthetic.main.fragment_order_buy.llSelectReceiveWallet
 import kotlinx.android.synthetic.main.fragment_order_buy.llSelectSendWallet
-import kotlinx.android.synthetic.main.fragment_order_buy.tvCreateWallet
+import kotlinx.android.synthetic.main.fragment_order_buy.llSellToken
+import kotlinx.android.synthetic.main.fragment_order_buy.seekBar
+import kotlinx.android.synthetic.main.fragment_order_buy.sellingToken
+import kotlinx.android.synthetic.main.fragment_order_buy.sellinngTokenQuantity
+import kotlinx.android.synthetic.main.fragment_order_buy.tvCostEth
+import kotlinx.android.synthetic.main.fragment_order_buy.tvGwei
 import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
 import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletAddess
 import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletName
 import kotlinx.android.synthetic.main.fragment_order_buy.tvSendWalletAddess
 import kotlinx.android.synthetic.main.fragment_order_buy.tvSendWalletName
+import kotlinx.android.synthetic.main.fragment_order_sell.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
+import org.web3j.utils.Convert
 import qlc.mng.AccountMng
 import qlc.mng.WalletMng
 import wendu.dsbridge.DWebView
@@ -199,7 +215,11 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            payTokenAmount = etAmount.text.toString().trim().toBigDecimal().multiply(etUnitPrice.text.toString().trim().toBigDecimal()).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString().toDouble()
+            if (etUnitPrice.text.toString().toBigDecimal().multiply(etMinAmount.text.toString().trim().toBigDecimal()) < 0.00000001.toBigDecimal()) {
+                toast(getString(R.string.sorry_this_order_cannot_be_placeed_))
+                return@setOnClickListener
+            }
+            payTokenAmount = etAmount.text.toString().trim().toBigDecimal().multiply(etUnitPrice.text.toString().trim().toBigDecimal()).setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString().toDouble()
             when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
                 AllWallet.WalletType.QlcWallet -> {
                     if (!AccountMng.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
@@ -269,7 +289,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
         }
         etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
-        etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(3))
+        etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(8))
         etUnitPrice.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -280,9 +300,9 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (!"".equals(etUnitPrice.text.toString())) {
-                    if (etUnitPrice.text.toString().length == 5 && etUnitPrice.text.toString().toBigDecimal() < 0.001.toBigDecimal()) {
-                        etUnitPrice.setText("0.001")
-                        etUnitPrice.setSelection(5)
+                    if (etUnitPrice.text.toString().length == 5 && etUnitPrice.text.toString().toBigDecimal() < 0.00000001.toBigDecimal()) {
+                        etUnitPrice.setText("0.00000001")
+                        etUnitPrice.setSelection(10)
                     }
                 }
             }
@@ -318,6 +338,24 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
         }
         llBuyToken.setOnClickListener {
             startActivityForResult(Intent(activity, SelectCurrencyActivity::class.java), selectPair)
+        }
+
+        llOpen.setOnClickListener {
+            toggleCost()
+        }
+    }
+
+    var isOpen = false
+
+    private fun toggleCost() {
+        if (isOpen) {
+            isOpen = false
+            group.visibility = View.GONE
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivShow) { animation, canceled, value, velocity -> }
+        } else {
+            isOpen = true
+            group.visibility = View.VISIBLE
+            SpringAnimationUtil.startRotatoSpringViewAnimation(ivShow) { animation, canceled, value, velocity -> }
         }
     }
     var selectedPair : TradePair.PairsListBean? = null
@@ -388,7 +426,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             thread {
                 when (OtcUtils.parseChain(selectedPair!!.payTokenChain)) {
                     AllWallet.WalletType.EthWallet -> {
-                        mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, payTokenAmount.toString(), 6, ethPayTokenBean!!, map)
+                        mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, payTokenAmount.toString(), gasPrice, ethPayTokenBean!!, map)
                     }
                     AllWallet.WalletType.EosWallet -> {
                         mPresenter.sendQgas(payTokenAmount.toString(), ConstantValue.mainAddressData.qlcchian.address, map)
@@ -518,6 +556,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
                     when (OtcUtils.parseChain(selectedPair!!.payTokenChain)) {
                         AllWallet.WalletType.EthWallet -> {
+                            constraintLayout.visibility = View.VISIBLE
                             sendEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
                             tvSendWalletName.text = sendEthWallet!!.name
                             tvSendWalletAddess.text = sendEthWallet!!.address
@@ -599,6 +638,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                     }
                 }
                 selectPair -> {
+                    constraintLayout.visibility = View.GONE
                     selectedPair = data!!.getParcelableExtra("pair")
                     buyingToken.text = selectedPair!!.tradeToken
                     buyingTokenPrice.text = selectedPair!!.tradeToken
@@ -630,6 +670,30 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                         }
                         AllWallet.WalletType.EthWallet -> {
                             ivSendChain.setImageResource(R.mipmap.icons_eth_wallet)
+                            constraintLayout.visibility = View.VISIBLE
+                            mPresenter.getEthPrice()
+                            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                                    gasPrice = progress + ConstantValue.gasPrice
+                                    tvGwei.text = "$gasPrice gwei"
+                                    val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
+                                    val f = gas.multiply(BigDecimal(gasLimit))
+
+                                    val gasMoney = f.multiply(BigDecimal(ethPrice.toString() + ""))
+                                    val f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+                                    KLog.i(f1)
+                                    gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
+                                    tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
+                                }
+
+                                override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                                }
+
+                                override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+                                }
+                            })
                         }
                         AllWallet.WalletType.NeoWallet -> {
                             ivSendChain.setImageResource(R.mipmap.icons_neo_wallet)
@@ -642,6 +706,28 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             }
         }
     }
+
+    override fun setEthPrice(tokenPrice: TokenPrice) {
+        ethPrice = tokenPrice.data[0].price
+        gasPrice = seekBar.progress + ConstantValue.gasPrice
+        tvGwei.text = "$gasPrice gwei"
+        val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
+        val f = gas.multiply(BigDecimal(gasLimit))
+        val gasMoney = f.multiply(BigDecimal(ethPrice.toString() + ""))
+        val f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+        gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
+        tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
+    }
+
+
+    /**
+     * eth当前的市价
+     */
+    private var ethPrice: Double = 0.toDouble()
+
+    private val gasLimit = 60000
+
+    private var gasPrice = ConstantValue.gasPrice
 
     fun getQlcAccountBalance(qlcAccount: QLCAccount) {
         thread {

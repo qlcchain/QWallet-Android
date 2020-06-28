@@ -42,7 +42,7 @@ object DefiUtil {
                 return "A++"
             }
             else -> {
-                return ""
+                return "Unrated"
             }
         }
     }
