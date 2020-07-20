@@ -1858,4 +1858,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="rating___">Rating</string>
     <string name="views">views</string>
     <string name="reading_your_special_rating_interest_on_the_chain">Reading your special rating interest on the chain</string>
+
+    <string name="please_complete_the_man_machine_verfy">Please complete the man-machine verification</string>
+    <string name="this_is_your_order">This is your order</string>
+    <string name="sorry_this_order_cannot_be_placeed_">Sorry, this order can\'t be placed because of the insufficient amount.</string>
 </resources>

@@ -254,7 +254,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         }))
     }
 
-    fun getEthWalletDetail(map: java.util.HashMap<String, String>) {
+    fun getEthWalletDetail(map: HashMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.getEthWalletInfo(map).subscribe({
             mView.setEthTokens(it)
         }, {
@@ -264,10 +264,10 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
         }))
     }
 
-    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, contactAddress: String, map: MutableMap<String, String>) {
+    fun sendEthToken(walletAddress: String, toAddress: String, amount: String, price: Int, contactAddress: String, map: MutableMap<String, String>, decimal : Int) {
         var disposable = Observable.create(ObservableOnSubscribe<String> { it ->
             it.onNext(
-                    generateTransaction(walletAddress, contactAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, 6))
+                    generateTransaction(walletAddress, contactAddress, toAddress, derivePrivateKey(walletAddress)!!, amount, 60000, price, decimal))
         })
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -395,5 +395,19 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Sell
                     KLog.i("onComplete")
                 })
         mCompositeDisposable.add(disposable)
+    }
+
+    fun getEthPrice() {
+        val infoMap = java.util.HashMap<String, Any>()
+        val tokens = arrayListOf<String>("ETH")
+        infoMap["symbols"] = tokens
+        infoMap["coin"] = ConstantValue.currencyBean.name
+        mCompositeDisposable.add(httpAPIWrapper.getTokenPrice(infoMap).subscribe({
+            mView.setEthPrice(it)
+        }, {
+
+        }, {
+
+        }))
     }
 }

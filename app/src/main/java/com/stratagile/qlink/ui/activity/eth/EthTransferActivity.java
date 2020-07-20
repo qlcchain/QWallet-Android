@@ -105,7 +105,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
 
     private int gasLimit = 60000;
 
-    private int gasPrice = 0;
+    private int gasPrice = ConstantValue.gasPrice;
 
     private String gasEth;
 
@@ -162,7 +162,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
         mSpinerPopWindow = new SpinnerPopWindow<String>(this, ctype, itemClickListener);
         mSpinerPopWindow.setOnDismissListener(dismissListener);
 
-        gasPrice = seekBar.getProgress() + 6;
+        gasPrice = seekBar.getProgress() + ConstantValue.gasPrice;
         tvGwei.setText(gasPrice + " gwei");
         BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
         BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
@@ -173,7 +173,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                gasPrice = progress + 6;
+                gasPrice = progress + ConstantValue.gasPrice;
                 tvGwei.setText(gasPrice + " gwei");
                 BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
                 BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
@@ -386,7 +386,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
     @Override
     public void getTokenPriceBack(TokenPrice tokenPrice) {
         ethPrice = tokenPrice.getData().get(0).getPrice();
-        gasPrice = seekBar.getProgress() + 6;
+        gasPrice = seekBar.getProgress() + ConstantValue.gasPrice;
         tvGwei.setText(gasPrice + " gwei");
         BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
         BigDecimal f = gas.multiply(new BigDecimal(gasLimit));
@@ -397,7 +397,7 @@ public class EthTransferActivity extends BaseActivity implements EthTransferCont
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                gasPrice = progress + 6;
+                gasPrice = progress + ConstantValue.gasPrice;
                 tvGwei.setText(gasPrice + " gwei");
                 BigDecimal gas = Convert.toWei(gasPrice + "", Convert.Unit.GWEI).divide(Convert.toWei(1 + "", Convert.Unit.ETHER));
                 BigDecimal f = gas.multiply(new BigDecimal(gasLimit));

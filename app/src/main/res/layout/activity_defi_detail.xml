@@ -66,7 +66,8 @@
     </android.support.v7.widget.CardView>
     
     <android.support.v7.widget.CardView
-        android:layout_width="38dp"
+        android:layout_width="wrap_content"
+        android:minWidth="38dp"
         android:layout_alignParentRight="true"
         app:cardCornerRadius="6dp"
         app:cardElevation="10dp"
@@ -75,7 +76,10 @@
         android:layout_height="38dp">
         <TextView
             android:id="@+id/tvRating"
-            android:layout_width="38dp"
+            android:layout_width="wrap_content"
+            android:minWidth="38dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
             android:gravity="center"
             android:includeFontPadding="false"
             android:layout_centerVertical="true"

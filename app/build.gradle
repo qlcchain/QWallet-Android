@@ -18,9 +18,9 @@ android {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode getSelfDefinedVersion("code") + 21
+        versionCode getSelfDefinedVersion("code") + 35
         multiDexEnabled true
-        versionName "2.6.8"
+        versionName "2.7.4"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -315,8 +315,8 @@ dependencies {
     implementation 'net.i2p.crypto:eddsa:0.3.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.8'
 
-//    implementation project(':lib-todaystepcounter')
-    implementation files('libs/lib-todaystepcounter-release.aar')
+    implementation project(':lib-todaystepcounter')
+//    implementation files('libs/lib-todaystepcounter-release.aar')
 
 }
 

@@ -2,6 +2,7 @@ package com.stratagile.qlink.ui.activity.otc.contract
 
 import com.stratagile.qlink.entity.EthWalletInfo
 import com.stratagile.qlink.entity.NeoWalletInfo
+import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.ui.activity.base.BasePresenter
 import com.stratagile.qlink.ui.activity.base.BaseView
 /**
@@ -29,6 +30,8 @@ interface OrderSellContract {
         fun setNeoDetail(neoWalletInfo : NeoWalletInfo)
 
         fun setEthTokens(ethWalletInfo: EthWalletInfo)
+
+        fun setEthPrice(tokenPrice: TokenPrice)
     }
 
     interface OrderSellContractPresenter : BasePresenter {

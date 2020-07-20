@@ -514,7 +514,7 @@ public class MyFragment extends BaseFragment implements MyContract.View {
                 }
                 break;
             case R.id.cryptoWallet:
-                EventBus.getDefault().post(new ChangeViewpager(2));
+                EventBus.getDefault().post(new ChangeViewpager(3));
                 break;
             case R.id.shareFriend:
                 if (isLogin && ConstantValue.currentUser != null) {

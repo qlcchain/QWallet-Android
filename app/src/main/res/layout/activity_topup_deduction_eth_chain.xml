@@ -194,6 +194,106 @@
         android:layout_height="@dimen/x1"
         android:layout_marginTop="@dimen/x25"
         android:background="@color/color_29282a_40"/>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/view3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginTop="@dimen/x25"
+            android:background="@color/color_f2f2f2"/>
+        <TextView
+            android:id="@+id/cost"
+            android:text="@string/miner_cost"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textColor="@color/color_29282a_40"
+            app:layout_constraintTop_toBottomOf="@+id/view3"
+            android:layout_marginTop="@dimen/x25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/llOpen"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/x25"
+            app:layout_constraintRight_toRightOf="parent"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/view3"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvCostEth"
+                android:layout_width="wrap_content"
+                android:text="0.0006 eth"
+                android:includeFontPadding="false"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/ivShow"
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_back_3"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <android.support.constraint.Group
+            app:layout_constraintTop_toBottomOf="@+id/cost"
+            app:constraint_referenced_ids="seekBar,llCost"
+            android:id="@+id/group"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/cost"
+            android:max="34"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/llCost"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/x20"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/slow"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/tvGwei"
+                android:layout_width="wrap_content"
+                android:text="In"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/fast"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+    <View
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_f2f2f2" />
 
     <TextView
         android:id="@+id/tvSend"

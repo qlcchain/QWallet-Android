@@ -577,7 +577,9 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     process(lockResult)
                 } else {
                     AppConfig.instance.saveLog("stake", "process" + getLine(), Gson().toJson(lockResult))
-                    toast(getString(R.string.process_error_please_try_later))
+                    runOnUiThread {
+                        toast(getString(R.string.process_error_please_try_later))
+                    }
                     KLog.i(error.response)
                     KLog.i(error.exception)
                 }

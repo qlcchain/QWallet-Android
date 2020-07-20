@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import com.google.gson.Gson
 import com.pawegio.kandroid.toast
@@ -35,23 +36,12 @@ import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_sell_qgas.*
-import kotlinx.android.synthetic.main.activity_sell_qgas.ivReceiveChain
-import kotlinx.android.synthetic.main.activity_sell_qgas.ivSendChain
-import kotlinx.android.synthetic.main.activity_sell_qgas.llSelectReceiveWallet
-import kotlinx.android.synthetic.main.activity_sell_qgas.llSelectSendWallet
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvAmount
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvNext
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvReceiveWalletAddess
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvReceiveWalletName
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvSendWalletAddess
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvSendWalletName
-import kotlinx.android.synthetic.main.activity_sell_qgas.tvUnitPrice
-import kotlinx.android.synthetic.main.fragment_order_sell.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
+import org.web3j.utils.Convert
 import qlc.mng.AccountMng
 import wendu.dsbridge.DWebView
 import wendu.dsbridge.OnReturnValue
@@ -88,6 +78,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                 return@forEach
             }
         }
+        mPresenter.getEthPrice()
     }
 
     var ethPayTokenBean : EthWalletInfo.DataBean.TokensBean? = null
@@ -132,6 +123,28 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         }
     }
 
+    override fun setEthPrice(tokenPrice: TokenPrice) {
+        ethPrice = tokenPrice.data[0].price
+        gasPrice = seekBar.progress + ConstantValue.gasPrice
+        tvGwei.text = "$gasPrice gwei"
+        val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
+        val f = gas.multiply(BigDecimal(gasLimit))
+        val gasMoney = f.multiply(BigDecimal(ethPrice.toString() + ""))
+        val f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+        gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
+        tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
+    }
+
+
+    /**
+     * eth当前的市价
+     */
+    private var ethPrice: Double = 0.toDouble()
+
+    private val gasLimit = 60000
+
+    private var gasPrice = ConstantValue.gasPrice
+
     override fun generateBuyQgasOrderSuccess(tradeOrder: TradeOrder) {
         var tradeOrderId = tradeOrder.order.id
         var map = hashMapOf<String, String>()
@@ -142,7 +155,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         thread {
             when (OtcUtils.parseChain(entrustOrderInfo.order!!.tradeTokenChain)) {
                 AllWallet.WalletType.EthWallet -> {
-                    mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), 6, ethPayTokenBean!!.tokenInfo.address, map)
+                    mPresenter.sendEthToken(sendEthWallet!!.address, ConstantValue.mainAddressData.eth.address, etQgas.text.toString().trim(), gasPrice, ethPayTokenBean!!.tokenInfo.address, map, ethPayTokenBean!!.tokenInfo.decimals.toInt())
                 }
                 AllWallet.WalletType.EosWallet -> {
 //                    mPresenter.sendQgas(etQgas.text.toString(), ConstantValue.mainAddressData.qlcchian.address, map, message)
@@ -287,7 +300,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
 
         tvNext.setOnClickListener {
             if (entrustOrderInfo.order.userId.equals(ConstantValue.currentUser.userId)) {
-
+                toast(getString(R.string.this_is_your_order))
                 return@setOnClickListener
             }
             if ("".equals(etQgas.text.toString())) {
@@ -399,7 +412,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
                             etQgas.setText(maxQgas.stripTrailingZeros().toString())
                         } else {
-                            etQgas.setText((etUsdt.text.toString().toBigDecimal().divide(entrustOrderInfo.order.unitPrice.toBigDecimal(), 3, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString())
+                            etQgas.setText((etUsdt.text.toString().toBigDecimal().divide(entrustOrderInfo.order.unitPrice.toBigDecimal(), 8, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {
@@ -426,7 +439,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
                             etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {
-                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(3, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
+                            etUsdt.setText((BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).multiply(etQgas.text.toString().toBigDecimal())).setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
                         }
                     }
                 } else {
@@ -442,6 +455,47 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
 
             }
         })
+
+        llOpen.setOnClickListener {
+            toggleCost()
+        }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                gasPrice = progress + ConstantValue.gasPrice
+                tvGwei.text = "$gasPrice gwei"
+                val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
+                val f = gas.multiply(BigDecimal(gasLimit))
+
+                val gasMoney = f.multiply(BigDecimal(ethPrice.toString() + ""))
+                val f1 = gasMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+                KLog.i(f1)
+                gasEth = f.setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString()
+                tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+            }
+        })
+    }
+
+    var isOpen = false
+
+    private fun toggleCost() {
+        if (isOpen) {
+            isOpen = false
+            group.visibility = View.GONE
+            SpringAnimationUtil.endRotatoSpringViewAnimation(ivShow) { animation, canceled, value, velocity -> }
+        } else {
+            isOpen = true
+            group.visibility = View.VISIBLE
+            SpringAnimationUtil.startRotatoSpringViewAnimation(ivShow) { animation, canceled, value, velocity -> }
+        }
     }
 
     var receiveEthWallet : EthWallet? = null
@@ -506,6 +560,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     when(OtcUtils.parseChain(entrustOrderInfo.order.tradeTokenChain)) {
                         AllWallet.WalletType.EthWallet -> {
                             showProgressDialog()
+                            constraintLayout.visibility = View.VISIBLE
                             sendEthWallet = data!!.getParcelableExtra<EthWallet>("wallet")
                             ivSendChain.setImageResource(R.mipmap.icons_eth_wallet)
                             tvSendWalletName.text = sendEthWallet!!.name
@@ -701,7 +756,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         arrays[0] = sendNeoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = tradeTokenInfo!!.asset_hash
-        arrays[3] = etAmount.text.toString()
+        arrays[3] = etQgas.text.toString().trim()
         arrays[4] = 8
         arrays[5] = Account.getWallet()!!.wif
         arrays[6] = "xxx"

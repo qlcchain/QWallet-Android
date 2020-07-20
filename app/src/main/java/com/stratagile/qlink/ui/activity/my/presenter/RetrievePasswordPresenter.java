@@ -60,6 +60,7 @@ public class RetrievePasswordPresenter implements RetrievePasswordContract.Retri
                     public void accept(BaseBack baseBack) throws Exception {
                         //isSuccesse
                         mView.closeProgressDialog();
+                        mView.getResetPwCodeSuucess();
                         ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.success));
 
                     }

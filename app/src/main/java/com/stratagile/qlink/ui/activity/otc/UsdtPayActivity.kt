@@ -27,10 +27,7 @@ import com.stratagile.qlink.ui.activity.otc.presenter.UsdtPayPresenter
 import com.stratagile.qlink.utils.AccountUtil
 import com.stratagile.qlink.utils.SpringAnimationUtil
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.activity_appeal.*
-import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import kotlinx.android.synthetic.main.activity_usdt_pay.*
-import kotlinx.android.synthetic.main.activity_usdt_pay.llSelectEthWallet
 import org.greenrobot.eventbus.EventBus
 import org.web3j.utils.Convert
 import java.math.BigDecimal
@@ -77,7 +74,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
 
     override fun setEthPrice(tokenPrice: TokenPrice) {
         ethPrice = tokenPrice.data[0].price
-        gasPrice = seekBar.progress + 6
+        gasPrice = seekBar.progress + ConstantValue.gasPrice
         tvGwei.text = "$gasPrice gwei"
         val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
         val f = gas.multiply(BigDecimal(gasLimit))
@@ -98,7 +95,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
 
     private val gasLimit = 60000
 
-    private var gasPrice = 6
+    private var gasPrice = ConstantValue.gasPrice
 
     private var gasEth: String = "0.0004"
 
@@ -131,7 +128,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvAmountUsdt.text = intent.getStringExtra("usdt")
         usdtAmount = intent.getStringExtra("usdt").toDouble()
 
-        gasPrice = seekBar.progress + 6
+        gasPrice = seekBar.progress + ConstantValue.gasPrice
         tvGwei.text = "$gasPrice gwei"
         val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
         val f = gas.multiply(BigDecimal(gasLimit))
@@ -141,7 +138,7 @@ class UsdtPayActivity : BaseActivity(), UsdtPayContract.View {
         tvCostEth.text = gasEth + " ether ≈ " + ConstantValue.currencyBean.currencyImg + f1
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                gasPrice = progress + 6
+                gasPrice = progress + ConstantValue.gasPrice
                 tvGwei.text = "$gasPrice gwei"
                 val gas = Convert.toWei(gasPrice.toString() + "", Convert.Unit.GWEI).divide(Convert.toWei(1.toString() + "", Convert.Unit.ETHER))
                 val f = gas.multiply(BigDecimal(gasLimit))
