@@ -7,7 +7,6 @@ import com.stratagile.qlink.api.transaction.SendCallBack
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.NeoCallBack
-import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
@@ -69,21 +68,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: OtcN
         mCompositeDisposable.add(disposable)
     }
 
-    fun sendNep5Token(address : String, amount : String, toAddress : String, dataBean : NeoWalletInfo.DataBean.BalanceBean, remark : String, tradeOrderId: String) {
-        val neoNodeRPC = NeoNodeRPC("")
-        neoNodeRPC.sendNEP5Token(assets, Account.getWallet()!!, dataBean.asset_hash, address, toAddress, amount.toDouble(), remark, object : NeoCallBack{
-            override fun NeoTranscationResult(jsonBody: String?) {
-                val tx = getTxid(jsonBody!!)
-                val map = java.util.HashMap<String, String>()
-                map["addressFrom"] = address
-                map["addressTo"] = toAddress
-                map["symbol"] = dataBean.asset_symbol
-                map["amount"] = amount
-                map["tx"] = jsonBody
-                sendRow(tx.getHash().toReverseHexString(), tradeOrderId, map)
-            }
-        })
-    }
 
     fun sendRow(txid: String, tradeOrderId : String, map: HashMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.neoTokenTransaction(map).subscribe({

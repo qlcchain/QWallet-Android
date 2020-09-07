@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "type": "1",
+    "hash": "6a87a60f537d6acd065235cff09fd457",
+    "status": "9",
+    "errno": "0"
+  }
+}

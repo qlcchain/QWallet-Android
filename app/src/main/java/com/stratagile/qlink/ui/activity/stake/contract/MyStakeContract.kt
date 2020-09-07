@@ -25,6 +25,8 @@ interface MyStakeContract {
         fun setRewardQlcAmount(dict: Dict)
 
         fun setClaimedTotal(rewardTotal: RewardTotal)
+
+        fun setQLCQLCAmount(amount : Long)
     }
 
     interface MyStakeContractPresenter : BasePresenter {

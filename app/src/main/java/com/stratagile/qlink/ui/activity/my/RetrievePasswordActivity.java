@@ -148,8 +148,8 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
                     map.put("sessionId", sid);
                     map.put("sig", sig);
                     map.put("afsToken", token);
-                    map.put("appKey", MainConstant.afsAppKey);
-                    map.put("scene", MainConstant.ncRegister);
+                    map.put("appKey", MainConstant.afsFFFF0N00000000009290AppKey);
+                    map.put("scene", MainConstant.ncOther);
                     mPresenter.getForgetPasswordVcode(map);
                 }
             });
@@ -238,7 +238,7 @@ public class RetrievePasswordActivity extends BaseActivity implements RetrievePa
      */
     private void getForgetPasswordVcode() {
         webview.setVisibility(View.VISIBLE);
-        webview.loadUrl("file:///android_asset/slideLogin.html");
+        webview.loadUrl("file:///android_asset/slideResetPassword.html");
     }
 
     private void resetPassword() {

@@ -36,6 +36,5 @@ public interface SelectWalletTypeContract {
 
         void createNeoWallet();
         void createQlcWallet();
-        void reportWalletCreated(String address, String blockChain, String publicKey, String signData);
     }
 }

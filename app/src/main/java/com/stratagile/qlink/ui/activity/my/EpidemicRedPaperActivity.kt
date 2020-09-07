@@ -13,20 +13,16 @@ import android.text.Html
 import android.view.View
 import android.view.animation.Animation.RELATIVE_TO_SELF
 import android.view.animation.RotateAnimation
-import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pawegio.kandroid.runDelayedOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.Location
-import com.stratagile.qlink.entity.MyAsset
-import com.stratagile.qlink.entity.otc.TradePair
 import com.stratagile.qlink.ui.activity.my.component.DaggerEpidemicRedPaperComponent
 import com.stratagile.qlink.ui.activity.my.contract.EpidemicRedPaperContract
 import com.stratagile.qlink.ui.activity.my.module.EpidemicRedPaperModule
@@ -38,20 +34,14 @@ import com.stratagile.qlink.utils.AccountUtil
 import com.today.step.lib.ISportStepInterface
 import com.today.step.lib.TodayStepData
 import com.today.step.lib.TodayStepService
-import com.today.step.net.BaseBack
-import com.today.step.net.CHttpApiWrapper
 import com.today.step.net.CreateRecord
 import com.today.step.net.EpidemicList
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_epidemic_red_paper.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.ArrayList
-import java.util.HashMap
-
-import javax.inject.Inject;
+import java.util.*
+import javax.inject.Inject
 
 /**
  * @author hzp
@@ -76,6 +66,10 @@ class EpidemicRedPaperActivity : BaseActivity(), EpidemicRedPaperContract.View {
     }
 
     override fun setLocation(location: Location) {
+        if (ConstantValue.currentUser == null) {
+            startActivityForResult(Intent(this, AccountActivity::class.java), 0)
+            return
+        }
         closeProgressDialog()
         focusEpidemic()
         if ("domestic".equals(location.location)) {

@@ -38,7 +38,13 @@ class MyStakeAdapter(arrayList : ArrayList<MyStakeList.ResultBean>) : BaseQuickA
             }
 
             "WithdrawStart" -> {
-
+                helper.setText(R.id.tvStakeStatus, mContext.getString(R.string.withdrawstart))
+                helper.setTextColor(R.id.tvStakeStatus, mContext.resources.getColor(R.color.color_d0021b))
+                if (item.qgas == 0L) {
+                    helper.setText(R.id.tvEarns, "0")
+                } else {
+                    helper.setText(R.id.tvEarns, item.qgas.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString())
+                }
             }
             "WithdrawProcess" -> {
                 helper.setText(R.id.tvStakeStatus, mContext.getString(R.string.revoke_failed1))

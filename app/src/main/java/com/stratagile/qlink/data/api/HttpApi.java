@@ -13,6 +13,7 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.DefiPrice;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
@@ -70,6 +71,7 @@ import com.stratagile.qlink.entity.defi.DefiRating;
 import com.stratagile.qlink.entity.defi.DefiStateList;
 import com.stratagile.qlink.entity.defi.DefiStatsCache;
 import com.stratagile.qlink.entity.defi.RatingInfo;
+import com.stratagile.qlink.entity.defi.ServerEthPrice;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
@@ -313,7 +315,7 @@ public interface HttpApi {
 
     @POST(url_uploadIdCard)
     @Multipart
-    Observable<Passport> updateIdCard(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part faceOhoto, @Part MultipartBody.Part holdingPhoto);
+    Observable<Passport> updateIdCard(@Part("idNumber") RequestBody idNumber, @Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part faceOhoto, @Part MultipartBody.Part holdingPhoto);
 
     @GET(API.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);
@@ -859,4 +861,12 @@ public interface HttpApi {
 //    Observable<TradeOrderDetail> generateAppeal(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part photo1);
 
     /*************************************************/
+
+    @POST(API.defiPriceList)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiPrice> defiPriceList(@Body RequestBody map);
+
+    @POST(API.ethGasPrice)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<ServerEthPrice> ethGasPrice(@Body RequestBody map);
 }

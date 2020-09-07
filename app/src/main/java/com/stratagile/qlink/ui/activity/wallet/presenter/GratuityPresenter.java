@@ -10,7 +10,6 @@ import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.ui.activity.wallet.contract.GratuityContract;
 import com.stratagile.qlink.ui.activity.wallet.GratuityActivity;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
-import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.utils.ToastUtil;
 
 import java.util.Map;

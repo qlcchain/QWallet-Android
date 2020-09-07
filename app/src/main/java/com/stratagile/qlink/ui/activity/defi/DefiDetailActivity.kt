@@ -19,6 +19,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
@@ -58,7 +59,7 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
 
     @Inject
     internal lateinit var mPresenter: DefiDetailPresenter
-    lateinit var defiEntity : DefiList.ProjectListBean
+    lateinit var defiEntity: DefiList.ProjectListBean
     lateinit var defiDetailCategoryAdapter: DefiDetailCategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,7 +145,7 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
                 tvDesc.maxLines = 3
             }
         }
-        viewPager.addOnPageChangeListener(object : OnPageChangeListener{
+        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
 
             }
@@ -154,7 +155,7 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
             }
 
             override fun onPageSelected(p0: Int) {
-                when(p0) {
+                when (p0) {
                     0 -> {
                         FireBaseUtils.logEvent(this@DefiDetailActivity, FireBaseUtils.Defi_Detail_KeyStats)
                     }
@@ -168,6 +169,7 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
             }
         })
     }
+
     override fun initData() {
         title.text = getString(R.string.defi_details)
         viewModel = ViewModelProviders.of(this).get(DefiViewModel::class.java)
@@ -197,14 +199,28 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
 
         if ("".equals(defiEntity.shortName)) {
             tvDefi.text = defiEntity.name
-            Glide.with(this)
-                    .load(resources.getIdentifier(defiEntity.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
-                    .into(ivDefi)
+            var resource = resources.getIdentifier(defiEntity.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName)
+            if (resource == 0) {
+                Glide.with(this)
+                        .load(AppConfig.instance.baseUrl + defiEntity.logo)
+                        .into(ivDefi)
+            } else {
+                Glide.with(this)
+                        .load(resources.getIdentifier(defiEntity.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
+                        .into(ivDefi)
+            }
         } else {
             tvDefi.text = defiEntity.shortName
-            Glide.with(this)
-                    .load(resources.getIdentifier(defiEntity.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
-                    .into(ivDefi)
+            var resource = resources.getIdentifier(defiEntity.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName)
+            if (resource == 0) {
+                Glide.with(this)
+                        .load(AppConfig.instance.baseUrl + defiEntity.logo)
+                        .into(ivDefi)
+            } else {
+                Glide.with(this)
+                        .load(resources.getIdentifier(defiEntity.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
+                        .into(ivDefi)
+            }
         }
 
         tvOpreate1.setOnClickListener {
@@ -228,11 +244,19 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
                 val content_url = Uri.parse(website)
                 intent.data = content_url
                 startActivity(intent)
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+    }
 
+    override fun setDetailError(error: String?) {
+        error?.let {
+            if ("The project has been taken off the shelves!".equals(it)) {
+                setResult(10, intent)
+                finish()
+            }
+        }
     }
 
     fun getDefiDetail() {
@@ -243,7 +267,7 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
 
     fun getDefiStateList() {
         var infoMap = hashMapOf<String, String>()
-        infoMap["projectId"] =mDefiDetail.project.id
+        infoMap["projectId"] = mDefiDetail.project.id
         infoMap["page"] = "1"
         infoMap["size"] = "30"
         mPresenter.getDefiStateList(infoMap)
@@ -263,16 +287,17 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
     }
 
     override fun setupActivityComponent() {
-       DaggerDefiDetailComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .defiDetailModule(DefiDetailModule(this))
-               .build()
-               .inject(this)
+        DaggerDefiDetailComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .defiDetailModule(DefiDetailModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: DefiDetailContract.DefiDetailContractPresenter) {
-            mPresenter = presenter as DefiDetailPresenter
-        }
+        mPresenter = presenter as DefiDetailPresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()

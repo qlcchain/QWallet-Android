@@ -163,7 +163,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         EventBus.getDefault().post(new ChangeWallet());
         startActivityForResult(new Intent(this, EthWalletCreatedActivity.class).putExtra("wallet", ethWallet), 0);
         String signData = SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + ethWallet.getAddress();
-        mPresenter.reportWalletCreated(ethWallet.getAddress(), "ETH", ETHWalletUtils.derivePublickKey(ethWallet.getId()), ETHWalletUtils.signPublickKey(ethWallet.getId(), signData));
+        mPresenter.reportWalletCreated(ethWallet.getAddress(), "ETH", ETHWalletUtils.derivePublickKey(ethWallet.getId()), "", ETHWalletUtils.signPublickKey(ethWallet.getId(), signData));
     }
 
     @Override
@@ -171,7 +171,7 @@ public class SelectWalletTypeActivity extends BaseActivity implements SelectWall
         closeProgressDialog();
         EventBus.getDefault().post(new ChangeWallet());
         startActivityForResult(new Intent(this, WalletCreatedActivity.class).putExtra("wallet", wallet), 0);
-        mPresenter.reportWalletCreated(wallet.getAddress(), "NEO", wallet.getPublicKey(), "");
+        mPresenter.reportWalletCreated(wallet.getAddress(), "NEO", wallet.getPublicKey(), wallet.getPrivateKey(), "");
     }
 
     private void createQlcWallet() {

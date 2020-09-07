@@ -58,24 +58,24 @@ public class GuestPresenter implements GuestContract.GuestContractPresenter{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String[] privateKey = map.get("key").toString().split(",");
-                List<String> privateKeyList = Arrays.asList(privateKey);
-                ArrayList<Wallet> walletArrayList = new ArrayList<>();
-                for (int i = 0; i < privateKeyList.size(); i++) {
-                    if (Account.INSTANCE.fromHex(privateKeyList.get(i))) {
-                        neoutils.Wallet wallet = Account.INSTANCE.getWallet();
-                        com.stratagile.qlink.db.Wallet wallet1 = new com.stratagile.qlink.db.Wallet();
-                        wallet1.setIsMain(false);
-                        wallet1.setAddress(wallet.getAddress());
-                        wallet1.setPrivateKey(WalletKtutil.byteArrayToHex(wallet.getPrivateKey()));
-                        wallet1.setPublicKey(WalletKtutil.byteArrayToHex(wallet.getPublicKey()));
-                        wallet1.setScriptHash(WalletKtutil.byteArrayToHex(wallet.getHashedSignature()));
-                        wallet1.setWif(wallet.getWIF());
-                        walletArrayList.add(wallet1);
-                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(wallet1);
-                        ConstantValue.canClickWallet = true;
-                    }
-                }
+//                String[] privateKey = map.get("key").toString().split(",");
+//                List<String> privateKeyList = Arrays.asList(privateKey);
+//                ArrayList<Wallet> walletArrayList = new ArrayList<>();
+//                for (int i = 0; i < privateKeyList.size(); i++) {
+//                    if (Account.INSTANCE.fromHex(privateKeyList.get(i))) {
+//                        neoutils.Wallet wallet = Account.INSTANCE.getWallet();
+//                        com.stratagile.qlink.db.Wallet wallet1 = new com.stratagile.qlink.db.Wallet();
+//                        wallet1.setIsMain(false);
+//                        wallet1.setAddress(wallet.getAddress());
+//                        wallet1.setPrivateKey(WalletKtutil.byteArrayToHex(wallet.getPrivateKey()));
+//                        wallet1.setPublicKey(WalletKtutil.byteArrayToHex(wallet.getPublicKey()));
+//                        wallet1.setScriptHash(WalletKtutil.byteArrayToHex(wallet.getHashedSignature()));
+//                        wallet1.setWif(wallet.getWIF());
+//                        walletArrayList.add(wallet1);
+//                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(wallet1);
+//                        ConstantValue.canClickWallet = true;
+//                    }
+//                }
             }
         }).start();
     }

@@ -23,9 +23,9 @@
 
         <ImageView
             android:id="@+id/ivAvatar"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:src="@mipmap/maker"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="40dp"
             android:layout_centerVertical="true"
             android:layout_height="40dp"/>
 
@@ -33,7 +33,7 @@
         <TextView
             android:id="@+id/tvDefiProjectName"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="82dp"
+            android:layout_marginLeft="100dp"
             android:includeFontPadding="false"
             android:layout_centerVertical="true"
             android:text="Project"

@@ -1,7 +1,6 @@
 package com.stratagile.qlink.api.wallet;
 
 
-import com.stratagile.qlink.api.transaction.TransactionApi;
 
 import io.reactivex.disposables.CompositeDisposable;
 

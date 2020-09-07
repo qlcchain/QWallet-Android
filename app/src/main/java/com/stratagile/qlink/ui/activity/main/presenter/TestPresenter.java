@@ -7,7 +7,6 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.blockchain.cypto.util.HexUtils;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.ui.activity.main.contract.TestContract;
@@ -66,8 +65,6 @@ public class TestPresenter implements TestContract.TestContractPresenter{
         infoMap.put("blockChain", blockChain);
         infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
         infoMap.put("pubKey", publicKey);
-        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-//        infoMap.put("signData", signingtrasaction(wif, SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "") + address));
         Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
                 .subscribe(new Consumer<BaseBack>() {
                     @Override

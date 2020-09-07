@@ -169,7 +169,7 @@ class EpidemicClaimQlcActivity : BaseActivity(), EpidemicClaimQlcContract.View {
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveNeoWallet!!.address
         map["code"] = etVcode.text.toString().trim()
-        iSportStepInterface!!.claimQlc(ConstantValue.currentUser.account, AccountUtil.getUserToken(), receiveNeoWallet!!.address, sid, sig, token, MainConstant.afsAppKey, MainConstant.ncActivity)
+        iSportStepInterface!!.claimQlc(ConstantValue.currentUser.account, AccountUtil.getUserToken(), receiveNeoWallet!!.address, sid, sig, token, MainConstant.afsFFFF0N0N000000009290AppKey, MainConstant.ncActivity)
     }
 
     fun getVcode() {

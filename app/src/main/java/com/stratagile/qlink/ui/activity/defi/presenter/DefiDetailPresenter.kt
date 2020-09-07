@@ -36,6 +36,8 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Defi
                     //isSuccesse
                 }, {
                     mView.closeProgressDialog()
+                    KLog.i(it.message)
+                    mView.setDetailError(it.message)
                 }, {
                     //onComplete
                     mView.closeProgressDialog()

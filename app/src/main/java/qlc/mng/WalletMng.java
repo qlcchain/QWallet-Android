@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import com.rfksystems.blake2b.Blake2b;
 import com.rfksystems.blake2b.security.Blake2bProvider;
+import com.socks.library.KLog;
 
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
@@ -25,7 +26,6 @@ import qlc.utils.Checking;
 public class WalletMng {
 
     private static EdDSANamedCurveSpec ED25519_BLAKE2B_CURVES_PEC;
-
     static {
         Security.addProvider(new Blake2bProvider());
 
@@ -58,6 +58,7 @@ public class WalletMng {
 
     public static byte[] sign(byte[] hash, byte[] privateKey) {
         try {
+            KLog.i(Blake2b.BLAKE2_B_512);
             EdDSAEngine edDSAEngine = new EdDSAEngine(MessageDigest.getInstance(Blake2b.BLAKE2_B_512));
             EdDSAPrivateKeySpec edDSAPrivateKeySpec = new EdDSAPrivateKeySpec(privateKey, ED25519_BLAKE2B_CURVES_PEC);
             EdDSAPrivateKey edDSAPrivateKey = new EdDSAPrivateKey(edDSAPrivateKeySpec);
@@ -66,6 +67,7 @@ public class WalletMng {
             edDSAEngine.update(hash);
             return edDSAEngine.sign();
         } catch (GeneralSecurityException e) {
+            e.printStackTrace();
             throw new IllegalStateException("It wasn't possible to sign " + Arrays.toString(hash), e);
         }
     }

@@ -31,6 +31,7 @@ import com.stratagile.qlink.utils.SystemUtil
 import com.stratagile.qlink.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_appeal.*
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -135,15 +136,15 @@ class AppealActivity : BaseActivity(), AppealContract.View {
                 return@setOnClickListener
             }
             showProgressDialog()
-            var accountRequestBody = RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.account)
-            var tokenRequestBody = RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken())
-            var tradeOrderIdRequestBody = RequestBody.create(MediaType.parse("text/plain"), mTradeOrderDetail.id)
-            var reasonRequestBody = RequestBody.create(MediaType.parse("text/plain"), etContent.text.toString().trim())
+            var accountRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), ConstantValue.currentUser.account)
+            var tokenRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), AccountUtil.getUserToken())
+            var tradeOrderIdRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), mTradeOrderDetail.id)
+            var reasonRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), etContent.text.toString().trim())
             var partBodyList = arrayListOf<MultipartBody.Part?>()
             for (i in 1..4) {
                 if (appealImgAdapter.data.size >= i && appealImgAdapter.data[i - 1].isSet) {
                     var file = File(Environment.getExternalStorageDirectory().path + "/QWallet/otc/" + appealImgAdapter.data[i - 1].name)
-                    val passport1 = RequestBody.create(MediaType.parse("image/jpg"), file)
+                    val passport1 = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
                     val multipartBody = MultipartBody.Part.createFormData("photo" + i, appealImgAdapter.data[i - 1].name, passport1)
                     partBodyList.add(multipartBody)
                 } else {

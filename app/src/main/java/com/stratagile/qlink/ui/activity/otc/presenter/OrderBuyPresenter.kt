@@ -89,65 +89,93 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mView.closeProgressDialog()
             return
         }
-        var disposable = Observable.create(ObservableOnSubscribe<QLCAccount> {
-            KLog.i("发射1")
-            it.onNext(qlcAccount)
-            it.onComplete()
-        }).subscribeOn(Schedulers.io()).map { qlcAccount1 ->
-            var qlcTokenbalances: ArrayList<QlcTokenbalance>? = null
-            Observable.create(ObservableOnSubscribe<String> {
-                KLog.i("开始查询qgas。。")
-                QLCAPI().walletGetBalance(qlcAccount1.address, "", object : QLCAPI.BalanceInter {
-                    override fun onBack(baseResult: ArrayList<QlcTokenbalance>?, error: Error?) {
-                        if (error == null) {
-                            KLog.i("发射2")
-                            qlcTokenbalances = baseResult
-                            if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
-                                if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "order_entrust_buy", false, object : SendBack {
-                                        override fun send(suceess: String) {
-                                            if ("".equals(suceess)) {
-                                                mView.generatebuyQgasOrderFailed("send qgas error")
-                                                it.onComplete()
-                                            } else {
-                                                KLog.i(suceess)
-                                                it.onNext(suceess)
-                                                it.onComplete()
-                                            }
-                                        }
+        var qlcTokenbalances: ArrayList<QlcTokenbalance>? = null
+        QLCAPI().walletGetBalance(qlcAccount.address, "", object : QLCAPI.BalanceInter {
+            override fun onBack(baseResult: ArrayList<QlcTokenbalance>?, error: Error?) {
+                if (error == null) {
+                    KLog.i("发射2")
+                    qlcTokenbalances = baseResult
+                    if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
+                        if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
+                            QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "order_entrust_buy", false, object : SendBack {
+                                override fun send(suceess: String) {
+                                    if ("".equals(suceess)) {
+                                        mView.generatebuyQgasOrderFailed("send qgas error")
+                                    } else {
+                                        KLog.i(suceess)
+                                        map.put("fromAddress", qlcAccount.address)
+                                        map.put("txid", suceess)
+                                        Thread.sleep(200)
+                                        httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
+                                            mView.closeProgressDialog()
+                                            mView.generateBuyQgasOrderSuccess()
+                                        }, {
+                                            httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
+                                                mView.closeProgressDialog()
+                                                mView.generateBuyQgasOrderSuccess()
+                                            }, {
+                                                mView.closeProgressDialog()
+                                                if (map["txid"] != null) {
+                                                    EntrustTodo.createEntrustTodo(map)
+                                                    sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "QLC_CHAIN", "QGAS", amount, it.message!!)
+                                                }
+                                            }, {
 
-                                    })
-                                } else {
-                                    mView.generatebuyQgasOrderFailed("Not enough QGAS")
-                                    it.onComplete()
+                                            })
+                                        }, {
+
+                                        })
+                                    }
                                 }
-                            }
+
+                            })
                         } else {
-                            mView.generatebuyQgasOrderFailed("send qgas error")
-                            it.onComplete()
+                            mView.generatebuyQgasOrderFailed("Not enough QGAS")
                         }
                     }
-                })
-            })
-        }.concatMap {
-            map.put("fromAddress", qlcAccount.address)
-            map.put("txid", it.blockingFirst())
-            httpAPIWrapper.generateBuyQgasOrder(map)
-        }.subscribe({ baseBack ->
-            //isSuccesse
-            mView.closeProgressDialog()
-            mView.generateBuyQgasOrderSuccess()
-        }, {
-            mView.closeProgressDialog()
-        }, {
-            //onComplete
-            KLog.i("onComplete")
-            mView.closeProgressDialog()
+                } else {
+                    mView.generatebuyQgasOrderFailed("send qgas error")
+                }
+            }
         })
-        mCompositeDisposable.add(disposable)
+
+//        var disposable = Observable.create(ObservableOnSubscribe<QLCAccount> {
+//            KLog.i("发射1")
+//            it.onNext(qlcAccount)
+//            it.onComplete()
+//        }).subscribeOn(Schedulers.io()).map { qlcAccount1 ->
+//
+//            Observable.create(ObservableOnSubscribe<String> {
+//                KLog.i("开始查询qgas。。")
+//
+//            })
+//        }.concatMap {
+//            map.put("fromAddress", qlcAccount.address)
+//            map.put("txid", it.blockingFirst())
+//            httpAPIWrapper.generateBuyQgasOrder(map)
+//        }.subscribe({ baseBack ->
+//            //isSuccesse
+//            mView.closeProgressDialog()
+//            mView.generateBuyQgasOrderSuccess()
+//        }, {
+//            mView.closeProgressDialog()
+//            if (map["txid"] != null) {
+//                EntrustTodo.createEntrustTodo(map)
+//                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "QLC_CHAIN", "QGAS", amount)
+//            }
+//        }, {
+//            //onComplete
+//            KLog.i("onComplete")
+//            mView.closeProgressDialog()
+//            if (map["txid"] != null) {
+//                EntrustTodo.createEntrustTodo(map)
+//                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "QLC_CHAIN", "QGAS", amount)
+//            }
+//        })
+//        mCompositeDisposable.add(disposable)
     }
 
-    fun generateEntrustBuyOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
+    fun generateEntrustBuyOrder(txid: String, fromAddress: String, map: MutableMap<String, String>, amount: String, chain: String, tokenName: String) {
         map.put("fromAddress", fromAddress)
         map.put("txid", getTxidByHex(txid))
         mCompositeDisposable.add(httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
@@ -156,15 +184,15 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         }, {
             mView.closeProgressDialog()
             EntrustTodo.createEntrustTodo(map)
-            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
+            sysbackUp(txid, "ENTRUST_ORDER", chain, tokenName, amount, it.message!!)
         }, {
             mView.closeProgressDialog()
             EntrustTodo.createEntrustTodo(map)
-            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
+            sysbackUp(txid, "ENTRUST_ORDER", chain, tokenName, amount)
         }))
     }
 
-    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String, remark : String = "") {
         val infoMap = java.util.HashMap<String, Any>()
         infoMap["account"] = ConstantValue.currentUser.account
         infoMap["token"] = AccountUtil.getUserToken()
@@ -174,6 +202,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         infoMap["amount"] = amount
         infoMap["platform"] = "Android"
         infoMap["txid"] = txid
+        infoMap["remark"] = remark
         httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
             override fun onNext(baseBack: BaseBack<*>) {
                 onComplete()
@@ -198,7 +227,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
-                        generateEntrustBuyOrder(it, walletAddress, map)
+                        generateEntrustBuyOrder(it, walletAddress, map, amount, "ETH_CHAIN", tokenInfo.tokenInfo.symbol)
                         KLog.i("transaction Hash: $it")
                     }
                 }, {

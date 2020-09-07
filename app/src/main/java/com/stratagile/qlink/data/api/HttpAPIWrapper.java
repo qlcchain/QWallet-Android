@@ -17,6 +17,7 @@ import com.stratagile.qlink.entity.ChainVpn;
 import com.stratagile.qlink.entity.ClaimData;
 import com.stratagile.qlink.entity.ConnectedWifiRecord;
 import com.stratagile.qlink.entity.CreateWallet;
+import com.stratagile.qlink.entity.DefiPrice;
 import com.stratagile.qlink.entity.EntrustOrderList;
 import com.stratagile.qlink.entity.EosAccountInfo;
 import com.stratagile.qlink.entity.EosAccountTransaction;
@@ -74,6 +75,7 @@ import com.stratagile.qlink.entity.defi.DefiRating;
 import com.stratagile.qlink.entity.defi.DefiStateList;
 import com.stratagile.qlink.entity.defi.DefiStatsCache;
 import com.stratagile.qlink.entity.defi.RatingInfo;
+import com.stratagile.qlink.entity.defi.ServerEthPrice;
 import com.stratagile.qlink.entity.eos.EosNeedInfo;
 import com.stratagile.qlink.entity.eos.EosResourcePrice;
 import com.stratagile.qlink.entity.finance.EarnRank;
@@ -362,11 +364,11 @@ public class HttpAPIWrapper {
 
     }
 
-    public Observable<Passport> updateIdCard(MultipartBody.Part photo, MultipartBody.Part holdphoto, RequestBody account, RequestBody token) {     //String userId, String nickName   userId, nickName
+    public Observable<Passport> updateIdCard(MultipartBody.Part photo, MultipartBody.Part holdphoto, RequestBody account, RequestBody token, RequestBody idNumber) {     //String userId, String nickName   userId, nickName
         if (false) {
-            return wrapper(mMainHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mMainHttpAPI.updateIdCard(idNumber, token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
         } else {
-            return wrapper(mHttpAPI.updateIdCard(token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
+            return wrapper(mHttpAPI.updateIdCard(idNumber, token, account, photo, holdphoto)).compose(SCHEDULERS_TRANSFORMER);
         }
 
     }
@@ -992,7 +994,7 @@ public class HttpAPIWrapper {
     }
 
     public Observable<UnLock> unLock(Map map) {
-        if (false) {
+        if (!AppConfig.getInstance().isMainNet) {
             return wrapper(mMainHttpAPI.unLock(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.unLock(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
@@ -1426,6 +1428,21 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.defiStasCache(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         } else {
             return wrapper(mHttpAPI.defiStasCache(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+
+    public Observable<DefiPrice> defiPriceList(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiPriceList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiPriceList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
+    public Observable<ServerEthPrice> ethGasPrice(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.ethGasPrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.ethGasPrice(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
 

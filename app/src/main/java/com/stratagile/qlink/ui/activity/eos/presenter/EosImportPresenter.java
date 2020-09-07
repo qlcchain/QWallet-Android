@@ -7,7 +7,6 @@ import com.stratagile.qlink.Account;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.blockchain.cypto.util.HexUtils;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.Balance;
 import com.stratagile.qlink.entity.BaseBack;
@@ -30,7 +29,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import neoutils.Neoutils;
 
 /**
  * @author hzp

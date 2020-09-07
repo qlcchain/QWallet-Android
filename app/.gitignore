@@ -2,3 +2,5 @@
 .externalNativeBuild
 /.externalNativeBuild
 /src/main/java/com/stratagile/qlink/utils/JUtil.java
+/googleplay/
+/normal/

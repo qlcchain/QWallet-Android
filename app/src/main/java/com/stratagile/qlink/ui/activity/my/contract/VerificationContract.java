@@ -32,6 +32,6 @@ public interface VerificationContract {
 //         */
 //        void getBusinessInfo(Map map);
 
-        void uploadImg(Map map);
+        void uploadImg(Map map, String idNumber);
     }
 }

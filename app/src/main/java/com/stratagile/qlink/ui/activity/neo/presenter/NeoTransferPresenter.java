@@ -5,10 +5,8 @@ import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.api.transaction.SendBackWithTxId;
 import com.stratagile.qlink.api.transaction.SendCallBack;
-import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.UTXO;
 import com.stratagile.qlink.data.UTXOS;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
@@ -195,175 +193,175 @@ public class NeoTransferPresenter implements NeoTransferContract.NeoTransferCont
 
     @Override
     public void sendNEP5Token(TokenInfo tokenInfo, String amount, String toAddress, String remark) {
-        if (assets == null) {
-            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.pleasewait));
-            mView.showProgressDialog();
-            getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
-                @Override
-                public void onSuccess() {
-                    mView.closeProgressDialog();
-                    mView.showProgressDialog();
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("addressFrom", tokenInfo.getWalletAddress());
-                    map.put("addressTo", toAddress);
-                    map.put("symbol", tokenInfo.getTokenSymol());
-                    map.put("amount", amount);
-                    TransactionApi.getInstance().sendNEP5Token(assets, map, com.stratagile.qlink.Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
-
-                        @Override
-                        public void onSuccess(String txid) {
-                            KLog.i(txid);
-                            mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
-                            mView.closeProgressDialog();
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            mView.closeProgressDialog();
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure() {
-
-                }
-            });
-            return;
-        }
-        mView.showProgressDialog();
-        Map<String, Object> map = new HashMap<>();
-        map.put("addressFrom", tokenInfo.getWalletAddress());
-        map.put("addressTo", toAddress);
-        map.put("symbol", tokenInfo.getTokenSymol());
-        map.put("amount", amount);
-        TransactionApi.getInstance().sendNEP5Token(assets, map, com.stratagile.qlink.Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
-
-            @Override
-            public void onSuccess(String txid) {
-                KLog.i(txid);
-                mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
-                mView.closeProgressDialog();
-            }
-
-            @Override
-            public void onFailure() {
-                mView.closeProgressDialog();
-            }
-        });
+//        if (assets == null) {
+//            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.pleasewait));
+//            mView.showProgressDialog();
+//            getUtxo(tokenInfo.getWalletAddress(), new SendCallBack() {
+//                @Override
+//                public void onSuccess() {
+//                    mView.closeProgressDialog();
+//                    mView.showProgressDialog();
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put("addressFrom", tokenInfo.getWalletAddress());
+//                    map.put("addressTo", toAddress);
+//                    map.put("symbol", tokenInfo.getTokenSymol());
+//                    map.put("amount", amount);
+//                    TransactionApi.getInstance().sendNEP5Token(assets, map, com.stratagile.qlink.Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
+//
+//                        @Override
+//                        public void onSuccess(String txid) {
+//                            KLog.i(txid);
+//                            mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
+//                            mView.closeProgressDialog();
+//                        }
+//
+//                        @Override
+//                        public void onFailure() {
+//                            mView.closeProgressDialog();
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onFailure() {
+//
+//                }
+//            });
+//            return;
+//        }
+//        mView.showProgressDialog();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("addressFrom", tokenInfo.getWalletAddress());
+//        map.put("addressTo", toAddress);
+//        map.put("symbol", tokenInfo.getTokenSymol());
+//        map.put("amount", amount);
+//        TransactionApi.getInstance().sendNEP5Token(assets, map, com.stratagile.qlink.Account.INSTANCE.getWallet(), tokenInfo.getTokenAddress(), tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), remark, new SendBackWithTxId() {
+//
+//            @Override
+//            public void onSuccess(String txid) {
+//                KLog.i(txid);
+//                mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
+//                mView.closeProgressDialog();
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//                mView.closeProgressDialog();
+//            }
+//        });
     }
 
     @Override
     public void sendNeo(String amount, String toAddress, TokenInfo tokenInfo) {
-        mView.showProgressDialog();
-        if (assets == null) {
-            getUtxo(com.stratagile.qlink.Account.INSTANCE.getWallet().getAddress(), new SendCallBack() {
-                @Override
-                public void onSuccess() {
-                    mView.closeProgressDialog();
-                }
-
-                @Override
-                public void onFailure() {
-                    mView.closeProgressDialog();
-                }
-            });
-            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.pleasewait));
-            return;
-        }
-        if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
-            TransactionApi.getInstance().sendNeo(assets, com.stratagile.qlink.Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.NEO, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
-                @Override
-                public void onSuccess(String txid) {
-                    KLog.i(txid);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("addressFrom", tokenInfo.getWalletAddress());
-                    map.put("addressTo", toAddress);
-                    map.put("symbol", tokenInfo.getTokenSymol());
-                    map.put("amount", amount);
-                    map.put("tx", txid);
-                    Disposable disposable = httpAPIWrapper.neoTokenTransaction(map)
-                            .subscribe(new Consumer<NeoTransfer>() {
-                                @Override
-                                public void accept(NeoTransfer unspent) throws Exception {
-                                    //isSuccesse
-                                    KLog.i("onSuccesse");
-                                    if (unspent.getData().isTransferResult()) {
-                                        mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
-                                    } else {
-                                        mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.error2));
-                                    }
-                                    mView.closeProgressDialog();
-
-                                }
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-                                    //onError
-                                    KLog.i("onError");
-                                    throwable.printStackTrace();
-                                    mView.closeProgressDialog();
-                                }
-                            }, new Action() {
-                                @Override
-                                public void run() throws Exception {
-                                    //onComplete
-                                    KLog.i("onComplete");
-                                    mView.closeProgressDialog();
-                                }
-                            });
-                    mCompositeDisposable.add(disposable);
-                }
-
-                @Override
-                public void onFailure() {
-                    mView.closeProgressDialog();
-                }
-            });
-        } else {
-            TransactionApi.getInstance().sendNeo(assets, com.stratagile.qlink.Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.GAS, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
-                @Override
-                public void onSuccess(String txid) {
-                    KLog.i(txid);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("addressFrom", tokenInfo.getWalletAddress());
-                    map.put("addressTo", toAddress);
-                    map.put("symbol", tokenInfo.getTokenSymol());
-                    map.put("amount", amount);
-                    map.put("tx", txid);
-                    Disposable disposable = httpAPIWrapper.neoTokenTransaction(map)
-                            .subscribe(new Consumer<BaseBack>() {
-                                @Override
-                                public void accept(BaseBack unspent) throws Exception {
-                                    //isSuccesse
-                                    KLog.i("onSuccesse");
-                                    mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
-                                    mView.closeProgressDialog();
-
-                                }
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-                                    //onError
-                                    KLog.i("onError");
-                                    throwable.printStackTrace();
-                                }
-                            }, new Action() {
-                                @Override
-                                public void run() throws Exception {
-                                    //onComplete
-                                    KLog.i("onComplete");
-                                }
-                            });
-                    mCompositeDisposable.add(disposable);
-                }
-
-                @Override
-                public void onFailure() {
-                    mView.closeProgressDialog();
-                }
-            });
-        }
+//        mView.showProgressDialog();
+//        if (assets == null) {
+//            getUtxo(com.stratagile.qlink.Account.INSTANCE.getWallet().getAddress(), new SendCallBack() {
+//                @Override
+//                public void onSuccess() {
+//                    mView.closeProgressDialog();
+//                }
+//
+//                @Override
+//                public void onFailure() {
+//                    mView.closeProgressDialog();
+//                }
+//            });
+//            ToastUtil.displayShortToast(AppConfig.instance.getString(R.string.pleasewait));
+//            return;
+//        }
+//        if (tokenInfo.getTokenSymol().toLowerCase().equals("neo")) {
+//            TransactionApi.getInstance().sendNeo(assets, com.stratagile.qlink.Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.NEO, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
+//                @Override
+//                public void onSuccess(String txid) {
+//                    KLog.i(txid);
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put("addressFrom", tokenInfo.getWalletAddress());
+//                    map.put("addressTo", toAddress);
+//                    map.put("symbol", tokenInfo.getTokenSymol());
+//                    map.put("amount", amount);
+//                    map.put("tx", txid);
+//                    Disposable disposable = httpAPIWrapper.neoTokenTransaction(map)
+//                            .subscribe(new Consumer<NeoTransfer>() {
+//                                @Override
+//                                public void accept(NeoTransfer unspent) throws Exception {
+//                                    //isSuccesse
+//                                    KLog.i("onSuccesse");
+//                                    if (unspent.getData().isTransferResult()) {
+//                                        mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
+//                                    } else {
+//                                        mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.error2));
+//                                    }
+//                                    mView.closeProgressDialog();
+//
+//                                }
+//                            }, new Consumer<Throwable>() {
+//                                @Override
+//                                public void accept(Throwable throwable) throws Exception {
+//                                    //onError
+//                                    KLog.i("onError");
+//                                    throwable.printStackTrace();
+//                                    mView.closeProgressDialog();
+//                                }
+//                            }, new Action() {
+//                                @Override
+//                                public void run() throws Exception {
+//                                    //onComplete
+//                                    KLog.i("onComplete");
+//                                    mView.closeProgressDialog();
+//                                }
+//                            });
+//                    mCompositeDisposable.add(disposable);
+//                }
+//
+//                @Override
+//                public void onFailure() {
+//                    mView.closeProgressDialog();
+//                }
+//            });
+//        } else {
+//            TransactionApi.getInstance().sendNeo(assets, com.stratagile.qlink.Account.INSTANCE.getWallet(), NeoNodeRPC.Asset.GAS, tokenInfo.getWalletAddress(), toAddress, Double.parseDouble(amount), new SendBackWithTxId() {
+//                @Override
+//                public void onSuccess(String txid) {
+//                    KLog.i(txid);
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put("addressFrom", tokenInfo.getWalletAddress());
+//                    map.put("addressTo", toAddress);
+//                    map.put("symbol", tokenInfo.getTokenSymol());
+//                    map.put("amount", amount);
+//                    map.put("tx", txid);
+//                    Disposable disposable = httpAPIWrapper.neoTokenTransaction(map)
+//                            .subscribe(new Consumer<BaseBack>() {
+//                                @Override
+//                                public void accept(BaseBack unspent) throws Exception {
+//                                    //isSuccesse
+//                                    KLog.i("onSuccesse");
+//                                    mView.sendSuccess(AppConfig.getInstance().getResources().getString(R.string.success));
+//                                    mView.closeProgressDialog();
+//
+//                                }
+//                            }, new Consumer<Throwable>() {
+//                                @Override
+//                                public void accept(Throwable throwable) throws Exception {
+//                                    //onError
+//                                    KLog.i("onError");
+//                                    throwable.printStackTrace();
+//                                }
+//                            }, new Action() {
+//                                @Override
+//                                public void run() throws Exception {
+//                                    //onComplete
+//                                    KLog.i("onComplete");
+//                                }
+//                            });
+//                    mCompositeDisposable.add(disposable);
+//                }
+//
+//                @Override
+//                public void onFailure() {
+//                    mView.closeProgressDialog();
+//                }
+//            });
+//        }
 
     }
 

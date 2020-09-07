@@ -38,7 +38,6 @@ import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.activity_sell_qgas.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import org.web3j.utils.Convert
@@ -338,7 +337,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     }
                 }
                 AllWallet.WalletType.NeoWallet -> {
-                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                    if (!NeoUtils.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
                         return@setOnClickListener
                     }
@@ -364,7 +363,7 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
                     }
                 }
                 AllWallet.WalletType.NeoWallet -> {
-                    if (!Neoutils.validateNEOAddress(tvSendWalletAddess.text.toString().trim())) {
+                    if (!NeoUtils.isValidAddress(tvSendWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_send_address))
                         return@setOnClickListener
                     }
@@ -752,14 +751,16 @@ class SellQgasActivity : BaseActivity(), SellQgasContract.View {
         webview = DWebView(this)
         webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(7)
+        val arrays = arrayOfNulls<Any>(8)
         arrays[0] = sendNeoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = tradeTokenInfo!!.asset_hash
         arrays[3] = etQgas.text.toString().trim()
         arrays[4] = 8
+//        arrays[5] = Account.getWallet()!!.ecKeyPair.exportAsWIF()
         arrays[5] = Account.getWallet()!!.wif
         arrays[6] = "xxx"
+        arrays[7] = AppConfig.instance.isMainNet
         try {
             webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
                 KLog.i("call succeed,return value is " + retValue!!)

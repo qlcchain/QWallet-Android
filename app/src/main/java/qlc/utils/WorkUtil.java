@@ -34,7 +34,7 @@ public class WorkUtil {
 				}
 			}
 		}
-		
+
 		return Helper.byteToHexString(pow);
 	}
 
@@ -71,7 +71,7 @@ public class WorkUtil {
 			threads[i] = powFinder;
 			powFinder.start();
 		}
-		
+
 		while (isEqual(pow, zero)) {
 			try {
 				Thread.sleep(5);
@@ -79,10 +79,10 @@ public class WorkUtil {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return Helper.byteToHexString(pow);
 	}
-	
+
 	private static boolean isEqual(byte[] b0, byte[] b1) {
 		for (int i = 0; i < b0.length; i++) {
 			if (b0[i] != b1[i])

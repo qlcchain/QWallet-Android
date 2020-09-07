@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cmn-Hans">
+    <meta charset="UTF-8">
+    <title>qlc staking</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <!--    <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>-->
+    <script src="./bignumber.min.js"></script>
+    <script src="./dsbridge.js"></script>
+    <script src="./browser.min.js"></script>
+</head>
+<body>
+
+<script>
+
+  // const apiProvider = new Neon.api.neoscan.instance("MainNet");
+  // const apiProvider = new Neon.api.neoscan.instance("TestNet");
+  const apiProvider = new Neon.api.neoscan.instance("http://seed1.ngd.network:20332");
+  // const scriptHash = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5";
+  const scriptHash = "e0abb5fde5a0b870c13f3e60258856e38a939187";
+  // multisig
+  dsBridge.registerAsyn("staking", {
+    tag: "staking",
+
+    // test2
+    testContract1: function(privateKey, responseCallback) {
+      const account = new Neon.wallet.Account(privateKey);
+
+      const getName = { scriptHash, operation: 'name', args: [] }
+      const getDecimals = { scriptHash, operation: 'decimals', args: [] }
+      const getSymbol = { scriptHash, operation: 'symbol', args: [] }
+      const getTotalSupply = { scriptHash, operation: 'totalSupply', args: [] }
+
+      const script = Neon.sc.createScript(getName, getDecimals, getSymbol, getTotalSupply)
+
+      // const script = Neon.sc.createScript(invoke);
+      //console.log("\n\n--- API Provider RPC Endpoint ---");
+      console.log(script);
+
+      console.log("\n\n--- 开始 ---");
+      Neon.rpc.Query.invokeScript(script)
+        .execute('http://seed7.ngd.network:10332')
+        .then(res => {
+          responseCallback(res);
+          console.log("\n\n--- Response ---");
+          console.log(res);
+        });
+
+
+      // Neon.rpc.Query.invokeFunction(scriptHash, "name", [])
+      //   .execute('http://seed7.ngd.network:10332')
+      //   .then(response => {
+      //   responseCallback(response);
+      //   console.log("\n\n--- Response ---");
+      //   console.log(response);
+      //   return response;
+      // });
+
+    },
+
+    deSerializ : function(data, responseCallback) {
+      const result = Neon.sc.StackItem.deserialize(data);
+      console.log(JSON.stringify(result));
+      responseCallback(result);
+    },
+
+    nep5Transfer: function(privateKey, responseCallback) {
+      const account = new Neon.wallet.Account(privateKey);
+
+      const getName = { scriptHash, operation: 'name', args: [] }
+      const getDecimals = { scriptHash, operation: 'decimals', args: [] }
+      const getSymbol = { scriptHash, operation: 'symbol', args: [] }
+      const getTotalSupply = { scriptHash, operation: 'totalSupply', args: [] }
+
+      const script = Neon.sc.createScript(getName, getDecimals, getSymbol, getTotalSupply)
+
+      // const script = Neon.sc.createScript(invoke);
+      //console.log("\n\n--- API Provider RPC Endpoint ---");
+      console.log(script);
+
+      const invokeConfig = {
+        api: apiProvider, // The API Provider that we rely on for balance and rpc information
+        account: account, // The sending Account
+        script: script // The Smart Contract invocation script
+      };
+      console.log("\n\n--- 开始 ---");
+      Neon.rpc.Query.invokeScript(script)
+        .execute('http://seed1.ngd.network:20332')
+        .then(res => {
+          responseCallback(res);
+          console.log("\n\n--- Response ---");
+          console.log(res);
+        });
+
+
+      // Neon.rpc.Query.invokeFunction(scriptHash, "name", [])
+      //   .execute('http://seed7.ngd.network:10332')
+      //   .then(response => {
+      //   responseCallback(response);
+      //   console.log("\n\n--- Response ---");
+      //   console.log(response);
+      //   return response;
+      // });
+
+    },
+
+    userLock: function (hash, address, amount, overtimeBlocks, privateKey, responseCallback) {
+      const account = new Neon.wallet.Account(privateKey);
+
+      const invoke = {
+        scriptHash: scriptHash, // Scripthash for the contract
+        operation: 'userLock', // name of operation to perform.
+        args: [
+          Neon.sc.ContractParam.byteArray(hash, 'string'),
+          Neon.sc.ContractParam.byteArray(address, 'address'),
+          Neon.sc.ContractParam.integer(amount),
+          Neon.sc.ContractParam.byteArray('ARNpaFJhp6SHziRomrK4cenWw66C8VVFyv', 'address'),
+          Neon.sc.ContractParam.integer(overtimeBlocks)
+        ]
+      };
+      console.log(JSON.stringify(invoke));
+
+      const script = Neon.sc.createScript(invoke);
+      //console.log("\n\n--- API Provider RPC Endpoint ---");
+      console.log(JSON.stringify(script));
+
+      const invokeConfig = {
+        api: apiProvider, // The API Provider that we rely on for balance and rpc information
+        account: account, // The sending Account
+        script: script // The Smart Contract invocation script
+      };
+
+      // Neon.api.doInvoke(invokeConfig)
+      //   .then(res => {
+      //     responseCallback(res.response);
+      //     console.log("\n\n--- Response ---");
+      //     console.log(res);
+      //     return res.response;
+      //   })
+      //   .catch(err => {
+      //     responseCallback(err);
+      //     console.log(err);
+      //     return err;
+      //   });
+
+
+
+      Neon.rpc.Query.sendRawTransaction(Neon.wallet.sign(script, privateKey))
+        .execute("http://seed1.ngd.network:20332")
+        .then(res => {
+          responseCallback(res);
+          console.log("\n\n--- Response ---");
+          console.log(res);
+        });
+
+    },
+
+    refundUser: function (hash, address, amount, overtimeBlocks, privateKey, responseCallback) {
+      const account = new Neon.wallet.Account(privateKey);
+      const invoke = {
+        scriptHash: scriptHash, // Scripthash for the contract
+        operation: 'refundUser', // name of operation to perform.
+        args: [
+          // Neon.sc.ContractParam.byteArray(hash, 'string'),
+          Neon.sc.ContractParam.byteArray(address, 'address'),
+          Neon.sc.ContractParam.integer(amount)
+          // Neon.sc.ContractParam.integer(overtimeBlocks)
+        ]
+      };
+      var attrbutes = [
+        '', ''
+      ];
+      var attrbute1 = [
+        new TransactionAttribute()
+      ];
+      console.log(JSON.stringify(invoke));
+
+      const script = Neon.sc.createScript(invoke);
+      //console.log("\n\n--- API Provider RPC Endpoint ---");
+      console.log(JSON.stringify(script));
+
+      const invokeConfig = {
+        api: apiProvider, // The API Provider that we rely on for balance and rpc information
+        account: account, // The sending Account
+        script: script // The Smart Contract invocation script
+      };
+
+
+
+      Neon.rpc.Query.sendRawTransaction(Neon.wallet.sign(script, privateKey))
+        .execute('http://seed1.ngd.network:20332')
+        .then(res => {
+          responseCallback(res);
+          console.log("\n\n--- Response ---");
+          console.log(res);
+        });
+
+    },
+
+    testContract2: function(privateKey, responseCallback) {
+      const scriptHash = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5";
+      const account = Neon.create.account(privateKey);
+      const alternative = new wallet.Account(privateKey);
+
+      Neon.is.address(string);
+      wallet.isAddress(string);
+    }
+  });
+
+
+
+</script>
+</body>
+</html>

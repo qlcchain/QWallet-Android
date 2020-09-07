@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:layout_height="40dp">
+    <TextView
+        android:id="@+id/tvTokenName"
+        android:text="COMP"
+        android:textColor="@color/color_29282a"
+        android:layout_marginLeft="15dp"
+        android:textSize="13sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvTokenPrice1"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/color_29282a"
+        android:textSize="13sp"
+        android:text="200USDT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/percentChange24h"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/color_29282a"
+        android:textSize="13sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:layout_marginLeft="10dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"/>
+
+</LinearLayout>

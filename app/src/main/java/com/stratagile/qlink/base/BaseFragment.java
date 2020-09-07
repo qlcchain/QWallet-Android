@@ -125,7 +125,7 @@ public abstract class BaseFragment extends Fragment {
 		if(this != null ){
 			super.setUserVisibleHint(isVisibleToUser);
 			if (isVisibleToUser) {
-				if(!isLoaded && viewCreated){
+				if(viewCreated){
 					initDataFromNet();
 					isLoaded = true;
 				}

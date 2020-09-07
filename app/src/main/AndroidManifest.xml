@@ -355,6 +355,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.my.VerificationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.otc.NewOrderActivity"
@@ -598,7 +599,7 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
-            android:theme="@style/MyDialogStyle"/>
+            android:theme="@style/MyDialogStyle" />
 
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
@@ -616,8 +617,8 @@
 
         <service
             android:name="cn.jpush.android.service.PushService"
-            android:process=":pushcore"
-            android:exported="false">
+            android:exported="false"
+            android:process=":pushcore">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER" />
                 <action android:name="cn.jpush.android.intent.REPORT" />
@@ -685,15 +686,15 @@
         </receiver>
 
 
-<!--        <receiver-->
-<!--            android:name="com.stratagile.qlink.reciver.JpushReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
-<!--                <category android:name="com.stratagile.qwallet" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+        <!--        <receiver-->
+        <!--            android:name="com.stratagile.qlink.reciver.JpushReceiver"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="false">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
+        <!--                <category android:name="com.stratagile.qwallet" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
 
         <!--since 3.3.0 Required SDK核心功能-->
         <activity
@@ -706,15 +707,42 @@
                 <category android:name="com.stratagile.qlink" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.my.EpidemicRedPaperActivity" />
-        <activity android:name=".ui.activity.my.CumulativeQgasClaimedActivity" />
-        <activity android:name=".ui.activity.my.EpidemicClaimActivity" />
-        <activity android:name=".ui.activity.my.EpidemicClaimQlcActivity" />
-        <activity android:name=".ui.activity.my.EpidemicWebViewActivity" />
-        <activity android:name=".ui.activity.my.EpidemicInviteNowActivity" />
-        <activity android:name=".ui.activity.defi.DefiDetailActivity" />
-        <activity android:name=".ui.activity.defi.DefiRateActivity" />
-        <activity android:name=".ui.activity.defi.DefiNewsDetailActivity" />
+        <activity
+            android:name=".ui.activity.my.EpidemicRedPaperActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.CumulativeQgasClaimedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.EpidemicClaimActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.EpidemicClaimQlcActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.EpidemicWebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.my.EpidemicInviteNowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.defi.DefiDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.defi.DefiRateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.defi.DefiNewsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.defi.TransformQlcActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".ui.activity.defi.EthTransformActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".ui.activity.defi.SwapDetailActivity" android:screenOrientation="portrait"/>
 
         <service
             android:name="com.stratagile.qlink.service.JpushService"

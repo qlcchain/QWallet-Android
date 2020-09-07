@@ -3,6 +3,7 @@ package com.stratagile.qlink.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.AllWallet
 
 object OtcUtils {
@@ -48,10 +49,18 @@ object OtcUtils {
                 urlPre = "https://explorer.qlcchain.org/transaction/"
             }
             "ETH_CHAIN" -> {
-                urlPre = "https://etherscan.io/tx/"
+                if (SpUtil.getBoolean(context, ConstantValue.isMainNet, true)) {
+                    urlPre = "https://etherscan.io/tx/"
+                } else {
+                    urlPre = "https://rinkeby.etherscan.io/tx/"
+                }
             }
             "NEO_CHAIN" -> {
-                urlPre = "https://neoscan.io/transaction/"
+                if (SpUtil.getBoolean(context, ConstantValue.isMainNet, true)) {
+                    urlPre = "https://neoscan.io/transaction/"
+                } else {
+                    urlPre = "https://neoscan-testnet.io/transaction/"
+                }
             }
             "EOS_CHAIN" -> {
                 urlPre = "https://eosflare.io/tx/"

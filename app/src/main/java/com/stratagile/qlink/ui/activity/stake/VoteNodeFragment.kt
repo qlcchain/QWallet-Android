@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
@@ -35,12 +36,15 @@ import com.google.gson.reflect.TypeToken
 import com.pawegio.kandroid.runOnUiThread
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
+import com.stratagile.qlc.entity.QlcTokenbalance
 import com.stratagile.qlink.Account
 import com.stratagile.qlink.R
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
 import com.stratagile.qlink.db.Wallet
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.NeoWalletInfo
+import com.stratagile.qlink.entity.TestNetNeoBalance
 import com.stratagile.qlink.entity.eventbus.ChangeWallet
 import com.stratagile.qlink.entity.eventbus.CreateMultSignSuccess
 import com.stratagile.qlink.entity.eventbus.StakeQlcError
@@ -84,6 +88,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     var neoWalletInfo: NeoWalletInfo? = null
     var neoQlcTokenInfo: NeoWalletInfo.DataBean.BalanceBean? = null
     lateinit var stakeViewModel: NewStakeViewModel
+    var checkCount = 0
 
     override fun setNeoDetail(neoWalletInfo: NeoWalletInfo) {
         closeProgressDialog()
@@ -93,9 +98,6 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                 neoQlcTokenInfo = it
                 tvQlcBalance.text = getString(R.string.balance) + ": ${it.amount} QLC"
             }
-//            if (it.asset_symbol.equals("GAS")) {
-//                gasTokenInfo = it
-//            }
         }
     }
 
@@ -307,6 +309,13 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     }
 
     fun getNep5Txid(lockResult: LockResult) {
+        if (!AppConfig.instance.isMainNet) {
+            thread {
+                Thread.sleep(25000)
+                prePareBenefitPledge(lockResult = lockResult)
+            }
+            return
+        }
         thread {
             val dataJson = jsonObject(
                     "jsonrpc" to "2.0",
@@ -315,7 +324,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     "id" to 3
             )
 //            var request = "https://api.nel.group/api/mainnet".httpPost().body(dataJson.toString())
-            var request = "https://api.neoscan.io/api/main_net/v1/get_transaction/${lockResult.txid}".httpGet()
+            var request = "${ConstantValue.neoTranscationNode}${lockResult.txid}".httpGet()
             request.headers["Content-Type"] = "application/json"
             request.responseString { _, _, result ->
                 val (data, error) = result
@@ -338,6 +347,43 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                         getNep5Txid(lockResult)
                     }
                     KLog.i(error.localizedMessage)
+                }
+            }
+        }
+    }
+
+    fun getTestNetQlcBalance(address : String) {
+        thread {
+            val dataJson = jsonObject(
+                    "jsonrpc" to "2.0",
+                    "method" to "getnep5balanceofaddress",
+                    "params" to jsonArray("b9d7ea3062e6aeeb3e8ad9548220c4ba1361d263", address),
+                    "id" to 3
+            )
+            var request = "https://api.nel.group/api/testnet".httpPost().body(dataJson.toString())
+            request.headers["Content-Type"] = "application/json"
+            request.responseString { _, _, result ->
+                val (data, error) = result
+                KLog.i(data)
+                if (error == null) {
+                    // {"jsonrpc":"2.0","id":3,"result":[{"nep5balance":"8127.18366812"}]}
+                    var testNetNeoBalance = Gson().fromJson<TestNetNeoBalance>(data, TestNetNeoBalance::class.java)
+                    try {
+                        val jsonObject = JSONObject.parseObject(data)
+                        val tokenJson = jsonObject.getJSONArray("result")
+                        var tokenbalance = NeoWalletInfo.DataBean.BalanceBean()
+                        tokenbalance.asset_hash = "b9d7ea3062e6aeeb3e8ad9548220c4ba1361d263"
+                        tokenbalance.asset_symbol = "QLC"
+                        tokenbalance.amount = testNetNeoBalance.result[0].nep5balance.toDouble()
+                        runOnUiThread {
+                            neoQlcTokenInfo = tokenbalance
+                            tvQlcBalance.text = getString(R.string.balance) + ": ${tokenbalance.amount} QLC"
+                        }
+                    } catch (e : Exception) {
+                        e.printStackTrace()
+                    }
+                } else {
+
                 }
             }
         }
@@ -414,7 +460,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         showProgressDialog()
         thread {
             try {
-                val client = QlcClient("https://nep5.qlcchain.online")
+                val client = QlcClient(ConstantValue.qlcStakeNode)
                 val params = JSONArray()
                 params.add(txid)
                 var result = client.call("ledger_pledgeInfoByTransactionID", params)
@@ -444,7 +490,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
     fun recoverStake(txid: String) {
         thread {
             try {
-                val client = QlcClient("https://nep5.qlcchain.online")
+                val client = QlcClient(ConstantValue.qlcStakeNode)
                 val params = JSONArray()
                 params.add(txid)
                 var result = client.call("nep5_getLockInfo", params)
@@ -470,6 +516,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                             if (neoWallet!!.privateKey.toLowerCase().equals(neoWallet!!.publicKey.toLowerCase())) {
 
                                 Account.fromWIF(neoWallet!!.wif)
+//                                neoWallet!!.publicKey = Numeric.toHexStringWithPrefix(Account.getWallet()!!.publicKey)
                                 neoWallet!!.publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
                                 AppConfig.instance.daoSession.walletDao.update(neoWallet)
                             }
@@ -524,7 +571,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         runOnUiThread {
             tvDot!!.text = "4"
         }
-        val client = QlcClient("https://nep5.qlcchain.online")
+        val client = QlcClient(ConstantValue.qlcStakeNode)
         val params = JSONArray()
         val paramOne = JSONObject()
         paramOne["beneficial"] = lockResult.stakeType.qlcchainAddress
@@ -538,79 +585,144 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
         params.add(paramTwo)
         val result = client.call("nep5_prePareBenefitPledge", params)
         KLog.i(result)
-        benefitPledge(lockResult = lockResult)
+        benefitPledgeAsync(lockResult = lockResult)
     }
 
-    fun benefitPledge(lockResult: LockResult) {
+    fun benefitPledgeAsync(lockResult: LockResult) {
         runOnUiThread {
             tvDot!!.text = "5"
         }
-        val client = QlcClient("https://nep5.qlcchain.online")
+        val client = QlcClient(ConstantValue.qlcStakeNode)
         val params = JSONArray()
         params.add(lockResult.txid)
-        KLog.i("开始最后一步")
-        var result = client.call("nep5_benefitPledge", params)
-        KLog.i("最后一步返回")
+        KLog.i("开始benefitPledgeAsync")
+        var result = client.call("nep5_benefitPledgeAsync", params)
+        KLog.i("benefitPledgeAsync返回")
         KLog.i(result.toString())
-        var stateBlock = Gson().fromJson(result.getJSONObject("result").toString(), StateBlock::class.java)
+        benefitPledgeCheck(lockResult, result.getString("result"))
+    }
 
-        var root = BlockMng.getRoot(stateBlock)
-//        var root = AccountMng.addressToPublicKey(stateBlock.address)
-        var params1 = mutableListOf<Pair<String, String>>()
-        params1.add(Pair("root", root))
-        var request = "http://pow1.qlcchain.org/work".httpGet(params1)
-        request.responseString { _, _, result ->
-            KLog.i("远程work返回、、")
-            val (data, error) = result
-            try {
-                if (error == null) {
-                    stateBlock.work = data
-                    var hash = BlockMng.getHash(stateBlock)
-                    var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(lockResult.stakeType.qlcchainAddress).substring(0, 64)))
-                    val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePublicKey(lockResult.stakeType.qlcchainAddress)))
-                    if (!signCheck) {
-                        KLog.i("签名验证失败")
-                        return@responseString
-                    }
-                    stateBlock.setSignature(Helper.byteToHexString(signature))
-                    lockResult.stateBlock = stateBlock
-                    process(lockResult)
-                } else {
-                    AppConfig.instance.saveLog("stake", "process" + getLine(), Gson().toJson(lockResult))
-                    runOnUiThread {
-                        toast(getString(R.string.process_error_please_try_later))
-                    }
-                    KLog.i(error.response)
-                    KLog.i(error.exception)
+    fun benefitPledgeCheck(lockResult: LockResult, checkId : String) {
+        if (checkCount >= 10) {
+            sweetAlertDialog!!.dismissWithAnimation()
+            toast(getString(R.string.stake_failed_please_try_it_later))
+            return
+        }
+        checkCount++
+
+        val client = QlcClient(ConstantValue.qlcStakeNode)
+        val params = JSONArray()
+        params.set(0, checkId)
+        val result = client.call("nep5_benefitPledgeCheck", params)
+        KLog.i(result)
+
+        if (result.getJSONObject("error") != null) {
+            if ("NotCompleted".equals(result.getJSONObject("error").getString("message"))) {
+                Thread.sleep(5000)
+                benefitPledgeCheck(lockResult, checkId)
+            } else {
+                runOnUiThread {
+                    toast(result.getJSONObject("error").getString("message"))
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            }
+        } else {
+            checkCount = 0
+            var stateBlock = Gson().fromJson(result.getJSONObject("result").toString(), StateBlock::class.java)
+
+            var root = BlockMng.getRoot(stateBlock)
+//        var root = AccountMng.addressToPublicKey(stateBlock.address)
+            var params1 = mutableListOf<Pair<String, String>>()
+            params1.add(Pair("root", root))
+            KLog.i("root：" + root)
+            var request = ConstantValue.qlcWorkNode.httpGet(params1)
+            request.timeout(60000)
+            request.responseString { _, _, result ->
+                KLog.i("远程work返回、、")
+                val (data, error) = result
+                try {
+                    if (error == null) {
+                        stateBlock.work = data
+                        KLog.i("work为：" + data)
+                        var hash = BlockMng.getHash(stateBlock)
+                        var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(lockResult.stakeType.qlcchainAddress).substring(0, 64)))
+                        val signCheck = WalletMng.verify(signature, hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePublicKey(lockResult.stakeType.qlcchainAddress)))
+                        if (!signCheck) {
+                            KLog.i("签名验证失败")
+                            return@responseString
+                        }
+                        stateBlock.setSignature(Helper.byteToHexString(signature))
+                        lockResult.stateBlock = stateBlock
+                        processAsync(lockResult)
+                    } else {
+                        AppConfig.instance.saveLog("stake", "process" + getLine(), Gson().toJson(lockResult))
+                        runOnUiThread {
+                            toast(getString(R.string.process_error_please_try_later))
+                        }
+                        KLog.i(error.response)
+                        KLog.i(error.exception)
+                        Thread.sleep(5000)
+                        benefitPledgeCheck(lockResult, checkId)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
 
-    fun process(lockResult: LockResult) {
+    fun processAsync(lockResult: LockResult) {
         runOnUiThread {
             tvDot!!.text = "6"
         }
-        val client = QlcClient("https://nep5.qlcchain.online")
+        val client = QlcClient(ConstantValue.qlcStakeNode)
         val params = JSONArray()
         params.add(JSONObject.parse(Gson().toJson(lockResult.stateBlock)))
         params.add(lockResult.txid)
 
-        println(params.toJSONString())
+        KLog.i(params.toJSONString())
 
-        val result = client.call("ledger_process", params)
-        println(result)
-        if (result.getString("result") == null) {
-            AppConfig.instance.saveLog("stake", "voteNode process" + getLine(), URLEncoder.encode(result.toJSONString() + Gson().toJson(lockResult.stateBlock), "UTF-8"))
+        val result = client.call("ledger_processAsync", params)
+        KLog.i(result)
+        processCheck(lockResult, result.getString("result"))
+    }
+
+    fun processCheck(lockResult: LockResult, checkId : String) {
+        if (checkCount >= 10) {
+            sweetAlertDialog!!.dismissWithAnimation()
+            toast(getString(R.string.stake_failed_please_try_it_later))
+            return
         }
+        checkCount++
         runOnUiThread {
-            sweetAlertDialog?.dismissWithAnimation()
-            launch {
-                delay(300)
-                activity?.setResult(Activity.RESULT_OK)
-                activity?.finish()
+            tvDot!!.text = "6"
+        }
+        val client = QlcClient(ConstantValue.qlcStakeNode)
+        val params = JSONArray()
+        params.set(0, checkId)
+        KLog.i("checkId= $checkId")
+        val result = client.call("ledger_processCheck", params)
+        KLog.i(result)
+        if (result.getJSONObject("error") != null) {
+            if ("NotCompleted".equals(result.getJSONObject("error").getString("message"))) {
+                Thread.sleep(5000)
+                processCheck(lockResult, checkId)
+            } else {
+                runOnUiThread {
+                    toast(result.getJSONObject("error").getString("message"))
+                }
+            }
+        } else {
+            checkCount = 0
+            if (result.getString("result") == null) {
+                AppConfig.instance.saveLog("stake", "voteNode process" + getLine(), URLEncoder.encode(result.toJSONString() + Gson().toJson(lockResult.stateBlock), "UTF-8"))
+            }
+            runOnUiThread {
+                sweetAlertDialog?.dismissWithAnimation()
+                launch {
+                    delay(300)
+                    activity?.setResult(Activity.RESULT_OK)
+                    activity?.finish()
+                }
             }
         }
     }
@@ -632,6 +744,7 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                             }
                         }
                         Account.fromWIF(neoWallet!!.wif)
+//                        neoWallet!!.publicKey = Numeric.toHexStringWithPrefix(Account.getWallet()!!.publicKey)
                         neoWallet!!.publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
                         if (hasSelectNeo) {
                             neoWallet!!.isCurrent = true
@@ -645,7 +758,11 @@ class VoteNodeFragment : BaseFragment(), VoteNodeContract.View {
                     tvNeoWalletAddess.text = neoWallet!!.address
                     val infoMap = HashMap<String, String>()
                     infoMap["address"] = neoWallet!!.address
-                    mPresenter.getNeoWalletDetail(infoMap, neoWallet!!.address)
+                    if (AppConfig.instance.isMainNet) {
+                        mPresenter.getNeoWalletDetail(infoMap, neoWallet!!.address)
+                    } else {
+                        getTestNetQlcBalance(neoWallet!!.address)
+                    }
                 }
                 AllWallet.WalletType.QlcWallet.ordinal -> {
                     qlcWallet = data!!.getParcelableExtra("wallet")

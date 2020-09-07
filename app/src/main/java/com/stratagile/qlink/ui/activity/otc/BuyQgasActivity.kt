@@ -53,7 +53,6 @@ import kotlinx.android.synthetic.main.activity_buy_qgas.tvUnitPriceTip
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvVolumeAmount
 import kotlinx.android.synthetic.main.activity_buy_qgas.tvVolumeSetting
 import kotlinx.android.synthetic.main.activity_sell_qgas.*
-import neoutils.Neoutils
 import qlc.mng.AccountMng
 import java.math.BigDecimal
 
@@ -220,7 +219,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                     }
                 }
                 AllWallet.WalletType.NeoWallet -> {
-                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                    if (!NeoUtils.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
                         return@setOnClickListener
                     }
@@ -294,7 +293,7 @@ class BuyQgasActivity : BaseActivity(), BuyQgasContract.View {
                     if ("".equals(etQgas.text.toString())) {
                         etUsdt.setText("")
                     } else {
-                        if (etQgas.text.toString().toBigDecimal() > maxQgas) {
+                        if (!"".equals(etQgas.text.toString()) && etQgas.text.toString().toBigDecimal() > maxQgas) {
                             etUsdt.setText(maxUsdt.stripTrailingZeros().toPlainString())
                             etQgas.setText(maxQgas.stripTrailingZeros().toPlainString())
                         } else {

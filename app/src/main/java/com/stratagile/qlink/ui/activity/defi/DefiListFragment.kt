@@ -6,13 +6,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.pawegio.kandroid.runDelayed
 import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseFragment
-import com.stratagile.qlink.entity.MyAsset
+import com.stratagile.qlink.entity.DefiPrice
 import com.stratagile.qlink.entity.defi.DefiCategory
 import com.stratagile.qlink.entity.defi.DefiList
 import com.stratagile.qlink.entity.defi.DefiStatsCache
@@ -30,15 +34,14 @@ import com.stratagile.qlink.utils.FileUtil
 import com.stratagile.qlink.utils.FireBaseUtils
 import com.stratagile.qlink.utils.GsonUtils
 import com.stratagile.qlink.utils.UIUtils
-import kotlinx.android.synthetic.main.activity_topup_order_list.*
 import kotlinx.android.synthetic.main.fragment_defi_list.*
-import kotlinx.android.synthetic.main.fragment_defi_list.recyclerView
-import kotlinx.android.synthetic.main.fragment_defi_list.refreshLayout
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
 /**
@@ -70,6 +73,7 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        selectCategory = DefiCategoryEntity("All", true)
         categoryAdapter = DefiCategoryAdapter(arrayListOf())
         recyclerViewCatogry.layoutManager = LinearLayoutManager(activity!!, 0, false)
         recyclerViewCatogry.adapter = categoryAdapter
@@ -132,8 +136,53 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
             ivHsitory.isSelected = !isShowHistory
             isShowHistory = !isShowHistory
         }
+        getCategoryList()
+        var saveDefiStr = FileUtil.readData("/Qwallet/saveDefiStr.txt")
+        if (!"".equals(saveDefiStr)) {
+            var list = Gson().fromJson<ArrayList<DefiList.ProjectListBean>>(saveDefiStr, object : TypeToken<ArrayList<DefiList.ProjectListBean>>() {}.type)
+            defiListAdapter.setNewData(list)
+        }
+        var saveDefiPriceStr = FileUtil.readData("/Qwallet/saveDefiPriceStr.txt")
+        if (!"".equals(saveDefiPriceStr)) {
+            var list = Gson().fromJson<ArrayList<DefiPrice.DefiTokenListBean>>(saveDefiPriceStr, object : TypeToken<ArrayList<DefiPrice.DefiTokenListBean>>() {}.type)
+            tvTokenPrice.removeAllViews()
+            var views: ArrayList<View> = ArrayList()
+            list.forEach {
+                val moreView = LayoutInflater.from(activity).inflate(R.layout.defi_price_item, null) as LinearLayout
+                var tvTokenName = moreView.findViewById<TextView>(R.id.tvTokenName)
+                var tvTokenPrice1 = moreView.findViewById<TextView>(R.id.tvTokenPrice1)
+                var percentChange24h = moreView.findViewById<TextView>(R.id.percentChange24h)
+                var ivArrow = moreView.findViewById<ImageView>(R.id.ivArrow)
+                tvTokenName.text = it.symbol
+                tvTokenPrice1.text = "$ " + it.price.toBigDecimal().setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                percentChange24h.text = it.percentChange24h + " (24H)"
+                if (it.percentChange24h.toFloat() > 0) {
+                    percentChange24h.setTextColor(resources.getColor(R.color.color_7ED321))
+                    ivArrow.setImageResource(R.mipmap.icon_arrow_up)
+                } else {
+                    percentChange24h.setTextColor(resources.getColor(R.color.color_f50f60))
+                    ivArrow.setImageResource(R.mipmap.icon_arrow_down)
+                }
+                views.add(moreView)
+            }
+            tvTokenPrice.setViews(views)
+        }
+
+        var saveDefiCategoryStr = FileUtil.readData("/Qwallet/saveDefiCategoryStr.txt")
+        if (!"".equals(saveDefiCategoryStr)) {
+            var list = Gson().fromJson<ArrayList<String>>(saveDefiCategoryStr, object : TypeToken<ArrayList<String>>() {}.type)
+            var cateList = arrayListOf<DefiCategoryEntity>()
+            selectCategory = DefiCategoryEntity("All", true)
+            cateList.add(selectCategory)
+            list.forEach {
+                cateList.add(DefiCategoryEntity(it, false))
+            }
+            categoryAdapter.setNewData(cateList)
+        }
+
     }
 
+    lateinit var defiHistoryListAdapter : DefiHistoryListAdapter
     fun showHistory() {
         var defiHistoryStr = FileUtil.readData("/Qwallet/defiHisotry.txt")
         if ("".equals(defiHistoryStr)) {
@@ -141,10 +190,22 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
         }
         var list = Gson().fromJson<ArrayList<DefiList.ProjectListBean>>(defiHistoryStr, object : TypeToken<ArrayList<DefiList.ProjectListBean>>() {}.type)
         list.reverse()
-        var defiHistoryListAdapter = DefiHistoryListAdapter(list)
+        defiHistoryListAdapter = DefiHistoryListAdapter(list)
         recyclerViewHistory.adapter = defiHistoryListAdapter
         defiHistoryListAdapter.setOnItemClickListener { adapter, view, position ->
-            startActivity(Intent(activity!!, DefiDetailActivity::class.java).putExtra("defiEntity", defiHistoryListAdapter.data[position]))
+            startActivityForResult(Intent(activity!!, DefiDetailActivity::class.java).putExtra("defiEntity", defiHistoryListAdapter.data[position]).putExtra("position", position), 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == 10) {
+            KLog.i("删除")
+            defiHistoryListAdapter.remove(data!!.getIntExtra("position", 0))
+            defiHistoryListAdapter.notifyDataSetChanged()
+            var saveHisotryStr = GsonUtils.objToJson(defiHistoryListAdapter.data)
+            KLog.i(saveHisotryStr)
+            FileUtil.savaData("/Qwallet/defiHisotry.txt", saveHisotryStr)
         }
     }
 
@@ -196,6 +257,9 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
         infoMap["page"] = currentPage.toString()
         infoMap["size"] = "20"
         mPresenter.getDefis(infoMap, currentPage)
+        runDelayed(400) {
+            mPresenter.defiPriceList(hashMapOf())
+        }
     }
 
 
@@ -243,6 +307,11 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
         }
         getDefis()
         categoryAdapter.setNewData(cateList)
+
+        var saveDefiCategoryStr = GsonUtils.objToJson(category.categoryList)
+        KLog.i(saveDefiCategoryStr)
+        FileUtil.savaData("/Qwallet/saveDefiCategoryStr.txt", saveDefiCategoryStr)
+
     }
 
     lateinit var defiListAdapter: DefiListAdapter
@@ -256,6 +325,9 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
         }
         if (currentPage == 1) {
             defiListAdapter.setNewData(ArrayList())
+            var saveDefiStr = GsonUtils.objToJson(defiList.projectList)
+            KLog.i(saveDefiStr)
+            FileUtil.savaData("/Qwallet/saveDefiStr.txt", saveDefiStr)
         }
         defiListAdapter.addData(defiList.projectList)
         if (currentPage != 1) {
@@ -288,5 +360,32 @@ class DefiListFragment : BaseFragment(), DefiListContract.View {
             }
         }
         defiListAdapter.notifyDataSetChanged()
+    }
+
+    override fun setDefiPrice(defiPrice: DefiPrice) {
+        tvTokenPrice.removeAllViews()
+        var views: ArrayList<View> = ArrayList()
+        defiPrice.priceList.forEach {
+            val moreView = LayoutInflater.from(activity).inflate(R.layout.defi_price_item, null) as LinearLayout
+            var tvTokenName = moreView.findViewById<TextView>(R.id.tvTokenName)
+            var tvTokenPrice1 = moreView.findViewById<TextView>(R.id.tvTokenPrice1)
+            var percentChange24h = moreView.findViewById<TextView>(R.id.percentChange24h)
+            var ivArrow = moreView.findViewById<ImageView>(R.id.ivArrow)
+            tvTokenName.text = it.symbol
+            tvTokenPrice1.text = "$ " + it.price.toBigDecimal().setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+            percentChange24h.text = it.percentChange24h + " (24H)"
+            if (it.percentChange24h.toFloat() > 0) {
+                percentChange24h.setTextColor(resources.getColor(R.color.color_7ED321))
+                ivArrow.setImageResource(R.mipmap.icon_arrow_up)
+            } else {
+                percentChange24h.setTextColor(resources.getColor(R.color.color_f50f60))
+                ivArrow.setImageResource(R.mipmap.icon_arrow_down)
+            }
+            views.add(moreView)
+        }
+        tvTokenPrice.setViews(views)
+        var saveDefiPriceStr = GsonUtils.objToJson(defiPrice.priceList)
+        KLog.i(saveDefiPriceStr)
+        FileUtil.savaData("/Qwallet/saveDefiPriceStr.txt", saveDefiPriceStr)
     }
 }

@@ -59,6 +59,7 @@ import com.stratagile.qlink.entity.CurrencyBean;
 import com.stratagile.qlink.entity.EosKeyAccount;
 import com.stratagile.qlink.entity.eventbus.ForegroundCallBack;
 import com.stratagile.qlink.entity.eventbus.OnAppResume;
+import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.ui.activity.main.MainActivity;
 import com.stratagile.qlink.utils.FileUtil;
@@ -117,6 +118,8 @@ public class AppConfig extends MultiDexApplication {
     private SQLiteDatabase db;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
+    public TradePair.PairsListBean pair;
+    public boolean isMainNet = true;
 
     private PackageInfo info;
     public Application deviceStorage;
@@ -195,6 +198,45 @@ public class AppConfig extends MultiDexApplication {
         JPushInterface.init(this);
     }
 
+    private void initStakeConfig() {
+        isMainNet = SpUtil.getBoolean(this, ConstantValue.isMainNet, true);
+        // 还要改html中的正式节点和测试节点
+        // html中的smartContractScript
+        // 新建抵押查neo链的txid直接跳过了，正式服要改过来
+        // 查测试服的qlc余额的方法改了，要在正式服改回来
+        // 赎回的时候，要用测试网的unlock方法
+        if (isMainNet) {
+            //qlc正式网节点
+            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+            //qlc链抵押正式节点
+            ConstantValue.qlcStakeNode = "https://nep5.qlcchain.online";
+            //neo链正式网查交易记录
+            ConstantValue.neoTranscationNode = "https://api.neoscan.io/api/main_net/v1/get_transaction/";
+            //创建多重签名地址的hash正式服
+            ConstantValue.createMultiSigHash = "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5";
+
+            ConstantValue.ethNodeUrl = "https://mainnet.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2";
+
+            ConstantValue.qlchash = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5";
+            ConstantValue.qlcHubEndPoint = "https://hub-test.qlcchain.online";
+            ConstantValue.neoNode = "http://seed2.ngd.network:10332";
+        } else {
+            //qlc测试网节点
+//            ConstantValue.qlcNode = "http://rpc-test.qlcchain.online";
+            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
+            //qlc抵押测试节点
+//            ConstantValue.qlcStakeNode = "http://47.103.54.171:19740";
+            //neo测试网查交易记录
+            ConstantValue.neoTranscationNode = "https://api.neoscan.io/api/test_net/v1/get_transaction/";
+            //创建多重签名地址的hash测试服
+            ConstantValue.createMultiSigHash = "0292a55eb2f213d087d71cf0e2e4b047762b6eccc6a6993d7bbea39e7379661afb";
+            ConstantValue.ethNodeUrl = "https://rinkeby.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2";
+            ConstantValue.qlchash = "b9d7ea3062e6aeeb3e8ad9548220c4ba1361d263";
+            ConstantValue.qlcHubEndPoint = "https://hub-test.qlcchain.online";
+            ConstantValue.neoNode = "http://seed2.ngd.network:20332";
+        }
+    }
+
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -226,8 +268,7 @@ public class AppConfig extends MultiDexApplication {
         NickUtil.initUserNickName(this);
         initDbUpdate();
         initResumeListener();
-//        initMiPush();
-        setMode();
+        initStakeConfig();
         setLanguage(false);
         TodayStep.init(MainConstant.MainAppid, MainConstant.unKownKeyButImportant);
         applicationHandler = new Handler(getMainLooper());
@@ -317,15 +358,6 @@ public class AppConfig extends MultiDexApplication {
         });
     }
 
-
-    private void setMode() {
-        ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
-//        if (SpUtil.getBoolean(this, ConstantValue.isMainNet, true)) {
-//            ConstantValue.qlcNode = "http://wrpc.qlcchain.org:9735";
-//        } else {
-//            ConstantValue.qlcNode = "http://47.103.40.20:19735";
-//        }
-    }
 
     private void updateNotificationChannels() {
         if (Build.VERSION.SDK_INT >= 26) {

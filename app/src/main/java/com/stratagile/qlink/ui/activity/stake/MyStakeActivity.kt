@@ -57,6 +57,14 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         setStakedQlcAmount()
     }
 
+    var voteQlcAmount = 0.toLong()
+    override fun setQLCQLCAmount(amount: Long) {
+        voteQlcAmount = amount
+        runOnUiThread {
+            setStakedQlcAmount()
+        }
+    }
+
     override fun setRewardQlcAmount(dict: Dict) {
         rewardQlcAmount = dict.data.value.toBigDecimal()
         tvFreeStakedQlc.text = rewardQlcAmount.stripTrailingZeros().toPlainString()
@@ -132,6 +140,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
             FireBaseUtils.logEvent(this, FireBaseUtils.Wallet_MyStakings_InvokeNewStakings)
             startActivityForResult(Intent(this, NewStakeActivity::class.java), 1)
         }
+        mPresenter.getStakeQlcAmount(qlcWallet.address)
         myStakeAdapter = MyStakeAdapter(arrayListOf())
         myStakeAdapter.setEmptyView(R.layout.empty_layout, refreshLayout)
         myStakeAdapter.setEnableLoadMore(true)
@@ -140,7 +149,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
 
             thread {
                 try {
-                    val client = QlcClient("https://nep5.qlcchain.online")
+                    val client = QlcClient(ConstantValue.qlcStakeNode)
                     val params = JSONArray()
                     params.add(qlcWallet.address)
                     params.add(10)
@@ -166,12 +175,13 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         thread {
             try {
                 refreshLayout.isRefreshing = true
-                val client = QlcClient("https://nep5.qlcchain.online")
+                val client = QlcClient(ConstantValue.qlcStakeNode)
                 val params = JSONArray()
                 params.add(qlcWallet.address)
                 params.add(10)
                 params.add(0)
                 KLog.i(params)
+                KLog.i("获取抵押列表开始")
                 var result = client.call("ledger_pledgeInfoByBeneficial", params)
                 KLog.i(result.toString())
                 var myStakeList = Gson().fromJson(result.toString(), MyStakeList::class.java)
@@ -188,7 +198,7 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
         myStakeAdapter.setOnItemClickListener { adapter, view, position ->
             startActivityForResult(Intent(this, StakeDetailActivity::class.java).putExtra("stake", myStakeAdapter.data[position]), 1)
         }
-        if (ConstantValue.currentUser != null && !"".equals(ConstantValue.currentUser.bindDate) ) {
+        if (ConstantValue.currentUser != null && !"".equals(ConstantValue.currentUser.bindDate)) {
             llQlcLendFree.visibility = View.VISIBLE
             llQlcLendFree.setOnClickListener {
                 startActivity(Intent(this, MyClaimActivity::class.java))
@@ -214,16 +224,12 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
     }
 
     fun setStakedQlcAmount() {
-        var stakedQlc = 0L
         var earnQgas = 0L
         myStakeAdapter.data.forEach {
-            if ("PledgeDone".equals(it.state) || "WithdrawStart".equals(it.state) || "WithdrawProcess".equals(it.state)) {
-                stakedQlc += it.amount.toLong()
-            }
             earnQgas += it.qgas
         }
-        tvStakeVol.text = (stakedQlc.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP) + rewardQlcAmount).stripTrailingZeros().toPlainString()
-        tvStakedQlc.text = stakedQlc.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+        tvStakeVol.text = (voteQlcAmount.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP) + rewardQlcAmount).stripTrailingZeros().toPlainString()
+        tvStakedQlc.text = voteQlcAmount.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
         tvEarnQgas.text = (earnQgas.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP)).stripTrailingZeros().toPlainString()
 
         tvTotalEarnVol.text = (earnQgas.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_UP) + rewardTotal).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
@@ -237,9 +243,9 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
     }
 
     fun getMoreStake() {
-        try {
-            thread {
-                val client = QlcClient("https://nep5.qlcchain.online")
+        thread {
+            try {
+                val client = QlcClient(ConstantValue.qlcStakeNode)
                 val params = JSONArray()
                 params.add(qlcWallet.address)
                 params.add(10)
@@ -258,9 +264,9 @@ class MyStakeActivity : BaseActivity(), MyStakeContract.View {
                     }
                     setStakedQlcAmount()
                 }
-            }
-        } catch (ex: java.lang.Exception) {
+            } catch (ex: java.lang.Exception) {
 
+            }
         }
     }
 

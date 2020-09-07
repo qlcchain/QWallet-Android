@@ -34,7 +34,19 @@ public class Pending {
 		private String type;
 		
 		private String tokenName;
-		
+
+		@Override
+		public String toString() {
+			return "PendingInfo{" +
+					"source='" + source + '\'' +
+					", amount=" + amount +
+					", type='" + type + '\'' +
+					", tokenName='" + tokenName + '\'' +
+					", hash='" + hash + '\'' +
+					", timestamp=" + timestamp +
+					'}';
+		}
+
 		private String hash;
 		
 		private Long timestamp;

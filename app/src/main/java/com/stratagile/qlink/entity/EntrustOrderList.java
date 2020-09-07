@@ -21,25 +21,27 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
     public static class OrderListBean implements Parcelable {
 
         /**
-         * unitPrice : 2.0
-         * minAmount : 100.0
-         * isBurnQgasOrder : 1
+         * unitPrice : 5.0
+         * minAmount : 1.0
+         * isBurnQgasOrder : 0
          * lockingAmount : 0.0
-         * type : BUY
-         * payTokenAmount : 40000.0
-         * userId : 949caa0a0d8b4f2c81dd1750e8e867de
+         * type : SELL
+         * payTokenAmount : 5.0
+         * userId : 8fc506f48e50408faf4a4f8e63e380d1
          * tradeTokenChain : QLC_CHAIN
          * completeAmount : 0.0
-         * head : /data/dapp/head/d0b58c62e15445e4b26b93a2f18a138a.jpg
-         * number : 20200227010000562142
-         * totalAmount : 20000.0
-         * orderTime : 2020-02-27 01:00:00
-         * nickname : 黄大叔
+         * payTokenLogo : /userfiles/1/images/otc/2020/07/769ae1780c6e4501b72dd23155f474ae.png
+         * head : /data/dapp/head/fe2323bf69ca427f84f0b0205bc61c8b.jpg
+         * number : 20200316194427219088
+         * totalAmount : 1.0
+         * orderTime : 2020-03-16 19:44:28
+         * tradeTokenLogo : /userfiles/1/images/otc/2020/07/60b23dfd8a454127b99354a930ee194a.png
+         * nickname : owen_vip@163.com
          * payTokenChain : NEO_CHAIN
          * tradeToken : QGAS
-         * id : 079ff6b193f54c769a9b5bd2c29ea7d6
-         * maxAmount : 1000.0
-         * otcTimes : 3
+         * id : 03c97cb76cbf4fdea732b99871e44712
+         * maxAmount : 1.0
+         * otcTimes : 32
          * status : NORMAL
          * payToken : QLC
          */
@@ -53,10 +55,12 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
         private String userId;
         private String tradeTokenChain;
         private double completeAmount;
+        private String payTokenLogo;
         private String head;
         private String number;
         private double totalAmount;
         private String orderTime;
+        private String tradeTokenLogo;
         private String nickname;
         private String payTokenChain;
         private String tradeToken;
@@ -76,10 +80,12 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             userId = in.readString();
             tradeTokenChain = in.readString();
             completeAmount = in.readDouble();
+            payTokenLogo = in.readString();
             head = in.readString();
             number = in.readString();
             totalAmount = in.readDouble();
             orderTime = in.readString();
+            tradeTokenLogo = in.readString();
             nickname = in.readString();
             payTokenChain = in.readString();
             tradeToken = in.readString();
@@ -174,6 +180,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             this.completeAmount = completeAmount;
         }
 
+        public String getPayTokenLogo() {
+            return payTokenLogo;
+        }
+
+        public void setPayTokenLogo(String payTokenLogo) {
+            this.payTokenLogo = payTokenLogo;
+        }
+
         public String getHead() {
             return head;
         }
@@ -204,6 +218,14 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
 
         public void setOrderTime(String orderTime) {
             this.orderTime = orderTime;
+        }
+
+        public String getTradeTokenLogo() {
+            return tradeTokenLogo;
+        }
+
+        public void setTradeTokenLogo(String tradeTokenLogo) {
+            this.tradeTokenLogo = tradeTokenLogo;
         }
 
         public String getNickname() {
@@ -286,10 +308,12 @@ public class EntrustOrderList extends BaseBack<EntrustOrderList.OrderListBean> {
             dest.writeString(userId);
             dest.writeString(tradeTokenChain);
             dest.writeDouble(completeAmount);
+            dest.writeString(payTokenLogo);
             dest.writeString(head);
             dest.writeString(number);
             dest.writeDouble(totalAmount);
             dest.writeString(orderTime);
+            dest.writeString(tradeTokenLogo);
             dest.writeString(nickname);
             dest.writeString(payTokenChain);
             dest.writeString(tradeToken);

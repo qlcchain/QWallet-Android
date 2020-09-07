@@ -62,10 +62,32 @@ class DefiRateActivity : BaseActivity(), DefiRateContract.View {
         title.text = getString(R.string.rate_this_defi)
         defiEntity = intent.getParcelableExtra("defiEntity")
         getRatingInfo()
-        Glide.with(this)
-                .load(resources.getIdentifier(defiEntity.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
-                .into(ivAvatar)
-        tvName.text = defiEntity.name
+        if ("".equals(defiEntity.shortName)) {
+            tvName.text = defiEntity.name
+            var resource = resources.getIdentifier(defiEntity.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName)
+            if (resource == 0) {
+                Glide.with(this)
+                        .load(AppConfig.instance.baseUrl + defiEntity.logo)
+                        .into(ivAvatar)
+            } else {
+                Glide.with(this)
+                        .load(resources.getIdentifier(defiEntity.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
+                        .into(ivAvatar)
+            }
+        } else {
+            tvName.text = defiEntity.shortName
+            var resource = resources.getIdentifier(defiEntity.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName)
+            if (resource == 0) {
+                Glide.with(this)
+                        .load(AppConfig.instance.baseUrl + defiEntity.logo)
+                        .into(ivAvatar)
+            } else {
+                Glide.with(this)
+                        .load(resources.getIdentifier(defiEntity.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", packageName))
+                        .into(ivAvatar)
+            }
+        }
+
         tvRating.text = getString(R.string.rating_) + DefiUtil.parseDefiRating(defiEntity.rating.toInt())
         var defiPageTransformer = DefiPageTransformer()
         var defiPagerAdapter = DefiPagerAdapter(this, arrayListOf(0, 1, 2, 3, 4, 5, 6, 7))

@@ -19,6 +19,7 @@ import com.stratagile.qlink.db.EosAccount;
 import com.stratagile.qlink.db.RecordSave;
 import com.stratagile.qlink.db.BtcWallet;
 import com.stratagile.qlink.db.Wallet;
+import com.stratagile.qlink.db.SwapRecord;
 import com.stratagile.qlink.db.QLCAccount;
 import com.stratagile.qlink.db.EntrustTodo;
 import com.stratagile.qlink.db.TransactionRecord;
@@ -35,6 +36,7 @@ import com.stratagile.qlink.db.EosAccountDao;
 import com.stratagile.qlink.db.RecordSaveDao;
 import com.stratagile.qlink.db.BtcWalletDao;
 import com.stratagile.qlink.db.WalletDao;
+import com.stratagile.qlink.db.SwapRecordDao;
 import com.stratagile.qlink.db.QLCAccountDao;
 import com.stratagile.qlink.db.EntrustTodoDao;
 import com.stratagile.qlink.db.TransactionRecordDao;
@@ -60,6 +62,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig recordSaveDaoConfig;
     private final DaoConfig btcWalletDaoConfig;
     private final DaoConfig walletDaoConfig;
+    private final DaoConfig swapRecordDaoConfig;
     private final DaoConfig qLCAccountDaoConfig;
     private final DaoConfig entrustTodoDaoConfig;
     private final DaoConfig transactionRecordDaoConfig;
@@ -76,6 +79,7 @@ public class DaoSession extends AbstractDaoSession {
     private final RecordSaveDao recordSaveDao;
     private final BtcWalletDao btcWalletDao;
     private final WalletDao walletDao;
+    private final SwapRecordDao swapRecordDao;
     private final QLCAccountDao qLCAccountDao;
     private final EntrustTodoDao entrustTodoDao;
     private final TransactionRecordDao transactionRecordDao;
@@ -118,6 +122,9 @@ public class DaoSession extends AbstractDaoSession {
         walletDaoConfig = daoConfigMap.get(WalletDao.class).clone();
         walletDaoConfig.initIdentityScope(type);
 
+        swapRecordDaoConfig = daoConfigMap.get(SwapRecordDao.class).clone();
+        swapRecordDaoConfig.initIdentityScope(type);
+
         qLCAccountDaoConfig = daoConfigMap.get(QLCAccountDao.class).clone();
         qLCAccountDaoConfig.initIdentityScope(type);
 
@@ -141,6 +148,7 @@ public class DaoSession extends AbstractDaoSession {
         recordSaveDao = new RecordSaveDao(recordSaveDaoConfig, this);
         btcWalletDao = new BtcWalletDao(btcWalletDaoConfig, this);
         walletDao = new WalletDao(walletDaoConfig, this);
+        swapRecordDao = new SwapRecordDao(swapRecordDaoConfig, this);
         qLCAccountDao = new QLCAccountDao(qLCAccountDaoConfig, this);
         entrustTodoDao = new EntrustTodoDao(entrustTodoDaoConfig, this);
         transactionRecordDao = new TransactionRecordDao(transactionRecordDaoConfig, this);
@@ -157,6 +165,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(RecordSave.class, recordSaveDao);
         registerDao(BtcWallet.class, btcWalletDao);
         registerDao(Wallet.class, walletDao);
+        registerDao(SwapRecord.class, swapRecordDao);
         registerDao(QLCAccount.class, qLCAccountDao);
         registerDao(EntrustTodo.class, entrustTodoDao);
         registerDao(TransactionRecord.class, transactionRecordDao);
@@ -175,6 +184,7 @@ public class DaoSession extends AbstractDaoSession {
         recordSaveDaoConfig.clearIdentityScope();
         btcWalletDaoConfig.clearIdentityScope();
         walletDaoConfig.clearIdentityScope();
+        swapRecordDaoConfig.clearIdentityScope();
         qLCAccountDaoConfig.clearIdentityScope();
         entrustTodoDaoConfig.clearIdentityScope();
         transactionRecordDaoConfig.clearIdentityScope();
@@ -223,6 +233,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public WalletDao getWalletDao() {
         return walletDao;
+    }
+
+    public SwapRecordDao getSwapRecordDao() {
+        return swapRecordDao;
     }
 
     public QLCAccountDao getQLCAccountDao() {

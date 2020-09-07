@@ -22,6 +22,14 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
     }
 
     public static class OrderBean implements Parcelable {
+        public String getTxid() {
+            return txid;
+        }
+
+        public void setTxid(String txid) {
+            this.txid = txid;
+        }
+
         /**
          * unitPrice : 1.0
          * minAmount : 1.0
@@ -67,6 +75,8 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
         private int otcTimes;
         private String status;
         private String payToken;
+        private String txid;
+
 
         protected OrderBean(Parcel in) {
             unitPrice = in.readDouble();
@@ -90,6 +100,7 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             otcTimes = in.readInt();
             status = in.readString();
             payToken = in.readString();
+            txid = in.readString();
         }
 
         public static final Creator<OrderBean> CREATOR = new Creator<OrderBean>() {
@@ -272,34 +283,36 @@ public class EntrustOrderInfo extends BaseBack<EntrustOrderInfo.OrderBean> {
             this.payToken = payToken;
         }
 
+
         @Override
         public int describeContents() {
             return 0;
         }
 
         @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeDouble(unitPrice);
-            parcel.writeDouble(minAmount);
-            parcel.writeString(qgasAddress);
-            parcel.writeDouble(lockingAmount);
-            parcel.writeString(type);
-            parcel.writeString(userId);
-            parcel.writeString(tradeTokenChain);
-            parcel.writeDouble(completeAmount);
-            parcel.writeString(head);
-            parcel.writeString(number);
-            parcel.writeDouble(totalAmount);
-            parcel.writeString(usdtAddress);
-            parcel.writeString(orderTime);
-            parcel.writeString(nickname);
-            parcel.writeString(payTokenChain);
-            parcel.writeString(tradeToken);
-            parcel.writeString(id);
-            parcel.writeDouble(maxAmount);
-            parcel.writeInt(otcTimes);
-            parcel.writeString(status);
-            parcel.writeString(payToken);
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeDouble(unitPrice);
+            dest.writeDouble(minAmount);
+            dest.writeString(qgasAddress);
+            dest.writeDouble(lockingAmount);
+            dest.writeString(type);
+            dest.writeString(userId);
+            dest.writeString(tradeTokenChain);
+            dest.writeDouble(completeAmount);
+            dest.writeString(head);
+            dest.writeString(number);
+            dest.writeDouble(totalAmount);
+            dest.writeString(usdtAddress);
+            dest.writeString(orderTime);
+            dest.writeString(nickname);
+            dest.writeString(payTokenChain);
+            dest.writeString(tradeToken);
+            dest.writeString(id);
+            dest.writeDouble(maxAmount);
+            dest.writeInt(otcTimes);
+            dest.writeString(status);
+            dest.writeString(payToken);
+            dest.writeString(txid);
         }
     }
 }

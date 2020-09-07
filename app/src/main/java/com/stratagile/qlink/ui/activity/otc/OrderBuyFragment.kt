@@ -47,36 +47,8 @@ import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import kotlinx.android.synthetic.main.fragment_order_buy.*
-import kotlinx.android.synthetic.main.fragment_order_buy.buyingToken
-import kotlinx.android.synthetic.main.fragment_order_buy.buyingTokenPrice
-import kotlinx.android.synthetic.main.fragment_order_buy.constraintLayout
-import kotlinx.android.synthetic.main.fragment_order_buy.etAmount
-import kotlinx.android.synthetic.main.fragment_order_buy.etMaxAmount
-import kotlinx.android.synthetic.main.fragment_order_buy.etMinAmount
-import kotlinx.android.synthetic.main.fragment_order_buy.etUnitPrice
-import kotlinx.android.synthetic.main.fragment_order_buy.group
-import kotlinx.android.synthetic.main.fragment_order_buy.ivReceiveChain
-import kotlinx.android.synthetic.main.fragment_order_buy.ivSendChain
-import kotlinx.android.synthetic.main.fragment_order_buy.ivShow
-import kotlinx.android.synthetic.main.fragment_order_buy.llBuyToken
-import kotlinx.android.synthetic.main.fragment_order_buy.llOpen
-import kotlinx.android.synthetic.main.fragment_order_buy.llSelectReceiveWallet
-import kotlinx.android.synthetic.main.fragment_order_buy.llSelectSendWallet
-import kotlinx.android.synthetic.main.fragment_order_buy.llSellToken
-import kotlinx.android.synthetic.main.fragment_order_buy.seekBar
-import kotlinx.android.synthetic.main.fragment_order_buy.sellingToken
-import kotlinx.android.synthetic.main.fragment_order_buy.sellinngTokenQuantity
-import kotlinx.android.synthetic.main.fragment_order_buy.tvCostEth
-import kotlinx.android.synthetic.main.fragment_order_buy.tvGwei
-import kotlinx.android.synthetic.main.fragment_order_buy.tvNext
-import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletAddess
-import kotlinx.android.synthetic.main.fragment_order_buy.tvReceiveWalletName
-import kotlinx.android.synthetic.main.fragment_order_buy.tvSendWalletAddess
-import kotlinx.android.synthetic.main.fragment_order_buy.tvSendWalletName
-import kotlinx.android.synthetic.main.fragment_order_sell.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import org.web3j.utils.Convert
@@ -97,6 +69,7 @@ import kotlin.concurrent.thread
  */
 
 class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
+
     override fun initDataFromNet() {
 
     }
@@ -118,6 +91,8 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             }
         }
     }
+
+
 
     var ethPayTokenBean : EthWalletInfo.DataBean.TokensBean? = null
 
@@ -199,6 +174,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
         super.onViewCreated(view, savedInstanceState)
         webview = DWebView(activity!!)
         webview!!.loadUrl("file:///android_asset/contract.html")
+        onActivityResult(selectPair, Activity.RESULT_OK, Intent().putExtra("pair", AppConfig.instance.pair))
         tvCreateWallet.setOnClickListener {
             startActivity(Intent(activity, SelectWalletTypeActivity::class.java))
         }
@@ -215,8 +191,8 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (etUnitPrice.text.toString().toBigDecimal().multiply(etMinAmount.text.toString().trim().toBigDecimal()) < 0.00000001.toBigDecimal()) {
-                toast(getString(R.string.sorry_this_order_cannot_be_placeed_))
+            if (etUnitPrice.text.toString().toBigDecimal().multiply(etMinAmount.text.toString().trim().toBigDecimal()) < selectedPair!!.minPayTokenAmount.toBigDecimal()) {
+                toast(getString(R.string.sorry_this_order_cannot_be_placeed_, selectedPair!!.payToken, selectedPair!!.minPayTokenAmount.toString()))
                 return@setOnClickListener
             }
             payTokenAmount = etAmount.text.toString().trim().toBigDecimal().multiply(etUnitPrice.text.toString().trim().toBigDecimal()).setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString().toDouble()
@@ -234,7 +210,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                     }
                 }
                 AllWallet.WalletType.NeoWallet -> {
-                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                    if (!NeoUtils.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
                         return@setOnClickListener
                     }
@@ -260,7 +236,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                     }
                 }
                 AllWallet.WalletType.NeoWallet -> {
-                    if (!Neoutils.validateNEOAddress(tvSendWalletAddess.text.toString().trim())) {
+                    if (!NeoUtils.isValidAddress(tvSendWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
                         return@setOnClickListener
                     }
@@ -300,7 +276,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (!"".equals(etUnitPrice.text.toString())) {
-                    if (etUnitPrice.text.toString().length == 5 && etUnitPrice.text.toString().toBigDecimal() < 0.00000001.toBigDecimal()) {
+                    if (etUnitPrice.text.toString().length == 10 && etUnitPrice.text.toString().toBigDecimal() < 0.00000001.toBigDecimal()) {
                         etUnitPrice.setText("0.00000001")
                         etUnitPrice.setSelection(10)
                     }
@@ -308,6 +284,49 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
             }
 
         })
+        etAmount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (!"".equals(etAmount.text.toString())) {
+                    if (etAmount.text.toString().toDouble() < selectedPair!!.minTradeTokenAmount) {
+                        etAmount.setText(selectedPair!!.minTradeTokenAmount.toString())
+                        etAmount.setSelection(selectedPair!!.minTradeTokenAmount.toString().length)
+                    }
+                }
+            } else {
+                if (selectedPair == null) {
+                    llSellToken.performClick()
+                }
+            }
+        }
+        etMinAmount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (!"".equals(etMinAmount.text.toString())) {
+                    if (etMinAmount.text.toString().toDouble() < selectedPair!!.minTradeTokenAmount) {
+                        etMinAmount.setText(selectedPair!!.minTradeTokenAmount.toString())
+                        etMinAmount.setSelection(selectedPair!!.minTradeTokenAmount.toString().length)
+                    }
+                }
+            } else {
+                if (selectedPair == null) {
+                    llSellToken.performClick()
+                }
+            }
+        }
+        etMaxAmount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (!"".equals(etMaxAmount.text.toString())) {
+                    if (etMaxAmount.text.toString().toDouble() < selectedPair!!.minTradeTokenAmount) {
+                        etMaxAmount.setText(selectedPair!!.minTradeTokenAmount.toString())
+                        etMaxAmount.setSelection(selectedPair!!.minTradeTokenAmount.toString().length)
+                    }
+                }
+            } else {
+                if (selectedPair == null) {
+                    llSellToken.performClick()
+                }
+            }
+        }
+
         llSelectReceiveWallet.setOnClickListener {
             if (selectedPair == null) {
                 toast(getString(R.string.please_select_a_trade_pair))
@@ -454,14 +473,16 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
     private var webview: DWebView? = null
     private fun testTransfer(map : HashMap<String, String>, address : String) {
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(7)
+        val arrays = arrayOfNulls<Any>(8)
         arrays[0] = sendNeoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = payTokenInfo!!.asset_hash
         arrays[3] = payTokenAmount.toString()
         arrays[4] = 8
+//        arrays[5] = Account.getWallet()!!.ecKeyPair.exportAsWIF()
         arrays[5] = Account.getWallet()!!.wif
         arrays[6] = "xxx"
+        arrays[7] = AppConfig.instance.isMainNet
         var retStr = ""
         try {
             webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
@@ -469,7 +490,7 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                 retStr = retValue!!.toString()
                 var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
                 if (nep5SendBack != null && nep5SendBack.txid != null) {
-                    mPresenter.generateEntrustBuyOrder(nep5SendBack.txid, address, map)
+                    mPresenter.generateEntrustBuyOrder(nep5SendBack.txid, address, map, payTokenAmount.toString(), "NEO_CHAIN", payTokenInfo!!.asset_symbol)
                 } else {
                     toast(getString(R.string.send_qgas_error, "QLC"))
                     closeProgressDialog()
@@ -645,10 +666,10 @@ class OrderBuyFragment : BaseFragment(), OrderBuyContract.View {
                     sellingToken.text = selectedPair!!.payToken
                     sellinngTokenQuantity.text = selectedPair!!.payToken
                     ivReceiveChain.setImageDrawable(null)
-
+                    etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(selectedPair!!.tradeTokenDecimal, 13))
                     tvReceiveWalletAddess.text = getString(R.string.input_wallet_address)
                     tvReceiveWalletName.text = getString(R.string.select_a_wallet_to_receive_token)
-
+                    tvDesc.text = getString(R.string.the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set, selectedPair!!.minTradeTokenAmount.toString())
                     when(OtcUtils.parseChain(selectedPair!!.tradeTokenChain)) {
                         AllWallet.WalletType.QlcWallet -> {
                             ivReceiveChain.setImageResource(R.mipmap.icons_qlc_wallet)

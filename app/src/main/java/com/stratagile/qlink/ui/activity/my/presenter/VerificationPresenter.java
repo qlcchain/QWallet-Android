@@ -58,7 +58,7 @@ public class VerificationPresenter implements VerificationContract.VerificationC
     }
 
     @Override
-    public void uploadImg(Map map) {
+    public void uploadImg(Map map, String idNumber) {
         File upLoadFile1 = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport1.jpg");
         File upLoadFile2 = new File(Environment.getExternalStorageDirectory() + "/Qwallet/image/passport2.jpg");
         RequestBody passport1 = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile1);
@@ -67,7 +67,7 @@ public class VerificationPresenter implements VerificationContract.VerificationC
         RequestBody passport2 = RequestBody.create(MediaType.parse("image/jpg"), upLoadFile2);
         MultipartBody.Part photo2 = MultipartBody.Part.createFormData("holdingPhoto", "passport2.jpg", passport2);
 
-        Disposable disposable = httpAPIWrapper.updateIdCard(photo1, photo2, RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken()), RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.getAccount()))     //userId, nickName
+        Disposable disposable = httpAPIWrapper.updateIdCard(photo1, photo2, RequestBody.create(MediaType.parse("text/plain"), AccountUtil.getUserToken()), RequestBody.create(MediaType.parse("text/plain"), ConstantValue.currentUser.getAccount()), RequestBody.create(MediaType.parse("text/plain"), idNumber))     //userId, nickName
                 .subscribe(new Consumer<Passport>() {
                     @Override
                     public void accept(Passport upLoadAvatar) throws Exception {

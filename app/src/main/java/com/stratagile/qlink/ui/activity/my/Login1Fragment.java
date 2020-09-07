@@ -188,8 +188,8 @@ public class Login1Fragment extends BaseFragment implements Login1Contract.View 
                     map.put("sessionId", sid);
                     map.put("sig", sig);
                     map.put("afsToken", token);
-                    map.put("appKey", MainConstant.afsAppKey);
-                    map.put("scene", MainConstant.ncRegister);
+                    map.put("appKey", MainConstant.afsFFFF0N00000000009290AppKey);
+                    map.put("scene", MainConstant.ncLogin);
                     mPresenter.getSignInVcode(map);
                 }
             });
