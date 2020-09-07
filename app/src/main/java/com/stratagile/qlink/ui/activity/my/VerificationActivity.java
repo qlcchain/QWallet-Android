@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +22,6 @@ import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
 import com.stratagile.qlink.constant.ConstantValue;
-import com.stratagile.qlink.data.api.API;
 import com.stratagile.qlink.data.api.MainAPI;
 import com.stratagile.qlink.entity.otc.Passport;
 import com.stratagile.qlink.ui.activity.my.component.DaggerVerificationComponent;
@@ -74,12 +74,15 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
     TextView submit;
     @BindView(R.id.tvTip)
     TextView tvTip;
+    @BindView(R.id.etNumber)
+    EditText etNumber;
 
     private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainColor = R.color.white;
+        isEditActivity = true;
         super.onCreate(savedInstanceState);
     }
 
@@ -93,6 +96,11 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
 
     @Override
     protected void initData() {
+        if (ConstantValue.currentUser == null || ConstantValue.currentUser.getVstatus() == null) {
+            startActivity(new Intent(this, AccountActivity.class));
+            finish();
+            return;
+        }
         if ("KYC_FAIL".equals(ConstantValue.currentUser.getVstatus())) {
             KotlinConvertJavaUtils.INSTANCE.showNotApprovedDialog(this);
         }
@@ -135,6 +143,7 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
         //验证状态[NOT_UPLOAD/未上传,UPLOADED/已上传,KYC_SUCCESS/KYC成功,KYC_FAIL/KYC失败]
         if (!"NOT_UPLOAD".equals(ConstantValue.currentUser.getVstatus()) && !"KYC_FAIL".equals(ConstantValue.currentUser.getVstatus())) {
             submit.setVisibility(View.GONE);
+            etNumber.setVisibility(View.GONE);
             Glide.with(this)
                     .load(MainAPI.MainBASE_URL + ConstantValue.currentUser.getFacePhoto())
                     .apply(AppConfig.getInstance().optionsAppeal)
@@ -226,8 +235,8 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
             }
             intent.setDataAndType(uri, "image/*");
             intent.putExtra("crop", true);
-            intent.putExtra("aspectX", 484);
-            intent.putExtra("aspectY", 300);
+            intent.putExtra("aspectX", 0);
+            intent.putExtra("aspectY", 0);
             intent.putExtra("return-data", false);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFile);  //imageurl 文件输出的位置
@@ -238,8 +247,8 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
                 intent = new Intent("com.android.camera.action.CROP");
                 intent.setDataAndType(uri, "image/*");
                 intent.putExtra("crop", true);
-                intent.putExtra("aspectX", 484);
-                intent.putExtra("aspectY", 300);
+                intent.putExtra("aspectX", 0);
+                intent.putExtra("aspectY", 0);
                 intent.putExtra("return-data", false);
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFile);  //imageurl 文件输出的位置
@@ -408,8 +417,12 @@ public class VerificationActivity extends BaseActivity implements VerificationCo
                     ToastUtil.displayShortToast(getString(R.string.please_select_holdphoto));
                     return;
                 }
+                if ("".equals(etNumber.getText().toString().trim())) {
+                    ToastUtil.displayShortToast(getString(R.string.please_input_the_id_passport_number));
+                    return;
+                }
                 showProgressDialog();
-                mPresenter.uploadImg(new HashMap<String, String>());
+                mPresenter.uploadImg(new HashMap<String, String>(), etNumber.getText().toString());
                 break;
             default:
                 break;

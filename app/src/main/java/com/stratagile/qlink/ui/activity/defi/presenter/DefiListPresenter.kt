@@ -76,6 +76,21 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Defi
                 })
         mCompositeDisposable.add(disposable)
     }
+    fun defiPriceList(map: HashMap<String, String>) {
+        val disposable = httpAPIWrapper.defiPriceList(map)
+                .subscribe({ baseBack ->
+                    mView.closeProgressDialog()
+                    mView.setDefiPrice(baseBack)
+                    //isSuccesse
+                }, {
+                    mView.closeProgressDialog()
+                }, {
+                    //onComplete
+                    mView.closeProgressDialog()
+                    KLog.i("onComplete")
+                })
+        mCompositeDisposable.add(disposable)
+    }
 
     override fun unsubscribe() {
         if (!mCompositeDisposable.isDisposed) {

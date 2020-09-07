@@ -108,6 +108,7 @@ public class ProfilePictureActivity extends BaseActivity implements ProfilePictu
         if (ConstantValue.currentUser == null) {
             startActivity(new Intent(this, AccountActivity.class));
             finish();
+            return;
         }
 //        File dataFile = new File(Environment.getExternalStorageDirectory() + "/Qlink/image/useImage.jpg", "");
 //        if (dataFile.exists()) {

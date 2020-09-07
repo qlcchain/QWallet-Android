@@ -259,7 +259,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
     private fun sendNeoToken() {
         showProgressDialog()
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(7)
+        val arrays = arrayOfNulls<Any>(8)
         arrays[0] = neoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = payTokenInfo!!.asset_hash
@@ -267,6 +267,7 @@ class TopupPayNeoChainActivity : BaseActivity(), TopupPayNeoChainContract.View {
         arrays[4] = 8
         arrays[5] = neoWallet!!.wif
         arrays[6] = "xxx"
+        arrays[7] = AppConfig.instance.isMainNet
         webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)

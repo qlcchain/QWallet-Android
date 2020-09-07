@@ -14,27 +14,21 @@ import android.widget.LinearLayout
 import com.google.gson.Gson
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
-import com.stratagile.qlink.Account
-import com.stratagile.qlink.DSBridge.JsApi
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
+import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.entity.eventbus.CreateMultSignSuccess
 import com.stratagile.qlink.entity.eventbus.StakeQlcError
 import com.stratagile.qlink.entity.stake.LockResult
 import com.stratagile.qlink.entity.stake.MultSign
 import com.stratagile.qlink.entity.stake.StakeType
-import com.stratagile.qlink.ui.activity.main.MainViewModel
 import com.stratagile.qlink.ui.activity.stake.component.DaggerNewStakeComponent
 import com.stratagile.qlink.ui.activity.stake.contract.NewStakeContract
 import com.stratagile.qlink.ui.activity.stake.module.NewStakeModule
 import com.stratagile.qlink.ui.activity.stake.presenter.NewStakePresenter
-import com.stratagile.qlink.ui.activity.wallet.SelectWalletTypeActivity
-import com.stratagile.qlink.utils.ToastUtil
 import com.stratagile.qlink.utils.UIUtils
 import com.stratagile.qlink.utils.getLine
-import kotlinx.android.synthetic.main.activity_my_stake.*
 import kotlinx.android.synthetic.main.activity_new_stake.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -49,9 +43,8 @@ import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import wendu.dsbridge.DWebView
 import wendu.dsbridge.OnReturnValue
-import java.util.ArrayList
-
-import javax.inject.Inject;
+import java.util.*
+import javax.inject.Inject
 import kotlin.concurrent.thread
 
 /**
@@ -88,7 +81,7 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun createMultSign(stakeType: StakeType) {
         var isBack = false
-        webview.callHandler("staking.createMultiSig", arrayOf<Any>(stakeType.neoPubKey, "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5"), OnReturnValue<JSONObject> { retValue ->
+        webview.callHandler("staking.createMultiSig", arrayOf<Any>(stakeType.neoPubKey, ConstantValue.createMultiSigHash), OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var multSign = Gson().fromJson(retValue.toString(), MultSign::class.java)
             if (multSign._address == null) {
@@ -115,7 +108,7 @@ class NewStakeActivity : BaseActivity(), NewStakeContract.View {
     }
 
     fun lockQlc(stakeType: StakeType) {
-        webview.callHandler("staking.contractLock", arrayOf<Any>(stakeType.neoPriKey, stakeType.fromNeoAddress, stakeType.toAddress, stakeType.qlcchainAddress, stakeType.stakeQLcAmount, stakeType.stakeQlcDays), OnReturnValue<JSONObject> { retValue ->
+        webview.callHandler("staking.contractLock", arrayOf<Any>(stakeType.neoPriKey, stakeType.fromNeoAddress, stakeType.toAddress, stakeType.qlcchainAddress, stakeType.stakeQLcAmount, stakeType.stakeQlcDays, AppConfig.instance.isMainNet), OnReturnValue<JSONObject> { retValue ->
             KLog.i("lock result= " + retValue!!)
             var lockResult = Gson().fromJson(retValue.toString(), LockResult::class.java)
             if (lockResult.txid == null) {

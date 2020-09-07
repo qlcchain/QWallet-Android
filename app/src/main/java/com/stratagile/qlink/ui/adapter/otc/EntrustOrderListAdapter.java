@@ -53,5 +53,13 @@ public class EntrustOrderListAdapter extends BaseQuickAdapter<EntrustOrderList.O
                 .load(AppConfig.getInstance().getBaseUrl() + item.getHead())
                 .apply(AppConfig.getInstance().options)
                 .into((ImageView) helper.getView(R.id.ivAvatar));
+        Glide.with(mContext)
+                .load(AppConfig.getInstance().getBaseUrl() + item.getTradeTokenLogo())
+                .apply(AppConfig.getInstance().optionsNormal)
+                .into((ImageView) helper.getView(R.id.ivTradeToken));
+        Glide.with(mContext)
+                .load(AppConfig.getInstance().getBaseUrl() + item.getPayTokenLogo())
+                .apply(AppConfig.getInstance().optionsNormal)
+                .into((ImageView) helper.getView(R.id.ivPayToken));
     }
 }

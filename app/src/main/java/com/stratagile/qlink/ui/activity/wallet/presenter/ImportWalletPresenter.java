@@ -5,18 +5,17 @@ import android.util.Log;
 
 import com.socks.library.KLog;
 import com.stratagile.qlink.Account;
-import com.stratagile.qlink.api.transaction.TransactionApi;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.blockchain.cypto.util.HexUtils;
 import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.constant.MainConstant;
-import com.stratagile.qlink.data.NeoNodeRPC;
 import com.stratagile.qlink.data.api.HttpAPIWrapper;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.CreateWallet;
 import com.stratagile.qlink.ui.activity.wallet.contract.ImportWalletContract;
 import com.stratagile.qlink.ui.activity.wallet.ImportWalletActivity;
 import com.stratagile.qlink.utils.DigestUtils;
+import com.stratagile.qlink.utils.NeoUtils;
 import com.stratagile.qlink.utils.SpUtil;
 
 import org.bitcoinj.core.DumpedPrivateKey;
@@ -33,7 +32,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import neoutils.Neoutils;
 
 /**
  * @author hzp
@@ -98,16 +96,13 @@ public class ImportWalletPresenter implements ImportWalletContract.ImportWalletC
         mCompositeDisposable.add(disposable);
     }
 
-    @Override
-    public void reportWalletCreated(String address, String blockChain, String publicKey) {
+    public void reportWalletCreated(String address, String blockChain, String publicKey, String privateKey) {
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("address", address);
         infoMap.put("blockChain", blockChain);
-        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, ""));
+        infoMap.put("p2pId", SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "123456789"));
         infoMap.put("pubKey", publicKey);
-        NeoNodeRPC neoNodeRPC = new NeoNodeRPC("");
-        KLog.i(neoNodeRPC.signStr(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")));
-        infoMap.put("signData", neoNodeRPC.signStr(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "")));
+        infoMap.put("signData", NeoUtils.sign(SpUtil.getString(AppConfig.getInstance(), ConstantValue.P2PID, "123456789"), privateKey));
         Disposable disposable = httpAPIWrapper.reportWalletCreate(infoMap)
                 .subscribe(new Consumer<BaseBack>() {
                     @Override

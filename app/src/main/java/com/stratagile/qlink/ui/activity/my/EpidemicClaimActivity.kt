@@ -148,7 +148,7 @@ class EpidemicClaimActivity : BaseActivity(), EpidemicClaimContract.View {
         // 建立JavaScript调用Java接口的桥梁。
         webview.addJavascriptInterface(WebAppInterface(), "successCallback")
         webview.visibility = View.VISIBLE
-        webview.loadUrl("file:///android_asset/slideActivity.html")
+        webview.loadUrl("file:///android_asset/slideEpidicActivity.html")
     }
 
     var token = ""
@@ -201,7 +201,7 @@ class EpidemicClaimActivity : BaseActivity(), EpidemicClaimContract.View {
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveQlcWallet!!.address
-        iSportStepInterface!!.claimQgas(ConstantValue.currentUser.account, AccountUtil.getUserToken(), epidemicBean.id, receiveQlcWallet!!.address, sid, sig, token, MainConstant.afsAppKey, MainConstant.ncActivity)
+        iSportStepInterface!!.claimQgas(ConstantValue.currentUser.account, AccountUtil.getUserToken(), epidemicBean.id, receiveQlcWallet!!.address, sid, sig, token, MainConstant.afsFFFF0N1N000000009290AppKey, MainConstant.ncActivity)
     }
 
     fun getVcode() {

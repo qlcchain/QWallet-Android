@@ -22,6 +22,7 @@ import com.stratagile.qlink.ui.activity.otc.module.OrderDetailModule
 import com.stratagile.qlink.ui.activity.otc.presenter.OrderDetailPresenter
 import com.stratagile.qlink.ui.adapter.otc.EntrustOrderTradeOrderListAdapter
 import com.stratagile.qlink.utils.AccountUtil
+import com.stratagile.qlink.utils.OtcUtils
 import com.stratagile.qlink.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_order_detail.*
 import kotlinx.android.synthetic.main.activity_order_detail.llOpreate
@@ -59,7 +60,18 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
         tvQgasAmount.text = entrustOrderInfo.order.totalAmount.toString() + " " + entrustOrderInfo.order.tradeToken
         tvUnitPrice.text = BigDecimal.valueOf(entrustOrderInfo.order.unitPrice).stripTrailingZeros().toPlainString() + " " + entrustOrderInfo.order.payToken
         tvQgasVolume.text = BigDecimal.valueOf(entrustOrderInfo.order.getMinAmount()).stripTrailingZeros().toPlainString() + "-" + BigDecimal.valueOf(entrustOrderInfo.order.getMaxAmount()).stripTrailingZeros().toPlainString() + " QGAS"
+        txId1.text = entrustOrderInfo.order.txid
         if (entrustOrderInfo.order.type.equals(ConstantValue.orderTypeBuy)) {
+            txId1.setOnClickListener {
+                OtcUtils.gotoBlockBrowser(this, entrustOrderInfo.order.payTokenChain, entrustOrderInfo.order.txid)
+            }
+            if ("ETH_CHAIN".equals(entrustOrderInfo.order.payTokenChain)) {
+                ivTxid1.setImageResource(R.mipmap.icons_eth_wallet)
+            } else if ("QLC_CHAIN".equals(entrustOrderInfo.order.payTokenChain)) {
+                ivTxid1.setImageResource(R.mipmap.icons_qlc_wallet)
+            } else if ("NEO_CHAIN".equals(entrustOrderInfo.order.payTokenChain)) {
+                ivTxid1.setImageResource(R.mipmap.icons_neo_wallet)
+            }
             tvOrderType.text = getString(R.string.buy) + " " + entrustOrderInfo.order.tradeToken
             tvReceiveAddress.text = entrustOrderInfo.order.qgasAddress
             tvDealQgasAmounnt.text = (entrustOrderInfo.order.totalAmount - entrustOrderInfo.order.completeAmount - entrustOrderInfo.order.lockingAmount).toString() + " " + entrustOrderInfo.order.tradeToken
@@ -107,6 +119,16 @@ class OrderDetailActivity : BaseActivity(), OrderDetailContract.View {
                 }
             }
         } else {
+            txId1.setOnClickListener {
+                OtcUtils.gotoBlockBrowser(this, entrustOrderInfo.order.tradeTokenChain, entrustOrderInfo.order.txid)
+            }
+            if ("ETH_CHAIN".equals(entrustOrderInfo.order.tradeTokenChain)) {
+                ivTxid1.setImageResource(R.mipmap.icons_eth_wallet)
+            } else if ("QLC_CHAIN".equals(entrustOrderInfo.order.tradeTokenChain)) {
+                ivTxid1.setImageResource(R.mipmap.icons_qlc_wallet)
+            } else if ("NEO_CHAIN".equals(entrustOrderInfo.order.tradeTokenChain)) {
+                ivTxid1.setImageResource(R.mipmap.icons_neo_wallet)
+            }
             tvOrderType.text = getString(R.string.sell) + " " + entrustOrderInfo.order.tradeToken
             tvReceiveAddress.text = entrustOrderInfo.order.usdtAddress
             tvOrderType.setTextColor(resources.getColor(R.color.color_ff3669))

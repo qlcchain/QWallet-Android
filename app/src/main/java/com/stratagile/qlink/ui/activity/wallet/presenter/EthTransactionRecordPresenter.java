@@ -344,8 +344,10 @@ public class EthTransactionRecordPresenter implements EthTransactionRecordContra
             ArrayList<TransactionInfo> transactionInfos = new ArrayList<>();
             QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
             LedgerRpc rpc = new LedgerRpc(qlcClient);
+            KLog.i("插叙qlc链历史交易记录开始");
             JSONObject jsonObject = rpc.accountHistoryTopn(params);
             AccountHistory accountHistory = new Gson().fromJson(jsonObject.toJSONString(), AccountHistory.class);
+            KLog.i("插叙qlc链历史交易记录结束");
             for (int i = 0; i < accountHistory.getResult().size(); i++) {
                 TransactionInfo transactionInfo = new TransactionInfo();
                 transactionInfo.setTransactionType(AllWallet.WalletType.QlcWallet);

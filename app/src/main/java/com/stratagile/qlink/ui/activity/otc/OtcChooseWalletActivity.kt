@@ -54,6 +54,7 @@ class OtcChooseWalletActivity : BaseActivity(), OtcChooseWalletContract.View {
 
                         if (neoWallets[i].privateKey.equals(neoWallets[i].publicKey, ignoreCase = true)) {
                             Account.fromWIF(neoWallets[i].wif)
+//                            neoWallets[i].publicKey = Numeric.toHexStringWithPrefix(Account.getWallet()!!.publicKey)
                             neoWallets[i].publicKey = Account.byteArray2String(Account.getWallet()!!.publicKey).toLowerCase()
                             AppConfig.getInstance().daoSession.walletDao.update(neoWallets[i])
                         }

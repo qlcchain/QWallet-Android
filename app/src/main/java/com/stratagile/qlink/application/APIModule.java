@@ -18,6 +18,7 @@ import com.stratagile.qlink.data.api.HttpApi;
 import com.stratagile.qlink.entity.Auth;
 import com.stratagile.qlink.utils.SpUtil;
 import com.stratagile.qlink.utils.SystemUtil;
+import com.stratagile.qlink.utils.UuidUtil;
 import com.stratagile.qlink.utils.VersionUtil;
 import com.today.step.net.CHttpApi;
 import com.vondear.rxtools.RxDeviceTool;
@@ -69,13 +70,16 @@ public final class APIModule {
                 String uuid = "";
                 auth.setAgent(WebSettings.getDefaultUserAgent(AppConfig.getInstance()));
                 try {
-                    String serieaId = RxDeviceTool.getSerialNumberNew();
+                    KLog.i(RxDeviceTool.getAndroidId(AppConfig.getInstance()));
+                    KLog.i(RxDeviceTool.getDeviceIdIMEI(AppConfig.getInstance()));
+                    String serieaId = RxDeviceTool.getSerialNumberNew(AppConfig.getInstance());
                     auth.setUuid(serieaId);
                 } catch (Exception e) {
                     e.printStackTrace();
                     auth.setUuid("");
                 }
                 auth.setPlatform("Android");
+                auth.setUuid2(UuidUtil.getUUid2());
                 auth.setPhonemodel(RxDeviceTool.getBuildMANUFACTURER() + " " + RxDeviceTool.getBuildBrandModel());
                 auth.setAppVersion(VersionUtil.getAppVersionName(AppConfig.instance));
                 auth.setAppBuild(VersionUtil.getAppVersionCode(AppConfig.instance) + "");

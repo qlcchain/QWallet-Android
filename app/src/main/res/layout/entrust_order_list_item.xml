@@ -156,6 +156,29 @@
             android:layout_marginRight="12dp"
             android:layout_marginBottom="15dp"
             android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivTradeToken"
+                    android:layout_width="20dp"
+                    android:src="@mipmap/qgas"
+                    android:layout_height="20dp"/>
+                <ImageView
+                    android:src="@mipmap/switch_otc"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
+                <ImageView
+                    android:id="@+id/ivPayToken"
+                    android:layout_width="20dp"
+                    android:src="@mipmap/qlc"
+                    android:layout_height="20dp"/>
+            </LinearLayout>
             <TextView
                 android:id="@+id/tvOpreate"
                 android:layout_width="61dp"

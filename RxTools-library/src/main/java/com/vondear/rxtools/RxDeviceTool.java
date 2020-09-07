@@ -3,6 +3,7 @@ package com.vondear.rxtools;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.app.KeyguardManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -45,6 +46,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 设备工具类
@@ -150,11 +152,18 @@ public class RxDeviceTool {
         String id;
         //android.telephony.TelephonyManager
         TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTelephony.getDeviceId() != null) {
-            id = mTelephony.getDeviceId();
-        } else {
-            //android.provider.Settings;
+        try {
+            if (mTelephony.getDeviceId() != null) {
+                id = mTelephony.getDeviceId();
+            } else {
+                //android.provider.Settings;
+                id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+        } catch (Exception e) {
             id = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        if (id == null) {
+            id = "";
         }
         return id;
     }
@@ -298,8 +307,17 @@ public class RxDeviceTool {
      * @return
      */
     public static String getSubscriberId(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getSubscriberId();
+        try {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            String result = tm.getSubscriberId();
+            if (result == null) {
+                return "";
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     /**
@@ -368,23 +386,26 @@ public class RxDeviceTool {
      * @return 手机序列号
      */
     @SuppressLint({"NewApi", "MissingPermission"})
-    public static String getSerialNumberNew() {
-        String serial = "";
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {//9.0+
-                serial = Build.getSerial();
-            } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {//8.0+
-                serial = Build.SERIAL;
-            } else {//8.0-
-                Class<?> c = Class.forName("android.os.SystemProperties");
-                Method get = c.getMethod("get", String.class);
-                serial = (String) get.invoke(c, "ro.serialno");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("e", "读取设备序列号异常：" + e.toString());
-        }
-        return serial;
+    public static String getSerialNumberNew(Application appcon) {
+
+        String serial = "serial";
+        String androidId = getAndroidId(appcon);
+        String deviceId = getDeviceIdIMEI(appcon);
+        String subscriberId = getSubscriberId(appcon);
+        String m_szDevIDShort = "35" + androidId.length() % 10  + deviceId.length() % 10  + subscriberId.length() % 10  +
+                Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+                Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+                Build.ID.length() % 10 +
+                Build.MODEL.length() % 10 +
+                Build.TAGS.length() % 10 +
+                Build.USER.length() % 10; //13 位
+        Log.i("xxxxx", m_szDevIDShort.hashCode() + "");
+        Log.i("xxxxx", serial.hashCode() + "");
+        return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString()
+                .replace("-", "")
+                .replace("00000000", "")
+                .replace("ffffffff", "") + "|" + androidId + "|" + deviceId + "|" + subscriberId;
     }
 
     /**

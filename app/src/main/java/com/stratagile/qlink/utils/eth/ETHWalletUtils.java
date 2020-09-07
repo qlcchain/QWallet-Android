@@ -464,7 +464,7 @@ public class ETHWalletUtils {
             keypair = credentials.getEcKeyPair();
             publicKey = Numeric.toHexStringNoPrefixZeroPadded(keypair.getPublicKey(), 64<<1);
             Sign.SignatureData signatureData = Sign.signMessage(message.getBytes(), keypair);
-            String ret = ((int)signatureData.getV()) + ":" + Numeric.toHexString(signatureData.getR()) + ":"+ Numeric.toHexString(signatureData.getS());
+            String ret = (Numeric.toHexString(signatureData.getV())) + ":" + Numeric.toHexString(signatureData.getR()) + ":"+ Numeric.toHexString(signatureData.getS());
             KLog.i(ret);
             return ret;
         } catch (CipherException e) {

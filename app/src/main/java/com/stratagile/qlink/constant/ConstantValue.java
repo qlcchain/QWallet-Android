@@ -25,6 +25,7 @@ public class ConstantValue {
     public static int gasPrice = 30;
     public static boolean thisVersionShouldShowGuest = true;
     public static String P2PID = "p2pid";
+    public static String uuid2 = "uuid2";
     public static String topUpP2pId = "topUpP2pId";
     public static String Language = "language";
     public static boolean isConnectToP2p = false;
@@ -45,9 +46,36 @@ public class ConstantValue {
 
     public static String miningQLC = "";
 
+    public static String wrapperNode = "http://47.244.138.61:19746";
 
-
+    //qlc正式网节点
     public static String qlcNode = "http://wrpc.qlcchain.org:9735";
+    //qlc测试网节点
+//    public static String qlcNode = "http://rpc-test.qlcchain.online";
+
+    //创建多重签名地址的hash正式服
+    public static String createMultiSigHash = "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5";
+    //创建多重签名地址的hash测试服
+//    public static String createMultiSigHash = "0292a55eb2f213d087d71cf0e2e4b047762b6eccc6a6993d7bbea39e7379661afb";
+
+    //qlc链抵押正式节点
+    public static String qlcStakeNode = "https://nep5.qlcchain.online";
+    //qlc抵押测试节点
+//    public static String qlcStakeNode = "http://47.103.54.171:19740";
+
+    public static String qlcWorkNode = "http://pow1.qlcchain.org/work";
+
+    public static String neoNode = "http://seed2.ngd.network:20332";
+
+    public static String qlcHubEndPoint = "https://hub-test.qlcchain.online";
+
+    public static String qlchash = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5";
+
+    //neo链正式网查交易记录
+    public static String neoTranscationNode = "https://api.neoscan.io/api/main_net/v1/get_transaction/";
+    //neo测试网查交易记录
+//    public static String neoTranscationNode = "https://api.neoscan.io/api/test_net/v1/get_transaction/";
+
     //https://mainnet.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2
     public static String ethNodeUrl = "https://mainnet.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2";
 //    public static String qlcNode = "http://47.103.40.20:19735";

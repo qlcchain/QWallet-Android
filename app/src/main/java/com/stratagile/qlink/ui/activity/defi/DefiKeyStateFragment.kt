@@ -27,6 +27,7 @@ import com.stratagile.qlink.entity.defi.DefiJson
 import com.stratagile.qlink.entity.defi.KeyStateBean
 import com.stratagile.qlink.ui.adapter.defi.DefiKeyStateAdapter
 import kotlinx.android.synthetic.main.fragment_defi_key_state.*
+import java.math.BigDecimal
 
 /**
  * @author hzp
@@ -40,7 +41,7 @@ class DefiKeyStateFragment : BaseFragment(), DefiKeyStateContract.View {
     @Inject
     lateinit internal var mPresenter: DefiKeyStatePresenter
     lateinit var viewModel: DefiViewModel
-    lateinit var mDefiDetail : DefiDetail
+    lateinit var mDefiDetail: DefiDetail
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_defi_key_state, null)
@@ -53,17 +54,51 @@ class DefiKeyStateFragment : BaseFragment(), DefiKeyStateContract.View {
         viewModel = ViewModelProviders.of(activity!!).get(DefiViewModel::class.java)
         viewModel.defiDetailLiveData.observe(this, Observer {
             mDefiDetail = it!!
-           runOnUiThread {
-               KLog.i("数据改变")
-               var jsonValue = Gson().fromJson<DefiJson>(it!!.project.jsonValue, DefiJson::class.java)
-               var list = arrayListOf<KeyStateBean>()
-               list.add(KeyStateBean(jsonValue.tvl.btc.relative_1d, jsonValue.tvl.btc.value, "BTC"))
-               list.add(KeyStateBean(jsonValue.tvl.eth.relative_1d, jsonValue.tvl.eth.value, "ETH"))
-               list.add(KeyStateBean(jsonValue.tvl.usd.relative_1d, jsonValue.tvl.usd.value.toDouble(), "USDT"))
-               var keyStateAdapter = DefiKeyStateAdapter(list)
-               KLog.i("数据个数为：" + list.size)
-               recyclerView.adapter = keyStateAdapter
-           }
+            runOnUiThread {
+                KLog.i("数据改变")
+                var jsonValue = Gson().fromJson<DefiJson>(it!!.project.jsonValue, DefiJson::class.java)
+                var list = arrayListOf<KeyStateBean>()
+                list.add(KeyStateBean(jsonValue.tvl.btc.relative_1d, jsonValue.tvl.btc.value, "BTC"))
+                list.add(KeyStateBean(jsonValue.tvl.eth.relative_1d, jsonValue.tvl.eth.value, "ETH"))
+                list.add(KeyStateBean(jsonValue.tvl.usd.relative_1d, jsonValue.tvl.usd.value.toDouble(), "USDT"))
+                var keyStateAdapter = DefiKeyStateAdapter(list)
+                KLog.i("数据个数为：" + list.size)
+                recyclerView.adapter = keyStateAdapter
+
+                /**
+                 * symbol : COMP
+                 * marketCap : 477284653.8452589
+                 * chain : Ethereum
+                 * percentChange24h : -4.05578
+                 * percentChange7d : -14.0927
+                 * totalSupply : 10000000
+                 * price : 186.346217591
+                 * id : 188e0766426b4af1bd581dba24a2406d
+                 * hash : 0xc00e94cb662c3520282e6f5717214004a7f26888
+                 * circulatingSupply : 2561279
+                 */
+                if (mDefiDetail.project.token != null) {
+                    tvTokenInfo.text = mDefiDetail.project.token.symbol
+                    tvTokenPercent.text = mDefiDetail.project.token.percentChange24h + "% (24h)"
+                    tvTokenPrice.text =  "$" + mDefiDetail.project.token.price.toBigDecimal().setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                    tvMarketCap.text = "$ " + mDefiDetail.project.token.marketCap.toBigDecimal().setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                    tvCirculatingSupply.text = mDefiDetail.project.token.circulatingSupply.toString() + " " + mDefiDetail.project.token.symbol
+
+                    if (mDefiDetail.project.token.percentChange24h.toFloat() > 0) {
+                        tvTokenPercent.setTextColor(resources.getColor(R.color.color_7ED321))
+                        ivArrow.setImageResource(R.mipmap.icon_arrow_up)
+                    } else {
+                        tvTokenPercent.setTextColor(resources.getColor(R.color.color_f50f60))
+                        ivArrow.setImageResource(R.mipmap.icon_arrow_down)
+                    }
+                } else {
+                    tvTokenInfo.text = ""
+                    tvMarketCap.text = ""
+                    tvCirculatingSupply.text = ""
+                    llTokenInfo.visibility = View.GONE
+                    tvToken.text = ""
+                }
+            }
         })
     }
 

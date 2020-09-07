@@ -34,6 +34,7 @@ import com.stratagile.qlink.ui.activity.neo.contract.NeoTransferContract;
 import com.stratagile.qlink.ui.activity.neo.module.NeoTransferModule;
 import com.stratagile.qlink.ui.activity.neo.presenter.NeoTransferPresenter;
 import com.stratagile.qlink.utils.FileUtil;
+import com.stratagile.qlink.utils.NeoUtils;
 import com.stratagile.qlink.utils.PopWindowUtil;
 import com.stratagile.qlink.utils.SpringAnimationUtil;
 import com.stratagile.qlink.utils.ToastUtil;
@@ -53,8 +54,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import kotlin.jvm.internal.Intrinsics;
-import neoutils.Neoutils;
 import wendu.dsbridge.DWebView;
 import wendu.dsbridge.OnReturnValue;
 
@@ -322,7 +321,7 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
                     ToastUtil.displayShortToast(getString(R.string.please_enter_neo_wallet_address));
                     return;
                 }
-                if (!Neoutils.validateNEOAddress(etNeoTokenSendAddress.getText().toString().trim())) {
+                if (!NeoUtils.isValidAddress(etNeoTokenSendAddress.getText().toString().trim())) {
                     ToastUtil.displayShortToast(getString(R.string.please_enter_neo_wallet_address));
                     return;
                 }
@@ -361,14 +360,16 @@ public class NeoTransferActivity extends BaseActivity implements NeoTransferCont
         showProgressDialog();
 
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        Object[] arrays = new Object[7];
+        Object[] arrays = new Object[8];
         arrays[0] = tokenInfo.getWalletAddress();
         arrays[1] = etNeoTokenSendAddress.getText().toString();
         arrays[2] = tokenInfo.getTokenAddress();
         arrays[3] = etNeoTokenSendValue.getText().toString();
         arrays[4] = parseDecimal(tokenInfo.getTokenSymol()).getNetworks().get_$1().getDecimals();
+//        arrays[5] = Account.INSTANCE.getWallet().getECKeyPair().exportAsWIF();
         arrays[5] = Account.INSTANCE.getWallet().getWIF();
         arrays[6] = "hahaha";
+        arrays[7] = AppConfig.instance.isMainNet;
         KLog.i("开始调用js转账。。。");
         webview.callHandler("staking.send", arrays, (new OnReturnValue() {
             // $FF: synthetic method

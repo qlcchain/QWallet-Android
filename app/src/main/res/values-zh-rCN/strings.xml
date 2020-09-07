@@ -171,7 +171,7 @@
     <string name="min_amount">最小值</string>
     <string name="max_amount">最大值</string>
     <string name="next">下一步</string>
-    <string name="the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set">最小值应等于或大于1。最大金额应该等于或小于您设置的总金额。</string>
+    <string name="the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set">最小值应等于或大于%1$s。最大金额应该等于或小于您设置的总金额。</string>
     <string name="pay_now">现在支付</string>
     <string name="you_have_to_pay_within_30_minus">你必须在30分钟之内支付完成</string>
     <string name="i_ve_transfered">我已付款</string>
@@ -198,8 +198,8 @@
     <string name="select_a_eth_wallet">选择一个ETH钱包</string>
     <string name="memo">备注</string>
     <string name="miner_cost">矿工手续费</string>
-    <string name="slow">慢</string>
-    <string name="fast">快</string>
+    <string name="slow">较慢</string>
+    <string name="fast">较快</string>
     <string name="remaining_volume">剩余总量</string>
     <string name="successful_deal">交易完成</string>
     <string name="appellant">申诉方</string>
@@ -815,7 +815,7 @@
     <string name="historical_stats">历史数据</string>
     <string name="rate">评级</string>
     <string name="explorer">更多</string>
-    <string name="defi_details">Details</string>
+    <string name="defi_details">Defi详情</string>
     <string name="rating__">评级\n</string>
     <string name="date_defi">日期</string>
     <string name="tvl_usd">锁定 USD</string>
@@ -829,6 +829,42 @@
 
     <string name="please_complete_the_man_machine_verfy">请完成人机验证</string>
     <string name="this_is_your_order">这是你自己的订单</string>
-    <string name="sorry_this_order_cannot_be_placeed_">抱歉，交易价值过低，不能下单。</string>
+    <string name="sorry_this_order_cannot_be_placeed_">抱歉，交易价值过低，不能下单。 %1$s 数量应该大于等于 %2$s</string>
+    <string name="token">代币</string>
+    <string name="percent_change">涨跌幅</string>
+    <string name="token_price">代币价格</string>
+    <string name="token_name_1">代币名称</string>
+    <string name="market_cap">市值</string>
+    <string name="circulating_supply">总供应量</string>
+    <string name="revoke_failed_please_try_it_later">赎回失败，请稍后再试</string>
+    <string name="stake_failed_please_try_it_later">抵押失败，请稍后再试</string>
+    <string name="qlc_erc20_token_nep5_token"><![CDATA[QLC ERC20 Token -> NEP5 Token]]></string>
+    <string name="nep5_token_erc20_token"><![CDATA[NEP5 Token -> ERC20 Token]]></string>
+    <string name="the_minimum_stake_amount_is_1_s_qlc">The minimum stake amount is %1$s QLC</string>
+    <string name="from_1_s_qlc">From %1$s QLC</string>
+    <string name="qlc_cross_chain_swap">QLC跨链Swap</string>
+    <string name="wait_for_lock_nep5_qlc">Waiting for Lock nep5 QLC</string>
+    <string name="please_retry">请重试</string>
+    <string name="failed">failed</string>
+    <string name="insufficient_balance">余额不足</string>
+    <string name="withdrawstart">WithdrawStart</string>
+    <string name="swap">兑换</string>
+    <string name="record_swap">记录</string>
+    <string name="waiting_for_claim">待领取</string>
+    <string name="claim_swap">领取</string>
+    <string name="claiming">领取中</string>
+    <string name="expired">已失效</string>
+    <string name="gas_fee">GAS Fee</string>
+    <string name="average">平均</string>
+    <string name="swapping">兑换中</string>
+    <string name="this_may_take_several_minutes">可能需要几分钟时间。</string>
+    <string name="swap_details_are_available_in_the_record_page">可在「记录」页面查看详细记录。</string>
+    <string name="revoking">赎回中</string>
+    <string name="please_input_the_id_passport_number">请输入证件号码</string>
+    <string name="waiting_for_confirm">等待确认</string>
+    <string name="status_swap">状态:</string>
+    <string name="swap_amount_qlc">Swap 数量(QLC)</string>
+    <string name="time_swap_detail">时间</string>
+    <string name="hash">Hash</string>
 
 </resources>

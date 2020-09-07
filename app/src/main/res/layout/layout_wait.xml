@@ -22,6 +22,9 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:layout_width="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
             android:text="@string/reading_your_special_rating_interest_on_the_chain"
             android:layout_marginTop="6dp"
             android:layout_height="wrap_content"/>

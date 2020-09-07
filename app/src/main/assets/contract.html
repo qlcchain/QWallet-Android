@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
     <!--require dsbridge init js-->
-<!--        <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>-->
+    <!--        <script src="https://cdn.jsdelivr.net/npm/@cityofzion/neon-js/dist/browser.min.js"></script>-->
     <!--    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>-->
     <!--    <script src="https://cdn.bootcss.com/bignumber.js/9.0.0/bignumber.min.js"></script>-->
     <script src="./bignumber.min.js"></script>
@@ -17,174 +17,194 @@
 <body>
 
 <script>
-		// constants
-		const NEO_HASH = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b';
-		const GAS_HASH = '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7';
+  // constants
+  const NEO_HASH = 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b';
+  const GAS_HASH = '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7';
 
-		// smart contract script hash
-		const smartContractScript = '3078aa0e095defba3f00e0af12810187ecfb586a';
-		const apiProvider = new Neon.api.neoscan.instance("MainNet");
+  // smart contract script hash
+  //正式网的
+  var smartContractScript = '3078aa0e095defba3f00e0af12810187ecfb586a';
+  //测试网的
+  var smartContractScriptTest = '30f69798a129527b4996d6dd8e974cc15d51403d';
 
-		// multisig
-		dsBridge.registerAsyn("staking", {
-			tag: "staking",
-			// multisig
-        createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
-            try {
-                // user neo public key
-                const accountA = new Neon.wallet.Account(publicKeyA);
-                // environment neo public key
-                const accountB = new Neon.wallet.Account(publicKeyB);
-                // multisig account
-                const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
-                accountA.publicKey,
-                accountB.publicKey
-                ]);
-                responseCallback(multisigAcct);
-                } catch(err) {
-                responseCallback(err);
-            }
-        },
-			// lock
-			contractLock:function (privateKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime, responseCallback) {
+  var apiProvider = new Neon.api.neoscan.instance("MainNet");
+  var apiProviderTest = new Neon.api.neoscan.instance("TestNet");
 
-				const account = new Neon.wallet.Account(privateKey);
+  // multisig
+  dsBridge.registerAsyn("staking", {
+    tag: "staking",
+    // multisig
+    createMultiSig:function (publicKeyA, publicKeyB, responseCallback) {
+      try {
+        // user neo public key
+        const accountA = new Neon.wallet.Account(publicKeyA);
+        // environment neo public key
+        const accountB = new Neon.wallet.Account(publicKeyB);
+        // multisig account
+        const multisigAcct = Neon.wallet.Account.createMultiSig(2, [
+          accountA.publicKey,
+          accountB.publicKey
+        ]);
+        responseCallback(multisigAcct);
+      } catch(err) {
+        responseCallback(err);
+      }
+    },
+    // lock
+    contractLock:function (privateKey, fromAddress, toAddress, qlcchainAddress, qlcAmount, lockTime, isMainNet, responseCallback) {
 
-				const amountWithDecimals = new BigNumber(qlcAmount).multipliedBy(100000000);
+      const account = new Neon.wallet.Account(privateKey);
 
-				const invoke = {
-					scriptHash: smartContractScript, // Scripthash for the contract
-					operation: 'lock', // name of operation to perform.
-					args: [
-						Neon.sc.ContractParam.byteArray(fromAddress, 'address'), // neo address
-						Neon.sc.ContractParam.byteArray(toAddress, 'address'), // multisig neo address
-						Neon.sc.ContractParam.byteArray(Neon.u.str2hexstring(qlcchainAddress), 'string'), // qlc address
-						Neon.sc.ContractParam.integer(amountWithDecimals.toNumber()), // qlc amount // check integer limit for big numbers !! should be 2,147,483,647 that's max 21 qlc ?
-						Neon.sc.ContractParam.integer(lockTime), // lock time
-					]
-				}
-				//console.log(invoke);
+      if (!isMainNet) {
+        apiProvider = apiProviderTest
+        smartContractScript = smartContractScriptTest
+      };
 
-				const script = Neon.sc.createScript(invoke);
-				//console.log("\n\n--- API Provider RPC Endpoint ---");
-				//console.log(script);
+      const amountWithDecimals = new BigNumber(qlcAmount).multipliedBy(100000000);
 
-				const invokeConfig = {
-					api: apiProvider, // The API Provider that we rely on for balance and rpc information
-					account: account, // The sending Account
-					script: script // The Smart Contract invocation script
-				};
+      const invoke = {
+        scriptHash: smartContractScript, // Scripthash for the contract
+        operation: 'lock', // name of operation to perform.
+        args: [
+          Neon.sc.ContractParam.byteArray(fromAddress, 'address'), // neo address
+          Neon.sc.ContractParam.byteArray(toAddress, 'address'), // multisig neo address
+          Neon.sc.ContractParam.byteArray(Neon.u.str2hexstring(qlcchainAddress), 'string'), // qlc address
+          Neon.sc.ContractParam.integer(amountWithDecimals.toNumber()), // qlc amount // check integer limit for big numbers !! should be 2,147,483,647 that's max 21 qlc ?
+          Neon.sc.ContractParam.integer(lockTime), // lock time
+        ]
+      }
+      //console.log(invoke);
 
-				const returnTokeninvokeConfig = Neon.api.doInvoke(invokeConfig)
-				.then(res => {
-					responseCallback(res.response);
-					//console.log("\n\n--- Response ---");
-					//console.log(res);
-					//return res.response;
-				})
-				.catch(err => {
-					responseCallback(err);
-					//console.log(err);
-					//return err;
-				});
-			},
-			// signature
-			signature:function (unsignedRawTx, privateKey, responseCallback) {
+      const script = Neon.sc.createScript(invoke);
+      //console.log("\n\n--- API Provider RPC Endpoint ---");
+      //console.log(script);
 
-				const signature = Neon.wallet.sign(unsignedRawTx, privateKey);
+      const invokeConfig = {
+        api: apiProvider, // The API Provider that we rely on for balance and rpc information
+        account: account, // The sending Account
+        script: script // The Smart Contract invocation script
+      };
 
-				const result = {
-					'signature': signature
-				}
-				responseCallback(result);
-			},
-			// send
-			send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, memo, responseCallback) {
+      const returnTokeninvokeConfig = Neon.api.doInvoke(invokeConfig)
+        .then(res => {
+          responseCallback(res.response);
+          //console.log("\n\n--- Response ---");
+          //console.log(res);
+          //return res.response;
+        })
+        .catch(err => {
+          responseCallback(err);
+          //console.log(err);
+          //return err;
+        });
+    },
+    // signature
+    signature:function (unsignedRawTx, privateKey, responseCallback) {
 
-                //console.log("js日志1。。。");
-				const account = new Neon.wallet.Account(wif);
-				// NEO or GAS send
-				if (assetHash == NEO_HASH || assetHash == GAS_HASH) {
-					let intent = null;
-					if (assetHash == NEO_HASH)
-						intent = Neon.api.makeIntent({ NEO: new BigNumber(amount).toNumber() }, toAddress);
-					else
-						intent = Neon.api.makeIntent({ GAS: new BigNumber(amount).toNumber() }, toAddress);
+      const signature = Neon.wallet.sign(unsignedRawTx, privateKey);
 
-					const config = {
-						api: apiProvider, // The network to perform the action, MainNet or TestNet.
-						account: account, // This is the address which the assets come from.
-						intents: intent // This is where you want to send assets to.
-					};
-					const returnAsset = Neon.api.sendAsset(config)
-					.then(config => {
-						responseCallback(config.response);
-					})
-					.catch(config => {
-						responseCallback(config);
-					});
-				}
-                //console.log("js日志2。。。");
-				// nep5 asset send
-				const amtToSend = new BigNumber(amount).toFixed();
-				const network = 'MainNet';
-				const additionalInvocationGas = 0;
-				const additionalIntents = [];
-				const remark = memo;
+      const result = {
+        'signature': signature
+      }
+      responseCallback(result);
+    },
+    // send
+    send:function (fromAddress, toAddress, assetHash, amount, numOfDecimals, wif, memo, isMainNet, responseCallback) {
+      if (!isMainNet) {
+        apiProvider = apiProviderTest
+        smartContractScript = smartContractScriptTest
+      };
+      //console.log("js日志1。。。");
+      const account = new Neon.wallet.Account(wif);
+      // NEO or GAS send
+      if (assetHash == NEO_HASH || assetHash == GAS_HASH) {
+        let intent = null;
+        if (assetHash == NEO_HASH)
+          intent = Neon.api.makeIntent({ NEO: new BigNumber(amount).toNumber() }, toAddress);
+        else
+          intent = Neon.api.makeIntent({ GAS: new BigNumber(amount).toNumber() }, toAddress);
 
-				// We have to adjust the amount to send because this function bumps it up by 8 decimals places according to Fixed8 rules. For NEP5 tokens of 8 decimals places, no adjustments is needed.
-				const generator = Neon.nep5.abi.transfer(
-					assetHash,
-					account.address,
-					toAddress,
-					new Neon.u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
-				);
-                //console.log("js日志3。。。");
-				const builder = generator();
-				const script = builder.str;
-				const gas = additionalInvocationGas;
-				const intent = additionalIntents;
+        const config = {
+          api: apiProvider, // The network to perform the action, MainNet or TestNet.
+          account: account, // This is the address which the assets come from.
+          intents: intent // This is where you want to send assets to.
+        };
+        const returnAsset = Neon.api.sendAsset(config)
+          .then(config => {
+            responseCallback(config.response);
+          })
+          .catch(config => {
+            responseCallback(config);
+          });
+      }
+      //console.log("js日志2。。。");
+      // nep5 asset send
+      const amtToSend = new BigNumber(amount).toFixed();
+      const network = 'MainNet';
+      const additionalInvocationGas = 0;
+      const additionalIntents = [];
+      const remark = memo;
 
-				const config = {
-					api: apiProvider, // The API Provider that we rely on for balance and rpc information
-					account: account, // The sending Account
-					intents: intent, // Additional intents to move assets
-					script: script, // The Smart Contract invocation script
-					gas: gas // Additional GAS for invocation.
-				};
-                //console.log("js日志4。。。");
-				const returnToken = Neon.api.doInvoke(config)
-				.then(config => {
-				    //console.log("js日志5。。。");
-					responseCallback(config.response);
-				})
-				.catch(config => {
-				    //console.log("js日志6。。。");
-					responseCallback(config);
-				});
-			},
-			// claimGas
-            claimGas:function (privateKey, responseCallback) {
+      // We have to adjust the amount to send because this function bumps it up by 8 decimals places according to Fixed8 rules. For NEP5 tokens of 8 decimals places, no adjustments is needed.
+      const generator = Neon.nep5.abi.transfer(
+        assetHash,
+        account.address,
+        toAddress,
+        new Neon.u.Fixed8(amtToSend).div(Math.pow(10, 8 - numOfDecimals))
+      );
+      //console.log("js日志3。。。");
+      const builder = generator();
+      const script = builder.str;
+      const gas = additionalInvocationGas;
+      const intent = additionalIntents;
 
-             const account = new Neon.wallet.Account(privateKey);
+      const config = {
+        api: apiProvider, // The API Provider that we rely on for balance and rpc information
+        account: account, // The sending Account
+        intents: intent, // Additional intents to move assets
+        script: script, // The Smart Contract invocation script
+        gas: gas // Additional GAS for invocation.
+      };
+      //console.log("js日志4。。。");
+      const returnToken = Neon.api.doInvoke(config)
+        .then(config => {
+          //console.log("js日志5。。。");
+          responseCallback(config.response);
+        })
+        .catch(config => {
+          //console.log("js日志6。。。");
+          responseCallback(config);
+        });
+    },
 
-             const config = {
-              api: apiProvider, // The API Provider that we rely on for balance and rpc information
-              account: account  // The sending Account
-             };
 
-             Neon.api.claimGas(config)
-             .then(config => {
-              console.log(config.response);
-              responseCallback({'claimed': true, 'msg':config.response});
-             })
-             .catch(config => {
-              console.log("出错了。。");
-              console.log(config);
-              responseCallback({'claimed': false, 'msg':config});
-             });
-            }
-		});
+    // claimGas
+    claimGas:function (privateKey, isMainNet, responseCallback) {
+
+      const account = new Neon.wallet.Account(privateKey);
+
+      if (!isMainNet) {
+        apiProvider = apiProviderTest
+        smartContractScript = smartContractScriptTest
+      };
+
+      const config = {
+        api: apiProvider, // The API Provider that we rely on for balance and rpc information
+        account: account  // The sending Account
+      };
+
+      Neon.api.claimGas(config)
+        .then(config => {
+          console.log(config.response);
+          responseCallback({'claimed': true, 'msg':config.response});
+        })
+        .catch(config => {
+          console.log("出错了。。");
+          console.log(config);
+          responseCallback({'claimed': false, 'msg':config});
+        });
+    }
+  });
 
 
 </script>

@@ -11,7 +11,6 @@ import com.stratagile.qlink.api.HttpObserver
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.data.NeoCallBack
-import com.stratagile.qlink.data.NeoNodeRPC
 import com.stratagile.qlink.data.UTXO
 import com.stratagile.qlink.data.UTXOS
 import com.stratagile.qlink.data.api.HttpAPIWrapper
@@ -80,73 +79,95 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
             mView.closeProgressDialog()
             return
         }
-        var disposable = Observable.create(ObservableOnSubscribe<QLCAccount> {
-            KLog.i("发射1")
-            it.onNext(qlcAccount)
-            it.onComplete()
-        }).subscribeOn(Schedulers.io()).map { qlcAccount1 ->
-            var qlcTokenbalances: ArrayList<QlcTokenbalance>? = null
-            Observable.create(ObservableOnSubscribe<String> {
-                KLog.i("开始查询qgas。。")
-                QLCAPI().walletGetBalance(qlcAccount1.address, "", object : QLCAPI.BalanceInter {
-                    override fun onBack(baseResult: ArrayList<QlcTokenbalance>?, error: Error?) {
-                        if (error == null) {
-                            KLog.i("发射2")
-                            qlcTokenbalances = baseResult
-                            if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
-                                if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
-                                    QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "otc_entrust_sell", false, object : SendBack {
-                                        override fun send(suceess: String) {
-                                            if ("".equals(suceess)) {
-                                                mView.generateSellQgasOrderFailed("send qgas error")
-                                                it.onComplete()
-                                            } else {
-                                                KLog.i(suceess)
-                                                it.onNext(suceess)
-                                                it.onComplete()
-                                            }
-                                        }
 
-                                    })
-                                } else {
-                                    mView.generateSellQgasOrderFailed("Not enough QGAS")
-                                    it.onComplete()
+        var qlcTokenbalances: ArrayList<QlcTokenbalance>? = null
+        QLCAPI().walletGetBalance(qlcAccount.address, "", object : QLCAPI.BalanceInter {
+            override fun onBack(baseResult: ArrayList<QlcTokenbalance>?, error: Error?) {
+                if (error == null) {
+                    KLog.i("发射2")
+                    qlcTokenbalances = baseResult
+                    if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }.size > 0) {
+                        if (qlcTokenbalances!!.filter { it.symbol.equals("QGAS") }[0].balance.toBigDecimal().divide(BigDecimal.TEN.pow(8), 8, BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros() >= amount.toBigDecimal()) {
+                            QlcReceiveUtils.sendQGas(qlcAccount, receiveAddress, amount, "otc_entrust_sell", false, object : SendBack {
+                                override fun send(suceess: String) {
+                                    if ("".equals(suceess)) {
+                                        mView.generateSellQgasOrderFailed("send qgas error")
+                                    } else {
+                                        KLog.i(suceess)
+                                        map.put("fromAddress", qlcAccount.address)
+                                        map.put("txid", suceess)
+                                        Thread.sleep(200)
+                                        httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
+                                            mView.closeProgressDialog()
+                                            mView.generateSellQgasOrderSuccess()
+                                        }, {
+                                            httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
+                                                mView.closeProgressDialog()
+                                                mView.generateSellQgasOrderSuccess()
+                                            }, {
+                                                mView.closeProgressDialog()
+                                                if (map["txid"] != null) {
+                                                    EntrustTodo.createEntrustTodo(map)
+                                                    sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "QLC_CHAIN", "QGAS", amount, it.message!!)
+                                                }
+                                            }, {
+
+                                            })
+                                        }, {
+
+                                        })
+
+                                    }
                                 }
-                            }
+
+                            })
                         } else {
-                            mView.generateSellQgasOrderFailed("send qgas error")
-                            it.onComplete()
+                            mView.generateSellQgasOrderFailed("Not enough QGAS")
                         }
                     }
-                })
-            })
-        }.concatMap {
-            map.put("fromAddress", qlcAccount.address)
-            map.put("txid", it.blockingFirst())
-            httpAPIWrapper.generateBuyQgasOrder(map)
-        }.subscribe({ baseBack ->
-            //isSuccesse
-            mView.closeProgressDialog()
-            mView.generateSellQgasOrderSuccess()
-        }, {
-            mView.closeProgressDialog()
-            if (map["txid"] != null) {
-                EntrustTodo.createEntrustTodo(map)
-                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "", "", "")
-            }
-        }, {
-            //onComplete
-            KLog.i("onComplete")
-            mView.closeProgressDialog()
-            if (map["txid"] != null) {
-                EntrustTodo.createEntrustTodo(map)
-                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "", "", "")
+                } else {
+                    mView.generateSellQgasOrderFailed("send qgas error")
+                }
             }
         })
-        mCompositeDisposable.add(disposable)
+
+//        var disposable = Observable.create(ObservableOnSubscribe<QLCAccount> {
+//            KLog.i("发射1")
+//            it.onNext(qlcAccount)
+//            it.onComplete()
+//        }).subscribeOn(Schedulers.io()).map { qlcAccount1 ->
+//
+//            Observable.create(ObservableOnSubscribe<String> {
+//                KLog.i("开始查询qgas。。")
+//
+//            })
+//        }.concatMap {
+//            map.put("fromAddress", qlcAccount.address)
+//            map.put("txid", it.blockingFirst())
+//            httpAPIWrapper.generateBuyQgasOrder(map)
+//        }.subscribe({ baseBack ->
+//            //isSuccesse
+//            mView.closeProgressDialog()
+//            mView.generateSellQgasOrderSuccess()
+//        }, {
+//            mView.closeProgressDialog()
+//            if (map["txid"] != null) {
+//                EntrustTodo.createEntrustTodo(map)
+//                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "QLC_CHAIN", "QGAS", amount)
+//            }
+//        }, {
+//            //onComplete
+//            KLog.i("onComplete")
+//            mView.closeProgressDialog()
+//            if (map["txid"] != null) {
+//                EntrustTodo.createEntrustTodo(map)
+//                sysbackUp(map["txid"]!!, "ENTRUST_ORDER", "QLC_CHAIN", "QGAS", amount)
+//            }
+//        })
+//        mCompositeDisposable.add(disposable)
     }
 
-    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String) {
+    fun sysbackUp(txid: String, type: String, chain: String, tokenName: String, amount: String, remark : String = "") {
         val infoMap = java.util.HashMap<String, Any>()
         infoMap["account"] = ConstantValue.currentUser.account
         infoMap["token"] = AccountUtil.getUserToken()
@@ -156,6 +177,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         infoMap["amount"] = amount
         infoMap["platform"] = "Android"
         infoMap["txid"] = txid
+        infoMap["remark"] = remark
         httpAPIWrapper.sysBackUp(infoMap).subscribe(object : HttpObserver<BaseBack<*>>() {
             override fun onNext(baseBack: BaseBack<*>) {
                 onComplete()
@@ -179,7 +201,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
                         ToastUtil.displayShortToast(AppConfig.getInstance().resources.getString(R.string.error2))
                         mView.closeProgressDialog()
                     } else {
-                        generateEntrustSellOrder(it, walletAddress, map)
+                        generateEntrustSellOrder(it, walletAddress, map, amount, "ETH_CHAIN", tokenInfo.tokenInfo.symbol)
                         KLog.i("transaction Hash: $it")
                     }
                 }, {
@@ -306,7 +328,7 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         return txid
     }
 
-    fun generateEntrustSellOrder(txid: String, fromAddress: String, map: MutableMap<String, String>) {
+    fun generateEntrustSellOrder(txid: String, fromAddress: String, map: MutableMap<String, String>, amount: String, chain: String, tokenName: String) {
         map.put("fromAddress", fromAddress)
         map.put("txid", getTxidByHex(txid))
         mCompositeDisposable.add(httpAPIWrapper.generateBuyQgasOrder(map).subscribe({
@@ -315,11 +337,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         }, {
             mView.closeProgressDialog()
             EntrustTodo.createEntrustTodo(map)
-            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
+            sysbackUp(txid, "ENTRUST_ORDER", chain, tokenName, amount, it.message!!)
         }, {
             mView.closeProgressDialog()
             EntrustTodo.createEntrustTodo(map)
-            sysbackUp(txid, "ENTRUST_ORDER", "", "", "")
+            sysbackUp(txid, "ENTRUST_ORDER", chain, tokenName, amount)
         }))
     }
 
@@ -349,31 +371,31 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Orde
         return Transaction(ByteBuffer.wrap(ba))
     }
 
-    fun sendNep5Token(address: String, amount: String, toAddress: String, dataBean: NeoWalletInfo.DataBean.BalanceBean, remark: String, generateMap: HashMap<String, String>) {
-        val neoNodeRPC = NeoNodeRPC("")
-        neoNodeRPC.sendNEP5Token(assets, Account.getWallet()!!, dataBean.asset_hash, address, toAddress, amount.toDouble(), remark, object : NeoCallBack {
-            override fun NeoTranscationResult(jsonBody: String?) {
-                val tx = getTxid(jsonBody!!)
-                val map = java.util.HashMap<String, String>()
-                map["addressFrom"] = address
-                map["addressTo"] = toAddress
-                map["symbol"] = dataBean.asset_symbol
-                map["amount"] = amount
-                map["tx"] = jsonBody
-                sendRow(tx.getHash().toReverseHexString(), address, map, generateMap)
-            }
-        })
-    }
-
-    fun sendRow(txid: String, address: String, map: HashMap<String, String>, generateMap: HashMap<String, String>) {
-        mCompositeDisposable.add(httpAPIWrapper.neoTokenTransaction(map).subscribe({
-            generateEntrustSellOrder(txid, address, generateMap)
-        }, {
-            mView.closeProgressDialog()
-        }, {
-            mView.closeProgressDialog()
-        }))
-    }
+//    fun sendNep5Token(address: String, amount: String, toAddress: String, dataBean: NeoWalletInfo.DataBean.BalanceBean, remark: String, generateMap: HashMap<String, String>) {
+//        val neoNodeRPC = NeoNodeRPC("")
+//        neoNodeRPC.sendNEP5Token(assets, Account.getWallet()!!, dataBean.asset_hash, address, toAddress, amount.toDouble(), remark, object : NeoCallBack {
+//            override fun NeoTranscationResult(jsonBody: String?) {
+//                val tx = getTxid(jsonBody!!)
+//                val map = java.util.HashMap<String, String>()
+//                map["addressFrom"] = address
+//                map["addressTo"] = toAddress
+//                map["symbol"] = dataBean.asset_symbol
+//                map["amount"] = amount
+//                map["tx"] = jsonBody
+//                sendRow(tx.getHash().toReverseHexString(), address, map, generateMap)
+//            }
+//        })
+//    }
+//
+//    fun sendRow(txid: String, address: String, map: HashMap<String, String>, generateMap: HashMap<String, String>) {
+//        mCompositeDisposable.add(httpAPIWrapper.neoTokenTransaction(map).subscribe({
+//            generateEntrustSellOrder(txid, address, generateMap)
+//        }, {
+//            mView.closeProgressDialog()
+//        }, {
+//            mView.closeProgressDialog()
+//        }))
+//    }
 
     private var assets: UTXOS? = null
     fun getUtxo(address: String) {

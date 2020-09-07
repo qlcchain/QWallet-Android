@@ -52,7 +52,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
                 receiveBack.recevie(true)
                 return
             } else {
-                receiveBack.recevie(false)
+                receiveBack.recevie(true)
             }
         } catch (e : Exception) {
             e.printStackTrace()
@@ -74,6 +74,7 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
             val (data, error) = result
             try {
                 if (error == null) {
+                    KLog.i("算work正确。")
                     stateBlock.work = data
                     var hash = BlockMng.getHash(stateBlock)
                     var signature = WalletMng.sign(hash, Helper.hexStringToBytes(QlcReceiveUtils.drivePrivateKey(qlcAccount.address).substring(0, 64)))

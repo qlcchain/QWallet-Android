@@ -55,6 +55,15 @@ public class DefiDetail extends BaseBack {
         private String category;
         private String tvlUsd;
         private String relative;
+        private TokenBean token;
+
+        public TokenBean getToken() {
+            return token;
+        }
+
+        public void setToken(TokenBean token) {
+            this.token = token;
+        }
 
         public String getChain() {
             return chain;
@@ -166,6 +175,113 @@ public class DefiDetail extends BaseBack {
 
         public void setRelative(String relative) {
             this.relative = relative;
+        }
+    }
+
+    public static class TokenBean {
+
+        /**
+         * symbol : COMP
+         * marketCap : 477284653.8452589
+         * chain : Ethereum
+         * percentChange24h : -4.05578
+         * percentChange7d : -14.0927
+         * totalSupply : 10000000
+         * price : 186.346217591
+         * id : 188e0766426b4af1bd581dba24a2406d
+         * hash : 0xc00e94cb662c3520282e6f5717214004a7f26888
+         * circulatingSupply : 2561279
+         */
+
+        private String symbol;
+        private String marketCap;
+        private String chain;
+        private String percentChange24h;
+        private String percentChange7d;
+        private String totalSupply;
+        private String price;
+        private String id;
+        private String hash;
+        private String circulatingSupply;
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public String getMarketCap() {
+            return marketCap;
+        }
+
+        public void setMarketCap(String marketCap) {
+            this.marketCap = marketCap;
+        }
+
+        public String getChain() {
+            return chain;
+        }
+
+        public void setChain(String chain) {
+            this.chain = chain;
+        }
+
+        public String getPercentChange24h() {
+            return percentChange24h;
+        }
+
+        public void setPercentChange24h(String percentChange24h) {
+            this.percentChange24h = percentChange24h;
+        }
+
+        public String getPercentChange7d() {
+            return percentChange7d;
+        }
+
+        public void setPercentChange7d(String percentChange7d) {
+            this.percentChange7d = percentChange7d;
+        }
+
+        public String getTotalSupply() {
+            return totalSupply;
+        }
+
+        public void setTotalSupply(String totalSupply) {
+            this.totalSupply = totalSupply;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getHash() {
+            return hash;
+        }
+
+        public void setHash(String hash) {
+            this.hash = hash;
+        }
+
+        public String getCirculatingSupply() {
+            return circulatingSupply;
+        }
+
+        public void setCirculatingSupply(String circulatingSupply) {
+            this.circulatingSupply = circulatingSupply;
         }
     }
 }

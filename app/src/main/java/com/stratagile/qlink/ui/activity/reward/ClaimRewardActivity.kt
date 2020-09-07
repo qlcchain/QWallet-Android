@@ -65,6 +65,7 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         if (ConstantValue.currentUser == null) {
             startActivity(Intent(this, AccountActivity::class.java))
             finish()
+            return
         }
         isInvite = "invite".equals(intent.getStringExtra("claimType"))
         if (isInvite) {
@@ -122,7 +123,11 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         // 建立JavaScript调用Java接口的桥梁。
         webview.addJavascriptInterface(WebAppInterface(), "successCallback")
         webview.visibility = View.VISIBLE
-        webview.loadUrl("file:///android_asset/slideActivity.html")
+        if (isInvite) {
+            webview.loadUrl("file:///android_asset/slideInviteReward.html")
+        } else {
+            webview.loadUrl("file:///android_asset/slideEveryDayReward.html")
+        }
     }
     var token = ""
     var sid = ""
@@ -172,8 +177,8 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         map["sessionId"] = sid
         map["sig"] = sig
         map["afsToken"] = token
-        map["appKey"] = MainConstant.afsAppKey
-        map["scene"] = MainConstant.ncActivity
+        map["appKey"] = MainConstant.afsFFFF0N0N000000009290AppKey
+        map["scene"] = MainConstant.ncOther
         map["account"] = ConstantValue.currentUser.account
         map["token"] = AccountUtil.getUserToken()
         map["toAddress"] = receiveQlcWallet!!.address
@@ -189,7 +194,7 @@ class ClaimRewardActivity : BaseActivity(), ClaimRewardContract.View {
         map["sessionId"] = sid
         map["sig"] = sig
         map["afsToken"] = token
-        map["appKey"] = MainConstant.afsAppKey
+        map["appKey"] = MainConstant.afsFFFF0N0N000000009290AppKey
         map["scene"] = MainConstant.ncActivity
         mPresenter.claiminviteQgas(map)
     }

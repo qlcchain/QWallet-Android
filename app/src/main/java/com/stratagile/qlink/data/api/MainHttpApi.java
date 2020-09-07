@@ -213,7 +213,7 @@ public interface MainHttpApi {
 
     @POST(MainAPI.url_uploadIdCard)
     @Multipart
-    Observable<Passport> updateIdCard(@Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part faceOhoto, @Part MultipartBody.Part holdingPhoto);
+    Observable<Passport> updateIdCard(@Part("idNumber") RequestBody idNumber, @Part("account") RequestBody account, @Part("token") RequestBody token, @Part MultipartBody.Part faceOhoto, @Part MultipartBody.Part holdingPhoto);
 
     @GET(MainAPI.user_headView)
     Observable<UpLoadAvatar> userHeadView(@QueryMap Map<String, String> map);

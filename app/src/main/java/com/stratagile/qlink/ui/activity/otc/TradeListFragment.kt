@@ -84,18 +84,19 @@ class TradeListFragment : BaseFragment(), TradeListContract.View {
         currentOrderType = ConstantValue.orderTypeSell
         viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         viewModel!!.currentEntrustOrderType.observe(this, Observer<String> { s ->
+            if (isVisibleToUser)
             currentPage = 0
             KLog.i("------>>>>" + arguments!!["tradeToken"])
             KLog.i("------>>>>" + s!!)
             currentOrderType = s!!
             entrustOrderListAdapter.setNewData(ArrayList())
-//            if (isVisibleToUser) {
-//                if ("".equals(tradeToken)) {
-//                    EventBus.getDefault().post(GetPairs())
-//                } else {
-//                    getOrderList()
-//                }
-//            }
+            if (isVisibleToUser) {
+                if ("".equals(tradeToken)) {
+                    EventBus.getDefault().post(GetPairs())
+                } else {
+                    getOrderList()
+                }
+            }
             if ("".equals(tradeToken)) {
                 EventBus.getDefault().post(GetPairs())
             } else {

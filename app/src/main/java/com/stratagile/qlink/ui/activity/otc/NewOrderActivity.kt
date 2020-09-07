@@ -12,6 +12,7 @@ import com.stratagile.qlink.R
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.constant.ConstantValue
+import com.stratagile.qlink.entity.otc.TradePair
 import com.stratagile.qlink.statusbar.StatusBarCompat
 import com.stratagile.qlink.ui.activity.otc.component.DaggerNewOrderComponent
 import com.stratagile.qlink.ui.activity.otc.contract.NewOrderContract
@@ -54,6 +55,7 @@ class NewOrderActivity : BaseActivity(), NewOrderContract.View {
         if (ConstantValue.mainAddressData == null) {
             mPresenter.getMainAddress()
         }
+        AppConfig.instance.pair = intent.getParcelableExtra("pair")
         title.text = getString(R.string.new_order)
         val titles = ArrayList<String>()
         titles.add(getString(R.string.buy).toUpperCase())

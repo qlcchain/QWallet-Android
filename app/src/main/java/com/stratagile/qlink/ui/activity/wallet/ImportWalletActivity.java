@@ -205,6 +205,19 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                         }
                                     }
                                 }
+//                                io.neow3j.wallet.Account wallet = Account.INSTANCE.getWallet();
+//                                Wallet walletWinq = new Wallet();
+//                                walletWinq.setAddress(wallet.getAddress());
+//                                if (wallets.size() < 9) {
+//                                    walletWinq.setName("NEO-Wallet 0" + (wallets.size() + 1));
+//                                } else {
+//                                    walletWinq.setName("NEO-Wallet " + (wallets.size() + 1));
+//                                }
+//                                walletWinq.setWif(wallet.getECKeyPair().exportAsWIF());
+//                                walletWinq.setPrivateKey(Numeric.toHexStringNoPrefix(wallet.getECKeyPair().getPrivateKey()).toLowerCase());
+//                                walletWinq.setPublicKey(Numeric.toHexStringNoPrefix(wallet.getECKeyPair().getPublicKey()).toLowerCase());
+//                                walletWinq.setScriptHash(wallet.getScriptHash().toString());
+//                                walletWinq.setIsCurrent(true);
                                 neoutils.Wallet wallet = Account.INSTANCE.getWallet();
                                 Wallet walletWinq = new Wallet();
                                 walletWinq.setAddress(wallet.getAddress());
@@ -218,11 +231,12 @@ public class ImportWalletActivity extends BaseActivity implements ImportWalletCo
                                 walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()).toLowerCase());
                                 walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
                                 walletWinq.setIsCurrent(true);
+
                                 AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO", walletWinq.getPublicKey());
+                                        mPresenter.reportWalletCreated(walletWinq.getAddress(), "NEO", walletWinq.getPublicKey(), walletWinq.getPrivateKey());
                                     }
                                 });
                             } else {

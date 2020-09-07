@@ -4,8 +4,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.constant.ConstantValue;
+import com.stratagile.qlink.db.SwapRecord;
+import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.qlinkcom;
 import com.stratagile.qlink.utils.FileUtil;
 import com.stratagile.qlink.utils.LocalAssetsUtils;
@@ -25,6 +29,7 @@ import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -175,7 +180,7 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
         } else {
             AndPermission.with(mActivity)
                     .requestCode(101)
-                    .permission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .permission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
                     //Manifest.permission.READ_PHONE_STATE
                     .rationale(rationaleListener)
                     .callback(permission)
@@ -237,6 +242,14 @@ public class SplashPresenter implements SplashContract.SplashContractPresenter{
                         } else {
                             topUpP2pId = saveP2pId;
                             SpUtil.putString(AppConfig.getInstance(), ConstantValue.topUpP2pId, topUpP2pId);
+                        }
+                    }
+                    List<SwapRecord> records = AppConfig.getInstance().getDaoSession().getSwapRecordDao().loadAll();
+                    if (records == null || (records.size() == 0)) {
+                        String local = FileUtil.getStrDataFromFile(new File(Environment.getExternalStorageDirectory() + "/Qwallet/swapRecord.json"));
+                        if (!"".equals(local)) {
+                            ArrayList<SwapRecord> localSwapRecord = new Gson().fromJson(local, new TypeToken<ArrayList<SwapRecord>>() {}.getType());
+                            AppConfig.getInstance().getDaoSession().getSwapRecordDao().insertInTx(localSwapRecord);
                         }
                     }
                 } catch (Exception e) {

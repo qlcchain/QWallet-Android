@@ -1,5 +1,6 @@
 package com.stratagile.qlink.ui.activity.defi.contract
 
+import com.stratagile.qlink.entity.DefiPrice
 import com.stratagile.qlink.entity.defi.DefiCategory
 import com.stratagile.qlink.entity.defi.DefiList
 import com.stratagile.qlink.entity.defi.DefiStateList
@@ -29,6 +30,8 @@ interface DefiListContract {
         fun setDefiList(defiList: DefiList, currentPage : Int)
 
         fun setDefiStats(defiStateCache: DefiStatsCache)
+
+        fun setDefiPrice(defiPrice : DefiPrice)
     }
 
     interface DefiListContractPresenter : BasePresenter {

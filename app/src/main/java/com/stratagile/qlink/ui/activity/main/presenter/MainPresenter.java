@@ -20,6 +20,7 @@ import com.stratagile.qlink.db.BuySellBuyTodo;
 import com.stratagile.qlink.db.BuySellSellTodo;
 import com.stratagile.qlink.db.EntrustTodo;
 import com.stratagile.qlink.db.TopupTodoList;
+import com.stratagile.qlink.db.Wallet;
 import com.stratagile.qlink.entity.AppVersion;
 import com.stratagile.qlink.entity.BaseBack;
 import com.stratagile.qlink.entity.FreeNum;
@@ -63,7 +64,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import neoutils.Wallet;
 
 /**
  * @author hzp
@@ -264,16 +264,25 @@ public class MainPresenter implements MainContract.MainContractPresenter {
                 ArrayList<com.stratagile.qlink.db.Wallet> walletArrayList = new ArrayList<>();
                 for (int i = 0; i < privateKeyList.size(); i++) {
                     if (Account.INSTANCE.fromHex(privateKeyList.get(i))) {
-                        Wallet wallet = Account.INSTANCE.getWallet();
-                        com.stratagile.qlink.db.Wallet wallet1 = new com.stratagile.qlink.db.Wallet();
-                        wallet1.setIsMain(false);
-                        wallet1.setAddress(wallet.getAddress());
-                        wallet1.setPrivateKey(WalletKtutil.byteArrayToHex(wallet.getPrivateKey()));
-                        wallet1.setPublicKey(WalletKtutil.byteArrayToHex(wallet.getPublicKey()));
-                        wallet1.setScriptHash(WalletKtutil.byteArrayToHex(wallet.getHashedSignature()));
-                        wallet1.setWif(wallet.getWIF());
-                        walletArrayList.add(wallet1);
-                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(wallet1);
+//                        io.neow3j.wallet.Account account = io.neow3j.wallet.Account.createAccount();
+//                        Wallet walletWinq = new Wallet();
+//                        walletWinq.setAddress(account.getAddress());
+//                        walletWinq.setWif(account.getECKeyPair().exportAsWIF());
+//                        walletWinq.setPrivateKey(Numeric.toHexStringNoPrefix(account.getECKeyPair().getPrivateKey()).toLowerCase());
+//                        walletWinq.setPublicKey(Numeric.toHexStringNoPrefix(account.getECKeyPair().getPublicKey()).toLowerCase());
+//                        walletWinq.setScriptHash(account.getScriptHash().toString());
+//                        walletArrayList.add(walletWinq);
+//                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+                        Account.INSTANCE.createNewWallet();
+                        neoutils.Wallet wallet = Account.INSTANCE.getWallet();
+                        Wallet walletWinq = new Wallet();
+                        walletWinq.setAddress(wallet.getAddress());
+                        walletWinq.setWif(wallet.getWIF());
+                        walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
+                        walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPublicKey()).toLowerCase());
+                        walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
+                        walletArrayList.add(walletWinq);
+                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
                         ConstantValue.canClickWallet = true;
                     }
                 }

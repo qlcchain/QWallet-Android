@@ -25,6 +25,8 @@ interface DefiDetailContract {
         fun setDefiDetail(defiDetail: DefiDetail)
 
         fun setDefiStateList(defiStateList: DefiStateList)
+
+        fun setDetailError(error : String?)
     }
 
     interface DefiDetailContractPresenter : BasePresenter {

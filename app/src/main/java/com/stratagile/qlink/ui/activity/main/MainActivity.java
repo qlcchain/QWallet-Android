@@ -695,7 +695,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
                 }
             }
         }, 2500);
-
+        alphaIndicator.setSelectItem(2);
     }
 
     private void handlerTopupTodoList() {
@@ -1044,7 +1044,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
         if (!foregroundCallBack.isForeground()) {
             ConstantValue.isShouldShowVertifyPassword = true;
 //            viewPager.setCurrentItem(0);
-            alphaIndicator.setSelectItem(0);
+            alphaIndicator.setSelectItem(2);
 //            setTopupPage();
         }
     }

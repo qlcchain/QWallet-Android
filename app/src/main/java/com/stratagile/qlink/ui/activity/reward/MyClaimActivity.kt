@@ -77,6 +77,7 @@ class MyClaimActivity : BaseActivity(), MyClaimContract.View {
         if (ConstantValue.currentUser == null) {
             startActivity(Intent(this, AccountActivity::class.java))
             finish()
+            return
         }
         title.text = getString(R.string.earning_detail)
         rewardListAdapter = RewardListAdapter(arrayListOf())

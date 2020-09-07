@@ -1,62 +1,39 @@
 package com.stratagile.qlink.ui.activity.main;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.binance.dex.api.client.BinanceDexApiClientFactory;
 import com.binance.dex.api.client.BinanceDexApiNodeClient;
 import com.binance.dex.api.client.BinanceDexEnvironment;
+import com.binance.dex.api.client.Wallet;
 import com.binance.dex.api.client.domain.Account;
-import com.binance.dex.api.client.domain.TransactionMetadata;
-import com.binance.dex.api.client.domain.broadcast.TransactionOption;
-import com.binance.dex.api.client.domain.broadcast.Transfer;
 import com.binance.dex.api.client.encoding.Crypto;
 import com.socks.library.KLog;
-import com.stratagile.qlink.DSBridge.JsApi;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
 import com.stratagile.qlink.base.BaseActivity;
-import com.stratagile.qlink.blockchain.cypto.util.HexUtils;
+import com.stratagile.qlink.blockchain.cypto.digest.Sha256;
+import com.stratagile.qlink.constant.ConstantValue;
 import com.stratagile.qlink.db.BnbWallet;
-import com.stratagile.qlink.db.BtcWallet;
 import com.stratagile.qlink.ui.activity.main.component.DaggerTestComponent;
 import com.stratagile.qlink.ui.activity.main.contract.TestContract;
 import com.stratagile.qlink.ui.activity.main.module.TestModule;
 import com.stratagile.qlink.ui.activity.main.presenter.TestPresenter;
-import com.stratagile.qlink.ui.components.AlertsCreator;
 import com.stratagile.qlink.utils.BnbUtil;
-import com.stratagile.qlink.utils.ToastUtil;
 import com.stratagile.qlink.view.BottomSheet;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.Context;
-import org.bitcoinj.core.DumpedPrivateKey;
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.InsufficientMoneyException;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.params.TestNet3Params;
-import org.bitcoinj.wallet.SendRequest;
-import org.bitcoinj.wallet.Wallet;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -64,10 +41,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.eblock.eos4j.utils.Hex;
+import io.neow3j.constants.OpCode;
+import io.neow3j.contract.ContractInvocation;
+import io.neow3j.contract.ContractParameter;
+import io.neow3j.contract.ScriptBuilder;
+import io.neow3j.contract.ScriptHash;
+import io.neow3j.contract.Test1Contract;
+import io.neow3j.crypto.transaction.RawScript;
+import io.neow3j.crypto.transaction.RawTransactionAttribute;
+import io.neow3j.model.types.TransactionAttributeUsageType;
+import io.neow3j.protocol.Neow3j;
+import io.neow3j.protocol.core.methods.response.StackItem;
+import io.neow3j.protocol.exceptions.ErrorResponseException;
+import io.neow3j.protocol.http.HttpService;
+import io.neow3j.transaction.InvocationTransaction;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import wendu.dsbridge.DWebView;
 import wendu.dsbridge.OnReturnValue;
-
-import static com.vondear.rxtools.view.RxToast.showToast;
 
 /**
  * @author hzp
@@ -95,6 +86,12 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     @BindView(R.id.addValue)
     TextView addValue;
     BnbWallet bnbWallet;
+    @BindView(R.id.testCoinmarketcap)
+    TextView testCoinmarketcap;
+    @BindView(R.id.refundUser)
+    TextView refundUser;
+
+    private Neow3j neow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +113,15 @@ public class TestActivity extends BaseActivity implements TestContract.View {
             bnbWallet = AppConfig.getInstance().getDaoSession().getBnbWalletDao().loadAll().get(0);
             KLog.i(bnbWallet.toString());
         }
+        // http://seed1.o3node.org:10332
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        builder.callTimeout(600, TimeUnit.SECONDS);
+        builder.readTimeout(600, TimeUnit.SECONDS);
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(logging);
+        neow = Neow3j.build(new HttpService(ConstantValue.neoNode, builder.build()));
+        webview.loadUrl("file:///android_asset/neonjs.html");
     }
 
     @Override
@@ -143,7 +149,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         progressDialog.hide();
     }
 
-    @OnClick({R.id.getBnbTokens, R.id.getBnbAccount, R.id.test, R.id.transferBnb})
+    @OnClick({R.id.getBnbTokens, R.id.getBnbAccount, R.id.test, R.id.transferBnb, R.id.test2, R.id.nep5Transfer, R.id.testEthSmartContract, R.id.testEthTransaction, R.id.erc20Transaction, R.id.refundUser, R.id.deploy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.getBnbTokens:
@@ -161,7 +167,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
                     @Override
                     public void run() {
                         BinanceDexApiNodeClient binanceDexNodeApi = null;
-                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(),BinanceDexEnvironment.PROD.getHrp());
+                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(), BinanceDexEnvironment.PROD.getHrp());
                         String address = bnbWallet.getAddress();
                         Account account = binanceDexNodeApi.getAccount(address);
                         KLog.i(account);
@@ -169,43 +175,412 @@ public class TestActivity extends BaseActivity implements TestContract.View {
                 }).start();
                 break;
             case R.id.transferBnb:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BinanceDexApiNodeClient binanceDexNodeApi = null;
-                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(),BinanceDexEnvironment.PROD.getHrp());
-                        com.binance.dex.api.client.Wallet walletSender = new com.binance.dex.api.client.Wallet(bnbWallet.getPrivateKey(), BinanceDexEnvironment.PROD);
-                        walletSender.initAccount(binanceDexNodeApi);
-                        Transfer transfer = new Transfer();
-                        transfer.setAmount("10");
-                        transfer.setCoin("MATIC-84A");
-                        transfer.setFromAddress(walletSender.getAddress());
-                        transfer.setToAddress("bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23");
-                        System.out.println(transfer.toString());
-                        TransactionOption options = new TransactionOption("101252674", 0, null);
-                        List<TransactionMetadata> resp = null;
-                        try {
-                            resp = binanceDexNodeApi.transfer(transfer, walletSender, options, true);
-                            System.out.println(resp.get(0));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                getErc20TokenBalance();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        BinanceDexApiNodeClient binanceDexNodeApi = null;
+//                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(), BinanceDexEnvironment.PROD.getHrp());
+//                        Wallet walletSender = new Wallet(bnbWallet.getPrivateKey(), BinanceDexEnvironment.PROD);
+//                        walletSender.initAccount(binanceDexNodeApi);
+//                        Transfer transfer = new Transfer();
+//                        transfer.setAmount("10");
+//                        transfer.setCoin("MATIC-84A");
+//                        transfer.setFromAddress(walletSender.getAddress());
+//                        transfer.setToAddress("bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23");
+//                        System.out.println(transfer.toString());
+//                        TransactionOption options = new TransactionOption("101252674", 0, null);
+//                        List<TransactionMetadata> resp = null;
+//                        try {
+//                            resp = binanceDexNodeApi.transfer(transfer, walletSender, options, true);
+//                            System.out.println(resp.get(0));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (NoSuchAlgorithmException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).start();
                 break;
             case R.id.test:
-                createBnbWallet();
+//                callNeoSmartContract();
+                querySwapInfo();
+                break;
+            case R.id.nep5Transfer:
+                nep5Transfer();
+                break;
+            case R.id.testEthSmartContract:
+                callEthSmartContract();
+                break;
+            case R.id.testEthTransaction:
+                ethTransaction();
+                break;
+            case R.id.erc20Transaction:
+                erc20Transaction();
+                break;
+            case R.id.deploy:
+                deploy();
+                break;
+            case R.id.refundUser:
+                refundUser();
+//                sha2561();
+                break;
+            case R.id.test2:
+//                Test1Contract.byteArrayToString("516c696e6b20546f6b656e");
+//                Test1Contract.byteArrayToString("514c43");
+//                Test1Contract.byteArrayToString2("00a367b0ae29d500");
+//                Test1Contract.byteArrayToString2("9ac2dde000");
+                callNeoContract2();
                 break;
             default:
                 break;
         }
     }
 
+    private void deploy() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Test1Contract.deploy(neow);
+            }
+        }).start();
+    }
+
+    private void refundUser() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = Test1Contract.refundUser(neow, "37e4bc3796c240e0ae161e7d2478ecc9", neoUserAddress, "KzviPYuqHtQvw4T6vkbxJGnyoRGo1yYULAAn6WbTLwpQboHEkXcW", neoContractAddress);
+                KLog.i(result);
+            }
+        }).start();
+    }
+    private void sha2561() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = Test1Contract.sha2561(neow, "65f1ec02cacb4616bf8fb60b97b67dd7", neoContractAddress);
+                KLog.i(result);
+                Object[] arrays = new Object[1];
+                arrays[0] = result;
+                webview.callHandler("staking.deSerializ", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((JSONObject) var1);
+                    }
+
+                    public final void onValue(JSONObject retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+
+
+                    }
+                }));
+            }
+        }).start();
+    }
+    private void sha2562() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = Test1Contract.sha2562(neow, "65f1ec02cacb4616bf8fb60b97b67dd7", "KzviPYuqHtQvw4T6vkbxJGnyoRGo1yYULAAn6WbTLwpQboHEkXcW", neoContractAddress);
+                KLog.i(result);
+                Object[] arrays = new Object[1];
+                arrays[0] = result;
+                webview.callHandler("staking.deSerializ", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((JSONObject) var1);
+                    }
+
+                    public final void onValue(JSONObject retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+
+
+                    }
+                }));
+            }
+        }).start();
+    }
+
+    private void erc20Transaction() {
+        Object[] arrays = new Object[5];
+        //0x255的
+        arrays[0] = "1c70c79c8f0c0ba5c700663256360230327f6d3688859c688b4106c890676440";
+        //0x0a8的
+//        arrays[0] = "67652fa52357b65255ac38d0ef8997b5608527a7c1d911ecefb8bc184d74e92e";
+        arrays[1] = userAddress;
+        arrays[2] = "0xE0632e90d6eB6649CfD82f6d625769cCf9E7762f";
+        arrays[3] = contractAddress;
+        arrays[4] = "200";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                webview.callHandler("ethSmartContract.erc20Transaction", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((String) var1);
+                    }
+
+                    public final void onValue(String retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+
+                    }
+                }));
+            }
+        }).start();
+    }
+
+    private void test111() {
+        char[] chars = "0123456789abcdef".toCharArray();
+        StringBuilder builder = new StringBuilder("");
+        byte[] bs = "ddbda109309f9fafa6dd6a9cb9f1df40".getBytes();
+        int bit;
+        for (int i = 0; i < bs.length; i++) {
+            bit = (bs[i] & 0x0f0) >> 4;
+            builder.append("0x");
+            builder.append(chars[bit]);
+            bit = bs[i] & 0x0f;
+            builder.append(chars[bit]);
+            builder.append(", ");
+        }
+        System.out.println(builder.toString().trim());
+    }
+
+    private String contractAddress = "0x9a36F711133188EDb3952b3A6ee29c6a3d2e3836";
+    private String onwerAddress = "0x0A8EFAacbeC7763855b9A39845DDbd03b03775C1";
+    private String userAddress = "0x255eEcd17E11C5d2FFD5818da31d04B5c1721D7C";
+    private String neoContractAddress = "c59bd98299324d6156c67cd9e2e9783054eaf383";
+    private String neoUserAddress = "AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK";
+//    private String neoContractAddress = "58960df3e9238f2f40c578aef727d26c1aa51b60";
+
+    private void ethTransaction() {
+        KLog.i("xxxxxx");
+        Object[] arrays = new Object[4];
+        arrays[0] = "1c70c79c8f0c0ba5c700663256360230327f6d3688859c688b4106c890676440";
+        arrays[1] = userAddress;
+//        arrays[2] = userAddress;
+        arrays[2] = "0x44442EcC08C7095311d57a1882F168097598755C";
+        arrays[3] = contractAddress;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                webview.callHandler("ethSmartContract.ethTransaction", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((JSONObject) var1);
+                    }
+
+                    public final void onValue(JSONObject retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+
+                    }
+                }));
+            }
+        }).start();
+    }
+
+    private void callEthSmartContract() {
+        Object[] arrays = new Object[3];
+        arrays[0] = userAddress;
+        arrays[1] = "xxxxxx";
+        arrays[2] = contractAddress;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                webview.callHandler("ethSmartContract.lockedBalanceOf", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((String) var1);
+                    }
+
+                    public final void onValue(String retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+
+                    }
+                }));
+            }
+        }).start();
+    }
+
+    private void getErc20TokenBalance() {
+        Object[] arrays = new Object[3];
+        arrays[0] = userAddress;
+        arrays[1] = userAddress;
+        arrays[2] = contractAddress;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                webview.callHandler("ethSmartContract.getErc20TokenBalance", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((String) var1);
+                    }
+
+                    public final void onValue(String retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+
+                    }
+                }));
+            }
+        }).start();
+    }
+
+    private void querySwapInfo() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Test1Contract.querySwapInfo(neow, "0x4b9893ca574762cde2b4ac16b53de121e09a5af30a4c94c2593bdeaee4e54ec7", neoContractAddress);
+            }
+        }).start();
+    }
+
+    private void nep5Transfer() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String orginHash = UUID.randomUUID().toString().replace("-", "");
+//                KLog.i(orginHash);
+//                String hashSha256 = Sha256.from(orginHash.getBytes()).toString();
+//                KLog.i(hashSha256);
+//                //neow3j: Neow3j, hash : String, fromAddress : String, privateKey : String, amount : Int, wrapperNeoAddress : String, overTimeBlocks : Int, contractAddress : String
+//                Test1Contract.userLock(neow, hashSha256, "AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK", "KzviPYuqHtQvw4T6vkbxJGnyoRGo1yYULAAn6WbTLwpQboHEkXcW", new BigInteger("10"), "ARJZeUehdrFD3Koy3iAymfLDWi3HtCVKYV", 20, neoContractAddress);
+//            }
+//        }).start();
+
+        String orginHash = UUID.randomUUID().toString().replace("-", "");
+        KLog.i(orginHash);
+        String hashSha256 = Sha256.from(orginHash.getBytes()).toString();
+        KLog.i(hashSha256);
+        Object[] arrays = new Object[5];
+        arrays[0] = hashSha256;
+        arrays[1] = "AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK";
+        arrays[2] = "1100000000";
+        arrays[3] = "81";
+        arrays[4] = "KzviPYuqHtQvw4T6vkbxJGnyoRGo1yYULAAn6WbTLwpQboHEkXcW";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                webview.callHandler("staking.userLock", arrays, (new OnReturnValue() {
+                    @Override
+                    public void onValue(Object var1) {
+                        this.onValue((JSONObject)var1);
+                    }
+
+                    public final void onValue(JSONObject retValue) {
+                        StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                        KLog.i(result.append(retValue).toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+
+                    }
+                }));
+            }
+        }).start();
+    }
+
+    private void callNeoContract2() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Object[] arrays = new Object[1];
+                arrays[0] = "AXa39WUxN6rXjRMt36Zs88XZi5hZHcF8GK";
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        webview.callHandler("staking.nep5Transfer", arrays, (new OnReturnValue() {
+                            @Override
+                            public void onValue(Object var1) {
+                                this.onValue((JSONObject) var1);
+                            }
+
+                            public final void onValue(JSONObject retValue) {
+                                StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+                                KLog.i(result.append(retValue).toString());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                    }
+                                });
+
+                            }
+                        }));
+                    }
+                }).start();
+            }
+        }).start();
+    }
+
+    private void callNeoSmartContract() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Test1Contract.testContract(neow);
+            }
+        }).start();
+//        Object[] arrays = new Object[1];
+//        arrays[0] = com.stratagile.qlink.Account.INSTANCE.byteArray2String(com.stratagile.qlink.Account.INSTANCE.getWallet().getPrivateKey());
+//        KLog.i(com.stratagile.qlink.Account.INSTANCE.byteArray2String(com.stratagile.qlink.Account.INSTANCE.getWallet().getPrivateKey()));
+//        KLog.i(com.stratagile.qlink.Account.INSTANCE.byteArray2String(com.stratagile.qlink.Account.INSTANCE.getWallet().getHashedSignature()));
+//       new Thread(new Runnable() {
+//           @Override
+//           public void run() {
+//               webview.callHandler("staking.testContract1", arrays, (new OnReturnValue() {
+//                   // $FF: synthetic method
+//                   // $FF: bridge method
+//                   @Override
+//                   public void onValue(Object var1) {
+//                       this.onValue((JSONObject)var1);
+//                   }
+//
+//                   public final void onValue(JSONObject retValue) {
+//                       StringBuilder result = (new StringBuilder()).append("call succeed,return value is ");
+//                       KLog.i(result.append(retValue).toString());
+//                       runOnUiThread(new Runnable() {
+//                           @Override
+//                           public void run() {
+//                           }
+//                       });
+//
+//                   }
+//               }));
+//           }
+//       }).start();
+    }
+
     private AlertDialog visibleDialog;
     private AlertDialog localeDialog;
     private AlertDialog proxyErrorDialog;
+
     public AlertDialog showAlertDialog(AlertDialog.Builder builder) {
         try {
             if (visibleDialog != null) {
@@ -249,10 +624,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     }
 
 
-    private static NetworkParameters getParams() {
-        return TestNet3Params.get();
-    }
-
     public void transferBtc(String privateKey, String recipientAddress, String amount) {
 
     }
@@ -262,7 +633,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         AppConfig.getInstance().getDaoSession().getBnbWalletDao().deleteAll();
         try {
             List<String> mnemonicCodeWords = Crypto.generateMnemonicCode();
-            com.binance.dex.api.client.Wallet wallet = com.binance.dex.api.client.Wallet.createWalletFromMnemonicCode(mnemonicCodeWords, BinanceDexEnvironment.PROD);
+            Wallet wallet = Wallet.createWalletFromMnemonicCode(mnemonicCodeWords, BinanceDexEnvironment.PROD);
             KLog.i(wallet.toString());
             BnbWallet bnbWallet = new BnbWallet();
             bnbWallet.setIsBackup(false);

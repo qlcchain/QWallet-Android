@@ -39,16 +39,8 @@ import com.stratagile.qlink.ui.activity.otc.presenter.OrderSellPresenter
 import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
-import kotlinx.android.synthetic.main.activity_usdt_pay.*
 import kotlinx.android.synthetic.main.fragment_order_sell.*
-import kotlinx.android.synthetic.main.fragment_order_sell.group
-import kotlinx.android.synthetic.main.fragment_order_sell.ivShow
-import kotlinx.android.synthetic.main.fragment_order_sell.llOpen
-import kotlinx.android.synthetic.main.fragment_order_sell.seekBar
-import kotlinx.android.synthetic.main.fragment_order_sell.tvCostEth
-import kotlinx.android.synthetic.main.fragment_order_sell.tvGwei
 import kotlinx.coroutines.launch
-import neoutils.Neoutils
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import org.web3j.utils.Convert
@@ -186,6 +178,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onActivityResult(selectPair, Activity.RESULT_OK, Intent().putExtra("pair", AppConfig.instance.pair))
         tvNext.setOnClickListener {
             if ("".equals(etMinAmount.text.toString()) || "".equals(etMaxAmount.text.toString()) || "".equals(etAmount.text.toString()) || "".equals(etUnitPrice.text.toString())) {
                 toast(getString(R.string.illegal_value))
@@ -199,8 +192,8 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                 toast(getString(R.string.illegal_value))
                 return@setOnClickListener
             }
-            if (etUnitPrice.text.toString().toBigDecimal().multiply(etMinAmount.text.toString().trim().toBigDecimal()) < 0.00000001.toBigDecimal()) {
-                toast(getString(R.string.sorry_this_order_cannot_be_placeed_))
+            if (etUnitPrice.text.toString().toBigDecimal().multiply(etMinAmount.text.toString().trim().toBigDecimal()) < selectedPair!!.minPayTokenAmount.toBigDecimal()) {
+                toast(getString(R.string.sorry_this_order_cannot_be_placeed_, selectedPair!!.payToken, selectedPair!!.minPayTokenAmount.toString()))
                 return@setOnClickListener
             }
             if ("".equals(tvSendWalletAddess.text.toString())) {
@@ -226,7 +219,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                     }
                 }
                 AllWallet.WalletType.NeoWallet -> {
-                    if (!Neoutils.validateNEOAddress(tvReceiveWalletAddess.text.toString().trim())) {
+                    if (!NeoUtils.isValidAddress(tvReceiveWalletAddess.text.toString().trim())) {
                         toast(getString(R.string.illegal_receipt_address))
                         return@setOnClickListener
                     }
@@ -279,7 +272,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
             activity!!.overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
 //            showSpinnerPopWindow()
         }
-        etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(3, 13))
+        etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(selectedPair!!.tradeTokenDecimal, 13))
         etUnitPrice.filters = arrayOf<InputFilter>(MoneyValueFilter().setDigits(8))
         etUnitPrice.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -291,7 +284,7 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (!"".equals(etUnitPrice.text.toString())) {
-                    if (etUnitPrice.text.toString().length == 5 && etUnitPrice.text.toString().toBigDecimal() < 0.00000001.toBigDecimal()) {
+                    if (etUnitPrice.text.toString().length == 10 && etUnitPrice.text.toString().toBigDecimal() < 0.00000001.toBigDecimal()) {
                         etUnitPrice.setText("0.00000001")
                         etUnitPrice.setSelection(10)
                     }
@@ -323,6 +316,50 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
         llOpen.setOnClickListener {
             toggleCost()
         }
+
+        etAmount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (!"".equals(etAmount.text.toString())) {
+                    if (etAmount.text.toString().toDouble() < selectedPair!!.minTradeTokenAmount) {
+                        etAmount.setText(selectedPair!!.minTradeTokenAmount.toString())
+                        etAmount.setSelection(selectedPair!!.minTradeTokenAmount.toString().length)
+                    }
+                }
+            } else {
+                if (selectedPair == null) {
+                    llSellToken.performClick()
+                }
+            }
+        }
+        etMinAmount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (!"".equals(etMinAmount.text.toString())) {
+                    if (etMinAmount.text.toString().toDouble() < selectedPair!!.minTradeTokenAmount) {
+                        etMinAmount.setText(selectedPair!!.minTradeTokenAmount.toString())
+                        etMinAmount.setSelection(selectedPair!!.minTradeTokenAmount.toString().length)
+                    }
+                }
+            } else {
+                if (selectedPair == null) {
+                    llSellToken.performClick()
+                }
+            }
+        }
+        etMaxAmount.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (!"".equals(etMaxAmount.text.toString())) {
+                    if (etMaxAmount.text.toString().toDouble() < selectedPair!!.minTradeTokenAmount) {
+                        etMaxAmount.setText(selectedPair!!.minTradeTokenAmount.toString())
+                        etMaxAmount.setSelection(selectedPair!!.minTradeTokenAmount.toString().length)
+                    }
+                }
+            } else {
+                if (selectedPair == null) {
+                    llSellToken.performClick()
+                }
+            }
+        }
+
     }
 
     var isOpen = false
@@ -436,18 +473,20 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
         webview = DWebView(activity!!)
         webview!!.loadUrl("file:///android_asset/contract.html")
         //fromAddress, toAddress, assetHash, amount, wif, responseCallback
-        val arrays = arrayOfNulls<Any>(7)
+        val arrays = arrayOfNulls<Any>(8)
         arrays[0] = sendNeoWallet!!.address
         arrays[1] = ConstantValue.mainAddressData.neo.address
         arrays[2] = tradeTokenInfo!!.asset_hash
         arrays[3] = etAmount.text.toString()
         arrays[4] = 8
+//        arrays[5] = Account.getWallet()!!.ecKeyPair.exportAsWIF()
         arrays[5] = Account.getWallet()!!.wif
         arrays[6] = "xxx"
+        arrays[7] = AppConfig.instance.isMainNet
         webview!!.callHandler("staking.send", arrays, OnReturnValue<JSONObject> { retValue ->
             KLog.i("call succeed,return value is " + retValue!!)
             var nep5SendBack = Gson().fromJson(retValue.toString(), SendNep5TokenBack::class.java)
-            mPresenter.generateEntrustSellOrder(nep5SendBack.txid, address, map)
+            mPresenter.generateEntrustSellOrder(nep5SendBack.txid, address, map, etAmount.text.toString(), "NEO_CHAIN", tradeTokenInfo!!.asset_symbol)
         })
     }
 
@@ -635,6 +674,8 @@ class OrderSellFragment : BaseFragment(), OrderSellContract.View {
                     selectedPair = data!!.getParcelableExtra("pair")
                     buyingToken.text = selectedPair!!.payToken
                     buyingTokenPrice.text = selectedPair!!.payToken
+                    etAmount.filters = arrayOf<InputFilter>(InputNumLengthFilter(selectedPair!!.tradeTokenDecimal, 13))
+                    tvDesc.text = getString(R.string.the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set, selectedPair!!.minTradeTokenAmount.toString())
                     sellingToken.text = selectedPair!!.tradeToken
                     sellinngTokenQuantity.text = selectedPair!!.tradeToken
                     ivReceiveChain.setImageDrawable(null)

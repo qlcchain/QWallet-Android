@@ -2,6 +2,7 @@ package com.stratagile.qlink.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -27,7 +28,16 @@ public class RxDialogLoading {
     private View mDialogContentView;
     private ProgressBar progressBar;
     private TextView tvProgress;
+    private DialogInterface.OnDismissListener onDismissListener;
 
+    public DialogInterface.OnDismissListener getOnDismissListener() {
+        return onDismissListener;
+    }
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+        mDialog.setOnDismissListener(onDismissListener);
+    }
 
     public RxDialogLoading(Context context) {
         this.mContext = context;
@@ -76,6 +86,7 @@ public class RxDialogLoading {
         }
     }
 
+
     public Dialog getDialog() {
         return mDialog;
     }
@@ -83,4 +94,5 @@ public class RxDialogLoading {
     public void setCanceledOnTouchOutside(boolean cancel) {
         mDialog.setCanceledOnTouchOutside(cancel);
     }
+
 }

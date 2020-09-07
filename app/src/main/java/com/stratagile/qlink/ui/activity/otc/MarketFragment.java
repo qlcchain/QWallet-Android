@@ -370,7 +370,7 @@ public class MarketFragment extends BaseFragment implements MarketContract.View 
                     return;
                 }
                 FireBaseUtils.logEvent(getActivity(), FireBaseUtils.OTC_Home_NewOrder);
-                startActivityForResult(new Intent(getActivity(), NewOrderActivity.class), NEW_ORDER);
+                startActivityForResult(new Intent(getActivity(), NewOrderActivity.class).putExtra("pair", viewModel.pairsLiveData.getValue().get(0)), NEW_ORDER);
             }
         });
     }

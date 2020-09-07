@@ -1,40 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_height="46dp">
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="46dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="@string/total_value_locked"
+                android:textColor="@color/color_29282a"
+                android:textSize="15sp" />
+
+            <TextView
+                android:text=" 24H"
+                android:layout_marginRight="15dp"
+                android:textSize="13sp"
+                android:textColor="@color/color_29282a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:background="@color/f6f6f6"
+            android:layout_height="1dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/recyclerView"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/tvToken"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:text="@string/total_value_locked"
+            android:text="@string/token"
             android:textColor="@color/color_29282a"
             android:textSize="15sp" />
 
-        <TextView
-            android:text=" 24H"
-            android:layout_marginRight="15dp"
-            android:textSize="13sp"
-            android:textColor="@color/color_29282a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:background="@color/f6f6f6"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/llTokenInfo"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/token_name_1"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvTokenInfo"
+                    android:text="$451,686,896"
+                    android:layout_marginLeft="140dp"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/f6f6f6"
+                android:layout_height="1dp"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/token_price"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvTokenPrice"
+                    android:text="$451,686,896"
+                    android:layout_marginLeft="140dp"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/f6f6f6"
+                android:layout_height="1dp"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/percent_change"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvTokenPercent"
+                    android:text="$451,686,896"
+                    android:layout_marginLeft="140dp"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/ivArrow"
+                    android:layout_toRightOf="@+id/tvTokenPercent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"/>
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/f6f6f6"
+                android:layout_height="1dp"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/market_cap"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tvMarketCap"
+                    android:text="$451,686,896"
+                    android:layout_marginLeft="140dp"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/f6f6f6"
+                android:layout_height="1dp"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/circulating_supply"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvCirculatingSupply"
+                    android:text="$451,686,896"
+                    android:textColor="@color/color_29282a"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="140dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/f6f6f6"
+                android:layout_height="1dp"/>
+        </LinearLayout>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_marginLeft="15dp"
-        android:background="@color/f6f6f6"
-        android:layout_height="1dp"/>
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:id="@+id/recyclerView"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

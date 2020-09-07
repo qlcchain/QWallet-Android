@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.github.mikephil.charting.charts.LineChart
@@ -13,7 +14,9 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.socks.library.KLog
 import com.stratagile.qlink.R
+import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.entity.defi.DefiList
 import com.stratagile.qlink.utils.DefiUtil
 import com.stratagile.qlink.utils.UIUtils
@@ -23,15 +26,31 @@ class DefiListAdapter(array: ArrayList<DefiList.ProjectListBean>) : BaseQuickAda
         helper.setText(R.id.tvIndex, (helper.layoutPosition + 1).toString())
         val imageView = helper.getView<ImageView>(R.id.ivAvatar)
         if ("".equals(item.shortName)) {
+            var resource = mContext.resources.getIdentifier(item.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName)
             helper.setText(R.id.tvDefiProjectName, item.name)
-            Glide.with(mContext)
-                    .load(mContext.resources.getIdentifier(item.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName))
-                    .into(imageView)
+            if (resource == 0) {
+                KLog.i(item.logo)
+                Glide.with(mContext)
+                        .load(AppConfig.instance.baseUrl + item.logo)
+                        .into(imageView)
+            } else {
+                Glide.with(mContext)
+                        .load(mContext.resources.getIdentifier(item.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName))
+                        .into(imageView)
+            }
         } else {
             helper.setText(R.id.tvDefiProjectName, item.shortName)
-            Glide.with(mContext)
-                    .load(mContext.resources.getIdentifier(item.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName))
-                    .into(imageView)
+            var resource = mContext.resources.getIdentifier(item.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName)
+            KLog.i(resource)
+            if (resource == 0) {
+                Glide.with(mContext)
+                        .load(AppConfig.instance.baseUrl + item.logo)
+                        .into(imageView)
+            } else {
+                Glide.with(mContext)
+                        .load(mContext.resources.getIdentifier(item.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName))
+                        .into(imageView)
+            }
         }
         var ratingView = helper.getView<TextView>(R.id.tvRating)
         helper.setText(R.id.tvRating, DefiUtil.parseDefiRating(item.rating.toInt()))

@@ -5,6 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent">
+    <com.stratagile.qlink.view.RxTextViewVerticalMore
+        android:id="@+id/tvTokenPrice"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/f6f6f6"
+        android:layout_height="1dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -28,6 +37,7 @@
                 android:scaleType="centerCrop"
                 android:layout_height="25dp"/>
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/llHistoryBt"
             android:layout_width="40dp"
@@ -73,7 +83,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="82dp"
+                    android:layout_marginLeft="50dp"
                     android:includeFontPadding="false"
                     android:layout_centerVertical="true"
                     android:text="@string/project"

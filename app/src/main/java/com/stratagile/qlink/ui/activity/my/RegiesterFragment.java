@@ -170,7 +170,7 @@ public class RegiesterFragment extends BaseFragment implements RegiesterContract
                     map.put("sessionId", sid);
                     map.put("sig", sig);
                     map.put("afsToken", token);
-                    map.put("appKey", MainConstant.afsAppKey);
+                    map.put("appKey", MainConstant.afsFFFF0N00000000009290AppKey);
                     map.put("scene", MainConstant.ncRegister);
                     mPresenter.getSignUpVcode(map);
                 }

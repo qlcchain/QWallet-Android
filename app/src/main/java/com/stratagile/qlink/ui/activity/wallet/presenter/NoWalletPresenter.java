@@ -29,7 +29,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import neoutils.Wallet;
 
 /**
  * @author hzp
@@ -68,15 +67,6 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
     public void createWallet(Map map) {
         mView.showProgressDialog();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Account.INSTANCE.createNewWallet();
-                Wallet wallet = Account.INSTANCE.getWallet();
-                map.put("address", wallet.getAddress());
-                getNeoAndGasFromServer(map);
-            }
-        }).start();
     }
 
     private void getNeoAndGasFromServer(Map map) {
@@ -85,22 +75,22 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
                     @Override
                     public void accept(BaseBack baseBack) throws Exception {
                         //isSuccesse
-                        KLog.i("onSuccesse");
-                        Wallet wallet = Account.INSTANCE.getWallet();
-                        com.stratagile.qlink.db.Wallet walletWinq = new com.stratagile.qlink.db.Wallet();
-                        walletWinq.setAddress(wallet.getAddress());
-                        walletWinq.setWif(wallet.getWIF());
-                        walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
-                        walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
-                        walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
-                        walletWinq.setIsMain(false);
-                        KLog.i();walletWinq.toString();
-                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
-                        int size = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size();
-                        SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentWallet, size - 1);
-                        CreateWallet createWallet = new CreateWallet();
-                        createWallet.setData(walletWinq);
-                        mView.onCreatWalletSuccess(createWallet, 0);
+//                        KLog.i("onSuccesse");
+//                        Wallet wallet = Account.INSTANCE.getWallet();
+//                        com.stratagile.qlink.db.Wallet walletWinq = new com.stratagile.qlink.db.Wallet();
+//                        walletWinq.setAddress(wallet.getAddress());
+//                        walletWinq.setWif(wallet.getWIF());
+//                        walletWinq.setPrivateKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()).toLowerCase());
+//                        walletWinq.setPublicKey(Account.INSTANCE.byteArray2String(wallet.getPrivateKey()));
+//                        walletWinq.setScriptHash(Account.INSTANCE.byteArray2String(wallet.getHashedSignature()));
+//                        walletWinq.setIsMain(false);
+//                        KLog.i();walletWinq.toString();
+//                        AppConfig.getInstance().getDaoSession().getWalletDao().insert(walletWinq);
+//                        int size = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll().size();
+//                        SpUtil.putInt(AppConfig.getInstance(), ConstantValue.currentWallet, size - 1);
+//                        CreateWallet createWallet = new CreateWallet();
+//                        createWallet.setData(walletWinq);
+//                        mView.onCreatWalletSuccess(createWallet, 0);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -134,9 +124,9 @@ public class NoWalletPresenter implements NoWalletContract.NoWalletContractPrese
                     result = Account.INSTANCE.fromHex(map.get("key") + "");
                 }
                 if (result) {
-                    Wallet wallet = Account.INSTANCE.getWallet();
-                    map.put("address", wallet.getAddress());
-                    getNeoAndGasFromServer(map);
+//                    Wallet wallet = Account.INSTANCE.getWallet();
+//                    map.put("address", wallet.getAddress());
+//                    getNeoAndGasFromServer(map);
                 } else {
                     mView.createWalletFaliure();
                 }

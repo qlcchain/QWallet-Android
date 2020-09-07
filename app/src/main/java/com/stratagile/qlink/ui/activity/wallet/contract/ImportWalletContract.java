@@ -32,6 +32,5 @@ public interface ImportWalletContract {
     interface ImportWalletContractPresenter extends BasePresenter {
         void importWallet(Map map);
 
-        void reportWalletCreated(String address, String blockChain, String publicKey);
     }
 }

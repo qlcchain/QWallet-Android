@@ -90,13 +90,14 @@ public class JoinCommunityActivity extends BaseActivity implements JoinCommunity
         intent1.setAction("android.intent.action.VIEW");
         switch (view.getId()) {
             case R.id.twitter:
-                intent1.setData(Uri.parse("https://t.me/myqwallet"));
+                intent1.setData(Uri.parse("https://twitter.com/QLCchain"));
                 startActivity(intent1);
                 FireBaseUtils.logEvent(this, FireBaseUtils.Community_Twitter);
                 break;
             case R.id.telegram:
                 FireBaseUtils.logEvent(this, FireBaseUtils.Community_Telegram);
-                intent1.setData(Uri.parse("https://t.me/qlinkmobile"));
+//                intent1.setData(Uri.parse("https://t.me/qlinkmobile"));
+                intent1.setData(Uri.parse("https://t.me/myqwallet"));
                 startActivity(intent1);
                 break;
             case R.id.facebook:

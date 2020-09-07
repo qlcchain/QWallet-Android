@@ -1,0 +1,105 @@
+<!DOCTYPE> 
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <!— 国内使用 —>
+    <!--<script type="text/javascript" charset="utf-8" src="http://g.alicdn.com/sd/nch5/index.js?t=2015052012"></script> -->
+    <!-- <script type="text/javascript" charset="utf-8" src="http://g.alicdn.com/sd/ncpc/nc.js?t=2015052012"></script> -->
+
+    <!—- 若您的主要用户来源于海外，请替换使用下面的js资源 -—>
+   <!-- <script type="text/javascript" charset="utf-8" src="https://aeis.alicdn.com/sd/nch5/index.js?t=2015052012"></script> -->
+   
+   <script type="text/javascript" charset="utf-8" src="./sign.js"></script>
+   
+</head>
+
+
+<style type="text/css">
+
+.ccc{
+    position:absolute;
+    left: -5%;
+    right: -5%;
+    top:10%;
+    bottom: 10%;
+<!--    background-color:#FF0000;-->
+}
+
+.nc1{
+    position:absolute;
+    height: 60px;
+    top: 50%;
+    margin-top:-30px;
+    left:0%;
+    right:0%;
+<!--    background-color:#00F0F0;-->
+}
+
+</style>
+
+<body>
+    
+   <!--  <div id="__nc" style="background-color:red;margin-left:auto;margin-right:auto;width:100%;margin-top:auto;margin-bottom:auto;height:50%;">
+        <div id="nc"></div>
+    </div> -->
+
+    <div id="__nc" class="ccc">
+        <div id="nc" class="nc1"></div>
+    </div>
+    
+    <script>
+    var nc_token = ['FFFF0N1N000000009290', (new Date()).getTime(), Math.random()].join(':');
+    console.log(nc_token)
+    
+    var nc=NoCaptcha.init({
+        renderTo: '#nc',
+        appkey: 'FFFF0N1N000000009290',
+        scene: 'nc_activity_h5',
+        token: nc_token,
+        trans: {'key1': 'code200'},
+        elementID: ['usernameID'],
+        is_Opt: 0,
+        language: 'en',
+        timeout: 10000,
+        retryTimes: 5,
+        errorTimes: 5,
+        inline:false,
+        apimap: {
+            // ‘analyze’: ‘//a.com/nocaptcha/analyze.jsonp',
+            // ‘uab_Url’: ‘//aeu.alicdn.com/js/uac/909.js',
+        },
+        bannerHidden:false,
+        initHidden:false,
+        callback: function (data) {
+                          
+            //window.successCallback.postMessage({"token":nc_token,"sid":data.csessionid,"sig":data.sig});
+            window.successCallback.sendToken(nc_token, data.csessionid, data.sig);
+
+            window.console && console.log(nc_token)
+            window.console && console.log(data.csessionid)
+            window.console && console.log(data.sig)
+        },
+        error: function (s) {
+        }
+    });
+    NoCaptcha.setEnabled(true);
+    
+    nc.reset();//请务必确保这里调用一次reset()方法
+
+    NoCaptcha.upLang('cn', {
+        'LOADING':'Loading...',//加载
+        'SLIDER_LABEL':'Slide to verify',//等待滑动
+        'CHECK_Y':'Verified',//通过
+        'ERROR_TITLE':'Sorry, something wrong',//拦截
+        'CHECK_N':'Not Verified', //准备唤醒二次验证
+        'OVERLAY_INFORM':'Risk has been detected with your current operating environment, please enter the verification code.',//二次验证
+        'TIPS_TITLE':'Please try again',//验证码输错时的提示
+        'TEXTBOX_HOLDER':'Captcha',
+        'ERROR_RELOAD':'Reload',
+        'ERROR_FEEDBACK':'Feedback',
+        'CLICK_LABEL_READY':'Click the circle to verify'
+    });
+    </script>
+</body>
+</html>

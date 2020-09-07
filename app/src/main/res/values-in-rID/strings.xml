@@ -370,7 +370,7 @@
     <string name="unit_price">Harga Unit</string>
     <string name="min_amount">Jumlah Min</string>
     <string name="max_amount">Jumlah Maks</string>
-    <string name="the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set">Jumlah Minimal harus sama atau lebih besar dari 1. Dan jumlah maksimal harus sama atau kurang dari jumlah total yang anda tetapkan.</string>
+    <string name="the_min_amount_should_be_equal_or_greater_than_1_and_the_max_amount_should_be_equal_or_less_than_the_total_amount_you_set">Jumlah Minimal harus sama atau lebih besar dari %1$s. Dan jumlah maksimal harus sama atau kurang dari jumlah total yang anda tetapkan.</string>
     <string name="pay_now">Bayar Sekarang</string>
     <string name="you_have_to_pay_within_30_minus">Anda harus membayar dalam 30 menit.</string>
     <string name="order_information">Informasi Pesanan</string>

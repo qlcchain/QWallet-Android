@@ -98,6 +98,7 @@ public class PersonActivity extends BaseActivity implements PersonContract.View 
         if (ConstantValue.currentUser == null) {
             startActivity(new Intent(this, AccountActivity.class));
             finish();
+            return;
         }
         setTitle(getString(R.string.person_info));
         EventBus.getDefault().register(this);

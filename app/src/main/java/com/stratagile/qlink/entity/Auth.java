@@ -3,6 +3,16 @@ package com.stratagile.qlink.entity;
 public class Auth {
     private String agent;
     private String uuid;
+    private String uuid2;
+
+    public String getUuid2() {
+        return uuid2;
+    }
+
+    public void setUuid2(String uuid2) {
+        this.uuid2 = uuid2;
+    }
+
     private String platform;
     private String appBuild;
     private String phonemodel;
@@ -24,9 +34,10 @@ public class Auth {
         return "Auth{" +
                 "agent='" + agent + '\'' +
                 ", uuid='" + uuid + '\'' +
+                ", uuid2='" + uuid2 + '\'' +
                 ", platform='" + platform + '\'' +
-                ", phonemodel='" + phonemodel + '\'' +
                 ", appBuild='" + appBuild + '\'' +
+                ", phonemodel='" + phonemodel + '\'' +
                 ", appVersion='" + appVersion + '\'' +
                 '}';
     }

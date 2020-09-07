@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="0px"
                 android:layout_weight="1"
-                android:text="t.me/qlinkmobile"
+                android:text="t.me/myqwallet"
                 android:layout_marginLeft="@dimen/x46"
                 android:textColor="@color/color_29282a"
                 android:textSize="14sp"

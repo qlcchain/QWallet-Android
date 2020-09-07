@@ -37,6 +37,16 @@ public class DefiList extends BaseBack {
         private String shortName;
         private String category;
         private String tvlUsd;
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public void setLogo(String logo) {
+            this.logo = logo;
+        }
+
+        private String logo;
         private DefiStatsCache.StatsCacheBean statsCache;
 
         public DefiStatsCache.StatsCacheBean getStatsCache() {
@@ -55,6 +65,7 @@ public class DefiList extends BaseBack {
             shortName = in.readString();
             category = in.readString();
             tvlUsd = in.readString();
+            logo = in.readString();
         }
 
         public static final Creator<ProjectListBean> CREATOR = new Creator<ProjectListBean>() {
@@ -139,6 +150,7 @@ public class DefiList extends BaseBack {
             dest.writeString(shortName);
             dest.writeString(category);
             dest.writeString(tvlUsd);
+            dest.writeString(logo);
         }
     }
 }
