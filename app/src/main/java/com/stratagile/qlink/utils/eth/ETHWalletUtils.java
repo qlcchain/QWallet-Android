@@ -33,7 +33,11 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.security.SignatureException;
+import java.util.Arrays;
 import java.util.List;
+
+import wallet.core.jni.Curve;
 
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
 
@@ -473,6 +477,51 @@ public class ETHWalletUtils {
             e.printStackTrace();
         }
         return publicKey;
+    }
+    /**
+     *
+     * @param walletId 钱包Id
+     * @param pwd      钱包密码
+     * @return
+     */
+    public static String sign(String privateKey, byte[] message) {
+        EthWallet ethWallet = loadWalletByPrivateKey(privateKey);
+        String pwd = decrypt(ethWallet.getPassword());
+        Credentials credentials;
+        ECKeyPair keypair;
+        String publicKey = null;
+        try {
+            credentials = WalletUtils.loadCredentials(pwd, ethWallet.getKeystorePath());
+            keypair = credentials.getEcKeyPair();
+            publicKey = Numeric.toHexStringNoPrefixZeroPadded(keypair.getPublicKey(), 64<<1);
+            Sign.SignatureData signatureData = Sign.signMessage(message, keypair);
+            byte[] result1 = bytesFromSignature(signatureData);
+            return Numeric.toHexString(result1);
+        } catch (CipherException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return publicKey;
+    }
+
+    public static byte[] bytesFromSignature(Sign.SignatureData signature)
+    {
+        byte[] sigBytes = new byte[65];
+        Arrays.fill(sigBytes, (byte) 0);
+
+        try
+        {
+            System.arraycopy(signature.getR(), 0, sigBytes, 0, 32);
+            System.arraycopy(signature.getS(), 0, sigBytes, 32, 32);
+            System.arraycopy(signature.getV(), 0, sigBytes, 64, 1);
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+
+        return sigBytes;
     }
 
     /**

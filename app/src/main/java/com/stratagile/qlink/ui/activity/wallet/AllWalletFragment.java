@@ -50,6 +50,7 @@ import com.stratagile.qlink.entity.eventbus.ChangeCurrency;
 import com.stratagile.qlink.entity.eventbus.ChangeWallet;
 import com.stratagile.qlink.ui.activity.defi.EthTransformActivity;
 import com.stratagile.qlink.ui.activity.defi.TransformQlcActivity;
+import com.stratagile.qlink.ui.activity.defi.WalletConnectActivity;
 import com.stratagile.qlink.ui.activity.eos.EosActivationActivity;
 import com.stratagile.qlink.ui.activity.eos.EosResourceManagementActivity;
 import com.stratagile.qlink.ui.activity.eos.EosTransferActivity;
@@ -308,7 +309,9 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     } else {
                         ToastUtil.displayShortToast(getString(R.string.please_scan_the_qlc_wallet_address_and_make_a_transfer));
                     }
-                } else {
+                } else if (s.startsWith("wc:")) {
+                    startActivity(new Intent(getActivity(), WalletConnectActivity.class).putExtra("session", s));
+                }else {
                     try {
                         EosQrBean eosQrBean = new Gson().fromJson(s, EosQrBean.class);
                         if (currentSelectWallet.getWalletType() == AllWallet.WalletType.EosWallet) {
@@ -557,7 +560,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             @Override
                             public void run() {
                                 llNeoQlcTransfer.setVisibility(View.GONE);
-                                llEthQlcTransfer.setVisibility(View.VISIBLE);
+//                                llEthQlcTransfer.setVisibility(View.VISIBLE);
                                 tvPending.setText("");
                             }
                         });
@@ -575,7 +578,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    llNeoQlcTransfer.setVisibility(View.VISIBLE);
+//                                    llNeoQlcTransfer.setVisibility(View.VISIBLE);
                                     llEthQlcTransfer.setVisibility(View.GONE);
                                     tvPending.setText("");
                                 }

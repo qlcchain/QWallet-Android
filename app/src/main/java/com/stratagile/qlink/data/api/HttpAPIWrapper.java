@@ -1374,6 +1374,13 @@ public class HttpAPIWrapper {
             return wrapper(mHttpAPI.defiProjectList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
         }
     }
+    public Observable<DefiList> defiProjectListV2(Map map) {
+        if (false) {
+            return wrapper(mHttpAPI.defiProjectListV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        } else {
+            return wrapper(mHttpAPI.defiProjectListV2(addParams(map))).compose(SCHEDULERS_TRANSFORMER);
+        }
+    }
     public Observable<DefiStateList> defiStatsList(Map map) {
         if (false) {
             return wrapper(mHttpAPI.defiStatsList(addParams(map))).compose(SCHEDULERS_TRANSFORMER);

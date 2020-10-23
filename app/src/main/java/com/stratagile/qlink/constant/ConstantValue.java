@@ -71,6 +71,8 @@ public class ConstantValue {
 
     public static String qlchash = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5";
 
+    public static int currentChainId = 4;
+
     //neo链正式网查交易记录
     public static String neoTranscationNode = "https://api.neoscan.io/api/main_net/v1/get_transaction/";
     //neo测试网查交易记录

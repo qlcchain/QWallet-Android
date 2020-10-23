@@ -199,7 +199,7 @@ public class AppConfig extends MultiDexApplication {
     }
 
     private void initStakeConfig() {
-        isMainNet = SpUtil.getBoolean(this, ConstantValue.isMainNet, true);
+//        isMainNet = SpUtil.getBoolean(this, ConstantValue.isMainNet, true);
         // 还要改html中的正式节点和测试节点
         // html中的smartContractScript
         // 新建抵押查neo链的txid直接跳过了，正式服要改过来
@@ -216,7 +216,7 @@ public class AppConfig extends MultiDexApplication {
             ConstantValue.createMultiSigHash = "02c6e68c61480003ed163f72b41cbb50ded29d79e513fd299d2cb844318b1b8ad5";
 
             ConstantValue.ethNodeUrl = "https://mainnet.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2";
-
+            ConstantValue.currentChainId = 1;
             ConstantValue.qlchash = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5";
             ConstantValue.qlcHubEndPoint = "https://hub-test.qlcchain.online";
             ConstantValue.neoNode = "http://seed2.ngd.network:10332";
@@ -231,6 +231,7 @@ public class AppConfig extends MultiDexApplication {
             //创建多重签名地址的hash测试服
             ConstantValue.createMultiSigHash = "0292a55eb2f213d087d71cf0e2e4b047762b6eccc6a6993d7bbea39e7379661afb";
             ConstantValue.ethNodeUrl = "https://rinkeby.infura.io/v3/dc2243ed5aa5488d9fcf794149f56fc2";
+            ConstantValue.currentChainId = 4;
             ConstantValue.qlchash = "b9d7ea3062e6aeeb3e8ad9548220c4ba1361d263";
             ConstantValue.qlcHubEndPoint = "https://hub-test.qlcchain.online";
             ConstantValue.neoNode = "http://seed2.ngd.network:20332";

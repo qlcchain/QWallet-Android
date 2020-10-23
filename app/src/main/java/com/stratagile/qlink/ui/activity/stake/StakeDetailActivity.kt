@@ -652,7 +652,9 @@ class StakeDetailActivity : BaseActivity(), StakeDetailContract.View {
             return
         }
         if (checkCount >= 10) {
-            toast(getString(R.string.revoke_failed_please_try_it_later))
+            runOnUiThread {
+                toast(getString(R.string.revoke_failed_please_try_it_later))
+            }
             closeProgressDialog()
             return
         }

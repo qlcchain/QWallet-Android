@@ -4,6 +4,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import com.socks.library.KLog
 import com.stratagile.qlink.Account
+import com.stratagile.qlink.constant.ConstantValue
 import io.neow3j.constants.OpCode
 import io.neow3j.crypto.transaction.RawScript
 import io.neow3j.crypto.transaction.RawTransactionAttribute
@@ -14,10 +15,13 @@ import io.neow3j.protocol.core.methods.response.InvocationResult
 import io.neow3j.protocol.core.methods.response.StackItem
 import io.neow3j.protocol.exceptions.ErrorResponseException
 import io.neow3j.utils.Numeric
+import org.web3j.protocol.Web3j
+import org.web3j.protocol.http.HttpService
 import qlc.utils.TimeUtil
 import java.io.IOException
 import java.math.BigInteger
 import java.util.*
+import kotlin.concurrent.thread
 
 object Test1Contract {
     @RequiresApi(Build.VERSION_CODES.N)
@@ -104,36 +108,56 @@ object Test1Contract {
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun querySwapInfo(neow3j: Neow3j, hash: String, contractAddress: String) {
-        try {
-            var nep5ScriptHash = ScriptHash(contractAddress)
-            val params: MutableList<ContractParameter> = ArrayList()
-            params.add(ContractParameter.byteArray(hash))
-            var contractInvocation = ContractInvocation.Builder(neow3j)
-                    .contractScriptHash(nep5ScriptHash)
-                    .function("querySwapInfo")
-                    .parameters(params)
-                    .build()
-                    .testInvoke()
-            contractInvocation.stack.forEach {
-                print(it)
-//                KLog.i(it.toString())
-//                if (it.type == StackItemType.BYTE_ARRAY) {
-//                    KLog.i(Numeric.toHexStringNoPrefix(it.asByteArray().value))
-//                    KLog.i(Numeric.hexToString(Numeric.toHexStringNoPrefix(it.asByteArray().value)))
-//                } else if (it.type == StackItemType.ARRAY) {
-//                    for (i in 0..it.asArray().size() - 1) {
-//                        if (StackItemType.BYTE_ARRAY == it.asArray()[i].type) {
-//                            KLog.i(Numeric.toHexStringNoPrefix(it.asArray()[i].asByteArray().value))
-//                        } else if (StackItemType.BOOLEAN == it.asArray()[i].type) {
-//                            KLog.i(it.asArray()[i].asBoolean().value)
-//                        } else if (StackItemType.INTEGER == it.asArray()[i].type) {
-//                            KLog.i(it.asArray()[i].asInteger().value)
-//                        }
-//                    }
-//                }
+        checkErc20Transaction()
+//        try {
+//            var nep5ScriptHash = ScriptHash(contractAddress)
+//            val params: MutableList<ContractParameter> = ArrayList()
+//            params.add(ContractParameter.byteArray(hash))
+//            var contractInvocation = ContractInvocation.Builder(neow3j)
+//                    .contractScriptHash(nep5ScriptHash)
+//                    .function("querySwapInfo")
+//                    .parameters(params)
+//                    .build()
+//                    .testInvoke()
+//            contractInvocation.stack.forEach {
+//                print(it)
+////                KLog.i(it.toString())
+////                if (it.type == StackItemType.BYTE_ARRAY) {
+////                    KLog.i(Numeric.toHexStringNoPrefix(it.asByteArray().value))
+////                    KLog.i(Numeric.hexToString(Numeric.toHexStringNoPrefix(it.asByteArray().value)))
+////                } else if (it.type == StackItemType.ARRAY) {
+////                    for (i in 0..it.asArray().size() - 1) {
+////                        if (StackItemType.BYTE_ARRAY == it.asArray()[i].type) {
+////                            KLog.i(Numeric.toHexStringNoPrefix(it.asArray()[i].asByteArray().value))
+////                        } else if (StackItemType.BOOLEAN == it.asArray()[i].type) {
+////                            KLog.i(it.asArray()[i].asBoolean().value)
+////                        } else if (StackItemType.INTEGER == it.asArray()[i].type) {
+////                            KLog.i(it.asArray()[i].asInteger().value)
+////                        }
+////                    }
+////                }
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+    }
+    @JvmStatic
+    fun checkErc20Transaction() {
+        thread {
+            try {
+                val web3j = Web3j.build(HttpService(ConstantValue.ethNodeUrl))
+                var transaction = web3j.ethGetTransactionByHash("0x6edafaaf2a31bc97f68bd2693fe3b68a0e4e5efbd1fcd6298674a5fdaabad92e").send()
+                KLog.i(transaction.transaction)
+                if (transaction.hasError()) {
+                    KLog.i(transaction.error.message)
+                    if ("Unknown transaction".equals(transaction.error.message)) {
+                    }
+                } else {
+
+                }
+            } catch (e : Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

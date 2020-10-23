@@ -34,9 +34,28 @@ public class DefiList extends BaseBack {
         private String name;
         private String rating;
         private String id;
+
+        public String getWebsite() {
+            return website;
+        }
+
+        public String getSwapUrl() {
+            return swapUrl;
+        }
+
+        public void setSwapUrl(String swapUrl) {
+            this.swapUrl = swapUrl;
+        }
+
+        public void setWebsite(String website) {
+            this.website = website;
+        }
+
         private String shortName;
         private String category;
         private String tvlUsd;
+        private String website;
+        private String swapUrl;
 
         public String getLogo() {
             return logo;

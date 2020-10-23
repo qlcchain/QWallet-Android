@@ -66,6 +66,8 @@ import com.stratagile.qlink.entity.otc.TradePair;
 import com.stratagile.qlink.entity.reward.Dict;
 import com.stratagile.qlink.qlink.Qsdk;
 import com.stratagile.qlink.statusbar.StatusBarCompat;
+import com.stratagile.qlink.ui.activity.defi.DappFragment;
+import com.stratagile.qlink.ui.activity.defi.DappHomeFragment;
 import com.stratagile.qlink.ui.activity.main.component.DaggerMainComponent;
 import com.stratagile.qlink.ui.activity.main.contract.MainContract;
 import com.stratagile.qlink.ui.activity.main.module.MainModule;
@@ -569,6 +571,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Act
             public Fragment getItem(int position) {
                 if (position == 0) {
                     return new TopUpFragment();
+//                    return new DappHomeFragment();
                 } else if (position == 1) {
                     return new MarketFragment();
                 } else if (position == 2) {

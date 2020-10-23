@@ -18,9 +18,11 @@ import com.stratagile.qlink.ui.activity.defi.component.DaggerTransformQlcCompone
 import com.stratagile.qlink.ui.activity.defi.contract.TransformQlcContract
 import com.stratagile.qlink.ui.activity.defi.module.TransformQlcModule
 import com.stratagile.qlink.ui.activity.defi.presenter.TransformQlcPresenter
+import com.stratagile.qlink.ui.activity.main.WebViewActivity
 import com.stratagile.qlink.ui.activity.stake.StakeExplainActivity
 import com.stratagile.qlink.ui.activity.stake.TokenMintageFragment
 import com.stratagile.qlink.ui.activity.stake.VoteNodeFragment
+import com.stratagile.qlink.utils.LanguageUtil
 import com.stratagile.qlink.utils.UIUtils
 import kotlinx.android.synthetic.main.activity_transform_qlc.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -67,7 +69,7 @@ class TransformQlcActivity : BaseActivity(), TransformQlcContract.View {
             override fun getItem(position: Int): Fragment {
                 when(position) {
                     0 -> {
-                        return SwapFragment()
+                        return SwapFragment.SwapFragmentInstance.getInstance(ethWallet.address)
                     }
                     1 -> {
                         return SwapRecordFragment.SwapRecordFragmentInstance.getInstance(ethWallet.address)
@@ -142,7 +144,16 @@ class TransformQlcActivity : BaseActivity(), TransformQlcContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.stakeExplain) {
-//            startActivity(Intent(this, StakeExplainActivity::class.java))
+            if (item.itemId == R.id.stakeExplain) {
+                var intent = Intent(this, WebViewActivity::class.java)
+                intent.putExtra("title", getString(R.string.qlc_cross_chain_intro))
+                if (LanguageUtil.isCN(this)) {
+                    intent.putExtra("url", "http://dapp-t.qlink.mobi/f/swap/faq_cn.html")
+                } else {
+                    intent.putExtra("url", "http://dapp-t.qlink.mobi/f/swap/faq_en.html")
+                }
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

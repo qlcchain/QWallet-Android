@@ -28,6 +28,6 @@ public class MySQLiteOpenHelper extends DaoMaster.OpenHelper {
             public void onDropAllTables(Database db, boolean ifExists) {
                 DaoMaster.dropAllTables(db, ifExists);
             }
-        },RecordSaveDao.class, VpnEntityDao.class, WalletDao.class, TransactionRecordDao.class, EthWalletDao.class, EosAccountDao.class, BtcWalletDao.class, UserAccountDao.class, QLCAccountDao.class, BnbWalletDao.class, SwapRecordDao.class);
+        },RecordSaveDao.class, VpnEntityDao.class, WalletDao.class, TransactionRecordDao.class, EthWalletDao.class, EosAccountDao.class, BtcWalletDao.class, UserAccountDao.class, QLCAccountDao.class, BnbWalletDao.class, SwapRecordDao.class, DefiSearchHistoryDao.class, DWCSessionDao.class);
     }
 }

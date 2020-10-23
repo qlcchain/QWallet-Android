@@ -5,6 +5,7 @@ import org.web3j.utils.Convert;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 public class BalanceUtils {
     private static String weiInEth  = "1000000000000000000";
@@ -36,6 +37,18 @@ public class BalanceUtils {
 
     public static BigDecimal weiToGweiBI(BigInteger wei) {
         return Convert.fromWei(new BigDecimal(wei), Convert.Unit.GWEI);
+    }
+    public static String getScaledValueWithLimit(BigDecimal value, long decimals)
+    {
+        String pattern = "###,###,###,##0.00#######";
+        return scaledValue(value, pattern, decimals);
+    }
+    private static String scaledValue(BigDecimal value, String pattern, long decimals)
+    {
+        DecimalFormat df = new DecimalFormat(pattern);
+        value = value.divide(new BigDecimal(Math.pow(10, decimals)), 18, RoundingMode.DOWN);
+        df.setRoundingMode(RoundingMode.DOWN);
+        return df.format(value);
     }
 
     public static String weiToGwei(BigInteger wei) {

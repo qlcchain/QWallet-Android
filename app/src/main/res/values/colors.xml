@@ -164,5 +164,6 @@
     <color name="color_f0f0f0">#f0f0f0</color>
     <color name="color_555555">#555555</color>
     <color name="color_292b33">#292B33</color>
+    <color name="pending">#f5a623</color>
 
 </resources>

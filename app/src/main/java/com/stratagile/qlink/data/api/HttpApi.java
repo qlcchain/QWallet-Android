@@ -821,6 +821,9 @@ public interface HttpApi {
     @POST(API.defiProjectList)
     @Headers({"Content-Type: application/json","Accept: application/json"})
     Observable<DefiList> defiProjectList(@Body RequestBody map);
+    @POST(API.defiProjectList_v2)
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    Observable<DefiList> defiProjectListV2(@Body RequestBody map);
 
     @POST(API.defiStatsList)
     @Headers({"Content-Type: application/json","Accept: application/json"})

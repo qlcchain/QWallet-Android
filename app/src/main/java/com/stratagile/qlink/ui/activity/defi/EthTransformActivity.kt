@@ -11,14 +11,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import com.stratagile.qlink.R
-
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.ui.activity.defi.component.DaggerEthTransformComponent
 import com.stratagile.qlink.ui.activity.defi.contract.EthTransformContract
 import com.stratagile.qlink.ui.activity.defi.module.EthTransformModule
 import com.stratagile.qlink.ui.activity.defi.presenter.EthTransformPresenter
-import com.stratagile.qlink.ui.activity.stake.StakeExplainActivity
+import com.stratagile.qlink.ui.activity.main.WebViewActivity
+import com.stratagile.qlink.utils.LanguageUtil
 import com.stratagile.qlink.utils.UIUtils
 import kotlinx.android.synthetic.main.activity_transform_qlc.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -28,9 +28,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView
-import java.util.ArrayList
-
-import javax.inject.Inject;
+import java.util.*
+import javax.inject.Inject
 
 /**
  * @author hzp
@@ -140,7 +139,15 @@ class EthTransformActivity : BaseActivity(), EthTransformContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.stakeExplain) {
-//            startActivity(Intent(this, StakeExplainActivity::class.java))
+            var intent = Intent(this, WebViewActivity::class.java)
+            if (LanguageUtil.isCN(this)) {
+                intent.putExtra("title", "问与答")
+                intent.putExtra("url", "http://dapp-t.qlink.mobi/f/swap/faq_cn.html")
+            } else {
+                intent.putExtra("title", "FAQ")
+                intent.putExtra("url", "http://dapp-t.qlink.mobi/f/swap/faq_en.html")
+            }
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
