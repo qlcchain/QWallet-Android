@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_f2f2f2"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <TextView
@@ -21,14 +21,6 @@
         android:layout_height="42dp"
         android:background="@color/color_4a7eee">
 
-        <ImageView
-            android:id="@+id/iv_avater"
-            android:layout_width="50dp"
-            android:layout_height="23dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/icon_protfolio_more"
-            android:transitionName="avater" />
-
         <TextView
             android:id="@+id/tv_title"
             android:visibility="invisible"
@@ -38,24 +30,6 @@
             android:text="@string/top_up"
             android:textColor="@color/white"
             android:textSize="18sp" />
-
-
-        <RelativeLayout
-            android:id="@+id/rlWallet"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
-
-            <ImageView
-                android:id="@+id/ivDeduction"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_centerInParent="true"
-                android:layout_marginRight="12dp"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
-
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -103,125 +77,12 @@
                             android:layout_height="30dp"/>
                     </LinearLayout>
                 </RelativeLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="QLC"
-                    android:visibility="gone"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/color_29282a"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_height="wrap_content"/>
-                <android.support.v7.widget.CardView
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:clipChildren="false"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp">
-                            <TextView
-                                android:id="@+id/tvQlcPrice"
-                                android:layout_width="wrap_content"
-                                android:textSize="21sp"
-                                android:layout_marginLeft="12dp"
-                                android:layout_centerVertical="true"
-                                android:layout_marginTop="6dp"
-                                android:textColor="@color/color_108ee9"
-                                android:text="$0.0212"
-                                android:layout_height="wrap_content"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:text="+0.86%"
-                                android:visibility="gone"
-                                android:layout_marginLeft="12dp"
-                                android:textColor="#00C58E"
-                                android:layout_marginBottom="5dp"
-                                android:layout_marginTop="2dp"
-                                android:layout_below="@+id/tvQlcPrice"
-                                android:layout_height="wrap_content"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="12dp"
-                                android:background="@drawable/main_color_bt_bg"
-                                android:drawableRight="@mipmap/enter_n"
-                                android:gravity="center"
-                                android:paddingLeft="@dimen/x20"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:text="去交易"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
-                        </RelativeLayout>
-
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/chart"
-                            android:layout_width="match_parent"
-                            android:layout_height="212dp" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="24dp">
-                            <TextView
-                                android:id="@+id/tvHour"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:textSize="10sp"
-                                android:textColor="@color/color_29282a"
-                                android:text="@string/_1h"
-                                android:layout_height="match_parent"/>
-                            <TextView
-                                android:id="@+id/tvDay"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:textSize="10sp"
-                                android:textColor="@color/color_29282a"
-                                android:text="@string/_1d"
-                                android:layout_height="match_parent"/>
-                            <TextView
-                                android:id="@+id/tvWeek"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:textSize="10sp"
-                                android:textColor="@color/color_29282a"
-                                android:text="@string/_1w"
-                                android:layout_height="match_parent"/>
-                            <TextView
-                                android:id="@+id/tvMonth"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:textSize="10sp"
-                                android:textColor="@color/color_29282a"
-                                android:text="@string/_1m"
-                                android:layout_height="match_parent"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="0dp"
                     app:cardElevation="0dp"
                     android:layout_height="87dp"
-                    android:layout_marginBottom="10dp"
                     android:background="@color/white">
                     <RelativeLayout
                         android:id="@+id/rlInvite"
@@ -244,141 +105,42 @@
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:background="@color/white"
-                    android:gravity="center_horizontal"
-                    android:layout_height="wrap_content">
-                    <net.lucode.hackware.magicindicator.MagicIndicator
-                        android:id="@+id/indicatorPlan"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_height="38dp" />
-                </LinearLayout>
+                    android:layout_height="1dp"
+                    android:background="@color/f6f6f6"/>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:id="@+id/tvSearch"
+                        android:layout_width="match_parent"
+                        android:text="@string/input_dapp_website"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:textSize="16sp"
+                        android:layout_height="40dp"/>
+                </android.support.v7.widget.CardView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/f6f6f6"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerView"
-                    android:layout_marginTop="1dp"
                     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.RecyclerView>
-
-                <LinearLayout
-                    android:id="@+id/llReferralCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_f6f6f6"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:src="@mipmap/background_line_left" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="6dp"
-                            android:layout_marginRight="6dp"
-                            android:text="@string/my_referral_code"
-                            android:textColor="#7D4F21"
-                            android:textSize="15sp" />
-
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:src="@mipmap/background_line_right" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llCopy"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x77"
-                        android:layout_marginLeft="@dimen/x30"
-                        android:layout_marginTop="@dimen/x30"
-                        android:layout_marginRight="@dimen/x30"
-                        android:layout_marginBottom="@dimen/x30"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvIniviteCode"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/color_a61413"
-                            android:textSize="23sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/x40"
-                            android:text="@string/copy_invite_code"
-                            android:textColor="@color/color_a61413"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llbottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x113"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/tvInivteNow"
-                            android:layout_width="230dp"
-                            android:layout_height="38dp"
-                            android:layout_marginLeft="@dimen/x30"
-                            android:layout_marginRight="@dimen/x30"
-                            android:background="@drawable/bg_refer_now"
-                            android:gravity="center"
-                            android:text="@string/refer_now"
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x68"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:text="@string/ranking_in_the_last_30_days"
-                        android:textColor="#BB7944"
-                        android:textSize="12sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/color_f2f2f2" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerViewInvite"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layoutManager="android.support.v7.widget.LinearLayoutManager">
-
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <!--    </android.support.design.widget.CoordinatorLayout>-->
 
 </LinearLayout>

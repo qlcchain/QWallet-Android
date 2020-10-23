@@ -32,6 +32,7 @@ import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.db.SwapRecord
 import com.stratagile.qlink.db.Wallet
+import com.stratagile.qlink.db.WalletDao
 import com.stratagile.qlink.entity.AllWallet
 import com.stratagile.qlink.entity.NeoWalletInfo
 import com.stratagile.qlink.entity.TestNetNeoBalance
@@ -45,6 +46,7 @@ import com.stratagile.qlink.ui.activity.defi.contract.SwapContract
 import com.stratagile.qlink.ui.activity.defi.module.SwapModule
 import com.stratagile.qlink.ui.activity.defi.presenter.SwapPresenter
 import com.stratagile.qlink.ui.activity.otc.OtcChooseWalletActivity
+import com.stratagile.qlink.utils.DefiUtil
 import com.stratagile.qlink.utils.SpUtil
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
@@ -55,7 +57,16 @@ import io.neow3j.contract.Test1Contract
 import io.neow3j.contract.Test1Contract.userLock
 import io.neow3j.protocol.Neow3j
 import io.neow3j.protocol.http.HttpService
+import kotlinx.android.synthetic.main.fragment_ethswap.*
 import kotlinx.android.synthetic.main.fragment_swap.*
+import kotlinx.android.synthetic.main.fragment_swap.etStakeQlcAmount
+import kotlinx.android.synthetic.main.fragment_swap.invoke
+import kotlinx.android.synthetic.main.fragment_swap.llSelectETHWallet
+import kotlinx.android.synthetic.main.fragment_swap.miniSwapQlc
+import kotlinx.android.synthetic.main.fragment_swap.tvNeoWalletAddess
+import kotlinx.android.synthetic.main.fragment_swap.tvNeoWalletName
+import kotlinx.android.synthetic.main.fragment_swap.tvQlcBalance
+import kotlinx.android.synthetic.main.fragment_swap.webview
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
@@ -84,15 +95,26 @@ class SwapFragment : BaseFragment(), SwapContract.View {
     lateinit var ethWallet: EthWallet
     lateinit var neow3j: Neow3j
     lateinit var swapRecord: SwapRecord
-
+    var currentAddress = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_swap, null)
         ButterKnife.bind(this, view)
         val mBundle = arguments
+        currentAddress = mBundle!!.getString("address")
         return view
     }
 
-    var leastSwapQlc = 5
+    object SwapFragmentInstance{
+        @JvmStatic
+        fun getInstance(address: String) : SwapFragment{
+            var bundle = Bundle()
+            bundle.putString("address", address)
+            var swapRecordFragment = SwapFragment()
+            swapRecordFragment.arguments = bundle
+            return swapRecordFragment
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swapRecord = SwapRecord()
@@ -101,8 +123,8 @@ class SwapFragment : BaseFragment(), SwapContract.View {
         webview.loadUrl("file:///android_asset/eth.html")
 //        KLog.i(Numeric.toHexStringNoPrefix("942795a2a82e4228af75fc566a4cb909".toByteArray()))
 //        AppConfig.instance.daoSession.swapRecordDao.deleteAll()
-        miniSwapQlc.text = getString(R.string.the_minimum_stake_amount_is_1_s_qlc, leastSwapQlc.toString())
-        etStakeQlcAmount.hint = getString(R.string.from_1_s_qlc, leastSwapQlc.toString())
+        miniSwapQlc.text = getString(R.string.the_minimum_stake_amount_is_1_s_qlc, "")
+        etStakeQlcAmount.hint = ""
         // http://seed1.o3node.org:10332
         val builder = OkHttpClient.Builder()
         val logging = HttpLoggingInterceptor()
@@ -116,6 +138,10 @@ class SwapFragment : BaseFragment(), SwapContract.View {
             if (!this::wrapperOnline.isInitialized) {
                 checkWrapperOnline()
                 toast(getString(R.string.pleasewait))
+                return@setOnClickListener
+            }
+            if (wrapperOnline.ethBalance < 0.01) {
+                toast(getString(R.string.is_withdraw_limit))
                 return@setOnClickListener
             }
             if (neoBalance == -1.toDouble()) {
@@ -140,6 +166,10 @@ class SwapFragment : BaseFragment(), SwapContract.View {
             }
             if (neoBalance < etStakeQlcAmount.text.toString().toInt()) {
                 toast(getString(R.string.insufficient_balance))
+                return@setOnClickListener
+            }
+            if (etStakeQlcAmount.text.toString().toFloat() < wrapperOnline.minDepositAmount.toLong()/ 100000000) {
+                toast(getString(R.string.the_minimum_stake_amount_is_1_s_qlc, (wrapperOnline.minDepositAmount.toLong()/ 100000000).toString()))
                 return@setOnClickListener
             }
             if (!"".equals(etStakeQlcAmount.text.toString()) && this::ethWallet.isInitialized) {
@@ -177,7 +207,9 @@ class SwapFragment : BaseFragment(), SwapContract.View {
             }
 
         })
-        checkWrapperOnline()
+        thread {
+            checkWrapperOnline()
+        }
 
         saHalf = ScaleAnimation(1f, 0.5f, 1f, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         saHalf.setDuration(400)
@@ -373,14 +405,13 @@ class SwapFragment : BaseFragment(), SwapContract.View {
             return
         }
         val dataJson = jsonObject(
-                "amount" to (swapRecord.amount.toLong() * 100000000).toString(),
                 "rHash" to swapRecord.rHash,
                 "nep5TxHash" to swapRecord.txHash,
                 "addr" to swapRecord.wrpperEthAddress
         )
         KLog.i(dataJson.toString())
         var request = (ConstantValue.qlcHubEndPoint + "/deposit/lock").httpPost().body(dataJson.toString())
-        request.headers["Content-Type"] = "application/json"
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)
@@ -407,7 +438,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
         var list = arrayListOf<Pair<String, String>>(Pair("value", swapRecord.rHash))
         KLog.i(dataJson.toString())
         var request = (ConstantValue.qlcHubEndPoint + "/info/lockerInfo").httpGet(list)
-        request.headers["Content-Type"] = "application/json"
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)
@@ -418,7 +449,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
                     swapRecord.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "0"
+                        tvDot!!.text = "1"
                     }
                     Thread.sleep(checkStatusTime)
                     checkLcokState()
@@ -427,7 +458,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
                     swapRecord.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "1"
+                        tvDot!!.text = "2"
                     }
                     Thread.sleep(checkStatusTime)
                     checkLcokState()
@@ -436,7 +467,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
                     swapRecord.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "2"
+                        tvDot!!.text = "3"
                     }
                     Thread.sleep(checkStatusTime)
                     checkLcokState()
@@ -446,7 +477,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
                     swapRecord.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "3"
+                        tvDot!!.text = "4"
                     }
                     if (swapRecord.swaptxHash == null || "".equals(swapRecord.swaptxHash)) {
                         Thread.sleep(checkStatusTime)
@@ -461,7 +492,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
                     swapRecord.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "4"
+                        tvDot!!.text = "5"
                     }
                     if (swapRecord.swaptxHash == null || "".equals(swapRecord.swaptxHash)) {
                         Thread.sleep(checkStatusTime)
@@ -589,7 +620,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
         val view = layoutInflater.inflate(R.layout.alert_swap, null, false)
         llDot = view.findViewById(R.id.llDot)
         tvDot = view.findViewById(R.id.tvDot)
-        tvDot!!.text = "0"
+        tvDot!!.text = "1"
         sweetAlertDialogSwap = SweetAlertDialog(activity)
         var ivClose = view.findViewById<ImageView>(R.id.ivClose)
         ivClose.setOnClickListener {
@@ -657,6 +688,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
             tvETHWalletName.text = ethWallet!!.name
             tvETHWalletAddess.text = ethWallet!!.address
             swapRecord.toAddress = ethWallet.address
+
             mPresenter.getEthGasPrice(hashMapOf())
             if (!"".equals(etStakeQlcAmount.text.toString())) {
                 invoke.setBackgroundResource(R.drawable.main_color_bt_bg)
@@ -668,8 +700,8 @@ class SwapFragment : BaseFragment(), SwapContract.View {
 
     lateinit var wallet: Wallet
     fun getNeoWallet() {
-        var list = AppConfig.instance.daoSession.walletDao.loadAll()
-        wallet = list.filter { it.isCurrent }[0]
+        var list = AppConfig.instance.daoSession.walletDao.queryBuilder().where(WalletDao.Properties.Address.eq(currentAddress)).list()
+        wallet = list[0]
         tvNeoWalletAddess.text = wallet.address
         tvNeoWalletName.text = wallet.name
         swapRecord.fromAddress = wallet.address
@@ -677,7 +709,7 @@ class SwapFragment : BaseFragment(), SwapContract.View {
     }
 
     override fun initDataFromNet() {
-        checkWrapperOnline()
+//        checkWrapperOnline()
     }
 
     var neoBalance = -1.toDouble()
@@ -685,22 +717,26 @@ class SwapFragment : BaseFragment(), SwapContract.View {
     //获取测试网的qlc的余额
     fun getTestNetQlcBalance(address: String) {
         thread {
-            var scriptHash = ScriptHash(ConstantValue.qlchash)
+            try {
+                var scriptHash = ScriptHash(ConstantValue.qlchash)
 
-            val builder: ContractInvocation.Builder = ContractInvocation.Builder(neow3j)
-                    .contractScriptHash(scriptHash)
-                    .function("balanceOf")
-            var parameter = ContractParameter.byteArrayFromAddress(Account.getWallet()!!.address)
-            var result = builder.parameter(parameter).build().testInvoke()
-            var balance = Test1Contract.streamResponse(result)!!.asByteArray().asNumber.toDouble() / 100000000.toDouble()
-            KLog.i(balance)
-            var tokenbalance = NeoWalletInfo.DataBean.BalanceBean()
-            tokenbalance.asset_hash = ConstantValue.qlchash
-            tokenbalance.asset_symbol = "QLC"
-            tokenbalance.amount = balance.toDouble()
-            neoBalance = tokenbalance.amount
-            runOnUiThread {
-                tvQlcBalance?.text = getString(R.string.balance) + ": ${tokenbalance.amount} QLC"
+                val builder: ContractInvocation.Builder = ContractInvocation.Builder(neow3j)
+                        .contractScriptHash(scriptHash)
+                        .function("balanceOf")
+                var parameter = ContractParameter.byteArrayFromAddress(Account.getWallet()!!.address)
+                var result = builder.parameter(parameter).build().testInvoke()
+                var balance = Test1Contract.streamResponse(result)!!.asByteArray().asNumber.toDouble() / 100000000.toDouble()
+                KLog.i(balance)
+                var tokenbalance = NeoWalletInfo.DataBean.BalanceBean()
+                tokenbalance.asset_hash = ConstantValue.qlchash
+                tokenbalance.asset_symbol = "QLC"
+                tokenbalance.amount = balance.toDouble()
+                neoBalance = tokenbalance.amount
+                runOnUiThread {
+                    tvQlcBalance?.text = getString(R.string.balance) + ": ${tokenbalance.amount} QLC"
+                }
+            } catch (e :Exception) {
+                e.printStackTrace()
             }
 
         }
@@ -708,12 +744,16 @@ class SwapFragment : BaseFragment(), SwapContract.View {
 
     lateinit var wrapperOnline: WrapperOnline
     fun checkWrapperOnline() {
-        var request = (ConstantValue.qlcHubEndPoint + "/info/ping").httpGet()
-        request.headers["Content-Type"] = "application/json"
+        var list = arrayListOf<Pair<String, String>>(Pair("value", ""))
+        var request = (ConstantValue.qlcHubEndPoint + "/info/ping").httpGet(list)
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)
             if (error == null) {
+                if (isFinish) {
+                    return@responseString
+                }
                 try {
                     wrapperOnline = Gson().fromJson<WrapperOnline>(data, WrapperOnline::class.java)
                     KLog.i(wrapperOnline.toString())
@@ -721,6 +761,10 @@ class SwapFragment : BaseFragment(), SwapContract.View {
                     swapRecord.ethContractAddress = wrapperOnline.ethContract
                     swapRecord.wrapperNeoAddress = wrapperOnline.neoAddress
                     swapRecord.neoContractAddress = wrapperOnline.neoContract
+                    runOnUiThread {
+                        etStakeQlcAmount.hint = getString(R.string.from_1_s_qlc, (wrapperOnline.minDepositAmount.toLong() / 100000000).toString())
+                        miniSwapQlc.text = getString(R.string.the_minimum_stake_amount_is_1_s_qlc, (wrapperOnline.minDepositAmount.toLong() / 100000000).toString())
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -728,6 +772,12 @@ class SwapFragment : BaseFragment(), SwapContract.View {
 
             }
         }
+    }
+
+    var isFinish = false
+    override fun onDestroy() {
+        isFinish = true
+        super.onDestroy()
     }
 
 

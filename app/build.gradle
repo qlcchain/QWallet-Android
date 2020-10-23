@@ -19,9 +19,9 @@ android {
         applicationId "com.stratagile.qwallet"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode getSelfDefinedVersion("code") + 49
+        versionCode getSelfDefinedVersion("code") + 50
         multiDexEnabled true
-        versionName "2.8.8"
+        versionName "2.8.9"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -113,7 +113,7 @@ android {
     }
 
     greendao {
-        schemaVersion 83//数据库版本号
+        schemaVersion 87//数据库版本号
         daoPackage 'com.stratagile.qlink.db'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
         //targetGenDirTest：设置生成单元测试目录
@@ -323,6 +323,7 @@ dependencies {
 
     implementation project(':lib-todaystepcounter')
     implementation ('io.neow3j:contract:2.+')
+    implementation 'com.trustwallet.walletcore:walletcore:0.12.8'
 //    implementation files('libs/lib-todaystepcounter-release.aar')
 
 //    implementation 'io.grpc:grpc-okhttp:1.31.1'

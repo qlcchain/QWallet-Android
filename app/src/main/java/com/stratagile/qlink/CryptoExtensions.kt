@@ -9,8 +9,8 @@ import java.security.MessageDigest
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
-
+private val HEX_CHARS = "0123456789abcdef".toCharArray()
+private val HEX_CHARS1 = "0123456789abcdef"
 fun ByteArray.toHex() : String{
     val result = StringBuffer()
 
@@ -23,6 +23,21 @@ fun ByteArray.toHex() : String{
     }
 
     return result.toString()
+}
+
+fun String.hexStringToByteArray1() : ByteArray {
+    val hex = toLowerCase()
+    val result = ByteArray(length / 2)
+
+    for (i in 0 until hex.length step 2) {
+        val firstIndex = HEX_CHARS1.indexOf(hex[i])
+        val secondIndex = HEX_CHARS1.indexOf(hex[i + 1])
+
+        val octet = firstIndex.shl(4).or(secondIndex)
+        result.set(i.shr(1), octet.toByte())
+    }
+
+    return result
 }
 
 fun String.hexStringToByteArray() : ByteArray {

@@ -866,5 +866,17 @@
     <string name="swap_amount_qlc">Swap 数量(QLC)</string>
     <string name="time_swap_detail">时间</string>
     <string name="hash">Hash</string>
+    <string name="qlc_cross_chain_intro">QLC跨链Swap解答</string>
+    <string name="is_withdraw_limit">isWithdrawLimit</string>
+    <string name="number_of_transactions">Number of transactions</string>
+    <string name="sign">签名</string>
+    <string name="session_has_been_terminated">会话超时，请退回到dapp并且重新发起会话</string>
+    <string name="approve">同意</string>
+    <string name="rejected">已拒绝</string>
+    <string name="confirm_transaction">确认交易</string>
+    <string name="browser">浏览</string>
+    <string name="please_switch_to_eth_wallet">请选择以太坊钱包</string>
+    <string name="input_dapp_website">输入Dapp网址</string>
+
 
 </resources>

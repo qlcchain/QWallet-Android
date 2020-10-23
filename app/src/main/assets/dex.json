@@ -1,0 +1,22 @@
+[
+  {
+    "name": "SakeInterface",
+    "url": "https://sakeswap.finance/#/swap",
+    "img": ""
+  },
+  {
+    "name": "SakeSwap",
+    "url": "https://app.sakeswap.finance/#/",
+    "img": ""
+  },
+  {
+    "name": "UniSwap",
+    "url": "https://app.uniswap.org/#/swap",
+    "img": ""
+  },
+  {
+    "name": "WalletConnect",
+    "url": "https://example.walletconnect.org/",
+    "img": ""
+  }
+]

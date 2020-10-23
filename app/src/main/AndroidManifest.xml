@@ -743,6 +743,17 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity android:name=".ui.activity.defi.SwapDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.defi.WalletConnectActivity" android:screenOrientation="portrait" android:launchMode="singleTop">
+<!--            <intent-filter>-->
+<!--                <data android:scheme="wc" />-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".ui.activity.defi.ConfirmActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.defi.DappBrowserActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.defi.SearchDefiActivity" android:screenOrientation="portrait"/>
 
         <service
             android:name="com.stratagile.qlink.service.JpushService"
@@ -753,7 +764,10 @@
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
         </service>
-
+        <service
+            android:name=".service.WalletConnectService"
+            android:enabled="true">
+        </service>
 
         <meta-data
             android:name="JPUSH_CHANNEL"

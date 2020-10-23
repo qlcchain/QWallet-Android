@@ -1,0 +1,29 @@
+package com.stratagile.qlink.walletconnect.entity
+
+//TODO: Integrate the EthereumMessage here
+
+data class WCEthereumSignMessage(
+        val raw: List<String>,
+        val type: WCSignType
+) {
+    enum class WCSignType {
+        MESSAGE, PERSONAL_MESSAGE, TYPED_MESSAGE
+    }
+
+    val data
+        get() = when (type) {
+            WCSignType.MESSAGE -> raw[1]
+            WCSignType.TYPED_MESSAGE -> raw[1]
+            WCSignType.PERSONAL_MESSAGE -> raw[0]
+        }
+}
+
+data class WCEthereumTransaction(
+        val from: String,
+        val to: String?,
+        val nonce: String?,
+        val gasPrice: String?,
+        val gas: String?,
+        val value: String?,
+        val data: String
+)

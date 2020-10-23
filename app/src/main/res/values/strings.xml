@@ -1898,4 +1898,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae bibendum me
     <string name="swap_amount_qlc">Swap Amount(QLC)</string>
     <string name="time_swap_detail">Time</string>
     <string name="hash">Hash</string>
+    <string name="qlc_cross_chain_intro">QLC Cross-chain Swap Intro</string>
+    <string name="is_withdraw_limit">isWithdrawLimit</string>
+    <string name="number_of_transactions">Number of transactions</string>
+    <string name="session_has_been_terminated">Session has been terminated. Switch back to Dapp and start a new WalletConnect session.</string>
+    <string name="sign">sign</string>
+    <string name="approve">Approve</string>
+    <string name="rejected">Rejected</string>
+    <string name="confirm_transaction">Confirm Transaction</string>
+    <string name="browser">Browser</string>
+    <string name="please_switch_to_eth_wallet">please switch to eth wallet</string>
+    <string name="input_dapp_website">Input Dapp website</string>
 </resources>

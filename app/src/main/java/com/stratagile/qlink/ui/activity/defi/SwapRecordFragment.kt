@@ -33,16 +33,14 @@ import com.stratagile.qlink.db.WalletDao
 import com.stratagile.qlink.entity.TokenPrice
 import com.stratagile.qlink.entity.defi.CheckHubState
 import com.stratagile.qlink.entity.defi.EthGasPrice
+import com.stratagile.qlink.entity.defi.FetchBack
 import com.stratagile.qlink.ui.activity.defi.component.DaggerSwapRecordComponent
 import com.stratagile.qlink.ui.activity.defi.contract.SwapRecordContract
 import com.stratagile.qlink.ui.activity.defi.module.SwapRecordModule
 import com.stratagile.qlink.ui.activity.defi.presenter.SwapRecordPresenter
 import com.stratagile.qlink.ui.adapter.BottomMarginItemDecoration
 import com.stratagile.qlink.ui.adapter.defi.SwapListAdapter
-import com.stratagile.qlink.utils.FileUtil
-import com.stratagile.qlink.utils.SpUtil
-import com.stratagile.qlink.utils.ToastUtil
-import com.stratagile.qlink.utils.UIUtils
+import com.stratagile.qlink.utils.*
 import com.stratagile.qlink.utils.eth.ETHWalletUtils
 import com.stratagile.qlink.view.SweetAlertDialog
 import io.neow3j.contract.Test1Contract.refundUser
@@ -135,13 +133,8 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                     //nep5 -> erc20 抵押超时，赎回nep5
                     swapRecord = swapListAdapter.data[position]
                     swapRecord!!.index = position
-                    if (swapRecord!!.swaptxHash != null && !"".equals(swapRecord!!.swaptxHash)) {
-                        showProgressDialog()
-                        nep5unLockNotice()
-                    } else {
-                        showProgressDialog()
-                        unLockNepQlc()
-                    }
+                    showProgressDialog()
+                    unLockNepQlc()
                 } else if (swapListAdapter.data[position].state == 3) {
                     if (swapListAdapter.data[position].swaptxHash == null || "".equals(swapListAdapter.data[position].swaptxHash)) {
                         //nep5 -> erc20 抵押中断，继续抵押nep5， 这里处理领取erc20的qlc
@@ -190,14 +183,13 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
             return
         }
         val dataJson = jsonObject(
-                "amount" to (swapRecord!!.amount.toLong() * 100000000).toString(),
                 "rHash" to swapRecord!!.rHash,
                 "nep5TxHash" to swapRecord!!.txHash,
                 "addr" to swapRecord!!.wrpperEthAddress
         )
         KLog.i(dataJson.toString())
         var request = (ConstantValue.qlcHubEndPoint + "/deposit/lock").httpPost().body(dataJson.toString())
-        request.headers["Content-Type"] = "application/json"
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)
@@ -469,16 +461,16 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
 
 
 
-    private var neow: Neow3j? = null
+//    private var neow: Neow3j? = null
     fun unLockNepQlc() {
         showProgressDialog()
         thread {
-            neow = Neow3j.build(HttpService(ConstantValue.neoNode))
-            var wallet = AppConfig.instance.daoSession.walletDao.queryBuilder().where(WalletDao.Properties.Address.eq(swapRecord!!.fromAddress)).list()[0]
-            val result = refundUser(neow!!, swapRecord!!.rOrign, swapRecord!!.fromAddress, wallet.wif, swapRecord!!.neoContractAddress)
-            swapRecord!!.swaptxHash = result
-            AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
-            KLog.i(result)
+//            neow = Neow3j.build(HttpService(ConstantValue.neoNode))
+//            var wallet = AppConfig.instance.daoSession.walletDao.queryBuilder().where(WalletDao.Properties.Address.eq(swapRecord!!.fromAddress)).list()[0]
+//            val result = refundUser(neow!!, swapRecord!!.rOrign, swapRecord!!.fromAddress, wallet.wif, swapRecord!!.neoContractAddress)
+//            swapRecord!!.swaptxHash = result
+//            AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
+//            KLog.i(result)
             nep5unLockNotice()
         }
     }
@@ -499,23 +491,27 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
             return
         }
         val dataJson = jsonObject(
-                "rHash" to swapRecord!!.rHash,
-                "nep5TxHash" to swapRecord!!.swaptxHash
+                "rOrigin" to swapRecord!!.rOrign,
+                "userNep5Addr" to swapRecord!!.fromAddress
         )
         KLog.i(dataJson.toString())
-        var request = (ConstantValue.qlcHubEndPoint + "/deposit/fetchNotice").httpPost().body(dataJson.toString())
-        request.headers["Content-Type"] = "application/json"
+        var request = (ConstantValue.qlcHubEndPoint + "/deposit/fetch").httpPost().body(dataJson.toString())
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)
             if (error == null) {
+                var fetchBack = Gson().fromJson<FetchBack>(data, FetchBack::class.java)
+                swapRecord!!.swaptxHash = fetchBack.value
+                AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
+                Thread.sleep(checkStatusTime)
                 checkLcokState()
-                runOnUiThread {
+//                runOnUiThread {
 //                    if (!isClose) {
 //                        toast(getString(R.string.success))
 //                    }
-                    closeProgressDialog()
-                }
+//                    closeProgressDialog()
+//                }
             } else {
                 if (unLockNoticeTimes > 3) {
                     unLockNoticeTimes = 0
@@ -547,7 +543,6 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
     }
 
     fun getSwapHistory() {
-        var lsit = AppConfig.instance.daoSession.swapRecordDao.loadAll()
         var list = AppConfig.instance.daoSession.swapRecordDao.queryBuilder().where(SwapRecordDao.Properties.FromAddress.eq(currentAddress), SwapRecordDao.Properties.IsMainNet.eq(SpUtil.getBoolean(activity, ConstantValue.isMainNet, true))).list()
         list.sortBy { - it.lockTime }
         swapListAdapter.setNewData(list)
@@ -556,7 +551,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                 if (swapRecord.type == SwapRecord.SwapType.typeNep5ToErc20.ordinal) {
                     //查找nep5到erc20抵押的状态
                     //
-                    if (swapRecord.state != 6 && swapRecord.state != 9) {
+                    if (swapRecord.state != SwapRecord.SwapState.DepositNeoUnLockedDone.ordinal && swapRecord.state != SwapRecord.SwapState.DepositNeoFetchDone.ordinal) {
                         checkLcokState(index, swapRecord)
                     }
                 } else {
@@ -578,7 +573,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
         var list = arrayListOf<Pair<String, String>>(Pair("value", swapRecord!!.rHash))
         KLog.i(dataJson.toString())
         var request = (ConstantValue.qlcHubEndPoint + "/info/lockerInfo").httpGet(list)
-        request.headers["Content-Type"] = "application/json"
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)
@@ -589,7 +584,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                     swapRecord!!.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "0"
+                        tvDot!!.text = "1"
                     }
                     Thread.sleep(checkStatusTime)
                     checkLcokState()
@@ -598,7 +593,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                     swapRecord!!.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "1"
+                        tvDot!!.text = "2"
                     }
                     Thread.sleep(checkStatusTime)
                     checkLcokState()
@@ -607,7 +602,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                     swapRecord!!.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "2"
+                        tvDot!!.text = "3"
                     }
                     Thread.sleep(checkStatusTime)
                     checkLcokState()
@@ -617,7 +612,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                     swapRecord!!.state = checkHubState.state.toInt()
                     AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     runOnUiThread {
-                        tvDot!!.text = "3"
+                        tvDot!!.text = "4"
                     }
                     if (swapRecord!!.swaptxHash == null || "".equals(swapRecord!!.swaptxHash)) {
                         Thread.sleep(checkStatusTime)
@@ -653,19 +648,30 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
                         sweetAlertDialogSwap!!.dismissWithAnimation()
                         swapListAdapter.notifyItemChanged(swapRecord!!.index)
                     }
-                } else if (checkHubState.state.toInt() == 8) {
+                } else if (checkHubState.state.toInt() == SwapRecord.SwapState.DepositEthLockedDone.ordinal) {
                     //wrapper已经拿到了nep5代币
                     //DepositNeoUnLockedDone == 6
-                    runOnUiThread {
-                        swapRecord!!.state = 8
-                        swapListAdapter.notifyItemChanged(swapRecord!!.index)
-                        AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
-                    }
+                    Thread.sleep(checkStatusTime)
+                    checkLcokState()
+//                    runOnUiThread {
+//                        swapRecord!!.state = 8
+//                        swapListAdapter.notifyItemChanged(swapRecord!!.index)
+//                        AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
+//                    }
                 } else if (checkHubState.state.toInt() == 9) {
                     //wrapper已经拿到了nep5代币
                     //DepositNeoUnLockedDone == 6
                     runOnUiThread {
+                        closeProgressDialog()
                         swapRecord!!.state = 9
+                        swapListAdapter.notifyItemChanged(swapRecord!!.index)
+                        AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
+                    }
+                } else if (checkHubState.state.toInt() == 10) {
+                    //wrapper已经拿到了nep5代币
+                    //DepositNeoUnLockedDone == 6
+                    runOnUiThread {
+                        swapRecord!!.state = 10
                         swapListAdapter.notifyItemChanged(swapRecord!!.index)
                         AppConfig.instance.daoSession.swapRecordDao.update(swapRecord)
                     }
@@ -693,7 +699,7 @@ class SwapRecordFragment : BaseFragment(), SwapRecordContract.View {
         var list = arrayListOf<Pair<String, String>>(Pair("value", swapRecord.rHash))
         KLog.i(dataJson.toString())
         var request = (ConstantValue.qlcHubEndPoint + "/info/lockerInfo").httpGet(list)
-        request.headers["Content-Type"] = "application/json"
+        DefiUtil.addRequestHeader(request)
         request.responseString { _, _, result ->
             val (data, error) = result
             KLog.i(data)

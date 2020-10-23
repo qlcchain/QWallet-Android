@@ -44,7 +44,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
 
     fun getProductList(map: MutableMap<String, String>, next : Boolean, saveToLocal : Boolean) {
         mCompositeDisposable.add(httpAPIWrapper.getTopupProductList(map).subscribe({
-            mView.setProductList(it, next, saveToLocal)
         }, {
             mView.closeProgressDialog()
         }, {
@@ -54,7 +53,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
 
     fun getCountryList(map: MutableMap<String, String>) {
         mCompositeDisposable.add(httpAPIWrapper.getCountryList(map).subscribe({
-            mView.setCountryList(it)
         }, {
             mView.closeProgressDialog()
         }, {
@@ -89,7 +87,6 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
                 .subscribe({ user ->
                     //isSuccesse
                     //mView.closeProgressDialog();
-                    mView.setInviteRank(user)
                 }, { throwable ->
                     //onError
                     throwable.printStackTrace()
@@ -164,21 +161,11 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }))
     }
 
-    fun getTopupGroupKindList(map: MutableMap<String, String>) {
-        mCompositeDisposable.add(httpAPIWrapper.getTopupGroupKindList(map).subscribe({
-            mView.setGroupKindList(it)
-        }, {
-            mView.closeProgressDialog()
-        }, {
-            mView.closeProgressDialog()
-        }))
-    }
 
     fun qurryDict(map: Map<*, *>?, position : Int) {
         httpAPIWrapper.qurryDict(map).subscribe(object : Observer<Dict?> {
             override fun onSubscribe(d: Disposable) {}
             override fun onNext(dict: Dict) {
-                mView.setGroupDate(dict, position)
             }
 
             override fun onError(e: Throwable) {}
@@ -194,5 +181,21 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: TopU
         }, {
             mView.closeProgressDialog()
         }))
+    }
+
+    fun getDefis(map: HashMap<String, String>) {
+        val disposable = httpAPIWrapper.defiProjectListV2(map)
+                .subscribe({ baseBack ->
+                    mView.closeProgressDialog()
+                    mView.setDefiList(baseBack)
+                    //isSuccesse
+                }, {
+                    mView.closeProgressDialog()
+                }, {
+                    //onComplete
+                    mView.closeProgressDialog()
+                    KLog.i("onComplete")
+                })
+        mCompositeDisposable.add(disposable)
     }
 }

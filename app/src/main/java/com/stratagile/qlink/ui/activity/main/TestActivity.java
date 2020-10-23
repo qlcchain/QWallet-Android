@@ -12,6 +12,7 @@ import com.binance.dex.api.client.BinanceDexEnvironment;
 import com.binance.dex.api.client.Wallet;
 import com.binance.dex.api.client.domain.Account;
 import com.binance.dex.api.client.encoding.Crypto;
+import com.google.gson.GsonBuilder;
 import com.socks.library.KLog;
 import com.stratagile.qlink.R;
 import com.stratagile.qlink.application.AppConfig;
@@ -25,8 +26,14 @@ import com.stratagile.qlink.ui.activity.main.module.TestModule;
 import com.stratagile.qlink.ui.activity.main.presenter.TestPresenter;
 import com.stratagile.qlink.utils.BnbUtil;
 import com.stratagile.qlink.view.BottomSheet;
+import com.stratagile.qlink.walletconnect.WCClient;
+import com.stratagile.qlink.walletconnect.WCSession;
+import com.stratagile.qlink.walletconnect.entity.WCPeerMeta;
 
 import org.json.JSONObject;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthTransaction;
+import org.web3j.protocol.core.methods.response.Transaction;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -121,7 +128,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(logging);
         neow = Neow3j.build(new HttpService(ConstantValue.neoNode, builder.build()));
-        webview.loadUrl("file:///android_asset/neonjs.html");
+        webview.loadUrl("file:///android_asset/eth.html");
     }
 
     @Override
@@ -166,11 +173,22 @@ public class TestActivity extends BaseActivity implements TestContract.View {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        BinanceDexApiNodeClient binanceDexNodeApi = null;
-                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(), BinanceDexEnvironment.PROD.getHrp());
-                        String address = bnbWallet.getAddress();
-                        Account account = binanceDexNodeApi.getAccount(address);
-                        KLog.i(account);
+                        KLog.i("开始");
+                        Web3j web3j = Web3j.build(new org.web3j.protocol.http.HttpService(ConstantValue.ethNodeUrl));
+                        try {
+                            EthTransaction transaction = web3j.ethGetTransactionByHash("0x3256b5f4ce48f22ea9e43d764f4f6c9d846ef4bfee6f9682e99942f564c270b1").send();
+                            KLog.i("返回");
+                            if (transaction.hasError()) {
+                                KLog.i(transaction.getError().getMessage());
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+//                        BinanceDexApiNodeClient binanceDexNodeApi = null;
+//                        binanceDexNodeApi = BinanceDexApiClientFactory.newInstance().newNodeRpcClient(BinanceDexEnvironment.PROD.getNodeUrl(), BinanceDexEnvironment.PROD.getHrp());
+//                        String address = bnbWallet.getAddress();
+//                        Account account = binanceDexNodeApi.getAccount(address);
+//                        KLog.i(account);
                     }
                 }).start();
                 break;
@@ -222,7 +240,8 @@ public class TestActivity extends BaseActivity implements TestContract.View {
                 deploy();
                 break;
             case R.id.refundUser:
-                refundUser();
+//                refundUser();
+                testWalletConnect();
 //                sha2561();
                 break;
             case R.id.test2:
@@ -235,6 +254,13 @@ public class TestActivity extends BaseActivity implements TestContract.View {
             default:
                 break;
         }
+    }
+
+    private void testWalletConnect() {
+        String seseeionStr = "";
+        WCSession session = WCSession.Companion.from(seseeionStr);
+        WCClient wcClient = new WCClient(new GsonBuilder(), new OkHttpClient());
+        WCPeerMeta wcPeerMeta = new WCPeerMeta("", "", "", null);
     }
 
     private void deploy() {
@@ -313,7 +339,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         arrays[1] = userAddress;
         arrays[2] = "0xE0632e90d6eB6649CfD82f6d625769cCf9E7762f";
         arrays[3] = contractAddress;
-        arrays[4] = "200";
+        arrays[4] = "100";
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -355,7 +381,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         System.out.println(builder.toString().trim());
     }
 
-    private String contractAddress = "0x9a36F711133188EDb3952b3A6ee29c6a3d2e3836";
+    private String contractAddress = "0x16e502c867C2d4CAC0F4B4dBd39AB722F5cEc050";
     private String onwerAddress = "0x0A8EFAacbeC7763855b9A39845DDbd03b03775C1";
     private String userAddress = "0x255eEcd17E11C5d2FFD5818da31d04B5c1721D7C";
     private String neoContractAddress = "c59bd98299324d6156c67cd9e2e9783054eaf383";
@@ -368,7 +394,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         arrays[0] = "1c70c79c8f0c0ba5c700663256360230327f6d3688859c688b4106c890676440";
         arrays[1] = userAddress;
 //        arrays[2] = userAddress;
-        arrays[2] = "0x44442EcC08C7095311d57a1882F168097598755C";
+        arrays[2] = "0x99F74908466351992397Aa60962829Ca22cf4877";
         arrays[3] = contractAddress;
         new Thread(new Runnable() {
             @Override

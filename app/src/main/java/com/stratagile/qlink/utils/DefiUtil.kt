@@ -1,5 +1,6 @@
 package com.stratagile.qlink.utils
 
+import com.github.kittinunf.fuel.core.Request
 import com.socks.library.KLog
 import java.math.BigDecimal
 
@@ -133,5 +134,12 @@ object DefiUtil {
             KLog.i("进入其他。。。")
             return preStr + bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
         }
+    }
+
+    fun addRequestHeader(request : Request) : Request{
+        val token = "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJRTENDaGFpbiBCb3QiLCJqdGkiOiJjNzk5YjMzNS1jMmU0LTQzMzYtYmFkOC1lMWExZjA3OTZkZDUiLCJpYXQiOjE1OTk1NDc0NDksImlzcyI6IlFMQ0NoYWluIEJvdCIsInN1YiI6InNpZ25lciIsInJvbGVzIjpbInVzZXIiXX0.AGdR2P_9hBE5zI6mEbd0y4zGlZBRaeeKVMP3lWzjtL_FUK9hh7O7WW-L9fh7CpBj2nU_ToxfUI-KiKvqRl_0NabEASeBzSpdAr2yuIgyQvOUHYdKBe-R0Gv9_uMczHEHuAVvdGMmyJsgIoymi_w3RVqnK_SQNmQ_rWNzE2ItPEVutoKz"
+        request.headers["Content-Type"] = "application/json"
+        request.headers["authorization"] = token
+        return request
     }
 }

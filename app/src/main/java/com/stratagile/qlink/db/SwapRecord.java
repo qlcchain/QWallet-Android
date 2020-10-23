@@ -179,19 +179,40 @@ public class SwapRecord implements Parcelable {
         DepositEthLockedDone,
         DepositEthUnLockedDone,
         DepositNeoUnLockedPending,
+        //6
         DepositNeoUnLockedDone,
+        //7
         DepositEthFetchPending,
+        //8
         DepositEthFetchDone,
+        //9
+        DepositNeoFetchPending,
+        //10
         DepositNeoFetchDone,
+
+
         // withdraw
+        //11 新加的状态
+        WithDrawInit,
+        //12
         WithDrawEthLockedDone,
+        //13
         WithDrawNeoLockedPending,
+        //14
         WithDrawNeoLockedDone,
+        //15
+        WithDrawNeoUnLockedPending,
+        //16 正常最终状态
         WithDrawNeoUnLockedDone,
+        //17
         WithDrawEthUnlockPending,
+        //18 正常，eth qlc hub拿走了.
         WithDrawEthUnlockDone,
+        //19
         WithDrawNeoFetchPending,
+        //20 异常，hub拿走了nep5qlc，可以作为异常的最终状态
         WithDrawNeoFetchDone,
+        //21 异常，用户拿走了eth qlc，可以作为异常的最终状态
         WithDrawEthFetchDone,
         // failed
         Failed,
