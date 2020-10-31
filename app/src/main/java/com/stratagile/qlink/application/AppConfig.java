@@ -155,7 +155,7 @@ public class AppConfig extends MultiDexApplication {
 
     public RequestOptions optionsTopup = new RequestOptions()
             .centerCrop()
-            .transform(new GlideRoundTransform(this, 4))
+            .transform(new GlideRoundTransform(this, 8))
             .placeholder(R.mipmap.guangdong_mobile)
             .error(R.mipmap.guangdong_mobile)
             .priority(Priority.HIGH);
