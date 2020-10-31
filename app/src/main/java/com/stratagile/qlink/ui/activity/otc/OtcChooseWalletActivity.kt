@@ -11,12 +11,14 @@ import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.base.BaseActivity
 import com.stratagile.qlink.db.EthWallet
 import com.stratagile.qlink.entity.AllWallet
+import com.stratagile.qlink.entity.eventbus.ChangeWallet
 import com.stratagile.qlink.ui.activity.otc.component.DaggerOtcChooseWalletComponent
 import com.stratagile.qlink.ui.activity.otc.contract.OtcChooseWalletContract
 import com.stratagile.qlink.ui.activity.otc.module.OtcChooseWalletModule
 import com.stratagile.qlink.ui.activity.otc.presenter.OtcChooseWalletPresenter
 import com.stratagile.qlink.view.SelectWalletAdapter
 import kotlinx.android.synthetic.main.activity_choose_wallet.*
+import org.greenrobot.eventbus.EventBus
 import java.util.ArrayList
 
 import javax.inject.Inject;
@@ -129,6 +131,42 @@ class OtcChooseWalletActivity : BaseActivity(), OtcChooseWalletContract.View {
                    var returnItent  = Intent()
                     returnItent.putExtra("wallet", downCheckAdapter.data[position].ethWallet)
                     setResult(Activity.RESULT_OK, returnItent)
+                    if (intent.hasExtra("onlyeth")) {
+                        val ethWallets = AppConfig.getInstance().daoSession.ethWalletDao.loadAll()
+                        ethWallets.forEach {
+                            if (it.isCurrent()) {
+                                it.setCurrent(false)
+                                AppConfig.getInstance().daoSession.ethWalletDao.update(it)
+                            }
+                        }
+                        downCheckAdapter.data[position].ethWallet.setCurrent(true)
+                        AppConfig.getInstance().daoSession.ethWalletDao.update(downCheckAdapter.data[position].ethWallet)
+                        val neoWallets = AppConfig.getInstance().daoSession.walletDao.loadAll()
+                        neoWallets.forEach {
+                            if (it.isCurrent) {
+                                it.isCurrent = false
+                                AppConfig.getInstance().daoSession.walletDao.update(it)
+                            }
+
+                        }
+
+                        val wallets2 = AppConfig.getInstance().daoSession.eosAccountDao.loadAll()
+                        wallets2.forEach {
+                            if (it.isCurrent) {
+                                it.isCurrent = false
+                                AppConfig.getInstance().daoSession.eosAccountDao.update(it)
+                            }
+                        }
+
+                        val qlcAccounts = AppConfig.getInstance().daoSession.qlcAccountDao.loadAll()
+                        qlcAccounts.forEach {
+                            if (it.isCurrent()) {
+                                it.setCurrent(false)
+                                AppConfig.getInstance().daoSession.qlcAccountDao.update(it)
+                            }
+                        }
+                        EventBus.getDefault().post(ChangeWallet())
+                    }
                     finish()
                 }
                 AllWallet.WalletType.QlcWallet.ordinal -> {

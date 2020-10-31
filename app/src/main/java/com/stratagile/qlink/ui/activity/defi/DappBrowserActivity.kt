@@ -69,6 +69,7 @@ class DappBrowserActivity : BaseActivity(), DappBrowserContract.View, OnSignMess
             var intent1 = Intent(this, OtcChooseWalletActivity::class.java)
             intent1.putExtra("walletType", AllWallet.WalletType.EthWallet.ordinal)
             intent1.putExtra("select", true)
+            intent1.putExtra("onlyeth", true)
             startActivityForResult(intent1, AllWallet.WalletType.EthWallet.ordinal)
             overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out)
 //            toast(getString(R.string.please_switch_to_eth_wallet))
@@ -180,9 +181,13 @@ class DappBrowserActivity : BaseActivity(), DappBrowserContract.View, OnSignMess
             }
 
         }
-        if (requestCode == AllWallet.WalletType.EthWallet.ordinal && resultCode == Activity.RESULT_OK) {
-            ethWallet = data!!.getParcelableExtra("wallet")
-            setupWebView()
+        if (requestCode == AllWallet.WalletType.EthWallet.ordinal) {
+            if (resultCode == Activity.RESULT_OK) {
+                ethWallet = data!!.getParcelableExtra("wallet")
+                setupWebView()
+            } else {
+                finish()
+            }
         }
     }
 

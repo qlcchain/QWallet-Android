@@ -24,10 +24,12 @@ class DexListAdapter(array: MutableList<DefiList.ProjectListBean>) : BaseQuickAd
                 KLog.i(item.logo)
                 Glide.with(mContext)
                         .load(AppConfig.instance.baseUrl + item.logo)
+                        .apply(AppConfig.instance.optionsTopup)
                         .into(imageView)
             } else {
                 Glide.with(mContext)
                         .load(mContext.resources.getIdentifier(item.name.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName))
+//                        .apply(AppConfig.instance.options)
                         .into(imageView)
             }
         } else {
@@ -37,10 +39,12 @@ class DexListAdapter(array: MutableList<DefiList.ProjectListBean>) : BaseQuickAd
             if (resource == 0) {
                 Glide.with(mContext)
                         .load(AppConfig.instance.baseUrl + item.logo)
+                        .apply(AppConfig.instance.optionsTopup)
                         .into(imageView)
             } else {
                 Glide.with(mContext)
                         .load(mContext.resources.getIdentifier(item.shortName.toLowerCase().replace(" ", "_").replace("-", "_"), "mipmap", mContext.packageName))
+//                        .apply(AppConfig.instance.options)
                         .into(imageView)
             }
         }
