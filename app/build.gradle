@@ -49,11 +49,11 @@ android {
 
 
     signingConfigs{
-        debug{
+        debug {
             def properties = new Properties()
             def inputStream = project.rootProject.file('local.properties').newDataInputStream()
             properties.load( inputStream )
-            storeFile file(rootProject.getRootDir().getAbsolutePath()+"/app/qlink.jks");
+            storeFile file(rootProject.getRootDir().getAbsolutePath() + "/app/qlink.jks");
             storePassword properties.getProperty('DEBUG_KEYSTORE_PASSWORD')
             keyAlias properties.getProperty('DEBUG_KEY_ALIAS')
             keyPassword properties.getProperty('DEBUG_KEY_PASSWORD')
