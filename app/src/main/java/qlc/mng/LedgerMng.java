@@ -1,17 +1,18 @@
 package qlc.mng;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import qlc.bean.Pending;
 import qlc.bean.Pending.PendingInfo;
 import qlc.bean.StateBlock;
 import qlc.network.QlcClient;
+import qlc.network.QlcException;
 import qlc.utils.Helper;
 import qlc.utils.StringUtil;
 
@@ -39,8 +40,7 @@ public class LedgerMng {
 			
 			blockArray = json.getJSONArray("result");
 			
-			if (!blockArray.isEmpty())
-				return new Gson().fromJson(blockArray.getJSONObject(0).toJSONString(), StateBlock.class);
+			if (!blockArray.isEmpty()) return new Gson().fromJson(blockArray.getJSONObject(0).toJSONString(), StateBlock.class);
 		} 
 		
 		return null;
@@ -64,7 +64,12 @@ public class LedgerMng {
     	addressArr.add(address);
     	params.add(addressArr);
     	params.add(-1);
-		JSONObject json = client.call("ledger_accountsPending", params);
+		JSONObject json = null;
+    	try{
+			 json = client.call("ledger_accountsPending", params);
+		}catch (QlcException e){
+    		throw  new IOException();
+		}
 		if (json.containsKey("result")) {
 			
 			Pending pending = new Pending();

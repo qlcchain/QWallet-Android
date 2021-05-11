@@ -85,7 +85,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -395,7 +397,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         tvWalletAsset.post(new Runnable() {
             @Override
             public void run() {
-                KLog.i("刷新adapter");
+                KLog.i(" 刷新adapter");
                 if (tokenInfos.size() == 0) {
                     tokensAdapter.setNewData(null);
                     tokensAdapter.getEmptyView().setVisibility(View.GONE);
@@ -559,8 +561,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                llNeoQlcTransfer.setVisibility(View.GONE);
-//                                llEthQlcTransfer.setVisibility(View.VISIBLE);
+//                                llNeoQlcTransfer.setVisibility(View.GONE);
+////                                llEthQlcTransfer.setVisibility(View.VISIBLE);
+                                llStake.setVisibility(View.GONE);
+                                llEthQlcTransfer.setVisibility(View.GONE);
                                 tvPending.setText("");
                             }
                         });
@@ -578,8 +582,10 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-//                                    llNeoQlcTransfer.setVisibility(View.VISIBLE);
-                                    llEthQlcTransfer.setVisibility(View.GONE);
+////                                    llNeoQlcTransfer.setVisibility(View.VISIBLE);
+//                                    llEthQlcTransfer.setVisibility(View.GONE);
+                                    llStake.setVisibility(View.GONE);
+                                    llNeoQlcTransfer.setVisibility(View.GONE);
                                     tvPending.setText("");
                                 }
                             });
@@ -595,8 +601,11 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+//                                    llNeoQlcTransfer.setVisibility(View.GONE);
+//                                    llEthQlcTransfer.setVisibility(View.GONE);
+
+                                    llStake.setVisibility(View.GONE);
                                     llNeoQlcTransfer.setVisibility(View.GONE);
-                                    llEthQlcTransfer.setVisibility(View.GONE);
                                     tvPending.setText("");
                                 }
                             });
@@ -610,6 +619,9 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+//                                llNeoQlcTransfer.setVisibility(View.GONE);
+//                                llEthQlcTransfer.setVisibility(View.GONE);
+                                llStake.setVisibility(View.VISIBLE);
                                 llNeoQlcTransfer.setVisibility(View.GONE);
                                 llEthQlcTransfer.setVisibility(View.GONE);
                             }
@@ -799,6 +811,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
         new QLCAPI().walletGetBalance(qlcAccount.getAddress(), "", new QLCAPI.BalanceInter() {
             @Override
             public void onBack(@org.jetbrains.annotations.Nullable ArrayList<QlcTokenbalance> baseResult, @org.jetbrains.annotations.Nullable Error error) {
+                KLog.i("onBack");
                 if (error == null) {
                     KLog.i(baseResult);
                     mPresenter.getQlcTokensInfo(baseResult, qlcAccount.getAddress());
@@ -818,11 +831,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                     try {
                         QlcClient qlcClient = new QlcClient(ConstantValue.qlcNode);
                         LedgerRpc rpc = new LedgerRpc(qlcClient);
-                        if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+//                        if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
                             pending = LedgerMng.getAccountPending(qlcClient, qlcAccount.getAddress());
                             KLog.i(pending.getInfoList());
-                        }
+//                        }
                         if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                            KLog.i("没有pendding" );
                             return;
                         }
                         Iterator<Pending.PendingInfo> iterator = pending.getInfoList().iterator();
@@ -835,6 +849,12 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
 
                         }
                         if (pending == null || pending.getInfoList() == null || pending.getInfoList().size() == 0) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvPending.setText("");
+                                }
+                            });
                             return;
                         }
                         KLog.i("pending信息为" + pending.getInfoList().get(0).getHash());
@@ -856,7 +876,7 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                                             public void run() {
                                                 isPending = false;
                                                 if (pending != null && pending.getInfoList() != null && pending.getInfoList().size() != 0) {
-                                                    pending.getInfoList().remove(0);
+//                                                    pending.getInfoList().remove(0);
                                                     tvPending.setText("pending: " + pending.getInfoList().size() + "");
                                                     if (pending.getInfoList().size() == 0) {
                                                         tvPending.setText("");
@@ -887,7 +907,18 @@ public class AllWalletFragment extends BaseFragment implements AllWalletContract
                             });
                             isPending = false;
                         }
-                    } catch (Exception e) {
+                    } catch (MalformedURLException e) {
+                        KLog.i("获取pendding出错" + e.getMessage());
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                isPending = false;
+                                initData();
+                            }
+                        });
+                    }catch (IOException e){
+                        KLog.i("获取pendding出错" + e.getMessage());
                         e.printStackTrace();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

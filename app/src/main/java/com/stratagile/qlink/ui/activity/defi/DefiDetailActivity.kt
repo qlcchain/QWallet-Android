@@ -274,12 +274,14 @@ class DefiDetailActivity : BaseActivity(), DefiDetailContract.View {
     }
 
     override fun setDefiStateList(defiStateList: DefiStateList) {
+        KLog.e("setDefiStateList")
         viewModel.defiStateListLiveData.value = defiStateList
     }
 
     lateinit var viewModel: DefiViewModel
     lateinit var mDefiDetail: DefiDetail
     override fun setDefiDetail(defiDetail: DefiDetail) {
+        KLog.e("setDefiDetail ")
         mDefiDetail = defiDetail
         getDefiStateList()
         tvDesc.text = defiDetail.project.description

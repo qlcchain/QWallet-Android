@@ -21,46 +21,46 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        TopupTodoListDao.createTable(db, ifNotExists);
-        BuySellSellTodoDao.createTable(db, ifNotExists);
         BnbWalletDao.createTable(db, ifNotExists);
-        VpnEntityDao.createTable(db, ifNotExists);
-        VpnServerRecordDao.createTable(db, ifNotExists);
-        EthWalletDao.createTable(db, ifNotExists);
-        BuySellBuyTodoDao.createTable(db, ifNotExists);
-        DWCSessionDao.createTable(db, ifNotExists);
-        EosAccountDao.createTable(db, ifNotExists);
-        RecordSaveDao.createTable(db, ifNotExists);
         BtcWalletDao.createTable(db, ifNotExists);
-        WalletDao.createTable(db, ifNotExists);
+        BuySellBuyTodoDao.createTable(db, ifNotExists);
+        BuySellSellTodoDao.createTable(db, ifNotExists);
         DefiSearchHistoryDao.createTable(db, ifNotExists);
-        SwapRecordDao.createTable(db, ifNotExists);
-        QLCAccountDao.createTable(db, ifNotExists);
+        DWCSessionDao.createTable(db, ifNotExists);
         EntrustTodoDao.createTable(db, ifNotExists);
+        EosAccountDao.createTable(db, ifNotExists);
+        EthWalletDao.createTable(db, ifNotExists);
+        QLCAccountDao.createTable(db, ifNotExists);
+        RecordSaveDao.createTable(db, ifNotExists);
+        SwapRecordDao.createTable(db, ifNotExists);
+        TopupTodoListDao.createTable(db, ifNotExists);
         TransactionRecordDao.createTable(db, ifNotExists);
         UserAccountDao.createTable(db, ifNotExists);
+        VpnEntityDao.createTable(db, ifNotExists);
+        VpnServerRecordDao.createTable(db, ifNotExists);
+        WalletDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        TopupTodoListDao.dropTable(db, ifExists);
-        BuySellSellTodoDao.dropTable(db, ifExists);
         BnbWalletDao.dropTable(db, ifExists);
-        VpnEntityDao.dropTable(db, ifExists);
-        VpnServerRecordDao.dropTable(db, ifExists);
-        EthWalletDao.dropTable(db, ifExists);
-        BuySellBuyTodoDao.dropTable(db, ifExists);
-        DWCSessionDao.dropTable(db, ifExists);
-        EosAccountDao.dropTable(db, ifExists);
-        RecordSaveDao.dropTable(db, ifExists);
         BtcWalletDao.dropTable(db, ifExists);
-        WalletDao.dropTable(db, ifExists);
+        BuySellBuyTodoDao.dropTable(db, ifExists);
+        BuySellSellTodoDao.dropTable(db, ifExists);
         DefiSearchHistoryDao.dropTable(db, ifExists);
-        SwapRecordDao.dropTable(db, ifExists);
-        QLCAccountDao.dropTable(db, ifExists);
+        DWCSessionDao.dropTable(db, ifExists);
         EntrustTodoDao.dropTable(db, ifExists);
+        EosAccountDao.dropTable(db, ifExists);
+        EthWalletDao.dropTable(db, ifExists);
+        QLCAccountDao.dropTable(db, ifExists);
+        RecordSaveDao.dropTable(db, ifExists);
+        SwapRecordDao.dropTable(db, ifExists);
+        TopupTodoListDao.dropTable(db, ifExists);
         TransactionRecordDao.dropTable(db, ifExists);
         UserAccountDao.dropTable(db, ifExists);
+        VpnEntityDao.dropTable(db, ifExists);
+        VpnServerRecordDao.dropTable(db, ifExists);
+        WalletDao.dropTable(db, ifExists);
     }
 
     /**
@@ -79,24 +79,24 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(TopupTodoListDao.class);
-        registerDaoClass(BuySellSellTodoDao.class);
         registerDaoClass(BnbWalletDao.class);
-        registerDaoClass(VpnEntityDao.class);
-        registerDaoClass(VpnServerRecordDao.class);
-        registerDaoClass(EthWalletDao.class);
-        registerDaoClass(BuySellBuyTodoDao.class);
-        registerDaoClass(DWCSessionDao.class);
-        registerDaoClass(EosAccountDao.class);
-        registerDaoClass(RecordSaveDao.class);
         registerDaoClass(BtcWalletDao.class);
-        registerDaoClass(WalletDao.class);
+        registerDaoClass(BuySellBuyTodoDao.class);
+        registerDaoClass(BuySellSellTodoDao.class);
         registerDaoClass(DefiSearchHistoryDao.class);
-        registerDaoClass(SwapRecordDao.class);
-        registerDaoClass(QLCAccountDao.class);
+        registerDaoClass(DWCSessionDao.class);
         registerDaoClass(EntrustTodoDao.class);
+        registerDaoClass(EosAccountDao.class);
+        registerDaoClass(EthWalletDao.class);
+        registerDaoClass(QLCAccountDao.class);
+        registerDaoClass(RecordSaveDao.class);
+        registerDaoClass(SwapRecordDao.class);
+        registerDaoClass(TopupTodoListDao.class);
         registerDaoClass(TransactionRecordDao.class);
         registerDaoClass(UserAccountDao.class);
+        registerDaoClass(VpnEntityDao.class);
+        registerDaoClass(VpnServerRecordDao.class);
+        registerDaoClass(WalletDao.class);
     }
 
     public DaoSession newSession() {

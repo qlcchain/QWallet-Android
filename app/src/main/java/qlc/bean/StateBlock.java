@@ -2,9 +2,9 @@ package qlc.bean;
 
 import java.math.BigInteger;
 
-import qlc.bean.Block;
-
 public final class StateBlock extends Block {
+
+	private String hash;
 	
 	private String type;
 	
@@ -63,6 +63,14 @@ public final class StateBlock extends Block {
 		this.link = link;
 		this.timestamp = timestamp;
 		this.representative = representative;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	public String getType() {

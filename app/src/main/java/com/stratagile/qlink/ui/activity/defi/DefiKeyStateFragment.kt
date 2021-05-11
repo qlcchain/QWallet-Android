@@ -55,8 +55,9 @@ class DefiKeyStateFragment : BaseFragment(), DefiKeyStateContract.View {
         viewModel.defiDetailLiveData.observe(this, Observer {
             mDefiDetail = it!!
             runOnUiThread {
-                KLog.i("数据改变")
+                KLog.e("数据改变  ： ${mDefiDetail.project.jsonValue}")
                 var jsonValue = Gson().fromJson<DefiJson>(it!!.project.jsonValue, DefiJson::class.java)
+                KLog.e("数据改变完了")
                 var list = arrayListOf<KeyStateBean>()
                 list.add(KeyStateBean(jsonValue.tvl.btc.relative_1d, jsonValue.tvl.btc.value, "BTC"))
                 list.add(KeyStateBean(jsonValue.tvl.eth.relative_1d, jsonValue.tvl.eth.value, "ETH"))

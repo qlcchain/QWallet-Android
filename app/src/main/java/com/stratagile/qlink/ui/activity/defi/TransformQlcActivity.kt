@@ -143,7 +143,6 @@ class TransformQlcActivity : BaseActivity(), TransformQlcContract.View {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.stakeExplain) {
             if (item.itemId == R.id.stakeExplain) {
                 var intent = Intent(this, WebViewActivity::class.java)
                 intent.putExtra("title", getString(R.string.qlc_cross_chain_intro))
@@ -154,7 +153,6 @@ class TransformQlcActivity : BaseActivity(), TransformQlcContract.View {
                 }
                 startActivity(intent)
             }
-        }
         return super.onOptionsItemSelected(item)
     }
 

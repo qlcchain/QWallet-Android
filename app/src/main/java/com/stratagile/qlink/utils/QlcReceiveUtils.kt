@@ -1,30 +1,21 @@
 package com.stratagile.qlink.utils
 
-import android.app.Activity
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.github.kittinunf.fuel.httpGet
 import com.google.gson.Gson
-import com.pawegio.kandroid.toast
 import com.socks.library.KLog
-import com.stratagile.qlc.utils.QlcUtil
 import com.stratagile.qlink.application.AppConfig
 import com.stratagile.qlink.constant.ConstantValue
 import com.stratagile.qlink.db.QLCAccount
-import com.stratagile.qlink.entity.TokenInfo
-import com.stratagile.qlink.entity.eventbus.ChangeWallet
-import kotlinx.android.synthetic.main.activity_qlc_transfer.*
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import qlc.bean.StateBlock
 import qlc.mng.BlockMng
 import qlc.mng.LedgerMng
 import qlc.mng.TransactionMng
 import qlc.mng.WalletMng
 import qlc.network.QlcClient
-import qlc.network.QlcException
 import qlc.rpc.impl.LedgerRpc
 import qlc.utils.Constants
 import qlc.utils.Helper
@@ -38,6 +29,11 @@ fun recevive(qlcClient: QlcClient, byteArray: ByteArray, qlcAccount: QLCAccount,
     //QlcUtil.hexStringToByteArray(qlcAccount.getPrivKey()
     KLog.i("得到发送块")
     val receiveBlockJson = TransactionMng.receiveBlock(qlcClient, sendBlock, qlcAccount.address, null)
+    if (receiveBlockJson == null){
+        receiveBack.recevie(false)
+        return
+    }
+
     KLog.i("得到接收块")
     val aaaa = JSONArray()
     var stateBlock = Gson().fromJson<StateBlock>(receiveBlockJson.toJSONString(), StateBlock::class.java)

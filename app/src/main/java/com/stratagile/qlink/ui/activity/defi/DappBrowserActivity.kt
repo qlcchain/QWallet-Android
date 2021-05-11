@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.webkit.*
 import com.pawegio.kandroid.toast
 import com.socks.library.KLog
@@ -30,7 +31,9 @@ import com.stratagile.qlink.web3.OnSignTransactionListener
 import com.stratagile.qlink.web3.OnSignTypedMessageListener
 import com.stratagile.qlink.web3.entity.Address
 import com.stratagile.qlink.web3.entity.Web3Transaction
+import kotlinx.android.synthetic.main.activity_test.*
 import kotlinx.android.synthetic.main.fragment_dapp.*
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 import org.web3j.utils.Convert
 import javax.inject.Inject
 
@@ -45,7 +48,7 @@ class DappBrowserActivity : BaseActivity(), DappBrowserContract.View, OnSignMess
 
     @Inject
     internal lateinit var mPresenter: DappBrowserPresenter
-    lateinit var ethWallet : EthWallet
+    lateinit var ethWallet: EthWallet
     override fun onCreate(savedInstanceState: Bundle?) {
         mainColor = R.color.white
         super.onCreate(savedInstanceState)
@@ -54,6 +57,7 @@ class DappBrowserActivity : BaseActivity(), DappBrowserContract.View, OnSignMess
     override fun initView() {
         setContentView(R.layout.activity_dapp_browser)
     }
+
     override fun initData() {
         getEthWallet()
     }
@@ -82,7 +86,21 @@ class DappBrowserActivity : BaseActivity(), DappBrowserContract.View, OnSignMess
         webView.chainId = ConstantValue.currentChainId
         webView.setRpcUrl(ConstantValue.ethNodeUrl)
         webView.setWalletAddress(Address(ethWallet.address))
-        webView.webChromeClient = object : WebChromeClient(){
+        if (refresh != null) {
+            refresh.visibility = View.VISIBLE;
+            refresh.setOnClickListener {
+                //重新加载
+                webView.reload()
+            }
+        }
+        if (close != null) {
+            close.visibility = View.VISIBLE;
+            close.setOnClickListener {
+                finish()
+            }
+        }
+
+        webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 title.text = view.title
             }
@@ -137,17 +155,19 @@ class DappBrowserActivity : BaseActivity(), DappBrowserContract.View, OnSignMess
         webView.loadUrl(intent.getStringExtra("url"))
     }
 
+
     override fun setupActivityComponent() {
-       DaggerDappBrowserComponent
-               .builder()
-               .appComponent((application as AppConfig).applicationComponent)
-               .dappBrowserModule(DappBrowserModule(this))
-               .build()
-               .inject(this)
+        DaggerDappBrowserComponent
+                .builder()
+                .appComponent((application as AppConfig).applicationComponent)
+                .dappBrowserModule(DappBrowserModule(this))
+                .build()
+                .inject(this)
     }
+
     override fun setPresenter(presenter: DappBrowserContract.DappBrowserContractPresenter) {
-            mPresenter = presenter as DappBrowserPresenter
-        }
+        mPresenter = presenter as DappBrowserPresenter
+    }
 
     override fun showProgressDialog() {
         progressDialog.show()

@@ -54,7 +54,9 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
     RecyclerView recyclerView;
     private SelectWalletAdapter downCheckAdapter;
     ArrayList<AllWallet> allWallets = new ArrayList<>();
-    private AllWallet currentSelectWallet;
+    //    private AllWallet currentSelectWallet;
+    //0508　有时会出现同时选中两个钱包的情况，默认只选中第一个
+    private boolean hasCurrent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +77,21 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
         List<EthWallet> ethWallets = AppConfig.getInstance().getDaoSession().getEthWalletDao().loadAll();
         if (ethWallets.size() != 0) {
             for (int i = 0; i < ethWallets.size(); i++) {
+                if (ethWallets.get(i).isCurrent())
+                    if (hasCurrent)
+                        ethWallets.get(i).setCurrent(false);
+                    else
+                        hasCurrent = true;
                 AllWallet allWallet = new AllWallet();
                 allWallet.setEthWallet(ethWallets.get(i));
                 allWallet.setWalletType(AllWallet.WalletType.EthWallet);
                 allWallet.setWalletAddress(ethWallets.get(i).getAddress());
                 allWallet.setWalletName(ethWallets.get(i).getName());
                 allWallets.add(allWallet);
-                if (ethWallets.get(i).getName().equals(getIntent().getStringExtra("walletName"))) {
-                    currentSelectWallet = allWallet;
+//                if (ethWallets.get(i).getName().equals(getIntent().getStringExtra("walletName"))) {
+//                    currentSelectWallet = allWallet;
 //                    getEthToken(ethWallets.get(i));
-                }
+//                }
             }
         }
         List<Wallet> neoWallets = AppConfig.getInstance().getDaoSession().getWalletDao().loadAll();
@@ -96,6 +103,11 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                     neoWallets.get(i).setPublicKey(Account.INSTANCE.byteArray2String(Account.INSTANCE.getWallet().getPublicKey()));
                     AppConfig.getInstance().getDaoSession().getWalletDao().update(neoWallets.get(i));
                 }
+                if (neoWallets.get(i).getIsCurrent())
+                    if (hasCurrent)
+                        neoWallets.get(i).setIsCurrent(false);
+                    else
+                        hasCurrent = true;
                 AllWallet allWallet = new AllWallet();
                 allWallet.setWallet(neoWallets.get(i));
                 allWallet.setWalletAddress(neoWallets.get(i).getAddress());
@@ -106,9 +118,9 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                     allWallet.setWalletName(neoWallets.get(i).getName());
                 }
                 allWallets.add(allWallet);
-                if (neoWallets.get(i).getAddress().equals(getIntent().getStringExtra("walletName"))) {
-                    currentSelectWallet = allWallet;
-                }
+//                if (neoWallets.get(i).getAddress().equals(getIntent().getStringExtra("walletName"))) {
+//                    currentSelectWallet = allWallet;
+//                }
             }
         }
 
@@ -121,15 +133,20 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 if (wallets2.get(i).getIsCreating()) {
                     mPresenter.getEosAccountInfo(wallets2.get(i));
                 }
+                if (wallets2.get(i).getIsCurrent())
+                    if (hasCurrent)
+                        wallets2.get(i).setIsCurrent(false);
+                    else
+                        hasCurrent = true;
                 AllWallet allWallet = new AllWallet();
                 allWallet.setEosAccount(wallets2.get(i));
                 allWallet.setWalletAddress(wallets2.get(i).getAccountName());
-                allWallet.setWalletName(wallets2.get(i).getWalletName() == null? wallets2.get(i).getAccountName() : wallets2.get(i).getWalletName());
+                allWallet.setWalletName(wallets2.get(i).getWalletName() == null ? wallets2.get(i).getAccountName() : wallets2.get(i).getWalletName());
                 allWallet.setWalletType(AllWallet.WalletType.EosWallet);
                 allWallets.add(allWallet);
-                if (wallets2.get(i).getAccountName() != null && wallets2.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
-                    currentSelectWallet = allWallet;
-                }
+//                if (wallets2.get(i).getAccountName() != null && wallets2.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
+//                    currentSelectWallet = allWallet;
+//                }
             }
         }
 
@@ -139,15 +156,20 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 if (qlcAccounts.get(i).getAccountName() == null) {
                     continue;
                 }
+                if (qlcAccounts.get(i).getIsCurrent())
+                    if (hasCurrent)
+                        qlcAccounts.get(i).setIsCurrent(false);
+                    else
+                        hasCurrent = true;
                 AllWallet allWallet = new AllWallet();
                 allWallet.setQlcAccount(qlcAccounts.get(i));
                 allWallet.setWalletAddress(qlcAccounts.get(i).getAddress());
-                allWallet.setWalletName(qlcAccounts.get(i).getAccountName() == null? qlcAccounts.get(i).getAccountName() : qlcAccounts.get(i).getAccountName());
+                allWallet.setWalletName(qlcAccounts.get(i).getAccountName() == null ? qlcAccounts.get(i).getAccountName() : qlcAccounts.get(i).getAccountName());
                 allWallet.setWalletType(AllWallet.WalletType.QlcWallet);
                 allWallets.add(allWallet);
-                if (qlcAccounts.get(i).getAccountName() != null && qlcAccounts.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
-                    currentSelectWallet = allWallet;
-                }
+//                if (qlcAccounts.get(i).getAccountName() != null && qlcAccounts.get(i).getAccountName().equals(getIntent().getStringExtra("walletName"))) {
+//                    currentSelectWallet = allWallet;
+//                }
             }
         }
 
@@ -162,7 +184,7 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                 }
                 showProgressDialog();
                 downCheckAdapter.notifyDataSetChanged();
-                currentSelectWallet = downCheckAdapter.getItem(position);
+//                currentSelectWallet = downCheckAdapter.getItem(position);
                 for (int i = 0; i < downCheckAdapter.getData().size(); i++) {
                     if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.EthWallet && downCheckAdapter.getData().get(i).getEthWallet().getIsCurrent()) {
                         downCheckAdapter.getData().get(i).getEthWallet().setCurrent(false);
@@ -180,7 +202,6 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
                         downCheckAdapter.getData().get(i).getQlcAccount().setIsCurrent(false);
                         AppConfig.getInstance().getDaoSession().getQLCAccountDao().update(downCheckAdapter.getData().get(i).getQlcAccount());
                     }
-
 
 
                     if (downCheckAdapter.getData().get(i).getWalletType() == AllWallet.WalletType.EosWallet && position == i) {
@@ -270,9 +291,9 @@ public class ChooseWalletActivity extends BaseActivity implements ChooseWalletCo
 
     private String getIndex(int i) {
         if (i < 9) {
-            return "0" + (i +1);
+            return "0" + (i + 1);
         } else {
-            return "" + (i +1);
+            return "" + (i + 1);
         }
     }
 

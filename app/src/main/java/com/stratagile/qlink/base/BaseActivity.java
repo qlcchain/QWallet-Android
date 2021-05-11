@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -55,6 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     public RelativeLayout relativeLayout_root;
     public TextView view;
     public TextView title;
+    public ImageView refresh,close;
     public int mainColor = 0;
     public int drawableBg = 0;
     public boolean isEditActivity = false;
@@ -245,6 +247,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         relativeLayout_root = (RelativeLayout) findViewById(R.id.root_rl);
         view = findViewById(R.id.view);
         view.setBackgroundColor(getResources().getColor(mainColor));
+        refresh = findViewById(R.id.refresh);
+        close = findViewById(R.id.close);
         if (drawableBg != 0) {
             view.setBackgroundResource(drawableBg);
         }
@@ -259,6 +263,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         if (drawableBg != 0) {
             toolbar.setBackgroundResource(drawableBg);
         }
+
         view.setLayoutParams(new RelativeLayout.LayoutParams(UIUtils.getDisplayWidth(this), (int) (UIUtils.getStatusBarHeight(this))));
 //        if (!SpUtil.getBoolean(this, ConstantValue.isMainNet, false) && SpUtil.getBoolean(this, ConstantValue.showTestFlag, true)) {
 //            view.setBackgroundColor(getResources().getColor(R.color.color_f51818));

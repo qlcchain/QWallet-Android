@@ -48,4 +48,26 @@
             android:textSize="19sp" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/refresh"
+        android:layout_width="@dimen/x60"
+        android:src="@mipmap/refresh_black"
+        android:layout_marginRight="@dimen/x85"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_height="@dimen/x60"/>
+
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="@dimen/x55"
+        android:src="@mipmap/close_t"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/x5"
+        android:layout_marginRight="@dimen/x15"
+        android:layout_alignParentRight="true"
+        android:layout_height="@dimen/x55"/>
+
 </RelativeLayout>

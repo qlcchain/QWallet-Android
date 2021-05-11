@@ -1,14 +1,10 @@
 package com.stratagile.qlink.ui.activity.defi.presenter
-import android.support.annotation.NonNull
+
 import com.socks.library.KLog
 import com.stratagile.qlink.data.api.HttpAPIWrapper
 import com.stratagile.qlink.ui.activity.defi.contract.DefiDetailContract
-import com.stratagile.qlink.ui.activity.defi.DefiDetailActivity
-import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
+import javax.inject.Inject
 
 /**
  * @author hzp
@@ -28,11 +24,21 @@ constructor(internal var httpAPIWrapper: HttpAPIWrapper, private val mView: Defi
     override fun subscribe() {
 
     }
+
     fun getDefiDetail(map: HashMap<String, String>) {
+        KLog.e("fun  getDefiDetail")
         val disposable = httpAPIWrapper.defiProject(map)
                 .subscribe({ baseBack ->
-                    mView.closeProgressDialog()
-                    mView.setDefiDetail(baseBack)
+                    KLog.e("getDefiDetail  :  baseBack  " + baseBack.project.jsonValue)
+                    try {
+                        mView.closeProgressDialog()
+                        mView.setDefiDetail(baseBack)
+                        KLog.e("getDefiDetail  :  isSuccesse  ")
+                    } catch (e: Exception) {
+                        KLog.e(e.message)
+                        KLog.e(e.stackTrace)
+                        KLog.e(e.toString())
+                    }
                     //isSuccesse
                 }, {
                     mView.closeProgressDialog()

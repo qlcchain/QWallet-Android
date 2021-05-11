@@ -18,6 +18,7 @@ import com.stratagile.qlink.ui.activity.defi.presenter.DefiHistoricalStatePresen
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import com.socks.library.KLog
 import com.stratagile.qlink.R
 import com.stratagile.qlink.entity.defi.DefiDetail
 import com.stratagile.qlink.entity.defi.DefiStateList
@@ -51,13 +52,19 @@ class DefiHistoricalStateFragment : BaseFragment(), DefiHistoricalStateContract.
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(DefiViewModel::class.java)
         viewModel.defiDetailLiveData.observe(this, Observer {
+            KLog.e("defiDetailLiveData.observe")
             mDefiDetail = it!!
         })
         defiTokenHistoryListAdapter = DefiTokenHistoryListAdapter(arrayListOf())
         recyclerView.adapter = defiTokenHistoryListAdapter
         defiTokenHistoryListAdapter.setEnableLoadMore(true)
-        defiTokenHistoryListAdapter.setOnLoadMoreListener({getDefiStateList()}, recyclerView)
-        refreshLayout.setOnRefreshListener { initDataFromNet() }
+        defiTokenHistoryListAdapter.setOnLoadMoreListener({
+            KLog.e("OnLoadMore")
+            getDefiStateList()}, recyclerView)
+        refreshLayout.setOnRefreshListener {
+            KLog.e("OnRefresh")
+
+            initDataFromNet() }
     }
 
     override fun initDataFromNet() {
@@ -66,6 +73,7 @@ class DefiHistoricalStateFragment : BaseFragment(), DefiHistoricalStateContract.
     }
 
     fun getDefiStateList() {
+        KLog.e("getDefiStateList")
         currentPage++
         var infoMap = hashMapOf<String, String>()
         infoMap["projectId"] =mDefiDetail.project.id

@@ -1,5 +1,7 @@
 package com.stratagile.qlink.entity.defi;
 
+import java.math.BigDecimal;
+
 public class DefiJson {
 
     /**
@@ -188,7 +190,7 @@ public class DefiJson {
              */
 
             private double relative_1d;
-            private int value;
+            private BigDecimal value;
 
             public double getRelative_1d() {
                 return relative_1d;
@@ -198,11 +200,11 @@ public class DefiJson {
                 this.relative_1d = relative_1d;
             }
 
-            public int getValue() {
+            public BigDecimal getValue() {
                 return value;
             }
 
-            public void setValue(int value) {
+            public void setValue(BigDecimal value) {
                 this.value = value;
             }
         }
@@ -302,7 +304,7 @@ public class DefiJson {
              */
 
             private double relative_1d;
-            private int value;
+            private BigDecimal value;
 
             public double getRelative_1d() {
                 return relative_1d;
@@ -312,11 +314,11 @@ public class DefiJson {
                 this.relative_1d = relative_1d;
             }
 
-            public int getValue() {
+            public BigDecimal getValue() {
                 return value;
             }
 
-            public void setValue(int value) {
+            public void setValue(BigDecimal value) {
                 this.value = value;
             }
         }

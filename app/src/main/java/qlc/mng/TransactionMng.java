@@ -1,11 +1,11 @@
 package qlc.mng;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-
-import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 
 import qlc.bean.Account;
 import qlc.bean.Address;
@@ -110,7 +110,7 @@ public class TransactionMng {
 			if (!signCheck)
 				throw new QlcException(Constants.EXCEPTION_CODE_1005, Constants.EXCEPTION_MSG_1005);
 			block.setSignature(Helper.byteToHexString(signature));
-			
+
 			// set work
 			String work = WorkUtil.generateWork(Helper.hexStringToBytes(BlockMng.getRoot(block)));
 			block.setWork(work);
@@ -166,7 +166,8 @@ public class TransactionMng {
 			}
 		}
 		if (info == null)
-			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2005, Constants.EXCEPTION_BLOCK_MSG_2005);
+			return null;
+//			throw new QlcException(Constants.EXCEPTION_BLOCK_CODE_2005, Constants.EXCEPTION_BLOCK_MSG_2005);
 		
 
 		
